@@ -3,9 +3,9 @@ import { StatusEffect } from "#enums/status-effect";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,17 +28,17 @@ describe("Moves - Beak Blast", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.UNNERVE)
+      .ability(AbilityId.UNNERVE)
       .moveset([MoveId.BEAK_BLAST])
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.INSOMNIA)
       .enemyMoveset([MoveId.TACKLE])
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should add a charge effect that burns attackers on contact", async () => {
-    await game.startBattle([Species.BLASTOISE]);
+    await game.startBattle([SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -55,7 +55,7 @@ describe("Moves - Beak Blast", () => {
   it("should still charge and burn opponents if the user is sleeping", async () => {
     game.override.statusEffect(StatusEffect.SLEEP);
 
-    await game.startBattle([Species.BLASTOISE]);
+    await game.startBattle([SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -72,7 +72,7 @@ describe("Moves - Beak Blast", () => {
   it("should not burn attackers that don't make contact", async () => {
     game.override.enemyMoveset([MoveId.WATER_GUN]);
 
-    await game.startBattle([Species.BLASTOISE]);
+    await game.startBattle([SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -87,8 +87,8 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should only hit twice with Parental Bond", async () => {
-    game.override.ability(Abilities.PARENTAL_BOND);
-    await game.classicMode.startBattle([Species.BLASTOISE]);
+    game.override.ability(AbilityId.PARENTAL_BOND);
+    await game.classicMode.startBattle([SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -101,7 +101,7 @@ describe("Moves - Beak Blast", () => {
   it("should be blocked by Protect", async () => {
     game.override.enemyMoveset([MoveId.PROTECT]);
 
-    await game.startBattle([Species.BLASTOISE]);
+    await game.startBattle([SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

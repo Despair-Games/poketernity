@@ -6,7 +6,7 @@ import { type globalScene } from "#app/global-scene";
 import type { Ability } from "#app/data/abilities/ability";
 import { allAbilities } from "#app/data/data-lists";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
@@ -71,7 +71,7 @@ export class FieldHelper extends GameManagerHelper {
    * @see {@linkcode vi.spyOn}
    * @see https://vitest.dev/api/mock#mockreturnvalue
    */
-  public mockAbility(pokemon: Pokemon, ability: Abilities): MockInstance<(baseOnly?: boolean) => Ability> {
+  public mockAbility(pokemon: Pokemon, ability: AbilityId): MockInstance<(baseOnly?: boolean) => Ability> {
     return vi.spyOn(pokemon, "getAbility").mockReturnValue(allAbilities[ability]);
   }
 }

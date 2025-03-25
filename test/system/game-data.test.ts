@@ -1,6 +1,6 @@
 import { api } from "#app/plugins/api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -23,7 +23,7 @@ describe("System - Game Data", () => {
     game.override
       .moveset([MoveId.SPLASH])
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

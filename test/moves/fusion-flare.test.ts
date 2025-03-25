@@ -1,6 +1,6 @@
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -27,7 +27,7 @@ describe("Moves - Fusion Flare", () => {
     game.override.moveset([fusionFlare]);
     game.override.startingLevel(1);
 
-    game.override.enemySpecies(Species.RATTATA);
+    game.override.enemySpecies(SpeciesId.RATTATA);
     game.override.enemyMoveset([MoveId.REST, MoveId.REST, MoveId.REST, MoveId.REST]);
 
     game.override.battleType("single");
@@ -36,7 +36,7 @@ describe("Moves - Fusion Flare", () => {
   });
 
   it("should thaw freeze status condition", async () => {
-    await game.startBattle([Species.RESHIRAM]);
+    await game.startBattle([SpeciesId.RESHIRAM]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 

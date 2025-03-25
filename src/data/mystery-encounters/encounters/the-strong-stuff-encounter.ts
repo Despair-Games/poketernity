@@ -14,7 +14,7 @@ import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Nature } from "#enums/nature";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -63,7 +63,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
       disableAnimation: true,
     },
     {
-      spriteKey: Species.SHUCKLE.toString(),
+      spriteKey: SpeciesId.SHUCKLE.toString(),
       fileRoot: "pokemon",
       hasShadow: true,
       repeat: true,
@@ -87,7 +87,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
       disableSwitch: true,
       pokemonConfigs: [
         {
-          species: getPokemonSpecies(Species.SHUCKLE),
+          species: getPokemonSpecies(SpeciesId.SHUCKLE),
           isBoss: true,
           bossSegments: 5,
           shiny: false, // Shiny lock because shiny is rolled only if the battle option is picked
@@ -127,7 +127,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     loadCustomMovesForEncounter([MoveId.GASTRO_ACID, MoveId.STEALTH_ROCK]);
 
-    encounter.setDialogueToken("shuckleName", getPokemonSpecies(Species.SHUCKLE).getName());
+    encounter.setDialogueToken("shuckleName", getPokemonSpecies(SpeciesId.SHUCKLE).getName());
 
     return true;
   })

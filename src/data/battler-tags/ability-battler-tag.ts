@@ -1,5 +1,5 @@
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
@@ -8,9 +8,9 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
  * @extends BattlerTag
  */
 export abstract class AbilityBattlerTag extends BattlerTag {
-  public ability: Abilities;
+  public ability: AbilityId;
 
-  constructor(tagType: BattlerTagType, ability: Abilities, lapseType: BattlerTagLapseType, turnCount: number) {
+  constructor(tagType: BattlerTagType, ability: AbilityId, lapseType: BattlerTagLapseType, turnCount: number) {
     super(tagType, lapseType, turnCount);
 
     this.ability = ability;
@@ -22,6 +22,6 @@ export abstract class AbilityBattlerTag extends BattlerTag {
    */
   override loadTag(source: BattlerTag | any): void {
     super.loadTag(source);
-    this.ability = source.ability as Abilities;
+    this.ability = source.ability as AbilityId;
   }
 }

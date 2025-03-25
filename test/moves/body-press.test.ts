@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -23,18 +23,18 @@ describe("Moves - Body Press", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should use the user's Defense stat to calculate damage", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
@@ -54,7 +54,7 @@ describe("Moves - Body Press", () => {
   });
 
   it("should use Defense stat stages during damage calculation", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
@@ -73,7 +73,7 @@ describe("Moves - Body Press", () => {
   });
 
   it("should only apply Attack stat multipliers from abilities for damage", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
@@ -81,7 +81,7 @@ describe("Moves - Body Press", () => {
 
     const { damage: preDamage } = enemy.getAttackDamage(player, bodyPress);
 
-    game.override.ability(Abilities.HUSTLE).passiveAbility(Abilities.FUR_COAT);
+    game.override.ability(AbilityId.HUSTLE).passiveAbility(AbilityId.FUR_COAT);
 
     const { damage: postDamage } = enemy.getAttackDamage(player, bodyPress);
 

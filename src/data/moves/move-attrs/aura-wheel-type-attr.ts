@@ -1,4 +1,4 @@
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
@@ -16,7 +16,7 @@ export class AuraWheelTypeAttr extends VariableMoveTypeAttr {
       return false;
     }
 
-    if (user.species.speciesId === Species.MORPEKO) {
+    if (user.species.speciesId === SpeciesId.MORPEKO) {
       const form = user.formIndex;
 
       switch (form) {

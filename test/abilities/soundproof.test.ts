@@ -1,9 +1,9 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,17 +25,17 @@ describe("Abilities - Soundproof", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.SOUNDPROOF)
+      .ability(AbilityId.SOUNDPROOF)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should not provide immunity to the ability holder's own sound moves", async () => {
     game.override.moveset(MoveId.CLANGOROUS_SOUL);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.CLANGOROUS_SOUL);

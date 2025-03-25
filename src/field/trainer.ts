@@ -16,7 +16,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -344,7 +344,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
         }
 
         // Create an empty species pool (which will be set to one of the species pools based on the index, if applicable)
-        let newSpeciesPool: Species[] = [];
+        let newSpeciesPool: SpeciesId[] = [];
 
         // If we are in a double battle of named trainers, we need to use alternate species pools (generate half the party from each trainer)
         if (this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly) {
@@ -381,9 +381,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
           if (!(index % 2)) {
             // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
             if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [Species.SOLROCK];
+              newSpeciesPool = [SpeciesId.SOLROCK];
             } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [Species.LUNATONE];
+              newSpeciesPool = [SpeciesId.LUNATONE];
             } else {
               newSpeciesPool = speciesPoolFiltered;
             }
@@ -391,9 +391,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
             // If the index is odd, use the species pool for the partner trainer (that way he only uses his own pokemon in battle)
             // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
             if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [Species.SOLROCK];
+              newSpeciesPool = [SpeciesId.SOLROCK];
             } else if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [Species.LUNATONE];
+              newSpeciesPool = [SpeciesId.LUNATONE];
             } else {
               newSpeciesPool = speciesPoolPartnerFiltered;
             }

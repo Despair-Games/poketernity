@@ -7,7 +7,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { ChallengeType } from "#enums/challenge-type";
 import type { MoveId } from "#enums/move-id";
 import type { MoveSourceType } from "#enums/move-source-type";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 
 /**
  * Apply all challenges that modify starter choice.
@@ -45,14 +45,14 @@ export function applyChallenges(
  * Apply all challenges that modify the cost of a starter.
  * @param gameMode The current {@linkcode GameMode}
  * @param challengeType {@linkcode ChallengeType.STARTER_COST}
- * @param species The pokemon {@linkcode Species} to change the cost of.
+ * @param species The pokemon {@linkcode SpeciesId} to change the cost of.
  * @param points {@linkcode NumberHolder} The cost of the pokemon.
  * @returns `true` if any challenge was successfully applied.
  */
 export function applyChallenges(
   gameMode: GameMode,
   challengeType: ChallengeType.STARTER_COST,
-  species: Species,
+  species: SpeciesId,
   cost: NumberHolder,
 ): boolean;
 

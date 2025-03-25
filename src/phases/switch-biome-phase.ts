@@ -1,15 +1,15 @@
 import { getBiomeKey } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
-import type { Biome } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 
 export class SwitchBiomePhase extends BattlePhase {
   override readonly id = PhaseId.SWITCH_BIOME;
 
-  private readonly nextBiome: Biome;
+  private readonly nextBiome: BiomeId;
 
-  constructor(nextBiome: Biome) {
+  constructor(nextBiome: BiomeId) {
     super();
 
     this.nextBiome = nextBiome;

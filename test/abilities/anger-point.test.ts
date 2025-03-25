@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,15 +26,15 @@ describe("Abilities - Anger Point", () => {
     game.override
       .startingLevel(10)
       .moveset([MoveId.SPLASH, MoveId.SUBSTITUTE])
-      .ability(Abilities.ANGER_POINT)
+      .ability(AbilityId.ANGER_POINT)
       .battleType("single")
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.STORM_THROW);
   });
 
   it("should maximize the ability holder's attack if it receives a critical hit", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SPLASH);
@@ -44,7 +44,7 @@ describe("Abilities - Anger Point", () => {
   });
 
   it("should not maximize the ability holder's attack if its substitute receives a critical hit", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SUBSTITUTE);

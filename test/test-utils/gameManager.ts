@@ -27,7 +27,7 @@ import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-u
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
@@ -37,7 +37,7 @@ import { GameModes } from "#enums/game-modes";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/gameManagerUtils";
@@ -205,7 +205,7 @@ export class GameManager {
    * @param species
    * @param mode
    */
-  async runToFinalBossEncounter(species: Species[], mode: GameModes) {
+  async runToFinalBossEncounter(species: SpeciesId[], mode: GameModes) {
     console.log("===to final boss encounter===");
     await this.runToTitle();
 
@@ -234,7 +234,7 @@ export class GameManager {
    * @param species Optional array of species for party.
    * @returns A promise that resolves when the EncounterPhase ends.
    */
-  async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: Species[]) {
+  async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
     if (!isNullOrUndefined(encounterType)) {
       this.override.disableTrainerWaves();
       this.override.mysteryEncounter(encounterType);
@@ -279,7 +279,7 @@ export class GameManager {
    * @param species - Optional array of species to start the battle with.
    * @returns A promise that resolves when the battle is started.
    */
-  async startBattle(species?: Species[]) {
+  async startBattle(species?: SpeciesId[]) {
     await this.classicMode.runToSummon(species);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
@@ -540,7 +540,7 @@ export class GameManager {
    * @param speciesId - The ID of the species that is to receive the ability.
    * @param abilityId - The ID of the ability to give.
    */
-  forceSpeciesSpecificAbility(speciesId: Species, abilityId: Abilities): void {
+  forceSpeciesSpecificAbility(speciesId: SpeciesId, abilityId: AbilityId): void {
     for (const p of (this.scene.getPlayerParty() as Pokemon[]).concat(this.scene.getEnemyParty())) {
       if (p.species.speciesId === speciesId) {
         this.field.mockAbility(p, abilityId);

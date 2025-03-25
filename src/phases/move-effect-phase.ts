@@ -1,5 +1,9 @@
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { TurnMove } from "#app/@types/TurnMove";
+import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
+import type { PostAttackAbAttr } from "#app/data/abilities/ab-attrs/post-attack-ab-attr";
+import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
+import type { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveAnim } from "#app/data/animations/move-anim";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
@@ -132,7 +136,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
-      applyAbAttrs(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
+      applyAbAttrs<AddSecondStrikeAbAttr>(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
       // TODO: re-add multi-lens calculation
       // Set the user's relevant turnData fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
@@ -146,7 +150,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.canApplySmartTargeting() && user.turnData.hitsLeft % 2 === 1) {
       const targetAlly = targets[0].getAlly();
-      if (targetAlly.isActive(true)) {
+      if (targetAlly?.isActive(true)) {
         targets[0] = targetAlly;
         this.adjustedTargets = [targetAlly.getBattlerIndex()];
       }
@@ -163,7 +167,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.canApplySmartTargeting() && this.hitChecks[0][0] !== HitCheckResult.HIT) {
       const targetAlly = targets[0].getAlly();
-      if (targetAlly.isActive(true)) {
+      if (targetAlly?.isActive(true)) {
         targets[0] = targetAlly;
         this.adjustedTargets = [targetAlly.getBattlerIndex()];
         this.hitChecks[0] = this.hitCheck(targets[0]);
@@ -187,8 +191,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Moves are logged as a SUCCESS if at least one target was successfully hit
       this.moveHistoryEntry.result = MoveResult.SUCCESS;
     } else {
-      user.turnData.hitCount = 1;
-      user.turnData.hitsLeft = 1;
+      user.stopMultiHit();
 
       // If all targets were missed, log the move as a MISS.
       // Otherwise, log the move as a FAIL.
@@ -315,7 +318,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyAbAttrs(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
+        applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
       }
     }
   }
@@ -370,8 +373,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
 
     // G-Max Gold Rush should not give money twice for double battles
-    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
+    const allyPokemon = user.getAlly();
+    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && allyPokemon?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, allyPokemon, target, firstTarget, true);
     }
   }
 
@@ -391,8 +395,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     // G-Max Snooze is the only G-Max move to only apply its effect on a single target
-    if (move.id !== MoveId.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
+    const allyPokemon = target.getAlly();
+    if (move.id !== MoveId.G_MAX_SNOOZE && allyPokemon?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, allyPokemon, firstTarget, false);
     }
   }
 
@@ -568,10 +573,10 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
-    applyAbAttrs(AbAttrFlag.POST_ATTACK, user, false, target, move);
+    applyAbAttrs<PostAttackAbAttr>(AbAttrFlag.POST_ATTACK, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
-    if (move.isAttackMove()) {
+    if (move.isAttackMove(user, target)) {
       globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }
@@ -588,12 +593,9 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
       const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
-      if (
-        ogTarget?.isFainted()
-        && ogTarget.getAlly()?.isActive(true)
-        && ogTarget.getAlly().id !== this.getUserPokemon()?.id
-      ) {
-        this.targets = [ogTarget.getAlly().getBattlerIndex()];
+      const allyPokemon = ogTarget?.getAlly();
+      if (ogTarget?.isFainted() && allyPokemon?.isActive(true) && allyPokemon.id !== this.getUserPokemon()?.id) {
+        this.targets = [allyPokemon.getBattlerIndex()];
       }
     }
     /**
@@ -630,7 +632,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
-    applyAbAttrs(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
+    applyAbAttrs<PostDefendAbAttr>(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 

@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -24,11 +24,11 @@ describe("Moves - Synthesis", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SYNTHESIS])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -41,7 +41,7 @@ describe("Moves - Synthesis", () => {
   ])("should restore $expRatio percent of the user's HP in $weatherName weather", async ({ weather, expRatio }) => {
     game.override.weather(weather);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
     vi.spyOn(player, "getMaxHp").mockReturnValue(100);

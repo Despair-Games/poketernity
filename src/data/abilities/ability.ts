@@ -1,13 +1,13 @@
 import type { Localizable } from "#app/interfaces/locales";
 import type { Constructor } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class Ability implements Localizable {
-  public id: Abilities;
+  public id: AbilityId;
 
   private nameAppend: string;
   public name: string;
@@ -18,7 +18,7 @@ export class Ability implements Localizable {
   public attrs: AbAttr[];
   public conditions: AbAttrCondition[];
 
-  constructor(id: Abilities, generation: number) {
+  constructor(id: AbilityId, generation: number) {
     this.id = id;
 
     this.nameAppend = "";
@@ -30,7 +30,7 @@ export class Ability implements Localizable {
   }
 
   localize(): void {
-    const i18nKey = Abilities[this.id]
+    const i18nKey = AbilityId[this.id]
       .split("_")
       .filter((f) => f)
       .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))

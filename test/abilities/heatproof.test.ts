@@ -1,8 +1,8 @@
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -27,12 +27,12 @@ describe("Abilities - Heatproof", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.CHARMANDER)
-      .enemyAbility(Abilities.HEATPROOF)
+      .enemySpecies(SpeciesId.CHARMANDER)
+      .enemyAbility(AbilityId.HEATPROOF)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100)
-      .starterSpecies(Species.CHANDELURE)
-      .ability(Abilities.BALL_FETCH)
+      .starterSpecies(SpeciesId.CHANDELURE)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.FLAMETHROWER, MoveId.SPLASH])
       .startingLevel(100);
   });
@@ -49,7 +49,7 @@ describe("Abilities - Heatproof", () => {
     const heatproofDamage = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
 
     game.move.select(MoveId.FLAMETHROWER);
     await game.phaseInterceptor.to(TurnEndPhase);
@@ -60,7 +60,7 @@ describe("Abilities - Heatproof", () => {
   });
 
   it("reduces Burn damage by half", async () => {
-    game.override.enemyStatusEffect(StatusEffect.BURN).enemySpecies(Species.ABRA);
+    game.override.enemyStatusEffect(StatusEffect.BURN).enemySpecies(SpeciesId.ABRA);
     await game.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;

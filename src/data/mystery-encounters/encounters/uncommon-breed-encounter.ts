@@ -31,7 +31,7 @@ import PokemonData from "#app/system/pokemon-data";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import type { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { BerryModifier } from "#app/modifier/modifier";

@@ -16,7 +16,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
 import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
 import type { MoveId } from "#enums/move-id";
@@ -232,11 +232,11 @@ export abstract class Challenge {
 
   /**
    * An apply function for {@linkcode ChallengeType.STARTER_COST} challenges. Derived classes should alter this.
-   * @param _species {@linkcode Species} The pokemon to change the cost of.
+   * @param _species {@linkcode SpeciesId} The pokemon to change the cost of.
    * @param _cost {@link NumberHolder} The cost of the starter.
    * @returns `true` if this function did anything.
    */
-  applyStarterCost(_species: Species, _cost: NumberHolder): boolean {
+  applyStarterCost(_species: SpeciesId, _cost: NumberHolder): boolean {
     return false;
   }
 
@@ -399,7 +399,7 @@ export class SingleGenerationChallenge extends Challenge {
 
   override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     const baseGeneration =
-      pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
+      pokemon.species.speciesId === SpeciesId.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
     if (pokemon.isPlayer() && baseGeneration !== this.value) {
       valid.value = false;
       return true;
@@ -532,7 +532,7 @@ export class SingleGenerationChallenge extends Challenge {
 
 interface monotypeOverride {
   /** The species to override */
-  species: Species;
+  species: SpeciesId;
   /** The type to count as */
   type: ElementalType;
 }
@@ -541,8 +541,8 @@ interface monotypeOverride {
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: ElementalType.NORMAL }];
-  private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: SpeciesId.CASTFORM, type: ElementalType.NORMAL }];
+  private static SPECIES_OVERRIDES: SpeciesId[] = [SpeciesId.MELOETTA];
 
   constructor() {
     super(Challenges.SINGLE_TYPE, 18);
@@ -654,7 +654,7 @@ export class FreshStartChallenge extends Challenge {
     return false;
   }
 
-  override applyStarterCost(species: Species, cost: NumberHolder): boolean {
+  override applyStarterCost(species: SpeciesId, cost: NumberHolder): boolean {
     if (defaultStarterSpecies.includes(species)) {
       cost.value = speciesStarterCosts[species];
       return true;

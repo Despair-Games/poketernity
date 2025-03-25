@@ -6,7 +6,7 @@ import { isNullOrUndefined } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
@@ -258,7 +258,7 @@ export class PokemonAnimPhase extends BattlePhase {
     }
 
     const dondozo = this.pokemon.getAlly();
-    if (dondozo?.species?.speciesId !== Species.DONDOZO) {
+    if (dondozo?.species?.speciesId !== SpeciesId.DONDOZO) {
       return this.end();
     }
 

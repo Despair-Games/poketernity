@@ -1,30 +1,15 @@
+import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import { SpeciesFormChangeLapseTeraTrigger, SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { type FormChangeItem } from "#enums/form-change-item";
-import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
+import { type PlayerPokemon, type Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
-import { EvolutionPhase } from "#app/phases/evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { LearnMoveType } from "#enums/learn-move-type";
-import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achievements";
-import type { VoucherType } from "#enums/voucher-type";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
-import { BerryType } from "#enums/berry-type";
-import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
-import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
 import {
   type AttackTypeBoosterModifierType,
   type DoubleBattleChanceBoosterModifierType,
@@ -37,15 +22,31 @@ import {
   type PokemonFriendshipBoosterModifierType,
   type TerastallizeModifierType,
   type TmModifierType,
-} from "./modifier-type";
+} from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import Overrides from "#app/overrides";
+import { EvolutionPhase } from "#app/phases/evolution-phase";
+import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import { LevelUpPhase } from "#app/phases/level-up-phase";
+import { achvs } from "#app/system/achievements";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
-import { modifierTypes } from "./modifier-types";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { globalScene } from "#app/global-scene";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { BerryType } from "#enums/berry-type";
+import { ElementalType } from "#enums/elemental-type";
+import { type FormChangeItem } from "#enums/form-change-item";
+import { LearnMoveType } from "#enums/learn-move-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
+import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TextStyle } from "#enums/text-style";
+import type { VoucherType } from "#enums/voucher-type";
+import i18next from "i18next";
 
 const iconOverflowIndex = 24;
 
@@ -1051,11 +1052,11 @@ export class BaseStatModifier extends PokemonHeldItemModifier {
 }
 
 export class EvoTrackerModifier extends PokemonHeldItemModifier {
-  protected species: Species;
+  protected species: SpeciesId;
   protected required: number;
   public override isTransferable: boolean = false;
 
-  constructor(type: ModifierType, pokemonId: number, species: Species, required: number, stackCount?: number) {
+  constructor(type: ModifierType, pokemonId: number, species: SpeciesId, required: number, stackCount?: number) {
     super(type, pokemonId, stackCount);
     this.species = species;
     this.required = required;
@@ -1438,20 +1439,20 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
 
 /**
  * Modifier used for held items that Applies {@linkcode Stat} boost(s) using a
- * multiplier if the holder is of a specific {@linkcode Species}.
+ * multiplier if the holder is of a specific {@linkcode SpeciesId}.
  * @extends StatBoosterModifier
  * @see {@linkcode apply}
  */
 export class SpeciesStatBoosterModifier extends StatBoosterModifier {
   /** The species that the held item's stat boost(s) apply to */
-  private species: Species[];
+  private species: SpeciesId[];
 
   constructor(
     type: ModifierType,
     pokemonId: number,
     stats: Stat[],
     multiplier: number,
-    species: Species[],
+    species: SpeciesId[],
     stackCount?: number,
   ) {
     super(type, pokemonId, stats, multiplier, stackCount);
@@ -1486,7 +1487,7 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
   }
 
   /**
-   * Checks if the incoming stat is listed in {@linkcode stats} and if the holder's {@linkcode Species}.
+   * Checks if the incoming stat is listed in {@linkcode stats} and if the holder's {@linkcode SpeciesId}.
    * @param pokemon {@linkcode Pokemon} that holds the item
    * @param stat {@linkcode Stat} being checked at the time
    * @param statValue {@linkcode NumberHolder} that holds the resulting value of the stat
@@ -1498,11 +1499,11 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
 
   /**
    * Checks if either parameter is included in the corresponding lists
-   * @param speciesId {@linkcode Species} being checked
+   * @param speciesId {@linkcode SpeciesId} being checked
    * @param stat {@linkcode Stat} being checked
    * @returns `true` if both parameters are in {@linkcode species} and {@linkcode stats} respectively, false otherwise
    */
-  contains(speciesId: Species, stat: Stat): boolean {
+  contains(speciesId: SpeciesId, stat: Stat): boolean {
     return this.species.includes(speciesId) && this.stats.includes(stat);
   }
 }
@@ -1692,8 +1693,9 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
 }
 
 /**
- * Class for Pokemon held items like King's Rock
- * Because King's Rock can be stacked in the game, unlike mainline, it does not receive a boost from Abilities.SERENE_GRACE
+ * Class for Pokemon held items like King's Rock.
+ *
+ * Because King's Rock can be stacked in the game, unlike mainline, it does not receive a boost from Serene Grace
  */
 export class FlinchChanceModifier extends PokemonHeldItemModifier {
   private chance: number;
@@ -2071,7 +2073,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(AbAttrFlag.COMMANDER, p, false));
+    field.forEach((p) => applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false));
     return true;
   }
 
@@ -2825,7 +2827,7 @@ export class MoneyRewardModifier extends ConsumableModifier {
     globalScene.addMoney(moneyAmount.value);
 
     globalScene.getPlayerParty().map((p) => {
-      if (p.species?.speciesId === Species.GIMMIGHOUL) {
+      if (p.species?.speciesId === SpeciesId.GIMMIGHOUL) {
         p.evoCounter
           ? (p.evoCounter += Math.min(Math.floor(this.moneyMultiplier), 3))
           : (p.evoCounter = Math.min(Math.floor(this.moneyMultiplier), 3));

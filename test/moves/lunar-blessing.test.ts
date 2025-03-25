@@ -1,8 +1,8 @@
 import { StatusEffect } from "#enums/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,16 +24,16 @@ describe("Moves - Lunar Blessing", () => {
 
     game.override.battleType("double");
 
-    game.override.enemySpecies(Species.SHUCKLE);
+    game.override.enemySpecies(SpeciesId.SHUCKLE);
     game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
 
     game.override.moveset([MoveId.LUNAR_BLESSING, MoveId.SPLASH]);
-    game.override.ability(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
   });
 
   it("should restore 25% HP of the user and its ally", async () => {
-    await game.startBattle([Species.RATTATA, Species.RATTATA]);
+    await game.startBattle([SpeciesId.RATTATA, SpeciesId.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
 
     vi.spyOn(leftPlayer, "getMaxHp").mockReturnValue(100);
@@ -61,7 +61,7 @@ describe("Moves - Lunar Blessing", () => {
 
   it("should cure status effect of the user and its ally", async () => {
     game.override.statusEffect(StatusEffect.BURN);
-    await game.startBattle([Species.RATTATA, Species.RATTATA]);
+    await game.startBattle([SpeciesId.RATTATA, SpeciesId.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
 
     vi.spyOn(leftPlayer, "resetStatus");

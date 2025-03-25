@@ -4,9 +4,9 @@ import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -32,16 +32,16 @@ describe("Moves - Scale Shot", () => {
       .moveset([MoveId.SCALE_SHOT])
       .battleType("single")
       .disableCrits()
-      .ability(Abilities.NO_GUARD)
-      .passiveAbility(Abilities.SKILL_LINK)
+      .ability(AbilityId.NO_GUARD)
+      .passiveAbility(AbilityId.SKILL_LINK)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(3);
   });
 
   it("applies stat changes after last hit", async () => {
-    game.override.enemySpecies(Species.FORRETRESS);
+    game.override.enemySpecies(SpeciesId.FORRETRESS);
 
-    await game.classicMode.startBattle([Species.MINCCINO]);
+    await game.classicMode.startBattle([SpeciesId.MINCCINO]);
     const minccino = game.scene.getPlayerPokemon()!;
     game.move.select(MoveId.SCALE_SHOT);
 
@@ -65,11 +65,11 @@ describe("Moves - Scale Shot", () => {
     const moveToCheck = allMoves.get(MoveId.SCALE_SHOT);
     const basePower = moveToCheck.power;
 
-    game.override.enemySpecies(Species.WOBBUFFET);
+    game.override.enemySpecies(SpeciesId.WOBBUFFET);
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.MINCCINO]);
+    await game.classicMode.startBattle([SpeciesId.MINCCINO]);
     const minccino = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.SCALE_SHOT);

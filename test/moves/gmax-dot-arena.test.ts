@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
@@ -27,14 +27,14 @@ describe("Moves - G-Max damage over time arena moves", () => {
       .battleType("double")
       .startingLevel(1)
       .moveset([MoveId.G_MAX_WILDFIRE, MoveId.G_MAX_VOLCALITH, MoveId.SPLASH])
-      .enemySpecies(Species.SHUCKLE)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("G-Max wildfire should do 1/6th hp damage to non fire types", async () => {
-    await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -53,7 +53,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
   });
 
   it("G-Max Volcalith should not damage rock types", async () => {
-    await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
     game.move.select(MoveId.G_MAX_VOLCALITH, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -72,8 +72,8 @@ describe("Moves - G-Max damage over time arena moves", () => {
   });
 
   it("G-Max moves should not damage magic guard", async () => {
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
-    await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+    game.override.enemyAbility(AbilityId.MAGIC_GUARD);
+    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);

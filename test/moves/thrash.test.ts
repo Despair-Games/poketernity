@@ -1,10 +1,10 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,11 +26,11 @@ describe("Moves - Thrash", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SKARMORY)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SKARMORY)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -39,7 +39,7 @@ describe("Moves - Thrash", () => {
   });
 
   it("should lock the user into using Thrash for 1-2 turns, then confuse the user", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -61,9 +61,9 @@ describe("Moves - Thrash", () => {
   });
 
   it("should not lock the user into using Thrash when the move has no effect", async () => {
-    game.override.enemySpecies(Species.DUSCLOPS);
+    game.override.enemySpecies(SpeciesId.DUSCLOPS);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -77,7 +77,7 @@ describe("Moves - Thrash", () => {
   // NOTE: this and following tests assume Frenzy's random turn count is mocked to the max turn length
   // as is currently done in GameManager's constructor
   it("should cancel future uses of Thrash if interrupted by status", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -93,7 +93,7 @@ describe("Moves - Thrash", () => {
   });
 
   it("should cancel future uses of Thrash if interrupted by flinching", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -109,7 +109,7 @@ describe("Moves - Thrash", () => {
   });
 
   it("should confuse the user if the user is interrupted on the last turn of frenzy", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -136,7 +136,7 @@ describe("Moves - Thrash", () => {
   it("should continue execution between waves", async () => {
     game.override.enemyLevel(1);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
 

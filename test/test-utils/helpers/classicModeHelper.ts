@@ -1,5 +1,5 @@
 import { BattleStyle } from "#enums/battle-style";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import overrides from "#app/overrides";
@@ -21,7 +21,7 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to summon.
    * @returns A promise that resolves when the summon phase is reached.
    */
-  async runToSummon(species?: Species[]): Promise<void> {
+  async runToSummon(species?: SpeciesId[]): Promise<void> {
     await this.game.runToTitle();
 
     if (this.game.override.disableShinies) {
@@ -47,7 +47,7 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to start the battle with.
    * @returns A promise that resolves when the battle is started.
    */
-  async startBattle(species?: Species[]): Promise<void> {
+  async startBattle(species?: SpeciesId[]): Promise<void> {
     await this.runToSummon(species);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {

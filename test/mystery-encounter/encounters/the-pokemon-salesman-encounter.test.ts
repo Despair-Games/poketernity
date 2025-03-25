@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -24,8 +24,8 @@ import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("The Pokemon Salesman - Mystery Encounter", () => {
@@ -45,8 +45,8 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [Biome.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
     HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.THE_POKEMON_SALESMAN]);
@@ -81,7 +81,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.ULTRA);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.THE_POKEMON_SALESMAN);

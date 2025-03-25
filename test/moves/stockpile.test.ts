@@ -1,11 +1,11 @@
 import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,17 +29,17 @@ describe("Moves - Stockpile", () => {
 
       game.override.battleType("single");
 
-      game.override.enemySpecies(Species.RATTATA);
+      game.override.enemySpecies(SpeciesId.RATTATA);
       game.override.enemyMoveset(MoveId.SPLASH);
-      game.override.enemyAbility(Abilities.NONE);
+      game.override.enemyAbility(AbilityId.NONE);
 
       game.override.startingLevel(2000);
       game.override.moveset([MoveId.STOCKPILE, MoveId.SPLASH]);
-      game.override.ability(Abilities.NONE);
+      game.override.ability(AbilityId.NONE);
     });
 
     it("gains a stockpile stack and raises user's DEF and SPDEF stat stages by 1 on each use, fails at max stacks (3)", async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const user = game.scene.getPlayerPokemon()!;
 
@@ -79,7 +79,7 @@ describe("Moves - Stockpile", () => {
     });
 
     it("gains a stockpile stack even if user's DEF and SPDEF stat stages are at +6", async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const user = game.scene.getPlayerPokemon()!;
 

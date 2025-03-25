@@ -1,11 +1,11 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import Phaser from "phaser";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { Stat, BATTLE_STATS } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 
 describe("Moves - Power Swap", () => {
@@ -25,16 +25,16 @@ describe("Moves - Power Swap", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
-      .enemySpecies(Species.INDEEDEE)
+      .enemySpecies(SpeciesId.INDEEDEE)
       .enemyLevel(200)
       .moveset([MoveId.POWER_SWAP])
-      .ability(Abilities.NONE);
+      .ability(AbilityId.NONE);
   });
 
   it("should swap the user's ATK and SPATK stat stages with the target's", async () => {
-    await game.classicMode.startBattle([Species.INDEEDEE]);
+    await game.classicMode.startBattle([SpeciesId.INDEEDEE]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

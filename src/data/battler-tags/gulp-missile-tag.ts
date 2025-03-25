@@ -1,3 +1,4 @@
+import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
@@ -13,7 +14,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 
@@ -44,7 +45,7 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
 
       if (!cancelled.value) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
@@ -70,7 +71,7 @@ export class GulpMissileTag extends BattlerTag {
   override canAdd(pokemon: Pokemon): boolean {
     const isSurfOrDive = [MoveId.SURF, MoveId.DIVE].includes(this.sourceMoveId);
     const isNormalForm = pokemon.formIndex === 0 && !pokemon.getTag(...GulpMissileBattlerTagTypes);
-    const isCramorant = pokemon.species.speciesId === Species.CRAMORANT;
+    const isCramorant = pokemon.species.speciesId === SpeciesId.CRAMORANT;
 
     return isSurfOrDive && isNormalForm && isCramorant;
   }

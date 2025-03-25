@@ -4,7 +4,7 @@ import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { TerrainType } from "#enums/terrain-type";
 
@@ -24,75 +24,75 @@ export class NaturePowerAttr extends CallMoveAttr {
     let moveId: MoveId;
     const getBiomeMoveId = (): MoveId => {
       switch (globalScene.arena.biomeType) {
-        case Biome.TOWN:
+        case BiomeId.TOWN:
           return MoveId.ROUND;
-        case Biome.METROPOLIS:
+        case BiomeId.METROPOLIS:
           return MoveId.TRI_ATTACK;
-        case Biome.SLUM:
+        case BiomeId.SLUM:
           return MoveId.SLUDGE_BOMB;
-        case Biome.PLAINS:
+        case BiomeId.PLAINS:
           return MoveId.SILVER_WIND;
-        case Biome.GRASS:
+        case BiomeId.GRASS:
           return MoveId.GRASS_KNOT;
-        case Biome.TALL_GRASS:
+        case BiomeId.TALL_GRASS:
           return MoveId.POLLEN_PUFF;
-        case Biome.MEADOW:
+        case BiomeId.MEADOW:
           return MoveId.GIGA_DRAIN;
-        case Biome.FOREST:
+        case BiomeId.FOREST:
           return MoveId.BUG_BUZZ;
-        case Biome.JUNGLE:
+        case BiomeId.JUNGLE:
           return MoveId.LEAF_STORM;
-        case Biome.SEA:
+        case BiomeId.SEA:
           return MoveId.HYDRO_PUMP;
-        case Biome.SWAMP:
+        case BiomeId.SWAMP:
           return MoveId.MUD_BOMB;
-        case Biome.BEACH:
+        case BiomeId.BEACH:
           return MoveId.SCALD;
-        case Biome.LAKE:
+        case BiomeId.LAKE:
           return MoveId.BUBBLE_BEAM;
-        case Biome.SEABED:
+        case BiomeId.SEABED:
           return MoveId.BRINE;
-        case Biome.ISLAND:
+        case BiomeId.ISLAND:
           return MoveId.LEAF_TORNADO;
-        case Biome.MOUNTAIN:
+        case BiomeId.MOUNTAIN:
           return MoveId.AIR_SLASH;
-        case Biome.BADLANDS:
+        case BiomeId.BADLANDS:
           return MoveId.EARTH_POWER;
-        case Biome.DESERT:
+        case BiomeId.DESERT:
           return MoveId.SCORCHING_SANDS;
-        case Biome.WASTELAND:
+        case BiomeId.WASTELAND:
           return MoveId.DRAGON_PULSE;
-        case Biome.CONSTRUCTION_SITE:
+        case BiomeId.CONSTRUCTION_SITE:
           return MoveId.STEEL_BEAM;
-        case Biome.CAVE:
+        case BiomeId.CAVE:
           return MoveId.POWER_GEM;
-        case Biome.ICE_CAVE:
+        case BiomeId.ICE_CAVE:
           return MoveId.ICE_BEAM;
-        case Biome.SNOWY_FOREST:
+        case BiomeId.SNOWY_FOREST:
           return MoveId.FROST_BREATH;
-        case Biome.VOLCANO:
+        case BiomeId.VOLCANO:
           return MoveId.LAVA_PLUME;
-        case Biome.GRAVEYARD:
+        case BiomeId.GRAVEYARD:
           return MoveId.SHADOW_BALL;
-        case Biome.RUINS:
+        case BiomeId.RUINS:
           return MoveId.ANCIENT_POWER;
-        case Biome.TEMPLE:
+        case BiomeId.TEMPLE:
           return MoveId.EXTRASENSORY;
-        case Biome.DOJO:
+        case BiomeId.DOJO:
           return MoveId.FOCUS_BLAST;
-        case Biome.FAIRY_CAVE:
+        case BiomeId.FAIRY_CAVE:
           return MoveId.ALLURING_VOICE;
-        case Biome.ABYSS:
+        case BiomeId.ABYSS:
           return MoveId.OMINOUS_WIND;
-        case Biome.SPACE:
+        case BiomeId.SPACE:
           return MoveId.DRACO_METEOR;
-        case Biome.FACTORY:
+        case BiomeId.FACTORY:
           return MoveId.FLASH_CANNON;
-        case Biome.LABORATORY:
+        case BiomeId.LABORATORY:
           return MoveId.ZAP_CANNON;
-        case Biome.POWER_PLANT:
+        case BiomeId.POWER_PLANT:
           return MoveId.CHARGE_BEAM;
-        case Biome.END:
+        case BiomeId.END:
           return MoveId.ETERNABEAM;
       }
     };
