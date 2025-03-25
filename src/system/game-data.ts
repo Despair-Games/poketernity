@@ -1366,8 +1366,6 @@ export class GameData {
             globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
-          if (dataName === "session") {
-          }
           const dataNotLoadedString =
             dataName === "session" ? i18next.t("menu:sessionDataNotLoaded") : i18next.t("menu:gameDataNotLoaded");
           if (!valid) {
@@ -1387,8 +1385,7 @@ export class GameData {
               if (!bypassLogin && dataType < GameDataType.SETTINGS) {
                 updateUserInfo().then((success) => {
                   if (!success[0]) {
-                    const couldNotContactServerString = i18next.t("menu:couldNotContactServer");
-                    return displayError(couldNotContactServerString);
+                    return displayError(i18next.t("menu:couldNotContactServer"));
                   }
                   const { trainerId, secretId } = this;
                   let updatePromise: Promise<string | null>;
