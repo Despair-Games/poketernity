@@ -53,7 +53,7 @@ import ChallengeData from "#app/system/challenge-data";
 import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
@@ -403,7 +403,7 @@ export class GameData {
 
           this.migrateStarterAbilities(systemData, this.starterData);
 
-          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as Species);
+          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
           for (const s of starterIds) {
             this.starterData[s].candyCount += systemData.dexData[s].caughtCount;
             this.starterData[s].candyCount += systemData.dexData[s].hatchedCount * 2;
@@ -1478,7 +1478,7 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as Species);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       starterData[speciesId] = {
@@ -1539,14 +1539,14 @@ export class GameData {
    *   otherwise (e.g. evolution situation) the nature, ability and other unlocks will get updated, but no the game stats.
    * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
     pokemon: Pokemon,
     isNonRentalCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<Species[]> {
+  ): Promise<SpeciesId[]> {
     // If isNonRentalCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
@@ -1575,7 +1575,7 @@ export class GameData {
    * @param giveCandy - Whether to give starter candy for the root species. Default: `true`
    * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
   private setPokemonSpeciesCaught(
     pokemon: Pokemon,
@@ -1584,9 +1584,9 @@ export class GameData {
     giveCandy: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-    unlockedStarters: Species[] = [],
-  ): Promise<Species[]> {
-    return new Promise<Species[]>((resolve) => {
+    unlockedStarters: SpeciesId[] = [],
+  ): Promise<SpeciesId[]> {
+    return new Promise<SpeciesId[]>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
 
@@ -1649,7 +1649,7 @@ export class GameData {
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
-      const checkPreEvolution = (unlockedStarters: Species[]) => {
+      const checkPreEvolution = (unlockedStarters: SpeciesId[]) => {
         if (hasPreEvolution) {
           const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
@@ -1719,7 +1719,7 @@ export class GameData {
   }
 
   incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
-    const speciesIdToIncrement: Species = species.getRootSpeciesId(forStarter);
+    const speciesIdToIncrement: SpeciesId = species.getRootSpeciesId(forStarter);
 
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
       this.starterData[speciesIdToIncrement].classicWinCount = 0;
@@ -1830,7 +1830,7 @@ export class GameData {
       return;
     }
 
-    const _unlockSpeciesNature = (speciesId: Species) => {
+    const _unlockSpeciesNature = (speciesId: SpeciesId) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
       if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
         _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
@@ -1839,7 +1839,7 @@ export class GameData {
     _unlockSpeciesNature(species.speciesId);
   }
 
-  updateSpeciesDexIvs(speciesId: Species, ivs: number[]): void {
+  updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
     let dexEntry: DexEntry;
     do {
       dexEntry = globalScene.gameData.dexData[speciesId];
@@ -1970,7 +1970,7 @@ export class GameData {
     return ret;
   }
 
-  getSpeciesStarterValue(speciesId: Species): number {
+  getSpeciesStarterValue(speciesId: SpeciesId): number {
     const baseValue = speciesStarterCosts[speciesId];
     let value = baseValue;
 
@@ -2021,7 +2021,7 @@ export class GameData {
   }
 
   migrateStarterAbilities(systemData: SystemSaveData, initialStarterData?: StarterData): void {
-    const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as Species);
+    const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
     const starterData = initialStarterData || systemData.starterData;
     const dexData = systemData.dexData;
     for (const s of starterIds) {

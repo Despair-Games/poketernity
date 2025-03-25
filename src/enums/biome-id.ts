@@ -1,4 +1,4 @@
-export enum Biome {
+export enum BiomeId {
   TOWN,
   PLAINS,
   GRASS,

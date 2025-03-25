@@ -20,7 +20,7 @@ import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-enco
 import PokemonData from "#app/system/pokemon-data";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { getBiomeKey } from "#app/field/arena";
 import { ElementalType } from "#enums/elemental-type";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
@@ -40,7 +40,14 @@ import {
 const namespace = "mysteryEncounters/teleportingHijinks";
 
 const MONEY_COST_MULTIPLIER = 1.75;
-const BIOME_CANDIDATES = [Biome.SPACE, Biome.FAIRY_CAVE, Biome.LABORATORY, Biome.ISLAND, Biome.WASTELAND, Biome.DOJO];
+const BIOME_CANDIDATES = [
+  BiomeId.SPACE,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.LABORATORY,
+  BiomeId.ISLAND,
+  BiomeId.WASTELAND,
+  BiomeId.DOJO,
+];
 const MACHINE_INTERFACING_TYPES = [ElementalType.ELECTRIC, ElementalType.STEEL];
 
 /**
@@ -225,7 +232,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   return config;
 }
 
-async function animateBiomeChange(nextBiome: Biome) {
+async function animateBiomeChange(nextBiome: BiomeId) {
   return new Promise<void>((resolve) => {
     globalScene.tweens.add({
       targets: [globalScene.arenaEnemy, globalScene.lastEnemyTrainer],

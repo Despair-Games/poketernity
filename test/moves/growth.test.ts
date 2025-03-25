@@ -1,8 +1,8 @@
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
@@ -25,14 +25,14 @@ describe("Moves - Growth", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.enemyAbility(Abilities.MOXIE);
-    game.override.ability(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.MOXIE);
+    game.override.ability(AbilityId.INSOMNIA);
     game.override.moveset([MoveId.GROWTH]);
     game.override.enemyMoveset(MoveId.SPLASH);
   });
 
   it("should raise SPATK stat stage by 1", async () => {
-    await game.startBattle([Species.MIGHTYENA]);
+    await game.startBattle([SpeciesId.MIGHTYENA]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

@@ -2,7 +2,7 @@ import { AbilityBattlerTag } from "#app/data/battler-tags/ability-battler-tag";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
@@ -11,7 +11,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
  * @extends AbilityBattlerTag
  */
 export class FormBlockDamageTag extends AbilityBattlerTag {
-  constructor(tagType: BattlerTagType, ability: Abilities) {
+  constructor(tagType: BattlerTagType, ability: AbilityId) {
     super(tagType, ability, BattlerTagLapseType.CUSTOM, 1);
   }
 

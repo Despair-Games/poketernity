@@ -1,9 +1,9 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,18 +26,18 @@ describe("Moves - Encore", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.ENCORE])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH, MoveId.TACKLE])
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should prevent the target from using any move except the last used move", async () => {
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -65,7 +65,7 @@ describe("Moves - Encore", () => {
     ])("$name", async ({ moveId, delay }) => {
       game.override.enemyMoveset(moveId);
 
-      await game.classicMode.startBattle([Species.SNORLAX]);
+      await game.classicMode.startBattle([SpeciesId.SNORLAX]);
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -90,7 +90,7 @@ describe("Moves - Encore", () => {
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
     const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
     game.override.moveset([MoveId.ENCORE, MoveId.TORMENT, MoveId.SPLASH]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(MoveId.ENCORE);

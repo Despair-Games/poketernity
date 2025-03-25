@@ -1,8 +1,8 @@
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,16 +25,16 @@ describe("Items - Leftovers", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.startingLevel(2000);
-    game.override.ability(Abilities.UNNERVE);
+    game.override.ability(AbilityId.UNNERVE);
     game.override.moveset([MoveId.SPLASH]);
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.UNNERVE);
+    game.override.enemySpecies(SpeciesId.SHUCKLE);
+    game.override.enemyAbility(AbilityId.UNNERVE);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingHeldItems([{ name: "LEFTOVERS", count: 1 }]);
   });
 
   it("leftovers works", async () => {
-    await game.startBattle([Species.ARCANINE]);
+    await game.startBattle([SpeciesId.ARCANINE]);
 
     // Make sure leftovers are there
     expect(game.scene.modifiers[0].type.id).toBe("LEFTOVERS");

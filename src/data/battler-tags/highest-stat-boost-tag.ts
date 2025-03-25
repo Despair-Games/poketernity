@@ -4,7 +4,7 @@ import { allAbilities } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { EFFECTIVE_STATS, Stat, type EffectiveStat, getStatKey } from "#enums/stat";
@@ -21,7 +21,7 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
   public stat: Stat;
   public multiplier: number;
 
-  constructor(tagType: BattlerTagType, ability: Abilities) {
+  constructor(tagType: BattlerTagType, ability: AbilityId) {
     super(tagType, ability, BattlerTagLapseType.CUSTOM, 1);
   }
 

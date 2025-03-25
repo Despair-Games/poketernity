@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,10 +28,10 @@ describe("Abilities - Speed Boost", () => {
 
     game.override
       .battleType("single")
-      .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SHUCKLE)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100)
-      .ability(Abilities.SPEED_BOOST)
+      .ability(AbilityId.SPEED_BOOST)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.SPLASH, MoveId.U_TURN]);
   });
@@ -47,7 +47,7 @@ describe("Abilities - Speed Boost", () => {
   });
 
   it("should not trigger this turn if pokemon was switched into combat via attack, but the turn after", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE, Species.NINJASK]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE, SpeciesId.NINJASK]);
 
     game.move.select(MoveId.U_TURN);
     game.doSelectPartyPokemon(1);
@@ -61,7 +61,7 @@ describe("Abilities - Speed Boost", () => {
   });
 
   it("checking back to back swtiches", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE, Species.NINJASK]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE, SpeciesId.NINJASK]);
 
     const [shuckle, ninjask] = game.scene.getPlayerParty();
 
@@ -83,7 +83,7 @@ describe("Abilities - Speed Boost", () => {
   });
 
   it("should not trigger this turn if pokemon was switched into combat via normal switch, but the turn after", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE, Species.NINJASK]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE, SpeciesId.NINJASK]);
 
     game.doSwitchPokemon(1);
     await game.toNextTurn();
@@ -96,7 +96,7 @@ describe("Abilities - Speed Boost", () => {
   });
 
   it("should not trigger if pokemon fails to escape", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);

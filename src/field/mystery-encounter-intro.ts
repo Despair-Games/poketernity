@@ -1,12 +1,12 @@
 import type { GameObjects } from "phaser";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
-import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 import { ImagesFolder } from "#enums/images-folders";
+import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 export class MysteryEncounterSpriteConfig {
   /** The sprite key (which is the image file name). e.g. "ace_trainer_f" */
@@ -19,7 +19,7 @@ export class MysteryEncounterSpriteConfig {
    */
   fileRoot: ImagesFolder | string;
   /** Optional replacement for `spriteKey`/`fileRoot`. Just know this defaults to male/genderless, form 0, no shiny */
-  species?: Species;
+  species?: SpeciesId;
   /** Enable shadow. Defaults to `false` */
   hasShadow?: boolean = false;
   /** Disable animation. Defaults to `false` */

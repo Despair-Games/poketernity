@@ -1,6 +1,6 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -23,14 +23,14 @@ describe.todo("Items - Leek", () => {
     game = new GameManager(phaserGame);
 
     game.override
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH])
       .moveset([MoveId.TACKLE])
       .battleType("single");
   });
 
   it("should raise CRIT stage by 2 when held by FARFETCHD", async () => {
-    await game.startBattle([Species.FARFETCHD]);
+    await game.startBattle([SpeciesId.FARFETCHD]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -44,7 +44,7 @@ describe.todo("Items - Leek", () => {
   }, 20000);
 
   it("should raise CRIT stage by 2 when held by GALAR_FARFETCHD", async () => {
-    await game.startBattle([Species.GALAR_FARFETCHD]);
+    await game.startBattle([SpeciesId.GALAR_FARFETCHD]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -58,7 +58,7 @@ describe.todo("Items - Leek", () => {
   }, 20000);
 
   it("should raise CRIT stage by 2 when held by SIRFETCHD", async () => {
-    await game.startBattle([Species.SIRFETCHD]);
+    await game.startBattle([SpeciesId.SIRFETCHD]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -72,7 +72,7 @@ describe.todo("Items - Leek", () => {
   }, 20000);
 
   it("should not raise CRIT stage when held by a Pokemon outside of FARFETCHD line", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 

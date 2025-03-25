@@ -37,7 +37,7 @@ import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -1103,7 +1103,7 @@ export class PartyUiHandler extends MessageUiHandler {
       formChangeItemModifiers = formChangeItemModifiers.filter(
         (m) => m.active || m.formChangeItem === FormChangeItem.ULTRANECROZIUM_Z,
       );
-    } else if (pokemon.species.speciesId === Species.NECROZMA) {
+    } else if (pokemon.species.speciesId === SpeciesId.NECROZMA) {
       // no form is currently active. the user has to activate some form, except ULTRANECROZIUM_Z
       formChangeItemModifiers = formChangeItemModifiers.filter(
         (m) => m.formChangeItem !== FormChangeItem.ULTRANECROZIUM_Z,

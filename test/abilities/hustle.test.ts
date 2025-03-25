@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,17 +24,17 @@ describe("Abilities - Hustle", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.HUSTLE)
+      .ability(AbilityId.HUSTLE)
       .moveset([MoveId.TACKLE, MoveId.GIGA_DRAIN, MoveId.FISSURE])
       .disableCrits()
       .battleType("single")
       .enemyMoveset(MoveId.SPLASH)
-      .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemySpecies(SpeciesId.SHUCKLE)
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("increases the user's Attack stat by 50%", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const atk = pikachu.stats[Stat.ATK];
 
@@ -48,7 +48,7 @@ describe("Abilities - Hustle", () => {
   });
 
   it("lowers the accuracy of the user's physical moves by 20%", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
 
     vi.spyOn(pikachu, "getAccuracyMultiplier");
@@ -60,7 +60,7 @@ describe("Abilities - Hustle", () => {
   });
 
   it("does not affect non-physical moves", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const spatk = pikachu.stats[Stat.SPATK];
 
@@ -78,7 +78,7 @@ describe("Abilities - Hustle", () => {
     game.override.startingLevel(100);
     game.override.enemyLevel(30);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

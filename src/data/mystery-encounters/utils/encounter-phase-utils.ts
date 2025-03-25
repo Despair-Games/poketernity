@@ -46,7 +46,7 @@ import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { FieldPosition } from "#enums/field-position";
 import type { Gender } from "#enums/gender";
@@ -987,16 +987,16 @@ export function handleMysteryEncounterTurnStartEffects(): boolean {
 export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
-  const biomes = Object.keys(Biome).filter((key) => isNaN(Number(key)));
+  const biomes = Object.keys(BiomeId).filter((key) => isNaN(Number(key)));
   const alwaysPickTheseBiomes = [
-    Biome.ISLAND,
-    Biome.ABYSS,
-    Biome.WASTELAND,
-    Biome.FAIRY_CAVE,
-    Biome.TEMPLE,
-    Biome.LABORATORY,
-    Biome.SPACE,
-    Biome.WASTELAND,
+    BiomeId.ISLAND,
+    BiomeId.ABYSS,
+    BiomeId.WASTELAND,
+    BiomeId.FAIRY_CAVE,
+    BiomeId.TEMPLE,
+    BiomeId.LABORATORY,
+    BiomeId.SPACE,
+    BiomeId.WASTELAND,
   ];
 
   const calculateNumEncounters = (): any[] => {
@@ -1005,7 +1005,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     let mostRecentEncounterWave = 0;
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
-    let currentBiome = Biome.TOWN;
+    let currentBiome = BiomeId.TOWN;
     let currentArena = globalScene.newArena(currentBiome);
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
@@ -1018,9 +1018,9 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // New biome
       if (i % 10 === 1) {
         if (Array.isArray(biomeLinks[currentBiome])) {
-          let biomes: Biome[];
+          let biomes: BiomeId[];
           globalScene.executeWithSeedOffset(() => {
-            biomes = (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
+            biomes = (biomeLinks[currentBiome] as (BiomeId | [BiomeId, number])[])
               .filter((b) => {
                 return !Array.isArray(b) || !randSeedInt(b[1]);
               })
@@ -1035,10 +1035,10 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
             }
           }
         } else if (biomeLinks.hasOwnProperty(currentBiome)) {
-          currentBiome = biomeLinks[currentBiome] as Biome;
+          currentBiome = biomeLinks[currentBiome] as BiomeId;
         } else {
           if (!(i % 50)) {
-            currentBiome = Biome.END;
+            currentBiome = BiomeId.END;
           } else {
             currentBiome = globalScene.generateRandomBiome(i);
           }
@@ -1060,7 +1060,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // Otherwise, roll encounter
 
       const roll = randSeedInt(256);
-      validMEfloorsByBiome.set(Biome[currentBiome], (validMEfloorsByBiome.get(Biome[currentBiome]) ?? 0) + 1);
+      validMEfloorsByBiome.set(BiomeId[currentBiome], (validMEfloorsByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
@@ -1096,7 +1096,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
             : tierValue > rareThreshold
               ? ++numEncounters[2]
               : ++numEncounters[3];
-        encountersByBiome.set(Biome[currentBiome], (encountersByBiome.get(Biome[currentBiome]) ?? 0) + 1);
+        encountersByBiome.set(BiomeId[currentBiome], (encountersByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
       } else {
         encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }

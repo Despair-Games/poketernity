@@ -1,10 +1,10 @@
 import { allMoves } from "#app/data/data-lists";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Dynamax Cannon", () => {
@@ -27,9 +27,9 @@ describe("Moves - Dynamax Cannon", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(Species.SNORLAX)
-      .enemyForms({ [Species.SNORLAX]: 1 })
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyForms({ [SpeciesId.SNORLAX]: 1 })
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100)
@@ -38,7 +38,7 @@ describe("Moves - Dynamax Cannon", () => {
   });
 
   it("should deal double damage against a dynamax'd Pokemon", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
@@ -63,8 +63,8 @@ describe("Moves - Dynamax Cannon", () => {
   });
 
   it("should not deal double damage against non max Pokemon", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyForms({ [Species.SNORLAX]: 0 });
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    game.override.enemySpecies(SpeciesId.SNORLAX).enemyForms({ [SpeciesId.SNORLAX]: 0 });
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
@@ -88,8 +88,8 @@ describe("Moves - Dynamax Cannon", () => {
   });
 
   it("should not deal double damage against Eternamax", async () => {
-    game.override.enemySpecies(Species.ETERNATUS).enemyForms({ [Species.ETERNATUS]: 1 });
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    game.override.enemySpecies(SpeciesId.ETERNATUS).enemyForms({ [SpeciesId.ETERNATUS]: 1 });
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
@@ -114,8 +114,8 @@ describe("Moves - Dynamax Cannon", () => {
   });
 
   it("Dynamax cannon cannot be encored", async () => {
-    game.override.enemySpecies(Species.SHUCKLE).enemyAbility(Abilities.STURDY).enemyMoveset(MoveId.ENCORE);
-    await game.classicMode.startBattle([Species.ETERNATUS]);
+    game.override.enemySpecies(SpeciesId.SHUCKLE).enemyAbility(AbilityId.STURDY).enemyMoveset(MoveId.ENCORE);
+    await game.classicMode.startBattle([SpeciesId.ETERNATUS]);
 
     game.move.select(dynamaxCannon.id);
     await game.toNextTurn();

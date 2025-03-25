@@ -4,7 +4,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { rgbHexToRgba } from "#app/utils";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export class CandyBar extends Phaser.GameObjects.Container {
@@ -12,7 +12,7 @@ export class CandyBar extends Phaser.GameObjects.Container {
   private candyIcon: Phaser.GameObjects.Sprite;
   private candyOverlayIcon: Phaser.GameObjects.Sprite;
   private countText: Phaser.GameObjects.Text;
-  private speciesId: Species;
+  private speciesId: SpeciesId;
 
   private tween: Phaser.Tweens.Tween | null;
   private autoHideTimer: NodeJS.Timeout | null;
@@ -49,7 +49,7 @@ export class CandyBar extends Phaser.GameObjects.Container {
     this.shown = false;
   }
 
-  showStarterSpeciesCandy(starterSpeciesId: Species, count: number): Promise<void> {
+  showStarterSpeciesCandy(starterSpeciesId: SpeciesId, count: number): Promise<void> {
     return new Promise<void>((resolve) => {
       if (this.shown) {
         if (this.speciesId === starterSpeciesId) {

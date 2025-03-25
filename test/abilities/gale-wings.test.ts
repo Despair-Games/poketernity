@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,16 +25,16 @@ describe("Abilities - Gale Wings", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.WING_ATTACK])
-      .ability(Abilities.GALE_WINGS)
+      .ability(AbilityId.GALE_WINGS)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should boost the priority of flying type moves by 1 at full HP", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 
     const flyingMove = allMoves.get(MoveId.WING_ATTACK);
@@ -48,7 +48,7 @@ describe("Abilities - Gale Wings", () => {
   });
 
   it("should not boost the priority of flying type moves if not at full HP", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.hp = 1;
 
@@ -64,7 +64,7 @@ describe("Abilities - Gale Wings", () => {
 
   it("should not boost the priority of variable-type moves", async () => {
     game.override.moveset(MoveId.HIDDEN_POWER);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     //IVs for Flying-Type Hidden Power
     playerPokemon.ivs = [31, 31, 31, 30, 30, 30];
@@ -81,8 +81,8 @@ describe("Abilities - Gale Wings", () => {
   });
 
   it("should not boost the priority of originally Normal-type moves transformed by Aerilate", async () => {
-    game.override.moveset(MoveId.TACKLE).passiveAbility(Abilities.AERILATE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.moveset(MoveId.TACKLE).passiveAbility(AbilityId.AERILATE);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     const flyingMove = allMoves.get(MoveId.TACKLE);

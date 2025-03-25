@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,11 +25,11 @@ describe("Moves - Gastro Acid", () => {
     game.override.battleType("double");
     game.override.startingLevel(1);
     game.override.enemyLevel(100);
-    game.override.ability(Abilities.NONE);
+    game.override.ability(AbilityId.NONE);
     game.override.moveset([MoveId.GASTRO_ACID, MoveId.WATER_GUN, MoveId.SPLASH, MoveId.CORE_ENFORCER]);
-    game.override.enemySpecies(Species.BIDOOF);
+    game.override.enemySpecies(SpeciesId.BIDOOF);
     game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(Abilities.WATER_ABSORB);
+    game.override.enemyAbility(AbilityId.WATER_ABSORB);
   });
 
   it("suppresses effect of ability", async () => {

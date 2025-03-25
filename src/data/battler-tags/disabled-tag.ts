@@ -1,3 +1,8 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type AbilityId } from "#enums/ability-id";
+// -- end tsdoc imports
+
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { MoveRestrictionBattlerTag } from "#app/data/battler-tags/move-restriction-battler-tag";
 import { allMoves } from "#app/data/data-lists";
@@ -10,7 +15,7 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * Tag representing the "disabling" effect performed by {@linkcode MoveId.DISABLE} and {@linkcode Abilities.CURSED_BODY}.
+ * Tag representing the "disabling" effect performed by {@linkcode MoveId.DISABLE} and {@linkcode AbilityId.CURSED_BODY}.
  * When the tag is added, the last-used move of the tag holder is set as the disabled move.
  * @extends MoveRestrictionBattlerTag
  */

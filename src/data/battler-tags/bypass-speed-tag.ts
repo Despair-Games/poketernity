@@ -1,3 +1,4 @@
+import type { PreventBypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
@@ -19,7 +20,7 @@ export class BypassSpeedTag extends BattlerTag {
 
   override canAdd(pokemon: Pokemon): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE, pokemon, false, cancelled);
+    applyAbAttrs<PreventBypassSpeedChanceAbAttr>(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE, pokemon, false, cancelled);
     return !cancelled.value;
   }
 }

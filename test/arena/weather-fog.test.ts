@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -28,8 +28,8 @@ describe("Weather - Fog", () => {
     game.override
       .weather(WeatherType.FOG)
       .battleType("single")
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH])
       .moveset([MoveId.TACKLE]);
   });
@@ -39,7 +39,7 @@ describe("Weather - Fog", () => {
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
@@ -50,8 +50,8 @@ describe("Weather - Fog", () => {
     const moveToCheck = allMoves.get(MoveId.TACKLE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
-    game.override.ability(Abilities.AIR_LOCK);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.ability(AbilityId.AIR_LOCK);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(MoveEffectPhase);
 

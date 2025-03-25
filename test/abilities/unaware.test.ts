@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,16 +26,16 @@ describe("Abilities - Unaware", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.UNAWARE)
+      .ability(AbilityId.UNAWARE)
       .battleType("single")
       .startingLevel(100)
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should ignore the opponent's stat stages, except for speed", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SHELL_SMASH);
@@ -55,7 +55,7 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should not ignore the user's stat stages", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SHELL_SMASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);
@@ -80,7 +80,7 @@ describe("Abilities - Unaware", () => {
     const storedPowerMove = allMoves.get(MoveId.STORED_POWER);
     vi.spyOn(storedPowerMove, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SHELL_SMASH);
@@ -97,7 +97,7 @@ describe("Abilities - Unaware", () => {
     vi.spyOn(punishmentMove, "calculateBattlePower");
 
     game.override.startingLevel(5).enemyLevel(100);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SHELL_SMASH);
@@ -110,7 +110,7 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should cause the opponent's Body Press to ignore the opponent's Defense stages", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getEffectiveStat");
@@ -133,7 +133,7 @@ describe("Abilities - Unaware", () => {
 
   it("should not cause self-inflicted confusion to ignore stat stages", async () => {
     game.override.statusActivation(true).startingLevel(1000).enemyLevel(1000);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.field.getPlayerPokemon();
     vi.spyOn(playerPokemon, "getEffectiveStat");
@@ -173,7 +173,7 @@ describe("Abilities - Unaware", () => {
     // TODO: Is there a more direct way to test for Burn damage reduction?
     vi.spyOn(allMoves.get(MoveId.WILL_O_WISP), "accuracy", "get").mockReturnValue(-1);
     game.override.startingLevel(1000).enemyLevel(1000);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const hpAmounts = [playerPokemon.hp];

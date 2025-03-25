@@ -1,3 +1,4 @@
+import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { type Move, type MoveAttrFilter } from "#app/data/moves/move";
 import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
@@ -18,7 +19,7 @@ export const FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {
   const cancelled = new BooleanHolder(false);
-  applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
+  applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
   if (cancelled.value) {
     return false;
   }

@@ -1,7 +1,7 @@
-import { Biome } from "#enums/biome";
-import { Abilities } from "#enums/abilities";
+import { BiomeId } from "#enums/biome-id";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,18 +26,18 @@ describe("Game Over Phase", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.MEMENTO, MoveId.ICE_BEAM, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingWave(200)
-      .startingBiome(Biome.END)
+      .startingBiome(BiomeId.END)
       .startingLevel(10000);
   });
 
   it("winning a run should give rewards", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
     vi.spyOn(game.scene, "validateAchv");
 
     // Note: `game.doKillOpponents()` does not properly handle final boss
@@ -60,7 +60,7 @@ describe("Game Over Phase", () => {
   });
 
   it("losing a run should not give rewards", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
     vi.spyOn(game.scene, "validateAchv");
 
     game.move.select(MoveId.MEMENTO);

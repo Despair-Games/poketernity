@@ -238,7 +238,7 @@ import { isNullOrUndefined } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
@@ -251,7 +251,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { MultiHitType } from "#enums/multi-hit-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
@@ -951,7 +951,7 @@ export function initMoves() {
       .attr(RandomMovesetMoveAttr, invalidSleepTalkMoves)
       .condition(userSleptOrComatoseCondition),
     new StatusMove(MoveId.HEAL_BELL, ElementalType.NORMAL, -1, 5, -1, 0, 2)
-      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:bellChimed"), Abilities.SOUNDPROOF)
+      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:bellChimed"), AbilityId.SOUNDPROOF)
       .soundMove()
       .snatchable()
       .target(MoveTarget.PARTY),
@@ -1305,7 +1305,7 @@ export function initMoves() {
       })
       .bulletMove(),
     new StatusMove(MoveId.AROMATHERAPY, ElementalType.GRASS, -1, 5, -1, 0, 3)
-      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), Abilities.SAP_SIPPER)
+      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), AbilityId.SAP_SIPPER)
       .target(MoveTarget.PARTY)
       .snatchable(),
     new StatusMove(MoveId.FAKE_TEARS, ElementalType.DARK, 100, 20, -1, 0, 3)
@@ -1563,7 +1563,7 @@ export function initMoves() {
     new AttackMove(MoveId.LAST_RESORT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 140, 100, 5, -1, 0, 4)
       .attr(LastResortAttr),
     new StatusMove(MoveId.WORRY_SEED, ElementalType.GRASS, 100, 10, -1, 0, 4)
-      .attr(AbilityChangeAttr, Abilities.INSOMNIA)
+      .attr(AbilityChangeAttr, AbilityId.INSOMNIA)
       .bounceable(),
     new AttackMove(MoveId.SUCKER_PUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4)
       .condition(
@@ -1842,18 +1842,18 @@ export function initMoves() {
       .condition(
         (_user, target, _move) =>
           ![
-            Species.DIGLETT,
-            Species.DUGTRIO,
-            Species.ALOLA_DIGLETT,
-            Species.ALOLA_DUGTRIO,
-            Species.SANDYGAST,
-            Species.PALOSSAND,
-            Species.WIGLETT,
-            Species.WUGTRIO,
+            SpeciesId.DIGLETT,
+            SpeciesId.DUGTRIO,
+            SpeciesId.ALOLA_DIGLETT,
+            SpeciesId.ALOLA_DUGTRIO,
+            SpeciesId.SANDYGAST,
+            SpeciesId.PALOSSAND,
+            SpeciesId.WIGLETT,
+            SpeciesId.WUGTRIO,
           ].includes(target.species.speciesId),
       )
       .condition(
-        (_user, target, _move) => !(target.species.speciesId === Species.GENGAR && target.getFormKey() === "mega"),
+        (_user, target, _move) => !(target.species.speciesId === SpeciesId.GENGAR && target.getFormKey() === "mega"),
       )
       .condition(
         (_user, target, _move) =>
@@ -1914,7 +1914,7 @@ export function initMoves() {
     new AttackMove(MoveId.FOUL_PLAY, ElementalType.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
       .attr(TargetAtkUserAtkAttr),
     new StatusMove(MoveId.SIMPLE_BEAM, ElementalType.NORMAL, 100, 15, -1, 0, 5)
-      .attr(AbilityChangeAttr, Abilities.SIMPLE)
+      .attr(AbilityChangeAttr, AbilityId.SIMPLE)
       .bounceable(),
     new StatusMove(MoveId.ENTRAINMENT, ElementalType.NORMAL, 100, 15, -1, 0, 5)
       .condition(failOnMaxCondition)
@@ -2322,16 +2322,16 @@ export function initMoves() {
     new StatusMove(MoveId.MAGNETIC_FLUX, ElementalType.ELECTRIC, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], 1, false, {
         condition: (_user, target, _move) =>
-          !![Abilities.PLUS, Abilities.MINUS].find((a) => target.hasAbility(a, false)),
+          !![AbilityId.PLUS, AbilityId.MINUS].find((a) => target.hasAbility(a, false)),
       })
       .ignoresSubstitute()
       .snatchable()
       .target(MoveTarget.USER_AND_ALLIES)
       .condition(
         (user, _target, _move) =>
-          !![user, user.getAlly()]
+          [user, user.getAlly()]
             .filter((p) => p?.isActive())
-            .find((p) => !![Abilities.PLUS, Abilities.MINUS].find((a) => p.hasAbility(a, false))),
+            .some((p) => [AbilityId.PLUS, AbilityId.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new StatusMove(MoveId.HAPPY_HOUR, ElementalType.NORMAL, -1, 30, -1, 0, 6) // No animation
       .attr(AddArenaTagAttr, ArenaTagType.HAPPY_HOUR, ArenaTagRelativeSide.USER, { failOnOverlap: true })
@@ -2531,7 +2531,7 @@ export function initMoves() {
     new StatusMove(MoveId.GEAR_UP, ElementalType.STEEL, -1, 20, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 1, false, {
         condition: (_user, target, _move) =>
-          [Abilities.PLUS, Abilities.MINUS].some((a) => target.hasAbility(a, false)),
+          [AbilityId.PLUS, AbilityId.MINUS].some((a) => target.hasAbility(a, false)),
       })
       .snatchable()
       .ignoresSubstitute()
@@ -2540,7 +2540,7 @@ export function initMoves() {
         (user, _target, _move) =>
           [user, user.getAlly()]
             .filter((p) => p?.isActive())
-            .some((p) => [Abilities.PLUS, Abilities.MINUS].some((a) => p.hasAbility(a, false))),
+            .some((p) => [AbilityId.PLUS, AbilityId.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new AttackMove(MoveId.THROAT_CHOP, ElementalType.DARK, MoveCategory.PHYSICAL, 80, 100, 15, 100, 0, 7)
       .attr(AddBattlerTagAttr, BattlerTagType.THROAT_CHOPPED),
@@ -2758,7 +2758,7 @@ export function initMoves() {
     new AttackMove(MoveId.FREEZY_FROST, ElementalType.ICE, MoveCategory.SPECIAL, 100, 90, 10, -1, 0, 7)
       .attr(ResetStatsAttr, true),
     new AttackMove(MoveId.SPARKLY_SWIRL, ElementalType.FAIRY, MoveCategory.SPECIAL, 120, 85, 5, -1, 0, 7)
-      .attr(PartyStatusCureAttr, null, Abilities.NONE),
+      .attr(PartyStatusCureAttr, null, AbilityId.NONE),
     new AttackMove(MoveId.VEEVEE_VOLLEY, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, -1, 20, -1, 0, 7)
       .attr(FriendshipPowerAttr),
     new AttackMove(MoveId.DOUBLE_IRON_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 60, 100, 5, 30, 0, 7)
@@ -3148,110 +3148,110 @@ export function initMoves() {
       ])
       .snatchable(), // Custom
     new AttackMove(MoveId.G_MAX_WILDFIRE, ElementalType.FIRE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CHARIZARD)
+      .gMaxMove(SpeciesId.CHARIZARD)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(MoveId.G_MAX_BEFUDDLE, ElementalType.BUG, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.BUTTERFREE)
+      .gMaxMove(SpeciesId.BUTTERFREE)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
     new AttackMove(MoveId.G_MAX_VOLT_CRASH, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.PIKACHU)
+      .gMaxMove(SpeciesId.PIKACHU)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
     new AttackMove(MoveId.G_MAX_GOLD_RUSH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.MEOWTH)
+      .gMaxMove(SpeciesId.MEOWTH)
       .attr(ConfuseAttr)
       .attr(MoneyAttr), // should gives 100x user level (20x as effective as payday) as money. Rebalance later
     new AttackMove(MoveId.G_MAX_CHI_STRIKE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.MACHAMP)
+      .gMaxMove(SpeciesId.MACHAMP)
       .attr(AddBattlerTagAttr, BattlerTagType.CRIT_BOOST_STACKABLE, true),
     new AttackMove(MoveId.G_MAX_TERROR, ElementalType.GHOST, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.GENGAR)
+      .gMaxMove(SpeciesId.GENGAR)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
     new AttackMove(MoveId.G_MAX_RESONANCE, ElementalType.ICE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.LAPRAS)
+      .gMaxMove(SpeciesId.LAPRAS)
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5 }),
     new AttackMove(MoveId.G_MAX_CUDDLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.EEVEE)
+      .gMaxMove(SpeciesId.EEVEE)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED),
     new AttackMove(MoveId.G_MAX_REPLENISH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.SNORLAX)
+      .gMaxMove(SpeciesId.SNORLAX)
       .partial(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(MoveId.G_MAX_MALODOR, ElementalType.POISON, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.GARBODOR)
+      .gMaxMove(SpeciesId.GARBODOR)
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.G_MAX_STONESURGE, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.DREDNAW)
+      .gMaxMove(SpeciesId.DREDNAW)
       .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK),
     new AttackMove(MoveId.G_MAX_WIND_RAGE, ElementalType.FLYING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CORVIKNIGHT)
+      .gMaxMove(SpeciesId.CORVIKNIGHT)
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
       .attr(RemoveEntryHazardAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(MoveId.G_MAX_STUN_SHOCK, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.TOXTRICITY)
+      .gMaxMove(SpeciesId.TOXTRICITY)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
     new AttackMove(MoveId.G_MAX_FINALE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.ALCREMIE)
+      .gMaxMove(SpeciesId.ALCREMIE)
       .attr(HealAttr, 1 / 6),
     new AttackMove(MoveId.G_MAX_DEPLETION, ElementalType.DRAGON, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.DURALUDON)
+      .gMaxMove(SpeciesId.DURALUDON)
       .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.ORBEETLE)
+      .gMaxMove(SpeciesId.ORBEETLE)
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.COALOSSAL)
+      .gMaxMove(SpeciesId.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(MoveId.G_MAX_SANDBLAST, ElementalType.GROUND, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.SANDACONDA)
+      .gMaxMove(SpeciesId.SANDACONDA)
       .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
     new AttackMove(MoveId.G_MAX_SNOOZE, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.GRIMMSNARL)
+      .gMaxMove(SpeciesId.GRIMMSNARL)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
       .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
     new AttackMove(MoveId.G_MAX_TARTNESS, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.FLAPPLE)
+      .gMaxMove(SpeciesId.FLAPPLE)
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(MoveId.G_MAX_SWEETNESS, ElementalType.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.APPLETUN)
+      .gMaxMove(SpeciesId.APPLETUN)
       .attr(HealStatusEffectAttr, true, getNonVolatileStatusEffects()),
     new AttackMove(MoveId.G_MAX_SMITE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.HATTERENE)
+      .gMaxMove(SpeciesId.HATTERENE)
       .attr(ConfuseAttr),
     new AttackMove(MoveId.G_MAX_STEELSURGE, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.COPPERAJAH)
+      .gMaxMove(SpeciesId.COPPERAJAH)
       .attr(AddEntryHazardTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(MoveId.G_MAX_MELTDOWN, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.MELMETAL)
+      .gMaxMove(SpeciesId.MELMETAL)
       .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),
     new AttackMove(MoveId.G_MAX_FOAM_BURST, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.KINGLER)
+      .gMaxMove(SpeciesId.KINGLER)
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
     new AttackMove(MoveId.G_MAX_CENTIFERNO, ElementalType.FIRE, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CENTISKORCH)
+      .gMaxMove(SpeciesId.CENTISKORCH)
       .attr(TrapAttr, BattlerTagType.G_MAX_FIRE_SPIN),
     new AttackMove(MoveId.G_MAX_VINE_LASH, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.VENUSAUR)
+      .gMaxMove(SpeciesId.VENUSAUR)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
     new AttackMove(MoveId.G_MAX_CANNONADE, ElementalType.WATER, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.BLASTOISE)
+      .gMaxMove(SpeciesId.BLASTOISE)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
     new AttackMove(MoveId.G_MAX_DRUM_SOLO, ElementalType.GRASS, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.RILLABOOM)
+      .gMaxMove(SpeciesId.RILLABOOM)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_FIREBALL, ElementalType.FIRE, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CINDERACE)
+      .gMaxMove(SpeciesId.CINDERACE)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_HYDROSNIPE, ElementalType.WATER, MoveCategory.SPECIAL, 110, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.INTELEON)
+      .gMaxMove(SpeciesId.INTELEON)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_ONE_BLOW, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.URSHIFU)
+      .gMaxMove(SpeciesId.URSHIFU)
       .ignoresProtect(),
     new AttackMove(MoveId.G_MAX_RAPID_FLOW, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.URSHIFU)
+      .gMaxMove(SpeciesId.URSHIFU)
       .ignoresProtect(),
     new AttackMove(MoveId.TERA_BLAST, ElementalType.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
@@ -3287,7 +3287,8 @@ export function initMoves() {
       .punchingMove(),
     new StatusMove(MoveId.SPICY_EXTRACT, ElementalType.GRASS, -1, 15, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.ATK], 2)
-      .attr(StatStageChangeAttr, [Stat.DEF], -2),
+      .attr(StatStageChangeAttr, [Stat.DEF], -2)
+      .bounceable(),
     new AttackMove(MoveId.SPIN_OUT, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.SPD], -2, true),
     new AttackMove(MoveId.POPULATION_BOMB, ElementalType.NORMAL, MoveCategory.PHYSICAL, 20, 90, 10, -1, 0, 9)
@@ -3473,7 +3474,7 @@ export function initMoves() {
       .attr(TeraMoveCategoryAttr)
       .attr(TeraStarstormTypeAttr)
       .attr(VariableTargetAttr, (user, _target, _move) =>
-        user.species.speciesId === Species.TERAPAGOS && user.isTerastallized()
+        user.species.speciesId === SpeciesId.TERAPAGOS && user.isTerastallized()
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       ),

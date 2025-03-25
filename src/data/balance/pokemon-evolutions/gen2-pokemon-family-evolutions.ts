@@ -1,6 +1,6 @@
 import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   AMBIPOM_EVO_LEVEL,
@@ -26,87 +26,89 @@ import {
 } from "#app/data/pokemon-evolutions";
 
 export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
-  [Species.CHIKORITA]: [new SpeciesEvolution(Species.BAYLEEF, 16, null, null)],
-  [Species.BAYLEEF]: [new SpeciesEvolution(Species.MEGANIUM, 32, null, null)],
-  [Species.CYNDAQUIL]: [new SpeciesEvolution(Species.QUILAVA, 14, null, null)],
-  [Species.QUILAVA]: [
-    new SpeciesEvolution(Species.TYPHLOSION, 36, null, [new DayEvolutionCondition()]),
-    new SpeciesEvolution(Species.HISUI_TYPHLOSION, 36, null, [new NightEvolutionCondition()]),
+  [SpeciesId.CHIKORITA]: [new SpeciesEvolution(SpeciesId.BAYLEEF, 16, null, null)],
+  [SpeciesId.BAYLEEF]: [new SpeciesEvolution(SpeciesId.MEGANIUM, 32, null, null)],
+  [SpeciesId.CYNDAQUIL]: [new SpeciesEvolution(SpeciesId.QUILAVA, 14, null, null)],
+  [SpeciesId.QUILAVA]: [
+    new SpeciesEvolution(SpeciesId.TYPHLOSION, 36, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(SpeciesId.HISUI_TYPHLOSION, 36, null, [new NightEvolutionCondition()]),
   ],
-  [Species.TOTODILE]: [new SpeciesEvolution(Species.CROCONAW, 18, null, null)],
-  [Species.CROCONAW]: [new SpeciesEvolution(Species.FERALIGATR, 30, null, null)],
-  [Species.SENTRET]: [new SpeciesEvolution(Species.FURRET, 15, null, null)],
-  [Species.HOOTHOOT]: [new SpeciesEvolution(Species.NOCTOWL, 20, null, null)],
-  [Species.LEDYBA]: [new SpeciesEvolution(Species.LEDIAN, 18, null, null)],
-  [Species.SPINARAK]: [new SpeciesEvolution(Species.ARIADOS, 22, null, null)],
-  [Species.CHINCHOU]: [new SpeciesEvolution(Species.LANTURN, 27, null, null)],
-  [Species.TOGEPI]: [
+  [SpeciesId.TOTODILE]: [new SpeciesEvolution(SpeciesId.CROCONAW, 18, null, null)],
+  [SpeciesId.CROCONAW]: [new SpeciesEvolution(SpeciesId.FERALIGATR, 30, null, null)],
+  [SpeciesId.SENTRET]: [new SpeciesEvolution(SpeciesId.FURRET, 15, null, null)],
+  [SpeciesId.HOOTHOOT]: [new SpeciesEvolution(SpeciesId.NOCTOWL, 20, null, null)],
+  [SpeciesId.LEDYBA]: [new SpeciesEvolution(SpeciesId.LEDIAN, 18, null, null)],
+  [SpeciesId.SPINARAK]: [new SpeciesEvolution(SpeciesId.ARIADOS, 22, null, null)],
+  [SpeciesId.CHINCHOU]: [new SpeciesEvolution(SpeciesId.LANTURN, 27, null, null)],
+  [SpeciesId.TOGEPI]: [
     new SpeciesEvolution(
-      Species.TOGETIC,
+      SpeciesId.TOGETIC,
       1,
       null,
       [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
-  [Species.TOGETIC]: [
-    new SpeciesEvolution(Species.TOGEKISS, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.TOGETIC]: [
+    new SpeciesEvolution(SpeciesId.TOGEKISS, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.NATU]: [new SpeciesEvolution(Species.XATU, 25, null, null)],
-  [Species.MAREEP]: [new SpeciesEvolution(Species.FLAAFFY, 15, null, null)],
-  [Species.FLAAFFY]: [new SpeciesEvolution(Species.AMPHAROS, 30, null, null)],
+  [SpeciesId.NATU]: [new SpeciesEvolution(SpeciesId.XATU, 25, null, null)],
+  [SpeciesId.MAREEP]: [new SpeciesEvolution(SpeciesId.FLAAFFY, 15, null, null)],
+  [SpeciesId.FLAAFFY]: [new SpeciesEvolution(SpeciesId.AMPHAROS, 30, null, null)],
   /** Azurill is from Gen 3 */
-  [Species.AZURILL]: [
+  [SpeciesId.AZURILL]: [
     new SpeciesEvolution(
-      Species.MARILL,
+      SpeciesId.MARILL,
       1,
       null,
       [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
-  [Species.MARILL]: [new SpeciesEvolution(Species.AZUMARILL, 18, null, null)],
+  [SpeciesId.MARILL]: [new SpeciesEvolution(SpeciesId.AZUMARILL, 18, null, null)],
   /** Bonsly is from Gen 4 */
-  [Species.BONSLY]: [
-    new SpeciesEvolution(Species.SUDOWOODO, 1, null, [new MoveKnownEvoCondition(MoveId.MIMIC)], SUDOWOODO_EVO_LEVEL),
+  [SpeciesId.BONSLY]: [
+    new SpeciesEvolution(SpeciesId.SUDOWOODO, 1, null, [new MoveKnownEvoCondition(MoveId.MIMIC)], SUDOWOODO_EVO_LEVEL),
   ],
-  [Species.HOPPIP]: [new SpeciesEvolution(Species.SKIPLOOM, 18, null, null)],
-  [Species.SKIPLOOM]: [new SpeciesEvolution(Species.JUMPLUFF, 27, null, null)],
-  [Species.AIPOM]: [
-    new SpeciesEvolution(Species.AMBIPOM, 1, null, [new MoveKnownEvoCondition(MoveId.DOUBLE_HIT)], AMBIPOM_EVO_LEVEL),
+  [SpeciesId.HOPPIP]: [new SpeciesEvolution(SpeciesId.SKIPLOOM, 18, null, null)],
+  [SpeciesId.SKIPLOOM]: [new SpeciesEvolution(SpeciesId.JUMPLUFF, 27, null, null)],
+  [SpeciesId.AIPOM]: [
+    new SpeciesEvolution(SpeciesId.AMBIPOM, 1, null, [new MoveKnownEvoCondition(MoveId.DOUBLE_HIT)], AMBIPOM_EVO_LEVEL),
   ],
-  [Species.SUNKERN]: [new SpeciesEvolution(Species.SUNFLORA, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
-  [Species.YANMA]: [
+  [SpeciesId.SUNKERN]: [
+    new SpeciesEvolution(SpeciesId.SUNFLORA, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  ],
+  [SpeciesId.YANMA]: [
     new SpeciesEvolution(
-      Species.YANMEGA,
+      SpeciesId.YANMEGA,
       1,
       null,
       [new MoveKnownEvoCondition(MoveId.ANCIENT_POWER)],
       YANMEGA_EVO_LEVEL,
     ),
   ],
-  [Species.WOOPER]: [new SpeciesEvolution(Species.QUAGSIRE, 20, null, null)],
-  [Species.MURKROW]: [
-    new SpeciesEvolution(Species.HONCHKROW, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.WOOPER]: [new SpeciesEvolution(SpeciesId.QUAGSIRE, 20, null, null)],
+  [SpeciesId.MURKROW]: [
+    new SpeciesEvolution(SpeciesId.HONCHKROW, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.MISDREAVUS]: [
-    new SpeciesEvolution(Species.MISMAGIUS, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.MISDREAVUS]: [
+    new SpeciesEvolution(SpeciesId.MISMAGIUS, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   /** Wynaut is from Gen 3 */
-  [Species.WYNAUT]: [new SpeciesEvolution(Species.WOBBUFFET, 15, null, null)],
-  [Species.GIRAFARIG]: [
+  [SpeciesId.WYNAUT]: [new SpeciesEvolution(SpeciesId.WOBBUFFET, 15, null, null)],
+  [SpeciesId.GIRAFARIG]: [
     new SpeciesEvolution(
-      Species.FARIGIRAF,
+      SpeciesId.FARIGIRAF,
       1,
       null,
       [new MoveKnownEvoCondition(MoveId.TWIN_BEAM)],
       FARIGARIF_EVO_LEVEL,
     ),
   ],
-  [Species.PINECO]: [new SpeciesEvolution(Species.FORRETRESS, 31, null, null)],
-  [Species.DUNSPARCE]: [
+  [SpeciesId.PINECO]: [new SpeciesEvolution(SpeciesId.FORRETRESS, 31, null, null)],
+  [SpeciesId.DUNSPARCE]: [
     new SpeciesFormEvolution(
-      Species.DUDUNSPARCE,
+      SpeciesId.DUDUNSPARCE,
       "",
       "three-segment",
       1,
@@ -115,69 +117,69 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       DUDUNSPARCE_EVO_LEVEL,
     ),
     new SpeciesEvolution(
-      Species.DUDUNSPARCE,
+      SpeciesId.DUDUNSPARCE,
       1,
       null,
       [new MoveKnownEvoCondition(MoveId.HYPER_DRILL)],
       DUDUNSPARCE_EVO_LEVEL,
     ),
   ],
-  [Species.GLIGAR]: [
+  [SpeciesId.GLIGAR]: [
     new SpeciesEvolution(
-      Species.GLISCOR,
+      SpeciesId.GLISCOR,
       1,
       EvolutionItem.RAZOR_FANG,
       [new NightEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
-  [Species.SNUBBULL]: [new SpeciesEvolution(Species.GRANBULL, 23, null, null)],
-  [Species.SNEASEL]: [
+  [SpeciesId.SNUBBULL]: [new SpeciesEvolution(SpeciesId.GRANBULL, 23, null, null)],
+  [SpeciesId.SNEASEL]: [
     new SpeciesEvolution(
-      Species.WEAVILE,
+      SpeciesId.WEAVILE,
       1,
       EvolutionItem.RAZOR_CLAW,
       [new NightEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
-  [Species.TEDDIURSA]: [new SpeciesEvolution(Species.URSARING, 30, null, null)],
-  [Species.URSARING]: [
+  [SpeciesId.TEDDIURSA]: [new SpeciesEvolution(SpeciesId.URSARING, 30, null, null)],
+  [SpeciesId.URSARING]: [
     new SpeciesEvolution(
-      Species.URSALUNA,
+      SpeciesId.URSALUNA,
       1,
       EvolutionItem.PEAT_BLOCK,
       [new NightEvolutionCondition()],
       ADVANCED_ITEM_EVO_LEVEL,
     ), // Note: Ursaring does not evolve into Bloodmoon Ursaluna
   ],
-  [Species.SLUGMA]: [new SpeciesEvolution(Species.MAGCARGO, 38, null, null)],
-  [Species.SWINUB]: [new SpeciesEvolution(Species.PILOSWINE, 33, null, null)],
-  [Species.PILOSWINE]: [
+  [SpeciesId.SLUGMA]: [new SpeciesEvolution(SpeciesId.MAGCARGO, 38, null, null)],
+  [SpeciesId.SWINUB]: [new SpeciesEvolution(SpeciesId.PILOSWINE, 33, null, null)],
+  [SpeciesId.PILOSWINE]: [
     new SpeciesEvolution(
-      Species.MAMOSWINE,
+      SpeciesId.MAMOSWINE,
       1,
       null,
       [new MoveKnownEvoCondition(MoveId.ANCIENT_POWER)],
       MAMOSWINE_EVO_LEVEL,
     ),
   ],
-  [Species.REMORAID]: [new SpeciesEvolution(Species.OCTILLERY, 25, null, null)],
+  [SpeciesId.REMORAID]: [new SpeciesEvolution(SpeciesId.OCTILLERY, 25, null, null)],
   /** Mantyke is from Gen 4 */
-  [Species.MANTYKE]: [
-    new SpeciesEvolution(Species.MANTINE, 32, null, [new SpeciesOwnedEvoCondition(Species.REMORAID)]),
+  [SpeciesId.MANTYKE]: [
+    new SpeciesEvolution(SpeciesId.MANTINE, 32, null, [new SpeciesOwnedEvoCondition(SpeciesId.REMORAID)]),
   ],
-  [Species.HOUNDOUR]: [new SpeciesEvolution(Species.HOUNDOOM, 24, null, null)],
-  [Species.PHANPY]: [new SpeciesEvolution(Species.DONPHAN, 25, null, null)],
-  [Species.STANTLER]: [
+  [SpeciesId.HOUNDOUR]: [new SpeciesEvolution(SpeciesId.HOUNDOOM, 24, null, null)],
+  [SpeciesId.PHANPY]: [new SpeciesEvolution(SpeciesId.DONPHAN, 25, null, null)],
+  [SpeciesId.STANTLER]: [
     new SpeciesEvolution(
-      Species.WYRDEER,
+      SpeciesId.WYRDEER,
       1,
       null,
       [new MoveKnownEvoCondition(MoveId.PSYSHIELD_BASH)],
       WYRDEER_EVO_LEVEL,
     ),
   ],
-  [Species.LARVITAR]: [new SpeciesEvolution(Species.PUPITAR, 30, null, null)],
-  [Species.PUPITAR]: [new SpeciesEvolution(Species.TYRANITAR, 55, null, null)],
+  [SpeciesId.LARVITAR]: [new SpeciesEvolution(SpeciesId.PUPITAR, 30, null, null)],
+  [SpeciesId.PUPITAR]: [new SpeciesEvolution(SpeciesId.TYRANITAR, 55, null, null)],
 };

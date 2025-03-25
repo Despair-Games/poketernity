@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -24,7 +24,7 @@ import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtil
 import { ModifierTier } from "#enums/modifier-tier";
 import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
 import { TrainerType } from "#enums/trainer-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { Button } from "#enums/buttons";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
@@ -41,8 +41,8 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/clowningAround";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("Clowning Around - Mystery Encounter", () => {
@@ -63,7 +63,7 @@ describe("Clowning Around - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
+      new Map<BiomeId, MysteryEncounterType[]>([[BiomeId.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
     );
   });
 
@@ -117,33 +117,33 @@ describe("Clowning Around - Mystery Encounter", () => {
     expect(config.doubleBattle).toBe(true);
     expect(config.trainerConfig?.trainerType).toBe(TrainerType.HARLEQUIN);
     expect(config.pokemonConfigs?.[0]).toEqual({
-      species: getPokemonSpecies(Species.MR_MIME),
+      species: getPokemonSpecies(SpeciesId.MR_MIME),
       isBoss: true,
       moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
     });
     expect(config.pokemonConfigs?.[1]).toEqual({
-      species: getPokemonSpecies(Species.BLACEPHALON),
+      species: getPokemonSpecies(SpeciesId.BLACEPHALON),
       customPokemonData: expect.anything(),
       isBoss: true,
       moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
     });
     expect(config.pokemonConfigs?.[1].customPokemonData?.types.length).toBe(2);
     expect([
-      Abilities.STURDY,
-      Abilities.PICKUP,
-      Abilities.INTIMIDATE,
-      Abilities.GUTS,
-      Abilities.DROUGHT,
-      Abilities.DRIZZLE,
-      Abilities.SNOW_WARNING,
-      Abilities.SAND_STREAM,
-      Abilities.ELECTRIC_SURGE,
-      Abilities.PSYCHIC_SURGE,
-      Abilities.GRASSY_SURGE,
-      Abilities.MISTY_SURGE,
-      Abilities.MAGICIAN,
-      Abilities.SHEER_FORCE,
-      Abilities.PRANKSTER,
+      AbilityId.STURDY,
+      AbilityId.PICKUP,
+      AbilityId.INTIMIDATE,
+      AbilityId.GUTS,
+      AbilityId.DROUGHT,
+      AbilityId.DRIZZLE,
+      AbilityId.SNOW_WARNING,
+      AbilityId.SAND_STREAM,
+      AbilityId.ELECTRIC_SURGE,
+      AbilityId.PSYCHIC_SURGE,
+      AbilityId.GRASSY_SURGE,
+      AbilityId.MISTY_SURGE,
+      AbilityId.MAGICIAN,
+      AbilityId.SHEER_FORCE,
+      AbilityId.PRANKSTER,
     ]).toContain(config.pokemonConfigs?.[1].customPokemonData?.ability);
     expect(ClowningAroundEncounter.misc.ability).toBe(config.pokemonConfigs?.[1].customPokemonData?.ability);
     await vi.waitFor(() => expect(moveInitSpy).toHaveBeenCalled());
@@ -177,14 +177,14 @@ describe("Clowning Around - Mystery Encounter", () => {
       const enemyField = scene.getEnemyField();
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(2);
-      expect(enemyField[0].species.speciesId).toBe(Species.MR_MIME);
+      expect(enemyField[0].species.speciesId).toBe(SpeciesId.MR_MIME);
       expect(enemyField[0].moveset).toEqual([
         new PokemonMove(MoveId.TEETER_DANCE),
         new PokemonMove(MoveId.ALLY_SWITCH),
         new PokemonMove(MoveId.DAZZLING_GLEAM),
         new PokemonMove(MoveId.PSYCHIC),
       ]);
-      expect(enemyField[1].species.speciesId).toBe(Species.BLACEPHALON);
+      expect(enemyField[1].species.speciesId).toBe(SpeciesId.BLACEPHALON);
       expect(enemyField[1].moveset).toEqual([
         new PokemonMove(MoveId.TRICK),
         new PokemonMove(MoveId.HYPNOSIS),
