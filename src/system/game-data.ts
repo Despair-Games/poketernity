@@ -1408,11 +1408,11 @@ export class GameData {
                       console.error(error);
                       return displayError(i18next.t("menu:errorUpdating"));
                     }
-                    window.location = window.location;
+                    window.location.reload();
                   });
                 });
               } else {
-                window.location = window.location;
+                window.location.reload();
               }
             },
             noHandler: () => {
