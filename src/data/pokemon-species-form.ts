@@ -10,9 +10,9 @@ import type { PokemonForm } from "./pokemon-form";
 import { variantData, type VariantSet, type Variant } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { PokemonRegion } from "#enums/pokemon-regions";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { Stat } from "#enums/stat";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
@@ -27,16 +27,16 @@ type PokemonSpeciesFormType = "PokemonSpeciesForm" | "PokemonForm" | "PokemonSpe
 export abstract class PokemonSpeciesForm {
   /** Identifier for the class. HAS NOTHING TO DO WITH {@linkcode type1} and {@linkcode type2}. The name is derived from {@linkcode Phaser.GameObjects.Container} */
   public type: PokemonSpeciesFormType;
-  public speciesId: Species;
+  public speciesId: SpeciesId;
   protected _formIndex: number;
   protected _generation: number;
   readonly type1: ElementalType;
   readonly type2: ElementalType | null;
   readonly height: number;
   readonly weight: number;
-  readonly ability1: Abilities;
-  readonly ability2: Abilities;
-  readonly abilityHidden: Abilities;
+  readonly ability1: AbilityId;
+  readonly ability2: AbilityId;
+  readonly abilityHidden: AbilityId;
   readonly baseTotal: number;
   readonly baseStats: number[];
   readonly catchRate: number;
@@ -50,9 +50,9 @@ export abstract class PokemonSpeciesForm {
     type2: ElementalType | null,
     height: number,
     weight: number,
-    ability1: Abilities,
-    ability2: Abilities,
-    abilityHidden: Abilities,
+    ability1: AbilityId,
+    ability2: AbilityId,
+    abilityHidden: AbilityId,
     baseTotal: number,
     baseHp: number,
     baseAtk: number,
@@ -72,7 +72,7 @@ export abstract class PokemonSpeciesForm {
     this.height = height;
     this.weight = weight;
     this.ability1 = ability1;
-    this.ability2 = ability2 === Abilities.NONE ? ability1 : ability2;
+    this.ability2 = ability2 === AbilityId.NONE ? ability1 : ability2;
     this.abilityHidden = abilityHidden;
     this.baseTotal = baseTotal;
     this.baseStats = [baseHp, baseAtk, baseDef, baseSpatk, baseSpdef, baseSpd];
@@ -93,7 +93,7 @@ export abstract class PokemonSpeciesForm {
    * @param forStarter boolean to get the nonbaby form of a starter
    * @returns The species
    */
-  getRootSpeciesId(forStarter: boolean = false): Species {
+  getRootSpeciesId(forStarter: boolean = false): SpeciesId {
     let ret = this.speciesId;
     while (pokemonPreEvolutions.hasOwnProperty(ret) && (!forStarter || !speciesStarterCosts.hasOwnProperty(ret))) {
       ret = pokemonPreEvolutions[ret];
@@ -126,7 +126,7 @@ export abstract class PokemonSpeciesForm {
    * @returns Number of abilities
    */
   getAbilityCount(): number {
-    return this.abilityHidden !== Abilities.NONE ? 3 : 2;
+    return this.abilityHidden !== AbilityId.NONE ? 3 : 2;
   }
 
   /**
@@ -134,8 +134,8 @@ export abstract class PokemonSpeciesForm {
    * @param abilityIndex Which ability to get (should only be 0-2)
    * @returns The id of the Ability
    */
-  getAbility(abilityIndex: number): Abilities {
-    let ret: Abilities;
+  getAbility(abilityIndex: number): AbilityId {
+    let ret: AbilityId;
     if (abilityIndex === 0) {
       ret = this.ability1;
     } else if (abilityIndex === 1) {
@@ -173,7 +173,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   isTrainerForbidden(): boolean {
-    return [Species.ETERNAL_FLOETTE, Species.BLOODMOON_URSALUNA].includes(this.speciesId);
+    return [SpeciesId.ETERNAL_FLOETTE, SpeciesId.BLOODMOON_URSALUNA].includes(this.speciesId);
   }
 
   isRareRegional(): boolean {
@@ -286,18 +286,18 @@ export abstract class PokemonSpeciesForm {
     }
 
     switch (this.speciesId) {
-      case Species.DODUO:
-      case Species.DODRIO:
-      case Species.MEGANIUM:
-      case Species.TORCHIC:
-      case Species.COMBUSKEN:
-      case Species.BLAZIKEN:
-      case Species.HIPPOPOTAS:
-      case Species.HIPPOWDON:
-      case Species.UNFEZANT:
-      case Species.FRILLISH:
-      case Species.JELLICENT:
-      case Species.PYROAR:
+      case SpeciesId.DODUO:
+      case SpeciesId.DODRIO:
+      case SpeciesId.MEGANIUM:
+      case SpeciesId.TORCHIC:
+      case SpeciesId.COMBUSKEN:
+      case SpeciesId.BLAZIKEN:
+      case SpeciesId.HIPPOPOTAS:
+      case SpeciesId.HIPPOWDON:
+      case SpeciesId.UNFEZANT:
+      case SpeciesId.FRILLISH:
+      case SpeciesId.JELLICENT:
+      case SpeciesId.PYROAR:
         ret += female ? "-f" : "";
         break;
     }
@@ -305,10 +305,10 @@ export abstract class PokemonSpeciesForm {
     let formSpriteKey = this.getFormSpriteKey(formIndex);
     if (formSpriteKey) {
       switch (this.speciesId) {
-        case Species.DUDUNSPARCE:
+        case SpeciesId.DUDUNSPARCE:
           break;
-        case Species.ZACIAN:
-        case Species.ZAMAZENTA:
+        case SpeciesId.ZACIAN:
+        case SpeciesId.ZAMAZENTA:
           if (formSpriteKey.startsWith("behemoth")) {
             formSpriteKey = "crowned";
           }
@@ -329,9 +329,9 @@ export abstract class PokemonSpeciesForm {
     let speciesId = this.speciesId;
     if (this.speciesId > 2000) {
       switch (this.speciesId) {
-        case Species.GALAR_SLOWPOKE:
-        case Species.ETERNAL_FLOETTE:
-        case Species.BLOODMOON_URSALUNA:
+        case SpeciesId.GALAR_SLOWPOKE:
+        case SpeciesId.ETERNAL_FLOETTE:
+        case SpeciesId.BLOODMOON_URSALUNA:
           break;
         default:
           speciesId = speciesId % 2000;

@@ -1,5 +1,5 @@
 import { allSpecies } from "#app/data/data-lists";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { type PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { isNullOrUndefined, randSeedItem } from "#app/utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
@@ -8,11 +8,11 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { globalScene } from "#app/global-scene";
 
 /**
- * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode Species} enum given
+ * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given
  * @param species The species to fetch
  * @returns The associated {@linkcode PokemonSpecies} object
  */
-export function getPokemonSpecies(species: Species | Species[]): PokemonSpecies {
+export function getPokemonSpecies(species: SpeciesId | SpeciesId[]): PokemonSpecies {
   // If a special pool (named trainers) is used here it CAN happen that they have a array as species (which means choose one of those two). So we catch that with this code block
   if (Array.isArray(species)) {
     // Pick a random species from the list
@@ -24,7 +24,7 @@ export function getPokemonSpecies(species: Species | Species[]): PokemonSpecies 
   return allSpecies[species - 1];
 }
 
-export function getPokemonSpeciesForm(species: Species, formIndex: number): PokemonSpeciesForm {
+export function getPokemonSpeciesForm(species: SpeciesId, formIndex: number): PokemonSpeciesForm {
   const retSpecies: PokemonSpecies =
     species >= 2000
       ? allSpecies.find((s) => s.speciesId === species)! // TODO: is the bang correct?
@@ -41,7 +41,7 @@ export function getPokemonSpeciesForm(species: Species, formIndex: number): Poke
  * @param includeLegends if `true`, AND if `group` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
  * @returns a list of species IDs belonging to the group
  */
-export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): Species[] {
+export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): SpeciesId[] {
   const speciesList = allSpecies
     .map((s) => {
       if (s.group === group) {
@@ -50,11 +50,11 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
     })
     .filter((s) => !isNullOrUndefined(s));
   if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
-    speciesList.push(Species.COSMOG, Species.COSMOEM, Species.LUNALA, Species.SOLGALEO, Species.NECROZMA);
+    speciesList.push(SpeciesId.COSMOG, SpeciesId.COSMOEM, SpeciesId.LUNALA, SpeciesId.SOLGALEO, SpeciesId.NECROZMA);
   } else if (includeLegends && group === SpeciesGroups.PARADOX) {
-    speciesList.push(Species.KORAIDON, Species.MIRAIDON);
+    speciesList.push(SpeciesId.KORAIDON, SpeciesId.MIRAIDON);
   }
-  return speciesList as Species[];
+  return speciesList as SpeciesId[];
 }
 
 /**

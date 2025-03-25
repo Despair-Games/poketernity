@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,18 +25,18 @@ describe("Moves - Moongeist Beam", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.MOONGEIST_BEAM, MoveId.METRONOME])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .startingLevel(200)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.STURDY)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.STURDY)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   // Also covers Photon Geyser and Sunsteel Strike
   it("should ignore enemy abilities", async () => {
-    await game.classicMode.startBattle([Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.MILOTIC]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -48,7 +48,7 @@ describe("Moves - Moongeist Beam", () => {
 
   // Also covers Photon Geyser and Sunsteel Strike
   it("should not ignore enemy abilities when called by another move, such as metronome", async () => {
-    await game.classicMode.startBattle([Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.MILOTIC]);
     vi.spyOn(allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0], "getRandomMove").mockReturnValue(
       MoveId.MOONGEIST_BEAM,
     );

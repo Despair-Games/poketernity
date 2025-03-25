@@ -45,7 +45,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
           globalScene.unshiftPhase(
             new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, false),
           );
-        } else if (allyPokemon.isFainted()) {
+        } else if (allyPokemon?.isFainted()) {
           globalScene.unshiftPhase(
             new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, false),
           );

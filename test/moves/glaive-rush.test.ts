@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,11 +24,11 @@ describe("Moves - Glaive Rush", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.GLAIVE_RUSH])
-      .starterSpecies(Species.KLINK)
-      .ability(Abilities.BALL_FETCH)
+      .starterSpecies(SpeciesId.KLINK)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.SHADOW_SNEAK, MoveId.AVALANCHE, MoveId.SPLASH, MoveId.GLAIVE_RUSH]);
   });
 
@@ -62,7 +62,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("interacts properly with multi-lens", async () => {
-    game.override.ability(Abilities.PARENTAL_BOND).enemyMoveset([MoveId.AVALANCHE]);
+    game.override.ability(AbilityId.PARENTAL_BOND).enemyMoveset([MoveId.AVALANCHE]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
@@ -110,7 +110,7 @@ describe("Moves - Glaive Rush", () => {
 
   it("secondary effects are removed upon switching", async () => {
     game.override.enemyMoveset([MoveId.SHADOW_SNEAK]).starterSpecies(0);
-    await game.classicMode.startBattle([Species.KLINK, Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.KLINK, SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

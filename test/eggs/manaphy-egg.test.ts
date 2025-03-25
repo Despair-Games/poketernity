@@ -2,7 +2,7 @@ import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import { Egg } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -50,9 +50,9 @@ describe("Manaphy Eggs", () => {
 
       const newEgg = new Egg({ scene, tier: EggTier.COMMON, sourceType: EggSourceType.GACHA_SHINY, id: 204 });
       const newHatch = newEgg.generatePlayerPokemon();
-      if (newHatch.species.speciesId === Species.MANAPHY) {
+      if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
         manaphyCount++;
-      } else if (newHatch.species.speciesId === Species.PHIONE) {
+      } else if (newHatch.species.speciesId === SpeciesId.PHIONE) {
         phioneCount++;
       }
       if (newEgg.eggMoveIndex === 3) {
@@ -74,11 +74,11 @@ describe("Manaphy Eggs", () => {
     for (let i = 0; i < EGG_HATCH_COUNT; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
-      const newEgg = new Egg({ scene, species: Species.PHIONE, sourceType: EggSourceType.SAME_SPECIES_EGG });
+      const newEgg = new Egg({ scene, species: SpeciesId.PHIONE, sourceType: EggSourceType.SAME_SPECIES_EGG });
       const newHatch = newEgg.generatePlayerPokemon();
-      if (newHatch.species.speciesId === Species.MANAPHY) {
+      if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
         manaphyCount++;
-      } else if (newHatch.species.speciesId === Species.PHIONE) {
+      } else if (newHatch.species.speciesId === SpeciesId.PHIONE) {
         phioneCount++;
       }
       if (newEgg.eggMoveIndex === 3) {
@@ -100,11 +100,11 @@ describe("Manaphy Eggs", () => {
     for (let i = 0; i < EGG_HATCH_COUNT; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
-      const newEgg = new Egg({ scene, species: Species.MANAPHY, sourceType: EggSourceType.SAME_SPECIES_EGG });
+      const newEgg = new Egg({ scene, species: SpeciesId.MANAPHY, sourceType: EggSourceType.SAME_SPECIES_EGG });
       const newHatch = newEgg.generatePlayerPokemon();
-      if (newHatch.species.speciesId === Species.MANAPHY) {
+      if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
         manaphyCount++;
-      } else if (newHatch.species.speciesId === Species.PHIONE) {
+      } else if (newHatch.species.speciesId === SpeciesId.PHIONE) {
         phioneCount++;
       }
       if (newEgg.eggMoveIndex === 3) {

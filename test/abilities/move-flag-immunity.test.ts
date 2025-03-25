@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,27 +28,27 @@ describe("Ability Attribute - Move Flag Immunity", () => {
       .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // Flagged moves verified by the all_moves test in the `moves` directory
   it.each([
     {
       abilityName: "Soundproof",
-      ability: Abilities.SOUNDPROOF,
+      ability: AbilityId.SOUNDPROOF,
       moveFlag: MoveFlags.SOUND_MOVE,
       enemyMoveId: MoveId.UPROAR,
     },
     {
       abilityName: "Overcoat",
-      ability: Abilities.OVERCOAT,
+      ability: AbilityId.OVERCOAT,
       moveFlag: MoveFlags.POWDER_MOVE,
       enemyMoveId: MoveId.STUN_SPORE,
     },
     {
       abilityName: "Bulletproof",
-      ability: Abilities.BULLETPROOF,
+      ability: AbilityId.BULLETPROOF,
       moveFlag: MoveFlags.BULLET_MOVE,
       enemyMoveId: MoveId.AURA_SPHERE,
     },
@@ -57,7 +57,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
     async ({ ability, moveFlag, enemyMoveId: enemyMove }) => {
       game.override.ability(ability).enemyMoveset(enemyMove);
 
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       game.move.select(MoveId.SPLASH);

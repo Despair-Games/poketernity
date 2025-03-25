@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { WeatherType } from "#enums/weather-type";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
@@ -13,18 +13,18 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {
     const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;
-    let weatherAbility: Abilities | null = null;
+    let weatherAbility: AbilityId | null = null;
 
     // Clear weather only if user's ability matches the weather and no other pokemon has the ability.
     switch (weatherType) {
       case WeatherType.HARSH_SUN:
-        weatherAbility = Abilities.DESOLATE_LAND;
+        weatherAbility = AbilityId.DESOLATE_LAND;
         break;
       case WeatherType.HEAVY_RAIN:
-        weatherAbility = Abilities.PRIMORDIAL_SEA;
+        weatherAbility = AbilityId.PRIMORDIAL_SEA;
         break;
       case WeatherType.STRONG_WINDS:
-        weatherAbility = Abilities.DELTA_STREAM;
+        weatherAbility = AbilityId.DELTA_STREAM;
         break;
     }
 

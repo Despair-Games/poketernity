@@ -4,10 +4,10 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -30,15 +30,15 @@ describe("Abilities - Shield Dust", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.enemySpecies(Species.ONIX);
-    game.override.enemyAbility(Abilities.SHIELD_DUST);
+    game.override.enemySpecies(SpeciesId.ONIX);
+    game.override.enemyAbility(AbilityId.SHIELD_DUST);
     game.override.startingLevel(100);
     game.override.moveset(MoveId.AIR_SLASH);
     game.override.enemyMoveset(MoveId.TACKLE);
   });
 
   it("Shield Dust", async () => {
-    await game.classicMode.startBattle([Species.PIDGEOT]);
+    await game.classicMode.startBattle([SpeciesId.PIDGEOT]);
 
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);

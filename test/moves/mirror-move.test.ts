@@ -1,8 +1,8 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { Stat } from "enums/stat";
 import Phaser from "phaser";
@@ -26,17 +26,17 @@ describe("Moves - Mirror Move", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.MIRROR_MOVE, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should use the last move that the target used on the user", async () => {
     game.override.battleType("double").enemyMoveset([MoveId.TACKLE, MoveId.GROWL]);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.MIRROR_MOVE, 0, BattlerIndex.ENEMY); // target's last move is Tackle, enemy should receive damage from Mirror Move copying Tackle
     game.move.select(MoveId.SPLASH, 1);
@@ -50,7 +50,7 @@ describe("Moves - Mirror Move", () => {
 
   it("should apply secondary effects of a move", async () => {
     game.override.enemyMoveset(MoveId.ACID_SPRAY);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -61,7 +61,7 @@ describe("Moves - Mirror Move", () => {
 
   it("should be able to copy status moves", async () => {
     game.override.enemyMoveset(MoveId.GROWL);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -71,7 +71,7 @@ describe("Moves - Mirror Move", () => {
   });
 
   it("should fail if the target has not used any moves", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -82,7 +82,7 @@ describe("Moves - Mirror Move", () => {
 
   it("should fail if the target last used Mirror Move, without any infinite loop", async () => {
     game.override.enemyMoveset(MoveId.MIRROR_MOVE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
     await game.toEndOfTurn();

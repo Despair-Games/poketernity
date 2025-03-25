@@ -1,8 +1,8 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,14 +26,14 @@ describe("Moves - Double Team", () => {
     game.override.battleType("single");
     game.override.moveset([MoveId.DOUBLE_TEAM]);
     game.override.disableCrits();
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
+    game.override.enemySpecies(SpeciesId.SHUCKLE);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
   });
 
   it("raises the user's EVA stat stage by 1", async () => {
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const ally = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

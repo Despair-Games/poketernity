@@ -1,12 +1,12 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -32,9 +32,9 @@ describe("Moves - Protect", () => {
     game.override.battleType("single");
 
     game.override.moveset([MoveId.PROTECT]);
-    game.override.enemySpecies(Species.SNORLAX);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
 
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset([MoveId.TACKLE]);
 
     game.override.startingLevel(100);
@@ -42,7 +42,7 @@ describe("Moves - Protect", () => {
   });
 
   test("should protect the user from attacks", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -57,7 +57,7 @@ describe("Moves - Protect", () => {
     game.override.enemyMoveset([MoveId.CEASELESS_EDGE]);
     vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -72,7 +72,7 @@ describe("Moves - Protect", () => {
   test("should protect the user from status moves", async () => {
     game.override.enemyMoveset([MoveId.CHARM]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -86,7 +86,7 @@ describe("Moves - Protect", () => {
   test("should stop subsequent hits of a multi-hit move", async () => {
     game.override.enemyMoveset([MoveId.TACHYON_CUTTER]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -102,7 +102,7 @@ describe("Moves - Protect", () => {
   test("certain moves can bypass protect", async () => {
     game.override.enemyMoveset([MoveId.BLOCK]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -116,7 +116,7 @@ describe("Moves - Protect", () => {
   test("should fail if the user is the last to move in the turn", async () => {
     game.override.enemyMoveset([MoveId.PROTECT]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

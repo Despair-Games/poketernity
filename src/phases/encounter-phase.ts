@@ -44,14 +44,14 @@ import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { ImagesFolder } from "#enums/images-folders";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
@@ -145,7 +145,7 @@ export class EncounterPhase extends BattlePhase {
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
             && !gameMode.isBoss(waveIndex)
-            && arena.biomeType !== Biome.END
+            && arena.biomeType !== BiomeId.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);
@@ -188,7 +188,7 @@ export class EncounterPhase extends BattlePhase {
         );
       }
 
-      if (enemyPokemon.species.speciesId === Species.ETERNATUS) {
+      if (enemyPokemon.species.speciesId === SpeciesId.ETERNATUS) {
         if (isClassicFinalBoss) {
           enemyPokemon.setBoss();
         } else if (!(waveIndex % 1000)) {
@@ -553,7 +553,7 @@ export class EncounterPhase extends BattlePhase {
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
-        enemyPokemon.species.speciesId === Species.ETERNATUS
+        enemyPokemon.species.speciesId === SpeciesId.ETERNATUS
         && (gameMode.isBattleClassicFinalBoss(waveIndex) || gameMode.isEndlessMajorBoss(waveIndex))
       ) {
         const enemyMBH = globalScene.findModifier(

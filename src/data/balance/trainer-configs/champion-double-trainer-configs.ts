@@ -1,6 +1,6 @@
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { randInt } from "#app/utils";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -23,11 +23,11 @@ import {
 let t = TrainerType.BLUE_RED;
 export const championDoubleTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE_RED]: new TrainerConfig(t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.UMBREON], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.ESPEON], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.UMBREON], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.ESPEON], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.MACHAMP], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.MACHAMP], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // G-Max Machamp
         p.generateName();
@@ -36,7 +36,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.SNORLAX], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.SNORLAX], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // G-Max Snorlax
         p.generateName();
@@ -45,7 +45,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.ALAKAZAM], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ALAKAZAM], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Mega Alakazam
         p.generateName();
@@ -55,11 +55,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       5,
       getRandomPartyMemberFunc(
-        [Species.VENUSAUR, Species.CHARIZARD, Species.BLASTOISE],
+        [SpeciesId.VENUSAUR, SpeciesId.CHARIZARD, SpeciesId.BLASTOISE],
         TrainerSlot.TRAINER_PARTNER,
         true,
         (p) => {
-          if (p.species.speciesId === Species.CHARIZARD) {
+          if (p.species.speciesId === SpeciesId.CHARIZARD) {
             p.formIndex = 2; // Mega Charizard Y (Since lance has X)
           } else {
             p.formIndex = 1; // Mega Venusaur or Mega Blastoise
@@ -75,11 +75,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("old_rivals")
     .initForChampion(TrainerVariant.DOUBLE, [KANTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME]),
   [TrainerType.LANCE_CLAIR]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.DRAGONITE], TrainerSlot.TRAINER)) // (They both use Dragonite - even if their only ever mainline battle together is in the Johto games. So i like the idea of them fighting together with Dragonite)
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.DRAGONITE], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.DRAGONITE], TrainerSlot.TRAINER)) // (They both use Dragonite - even if their only ever mainline battle together is in the Johto games. So i like the idea of them fighting together with Dragonite)
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.DRAGONITE], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.CHARIZARD], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.CHARIZARD], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Mega Charizard X
         p.generateName();
@@ -88,7 +88,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.ALTARIA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ALTARIA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Mega Altaria
         p.generateName();
@@ -97,7 +97,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.HO_OH, Species.LUGIA], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.HO_OH, SpeciesId.LUGIA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -105,7 +105,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // Dragonite would be the signature, but we gave ho-oh/lugia to him in his single battle so i like for him to have it here too
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.KINGDRA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.KINGDRA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -116,11 +116,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("dragon_tamers")
     .initForChampion(TrainerVariant.DOUBLE, [JOHTO_CHAMPION_THEME]),
   [TrainerType.STEVEN_WALLACE]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.SKARMORY], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.WHISCASH], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.SKARMORY], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.WHISCASH], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.METAGROSS], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.METAGROSS], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Mega Metagross
         p.generateName();
@@ -129,7 +129,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // MEGA
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.MILOTIC], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.MILOTIC], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -137,7 +137,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // Signature
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.LATIAS], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.LATIAS], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -145,7 +145,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // They are not mega on purpose. So they arent THAT strong
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.LATIOS], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.LATIOS], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -156,11 +156,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("hoenn_champions")
     .initForChampion(TrainerVariant.DOUBLE, [HOENN5_CHAMPION_THEME, HOENN6_CHAMPION_THEME]),
   [TrainerType.CYNTHIA_DIANTHA]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.TOGEKISS], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.GOODRA], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.TOGEKISS], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.GOODRA], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.GARCHOMP], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.GARCHOMP], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // MEGA
         p.generateName();
@@ -169,7 +169,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // MEGA
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.GARDEVOIR], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.GARDEVOIR], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // MEGA
         p.generateName();
@@ -178,7 +178,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // MEGA
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.GIRATINA], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.GIRATINA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -186,7 +186,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.DIANCIE], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.DIANCIE], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // MEGA
         p.generateName();
@@ -198,11 +198,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("champion_friends")
     .initForChampion(TrainerVariant.DOUBLE, [SINNOH_CHAMPION_THEME, KALOS_CHAMPION_THEME]),
   [TrainerType.IRIS_ALDER]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.HAXORUS], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.VOLCARONA], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.HAXORUS], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.VOLCARONA], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.LAPRAS, Species.AGGRON], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.LAPRAS, SpeciesId.AGGRON], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Mega Aggron or GMAX Lapras
         p.generateName();
@@ -211,7 +211,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // GMAX/Mega (same fromindex)
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.ACCELGOR, Species.ESCAVALIER], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ACCELGOR, SpeciesId.ESCAVALIER], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -219,7 +219,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.RESHIRAM], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.RESHIRAM], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -227,7 +227,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.ZEKROM], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ZEKROM], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -238,12 +238,12 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("unovas_best")
     .initForChampion(TrainerVariant.DOUBLE, [DEFAULT_CHAMPION_THEME, IRIS_CHAMPION_THEME]),
   [TrainerType.HAU_KUKUI]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ALOLA_RAICHU], TrainerSlot.TRAINER)) // Signature
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.LYCANROC], TrainerSlot.TRAINER_PARTNER)) // Signature
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.ALOLA_RAICHU], TrainerSlot.TRAINER)) // Signature
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.LYCANROC], TrainerSlot.TRAINER_PARTNER)) // Signature
     .setPartyMemberFunc(
       2,
       getRandomPartyMemberFunc(
-        [Species.TAPU_BULU, Species.TAPU_FINI, Species.TAPU_KOKO, Species.TAPU_LELE],
+        [SpeciesId.TAPU_BULU, SpeciesId.TAPU_FINI, SpeciesId.TAPU_KOKO, SpeciesId.TAPU_LELE],
         TrainerSlot.TRAINER,
         true,
         (p) => {
@@ -256,7 +256,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc(
-        [Species.DECIDUEYE, Species.PRIMARINA, Species.INCINEROAR],
+        [SpeciesId.DECIDUEYE, SpeciesId.PRIMARINA, SpeciesId.INCINEROAR],
         TrainerSlot.TRAINER_PARTNER,
         true,
         (p) => {
@@ -268,7 +268,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // Uses one in his Alola-League fight
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.BLACEPHALON, Species.STAKATAKA], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.BLACEPHALON, SpeciesId.STAKATAKA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -276,7 +276,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // Those two are up for debate. They are pretty strong but iconic. But maybe if too strong we do UB?
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.ROTOM], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ROTOM], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = randInt(p.getFormAmount(), 0); // Random Rotom form since he is the one introducing the rotom phone
         p.generateName();
@@ -288,11 +288,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("masters_of_alola")
     .initForChampion(TrainerVariant.DOUBLE, [ALOLA_CHAMPION_THEME]),
   [TrainerType.LEON_HOP]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.DRAGAPULT], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.DUBWOOL], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.DRAGAPULT], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.DUBWOOL], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.CHARIZARD], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.CHARIZARD], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 3; // GMAX
         p.generateName();
@@ -302,7 +302,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc(
-        [Species.RILLABOOM, Species.CINDERACE, Species.INTELEON],
+        [SpeciesId.RILLABOOM, SpeciesId.CINDERACE, SpeciesId.INTELEON],
         TrainerSlot.TRAINER_PARTNER,
         true,
         (p) => {
@@ -315,7 +315,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.ZAMAZENTA], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ZAMAZENTA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Crowned (maybe too strong?)
         p.generateName();
@@ -324,7 +324,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // Zamazenta to fit with hop. If thats too strong lets to one of the GALAR Regis?
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.ZACIAN], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.ZACIAN], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.formIndex = 1; // Crowned (maybe too strong?)
         p.generateName();
@@ -336,11 +336,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("galar_stars")
     .initForChampion(TrainerVariant.DOUBLE, [GALAR_CHAMPION_THEME]),
   [TrainerType.GEETA_NEMONA]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GLIMMORA], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.PAWMOT], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.GLIMMORA], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.PAWMOT], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.KINGAMBIT], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.KINGAMBIT], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -349,7 +349,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc(
-        [Species.MEOWSCARADA, Species.SKELEDIRGE, Species.QUAQUAVAL],
+        [SpeciesId.MEOWSCARADA, SpeciesId.SKELEDIRGE, SpeciesId.QUAQUAVAL],
         TrainerSlot.TRAINER_PARTNER,
         true,
         (p) => {
@@ -361,7 +361,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.KORAIDON], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.KORAIDON], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -369,7 +369,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.MIRAIDON], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.MIRAIDON], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -380,11 +380,11 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setTitle("top_champs")
     .initForChampion(TrainerVariant.DOUBLE, [GEETA_CHAMPION_THEME, NEMONA_CHAMPION_THEME]),
   [TrainerType.KIERAN_CARMINE]: new TrainerConfig(++t)
-    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.POLIWRATH, Species.POLITOED], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.SINISTCHA], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.SINISTCHA], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
       2,
-      getRandomPartyMemberFunc([Species.HYDRAPPLE], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.HYDRAPPLE], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -392,7 +392,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.MIGHTYENA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.MIGHTYENA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -400,7 +400,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     ) // Maybe something different? She doesnt use much good pokemon
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.TERAPAGOS], TrainerSlot.TRAINER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.TERAPAGOS], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
@@ -408,7 +408,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       5,
-      getRandomPartyMemberFunc([Species.PECHARUNT], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([SpeciesId.PECHARUNT], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();

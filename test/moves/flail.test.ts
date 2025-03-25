@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
@@ -32,9 +32,9 @@ describe("Moves - Flail", () => {
       .moveset(MoveId.FLAIL)
       .battleType("single")
       .startingLevel(100)
-      .enemySpecies(Species.SNORLAX)
+      .enemySpecies(SpeciesId.SNORLAX)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
     vi.spyOn(flail, "calculateBattlePower");
   });
@@ -53,7 +53,7 @@ describe("Moves - Flail", () => {
     { hpRatio: 33, expectedBp: 20 },
     { hpRatio: 48, expectedBp: 20 },
   ])("should have $expectedBp base power at ($hpRatio / 48) health", async ({ hpRatio, expectedBp }) => {
-    await game.classicMode.startBattle([Species.BLISSEY]);
+    await game.classicMode.startBattle([SpeciesId.BLISSEY]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMaxHp").mockReturnValue(480);

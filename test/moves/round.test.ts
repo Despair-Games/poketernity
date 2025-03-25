@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,18 +25,18 @@ describe("Moves - Round", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.ROUND])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.BLISSEY)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.BLISSEY)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH, MoveId.ROUND])
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should cue other instances of Round together in Speed order", async () => {
-    await game.classicMode.startBattle([Species.BLISSEY, Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.BLISSEY, SpeciesId.FEEBAS]);
 
     const round = allMoves.get(MoveId.ROUND);
     const spy = vi.spyOn(round, "calculateBattlePower");

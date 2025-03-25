@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -25,16 +25,16 @@ describe("Abilities - Fur Coat", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.TACKLE, MoveId.PSYSHOCK, MoveId.SWEET_KISS, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.FUR_COAT)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.FUR_COAT)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should double the ability holder's defense", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -45,7 +45,7 @@ describe("Abilities - Fur Coat", () => {
   });
 
   it("should double the ability holder's defense when a special move uses its target's defense stat to calculate damage", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -57,7 +57,7 @@ describe("Abilities - Fur Coat", () => {
 
   it("should not affect self-inflicted confusion damage", async () => {
     game.override.statusActivation(true);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
@@ -72,7 +72,7 @@ describe("Abilities - Fur Coat", () => {
 
   it("should not affect the Defense stat when using the move Body Press", async () => {
     game.override.enemyMoveset(MoveId.BODY_PRESS);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 

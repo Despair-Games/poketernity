@@ -13,7 +13,7 @@ import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/te
 import { formatMoney, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";

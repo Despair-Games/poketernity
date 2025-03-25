@@ -1,7 +1,7 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import * as Utils from "#app/utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,61 +29,61 @@ describe("Evolution", () => {
 
     game.override.battleType("single");
 
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemySpecies(SpeciesId.MAGIKARP);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
 
     game.override.startingLevel(60);
   });
 
   it("should keep hidden ability after evolving", async () => {
-    await game.classicMode.runToSummon([Species.EEVEE, Species.TRAPINCH]);
+    await game.classicMode.runToSummon([SpeciesId.EEVEE, SpeciesId.TRAPINCH]);
 
     const eevee = game.scene.getPlayerParty()[0];
     const trapinch = game.scene.getPlayerParty()[1];
     eevee.abilityIndex = 2;
     trapinch.abilityIndex = 2;
 
-    await eevee.evolve(pokemonEvolutions[Species.EEVEE][6]);
+    await eevee.evolve(pokemonEvolutions[SpeciesId.EEVEE][6]);
     expect(eevee.abilityIndex).toBe(2);
 
-    await trapinch.evolve(pokemonEvolutions[Species.TRAPINCH][0]);
+    await trapinch.evolve(pokemonEvolutions[SpeciesId.TRAPINCH][0]);
     expect(trapinch.abilityIndex).toBe(0); // doesn't have an HA -> defaults to 1st ability
   });
 
   it("should keep same ability slot after evolving", async () => {
-    await game.classicMode.runToSummon([Species.BULBASAUR, Species.CHARMANDER]);
+    await game.classicMode.runToSummon([SpeciesId.BULBASAUR, SpeciesId.CHARMANDER]);
 
     const bulbasaur = game.scene.getPlayerParty()[0];
     const charmander = game.scene.getPlayerParty()[1];
     bulbasaur.abilityIndex = 0;
     charmander.abilityIndex = 1;
 
-    await bulbasaur.evolve(pokemonEvolutions[Species.BULBASAUR][0]);
+    await bulbasaur.evolve(pokemonEvolutions[SpeciesId.BULBASAUR][0]);
     expect(bulbasaur.abilityIndex).toBe(0);
 
-    await charmander.evolve(pokemonEvolutions[Species.CHARMANDER][0]);
+    await charmander.evolve(pokemonEvolutions[SpeciesId.CHARMANDER][0]);
     expect(charmander.abilityIndex).toBe(1);
   });
 
   it("should handle illegal abilityIndex values", async () => {
-    await game.classicMode.runToSummon([Species.SQUIRTLE]);
+    await game.classicMode.runToSummon([SpeciesId.SQUIRTLE]);
 
     const squirtle = game.scene.getPlayerPokemon()!;
     squirtle.abilityIndex = 5;
 
-    await squirtle.evolve(pokemonEvolutions[Species.SQUIRTLE][0]);
+    await squirtle.evolve(pokemonEvolutions[SpeciesId.SQUIRTLE][0]);
     expect(squirtle.abilityIndex).toBe(0);
   });
 
   it("should handle nincada's unique evolution", async () => {
-    await game.classicMode.runToSummon([Species.NINCADA]);
+    await game.classicMode.runToSummon([SpeciesId.NINCADA]);
 
     const nincada = game.scene.getPlayerPokemon()!;
     nincada.abilityIndex = 2;
     nincada.metBiome = -1;
     nincada.gender = Gender.FEMALE;
 
-    await nincada.evolve(pokemonEvolutions[Species.NINCADA][0]);
+    await nincada.evolve(pokemonEvolutions[SpeciesId.NINCADA][0]);
     const ninjask = game.scene.getPlayerParty()[0];
     const shedinja = game.scene.getPlayerParty()[1];
     expect(ninjask.abilityIndex).toBe(2);
@@ -97,13 +97,13 @@ describe("Evolution", () => {
   it("should increase both HP and max HP when evolving", async () => {
     game.override
       .moveset([MoveId.SURF])
-      .enemySpecies(Species.GOLEM)
+      .enemySpecies(SpeciesId.GOLEM)
       .enemyMoveset(MoveId.SPLASH)
       .startingWave(21)
       .startingLevel(16)
       .enemyLevel(50);
 
-    await game.startBattle([Species.TOTODILE]);
+    await game.startBattle([SpeciesId.TOTODILE]);
 
     const totodile = game.scene.getPlayerPokemon()!;
     const hpBefore = totodile.hp;
@@ -125,13 +125,13 @@ describe("Evolution", () => {
   it("should not fully heal HP when evolving", async () => {
     game.override
       .moveset([MoveId.SURF])
-      .enemySpecies(Species.GOLEM)
+      .enemySpecies(SpeciesId.GOLEM)
       .enemyMoveset(MoveId.SPLASH)
       .startingWave(21)
       .startingLevel(13)
       .enemyLevel(30);
 
-    await game.startBattle([Species.CYNDAQUIL]);
+    await game.startBattle([SpeciesId.CYNDAQUIL]);
 
     const cyndaquil = game.scene.getPlayerPokemon()!;
     cyndaquil.hp = Math.floor(cyndaquil.getMaxHp() / 2);
@@ -164,7 +164,7 @@ describe("Evolution", () => {
      * If the value is 0, it's a 3 family maushold, whereas if the value is
      * 1, 2 or 3, it's a 4 family maushold
      */
-    await game.startBattle([Species.TANDEMAUS]); // starts us off with a tandemaus
+    await game.startBattle([SpeciesId.TANDEMAUS]); // starts us off with a tandemaus
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.level = 25; // tandemaus evolves at level 25
     vi.spyOn(Utils, "randSeedInt").mockReturnValue(0); // setting the random generator to be 0 to force a three family maushold
@@ -184,11 +184,11 @@ describe("Evolution", () => {
       return rngSweepProgress * (max - min) + min;
     });
 
-    const actualEvolutions = new Set<Species>();
+    const actualEvolutions = new Set<SpeciesId>();
     const trials = 8; // For all 8 Eeveelutions
     for (let i = 0; i < trials; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * trials);
-      actualEvolutions.add(getPokemonSpecies(Species.EEVEE).getEnemySpeciesForLevel(100));
+      actualEvolutions.add(getPokemonSpecies(SpeciesId.EEVEE).getEnemySpeciesForLevel(100));
     }
     expect(actualEvolutions.size).toBe(trials);
   });
@@ -203,14 +203,14 @@ describe("Evolution", () => {
 
   it("wild Pokemon should be pre-evolved if they are at a sufficiently low level", async () => {
     game.override.enemySpecies(0); // Disable the enemy species override
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
     await game.doKillOpponents();
 
     // Mock the next wave's Pokemon pool
     vi.spyOn(game.scene.arena as any, "pokemonPool", "get").mockReturnValue({
-      [BiomePoolTier.COMMON]: [Species.SLOWKING],
+      [BiomePoolTier.COMMON]: [SpeciesId.SLOWKING],
       [BiomePoolTier.UNCOMMON]: [],
       [BiomePoolTier.RARE]: [],
       [BiomePoolTier.SUPER_RARE]: [],
@@ -219,6 +219,6 @@ describe("Evolution", () => {
 
     await game.toNextWave();
 
-    expect(game.field.getEnemyPokemon().species.speciesId).toBe(Species.SLOWPOKE);
+    expect(game.field.getEnemyPokemon().species.speciesId).toBe(SpeciesId.SLOWPOKE);
   });
 });

@@ -87,7 +87,7 @@ import { UproarTag } from "#app/data/battler-tags/uproar-tag";
 import { WeatherHighestStatBoostTag } from "#app/data/battler-tags/weather-highest-stat-boost-tag";
 import { WhirlpoolTag } from "#app/data/battler-tags/whirlpool-tag";
 import { WrapTag } from "#app/data/battler-tags/wrap-tag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -205,12 +205,12 @@ export function getBattlerTag(
     case BattlerTagType.PROTOSYNTHESIS:
       return new WeatherHighestStatBoostTag(
         tagType,
-        Abilities.PROTOSYNTHESIS,
+        AbilityId.PROTOSYNTHESIS,
         WeatherType.SUNNY,
         WeatherType.HARSH_SUN,
       );
     case BattlerTagType.QUARK_DRIVE:
-      return new TerrainHighestStatBoostTag(tagType, Abilities.QUARK_DRIVE, TerrainType.ELECTRIC);
+      return new TerrainHighestStatBoostTag(tagType, AbilityId.QUARK_DRIVE, TerrainType.ELECTRIC);
     case BattlerTagType.FLYING:
     case BattlerTagType.UNDERGROUND:
     case BattlerTagType.UNDERWATER:
@@ -257,7 +257,7 @@ export function getBattlerTag(
     case BattlerTagType.ICE_FACE:
       return new IceFaceBlockDamageTag(tagType);
     case BattlerTagType.DISGUISE:
-      return new FormBlockDamageTag(tagType, Abilities.DISGUISE);
+      return new FormBlockDamageTag(tagType, AbilityId.DISGUISE);
     case BattlerTagType.COMMANDED:
       return new CommandedTag(sourceId);
     case BattlerTagType.STOCKPILING:

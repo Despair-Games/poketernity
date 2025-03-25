@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,12 +26,12 @@ describe("Moves - Chilly Reception", () => {
       .battleType("single")
       .moveset([MoveId.CHILLY_RECEPTION, MoveId.SNOWSCAPE])
       .enemyMoveset(Array(4).fill(MoveId.SPLASH))
-      .enemyAbility(Abilities.NONE)
-      .ability(Abilities.NONE);
+      .enemyAbility(AbilityId.NONE)
+      .ability(AbilityId.NONE);
   });
 
   it("should still change the weather if user can't switch out", async () => {
-    await game.classicMode.startBattle([Species.SLOWKING]);
+    await game.classicMode.startBattle([SpeciesId.SLOWKING]);
 
     game.move.select(MoveId.CHILLY_RECEPTION);
 
@@ -40,7 +40,7 @@ describe("Moves - Chilly Reception", () => {
   });
 
   it("should switch out even if it's snowing", async () => {
-    await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
+    await game.classicMode.startBattle([SpeciesId.SLOWKING, SpeciesId.MEOWTH]);
     // first turn set up snow with snowscape, try chilly reception on second turn
     game.move.select(MoveId.SNOWSCAPE);
     await game.toEndOfTurn();
@@ -52,18 +52,18 @@ describe("Moves - Chilly Reception", () => {
 
     await game.toEndOfTurn();
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MEOWTH);
+    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MEOWTH);
   });
 
   it("happy case - switch out and weather changes", async () => {
-    await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
+    await game.classicMode.startBattle([SpeciesId.SLOWKING, SpeciesId.MEOWTH]);
 
     game.move.select(MoveId.CHILLY_RECEPTION);
     game.doSelectPartyPokemon(1);
 
     await game.toEndOfTurn();
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MEOWTH);
+    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MEOWTH);
   });
 
   // enemy uses another move and weather doesn't change
@@ -71,10 +71,10 @@ describe("Moves - Chilly Reception", () => {
     game.override
       .battleType("single")
       .enemyMoveset([MoveId.CHILLY_RECEPTION, MoveId.TACKLE])
-      .enemyAbility(Abilities.NONE)
+      .enemyAbility(AbilityId.NONE)
       .moveset(Array(4).fill(MoveId.SPLASH));
 
-    await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
+    await game.classicMode.startBattle([SpeciesId.SLOWKING, SpeciesId.MEOWTH]);
 
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.TACKLE);
@@ -88,11 +88,11 @@ describe("Moves - Chilly Reception", () => {
       .battleType("single")
       .startingWave(8)
       .enemyMoveset(Array(4).fill(MoveId.CHILLY_RECEPTION))
-      .enemyAbility(Abilities.NONE)
-      .enemySpecies(Species.MAGIKARP)
+      .enemyAbility(AbilityId.NONE)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .moveset([MoveId.SPLASH, MoveId.THUNDERBOLT]);
 
-    await game.classicMode.startBattle([Species.JOLTEON]);
+    await game.classicMode.startBattle([SpeciesId.JOLTEON]);
     const RIVAL_MAGIKARP1 = game.scene.getEnemyPokemon()?.id;
 
     game.move.select(MoveId.SPLASH);

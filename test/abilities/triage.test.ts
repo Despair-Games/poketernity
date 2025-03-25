@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,11 +26,11 @@ describe("Abilities - Triage", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.TRIAGE)
+      .ability(AbilityId.TRIAGE)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -41,7 +41,7 @@ describe("Abilities - Triage", () => {
     { moveId: MoveId.BITTER_BLADE, moveName: "Bitter Blade" },
   ])("should increase the priority of HP-recovery moves by 3", async ({ moveId }) => {
     game.override.moveset(moveId);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves.get(moveId);
@@ -59,7 +59,7 @@ describe("Abilities - Triage", () => {
     { moveId: MoveId.PAIN_SPLIT, moveName: "Pain Split" },
   ])("should not increase the priority of $moveName", async ({ moveId }) => {
     game.override.moveset(moveId);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves.get(moveId);
@@ -74,7 +74,7 @@ describe("Abilities - Triage", () => {
       .battleType("double")
       .startingLevel(10)
       .enemyMoveset(MoveId.QUICK_ATTACK);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.GOLDEEN]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.GOLDEEN]);
 
     const playerPokemon = game.scene.getPlayerField()[0];
 

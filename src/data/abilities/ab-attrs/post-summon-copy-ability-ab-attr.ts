@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { randSeedItem } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -33,7 +33,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     if (
       target.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
       // Wonder Guard is normally uncopiable so has the attribute, but Trace specifically can copy it
-      && !(pokemon.hasAbility(Abilities.TRACE) && target.getAbility().id === Abilities.WONDER_GUARD)
+      && !(pokemon.hasAbility(AbilityId.TRACE) && target.getAbility().id === AbilityId.WONDER_GUARD)
     ) {
       return false;
     }
