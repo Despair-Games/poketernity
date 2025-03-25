@@ -11,6 +11,10 @@ import { MoveId } from "#enums/move-id";
  * Attribute to copy the target's selected (and not yet used)
  * move for the turn and use it against the target.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Me_First_(move) | Me First}.
+ *
+ * NOTE: Unlike in mainline, Me First is currently redirected to the target's ally
+ * if the target faints or the target's index is otherwise vacant. This is intentional;
+ * we'd rather keep move behavior consistent than replicate what is likely a bug.
  * @extends CallMoveAttr
  */
 export class MeFirstAttr extends CallMoveAttr {
