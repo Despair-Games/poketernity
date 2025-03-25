@@ -35,7 +35,7 @@ import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -45,7 +45,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -295,7 +295,7 @@ export abstract class Move implements Localizable {
         break;
       case ElementalType.DARK:
         if (
-          user.hasAbility(Abilities.PRANKSTER)
+          user.hasAbility(AbilityId.PRANKSTER)
           && this.category === MoveCategory.STATUS
           && user.isPlayer() !== target.isPlayer()
         ) {
@@ -384,7 +384,7 @@ export abstract class Move implements Localizable {
   /**
    * Sets the {@linkcode MoveFlags.MAKES_CONTACT} flag for the calling Move
    * @param setFlag Default `true`, set to `false` if the move doesn't make contact
-   * @see {@linkcode Abilities.STATIC}
+   * @see {@linkcode AbilityId.STATIC}
    * @returns The {@linkcode Move} that called this function
    */
   makesContact(setFlag: boolean = true): this {
@@ -474,7 +474,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.RECKLESS_MOVE} flag for the calling Move
-   * @see {@linkcode Abilities.RECKLESS}
+   * @see {@linkcode AbilityId.RECKLESS}
    * @returns The {@linkcode Move} that called this function
    */
   recklessMove(): this {
@@ -582,7 +582,7 @@ export abstract class Move implements Localizable {
    *
    * @returns The {@linkcode Move} that called this function.
    */
-  gMaxMove(signatureSpecies: Species): this {
+  gMaxMove(signatureSpecies: SpeciesId): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
     this.makesContact(false);

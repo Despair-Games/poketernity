@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,16 +26,16 @@ describe("Moves - Hard Press", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.MUNCHLAX);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
+    game.override.enemySpecies(SpeciesId.MUNCHLAX);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.enemyMoveset(MoveId.SPLASH);
     game.override.moveset([MoveId.HARD_PRESS]);
     vi.spyOn(moveToCheck, "calculateBattlePower");
   });
 
   it("should return 100 power if target HP ratio is at 100%", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
 
     game.move.select(MoveId.HARD_PRESS);
     await game.phaseInterceptor.to(MoveEffectPhase);
@@ -44,7 +44,7 @@ describe("Moves - Hard Press", () => {
   });
 
   it("should return 50 power if target HP ratio is at 50%", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
     const targetHpRatio = 0.5;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -57,7 +57,7 @@ describe("Moves - Hard Press", () => {
   });
 
   it("should return 1 power if target HP ratio is at 1%", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
     const targetHpRatio = 0.01;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -70,7 +70,7 @@ describe("Moves - Hard Press", () => {
   });
 
   it("should return 1 power if target HP ratio is less than 1%", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
     const targetHpRatio = 0.005;
     const enemy = game.scene.getEnemyPokemon()!;
 

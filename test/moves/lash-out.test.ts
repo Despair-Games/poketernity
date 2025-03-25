@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,13 +26,13 @@ describe("Moves - Lash Out", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.FUR_COAT)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.FUR_COAT)
       .enemyMoveset([MoveId.GROWL])
       .startingLevel(10)
       .enemyLevel(10)
-      .starterSpecies(Species.FEEBAS)
-      .ability(Abilities.BALL_FETCH)
+      .starterSpecies(SpeciesId.FEEBAS)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.LASH_OUT]);
   });
 

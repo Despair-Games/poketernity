@@ -1,6 +1,6 @@
 import type { Localizable } from "#app/interfaces/locales";
-import type { Abilities } from "#enums/abilities";
-import { Species } from "#enums/species";
+import type { AbilityId } from "#enums/ability-id";
+import { SpeciesId } from "#enums/species-id";
 import i18next from "i18next";
 import { randSeedGauss, randSeedItem } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
@@ -27,16 +27,16 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   readonly forms: PokemonForm[];
 
   constructor(
-    id: Species,
+    id: SpeciesId,
     generation: number,
     group: SpeciesGroups,
     type1: ElementalType,
     type2: ElementalType | null,
     height: number,
     weight: number,
-    ability1: Abilities,
-    ability2: Abilities,
-    abilityHidden: Abilities,
+    ability1: AbilityId,
+    ability2: AbilityId,
+    abilityHidden: AbilityId,
     baseTotal: number,
     baseHp: number,
     baseAtk: number,
@@ -122,7 +122,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   }
 
   localize(): void {
-    this.name = i18next.t(`pokemon:${Species[this.speciesId].toLowerCase()}`);
+    this.name = i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase()}`);
   }
 
   /**
@@ -130,9 +130,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
    * and evolutions as necessary based on the Pokemon's level.
    * @param level The level of the Pokemon.
    * @param forTrainer Whether or not this Pokemon belongs to an enemy trainer (as opposed to being a wild Pokemon). Default: `false`.
-   * @returns The {@linkcode Species | species ID} of the desired evolution stage.
+   * @returns The {@linkcode SpeciesId | species ID} of the desired evolution stage.
    */
-  getEnemySpeciesForLevel(level: number, forTrainer: boolean = false): Species {
+  getEnemySpeciesForLevel(level: number, forTrainer: boolean = false): SpeciesId {
     // Apply pre-evolutions
     const preEvolutionLevels = this.getPreEvolutionLevels();
     if (preEvolutionLevels.length) {
@@ -151,7 +151,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
     // Apply evolutions
     const evolutions = pokemonEvolutions[this.speciesId];
-    const eligibleEvolutions: Species[] = [];
+    const eligibleEvolutions: SpeciesId[] = [];
 
     for (const ev of evolutions) {
       // TODO: Should enemy Pokemon have a random chance of evolving if they are close to the level threshold?
@@ -187,7 +187,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
           && preEvolutionLevels.every((pe) => pe[0] !== parseInt(p))
         ) {
-          const speciesId = parseInt(p) as Species;
+          const speciesId = parseInt(p) as SpeciesId;
           const level = e.enemyEvolveLevel;
           preEvolutionLevels.push([speciesId, level]);
           const subPreEvolutionLevels = getPokemonSpecies(speciesId).getPreEvolutionLevels();
@@ -262,7 +262,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
             && pokemonPreEvolutions.hasOwnProperty(species.speciesId) === hasPreEvolution))
         && species.group === category
         && (this.isTrainerForbidden() || !species.isTrainerForbidden())
-        && species.speciesId !== Species.DITTO
+        && species.speciesId !== SpeciesId.DITTO
       );
     };
   }

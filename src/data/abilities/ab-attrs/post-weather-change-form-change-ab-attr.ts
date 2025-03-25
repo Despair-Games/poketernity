@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { Abilities } from "#enums/abilities";
-import { Species } from "#enums/species";
+import { AbilityId } from "#enums/ability-id";
+import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
 import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
 
@@ -11,10 +11,10 @@ import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
  * @extends PostWeatherChangeAbAttr
  */
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
-  private readonly ability: Abilities;
+  private readonly ability: AbilityId;
   private readonly formRevertingWeathers: WeatherType[];
 
-  constructor(ability: Abilities, formRevertingWeathers: WeatherType[]) {
+  constructor(ability: AbilityId, formRevertingWeathers: WeatherType[]) {
     super(false);
 
     this.ability = ability;
@@ -23,9 +23,9 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): boolean {
     const isCastformWithForecast =
-      pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;
+      pokemon.species.speciesId === SpeciesId.CASTFORM && this.ability === AbilityId.FORECAST;
     const isCherrimWithFlowerGift =
-      pokemon.species.speciesId === Species.CHERRIM && this.ability === Abilities.FLOWER_GIFT;
+      pokemon.species.speciesId === SpeciesId.CHERRIM && this.ability === AbilityId.FLOWER_GIFT;
 
     if (isCastformWithForecast || isCherrimWithFlowerGift) {
       if (simulated) {

@@ -1,7 +1,7 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,8 +25,8 @@ describe("Abilities - Unseen Fist", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.starterSpecies(Species.URSHIFU);
-    game.override.enemySpecies(Species.SNORLAX);
+    game.override.starterSpecies(SpeciesId.URSHIFU);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.enemyMoveset([MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
@@ -39,7 +39,7 @@ describe("Abilities - Unseen Fist", () => {
     await testUnseenFistHitResult(game, MoveId.ABSORB, MoveId.PROTECT, false));
 
   it("should not apply if the source has Long Reach", async () => {
-    game.override.passiveAbility(Abilities.LONG_REACH);
+    game.override.passiveAbility(AbilityId.LONG_REACH);
     await testUnseenFistHitResult(game, MoveId.QUICK_ATTACK, MoveId.PROTECT, false);
   });
 

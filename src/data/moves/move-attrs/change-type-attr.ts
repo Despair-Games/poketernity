@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -40,8 +40,8 @@ export class ChangeTypeAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) =>
       !target.isTerastallized()
-      && !target.hasAbility(Abilities.MULTITYPE)
-      && !target.hasAbility(Abilities.RKS_SYSTEM)
+      && !target.hasAbility(AbilityId.MULTITYPE)
+      && !target.hasAbility(AbilityId.RKS_SYSTEM)
       && !(target.getTypes().length === 1 && target.getTypes()[0] === this.type);
   }
 }

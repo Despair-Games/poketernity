@@ -1,4 +1,4 @@
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -17,9 +17,9 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
  * @extends MoveEffectAttr
  */
 export class AbilityChangeAttr extends MoveEffectAttr {
-  public ability: Abilities;
+  public ability: AbilityId;
 
-  constructor(ability: Abilities, selfTarget?: boolean) {
+  constructor(ability: AbilityId, selfTarget?: boolean) {
     super(selfTarget);
 
     this.ability = ability;

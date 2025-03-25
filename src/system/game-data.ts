@@ -69,7 +69,7 @@ import { GameModes } from "#enums/game-modes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Tutorial } from "#enums/tutorial";
@@ -409,7 +409,7 @@ export class GameData {
 
           this.migrateStarterAbilities(systemData, this.starterData);
 
-          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as Species);
+          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
           for (const s of starterIds) {
             this.starterData[s].candyCount += systemData.dexData[s].caughtCount;
             this.starterData[s].candyCount += systemData.dexData[s].hatchedCount * 2;
@@ -1372,9 +1372,11 @@ export class GameData {
             globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
+          const dataNotLoadedString =
+            dataName === "session" ? i18next.t("menu:sessionDataNotLoaded") : i18next.t("menu:gameDataNotLoaded");
           if (!valid) {
             return globalScene.ui.showText(
-              `Your ${dataName} data could not be loaded. It may be corrupted.`,
+              dataNotLoadedString,
               null,
               () => globalScene.ui.showText("", 0),
               fixedNumber(1500),
@@ -1389,7 +1391,7 @@ export class GameData {
               if (!bypassLogin && dataType < GameDataType.SETTINGS) {
                 updateUserInfo().then((success) => {
                   if (!success[0]) {
-                    return displayError(`Could not contact the server. Your ${dataName} data could not be imported.`);
+                    return displayError(i18next.t("menu:couldNotContactServer"));
                   }
                   const { trainerId, secretId } = this;
                   let updatePromise: Promise<string | null>;
@@ -1404,9 +1406,7 @@ export class GameData {
                   updatePromise.then((error) => {
                     if (error) {
                       console.error(error);
-                      return displayError(
-                        `An error occurred while updating ${dataName} data. Please contact the administrator.`,
-                      );
+                      return displayError(i18next.t("menu:errorUpdating"));
                     }
                     window.location = window.location;
                   });
@@ -1421,13 +1421,14 @@ export class GameData {
             },
             xOffset: confirmWindowXOffset,
           };
-          globalScene.ui.showText(
-            `Your ${dataName} data will be overridden and the page will reload. Proceed?`,
-            null,
-            () => {
-              globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions);
-            },
-          );
+
+          const dataOverwriteString =
+            dataName === "session"
+              ? i18next.t("menu:sessionDataOverwriteWarning")
+              : i18next.t("menu:gameDataOverwriteWarning");
+          globalScene.ui.showText(dataOverwriteString, null, () => {
+            globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions);
+          });
         };
       })((e.target as any).files[0]);
 
@@ -1484,7 +1485,7 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as Species);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       starterData[speciesId] = {
@@ -1545,14 +1546,14 @@ export class GameData {
    *   otherwise (e.g. evolution situation) the nature, ability and other unlocks will get updated, but no the game stats.
    * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
     pokemon: Pokemon,
     isNonRentalCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<Species[]> {
+  ): Promise<SpeciesId[]> {
     // If isNonRentalCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
@@ -1581,7 +1582,7 @@ export class GameData {
    * @param giveCandy - Whether to give starter candy for the root species. Default: `true`
    * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
   private setPokemonSpeciesCaught(
     pokemon: Pokemon,
@@ -1590,9 +1591,9 @@ export class GameData {
     giveCandy: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-    unlockedStarters: Species[] = [],
-  ): Promise<Species[]> {
-    return new Promise<Species[]>((resolve) => {
+    unlockedStarters: SpeciesId[] = [],
+  ): Promise<SpeciesId[]> {
+    return new Promise<SpeciesId[]>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
 
@@ -1655,7 +1656,7 @@ export class GameData {
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
-      const checkPreEvolution = (unlockedStarters: Species[]) => {
+      const checkPreEvolution = (unlockedStarters: SpeciesId[]) => {
         if (hasPreEvolution) {
           const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
@@ -1725,7 +1726,7 @@ export class GameData {
   }
 
   incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
-    const speciesIdToIncrement: Species = species.getRootSpeciesId(forStarter);
+    const speciesIdToIncrement: SpeciesId = species.getRootSpeciesId(forStarter);
 
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
       this.starterData[speciesIdToIncrement].classicWinCount = 0;
@@ -1836,7 +1837,7 @@ export class GameData {
       return;
     }
 
-    const _unlockSpeciesNature = (speciesId: Species) => {
+    const _unlockSpeciesNature = (speciesId: SpeciesId) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
       if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
         _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
@@ -1845,7 +1846,7 @@ export class GameData {
     _unlockSpeciesNature(species.speciesId);
   }
 
-  updateSpeciesDexIvs(speciesId: Species, ivs: number[]): void {
+  updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
     let dexEntry: DexEntry;
     do {
       dexEntry = globalScene.gameData.dexData[speciesId];
@@ -1976,7 +1977,7 @@ export class GameData {
     return ret;
   }
 
-  getSpeciesStarterValue(speciesId: Species): number {
+  getSpeciesStarterValue(speciesId: SpeciesId): number {
     const baseValue = speciesStarterCosts[speciesId];
     let value = baseValue;
 
@@ -2027,7 +2028,7 @@ export class GameData {
   }
 
   migrateStarterAbilities(systemData: SystemSaveData, initialStarterData?: StarterData): void {
-    const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as Species);
+    const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
     const starterData = initialStarterData || systemData.starterData;
     const dexData = systemData.dexData;
     for (const s of starterIds) {

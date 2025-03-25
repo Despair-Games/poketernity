@@ -1,7 +1,7 @@
 import { FormBlockDamageTag } from "#app/data/battler-tags/form-block-damage-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 
@@ -11,7 +11,7 @@ import { WeatherType } from "#enums/weather-type";
  */
 export class IceFaceBlockDamageTag extends FormBlockDamageTag {
   constructor(tagType: BattlerTagType) {
-    super(tagType, Abilities.ICE_FACE);
+    super(tagType, AbilityId.ICE_FACE);
   }
 
   /**

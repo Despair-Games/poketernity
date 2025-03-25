@@ -10,8 +10,8 @@ import { allSpecies } from "#app/data/data-lists";
 import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";
-import { Biome } from "#enums/biome";
-import { Species } from "#enums/species";
+import { BiomeId } from "#enums/biome-id";
+import { SpeciesId } from "#enums/species-id";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "#enums/game-modes";
@@ -107,12 +107,12 @@ export class GameMode implements GameModeConfig {
    * - override from overrides.ts
    * - Town
    */
-  getStartingBiome(): Biome {
+  getStartingBiome(): BiomeId {
     switch (this.modeId) {
       case GameModes.DAILY:
         return globalScene.generateRandomBiome(this.getWaveForDifficulty(1));
       default:
-        return Overrides.STARTING_BIOME_OVERRIDE || Biome.TOWN;
+        return Overrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN;
     }
   }
 
@@ -185,14 +185,14 @@ export class GameMode implements GameModeConfig {
     return false;
   }
 
-  isTrainerBoss(waveIndex: number, biomeType: Biome, offsetGym: boolean): boolean {
+  isTrainerBoss(waveIndex: number, biomeType: BiomeId, offsetGym: boolean): boolean {
     switch (this.modeId) {
       case GameModes.DAILY:
         return waveIndex > 10 && waveIndex < 50 && !(waveIndex % 10);
       default:
         return (
           waveIndex % 30 === (offsetGym ? 0 : 20)
-          && (biomeType !== Biome.END || this.isClassic || this.isWaveFinal(waveIndex))
+          && (biomeType !== BiomeId.END || this.isClassic || this.isWaveFinal(waveIndex))
         );
     }
   }
@@ -201,7 +201,10 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          s.isLegendLike() && s.baseTotal >= 600 && s.speciesId !== Species.ETERNATUS && s.speciesId !== Species.ARCEUS,
+          s.isLegendLike()
+          && s.baseTotal >= 600
+          && s.speciesId !== SpeciesId.ETERNATUS
+          && s.speciesId !== SpeciesId.ARCEUS,
       );
       return randSeedItem(allFinalBossSpecies);
     }

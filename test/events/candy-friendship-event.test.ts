@@ -3,8 +3,8 @@ import { describe, beforeAll, afterEach, vi, beforeEach, it, expect } from "vite
 import { timedEventManager } from "#app/timed-event-manager";
 import type { TimedEvent } from "#app/@types/TimedEvent";
 import { EventModifierType } from "#enums/event-modifier-type";
-import { Abilities } from "#enums/abilities";
-import { Species } from "#enums/species";
+import { AbilityId } from "#enums/ability-id";
+import { SpeciesId } from "#enums/species-id";
 import { MoveId } from "#enums/move-id";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { api } from "#app/plugins/api/api";
@@ -37,11 +37,11 @@ describe("Candy Friendship Modifier Event", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .starterSpecies(Species.VENUSAUR)
+      .starterSpecies(SpeciesId.VENUSAUR)
       .startingLevel(100)
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .timedEvents(testEvents, duringEventDate);
   });
 

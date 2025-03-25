@@ -1,3 +1,3 @@
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 
-export const uncatchableSpecies: Species[] = [];
+export const uncatchableSpecies: SpeciesId[] = [];

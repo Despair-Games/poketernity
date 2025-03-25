@@ -3,11 +3,11 @@ import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerab
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -35,11 +35,11 @@ describe("Moves - Metronome", () => {
       .moveset([MoveId.METRONOME, MoveId.SPLASH])
       .battleType("single")
       .startingLevel(100)
-      .starterSpecies(Species.REGIELEKI)
+      .starterSpecies(SpeciesId.REGIELEKI)
       .enemyLevel(100)
-      .enemySpecies(Species.SHUCKLE)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should have one semi-invulnerable turn and deal damage on the second turn when a semi-invulnerable move is called", async () => {
@@ -83,7 +83,7 @@ describe("Moves - Metronome", () => {
 
   it("should only target ally for Aromatic Mist", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.RATTATA]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.AROMATIC_MIST);

@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,16 +28,16 @@ describe("Abilities - Galvanize", () => {
     game.override
       .battleType("single")
       .startingLevel(100)
-      .ability(Abilities.GALVANIZE)
+      .ability(AbilityId.GALVANIZE)
       .moveset([MoveId.TACKLE, MoveId.REVELATION_DANCE, MoveId.FURY_SWIPES])
-      .enemySpecies(Species.DUSCLOPS)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.DUSCLOPS)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
   });
 
   it("should change Normal-type attacks to Electric type and boost their power", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -59,9 +59,9 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should cause Normal-type attacks to activate Volt Absorb", async () => {
-    game.override.enemyAbility(Abilities.VOLT_ABSORB);
+    game.override.enemyAbility(AbilityId.VOLT_ABSORB);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -81,9 +81,9 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should not change the type of variable-type moves", async () => {
-    game.override.enemySpecies(Species.MIGHTYENA);
+    game.override.enemySpecies(SpeciesId.MIGHTYENA);
 
-    await game.classicMode.startBattle([Species.ESPEON]);
+    await game.classicMode.startBattle([SpeciesId.ESPEON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -100,7 +100,7 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should affect all hits of a Normal-type multi-hit move", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");

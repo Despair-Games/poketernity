@@ -1,5 +1,5 @@
 import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 
 export class PokemonForm extends PokemonSpeciesForm {
@@ -19,9 +19,9 @@ export class PokemonForm extends PokemonSpeciesForm {
     type2: ElementalType | null,
     height: number,
     weight: number,
-    ability1: Abilities,
-    ability2: Abilities,
-    abilityHidden: Abilities,
+    ability1: AbilityId,
+    ability2: AbilityId,
+    abilityHidden: AbilityId,
     baseTotal: number,
     baseHp: number,
     baseAtk: number,

@@ -34,7 +34,7 @@ import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/delibirdy";
@@ -74,7 +74,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     {
       spriteKey: "",
       fileRoot: "",
-      species: Species.DELIBIRD,
+      species: SpeciesId.DELIBIRD,
       hasShadow: true,
       repeat: true,
       startFrame: 38,
@@ -83,7 +83,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     {
       spriteKey: "",
       fileRoot: "",
-      species: Species.DELIBIRD,
+      species: SpeciesId.DELIBIRD,
       hasShadow: true,
       repeat: true,
       scale: 1.06,
@@ -91,7 +91,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     {
       spriteKey: "",
       fileRoot: "",
-      species: Species.DELIBIRD,
+      species: SpeciesId.DELIBIRD,
       hasShadow: true,
       repeat: true,
       startFrame: 65,
@@ -116,7 +116,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
   ])
   .withOnInit(() => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
-    encounter.setDialogueToken("delibirdName", getPokemonSpecies(Species.DELIBIRD).getName());
+    encounter.setDialogueToken("delibirdName", getPokemonSpecies(SpeciesId.DELIBIRD).getName());
 
     globalScene.loadBgm("mystery_encounter_fun_and_games", "mystery_encounter_fun_and_games.mp3");
     return true;

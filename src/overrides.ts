@@ -3,9 +3,9 @@
 import { type PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { EggTier } from "#enums/egg-type";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -14,8 +14,8 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
@@ -38,8 +38,8 @@ import { WeatherType } from "#enums/weather-type";
  * @example
  * ```
  * const overrides = {
- *   ABILITY_OVERRIDE: Abilities.PROTEAN,
- *   PASSIVE_ABILITY_OVERRIDE: Abilities.PIXILATE,
+ *   ABILITY_OVERRIDE: AbilityId.PROTEAN,
+ *   PASSIVE_ABILITY_OVERRIDE: AbilityId.PIXILATE,
  * }
  * ```
  */
@@ -76,7 +76,7 @@ class DefaultOverrides {
    */
   readonly BATTLE_TYPE_OVERRIDE: BattleStyle | null = null;
   readonly STARTING_WAVE_OVERRIDE: number = 0;
-  readonly STARTING_BIOME_OVERRIDE: Biome = Biome.TOWN;
+  readonly STARTING_BIOME_OVERRIDE: BiomeId = BiomeId.TOWN;
   readonly ARENA_TINT_OVERRIDE: TimeOfDay | null = null;
   /** Multiplies XP gained by this value including 0. Set to null to ignore the override */
   readonly XP_MULTIPLIER_OVERRIDE: number | null = null;
@@ -121,11 +121,11 @@ class DefaultOverrides {
    * @example
    * ```
    * const STARTER_FORM_OVERRIDES = {
-   *   [Species.DARMANITAN]: 1
+   *   [SpeciesId.DARMANITAN]: 1
    * }
    * ```
    */
-  readonly STARTER_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+  readonly STARTER_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
 
   /** default 5 or 20 for Daily */
   readonly STARTING_LEVEL_OVERRIDE: number = 0;
@@ -133,11 +133,11 @@ class DefaultOverrides {
    * SPECIES OVERRIDE
    * will only apply to the first starter in your party or each enemy pokemon
    * default is 0 to not override
-   * @example SPECIES_OVERRIDE = Species.Bulbasaur;
+   * @example SPECIES_OVERRIDE = SpeciesId.Bulbasaur;
    */
-  readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
-  readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly STARTER_SPECIES_OVERRIDE: SpeciesId | number = 0;
+  readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly GENDER_OVERRIDE: Gender | null = null;
   readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
@@ -148,17 +148,17 @@ class DefaultOverrides {
   // ENEMY OVERRIDES
   // --------------------------
 
-  readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
+  readonly ENEMY_SPECIES_OVERRIDE: SpeciesId | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
-  readonly ENEMY_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly ENEMY_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
   readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
-  readonly ENEMY_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+  readonly ENEMY_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
   /**
    * Override to give the enemy Pokemon a given amount of health segments
    *

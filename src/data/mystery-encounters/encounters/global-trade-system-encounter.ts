@@ -13,7 +13,7 @@ import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -42,7 +42,7 @@ import { getEncounterText, showEncounterText } from "#app/data/mystery-encounter
 import { trainerNamePools } from "#app/data/trainer-names";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import type { PokeballType } from "#enums/pokeball";
+import type { PokeballType } from "#enums/pokeball-type";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { timedEventManager } from "#app/timed-event-manager";
 import { EventModifierType } from "#enums/event-modifier-type";
@@ -56,39 +56,39 @@ const WONDER_TRADE_SHINY_CHANCE = 512;
 const MAX_WONDER_TRADE_SHINY_CHANCE = 4096;
 
 const LEGENDARY_TRADE_POOLS = {
-  1: [Species.RATTATA, Species.PIDGEY, Species.WEEDLE],
-  2: [Species.SENTRET, Species.HOOTHOOT, Species.LEDYBA],
-  3: [Species.POOCHYENA, Species.ZIGZAGOON, Species.TAILLOW],
-  4: [Species.BIDOOF, Species.STARLY, Species.KRICKETOT],
-  5: [Species.PATRAT, Species.PURRLOIN, Species.PIDOVE],
-  6: [Species.BUNNELBY, Species.LITLEO, Species.SCATTERBUG],
-  7: [Species.PIKIPEK, Species.YUNGOOS, Species.ROCKRUFF],
-  8: [Species.SKWOVET, Species.WOOLOO, Species.ROOKIDEE],
-  9: [Species.LECHONK, Species.FIDOUGH, Species.TAROUNTULA],
+  1: [SpeciesId.RATTATA, SpeciesId.PIDGEY, SpeciesId.WEEDLE],
+  2: [SpeciesId.SENTRET, SpeciesId.HOOTHOOT, SpeciesId.LEDYBA],
+  3: [SpeciesId.POOCHYENA, SpeciesId.ZIGZAGOON, SpeciesId.TAILLOW],
+  4: [SpeciesId.BIDOOF, SpeciesId.STARLY, SpeciesId.KRICKETOT],
+  5: [SpeciesId.PATRAT, SpeciesId.PURRLOIN, SpeciesId.PIDOVE],
+  6: [SpeciesId.BUNNELBY, SpeciesId.LITLEO, SpeciesId.SCATTERBUG],
+  7: [SpeciesId.PIKIPEK, SpeciesId.YUNGOOS, SpeciesId.ROCKRUFF],
+  8: [SpeciesId.SKWOVET, SpeciesId.WOOLOO, SpeciesId.ROOKIDEE],
+  9: [SpeciesId.LECHONK, SpeciesId.FIDOUGH, SpeciesId.TAROUNTULA],
 };
 
 /** Exclude Paradox mons as they aren't considered legendary/mythical */
 const EXCLUDED_TRADE_SPECIES = [
-  Species.GREAT_TUSK,
-  Species.SCREAM_TAIL,
-  Species.BRUTE_BONNET,
-  Species.FLUTTER_MANE,
-  Species.SLITHER_WING,
-  Species.SANDY_SHOCKS,
-  Species.ROARING_MOON,
-  Species.WALKING_WAKE,
-  Species.GOUGING_FIRE,
-  Species.RAGING_BOLT,
-  Species.IRON_TREADS,
-  Species.IRON_BUNDLE,
-  Species.IRON_HANDS,
-  Species.IRON_JUGULIS,
-  Species.IRON_MOTH,
-  Species.IRON_THORNS,
-  Species.IRON_VALIANT,
-  Species.IRON_LEAVES,
-  Species.IRON_BOULDER,
-  Species.IRON_CROWN,
+  SpeciesId.GREAT_TUSK,
+  SpeciesId.SCREAM_TAIL,
+  SpeciesId.BRUTE_BONNET,
+  SpeciesId.FLUTTER_MANE,
+  SpeciesId.SLITHER_WING,
+  SpeciesId.SANDY_SHOCKS,
+  SpeciesId.ROARING_MOON,
+  SpeciesId.WALKING_WAKE,
+  SpeciesId.GOUGING_FIRE,
+  SpeciesId.RAGING_BOLT,
+  SpeciesId.IRON_TREADS,
+  SpeciesId.IRON_BUNDLE,
+  SpeciesId.IRON_HANDS,
+  SpeciesId.IRON_JUGULIS,
+  SpeciesId.IRON_MOTH,
+  SpeciesId.IRON_THORNS,
+  SpeciesId.IRON_VALIANT,
+  SpeciesId.IRON_LEAVES,
+  SpeciesId.IRON_BOULDER,
+  SpeciesId.IRON_CROWN,
 ];
 
 /**

@@ -17,7 +17,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -1105,7 +1105,7 @@ export class TrickRoomTag extends ArenaRoomTag {
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Gravity_(move) Gravity}.
  * Grounds all Pokémon on the field, including Flying-types and those with
- * {@linkcode Abilities.LEVITATE} for the duration of the arena tag, usually 5 turns.
+ * {@linkcode AbilityId.LEVITATE} for the duration of the arena tag, usually 5 turns.
  */
 export class GravityTag extends ArenaTag {
   constructor(turnCount: number) {
@@ -1151,7 +1151,7 @@ class TailwindTag extends ArenaTag {
 
     for (const pokemon of party) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
-      if (pokemon.hasAbility(Abilities.WIND_POWER) && !pokemon.getTag(BattlerTagType.CHARGED)) {
+      if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.getTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);
         globalScene.queueMessage(
           i18next.t("abilityTriggers:windPowerCharged", {
@@ -1161,7 +1161,7 @@ class TailwindTag extends ArenaTag {
         );
       }
       // Raise attack by one stage if party member has WIND_RIDER ability
-      if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
+      if (pokemon.hasAbility(AbilityId.WIND_RIDER)) {
         globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
         globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1));
       }

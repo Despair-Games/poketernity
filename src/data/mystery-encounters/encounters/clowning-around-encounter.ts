@@ -20,6 +20,7 @@ import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -30,7 +31,7 @@ import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BerryType } from "#enums/berry-type";
 import { Challenges } from "#enums/challenges";
@@ -44,30 +45,29 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";
 
 const RANDOM_ABILITY_POOL = [
-  Abilities.STURDY,
-  Abilities.PICKUP,
-  Abilities.INTIMIDATE,
-  Abilities.GUTS,
-  Abilities.DROUGHT,
-  Abilities.DRIZZLE,
-  Abilities.SNOW_WARNING,
-  Abilities.SAND_STREAM,
-  Abilities.ELECTRIC_SURGE,
-  Abilities.PSYCHIC_SURGE,
-  Abilities.GRASSY_SURGE,
-  Abilities.MISTY_SURGE,
-  Abilities.MAGICIAN,
-  Abilities.SHEER_FORCE,
-  Abilities.PRANKSTER,
+  AbilityId.STURDY,
+  AbilityId.PICKUP,
+  AbilityId.INTIMIDATE,
+  AbilityId.GUTS,
+  AbilityId.DROUGHT,
+  AbilityId.DRIZZLE,
+  AbilityId.SNOW_WARNING,
+  AbilityId.SAND_STREAM,
+  AbilityId.ELECTRIC_SURGE,
+  AbilityId.PSYCHIC_SURGE,
+  AbilityId.GRASSY_SURGE,
+  AbilityId.MISTY_SURGE,
+  AbilityId.MAGICIAN,
+  AbilityId.SHEER_FORCE,
+  AbilityId.PRANKSTER,
 ];
 
 /**
@@ -84,7 +84,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
   .withAutoHideIntroVisuals(false)
   .withIntroSpriteConfigs([
     {
-      spriteKey: Species.MR_MIME.toString(),
+      spriteKey: SpeciesId.MR_MIME.toString(),
       fileRoot: "pokemon",
       hasShadow: true,
       repeat: true,
@@ -94,7 +94,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
       yShadow: -3,
     },
     {
-      spriteKey: Species.BLACEPHALON.toString(),
+      spriteKey: SpeciesId.BLACEPHALON.toString(),
       fileRoot: "pokemon",
       hasShadow: true,
       repeat: true,
@@ -145,13 +145,13 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
       pokemonConfigs: [
         // Overrides first 2 pokemon to be Mr. Mime and Blacephalon
         {
-          species: getPokemonSpecies(Species.MR_MIME),
+          species: getPokemonSpecies(SpeciesId.MR_MIME),
           isBoss: true,
           moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
         },
         {
           // Blacephalon has the random ability from pool, and 2 entirely random types to fit with the theme of the encounter
-          species: getPokemonSpecies(Species.BLACEPHALON),
+          species: getPokemonSpecies(SpeciesId.BLACEPHALON),
           customPokemonData: new CustomPokemonData({ ability: ability, types: [randSeedInt(18), randSeedInt(18)] }),
           isBoss: true,
           moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
@@ -163,7 +163,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     // Load animations/sfx for start of fight moves
     loadCustomMovesForEncounter([MoveId.ROLE_PLAY, MoveId.TAUNT]);
 
-    encounter.setDialogueToken("blacephalonName", getPokemonSpecies(Species.BLACEPHALON).getName());
+    encounter.setDialogueToken("blacephalonName", getPokemonSpecies(SpeciesId.BLACEPHALON).getName());
 
     return true;
   })

@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -24,7 +24,7 @@ export class CommanderAbAttr extends AbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
+    if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === SpeciesId.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
       // another Pokemon, this effect cannot apply.
       if (pokemon.getAlly()?.isFainted() || pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)) {

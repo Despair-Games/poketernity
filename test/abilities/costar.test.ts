@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,15 +25,15 @@ describe("Abilities - COSTAR", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("double");
-    game.override.ability(Abilities.COSTAR);
+    game.override.ability(AbilityId.COSTAR);
     game.override.moveset([MoveId.SPLASH, MoveId.NASTY_PLOT]);
     game.override.enemyMoveset(MoveId.SPLASH);
   });
 
   test("ability copies positive stat stages", async () => {
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
 
-    await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP, SpeciesId.FLAMIGO]);
 
     let [leftPokemon, rightPokemon] = game.scene.getPlayerField();
 
@@ -56,9 +56,9 @@ describe("Abilities - COSTAR", () => {
   });
 
   test("ability copies negative stat stages", async () => {
-    game.override.enemyAbility(Abilities.INTIMIDATE);
+    game.override.enemyAbility(AbilityId.INTIMIDATE);
 
-    await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP, SpeciesId.FLAMIGO]);
 
     let [leftPokemon, rightPokemon] = game.scene.getPlayerField();
 

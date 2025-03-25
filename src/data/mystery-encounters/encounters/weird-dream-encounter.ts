@@ -1,6 +1,6 @@
 import type { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
@@ -441,7 +441,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 async function postProcessTransformedPokemon(
   previousPokemon: PlayerPokemon,
   newPokemon: PlayerPokemon,
-  speciesRootForm: Species,
+  speciesRootForm: SpeciesId,
   forBattle: boolean = false,
 ): Promise<void> {
   // Roll HA a second time
@@ -571,24 +571,24 @@ function getTransformedSpecies(
         && (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
       /** Exclude Ultra Beasts, Paradox, Eternatus, and all legendary/mythical/trio pokemon that are below 570 BST */
       const EXCLUDED_TRANSFORMATION_SPECIES = [
-        Species.ETERNATUS,
+        SpeciesId.ETERNATUS,
         /** UBs */
         ...getSpecialSpeciesList(SpeciesGroups.ULTRA_BEAST, false),
         /** Paradox */
         ...getSpecialSpeciesList(SpeciesGroups.PARADOX, false),
         /** These are banned so they don't appear in the < 570 BST pool */
-        Species.COSMOG,
-        Species.MELTAN,
-        Species.KUBFU,
-        Species.COSMOEM,
-        Species.TERAPAGOS,
-        Species.TYPE_NULL,
-        Species.CALYREX,
-        Species.URSHIFU,
-        Species.OGERPON,
-        Species.OKIDOGI,
-        Species.MUNKIDORI,
-        Species.FEZANDIPITI,
+        SpeciesId.COSMOG,
+        SpeciesId.MELTAN,
+        SpeciesId.KUBFU,
+        SpeciesId.COSMOEM,
+        SpeciesId.TERAPAGOS,
+        SpeciesId.TYPE_NULL,
+        SpeciesId.CALYREX,
+        SpeciesId.URSHIFU,
+        SpeciesId.OGERPON,
+        SpeciesId.OKIDOGI,
+        SpeciesId.MUNKIDORI,
+        SpeciesId.FEZANDIPITI,
       ];
       return bstInRange && validBst && !EXCLUDED_TRANSFORMATION_SPECIES.includes(s.speciesId);
     });
@@ -699,7 +699,7 @@ function doSideBySideTransformations(transformations: PokemonTransformation[]) {
  */
 async function addEggMoveToNewPokemonMoveset(
   newPokemon: PlayerPokemon,
-  speciesRootForm: Species,
+  speciesRootForm: SpeciesId,
   forBattle: boolean = false,
 ): Promise<number | null> {
   let eggMoveIndex: null | number = null;

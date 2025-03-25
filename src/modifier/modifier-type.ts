@@ -75,8 +75,8 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { type Nature } from "#enums/nature";
-import { type PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
+import { type PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
@@ -1281,10 +1281,14 @@ export class TempStatStageBoosterModifierTypeGenerator extends ModifierTypeGener
 export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
   /** Object comprised of the currently available species-based stat boosting held items */
   public static readonly items = {
-    LIGHT_BALL: { stats: [Stat.ATK, Stat.SPATK], multiplier: 2, species: [Species.PIKACHU] },
-    THICK_CLUB: { stats: [Stat.ATK], multiplier: 2, species: [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK] },
-    METAL_POWDER: { stats: [Stat.DEF], multiplier: 2, species: [Species.DITTO] },
-    QUICK_POWDER: { stats: [Stat.SPD], multiplier: 2, species: [Species.DITTO] },
+    LIGHT_BALL: { stats: [Stat.ATK, Stat.SPATK], multiplier: 2, species: [SpeciesId.PIKACHU] },
+    THICK_CLUB: {
+      stats: [Stat.ATK],
+      multiplier: 2,
+      species: [SpeciesId.CUBONE, SpeciesId.MAROWAK, SpeciesId.ALOLA_MAROWAK],
+    },
+    METAL_POWDER: { stats: [Stat.DEF], multiplier: 2, species: [SpeciesId.DITTO] },
+    QUICK_POWDER: { stats: [Stat.SPD], multiplier: 2, species: [SpeciesId.DITTO] },
   };
 
   constructor() {
@@ -1319,7 +1323,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
             if (checkedSpecies.includes(speciesId)) {
               // Add weight if party member has a matching species
               weights[i]++;
-            } else if (checkedSpecies.includes(Species.PIKACHU) && hasFling) {
+            } else if (checkedSpecies.includes(SpeciesId.PIKACHU) && hasFling) {
               // Add weight to Light Ball if party member has Fling
               weights[i]++;
             }
@@ -1387,8 +1391,8 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
           (p) =>
             pokemonEvolutions.hasOwnProperty(p.species.speciesId)
             && (!p.pauseEvolutions
-              || p.species.speciesId === Species.SLOWPOKE
-              || p.species.speciesId === Species.EEVEE),
+              || p.species.speciesId === SpeciesId.SLOWPOKE
+              || p.species.speciesId === SpeciesId.EEVEE),
         )
         .flatMap((p) => {
           const evolutions = pokemonEvolutions[p.species.speciesId];
@@ -1449,7 +1453,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                     ),
                 );
 
-              if (p.species.speciesId === Species.NECROZMA) {
+              if (p.species.speciesId === SpeciesId.NECROZMA) {
                 // technically we could use a simplified version and check for formChanges.length > 3, but in case any code changes later, this might break...
 
                 let foundULTRA_Z = false,

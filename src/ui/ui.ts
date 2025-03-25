@@ -42,6 +42,7 @@ import { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
 import { UnavailableModalUiHandler } from "#app/ui/handlers/unavailable-modal-ui-handler";
 import { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 import { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
+import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { SettingsAudioUiHandler } from "#app/ui/settings/settings-audio-ui-handler";
 import { SettingsDisplayUiHandler } from "#app/ui/settings/settings-display-ui-handler";
 import { SettingsGamepadUiHandler } from "#app/ui/settings/settings-gamepad-ui-handler";
@@ -423,6 +424,12 @@ export class UI extends Phaser.GameObjects.Container {
 
       this.tooltipContainer.setPosition(x, y);
     }
+  }
+
+  override destroy(fromScene?: boolean): void {
+    NavigationManager.getInstance().clearMenus();
+    this.removeAll(true);
+    super.destroy(fromScene);
   }
 
   clearText(): void {

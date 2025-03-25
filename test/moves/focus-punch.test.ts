@@ -3,9 +3,9 @@ import { MessagePhase } from "#app/phases/message-phase";
 import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,17 +28,17 @@ describe("Moves - Focus Punch", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.UNNERVE)
+      .ability(AbilityId.UNNERVE)
       .moveset([MoveId.FOCUS_PUNCH])
-      .enemySpecies(Species.GROUDON)
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemySpecies(SpeciesId.GROUDON)
+      .enemyAbility(AbilityId.INSOMNIA)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should deal damage at the end of turn if uninterrupted", async () => {
-    await game.startBattle([Species.CHARIZARD]);
+    await game.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -62,7 +62,7 @@ describe("Moves - Focus Punch", () => {
   it("should fail if the user is hit", async () => {
     game.override.enemyMoveset([MoveId.TACKLE]);
 
-    await game.startBattle([Species.CHARIZARD]);
+    await game.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -86,7 +86,7 @@ describe("Moves - Focus Punch", () => {
   it("should be cancelled if the user falls asleep mid-turn", async () => {
     game.override.enemyMoveset([MoveId.SPORE]);
 
-    await game.startBattle([Species.CHARIZARD]);
+    await game.startBattle([SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -107,7 +107,7 @@ describe("Moves - Focus Punch", () => {
     /** Guarantee a Trainer battle with multiple enemy Pokemon */
     game.override.startingWave(25);
 
-    await game.startBattle([Species.CHARIZARD]);
+    await game.startBattle([SpeciesId.CHARIZARD]);
 
     game.forceEnemyToSwitch();
     game.move.select(MoveId.FOCUS_PUNCH);

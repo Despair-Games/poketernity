@@ -1,4 +1,4 @@
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
@@ -12,7 +12,7 @@ import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-t
  */
 export class TechnoBlastTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (user.species.speciesId === Species.GENESECT) {
+    if (user.species.speciesId === SpeciesId.GENESECT) {
       switch (user.formIndex) {
         case 1: // Shock Drive
           moveType.value = ElementalType.ELECTRIC;

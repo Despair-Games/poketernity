@@ -19,7 +19,7 @@ import { initAchievements } from "#app/system/achievements";
 import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initVouchers } from "#app/system/init-vouchers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/ui-constants";
@@ -208,8 +208,8 @@ export class LoadingScene extends SceneBase {
 
     // Load arena images
     this.loadImage("default_bg", ImagesFolder.ARENAS);
-    getEnumValues(Biome).map((bt) => {
-      const btKey = Biome[bt].toLowerCase();
+    getEnumValues(BiomeId).map((bt) => {
+      const btKey = BiomeId[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
       const baseBKey = `${btKey}_b`;

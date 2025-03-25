@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
@@ -29,14 +29,14 @@ describe("Moves - Rage", () => {
       .startingLevel(100)
       .moveset([MoveId.RAGE, MoveId.SPLASH])
       .disableCrits()
-      .enemySpecies(Species.BLISSEY)
+      .enemySpecies(SpeciesId.BLISSEY)
       .enemyLevel(100)
-      .enemyAbility(Abilities.NO_GUARD)
+      .enemyAbility(AbilityId.NO_GUARD)
       .enemyMoveset([MoveId.SHADOW_PUNCH, MoveId.RAGE, MoveId.TRIPLE_AXEL, MoveId.TACKLE]);
   });
 
   it("Rage should increase the user's attack by 1 for each time they are hit", async () => {
-    await game.classicMode.startBattle([Species.BLISSEY]);
+    await game.classicMode.startBattle([SpeciesId.BLISSEY]);
     const playerPokemon = game.field.getPlayerPokemon();
     playerPokemon.setStatStage(Stat.DEF, 6); // Prevents Blissey from fainting due to its low Defense stat
 

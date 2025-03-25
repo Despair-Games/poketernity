@@ -1,6 +1,6 @@
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -26,8 +26,8 @@ import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/dancingLessons";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.PLAINS;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.PLAINS;
 const defaultWave = 45;
 
 describe("Dancing Lessons - Mystery Encounter", () => {
@@ -48,9 +48,9 @@ describe("Dancing Lessons - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [Biome.PLAINS, [MysteryEncounterType.DANCING_LESSONS]],
-        [Biome.SPACE, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+      new Map<BiomeId, MysteryEncounterType[]>([
+        [BiomeId.PLAINS, [MysteryEncounterType.DANCING_LESSONS]],
+        [BiomeId.SPACE, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
       ]),
     );
   });
@@ -76,7 +76,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
   it("should not spawn outside of proper biomes", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.SPACE);
+    game.override.startingBiome(BiomeId.SPACE);
     await game.runToMysteryEncounter();
 
     expect(game.scene.currentBattle.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.DANCING_LESSONS);
@@ -111,7 +111,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       const enemyField = scene.getEnemyField();
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(Species.ORICORIO);
+      expect(enemyField[0].species.speciesId).toBe(SpeciesId.ORICORIO);
       expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 0, 0, 0]);
       const moveset = enemyField[0].moveset.map((m) => m.moveId);
       expect(moveset.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
@@ -208,7 +208,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       expect(partyCountBefore + 1).toBe(partyCountAfter);
       const oricorio = scene.getPlayerParty()[scene.getPlayerParty().length - 1];
-      expect(oricorio.species.speciesId).toBe(Species.ORICORIO);
+      expect(oricorio.species.speciesId).toBe(SpeciesId.ORICORIO);
       const moveset = oricorio.moveset.map((m) => m.moveId);
       expect(moveset?.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
       expect(moveset?.some((m) => m === MoveId.DRAGON_DANCE)).toBeTruthy();
