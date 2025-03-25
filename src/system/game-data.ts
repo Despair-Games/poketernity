@@ -379,6 +379,7 @@ export class GameData {
 
         localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemDataStr, bypassLogin));
 
+        // TODO: why is this done here?
         const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
         const lsItem = localStorage.getItem(lsItemKey);
         if (!lsItem) {
@@ -390,34 +391,7 @@ export class GameData {
         this.trainerId = systemData.trainerId;
         this.secretId = systemData.secretId;
 
-        if (!systemData.starterData) {
-          this.initStarterData();
-
-          if (systemData["starterMoveData"]) {
-            const starterMoveData = systemData["starterMoveData"];
-            for (const s of Object.keys(starterMoveData)) {
-              this.starterData[s].moveset = starterMoveData[s];
-            }
-          }
-
-          if (systemData["starterEggMoveData"]) {
-            const starterEggMoveData = systemData["starterEggMoveData"];
-            for (const s of Object.keys(starterEggMoveData)) {
-              this.starterData[s].eggMoves = starterEggMoveData[s];
-            }
-          }
-
-          this.migrateStarterAbilities(systemData, this.starterData);
-
-          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
-          for (const s of starterIds) {
-            this.starterData[s].candyCount += systemData.dexData[s].caughtCount;
-            this.starterData[s].candyCount += systemData.dexData[s].hatchedCount * 2;
-            if (systemData.dexData[s].caughtAttr & DexAttr.SHINY) {
-              this.starterData[s].candyCount += 4;
-            }
-          }
-        } else {
+        if (systemData.starterData) {
           this.starterData = systemData.starterData;
         }
 
