@@ -21,7 +21,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (
-      !pokemon.terastallized
+      !pokemon.isTerastallized
       && move.id !== MoveId.STRUGGLE
       /**
        * Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute

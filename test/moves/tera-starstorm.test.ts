@@ -38,12 +38,12 @@ describe("Moves - Tera Starstorm", () => {
 
     const terapagos = game.field.getPlayerPokemon();
     vi.spyOn(terapagos, "getMoveType");
-    vi.spyOn(terapagos, "terastallized", "get").mockReturnValue(true);
+    game.field.forceTera(terapagos);
 
     game.move.select(MoveId.TERA_STARSTORM);
     await game.toEndOfTurn();
 
-    expect(terapagos.terastallized).toBe(true);
+    expect(terapagos.isTerastallized).toBe(true);
     expect(terapagos.getMoveType).toHaveReturnedWith(ElementalType.STELLAR);
   });
 
@@ -51,7 +51,7 @@ describe("Moves - Tera Starstorm", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.TERAPAGOS]);
 
     const terapagos = game.field.getPlayerPokemon();
-    vi.spyOn(terapagos, "terastallized", "get").mockReturnValue(true);
+    game.field.forceTera(terapagos);
 
     game.move.select(MoveId.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.TERA_STARSTORM, 1);

@@ -79,7 +79,7 @@ describe("Moves - Tera Blast", () => {
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
-    vi.spyOn(enemyPokemon, "terastallized", "get").mockReturnValue(true);
+    game.field.forceTera(enemyPokemon);
 
     game.move.select(MoveId.TERA_BLAST);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

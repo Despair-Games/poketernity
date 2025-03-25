@@ -10,7 +10,7 @@ import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe.each([
   { ability: AbilityId.LIBERO, abilityName: "Libero" },
@@ -198,8 +198,7 @@ describe.each([
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.field.getPlayerPokemon();
-
-    vi.spyOn(leadPokemon, "terastallized", "get").mockReturnValue(true);
+    game.field.forceTera(leadPokemon);
 
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();

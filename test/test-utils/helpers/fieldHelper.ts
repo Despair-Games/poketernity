@@ -79,12 +79,13 @@ export class FieldHelper extends GameManagerHelper {
   }
 
   /**
-   * Forces a pokemon to be terastallized as the specified {@linkcode Type}.
-   * @param pokemon - The pokemon to terastallize
-   * @param teraType - The type to terastallize it as
+   * Forces a pokemon to be terastallized. Defaults to the pokemon's primary type if not specified.
+   * @param pokemon - The pokemon to terastallize.
+   * @param teraType - (optional) The {@linkcode ElementalType} to terastallize it as.
    */
-  public forceTera(pokemon: Pokemon, teraType: ElementalType): void {
-    vi.spyOn(pokemon, "terastallized", "get").mockReturnValue(true);
+  public forceTera(pokemon: Pokemon, teraType?: ElementalType): void {
+    vi.spyOn(pokemon, "isTerastallized", "get").mockReturnValue(true);
+    teraType = teraType !== undefined ? teraType : pokemon.getSpeciesForm(true).type1;
     vi.spyOn(pokemon, "teraType", "get").mockReturnValue(teraType);
   }
 }

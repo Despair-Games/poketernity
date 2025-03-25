@@ -182,7 +182,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
    * @returns `true` if the Pokémon can change forms, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
-    return pokemon.terastallized && pokemon.teraType === this.teraType;
+    return pokemon.isTerastallized && pokemon.teraType === this.teraType;
   }
 }
 
@@ -193,7 +193,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
   override canChange(pokemon: Pokemon): boolean {
-    return !pokemon.terastallized; // TODO: is this correct?
+    return !pokemon.isTerastallized; // TODO: is this correct?
   }
 }
 

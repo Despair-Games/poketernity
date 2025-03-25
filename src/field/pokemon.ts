@@ -269,7 +269,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public switchOutStatus: boolean;
   public evoCounter: number;
   public teraType: ElementalType;
-  public terastallized: boolean = false;
+  public isTerastallized: boolean = false;
 
   private summonDataPrimer: PokemonSummonData | null;
 
@@ -1379,7 +1379,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): ElementalType[] {
     const types: ElementalType[] = [];
 
-    if (includeTeraType && this.terastallized) {
+    if (includeTeraType && this.isTerastallized) {
       const teraType = this.teraType;
         types.push(teraType);
         if (forDefend) {
@@ -1912,7 +1912,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     move?: Move,
   ): TypeDamageMultiplier {
     if (moveType === ElementalType.STELLAR) {
-      return this.terastallized ? 2 : 1;
+      return this.isTerastallized ? 2 : 1;
     }
     const types = this.getTypes(true, true);
     const arena = globalScene.arena;
