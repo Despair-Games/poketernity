@@ -45,7 +45,7 @@ export class MeFirstAttr extends CallMoveAttr {
   }
 }
 
-export const invalidMeFirstMoves: Set<MoveId> = new Set([
+export const invalidMeFirstMoves: ReadonlySet<MoveId> = new Set([
   MoveId.BEAK_BLAST,
   MoveId.BELCH,
   MoveId.CHATTER,
