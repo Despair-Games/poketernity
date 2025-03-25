@@ -760,7 +760,7 @@ export function initAbilities() {
     new Ability(AbilityId.FLOWER_VEIL, 6).ignorable().unimplemented(),
     new Ability(AbilityId.CHEEK_POUCH, 6).attr(HealFromBerryUseAbAttr, 1 / 3),
     new Ability(AbilityId.PROTEAN, 6).attr(PokemonTypeChangeAbAttr),
-    //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.PROTEAN)), //Gen 9 Implementation
+    //.condition((p) => !p.summonData?.abilitiesApplied.includes(AbilityId.PROTEAN)), //Gen 9 Implementation
     new Ability(AbilityId.FUR_COAT, 6).attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target).ignorable(),
     new Ability(AbilityId.MAGICIAN, 6).attr(PostAttackStealHeldItemAbAttr),
     new Ability(AbilityId.BULLETPROOF, 6).attr(MoveFlagImmunityAbAttr, MoveFlags.BULLET_MOVE).ignorable(),
@@ -1119,7 +1119,7 @@ export function initAbilities() {
     new Ability(AbilityId.INTREPID_SWORD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true),
     new Ability(AbilityId.DAUNTLESS_SHIELD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.DEF], 1, true),
     new Ability(AbilityId.LIBERO, 8).attr(PokemonTypeChangeAbAttr),
-    //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.LIBERO)), //Gen 9 Implementation
+    //.condition((p) => !p.summonData?.abilitiesApplied.includes(AbilityId.LIBERO)), //Gen 9 Implementation
     new Ability(AbilityId.BALL_FETCH, 8)
       .attr(FetchBallAbAttr)
       .condition(getOncePerBattleCondition(AbilityId.BALL_FETCH)),

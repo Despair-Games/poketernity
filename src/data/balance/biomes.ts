@@ -11104,8 +11104,8 @@ export function initBiomes() {
   const traverseBiome = (biome: BiomeId, depth: number) => {
     if (biome === BiomeId.END) {
       const biomeList = Object.keys(BiomeId).filter((key) => !isNaN(Number(key)));
-      biomeList.pop(); // Removes Biome.END from the list
-      const randIndex = randSeedInt(biomeList.length, 1); // Will never be Biome.TOWN
+      biomeList.pop(); // Removes BiomeId.END from the list
+      const randIndex = randSeedInt(biomeList.length, 1); // Will never be BiomeId.TOWN
       biome = BiomeId[biomeList[randIndex]];
     }
     const linkedBiomes: (BiomeId | [BiomeId, number])[] = Array.isArray(biomeLinks[biome])

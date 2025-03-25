@@ -1593,7 +1593,7 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
 }
 
 /**
- * Randomly selects one of the `Species` from `speciesPool`, determines its evolution, level, and strength.
+ * Randomly selects one of the `SpeciesId` from `speciesPool`, determines its evolution, level, and strength.
  * Then adds Pokemon to globalScene.
  * @param speciesPool
  * @param trainerSlot

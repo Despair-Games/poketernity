@@ -38,8 +38,8 @@ import { WeatherType } from "#enums/weather-type";
  * @example
  * ```
  * const overrides = {
- *   ABILITY_OVERRIDE: Abilities.PROTEAN,
- *   PASSIVE_ABILITY_OVERRIDE: Abilities.PIXILATE,
+ *   ABILITY_OVERRIDE: AbilityId.PROTEAN,
+ *   PASSIVE_ABILITY_OVERRIDE: AbilityId.PIXILATE,
  * }
  * ```
  */
@@ -121,7 +121,7 @@ class DefaultOverrides {
    * @example
    * ```
    * const STARTER_FORM_OVERRIDES = {
-   *   [Species.DARMANITAN]: 1
+   *   [SpeciesId.DARMANITAN]: 1
    * }
    * ```
    */
@@ -133,7 +133,7 @@ class DefaultOverrides {
    * SPECIES OVERRIDE
    * will only apply to the first starter in your party or each enemy pokemon
    * default is 0 to not override
-   * @example SPECIES_OVERRIDE = Species.Bulbasaur;
+   * @example SPECIES_OVERRIDE = SpeciesId.Bulbasaur;
    */
   readonly STARTER_SPECIES_OVERRIDE: SpeciesId | number = 0;
   readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;

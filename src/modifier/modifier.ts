@@ -1693,8 +1693,9 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
 }
 
 /**
- * Class for Pokemon held items like King's Rock
- * Because King's Rock can be stacked in the game, unlike mainline, it does not receive a boost from Abilities.SERENE_GRACE
+ * Class for Pokemon held items like King's Rock.
+ *
+ * Because King's Rock can be stacked in the game, unlike mainline, it does not receive a boost from Serene Grace
  */
 export class FlinchChanceModifier extends PokemonHeldItemModifier {
   private chance: number;
