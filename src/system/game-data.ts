@@ -1366,9 +1366,13 @@ export class GameData {
             globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
+          if (dataName === "session") {
+          }
+          const dataNotLoadedString =
+            dataName === "session" ? i18next.t("menu:sessionDataNotLoaded") : i18next.t("menu:gameDataNotLoaded");
           if (!valid) {
             return globalScene.ui.showText(
-              `Your ${dataName} data could not be loaded. It may be corrupted.`,
+              dataNotLoadedString,
               null,
               () => globalScene.ui.showText("", 0),
               fixedNumber(1500),
@@ -1383,7 +1387,8 @@ export class GameData {
               if (!bypassLogin && dataType < GameDataType.SETTINGS) {
                 updateUserInfo().then((success) => {
                   if (!success[0]) {
-                    return displayError(`Could not contact the server. Your ${dataName} data could not be imported.`);
+                    const couldNotContactServerString = i18next.t("menu:couldNotContactServer");
+                    return displayError(couldNotContactServerString);
                   }
                   const { trainerId, secretId } = this;
                   let updatePromise: Promise<string | null>;
@@ -1398,9 +1403,7 @@ export class GameData {
                   updatePromise.then((error) => {
                     if (error) {
                       console.error(error);
-                      return displayError(
-                        `An error occurred while updating ${dataName} data. Please contact the administrator.`,
-                      );
+                      return displayError(i18next.t("menu:errorUpdating"));
                     }
                     window.location = window.location;
                   });
@@ -1415,13 +1418,14 @@ export class GameData {
             },
             xOffset: confirmWindowXOffset,
           };
-          globalScene.ui.showText(
-            `Your ${dataName} data will be overridden and the page will reload. Proceed?`,
-            null,
-            () => {
-              globalScene.ui.setOverlayMode(UiMode.CONFIRM, importDataConfirmOptions);
-            },
-          );
+
+          const dataOverwriteString =
+            dataName === "session"
+              ? i18next.t("menu:sessionDataOverwriteWarning")
+              : i18next.t("menu:gameDataOverwriteWarning");
+          globalScene.ui.showText(dataOverwriteString, null, () => {
+            globalScene.ui.setOverlayMode(UiMode.CONFIRM, importDataConfirmOptions);
+          });
         };
       })((e.target as any).files[0]);
 
