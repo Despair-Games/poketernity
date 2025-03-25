@@ -16,7 +16,7 @@ import { UiHandler } from "./abstract-ui-handler";
 /**
  * Handles all the UI for choosing optional challenges.
  */
-export class GameChallengesUiHandler extends UiHandler {
+export class ChallengeSelectUiHandler extends UiHandler {
   private challengesContainer: Phaser.GameObjects.Container;
   private valuesContainer: Phaser.GameObjects.Container;
 

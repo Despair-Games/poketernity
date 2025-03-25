@@ -2,6 +2,7 @@ import { GAME_SPEEDS } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { InputsController } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";
+import type { MenuUiHandler } from "#app/ui/handlers/menu-ui-handler";
 import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
 import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
@@ -185,7 +186,7 @@ export class UiInputs {
       case UiMode.COMMAND:
       case UiMode.MODIFIER_SELECT:
       case UiMode.MYSTERY_ENCOUNTER:
-        globalScene.ui.setOverlayMode(UiMode.MENU);
+        globalScene.ui.setOverlayMode<MenuUiHandler>(UiMode.MENU);
         break;
       case UiMode.STARTER_SELECT:
         this.buttonTouch();

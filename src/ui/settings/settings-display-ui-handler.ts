@@ -3,6 +3,7 @@ import { LANGUAGE_MAX_OPTIONS } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
@@ -18,7 +19,7 @@ export class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
     super("display", displaySettingUiItems);
 
     eventBus.on("language/change", () => {
-      globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
+      globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
         options: [
           ...supportedLanguages
             .filter((l) => l.key !== i18next.resolvedLanguage)
@@ -32,6 +33,7 @@ export class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
                       () => this.handleChangeLanguage(l),
                       () => this.handleCancelLanguageChange(),
                     );
+                    return true;
                   } else {
                     return this.handleChangeLanguage(l);
                   }

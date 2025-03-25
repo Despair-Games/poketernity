@@ -43,6 +43,9 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type { CommandUiHandler } from "./command-ui-handler";
+import type { ConfirmUiHandler } from "./confirm-ui-handler";
+import type { RenamePokemonUiHandler } from "./rename-pokemon-ui-handler";
 import type { SummaryUiHandler } from "./summary-ui-handler";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
@@ -453,7 +456,7 @@ export class PartyUiHandler extends MessageUiHandler {
               null,
               () => {
                 this.blockInput = false;
-                ui.setModeWithoutClear(UiMode.CONFIRM, options);
+                ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
               },
             );
           } else {
@@ -463,7 +466,7 @@ export class PartyUiHandler extends MessageUiHandler {
         } else if (option === PartyOption.RENAME) {
           this.clearOptions();
           ui.playSelect();
-          ui.setModeWithoutClear(
+          ui.setModeWithoutClear<RenamePokemonUiHandler>(
             UiMode.RENAME_POKEMON,
             {
               buttonActions: [
@@ -593,7 +596,7 @@ export class PartyUiHandler extends MessageUiHandler {
             selectCallback(6, PartyOption.CANCEL);
             ui.playSelect();
           } else {
-            ui.setMode(UiMode.COMMAND, this.fieldIndex);
+            ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
             ui.playSelect();
           }
         }

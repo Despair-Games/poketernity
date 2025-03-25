@@ -90,7 +90,7 @@ export class SwitchPhase extends BattlePhase {
           const switchType = option === PartyOption.PASS_BATON ? SwitchType.BATON_PASS : this.switchType;
           globalScene.unshiftPhase(new SwitchSummonPhase(switchType, fieldIndex, slotIndex, this.doReturn));
         }
-        ui.setMode(UiMode.MESSAGE).then(() => super.end());
+        ui.setMessageMode().then(() => super.end());
       },
       PartyFilterNonFainted,
     );

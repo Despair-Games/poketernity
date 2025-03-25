@@ -4421,7 +4421,7 @@ export class PlayerPokemon extends Pokemon {
               PhaseId.MOVE_END,
             );
           }
-          globalScene.ui.setMode(UiMode.MESSAGE).then(resolve);
+          globalScene.ui.setMessageMode().then(resolve);
         },
         PartyFilterNonFainted,
       );

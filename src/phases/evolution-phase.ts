@@ -4,22 +4,23 @@ import { type FormChangePhase } from "#app/phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
-import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, fixedNumber } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { PhaseId } from "#enums/phase-id";
+import type { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
-import { PhaseId } from "#enums/phase-id";
-import type { SpeciesId } from "#enums/species-id";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 
 /**
  * A phase for handling Pokemon evolution
@@ -202,7 +203,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                 time.delayedCall(3000, end);
               },
             };
-            ui.setOverlayMode(UiMode.CONFIRM, options);
+            ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
           },
         );
       },
