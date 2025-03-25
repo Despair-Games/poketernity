@@ -3202,7 +3202,8 @@ export function initMoves() {
       .punchingMove(),
     new StatusMove(MoveId.SPICY_EXTRACT, ElementalType.GRASS, -1, 15, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.ATK], 2)
-      .attr(StatStageChangeAttr, [Stat.DEF], -2),
+      .attr(StatStageChangeAttr, [Stat.DEF], -2)
+      .bounceable(),
     new AttackMove(MoveId.SPIN_OUT, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.SPD], -2, true),
     new AttackMove(MoveId.POPULATION_BOMB, ElementalType.NORMAL, MoveCategory.PHYSICAL, 20, 90, 10, -1, 0, 9)
