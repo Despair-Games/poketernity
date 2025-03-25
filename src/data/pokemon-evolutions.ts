@@ -382,6 +382,7 @@ const FRIENDSHIP_EVO_REQUIREMENT = 220;
 /**
  * For baby evolutions that require friendship
  * Used for the following:
+ * ```
  * Pichu
  * Cleffa
  * Igglybuff
@@ -390,6 +391,7 @@ const FRIENDSHIP_EVO_REQUIREMENT = 220;
  * Azurill
  * Budew
  * Chingling
+ * ```
  */
 export class BabySpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
@@ -401,6 +403,7 @@ export class BabySpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCon
 /**
  * For evolutions that require friendship
  * Used for the following:
+ * ```
  * Golbat
  * Chansey
  * Eevee
@@ -412,6 +415,7 @@ export class BabySpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCon
  * Type:Null
  * Alola Meowth
  * Snom
+ * ```
  */
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {

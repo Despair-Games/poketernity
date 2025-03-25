@@ -135,13 +135,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [SpeciesId.ZUBAT]: [new SpeciesEvolution(SpeciesId.GOLBAT, 22, null, null)],
   [SpeciesId.GOLBAT]: [
-    new SpeciesEvolution(
-      SpeciesId.CROBAT,
-      1,
-      null,
-      [new SpeciesFriendshipEvolutionCondition()],
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(SpeciesId.CROBAT, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [SpeciesId.ODDISH]: [new SpeciesEvolution(SpeciesId.GLOOM, 21, null, null)],
   [SpeciesId.GLOOM]: [
@@ -261,13 +255,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
     ),
   ],
   [SpeciesId.CHANSEY]: [
-    new SpeciesEvolution(
-      SpeciesId.BLISSEY,
-      1,
-      null,
-      [new SpeciesFriendshipEvolutionCondition()],
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(SpeciesId.BLISSEY, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [SpeciesId.TANGELA]: [
     new SpeciesEvolution(
@@ -439,13 +427,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.OMANYTE]: [new SpeciesEvolution(SpeciesId.OMASTAR, 40, null, null)],
   [SpeciesId.KABUTO]: [new SpeciesEvolution(SpeciesId.KABUTOPS, 40, null, null)],
   [SpeciesId.MUNCHLAX]: [
-    new SpeciesEvolution(
-      SpeciesId.SNORLAX,
-      1,
-      null,
-      [new SpeciesFriendshipEvolutionCondition()],
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(SpeciesId.SNORLAX, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [SpeciesId.DRATINI]: [new SpeciesEvolution(SpeciesId.DRAGONAIR, 30, null, null)],
   [SpeciesId.DRAGONAIR]: [new SpeciesEvolution(SpeciesId.DRAGONITE, 55, null, null)],
