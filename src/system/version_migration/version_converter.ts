@@ -36,7 +36,7 @@ export const vA_B_C_SessionMigrators: SessionSaveMigrator[] = [sessionMigratorA]
 
 const settingsMigratorA: SettingsSaveMigrator = {
   version: "A.B.C",
-  migrate: (data: Settings): void => {
+  migrate: (data: Partial<Settings>): void => {
     // migration code goes here
   },
 };
