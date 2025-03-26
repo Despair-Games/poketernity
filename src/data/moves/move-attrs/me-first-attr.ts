@@ -45,16 +45,18 @@ export class MeFirstAttr extends CallMoveAttr {
   }
 }
 
-export const invalidMeFirstMoves: ReadonlySet<MoveId> = new Set([
-  MoveId.BEAK_BLAST,
-  MoveId.BELCH,
-  MoveId.CHATTER,
-  MoveId.COUNTER,
-  MoveId.COVET,
-  MoveId.FOCUS_PUNCH,
-  MoveId.METAL_BURST,
-  MoveId.MIRROR_COAT,
-  MoveId.SHELL_TRAP,
-  MoveId.STRUGGLE,
-  MoveId.THIEF,
-]);
+export const invalidMeFirstMoves: ReadonlySet<MoveId> = Object.freeze(
+  new Set([
+    MoveId.BEAK_BLAST,
+    MoveId.BELCH,
+    MoveId.CHATTER,
+    MoveId.COUNTER,
+    MoveId.COVET,
+    MoveId.FOCUS_PUNCH,
+    MoveId.METAL_BURST,
+    MoveId.MIRROR_COAT,
+    MoveId.SHELL_TRAP,
+    MoveId.STRUGGLE,
+    MoveId.THIEF,
+  ]),
+);
