@@ -3,7 +3,7 @@ import { type Move } from "#app/data/moves/move";
 import { type MoveId } from "#enums/move-id";
 import type { Ability } from "#app/data/abilities/ability";
 import type { PEBiome } from "#app/data/balance/biomes/PEBiome";
-import { BiomeId } from "#enums/biome-id";
+import { type BiomeId } from "#enums/biome-id";
 
 interface DataMap<K, V> extends Map<K, V> {
   get(key: K): V;

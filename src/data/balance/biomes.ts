@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import type { TrainerType } from "#enums/trainer-type";
 import { BiomeId } from "#enums/biome-id";
-import { SpeciesId } from "#enums/species-id";
+import type { SpeciesId } from "#enums/species-id";
 
 export function getBiomeName(biome: BiomeId | -1) {
   if (biome === -1) {

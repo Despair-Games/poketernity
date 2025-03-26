@@ -1,6 +1,6 @@
-import { BiomeId } from "#enums/biome-id";
+import type { BiomeId } from "#enums/biome-id";
 import type { BiomePoolTier } from "#enums/biome-pool-tier";
-import { SpeciesId } from "#enums/species-id";
+import type { SpeciesId } from "#enums/species-id";
 import type { TerrainType } from "#enums/terrain-type";
 import type { TimeOfDay } from "#enums/time-of-day";
 import type { TrainerType } from "#enums/trainer-type";
@@ -8,6 +8,8 @@ import type { WeatherType } from "#enums/weather-type";
 
 /**
  * Calling it PEBiome for now to distinguish from Biome.ts and Biome the enum
+ *
+ * TODO: let's rename this Biome.ts in the future
  */
 export class PEBiome {
   public biomeType: BiomeId;
