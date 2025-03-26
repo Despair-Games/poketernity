@@ -43,11 +43,11 @@ import { UnavailableModalUiHandler } from "#app/ui/handlers/unavailable-modal-ui
 import { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 import { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
-import { SettingsAudioUiHandler } from "#app/ui/settings/settings-audio-ui-handler";
-import { SettingsDisplayUiHandler } from "#app/ui/settings/settings-display-ui-handler";
-import { SettingsGamepadUiHandler } from "#app/ui/settings/settings-gamepad-ui-handler";
-import { SettingsKeyboardUiHandler } from "#app/ui/settings/settings-keyboard-ui-handler";
-import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
+import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
+import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
+import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
+import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
+import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { executeIf } from "#app/utils";
@@ -151,12 +151,12 @@ export class UI extends Phaser.GameObjects.Container {
       new MenuUiHandler(),
       new OptionSelectUiHandler(UiMode.MENU_OPTION_SELECT),
       // settings
-      new SettingsUiHandler(),
-      new SettingsDisplayUiHandler(),
-      new SettingsAudioUiHandler(),
-      new SettingsGamepadUiHandler(),
+      new GeneralSettingsUiHandler(),
+      new DisplaySettingsUiHandler(),
+      new AudioSettingsUiHandler(),
+      new GamepadSettingsUiHandler(),
       new GamepadBindingUiHandler(),
-      new SettingsKeyboardUiHandler(),
+      new KeyboardSettingsUiHandler(),
       new KeyboardBindingUiHandler(),
       new AchievementsUiHandler(),
       new GameStatsUiHandler(),

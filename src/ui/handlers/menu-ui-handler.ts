@@ -19,7 +19,7 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { SettingsUiHandler } from "../settings/settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "../settings/general-settings-ui-handler";
 import type { AchievementsUiHandler } from "./achievements-ui-handler";
 import type { AdminUiHandler } from "./admin-ui-handler";
 import { getAdminModeName } from "./admin-ui-handler";
@@ -524,7 +524,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     const ui = this.getUi();
     switch (option) {
       case MenuOptions.GAME_SETTINGS:
-        ui.setOverlayMode<SettingsUiHandler>(UiMode.SETTINGS);
+        ui.setOverlayMode<GeneralSettingsUiHandler>(UiMode.SETTINGS);
         success = true;
         break;
       case MenuOptions.ACHIEVEMENTS:

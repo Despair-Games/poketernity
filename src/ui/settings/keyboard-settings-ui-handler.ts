@@ -23,9 +23,9 @@ import { UiMode } from "#enums/ui-mode";
  *
  * @extends AbstractControlSettingsUiHandler
  */
-export class SettingsKeyboardUiHandler extends AbstractControlSettingsUiHandler {
+export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler {
   /**
-   * Creates an instance of SettingsKeyboardUiHandler.
+   * Creates an instance of KeyboardSettingsUiHandler.
    *
    * @param mode - The UI mode, optional.
    */

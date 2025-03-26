@@ -3,7 +3,7 @@ import { hasTouchscreen, isLandscapeMode } from "#app/utils";
 import { t } from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export class SettingsUiHandler extends AbstractSettingsUiHandler {
+export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
   private onWindowResizeEvent = () => this.updateMoveTouchControlsSettingsLabel();
 
   /**
@@ -25,14 +25,18 @@ export class SettingsUiHandler extends AbstractSettingsUiHandler {
   }
 
   protected override tearDown(): void {
-    window.removeEventListener("resize", this.onWindowResizeEvent);
+    if (hasTouchscreen()) {
+      window.removeEventListener("resize", this.onWindowResizeEvent);
+    }
     super.tearDown();
   }
 
   override show(): boolean {
     super.show();
 
-    this.updateMoveTouchControlsSettingsLabel();
+    if (hasTouchscreen()) {
+      this.updateMoveTouchControlsSettingsLabel();
+    }
     return true;
   }
 

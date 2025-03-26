@@ -1,6 +1,5 @@
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
 import {
   setSettingGamepad,
   settingGamepadBlackList,
@@ -24,15 +23,14 @@ import { MAPPING_CONFIG_LS_KEY } from "#app/constants";
  *
  * @extends AbstractControlSettingsUiHandler
  */
-
-export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
+export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
   /**
-   * Creates an instance of SettingsGamepadUiHandler.
+   * Creates an instance of GamepadSettingsUiHandler.
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super();
     this.titleSelected = "Gamepad";
     this.setting = SettingGamepad;
     this.settingDeviceDefaults = settingGamepadDefaults;

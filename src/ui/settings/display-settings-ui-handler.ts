@@ -9,12 +9,7 @@ import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
-  /**
-   * Creates an instance of SettingsGamepadUiHandler.
-   *
-   * @param mode - The UI mode, optional.
-   */
+export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
   constructor() {
     super("display", displaySettingUiItems);
 
