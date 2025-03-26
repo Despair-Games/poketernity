@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -23,8 +23,8 @@ import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 const namespace = "mysteryEncounters/safariZone";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.SWAMP;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.SWAMP;
 const defaultWave = 45;
 
 describe("Safari Zone - Mystery Encounter", () => {
@@ -44,11 +44,11 @@ describe("Safari Zone - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
-      [Biome.FOREST, [MysteryEncounterType.SAFARI_ZONE]],
-      [Biome.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
-      [Biome.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
+      [BiomeId.FOREST, [MysteryEncounterType.SAFARI_ZONE]],
+      [BiomeId.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
+      [BiomeId.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
     ]);
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
   });
@@ -74,7 +74,7 @@ describe("Safari Zone - Mystery Encounter", () => {
 
   it("should not spawn outside of the forest, swamp, or jungle biomes", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.SAFARI_ZONE);

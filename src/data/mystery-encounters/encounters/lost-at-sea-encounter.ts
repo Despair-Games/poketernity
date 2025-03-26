@@ -1,6 +1,6 @@
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -128,7 +128,7 @@ export const LostAtSeaEncounter: MysteryEncounter = MysteryEncounterBuilder.with
  * Generic handler for using a guiding pokemon to guide you back.
  */
 function handlePokemonGuidingYouPhase() {
-  const laprasSpecies = getPokemonSpecies(Species.LAPRAS);
+  const laprasSpecies = getPokemonSpecies(SpeciesId.LAPRAS);
   const { mysteryEncounter } = globalScene.currentBattle;
 
   if (mysteryEncounter?.selectedOption?.primaryPokemon?.id) {

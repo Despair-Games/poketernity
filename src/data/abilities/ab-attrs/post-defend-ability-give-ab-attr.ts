@@ -2,15 +2,15 @@ import type { Move } from "#app/data/moves/move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
-  private readonly ability: Abilities;
+  private readonly ability: AbilityId;
 
-  constructor(ability: Abilities) {
+  constructor(ability: AbilityId) {
     super();
     this._flags.add(AbAttrFlag.POST_DEFEND_ABILITY_GIVE);
     this.ability = ability;

@@ -16,66 +16,68 @@ import {
   type PokemonEvolutions,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
-  [Species.SPRIGATITO]: [new SpeciesEvolution(Species.FLORAGATO, 16, null, null)],
-  [Species.FLORAGATO]: [new SpeciesEvolution(Species.MEOWSCARADA, 36, null, null)],
-  [Species.FUECOCO]: [new SpeciesEvolution(Species.CROCALOR, 16, null, null)],
-  [Species.CROCALOR]: [new SpeciesEvolution(Species.SKELEDIRGE, 36, null, null)],
-  [Species.QUAXLY]: [new SpeciesEvolution(Species.QUAXWELL, 16, null, null)],
-  [Species.QUAXWELL]: [new SpeciesEvolution(Species.QUAQUAVAL, 36, null, null)],
-  [Species.LECHONK]: [
-    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "", 18, null, [new MaleEvolutionCondition()]),
-    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "female", 18, null, [new FemaleEvolutionCondition()]),
+  [SpeciesId.SPRIGATITO]: [new SpeciesEvolution(SpeciesId.FLORAGATO, 16, null, null)],
+  [SpeciesId.FLORAGATO]: [new SpeciesEvolution(SpeciesId.MEOWSCARADA, 36, null, null)],
+  [SpeciesId.FUECOCO]: [new SpeciesEvolution(SpeciesId.CROCALOR, 16, null, null)],
+  [SpeciesId.CROCALOR]: [new SpeciesEvolution(SpeciesId.SKELEDIRGE, 36, null, null)],
+  [SpeciesId.QUAXLY]: [new SpeciesEvolution(SpeciesId.QUAXWELL, 16, null, null)],
+  [SpeciesId.QUAXWELL]: [new SpeciesEvolution(SpeciesId.QUAQUAVAL, 36, null, null)],
+  [SpeciesId.LECHONK]: [
+    new SpeciesFormEvolution(SpeciesId.OINKOLOGNE, "", "", 18, null, [new MaleEvolutionCondition()]),
+    new SpeciesFormEvolution(SpeciesId.OINKOLOGNE, "", "female", 18, null, [new FemaleEvolutionCondition()]),
   ],
-  [Species.TAROUNTULA]: [new SpeciesEvolution(Species.SPIDOPS, 15, null, null)],
-  [Species.NYMBLE]: [new SpeciesEvolution(Species.LOKIX, 24, null, null)],
-  [Species.PAWMI]: [new SpeciesEvolution(Species.PAWMO, 18, null, null)],
-  [Species.PAWMO]: [new SpeciesEvolution(Species.PAWMOT, PAWMOT_EVO_LEVEL, null, null)],
-  [Species.TANDEMAUS]: [
-    new SpeciesFormEvolution(Species.MAUSHOLD, "", "three", 25, null, [new RngFormEvoCondition()]),
-    new SpeciesEvolution(Species.MAUSHOLD, 25, null, null),
+  [SpeciesId.TAROUNTULA]: [new SpeciesEvolution(SpeciesId.SPIDOPS, 15, null, null)],
+  [SpeciesId.NYMBLE]: [new SpeciesEvolution(SpeciesId.LOKIX, 24, null, null)],
+  [SpeciesId.PAWMI]: [new SpeciesEvolution(SpeciesId.PAWMO, 18, null, null)],
+  [SpeciesId.PAWMO]: [new SpeciesEvolution(SpeciesId.PAWMOT, PAWMOT_EVO_LEVEL, null, null)],
+  [SpeciesId.TANDEMAUS]: [
+    new SpeciesFormEvolution(SpeciesId.MAUSHOLD, "", "three", 25, null, [new RngFormEvoCondition()]),
+    new SpeciesEvolution(SpeciesId.MAUSHOLD, 25, null, null),
   ],
-  [Species.FIDOUGH]: [new SpeciesEvolution(Species.DACHSBUN, 26, null, null)],
-  [Species.SMOLIV]: [new SpeciesEvolution(Species.DOLLIV, 25, null, null)],
-  [Species.DOLLIV]: [new SpeciesEvolution(Species.ARBOLIVA, 35, null, null)],
-  [Species.NACLI]: [new SpeciesEvolution(Species.NACLSTACK, 24, null, null)],
-  [Species.NACLSTACK]: [new SpeciesEvolution(Species.GARGANACL, 38, null, null)],
-  [Species.CHARCADET]: [
-    new SpeciesEvolution(Species.ARMAROUGE, 1, EvolutionItem.AUSPICIOUS_ARMOR, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesEvolution(Species.CERULEDGE, 1, EvolutionItem.MALICIOUS_ARMOR, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.FIDOUGH]: [new SpeciesEvolution(SpeciesId.DACHSBUN, 26, null, null)],
+  [SpeciesId.SMOLIV]: [new SpeciesEvolution(SpeciesId.DOLLIV, 25, null, null)],
+  [SpeciesId.DOLLIV]: [new SpeciesEvolution(SpeciesId.ARBOLIVA, 35, null, null)],
+  [SpeciesId.NACLI]: [new SpeciesEvolution(SpeciesId.NACLSTACK, 24, null, null)],
+  [SpeciesId.NACLSTACK]: [new SpeciesEvolution(SpeciesId.GARGANACL, 38, null, null)],
+  [SpeciesId.CHARCADET]: [
+    new SpeciesEvolution(SpeciesId.ARMAROUGE, 1, EvolutionItem.AUSPICIOUS_ARMOR, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesEvolution(SpeciesId.CERULEDGE, 1, EvolutionItem.MALICIOUS_ARMOR, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.TADBULB]: [
-    new SpeciesEvolution(Species.BELLIBOLT, 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.TADBULB]: [
+    new SpeciesEvolution(SpeciesId.BELLIBOLT, 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.WATTREL]: [new SpeciesEvolution(Species.KILOWATTREL, 25, null, null)],
-  [Species.MASCHIFF]: [new SpeciesEvolution(Species.MABOSSTIFF, 30, null, null)],
-  [Species.SHROODLE]: [new SpeciesEvolution(Species.GRAFAIAI, 28, null, null)],
-  [Species.BRAMBLIN]: [new SpeciesEvolution(Species.BRAMBLEGHAST, BRAMBLEGHAST_EVO_LEVEL, null, null)],
-  [Species.TOEDSCOOL]: [new SpeciesEvolution(Species.TOEDSCRUEL, 30, null, null)],
-  [Species.CAPSAKID]: [
-    new SpeciesEvolution(Species.SCOVILLAIN, 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.WATTREL]: [new SpeciesEvolution(SpeciesId.KILOWATTREL, 25, null, null)],
+  [SpeciesId.MASCHIFF]: [new SpeciesEvolution(SpeciesId.MABOSSTIFF, 30, null, null)],
+  [SpeciesId.SHROODLE]: [new SpeciesEvolution(SpeciesId.GRAFAIAI, 28, null, null)],
+  [SpeciesId.BRAMBLIN]: [new SpeciesEvolution(SpeciesId.BRAMBLEGHAST, BRAMBLEGHAST_EVO_LEVEL, null, null)],
+  [SpeciesId.TOEDSCOOL]: [new SpeciesEvolution(SpeciesId.TOEDSCRUEL, 30, null, null)],
+  [SpeciesId.CAPSAKID]: [
+    new SpeciesEvolution(SpeciesId.SCOVILLAIN, 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.RELLOR]: [new SpeciesEvolution(Species.RABSCA, RABSCA_EVO_LEVEL, null, null)],
-  [Species.FLITTLE]: [new SpeciesEvolution(Species.ESPATHRA, 35, null, null)],
-  [Species.TINKATINK]: [new SpeciesEvolution(Species.TINKATUFF, 24, null, null)],
-  [Species.TINKATUFF]: [new SpeciesEvolution(Species.TINKATON, 38, null, null)],
-  [Species.WIGLETT]: [new SpeciesEvolution(Species.WUGTRIO, 26, null, null)],
+  [SpeciesId.RELLOR]: [new SpeciesEvolution(SpeciesId.RABSCA, RABSCA_EVO_LEVEL, null, null)],
+  [SpeciesId.FLITTLE]: [new SpeciesEvolution(SpeciesId.ESPATHRA, 35, null, null)],
+  [SpeciesId.TINKATINK]: [new SpeciesEvolution(SpeciesId.TINKATUFF, 24, null, null)],
+  [SpeciesId.TINKATUFF]: [new SpeciesEvolution(SpeciesId.TINKATON, 38, null, null)],
+  [SpeciesId.WIGLETT]: [new SpeciesEvolution(SpeciesId.WUGTRIO, 26, null, null)],
   /** Does not need union circle */
-  [Species.FINIZEN]: [new SpeciesEvolution(Species.PALAFIN, 38, null, null)],
-  [Species.VAROOM]: [new SpeciesEvolution(Species.REVAVROOM, 40, null, null)],
-  [Species.GLIMMET]: [new SpeciesEvolution(Species.GLIMMORA, 35, null, null)],
-  [Species.GREAVARD]: [new SpeciesEvolution(Species.HOUNDSTONE, 30, null, [new NightEvolutionCondition()])],
-  [Species.CETODDLE]: [new SpeciesEvolution(Species.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
+  [SpeciesId.FINIZEN]: [new SpeciesEvolution(SpeciesId.PALAFIN, 38, null, null)],
+  [SpeciesId.VAROOM]: [new SpeciesEvolution(SpeciesId.REVAVROOM, 40, null, null)],
+  [SpeciesId.GLIMMET]: [new SpeciesEvolution(SpeciesId.GLIMMORA, 35, null, null)],
+  [SpeciesId.GREAVARD]: [new SpeciesEvolution(SpeciesId.HOUNDSTONE, 30, null, [new NightEvolutionCondition()])],
+  [SpeciesId.CETODDLE]: [
+    new SpeciesEvolution(SpeciesId.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  ],
   /** Since this is the only Paldea Pokemon that evolves, I am leaving it in dex order */
-  [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
-  [Species.FRIGIBAX]: [new SpeciesEvolution(Species.ARCTIBAX, 35, null, null)],
-  [Species.ARCTIBAX]: [new SpeciesEvolution(Species.BAXCALIBUR, 54, null, null)],
+  [SpeciesId.PALDEA_WOOPER]: [new SpeciesEvolution(SpeciesId.CLODSIRE, 20, null, null)],
+  [SpeciesId.FRIGIBAX]: [new SpeciesEvolution(SpeciesId.ARCTIBAX, 35, null, null)],
+  [SpeciesId.ARCTIBAX]: [new SpeciesEvolution(SpeciesId.BAXCALIBUR, 54, null, null)],
   /** Custom evolution method */
-  [Species.GIMMIGHOUL]: [
+  [SpeciesId.GIMMIGHOUL]: [
     new SpeciesFormEvolution(
-      Species.GHOLDENGO,
+      SpeciesId.GHOLDENGO,
       "chest",
       "",
       1,
@@ -84,7 +86,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       GHOLDENGO_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
-      Species.GHOLDENGO,
+      SpeciesId.GHOLDENGO,
       "roaming",
       "",
       1,
@@ -93,9 +95,9 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       GHOLDENGO_EVO_LEVEL,
     ),
   ],
-  [Species.POLTCHAGEIST]: [
+  [SpeciesId.POLTCHAGEIST]: [
     new SpeciesFormEvolution(
-      Species.SINISTCHA,
+      SpeciesId.SINISTCHA,
       "counterfeit",
       "unremarkable",
       1,
@@ -104,7 +106,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
-      Species.SINISTCHA,
+      SpeciesId.SINISTCHA,
       "artisan",
       "masterpiece",
       1,

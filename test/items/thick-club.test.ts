@@ -3,7 +3,7 @@ import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { NumberHolder } from "#app/utils";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -31,7 +31,7 @@ describe("Items - Thick Club", () => {
   it("THICK_CLUB activates in battle correctly", async () => {
     game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "THICK_CLUB" }]);
     const consoleSpy = vi.spyOn(console, "log");
-    await game.startBattle([Species.CUBONE]);
+    await game.startBattle([SpeciesId.CUBONE]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -82,7 +82,7 @@ describe("Items - Thick Club", () => {
   });
 
   it("THICK_CLUB held by CUBONE", async () => {
-    await game.startBattle([Species.CUBONE]);
+    await game.startBattle([SpeciesId.CUBONE]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -105,7 +105,7 @@ describe("Items - Thick Club", () => {
   }, 20000);
 
   it("THICK_CLUB held by MAROWAK", async () => {
-    await game.startBattle([Species.MAROWAK]);
+    await game.startBattle([SpeciesId.MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -128,7 +128,7 @@ describe("Items - Thick Club", () => {
   }, 20000);
 
   it("THICK_CLUB held by ALOLA_MAROWAK", async () => {
-    await game.startBattle([Species.ALOLA_MAROWAK]);
+    await game.startBattle([SpeciesId.ALOLA_MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -151,7 +151,7 @@ describe("Items - Thick Club", () => {
   }, 20000);
 
   it("THICK_CLUB not held by CUBONE", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 

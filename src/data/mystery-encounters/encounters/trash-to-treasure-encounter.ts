@@ -16,7 +16,7 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -49,7 +49,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
   .withFleeAllowed(false)
   .withIntroSpriteConfigs([
     {
-      spriteKey: Species.GARBODOR.toString() + "-gigantamax",
+      spriteKey: SpeciesId.GARBODOR.toString() + "-gigantamax",
       fileRoot: "pokemon",
       hasShadow: false,
       disableAnimation: true,
@@ -72,7 +72,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mon (shiny locked)
-    const bossSpecies = getPokemonSpecies(Species.GARBODOR);
+    const bossSpecies = getPokemonSpecies(SpeciesId.GARBODOR);
     const pokemonConfig: EnemyPokemonConfig = {
       species: bossSpecies,
       isBoss: true,

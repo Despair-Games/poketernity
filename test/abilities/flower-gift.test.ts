@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -19,9 +19,9 @@ describe("Abilities - Flower Gift", () => {
    * @param game The game manager instance
    * @param ability The ability that is active on the field
    */
-  const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
-    game.override.starterForms({ [Species.CHERRIM]: SUNSHINE_FORM }).enemyAbility(ability);
-    await game.classicMode.startBattle([Species.CHERRIM]);
+  const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
+    game.override.starterForms({ [SpeciesId.CHERRIM]: SUNSHINE_FORM }).enemyAbility(ability);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM]);
 
     game.move.select(MoveId.SPLASH);
 
@@ -42,15 +42,15 @@ describe("Abilities - Flower Gift", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.RAIN_DANCE, MoveId.SUNNY_DAY, MoveId.SKILL_SWAP])
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // TODO: Uncomment expect statements when the ability is fully implemented - currently does not increase stats of allies
   it("increases the ATK and SPDEF stat stages of the user and its allies by 1.5x during Sunny weather", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.CHERRIM, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM, SpeciesId.MAGIKARP]);
 
     const [cherrim] = game.scene.getPlayerField();
     const cherrimAtkStat = cherrim.getEffectiveStat(Stat.ATK);
@@ -74,7 +74,7 @@ describe("Abilities - Flower Gift", () => {
 
   it("changes the Pokemon's form during the primal weather Harsh Sunlight", async () => {
     game.override.weather(WeatherType.HARSH_SUN);
-    await game.classicMode.startBattle([Species.CHERRIM]);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM]);
 
     const cherrim = game.field.getPlayerPokemon();
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
@@ -83,17 +83,17 @@ describe("Abilities - Flower Gift", () => {
   });
 
   it("reverts to Overcast Form if a Pokémon on the field has Air Lock", async () => {
-    await testRevertFormAgainstAbility(game, Abilities.AIR_LOCK);
+    await testRevertFormAgainstAbility(game, AbilityId.AIR_LOCK);
   });
 
   it("reverts to Overcast Form if a Pokémon on the field has Cloud Nine", async () => {
-    await testRevertFormAgainstAbility(game, Abilities.CLOUD_NINE);
+    await testRevertFormAgainstAbility(game, AbilityId.CLOUD_NINE);
   });
 
   it("reverts to Overcast Form when the Pokémon loses Flower Gift, changes form under Harsh Sunlight/Sunny when it regains it", async () => {
     game.override.enemyMoveset([MoveId.SKILL_SWAP]).weather(WeatherType.HARSH_SUN);
 
-    await game.classicMode.startBattle([Species.CHERRIM]);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM]);
 
     const cherrim = game.field.getPlayerPokemon();
 
@@ -112,7 +112,7 @@ describe("Abilities - Flower Gift", () => {
   it("reverts to Overcast Form when the Flower Gift is suppressed, changes form under Harsh Sunlight/Sunny when it regains it", async () => {
     game.override.enemyMoveset([MoveId.GASTRO_ACID]).weather(WeatherType.HARSH_SUN);
 
-    await game.classicMode.startBattle([Species.CHERRIM, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM, SpeciesId.MAGIKARP]);
 
     const cherrim = game.field.getPlayerPokemon();
 
@@ -140,7 +140,7 @@ describe("Abilities - Flower Gift", () => {
   it("should be in Overcast Form after the user is switched out", async () => {
     game.override.weather(WeatherType.SUNNY);
 
-    await game.classicMode.startBattle([Species.CHERRIM, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM, SpeciesId.MAGIKARP]);
     const cherrim = game.field.getPlayerPokemon();
 
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
@@ -152,7 +152,7 @@ describe("Abilities - Flower Gift", () => {
   });
 
   it("should revert to Overcast Form after Sunny weather ends", async () => {
-    await game.classicMode.startBattle([Species.CHERRIM]);
+    await game.classicMode.startBattle([SpeciesId.CHERRIM]);
     const cherrim = game.field.getPlayerPokemon();
 
     game.move.use(MoveId.SUNNY_DAY);
@@ -170,8 +170,8 @@ describe("Abilities - Flower Gift", () => {
   });
 
   it("should revert to Overcast Form after the primal weather Harsh Sunlight ends", async () => {
-    game.override.battleType("double").starterForms({ [Species.GROUDON]: 1 }); // Primal Groudon
-    await game.classicMode.startBattle([Species.CHERRIM, Species.GROUDON, Species.MAGIKARP]);
+    game.override.battleType("double").starterForms({ [SpeciesId.GROUDON]: 1 }); // Primal Groudon
+    await game.classicMode.startBattle([SpeciesId.CHERRIM, SpeciesId.GROUDON, SpeciesId.MAGIKARP]);
     const cherrim = game.field.getPlayerPokemon();
 
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);

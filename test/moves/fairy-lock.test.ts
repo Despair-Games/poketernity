@@ -1,8 +1,8 @@
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,16 +26,16 @@ describe("Moves - Fairy Lock", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.FAIRY_LOCK, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH, MoveId.U_TURN]);
   });
 
   it("Applies Fairy Lock tag for two turns", async () => {
-    await game.classicMode.startBattle([Species.KLEFKI, Species.TYRUNT]);
+    await game.classicMode.startBattle([SpeciesId.KLEFKI, SpeciesId.TYRUNT]);
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.SPLASH, 1);
@@ -64,7 +64,7 @@ describe("Moves - Fairy Lock", () => {
   });
 
   it("Ghost types can escape Fairy Lock", async () => {
-    await game.classicMode.startBattle([Species.DUSKNOIR, Species.GENGAR, Species.TYRUNT]);
+    await game.classicMode.startBattle([SpeciesId.DUSKNOIR, SpeciesId.GENGAR, SpeciesId.TYRUNT]);
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.SPLASH, 1);
@@ -88,12 +88,12 @@ describe("Moves - Fairy Lock", () => {
     await game.toEndOfTurn();
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerField()[1].species.speciesId).not.toBe(Species.GENGAR);
+    expect(game.scene.getPlayerField()[1].species.speciesId).not.toBe(SpeciesId.GENGAR);
   });
 
   it("Phasing moves will still switch out", async () => {
     game.override.enemyMoveset([MoveId.SPLASH, MoveId.WHIRLWIND]);
-    await game.classicMode.startBattle([Species.KLEFKI, Species.TYRUNT, Species.ZYGARDE]);
+    await game.classicMode.startBattle([SpeciesId.KLEFKI, SpeciesId.TYRUNT, SpeciesId.ZYGARDE]);
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.SPLASH, 1);
@@ -114,13 +114,13 @@ describe("Moves - Fairy Lock", () => {
     await game.toEndOfTurn();
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerField()[0].species.speciesId).not.toBe(Species.KLEFKI);
-    expect(game.scene.getPlayerField()[1].species.speciesId).not.toBe(Species.TYRUNT);
+    expect(game.scene.getPlayerField()[0].species.speciesId).not.toBe(SpeciesId.KLEFKI);
+    expect(game.scene.getPlayerField()[1].species.speciesId).not.toBe(SpeciesId.TYRUNT);
   });
 
   it("If a Pokemon faints and is replaced the replacement is also trapped", async () => {
     game.override.moveset([MoveId.FAIRY_LOCK, MoveId.SPLASH, MoveId.MEMENTO]);
-    await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
+    await game.classicMode.startBattle([SpeciesId.KLEFKI, SpeciesId.GUZZLORD, SpeciesId.TYRUNT, SpeciesId.ZYGARDE]);
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.MEMENTO, 1);
@@ -145,7 +145,7 @@ describe("Moves - Fairy Lock", () => {
   });
 
   it("should apply even if the field is empty", async () => {
-    await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
+    await game.classicMode.startBattle([SpeciesId.KLEFKI, SpeciesId.GUZZLORD, SpeciesId.TYRUNT, SpeciesId.ZYGARDE]);
 
     game.move.use(MoveId.FAIRY_LOCK);
     game.move.use(MoveId.MEMENTO, 1, BattlerIndex.PLAYER);

@@ -1,5 +1,5 @@
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
@@ -13,65 +13,65 @@ export const cavePokemonPool = {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
     // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.UNCOMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.BOSS]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.BOSS_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.BOSS_SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.ZUBAT],
-    [TimeOfDay.ALL]: [Species.GEODUDE],
+    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
+    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
   },
 };
 

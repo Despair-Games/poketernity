@@ -1,5 +1,5 @@
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
@@ -14,18 +14,18 @@ export const endPokemonPool = {
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
     [TimeOfDay.ALL]: [
-      Species.GREAT_TUSK,
-      Species.SCREAM_TAIL,
-      Species.BRUTE_BONNET,
-      Species.FLUTTER_MANE,
-      Species.SLITHER_WING,
-      Species.SANDY_SHOCKS,
-      Species.IRON_TREADS,
-      Species.IRON_BUNDLE,
-      Species.IRON_HANDS,
-      Species.IRON_JUGULIS,
-      Species.IRON_MOTH,
-      Species.IRON_THORNS,
+      SpeciesId.GREAT_TUSK,
+      SpeciesId.SCREAM_TAIL,
+      SpeciesId.BRUTE_BONNET,
+      SpeciesId.FLUTTER_MANE,
+      SpeciesId.SLITHER_WING,
+      SpeciesId.SANDY_SHOCKS,
+      SpeciesId.IRON_TREADS,
+      SpeciesId.IRON_BUNDLE,
+      SpeciesId.IRON_HANDS,
+      SpeciesId.IRON_JUGULIS,
+      SpeciesId.IRON_MOTH,
+      SpeciesId.IRON_THORNS,
     ],
   },
   [BiomePoolTier.UNCOMMON]: {
@@ -33,7 +33,7 @@ export const endPokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [Species.ROARING_MOON, Species.IRON_VALIANT],
+    [TimeOfDay.ALL]: [SpeciesId.ROARING_MOON, SpeciesId.IRON_VALIANT],
   },
   [BiomePoolTier.RARE]: {
     [TimeOfDay.DAWN]: [],
@@ -41,12 +41,12 @@ export const endPokemonPool = {
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
     [TimeOfDay.ALL]: [
-      Species.WALKING_WAKE,
-      Species.IRON_LEAVES,
-      Species.GOUGING_FIRE,
-      Species.RAGING_BOLT,
-      Species.IRON_BOULDER,
-      Species.IRON_CROWN,
+      SpeciesId.WALKING_WAKE,
+      SpeciesId.IRON_LEAVES,
+      SpeciesId.GOUGING_FIRE,
+      SpeciesId.RAGING_BOLT,
+      SpeciesId.IRON_BOULDER,
+      SpeciesId.IRON_CROWN,
     ],
   },
   [BiomePoolTier.SUPER_RARE]: {
@@ -68,7 +68,7 @@ export const endPokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [Species.ETERNATUS],
+    [TimeOfDay.ALL]: [SpeciesId.ETERNATUS],
   },
   [BiomePoolTier.BOSS_RARE]: {
     [TimeOfDay.DAWN]: [],

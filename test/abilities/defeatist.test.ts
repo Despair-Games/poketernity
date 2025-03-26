@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,11 +24,11 @@ describe("Abilities - Defeatist", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.DEFEATIST)
+      .ability(AbilityId.DEFEATIST)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -36,7 +36,7 @@ describe("Abilities - Defeatist", () => {
     { statName: "attack", stat: Stat.ATK },
     { statName: "special attack", stat: Stat.SPATK },
   ])("should halve the user's $statName if the user's HP is at or below 50%", async ({ stat }) => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.field.getPlayerPokemon();
     const expectedStat = Math.floor(playerPokemon.getStat(stat as number) / 2);
     playerPokemon.hp = 1;
@@ -50,7 +50,7 @@ describe("Abilities - Defeatist", () => {
     { statName: "attack", stat: Stat.ATK },
     { statName: "special attack", stat: Stat.SPATK },
   ])("should have no effect on $statName if the user's HP is above 50%", async ({ stat }) => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.field.getPlayerPokemon();
     const expectedStat = playerPokemon.getStat(stat as number);
     const defeatistStat = playerPokemon.getEffectiveStat(stat as number);

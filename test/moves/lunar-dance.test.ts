@@ -1,8 +1,8 @@
 import { StatusEffect } from "#enums/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
@@ -25,12 +25,12 @@ describe("Moves - Lunar Dance", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double").enemyAbility(Abilities.BALL_FETCH).enemyMoveset(MoveId.SPLASH);
+    game.override.battleType("double").enemyAbility(AbilityId.BALL_FETCH).enemyMoveset(MoveId.SPLASH);
   });
 
   it("should full restore HP, PP and status of switched in pokemon, then fail second use because no remaining backup pokemon in party", async () => {
     game.override.statusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.ODDISH, Species.RATTATA]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.ODDISH, SpeciesId.RATTATA]);
 
     const [bulbasaur, oddish, rattata] = game.scene.getPlayerParty();
     game.move.changeMoveset(bulbasaur, [MoveId.LUNAR_DANCE, MoveId.SPLASH]);
@@ -78,7 +78,7 @@ describe("Moves - Lunar Dance", () => {
     game.override.battleType("single");
     // Mono normal challenge
     game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.NORMAL + 1, 0);
-    await game.challengeMode.startBattle([Species.RATICATE, Species.ODDISH]);
+    await game.challengeMode.startBattle([SpeciesId.RATICATE, SpeciesId.ODDISH]);
 
     const [raticate, oddish] = game.scene.getPlayerParty();
     game.move.changeMoveset(raticate, [MoveId.LUNAR_DANCE, MoveId.SPLASH]);

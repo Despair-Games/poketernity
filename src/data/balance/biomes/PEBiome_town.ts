@@ -1,5 +1,5 @@
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
@@ -13,65 +13,65 @@ export const townPokemonPool = {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
     // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.UNCOMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.BOSS]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.BOSS_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.BOSS_SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
-    [TimeOfDay.ALL]: [Species.SENTRET],
+    [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
+    [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
 };
 

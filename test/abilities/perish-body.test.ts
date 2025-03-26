@@ -1,8 +1,8 @@
 import type { PerishSongTag } from "#app/data/battler-tags/perish-song-tag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,17 +25,17 @@ describe("Abilities - Perish Body", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.PECK, MoveId.SPLASH])
-      .ability(Abilities.PERISH_BODY)
+      .ability(AbilityId.PERISH_BODY)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.PERISH_BODY)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.PERISH_BODY)
       .enemyMoveset(MoveId.PECK)
       .enemyLevel(8);
   });
 
   it("should not trigger if the attacker is afflicted with Perish", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [, milotic] = game.scene.getPlayerParty();
     const enemy = game.field.getEnemyPokemon();
@@ -52,7 +52,7 @@ describe("Abilities - Perish Body", () => {
 
   it("should trigger if only the defender is afflicted with Perish", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [, milotic] = game.scene.getPlayerParty();
     const enemy = game.field.getEnemyPokemon();

@@ -1,9 +1,9 @@
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MapModifier } from "#app/modifier/modifier";
 import { api } from "#app/plugins/api/api";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -56,7 +56,7 @@ describe("Shop modifications", async () => {
 
     game.override
       .startingWave(9)
-      .startingBiome(Biome.ICE_CAVE)
+      .startingBiome(BiomeId.ICE_CAVE)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
@@ -72,7 +72,7 @@ describe("Shop modifications", async () => {
   });
 
   it("should not have Eviolite and Mini Black Hole available in Classic if not unlocked", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
     game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");

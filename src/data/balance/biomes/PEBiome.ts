@@ -1,6 +1,6 @@
-import type { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import type { BiomePoolTier } from "#enums/biome-pool-tier";
-import type { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type { TerrainType } from "#enums/terrain-type";
 import type { TimeOfDay } from "#enums/time-of-day";
 import type { TrainerType } from "#enums/trainer-type";
@@ -10,9 +10,9 @@ import type { WeatherType } from "#enums/weather-type";
  * Calling it PEBiome for now to distinguish from Biome.ts and Biome the enum
  */
 export class PEBiome {
-  public biomeType: Biome;
+  public biomeType: BiomeId;
   // TODO: consider `partial` and `Omit`
-  public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, Species[]>>;
+  public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   public trainerPool: Record<BiomePoolTier, TrainerType[]>;
   // TODO: weatherPool and terrainPool are currently not used
   public weatherPool: Record<WeatherType, number>;
@@ -21,8 +21,8 @@ export class PEBiome {
   // TODO: image assets should also be in here probably
 
   constructor(
-    biomeType: Biome,
-    pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, Species[]>>,
+    biomeType: BiomeId,
+    pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>,
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,

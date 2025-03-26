@@ -1,12 +1,12 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { toDmgValue } from "#app/utils";
@@ -29,9 +29,9 @@ describe("Moves - Ceaseless Edge", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.RUN_AWAY);
-    game.override.enemyPassiveAbility(Abilities.RUN_AWAY);
+    game.override.enemySpecies(SpeciesId.RATTATA);
+    game.override.enemyAbility(AbilityId.RUN_AWAY);
+    game.override.enemyPassiveAbility(AbilityId.RUN_AWAY);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
     game.override.moveset([MoveId.CEASELESS_EDGE, MoveId.SPLASH, MoveId.ROAR]);
@@ -40,7 +40,7 @@ describe("Moves - Ceaseless Edge", () => {
   });
 
   test("move should hit and apply spikes", async () => {
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -61,9 +61,9 @@ describe("Moves - Ceaseless Edge", () => {
   });
 
   test("trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage", async () => {
-    game.override.startingWave(25).ability(Abilities.PARENTAL_BOND);
+    game.override.startingWave(25).ability(AbilityId.PARENTAL_BOND);
 
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
 
     game.move.select(MoveId.CEASELESS_EDGE);
     await game.phaseInterceptor.to(MoveEffectPhase, false);

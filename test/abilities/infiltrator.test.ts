@@ -4,9 +4,9 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -30,11 +30,11 @@ describe("Abilities - Infiltrator", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.TACKLE, MoveId.WATER_GUN, MoveId.SPORE, MoveId.BABY_DOLL_EYES])
-      .ability(Abilities.INFILTRATOR)
+      .ability(AbilityId.INFILTRATOR)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -45,7 +45,7 @@ describe("Abilities - Infiltrator", () => {
     { effectName: "Reflect", tagType: ArenaTagType.REFLECT, moveId: MoveId.TACKLE },
     { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, moveId: MoveId.TACKLE },
   ])("should bypass the target's $effectName", async ({ tagType, moveId }) => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -69,11 +69,11 @@ describe("Abilities - Infiltrator", () => {
     ).damage;
 
     expect(postScreenDmg).toBe(preScreenDmg);
-    expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
+    expect(player.battleData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
   });
 
   it("should bypass the target's Safeguard", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -84,11 +84,11 @@ describe("Abilities - Infiltrator", () => {
 
     await game.toEndOfTurn();
     expect(enemy.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
-    expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
+    expect(player.battleData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
   });
 
   it("should bypass the target's Mist", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -99,11 +99,11 @@ describe("Abilities - Infiltrator", () => {
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
-    expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
+    expect(player.battleData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
   });
 
   it("should bypass the target's Substitute", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -114,6 +114,6 @@ describe("Abilities - Infiltrator", () => {
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
-    expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
+    expect(player.battleData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
   });
 });

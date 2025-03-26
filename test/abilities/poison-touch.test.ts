@@ -2,9 +2,9 @@ import { BattlerIndex } from "#enums/battler-index";
 import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -28,12 +28,12 @@ describe("Abilities - Poison Touch", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.POISON_TOUCH)
+      .ability(AbilityId.POISON_TOUCH)
       .moveset([MoveId.DRAINING_KISS, MoveId.EARTHQUAKE, MoveId.LEER, MoveId.DRAGON_TAIL])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
     vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min); // Force Poison RNG rolls to succeed
@@ -60,7 +60,7 @@ describe("Abilities - Poison Touch", () => {
   }
 
   it("should have a 30% chance of poisoning the target with an attack that makes contact", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -73,7 +73,7 @@ describe("Abilities - Poison Touch", () => {
   });
 
   it("should not apply to attacks that do not make contact", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -81,7 +81,7 @@ describe("Abilities - Poison Touch", () => {
   });
 
   it("should not apply to status moves", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -90,7 +90,7 @@ describe("Abilities - Poison Touch", () => {
 
   it("should still apply to phazing attacks in trainer battles", async () => {
     game.override.startingWave(5);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -100,7 +100,7 @@ describe("Abilities - Poison Touch", () => {
 
   it("should apply for each hit of a multi-hit move independently", async () => {
     game.override.moveset(MoveId.DOUBLE_IRON_BASH);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     // Force setting status to fail so that the game tries again multiple times
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -114,7 +114,7 @@ describe("Abilities - Poison Touch", () => {
 
   it("should stack with moves that already have a chance to poison", async () => {
     game.override.moveset(MoveId.POISON_JAB);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     // Force setting status to fail so that the game tries again multiple times
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -128,7 +128,7 @@ describe("Abilities - Poison Touch", () => {
 
   it("should not apply if the target is already statused", async () => {
     game.override.enemyStatusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -140,9 +140,9 @@ describe("Abilities - Poison Touch", () => {
 
   it("should not apply against a target with Shield Dust, unless the contact-making move is Sunsteel Strike", async () => {
     game.override
-      .enemyAbility(Abilities.SHIELD_DUST)
+      .enemyAbility(AbilityId.SHIELD_DUST)
       .moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM, MoveId.SUNSTEEL_STRIKE]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -157,8 +157,8 @@ describe("Abilities - Poison Touch", () => {
   });
 
   it("should not normally apply against a target with Immunity", async () => {
-    game.override.enemyAbility(Abilities.IMMUNITY);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.enemyAbility(AbilityId.IMMUNITY);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -166,8 +166,8 @@ describe("Abilities - Poison Touch", () => {
   });
 
   it("should not normally apply against a target with active Leaf Guard", async () => {
-    game.override.enemyAbility(Abilities.LEAF_GUARD).enemyMoveset(MoveId.SUNNY_DAY);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.enemyAbility(AbilityId.LEAF_GUARD).enemyMoveset(MoveId.SUNNY_DAY);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -176,7 +176,7 @@ describe("Abilities - Poison Touch", () => {
 
   it("should not apply if the move hits a Substitute", async () => {
     game.override.enemyMoveset(MoveId.SUBSTITUTE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -185,13 +185,13 @@ describe("Abilities - Poison Touch", () => {
 
   // TODO: Fix this interaction to pass the test
   it.todo("should still apply against a target with Mummy", async () => {
-    game.override.enemyAbility(Abilities.MUMMY);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.enemyAbility(AbilityId.MUMMY);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     await checkSucceedPoison(MoveId.DRAINING_KISS, enemyPokemon);
-    expect(playerPokemon.getAbility().id).toBe(Abilities.MUMMY);
+    expect(playerPokemon.getAbility().id).toBe(AbilityId.MUMMY);
   });
 });

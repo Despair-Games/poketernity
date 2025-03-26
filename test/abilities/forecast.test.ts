@@ -1,7 +1,7 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -23,8 +23,8 @@ describe("Abilities - Forecast", () => {
    * @param initialForm The initial form pre form change
    */
   const testWeatherFormChange = async (game: GameManager, weather: WeatherType, form: number, initialForm?: number) => {
-    game.override.weather(weather).starterForms({ [Species.CASTFORM]: initialForm });
-    await game.classicMode.startBattle([Species.CASTFORM]);
+    game.override.weather(weather).starterForms({ [SpeciesId.CASTFORM]: initialForm });
+    await game.classicMode.startBattle([SpeciesId.CASTFORM]);
 
     game.move.select(MoveId.SPLASH);
 
@@ -36,9 +36,9 @@ describe("Abilities - Forecast", () => {
    * @param game The game manager instance
    * @param ability The ability that is active on the field
    */
-  const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
-    game.override.starterForms({ [Species.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
-    await game.classicMode.startBattle([Species.CASTFORM]);
+  const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
+    game.override.starterForms({ [SpeciesId.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
+    await game.classicMode.startBattle([SpeciesId.CASTFORM]);
 
     game.move.select(MoveId.SPLASH);
 
@@ -59,9 +59,9 @@ describe("Abilities - Forecast", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.RAIN_DANCE, MoveId.SUNNY_DAY, MoveId.TACKLE])
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // TODO: Break apart into individual tests again now that the test framework has been optimized
@@ -72,20 +72,20 @@ describe("Abilities - Forecast", () => {
         .moveset([MoveId.RAIN_DANCE, MoveId.SUNNY_DAY, MoveId.SNOWSCAPE, MoveId.SPLASH])
         .battleType("double")
         .starterForms({
-          [Species.KYOGRE]: 1,
-          [Species.GROUDON]: 1,
-          [Species.RAYQUAZA]: 1,
+          [SpeciesId.KYOGRE]: 1,
+          [SpeciesId.GROUDON]: 1,
+          [SpeciesId.RAYQUAZA]: 1,
         });
       await game.classicMode.startBattle([
-        Species.CASTFORM,
-        Species.FEEBAS,
-        Species.KYOGRE,
-        Species.GROUDON,
-        Species.RAYQUAZA,
-        Species.ALTARIA,
+        SpeciesId.CASTFORM,
+        SpeciesId.FEEBAS,
+        SpeciesId.KYOGRE,
+        SpeciesId.GROUDON,
+        SpeciesId.RAYQUAZA,
+        SpeciesId.ALTARIA,
       ]);
 
-      game.field.mockAbility(game.scene.getPlayerParty()[5], Abilities.CLOUD_NINE);
+      game.field.mockAbility(game.scene.getPlayerParty()[5], AbilityId.CLOUD_NINE);
 
       const castform = game.scene.getPlayerField()[0];
       expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -179,12 +179,12 @@ describe("Abilities - Forecast", () => {
   });
 
   it("reverts to Normal Form if a Pokémon on the field has Air Lock", async () => {
-    await testRevertFormAgainstAbility(game, Abilities.AIR_LOCK);
+    await testRevertFormAgainstAbility(game, AbilityId.AIR_LOCK);
   });
 
   it("has no effect on Pokémon other than Castform", async () => {
-    game.override.enemyAbility(Abilities.FORECAST).enemySpecies(Species.SHUCKLE);
-    await game.classicMode.startBattle([Species.CASTFORM]);
+    game.override.enemyAbility(AbilityId.FORECAST).enemySpecies(SpeciesId.SHUCKLE);
+    await game.classicMode.startBattle([SpeciesId.CASTFORM]);
 
     game.move.select(MoveId.RAIN_DANCE);
     await game.toEndOfTurn();
@@ -198,7 +198,7 @@ describe("Abilities - Forecast", () => {
       .moveset([MoveId.SKILL_SWAP, MoveId.WORRY_SEED, MoveId.SPLASH])
       .weather(WeatherType.RAIN)
       .battleType("double");
-    await game.startBattle([Species.CASTFORM, Species.FEEBAS]);
+    await game.startBattle([SpeciesId.CASTFORM, SpeciesId.FEEBAS]);
 
     const castform = game.scene.getPlayerField()[0];
 
@@ -226,7 +226,7 @@ describe("Abilities - Forecast", () => {
 
   it("reverts to Normal Form when Forecast is suppressed, changes form to match the weather when it regains it", async () => {
     game.override.enemyMoveset([MoveId.GASTRO_ACID]).weather(WeatherType.RAIN);
-    await game.classicMode.startBattle([Species.CASTFORM, Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.CASTFORM, SpeciesId.PIKACHU]);
     const castform = game.field.getPlayerPokemon();
 
     expect(castform.formIndex).toBe(RAINY_FORM);
@@ -257,7 +257,7 @@ describe("Abilities - Forecast", () => {
 
   it("does not change Castform's form until after Stealth Rock deals damage", async () => {
     game.override.weather(WeatherType.RAIN).enemyMoveset([MoveId.STEALTH_ROCK]);
-    await game.classicMode.startBattle([Species.PIKACHU, Species.CASTFORM]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU, SpeciesId.CASTFORM]);
 
     // First turn - set up stealth rock
     game.move.select(MoveId.SPLASH);
@@ -281,7 +281,7 @@ describe("Abilities - Forecast", () => {
   it("should be in Normal Form after the user is switched out", async () => {
     game.override.weather(WeatherType.RAIN);
 
-    await game.classicMode.startBattle([Species.CASTFORM, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.CASTFORM, SpeciesId.MAGIKARP]);
     const castform = game.field.getPlayerPokemon();
 
     expect(castform.formIndex).toBe(RAINY_FORM);
@@ -293,9 +293,9 @@ describe("Abilities - Forecast", () => {
   });
 
   it("should revert to Normal Form after primal weather ends", async () => {
-    game.override.battleType("double").starterForms({ [Species.GROUDON]: 1 }); // Primal Groudon
+    game.override.battleType("double").starterForms({ [SpeciesId.GROUDON]: 1 }); // Primal Groudon
 
-    await game.classicMode.startBattle([Species.CASTFORM, Species.GROUDON, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.CASTFORM, SpeciesId.GROUDON, SpeciesId.MAGIKARP]);
     const castform = game.field.getPlayerPokemon();
 
     expect(castform.formIndex).toBe(SUNNY_FORM);

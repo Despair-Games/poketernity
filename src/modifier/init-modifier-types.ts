@@ -80,8 +80,8 @@ import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { Nature } from "#enums/nature";
-import { PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { VoucherType } from "#enums/voucher-type";
 import { t } from "i18next";
@@ -106,7 +106,7 @@ export function initModifierTypes() {
     new PokemonHeldItemModifierType(
       "modifierType:ModifierType.EVOLUTION_TRACKER_GIMMIGHOUL",
       "relic_gold",
-      (type, args) => new EvoTrackerModifier(type, (args[0] as Pokemon).id, Species.GIMMIGHOUL, 10),
+      (type, args) => new EvoTrackerModifier(type, (args[0] as Pokemon).id, SpeciesId.GIMMIGHOUL, 10),
     );
 
   modifierTypes.MEGA_BRACELET = () =>

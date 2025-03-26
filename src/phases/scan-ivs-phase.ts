@@ -1,16 +1,17 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { CommonAnim } from "#enums/common-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { UiMode } from "#enums/ui-mode";
-import { Stat } from "#enums/stat";
-import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor } from "#enums/color";
+import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
+import { Stat } from "#enums/stat";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class ScanIvsPhase extends PokemonPhase {
   override readonly id = PhaseId.SCAN_IVS;
@@ -66,7 +67,7 @@ export class ScanIvsPhase extends PokemonPhase {
         () => {
           const options: ConfirmModeConfig = {
             yesHandler: () => {
-              ui.setMode(UiMode.MESSAGE);
+              ui.setMessageMode();
               ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
                 ui.getMessageHandler()
@@ -75,12 +76,12 @@ export class ScanIvsPhase extends PokemonPhase {
               });
             },
             noHandler: () => {
-              ui.setMode(UiMode.MESSAGE);
+              ui.setMessageMode();
               ui.clearText();
               this.end();
             },
           };
-          ui.setMode(UiMode.CONFIRM, options);
+          ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
         },
       );
     } else {

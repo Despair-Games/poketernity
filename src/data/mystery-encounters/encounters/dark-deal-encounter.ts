@@ -1,7 +1,7 @@
 import type { ElementalType } from "#enums/elemental-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
@@ -120,7 +120,7 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
           ...getSpecialSpeciesList(SpeciesGroups.MYTHICAL),
           ...getSpecialSpeciesList(SpeciesGroups.ULTRA_BEAST, true),
           ...getSpecialSpeciesList(SpeciesGroups.PARADOX, true),
-          Species.ETERNATUS,
+          SpeciesId.ETERNATUS,
         ];
         const bossSpecies = getPokemonSpecies(getRandomSpeciesByStarterCost(starterTier, excludedBosses, bossTypes));
         const pokemonConfig: EnemyPokemonConfig = {

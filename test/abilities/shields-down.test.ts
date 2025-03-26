@@ -1,8 +1,8 @@
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
@@ -24,7 +24,7 @@ describe("Abilities - SHIELDS DOWN", () => {
     game = new GameManager(phaserGame);
     const moveToUse = MoveId.SPLASH;
     game.override.battleType("single");
-    game.override.ability(Abilities.SHIELDS_DOWN);
+    game.override.ability(AbilityId.SHIELDS_DOWN);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
   });
@@ -34,12 +34,12 @@ describe("Abilities - SHIELDS DOWN", () => {
       coreForm = 7;
     game.override.startingWave(4);
     game.override.starterForms({
-      [Species.MINIOR]: coreForm,
+      [SpeciesId.MINIOR]: coreForm,
     });
 
-    await game.startBattle([Species.MAGIKARP, Species.MINIOR]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MINIOR]);
 
-    const minior = game.scene.getPlayerParty().find((p) => p.species.speciesId === Species.MINIOR)!;
+    const minior = game.scene.getPlayerParty().find((p) => p.species.speciesId === SpeciesId.MINIOR)!;
     expect(minior).not.toBe(undefined);
     expect(minior.formIndex).toBe(coreForm);
 

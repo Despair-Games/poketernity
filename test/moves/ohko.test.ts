@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
@@ -27,15 +27,15 @@ describe("Moves - One Hit KO Moves", () => {
       .battleType("single")
       .startingLevel(100)
       .moveset([MoveId.SHEER_COLD, MoveId.GUILLOTINE, MoveId.SPLASH])
-      .enemySpecies(Species.CHARIZARD)
+      .enemySpecies(SpeciesId.CHARIZARD)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("OHKO moves should OHKO when they hit", async () => {
-    game.override.ability(Abilities.NO_GUARD);
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    game.override.ability(AbilityId.NO_GUARD);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.GUILLOTINE);
@@ -45,9 +45,9 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("ignores damage modification from abilities, for example FUR_COAT", async () => {
-    game.override.ability(Abilities.NO_GUARD);
-    game.override.enemyAbility(Abilities.FUR_COAT);
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    game.override.ability(AbilityId.NO_GUARD);
+    game.override.enemyAbility(AbilityId.FUR_COAT);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.GUILLOTINE);
@@ -57,7 +57,7 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("ignores user's ACC stat stage", async () => {
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const partyPokemon = game.field.getPlayerPokemon();
     vi.spyOn(partyPokemon, "getAccuracyMultiplier");
 
@@ -72,7 +72,7 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("ignores target's EVA stat stage", async () => {
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const partyPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(partyPokemon, "getAccuracyMultiplier");
@@ -88,8 +88,8 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("OHKO moves accuracy goes up by 1% for each level the user is above the target", async () => {
-    game.override.startingLevel(142).enemySpecies(Species.ARCEUS).ability(Abilities.BALL_FETCH);
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    game.override.startingLevel(142).enemySpecies(SpeciesId.ARCEUS).ability(AbilityId.BALL_FETCH);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const moveToCheck = allMoves.get(MoveId.GUILLOTINE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
@@ -100,8 +100,8 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("OHKO moves should always fail if the opponent is higher level", async () => {
-    game.override.ability(Abilities.NO_GUARD).enemyLevel(101);
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    game.override.ability(AbilityId.NO_GUARD).enemyLevel(101);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.GUILLOTINE);
@@ -110,8 +110,8 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("OHKO moves should always fail if blocked by sturdy", async () => {
-    game.override.ability(Abilities.NO_GUARD).enemyAbility(Abilities.STURDY);
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+    game.override.ability(AbilityId.NO_GUARD).enemyAbility(AbilityId.STURDY);
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.GUILLOTINE);
@@ -121,10 +121,10 @@ describe("Moves - One Hit KO Moves", () => {
 
   it("OHKO moves should fail on G-Max Pokemon", async () => {
     game.override
-      .ability(Abilities.NO_GUARD)
-      .enemySpecies(Species.LAPRAS)
-      .enemyForms({ [Species.LAPRAS]: 1 });
-    await game.classicMode.startBattle([Species.ALAKAZAM]);
+      .ability(AbilityId.NO_GUARD)
+      .enemySpecies(SpeciesId.LAPRAS)
+      .enemyForms({ [SpeciesId.LAPRAS]: 1 });
+    await game.classicMode.startBattle([SpeciesId.ALAKAZAM]);
     const enemyPokemon = game.field.getEnemyPokemon();
     expect(enemyPokemon.isMax()).toBe(true);
 
@@ -134,8 +134,8 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("OHKO moves should do 1 HP bar for boss Pokemon", async () => {
-    game.override.enemySpecies(Species.ARCEUS).ability(Abilities.NO_GUARD);
-    await game.classicMode.startBattle([Species.MACHAMP]);
+    game.override.enemySpecies(SpeciesId.ARCEUS).ability(AbilityId.NO_GUARD);
+    await game.classicMode.startBattle([SpeciesId.MACHAMP]);
     const enemyPokemon = game.field.getEnemyPokemon();
     expect(enemyPokemon.getBossSegments()).toBe(4);
 
@@ -155,8 +155,8 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("OHKO moves should go to the next hp bar for boss Pokemon", async () => {
-    game.override.enemySpecies(Species.ARCEUS).ability(Abilities.NO_GUARD);
-    await game.classicMode.startBattle([Species.MACHAMP]);
+    game.override.enemySpecies(SpeciesId.ARCEUS).ability(AbilityId.NO_GUARD);
+    await game.classicMode.startBattle([SpeciesId.MACHAMP]);
     const enemyPokemon = game.field.getEnemyPokemon();
     expect(enemyPokemon.getBossSegments()).toBe(4);
 

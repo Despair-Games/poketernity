@@ -1,4 +1,4 @@
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/moves/move";
@@ -13,9 +13,9 @@ export class GMaxPowerAttr extends VariablePowerAttr {
   /**
    * Unused, but keeping it in case we want to use it in the future
    */
-  public readonly signatureSpecies: Species;
+  public readonly signatureSpecies: SpeciesId;
 
-  constructor(signatureSpecies: Species) {
+  constructor(signatureSpecies: SpeciesId) {
     super();
     this.signatureSpecies = signatureSpecies;
   }

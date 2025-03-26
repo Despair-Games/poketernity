@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
-import { Species } from "#enums/species";
+import { AbilityId } from "#enums/ability-id";
+import { SpeciesId } from "#enums/species-id";
 import { toDmgValue } from "#app/utils";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,15 +28,15 @@ describe("Multi-target damage reduction", () => {
       .battleType("double")
       .enemyLevel(100)
       .startingLevel(100)
-      .enemySpecies(Species.POLIWAG)
+      .enemySpecies(SpeciesId.POLIWAG)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.TACKLE, MoveId.DAZZLING_GLEAM, MoveId.EARTHQUAKE, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH);
+      .ability(AbilityId.BALL_FETCH);
   });
 
   it("should reduce d.gleam damage when multiple enemies but not tackle", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
@@ -76,7 +76,7 @@ describe("Multi-target damage reduction", () => {
   });
 
   it("should reduce earthquake when more than one pokemon other than user is not fainted", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
 
     const player2 = game.scene.getPlayerParty()[1];
     const [enemy1, enemy2] = game.scene.getEnemyField();

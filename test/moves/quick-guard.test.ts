@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { BattlerIndex } from "#enums/battler-index";
@@ -29,16 +29,16 @@ describe("Moves - Quick Guard", () => {
 
     game.override.moveset([MoveId.QUICK_GUARD, MoveId.SPLASH, MoveId.FOLLOW_ME]);
 
-    game.override.enemySpecies(Species.SNORLAX);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.enemyMoveset([MoveId.QUICK_ATTACK]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
 
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
   });
 
   test("should protect the user and allies from priority moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -51,10 +51,10 @@ describe("Moves - Quick Guard", () => {
   });
 
   test("should protect the user and allies from Prankster-boosted moves", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER);
+    game.override.enemyAbility(AbilityId.PRANKSTER);
     game.override.enemyMoveset([MoveId.GROWL]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -69,7 +69,7 @@ describe("Moves - Quick Guard", () => {
   test("should stop subsequent hits of a multi-hit priority move", async () => {
     game.override.enemyMoveset([MoveId.WATER_SHURIKEN]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -87,7 +87,7 @@ describe("Moves - Quick Guard", () => {
     game.override.battleType("single");
     game.override.enemyMoveset([MoveId.QUICK_GUARD]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

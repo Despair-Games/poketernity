@@ -1,9 +1,9 @@
 import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#app/data/data-lists";
 import { MoveCategory } from "#enums/move-category";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { AiType } from "#enums/ai-type";
 import { randSeedInt } from "#app/utils";
@@ -49,17 +49,17 @@ describe("Enemy Commands - Move Selection", () => {
     game = new GameManager(phaserGame);
     globalScene = game.scene;
 
-    game.override.ability(Abilities.BALL_FETCH).enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH).enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should never use Status moves if an attack can KO", async () => {
     game.override
-      .enemySpecies(Species.ETERNATUS)
+      .enemySpecies(SpeciesId.ETERNATUS)
       .enemyMoveset([MoveId.ETERNABEAM, MoveId.SLUDGE_BOMB, MoveId.DRAGON_DANCE, MoveId.COSMIC_POWER])
       .startingLevel(1)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
@@ -78,12 +78,12 @@ describe("Enemy Commands - Move Selection", () => {
 
   it("should not select Last Resort if it would fail, even if the move KOs otherwise", async () => {
     game.override
-      .enemySpecies(Species.KANGASKHAN)
+      .enemySpecies(SpeciesId.KANGASKHAN)
       .enemyMoveset([MoveId.LAST_RESORT, MoveId.GIGA_IMPACT, MoveId.SPLASH, MoveId.SWORDS_DANCE])
       .startingLevel(1)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;

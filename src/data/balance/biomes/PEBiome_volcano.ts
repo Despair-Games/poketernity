@@ -1,5 +1,5 @@
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
@@ -15,7 +15,7 @@ export const volcanoPokemonPool = {
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
     // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
-    [TimeOfDay.ALL]: [Species.CYNDAQUIL],
+    [TimeOfDay.ALL]: [SpeciesId.CYNDAQUIL],
   },
   [BiomePoolTier.UNCOMMON]: {
     [TimeOfDay.DAWN]: [],

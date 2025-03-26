@@ -1,7 +1,7 @@
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,8 +24,8 @@ describe("Moves - Magnet Rise", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.starterSpecies(Species.MAGNEZONE);
-    game.override.enemySpecies(Species.RATTATA);
+    game.override.starterSpecies(SpeciesId.MAGNEZONE);
+    game.override.enemySpecies(SpeciesId.RATTATA);
     game.override.enemyMoveset([MoveId.DRILL_RUN, MoveId.DRILL_RUN, MoveId.DRILL_RUN, MoveId.DRILL_RUN]);
     game.override.disableCrits();
     game.override.enemyLevel(1);
