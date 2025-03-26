@@ -63,7 +63,7 @@ export class RevivalBlessingPhase extends BattlePhase {
             }
           }
         }
-        globalScene.ui.setMode(UiMode.MESSAGE).then(() => this.end());
+        globalScene.ui.setMessageMode().then(() => this.end());
       },
       PartyFilterFainted,
     );

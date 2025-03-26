@@ -3,6 +3,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interface
 import { isNullOrUndefined } from "#app/utils";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import type { AutoCompleteUiHandler } from "./autocomplete-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 export class TestDialogueUiHandler extends FormModalUiHandler {
@@ -129,7 +130,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
           options: options,
           maxOptions: 5,
         };
-        ui.setOverlayMode(UiMode.AUTO_COMPLETE, modalOpts, this.modalContainer);
+        ui.setOverlayMode<AutoCompleteUiHandler>(UiMode.AUTO_COMPLETE, modalOpts, this.modalContainer);
       }
     });
 

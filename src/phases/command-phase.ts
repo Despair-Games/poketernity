@@ -11,6 +11,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
+import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
@@ -121,15 +123,15 @@ export class CommandPhase extends FieldPhase {
           MoveLockTagTypes.forEach((tagType) => pokemon.lapseTag(tagType));
           this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
-          ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
         }
       }
     } else {
       if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
         ui.clearText();
-        ui.setMode(UiMode.FIGHT, this.fieldIndex);
+        ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
       } else {
-        ui.setMode(UiMode.COMMAND, this.fieldIndex);
+        ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
       }
     }
   }
@@ -167,11 +169,11 @@ export class CommandPhase extends FieldPhase {
 
     const failCatchRunCallback = (): void => {
       ui.showText("", 0);
-      ui.setMode(UiMode.COMMAND, this.fieldIndex);
+      ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
     };
     const failCatchRun = (i18nKey: string): void => {
-      ui.setMode(UiMode.COMMAND, this.fieldIndex);
-      ui.setMode(UiMode.MESSAGE);
+      ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
+      ui.setMessageMode();
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
@@ -237,7 +239,7 @@ export class CommandPhase extends FieldPhase {
           success = true;
         } else if (cursor < pokemon.getMoveset().length) {
           const move = pokemon.getMoveset()[cursor];
-          ui.setMode(UiMode.MESSAGE);
+          ui.setMessageMode();
 
           let errorMessageKey: string;
           if (pokemon.isMoveRestricted(move.moveId, pokemon)) {
@@ -256,7 +258,7 @@ export class CommandPhase extends FieldPhase {
             null,
             () => {
               ui.clearText();
-              ui.setMode(UiMode.FIGHT, this.fieldIndex);
+              ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
             },
             null,
             true,
@@ -336,7 +338,7 @@ export class CommandPhase extends FieldPhase {
             () => {
               ui.showText("", 0);
               if (!isSwitch) {
-                ui.setMode(UiMode.COMMAND, this.fieldIndex);
+                ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
               }
             },
             null,
@@ -355,7 +357,7 @@ export class CommandPhase extends FieldPhase {
           }
         } else if (trappedAbMessages.length > 0) {
           if (!isSwitch) {
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
@@ -365,8 +367,8 @@ export class CommandPhase extends FieldPhase {
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {
-            ui.setMode(UiMode.COMMAND, this.fieldIndex);
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
+            ui.setMessageMode();
           }
 
           const getNoEscapeText = (tag?: TrappedTag | SkyDropTag | FairyLockTag) => {
@@ -412,6 +414,6 @@ export class CommandPhase extends FieldPhase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode(UiMode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMessageMode().then(() => super.end());
   }
 }

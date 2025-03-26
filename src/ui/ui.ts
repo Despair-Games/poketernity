@@ -5,18 +5,18 @@ import { AchvBar } from "#app/ui/components/achv-bar";
 import type { BgmBar } from "#app/ui/components/bgm-bar";
 import { SavingIcon } from "#app/ui/components/saving-icon";
 import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import { AchvsUiHandler } from "#app/ui/handlers/achvs-ui-handler";
+import { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
 import { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
 import { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
 import { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
 import { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
-import { GameChallengesUiHandler } from "#app/ui/handlers/challenges-select-ui-handler";
+import { ChallengeSelectUiHandler } from "#app/ui/handlers/challenges-select-ui-handler";
 import { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { EggGachaUiHandler } from "#app/ui/handlers/egg-gacha-ui-handler";
 import { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
 import { EggListUiHandler } from "#app/ui/handlers/egg-list-ui-handler";
-import { EggSummaryUiHandler } from "#app/ui/handlers/egg-summary-ui-handler";
+import { EggHatchSummaryUiHandler } from "#app/ui/handlers/egg-hatch-summary-ui-handler";
 import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { GameStatsUiHandler } from "#app/ui/handlers/game-stats-ui-handler";
@@ -29,7 +29,7 @@ import { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui
 import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
-import { RenameFormUiHandler } from "#app/ui/handlers/rename-form-ui-handler";
+import { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
 import { RunHistoryUiHandler } from "#app/ui/handlers/run-history-ui-handler";
 import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
 import { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
@@ -145,7 +145,7 @@ export class UI extends Phaser.GameObjects.Container {
       new StarterSelectUiHandler(),
       new FormChangeSceneUiHandler(),
       new EggHatchSceneUiHandler(),
-      new EggSummaryUiHandler(),
+      new EggHatchSummaryUiHandler(),
       new ConfirmUiHandler(),
       new OptionSelectUiHandler(),
       new MenuUiHandler(),
@@ -158,7 +158,7 @@ export class UI extends Phaser.GameObjects.Container {
       new GamepadBindingUiHandler(),
       new SettingsKeyboardUiHandler(),
       new KeyboardBindingUiHandler(),
-      new AchvsUiHandler(),
+      new AchievementsUiHandler(),
       new GameStatsUiHandler(),
       new EggListUiHandler(),
       new EggGachaUiHandler(),
@@ -167,8 +167,8 @@ export class UI extends Phaser.GameObjects.Container {
       new LoadingModalUiHandler(),
       new SessionReloadModalUiHandler(),
       new UnavailableModalUiHandler(),
-      new GameChallengesUiHandler(),
-      new RenameFormUiHandler(),
+      new ChallengeSelectUiHandler(),
+      new RenamePokemonUiHandler(),
       new RunHistoryUiHandler(),
       new RunInfoUiHandler(),
       new TestDialogueUiHandler(),
@@ -494,26 +494,36 @@ export class UI extends Phaser.GameObjects.Container {
     return this.mode;
   }
 
-  setMode<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  setMessageMode(): Promise<void> {
+    return this.setMode<MessageUiHandler>(UiMode.MESSAGE);
+  }
+
+  setMode<THandler extends UiHandler = never>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, false, false, ...args);
   }
 
-  setModeForceTransition<THandler extends UiHandler>(
+  setModeForceTransition<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, true, false, ...args);
   }
 
-  setModeWithoutClear<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  setModeWithoutClear<THandler extends UiHandler = never>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, false, ...args);
   }
 
-  setOverlayMode<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  setOverlayMode<THandler extends UiHandler = never>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, true, ...args);
   }
 
-  private setModeInternal<THandler extends UiHandler>(
+  private setModeInternal<THandler extends UiHandler = never>(
     mode: UiMode,
     clear: boolean,
     forceTransition: boolean,

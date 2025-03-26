@@ -54,7 +54,6 @@ import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
-import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
@@ -309,7 +308,7 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      ui.setMode(UiMode.MESSAGE).then(() => {
+      ui.setMessageMode().then(() => {
         if (!this.loaded) {
           // Set weather before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();

@@ -38,6 +38,8 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
+import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
@@ -549,7 +551,7 @@ export function selectPokemonForOption(
         if (slotIndex < globalScene.getPlayerParty().length) {
           // TODO: we should make use of ui.revertMode because
           // the mode getting set here does not get the parameters it may expect
-          globalScene.ui.setMode(modeToSetOnExit).then(() => {
+          globalScene.ui.setMode<UiHandler>(modeToSetOnExit).then(() => {
             const pokemon = globalScene.getPlayerParty()[slotIndex];
             const secondaryOptions = onPokemonSelected(pokemon);
             if (!secondaryOptions) {
@@ -562,7 +564,7 @@ export function selectPokemonForOption(
             }
 
             // There is a second option to choose after selecting the Pokemon
-            globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+            globalScene.ui.setMessageMode().then(() => {
               const displayOptions = () => {
                 // Always appends a cancel option to bottom of options
                 const fullOptions = secondaryOptions
@@ -587,7 +589,7 @@ export function selectPokemonForOption(
                       globalScene.ui.clearText();
                       // TODO: we should make use of ui.revertMode because
                       // the mode getting set here does not get the parameters it may expect
-                      globalScene.ui.setMode(modeToSetOnExit);
+                      globalScene.ui.setMode<UiHandler>(modeToSetOnExit);
                       resolve(false);
                       return true;
                     },
@@ -606,7 +608,7 @@ export function selectPokemonForOption(
                 if (fullOptions[0].onHover) {
                   fullOptions[0].onHover();
                 }
-                globalScene.ui.setModeWithoutClear(UiMode.OPTION_SELECT, config);
+                globalScene.ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
               };
 
               const textPromptKey =
@@ -621,7 +623,7 @@ export function selectPokemonForOption(
         } else {
           // TODO: we should make use of ui.revertMode because
           // the mode getting set here does not get the parameters it may expect
-          globalScene.ui.setMode(modeToSetOnExit).then(() => {
+          globalScene.ui.setMode<UiHandler>(modeToSetOnExit).then(() => {
             if (onPokemonNotSelected) {
               onPokemonNotSelected();
             }
@@ -660,20 +662,20 @@ export function selectOptionThenPokemon(
     const modeToSetOnExit = globalScene.ui.getMode();
 
     const displayOptions = (config: OptionSelectModeConfig) => {
-      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+      globalScene.ui.setMessageMode().then(() => {
         if (!optionSelectPromptKey) {
           // Do hover over the starting selection option
           if (fullOptions[0].onHover) {
             fullOptions[0].onHover();
           }
-          globalScene.ui.setMode(UiMode.OPTION_SELECT, config);
+          globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
         } else {
           showEncounterText(optionSelectPromptKey).then(() => {
             // Do hover over the starting selection option
             if (fullOptions[0].onHover) {
               fullOptions[0].onHover();
             }
-            globalScene.ui.setMode(UiMode.OPTION_SELECT, config);
+            globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
           });
         }
       });
@@ -690,7 +692,7 @@ export function selectOptionThenPokemon(
             // Pokemon and option selected
             // TODO: we should make use of ui.revertMode because
             // the mode getting set here does not get the parameters it may expect
-            globalScene.ui.setMode(modeToSetOnExit).then(() => {
+            globalScene.ui.setMode<UiHandler>(modeToSetOnExit).then(() => {
               const result: PokemonAndOptionSelected = {
                 selectedPokemonIndex: slotIndex,
                 selectedOptionIndex: selectedOptionIndex,
@@ -725,7 +727,7 @@ export function selectOptionThenPokemon(
           globalScene.ui.clearText();
           // TODO: we should make use of ui.revertMode because
           // the mode getting set here does not get the parameters it may expect
-          globalScene.ui.setMode(modeToSetOnExit);
+          globalScene.ui.setMode<UiHandler>(modeToSetOnExit);
           resolve(null);
           return true;
         },

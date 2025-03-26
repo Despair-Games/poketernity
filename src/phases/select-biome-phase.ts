@@ -1,14 +1,15 @@
 import { biomeLinks, getBiomeName } from "#app/data/balance/biomes";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { UiMode } from "#enums/ui-mode";
 import { randSeedInt } from "#app/utils";
 import { BiomeId } from "#enums/biome-id";
+import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
-import { PhaseId } from "#enums/phase-id";
 
 export class SelectBiomePhase extends BattlePhase {
   override readonly id = PhaseId.SELECT_BIOME;
@@ -63,7 +64,7 @@ export class SelectBiomePhase extends BattlePhase {
           const ret: OptionSelectItem = {
             label: getBiomeName(b),
             handler: () => {
-              ui.setMode(UiMode.MESSAGE);
+              ui.setMessageMode();
               setNextBiome(b);
               return true;
             },
@@ -78,7 +79,7 @@ export class SelectBiomePhase extends BattlePhase {
           yOffset: 48,
         };
 
-        ui.setMode(UiMode.OPTION_SELECT, optionSelectConfig);
+        ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, optionSelectConfig);
       } else {
         setNextBiome(biomes[randSeedInt(biomes.length)]);
       }

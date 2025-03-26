@@ -1,11 +1,9 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
-import { BattleType } from "#enums/battle-type";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -22,14 +20,17 @@ import { api } from "#app/plugins/api/api";
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
-import { Unlockables } from "#enums/unlockables";
-import { UiMode } from "#enums/ui-mode";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { AchvCategory } from "#enums/achv-category";
+import { BattleType } from "#enums/battle-type";
+import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
+import { UiMode } from "#enums/ui-mode";
+import { Unlockables } from "#enums/unlockables";
 import i18next from "i18next";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { AchvCategory } from "#enums/achv-category";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of the player ending a run:
@@ -113,7 +114,7 @@ export class GameOverPhase extends BattlePhase {
           },
           inputDelay: 1000,
         };
-        ui.setMode(UiMode.CONFIRM, retryOptions);
+        ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, retryOptions);
       });
     }
   }

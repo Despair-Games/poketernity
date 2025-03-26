@@ -12,6 +12,8 @@ import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import JSZip from "jszip";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
+import type { OptionSelectUiHandler } from "./option-select-ui-handler";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -142,9 +144,12 @@ export class LoginFormUiHandler extends FormModalUiHandler {
       // Prevent overlapping overrides on action modification
       this.submitAction = originalLoginAction;
       this.sanitizeInputs();
-      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
       const onFail = (error: string) => {
-        globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+        globalScene.ui.setMode<LoginFormUiHandler>(
+          UiMode.LOGIN_FORM,
+          Object.assign(config, { errorMessage: error?.trim() }),
+        );
         globalScene.ui.playError();
       };
       if (!this.inputs[0].text) {
@@ -208,8 +213,11 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     });
 
     const onFail = (error) => {
-      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-      globalScene.ui.setModeForceTransition(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+      globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
+      globalScene.ui.setModeForceTransition<LoginFormUiHandler>(
+        UiMode.LOGIN_FORM,
+        Object.assign(config, { errorMessage: error?.trim() }),
+      );
       globalScene.ui.playError();
     };
 
@@ -233,7 +241,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
           xOffset: GAME_WIDTH,
           yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         };
-        globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, optionSelectConfig);
+        globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, optionSelectConfig);
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);
