@@ -12942,7 +12942,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6, 13]
   },
   {
     "id": 864,
