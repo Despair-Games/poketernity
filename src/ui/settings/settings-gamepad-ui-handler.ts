@@ -49,7 +49,7 @@ export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
   /**
    * Setup UI elements.
    */
-  override setup() {
+  protected override setup() {
     super.setup();
     // If no gamepads are detected, set up a default UI prompt in the settings container.
     this.layout["noGamepads"] = new Map();

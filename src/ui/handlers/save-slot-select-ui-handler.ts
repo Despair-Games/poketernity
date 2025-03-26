@@ -43,7 +43,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     super(UiMode.SAVE_SLOT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.saveSlotSelectContainer = globalScene.add.container(0, 0);
@@ -74,9 +74,11 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.sessionSlots = [];
   }
 
-  override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.saveSlotSelectContainer.destroy();
+  }
 
+  override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
     this.uiMode = mode;
     this.saveSlotSelectCallback = slotSelectCallback;
 
@@ -324,7 +326,6 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
   }
 
   override clear() {
-    super.clear();
     this.saveSlotSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();

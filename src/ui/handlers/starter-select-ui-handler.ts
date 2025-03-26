@@ -322,7 +322,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     super(UiMode.STARTER_SELECT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const langSettingKey =
@@ -1017,6 +1017,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
+  protected override tearDown(): void {
+    this.starterSelectContainer.destroy();
+  }
+
   override show(selectedStarterCallback?: StarterSelectCallback): boolean {
     if (!this.starterPreferences) {
       // starterPreferences haven't been loaded yet
@@ -1032,7 +1036,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       return false;
     }
 
-    super.show();
     this.starterSelectCallback = selectedStarterCallback;
 
     this.starterSelectContainer.setVisible(true);
@@ -4003,8 +4006,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   override clear(): void {
-    super.clear();
-
     StarterPrefs.save(this.starterPreferences);
     this.cursor = -1;
     this.hideInstructions();

@@ -60,7 +60,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
   /**
    * Setup UI elements.
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     this.optionSelectContainer = globalScene.add.container(0, 0);
     this.actionsContainer = globalScene.add.container(0, 0);
@@ -112,6 +112,11 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
     this.actionsContainer.add(this.cancelLabel);
   }
 
+  protected override tearDown(): void {
+    this.optionSelectContainer.destroy();
+    this.actionsContainer.destroy();
+  }
+
   manageAutoCloseTimer() {
     clearTimeout(this.countdownTimer);
     this.countdownTimer = setTimeout(() => {
@@ -133,7 +138,6 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
    * @returns `true` if successful.
    */
   override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
-    super.show();
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
     this.cancelFn = cancelHandler;
@@ -232,7 +236,6 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
    * Clear the UI elements and state.
    */
   override clear() {
-    super.clear();
     clearTimeout(this.countdownTimer);
     this.timerText.setText("(5)");
     this.timeLeftAutoClose = 5;

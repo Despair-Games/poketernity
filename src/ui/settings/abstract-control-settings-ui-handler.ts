@@ -92,7 +92,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Setup UI elements.
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     this.navigationIcons = {};
 
@@ -303,6 +303,10 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
     this.settingsContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.settingsContainer.destroy();
+  }
+
   /**
    * Get the active configuration.
    *
@@ -386,8 +390,6 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @returns `true` if successful.
    */
   override show(): boolean {
-    super.show();
-
     this.updateNavigationDisplay();
     NavigationManager.getInstance().updateIcons();
     // Update the bindings for the current active gamepad configuration.
@@ -680,8 +682,6 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * Clear the UI elements and state.
    */
   override clear(): void {
-    super.clear();
-
     // Hide the settings container to remove it from the view.
     this.settingsContainer.setVisible(false);
 

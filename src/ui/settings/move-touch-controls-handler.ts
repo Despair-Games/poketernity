@@ -110,6 +110,7 @@ export class MoveTouchControlsHandler {
   //#endregion
 
   public initListeners() {
+    // TODO remove listeners
     globalScene.scale.on("orientationchange", () => {
       this.updateOrientation();
     });

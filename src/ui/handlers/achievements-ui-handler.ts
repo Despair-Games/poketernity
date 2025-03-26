@@ -59,7 +59,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.scrollCursor = 0;
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.mainContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
@@ -165,9 +165,11 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.mainContainer.setVisible(false);
   }
 
-  override show(): boolean {
-    super.show();
+  override tearDown(): void {
+    this.mainContainer.destroy();
+  }
 
+  override show(): boolean {
     this.headerBgX = this.headerBg.getTopRight().x;
     this.updateAchvIcons();
 
@@ -433,7 +435,6 @@ export class AchievementsUiHandler extends MessageUiHandler {
   }
 
   override clear() {
-    super.clear();
     this.currentPage = Page.ACHIEVEMENTS;
     this.mainContainer.setVisible(false);
     this.setScrollCursor(0);

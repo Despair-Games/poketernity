@@ -35,7 +35,7 @@ export class EggListUiHandler extends MessageUiHandler {
     super(UiMode.EGG_LIST);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.eggListContainer = globalScene.add.container(0, -GAME_HEIGHT);
@@ -106,9 +106,13 @@ export class EggListUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.iconAnimHandler.removeAll();
+    this.eggListContainer.destroy();
+    //TODO: scrollgridHandler? iconAnimHandler?
+  }
 
+  override show(): boolean {
     this.initEggIcons();
 
     this.getUi().bringToTop(this.eggListContainer);
@@ -225,7 +229,6 @@ export class EggListUiHandler extends MessageUiHandler {
   }
 
   override clear(): void {
-    super.clear();
     this.scrollGridHandler.reset();
     this.cursor = -1;
     this.eggListContainer.setVisible(false);

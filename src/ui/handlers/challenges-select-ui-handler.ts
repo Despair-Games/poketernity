@@ -52,7 +52,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     super(UiMode.CHALLENGE_SELECT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.widestTextBox = 0;
@@ -199,6 +199,10 @@ export class ChallengeSelectUiHandler extends UiHandler {
     this.challengesContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.challengesContainer.destroy();
+  }
+
   /**
    * Adds the default text color to the description text
    * @param text text to set to the BBCode description
@@ -305,8 +309,6 @@ export class ChallengeSelectUiHandler extends UiHandler {
   }
 
   override show(): boolean {
-    super.show();
-
     this.startCursor.setVisible(false);
     this.updateChallengeArrows(false);
     this.challengesContainer.setVisible(true);
@@ -322,6 +324,11 @@ export class ChallengeSelectUiHandler extends UiHandler {
     this.getUi().hideTooltip();
 
     return true;
+  }
+
+  protected override clear() {
+    this.challengesContainer.setVisible(false);
+    this.eraseCursor();
   }
 
   /* This code updates the challenge starter arrows to be tinted/not tinted when the start button is selected to show they can't be changed
@@ -501,12 +508,6 @@ export class ChallengeSelectUiHandler extends UiHandler {
 
   getActiveChallenge(): Challenge {
     return globalScene.gameMode.challenges[this.cursor + this.scrollCursor];
-  }
-
-  override clear() {
-    super.clear();
-    this.challengesContainer.setVisible(false);
-    this.eraseCursor();
   }
 
   eraseCursor() {

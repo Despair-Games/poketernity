@@ -87,6 +87,10 @@ export class RunInfoUiHandler extends UiHandler {
     globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
   }
 
+  protected override tearDown(): void {
+    this.runContainer.destroy();
+  }
+
   /**
    * This takes a past or ongoing run's data and displays its information.
    *
@@ -95,8 +99,6 @@ export class RunInfoUiHandler extends UiHandler {
    * @param isVictory - optional. `true` is this is the data for a finished, victorious run.
    */
   override show(mode: RunDisplayMode, sessionData: SessionSaveData, isVictory?: boolean): boolean {
-    super.show();
-
     const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     runInfoBg.setOrigin(0, 0);
     this.runContainer.add(runInfoBg);
@@ -153,6 +155,10 @@ export class RunInfoUiHandler extends UiHandler {
     this.getUi().hideTooltip();
 
     return true;
+  }
+
+  protected override clear(): void {
+    // TODO
   }
 
   /**
@@ -994,7 +1000,7 @@ export class RunInfoUiHandler extends UiHandler {
           if (this.isVictory) {
             this.hallofFameContainer.removeAll(true);
           }
-          super.clear();
+          this.clear();
           this.runContainer.setVisible(false);
           ui.revertMode();
         } else if (this.pageMode === RunInfoUiMode.HALL_OF_FAME) {

@@ -61,7 +61,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     super(UiMode.EGG_HATCH_SUMMARY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.summaryContainer = globalScene.add.container(0, -GAME_HEIGHT);
@@ -110,8 +110,12 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
+  protected override tearDown(): void {
+    this.summaryContainer.destroy();
+    this.eggHatchContainer.destroy();
+  }
+
   override clear() {
-    super.clear();
     this.scrollGridHandler.reset();
     this.cursor = -1;
 
@@ -151,8 +155,6 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
       console.log("Missing Egg Hatch Data in Egg Summary UI");
       return false;
     }
-
-    super.show();
 
     // sort the egg hatch data by egg tier then by species number (then by order hatched)
     this.eggHatchData = hatchData.sort(function sortHatchData(a: EggHatchData, b: EggHatchData) {

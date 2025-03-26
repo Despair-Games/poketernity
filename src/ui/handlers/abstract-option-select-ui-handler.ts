@@ -61,7 +61,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     return (this.maxOptions + 1) * 96 * this.scale - 2;
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
@@ -83,6 +83,10 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     this.setCursor(0);
   }
 
+  protected override tearDown(): void {
+    this.optionSelectContainer.destroy();
+  }
+
   /**
    * @param args - args[0] should be of type `OptionSelectModeConfig<T>`.
    */
@@ -91,8 +95,6 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }
-
-    super.show();
 
     this.initOptions(args[0] as OptionSelectModeConfig<T>);
 
@@ -429,8 +431,6 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
   }
 
   override clear(): void {
-    super.clear();
-
     this.config = null;
     this.options = [];
     this.maxOptions = DEFAULT_MAX_OPTIONS;

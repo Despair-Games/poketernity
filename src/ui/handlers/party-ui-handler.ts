@@ -137,7 +137,7 @@ export class PartyUiHandler extends MessageUiHandler {
     super(UiMode.PARTY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     const partyContainer = globalScene.add.container(0, 0);
@@ -205,6 +205,11 @@ export class PartyUiHandler extends MessageUiHandler {
     this.partySlots = [];
   }
 
+  protected override tearDown(): void {
+    this.partyContainer.destroy();
+    this.moveInfoOverlay.destroy();
+  }
+
   override show(
     mode?: PartyUiMode,
     fieldIndex: number = -1,
@@ -217,8 +222,6 @@ export class PartyUiHandler extends MessageUiHandler {
     if (this.active || isNullOrUndefined(mode)) {
       return false;
     }
-
-    super.show();
 
     // reset the infoOverlay
     this.moveInfoOverlay.clear();
@@ -1146,7 +1149,6 @@ export class PartyUiHandler extends MessageUiHandler {
   }
 
   override clear() {
-    super.clear();
     // hide the overlay
     this.moveInfoOverlay.clear();
     this.partyContainer.setVisible(false);

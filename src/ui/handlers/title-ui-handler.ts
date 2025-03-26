@@ -30,7 +30,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     super(mode);
   }
 
-  override setup() {
+  protected override setup() {
     super.setup();
 
     const ui = this.getUi();

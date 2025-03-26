@@ -42,7 +42,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     super(mode);
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
     this.buildExternalPartyContainer();
 

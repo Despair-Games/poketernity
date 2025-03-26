@@ -123,7 +123,7 @@ export class SummaryUiHandler extends UiHandler {
     super(UiMode.SUMMARY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.summaryContainer = globalScene.add.container(0, 0);
@@ -286,6 +286,10 @@ export class SummaryUiHandler extends UiHandler {
     this.summaryPageTransitionContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.summaryContainer.destroy();
+  }
+
   getPageKey(page?: number) {
     if (page === undefined) {
       page = this.cursor;
@@ -312,7 +316,6 @@ export class SummaryUiHandler extends UiHandler {
     callback?: ExitCallBack | MoveSelectCallback,
     isPlayerParty: boolean = true,
   ): boolean {
-    super.show();
     this.pokemon = pokemon;
     this.summaryUiMode = mode;
     this.playerParty = isPlayerParty;
@@ -1195,7 +1198,6 @@ export class SummaryUiHandler extends UiHandler {
   }
 
   override clear() {
-    super.clear();
     this.pokemon = null;
     this.cursor = -1;
     this.newMove = null;

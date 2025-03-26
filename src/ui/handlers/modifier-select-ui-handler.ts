@@ -63,7 +63,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.shopOptionsRows = [];
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.modifierContainer = globalScene.add.container(0, 0);
@@ -157,6 +157,16 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     globalScene.addInfoToggle(this.moveInfoOverlay);
   }
 
+  protected override tearDown(): void {
+    this.modifierContainer.destroy();
+    this.continueButtonContainer.destroy();
+    this.transferButtonContainer.destroy();
+    this.rerollButtonContainer.destroy();
+    this.lockRarityButtonContainer.destroy();
+    this.checkButtonContainer.destroy();
+    this.moveInfoOverlay.destroy();
+  }
+
   override show(
     player: boolean = false,
     typeOptions?: ModifierTypeOption[],
@@ -177,8 +187,6 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     if (isNullOrUndefined(typeOptions) || isNullOrUndefined(actionCallback) || isNullOrUndefined(rerollCost)) {
       return false;
     }
-
-    super.show();
 
     this.getUi().clearText();
 
@@ -629,8 +637,6 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
   }
 
   override clear() {
-    super.clear();
-
     this.moveInfoOverlay.clear();
     this.moveInfoOverlayActive = false;
     this.awaitingActionInput = false;

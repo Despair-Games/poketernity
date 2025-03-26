@@ -68,7 +68,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Setup UI elements
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
@@ -206,6 +206,11 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
 
     this.settingsContainer.setVisible(false);
   }
+
+  protected override tearDown(): void {
+    this.settingsContainer.destroy();
+  }
+
   /**
    * Update the bindings for the current active device configuration.
    */
@@ -236,7 +241,6 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @returns `true` if successful.
    */
   override show(): boolean {
-    super.show();
     this.updateBindings();
 
     this.uiItems.forEach((uiItem, s) => {
@@ -512,7 +516,6 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * Clear the UI elements and state.
    */
   override clear() {
-    super.clear();
     this.settingsContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();

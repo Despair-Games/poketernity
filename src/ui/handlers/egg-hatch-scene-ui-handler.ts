@@ -20,12 +20,12 @@ export class EggHatchSceneUiHandler extends UiHandler {
     super(UiMode.EGG_HATCH_SCENE);
   }
 
-  setup() {
+  protected override setup() {
     this.eggHatchContainer = globalScene.add.container(0, -GAME_HEIGHT);
     globalScene.fieldUI.add(this.eggHatchContainer);
 
-    const eggLightraysAnimFrames = globalScene.anims.generateFrameNames("egg_lightrays", { start: 0, end: 3 });
     if (!globalScene.anims.exists("egg_lightrays")) {
+      const eggLightraysAnimFrames = globalScene.anims.generateFrameNames("egg_lightrays", { start: 0, end: 3 });
       globalScene.anims.create({
         key: "egg_lightrays",
         frames: eggLightraysAnimFrames,
@@ -34,14 +34,22 @@ export class EggHatchSceneUiHandler extends UiHandler {
     }
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.eggHatchContainer.destroy();
+    globalScene.anims.remove("egg_lightrays");
+  }
 
+  public override show(): boolean {
     this.getUi().showText("", 0);
 
     globalScene.setModifiersVisible(false);
 
     return true;
+  }
+
+  protected override clear() {
+    this.eggHatchContainer.removeAll(true);
+    this.getUi().hideTooltip();
   }
 
   processInput(button: Button): boolean {
@@ -57,11 +65,5 @@ export class EggHatchSceneUiHandler extends UiHandler {
 
   override setCursor(_cursor: number): boolean {
     return false;
-  }
-
-  override clear() {
-    super.clear();
-    this.eggHatchContainer.removeAll(true);
-    this.getUi().hideTooltip();
   }
 }

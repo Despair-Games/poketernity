@@ -27,7 +27,7 @@ export class BallUiHandler extends UiHandler {
     super(UiMode.BALL);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     let optionsTextContent = "";
@@ -64,9 +64,11 @@ export class BallUiHandler extends UiHandler {
     this.setCursor(0);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.pokeballSelectContainer.destroy();
+  }
 
+  override show(): boolean {
     this.updateCounts();
     this.pokeballSelectContainer.setVisible(true);
     this.setCursor(this.cursor);
@@ -139,7 +141,6 @@ export class BallUiHandler extends UiHandler {
   }
 
   override clear() {
-    super.clear();
     this.pokeballSelectContainer.setVisible(false);
     this.eraseCursor();
   }

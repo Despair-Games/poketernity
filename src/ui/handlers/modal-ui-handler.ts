@@ -39,7 +39,7 @@ export abstract class ModalUiHandler extends UiHandler {
     return 0;
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.modalContainer = globalScene.add.container(0, 0);
@@ -67,6 +67,10 @@ export abstract class ModalUiHandler extends UiHandler {
     }
 
     this.modalContainer.setVisible(false);
+  }
+
+  protected override tearDown(): void {
+    this.modalContainer.destroy();
   }
 
   private addButton(label: string) {
@@ -99,8 +103,6 @@ export abstract class ModalUiHandler extends UiHandler {
     if (!config.hasOwnProperty("buttonActions")) {
       return false;
     }
-
-    super.show(config);
 
     if (config.fadeOut) {
       const [marginTop, marginRight, marginBottom, marginLeft] = this.getMargin();
@@ -172,7 +174,6 @@ export abstract class ModalUiHandler extends UiHandler {
   }
 
   override clear() {
-    super.clear();
     this.modalContainer.setVisible(false);
 
     this.buttonBgs.map((bg) => bg.off("pointerdown"));

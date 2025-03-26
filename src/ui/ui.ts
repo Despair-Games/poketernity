@@ -181,7 +181,7 @@ export class UI extends Phaser.GameObjects.Container {
   setup(): void {
     this.setName(`ui-${UiMode[this.mode]}`);
     for (const handler of this.handlers) {
-      handler.setup();
+      handler.initialize();
     }
     this.overlay = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     this.overlay.setName("rect-ui-overlay");
@@ -427,8 +427,17 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   override destroy(fromScene?: boolean): void {
+    // Clear references to current handlers in the NavigationManager
     NavigationManager.getInstance().clearMenus();
-    this.removeAll(true);
+
+    // Stop the current handler
+    this.getHandler().stop();
+
+    // Destroy all handlers
+    for (const handler of this.handlers) {
+      handler.destroy();
+    }
+
     super.destroy(fromScene);
   }
 
@@ -538,7 +547,7 @@ export class UI extends Phaser.GameObjects.Container {
       const doSetMode = () => {
         if (this.mode !== mode) {
           if (clear) {
-            this.getHandler().clear();
+            this.getHandler().stop();
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -549,7 +558,7 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getHandler().show(...params);
+          this.getHandler().start(...params);
         }
         resolve();
       };
@@ -586,7 +595,7 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.getHandler().clear();
+        this.getHandler().stop();
         this.mode = this.modeChain.pop()!; // TODO: is this bang correct?
         globalScene.updateGameInfo();
         const touchControls = document.getElementById("touchControls");

@@ -76,7 +76,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     ];
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const ui = this.getUi();

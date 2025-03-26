@@ -44,7 +44,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     super(UiMode.FIGHT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.movesContainer = globalScene.add.container(18, -38.7);
@@ -115,9 +115,14 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     globalScene.addInfoToggle(this);
   }
 
-  override show(fieldIndex: number = 0): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.movesContainer.destroy();
+    this.moveInfoContainer.destroy();
+    this.moveInfoOverlay.destroy();
+    // TODO: removeInfoToggle
+  }
 
+  override show(fieldIndex: number = 0): boolean {
     this.fieldIndex = fieldIndex;
 
     const messageHandler = this.getUi().getMessageHandler();
@@ -132,7 +137,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     }
     this.displayMoves();
     this.toggleInfo(false); // in case cancel was pressed while info toggle is active
-    this.active = true;
+
     return true;
   }
 
@@ -348,7 +353,6 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   override clear() {
-    super.clear();
     const messageHandler = this.getUi().getMessageHandler();
     this.clearMoves();
     this.typeIcon.setVisible(false);
@@ -362,7 +366,6 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoOverlay.clear();
     messageHandler.bg.setVisible(true);
     this.eraseCursor();
-    this.active = false;
   }
 
   clearMoves() {

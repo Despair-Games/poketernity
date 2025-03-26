@@ -34,11 +34,11 @@ export class TargetSelectUiHandler extends UiHandler {
     this.cursor = -1;
   }
 
-  setup(): void {}
+  protected override setup(): void {}
+
+  protected override tearDown(): void {}
 
   override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
-    super.show();
-
     this.fieldIndex = fieldIndex;
     this.moveId = moveId;
     this.targetSelectCallback = callback;
@@ -235,7 +235,6 @@ export class TargetSelectUiHandler extends UiHandler {
   }
 
   override clear() {
-    super.clear();
     this.eraseCursor();
   }
 }

@@ -29,7 +29,7 @@ export class SessionReloadModalUiHandler extends ModalUiHandler {
     return [];
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const label = addTextObject(

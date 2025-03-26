@@ -26,7 +26,7 @@ export class CommandUiHandler extends UiHandler {
     super(UiMode.COMMAND);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     const commands = [
       i18next.t("commandUiHandler:fight"),
@@ -47,9 +47,11 @@ export class CommandUiHandler extends UiHandler {
     }
   }
 
-  override show(fieldIndex: number = 0): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.commandsContainer.destroy();
+  }
 
+  override show(fieldIndex: number = 0): boolean {
     this.fieldIndex = fieldIndex;
 
     this.commandsContainer.setVisible(true);
@@ -177,7 +179,6 @@ export class CommandUiHandler extends UiHandler {
   }
 
   override clear(): void {
-    super.clear();
     this.getUi().getMessageHandler().commandWindow.setVisible(false);
     this.commandsContainer.setVisible(false);
     this.getUi().getMessageHandler().clearText();

@@ -4,6 +4,8 @@ import { t } from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
 export class SettingsUiHandler extends AbstractSettingsUiHandler {
+  private onWindowResizeEvent = () => this.updateMoveTouchControlsSettingsLabel();
+
   /**
    * Creates an instance of SettingsGamepadUiHandler.
    *
@@ -11,10 +13,27 @@ export class SettingsUiHandler extends AbstractSettingsUiHandler {
    */
   constructor() {
     super("general", generalSettingsUiItems);
+  }
 
-    window.addEventListener("resize", () => {
-      this.updateMoveTouchControlsSettingsLabel();
-    });
+  protected override setup(): void {
+    super.setup();
+
+    if (hasTouchscreen()) {
+      // TODO: we should user Phaser's scale 'orientationchange' event instead
+      window.addEventListener("resize", this.onWindowResizeEvent);
+    }
+  }
+
+  protected override tearDown(): void {
+    window.removeEventListener("resize", this.onWindowResizeEvent);
+    super.tearDown();
+  }
+
+  override show(): boolean {
+    super.show();
+
+    this.updateMoveTouchControlsSettingsLabel();
+    return true;
   }
 
   private updateMoveTouchControlsSettingsLabel() {
@@ -23,6 +42,7 @@ export class SettingsUiHandler extends AbstractSettingsUiHandler {
     const settingIndex = this.uiItems.findIndex((uiItem) => uiItem.key === "moveTouchControls");
     if (settingIndex === -1) {
       console.warn("Could not find moveTouchControls setting label!");
+      return;
     }
 
     this.updateOptionValueLabel(settingIndex, 0, isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"));

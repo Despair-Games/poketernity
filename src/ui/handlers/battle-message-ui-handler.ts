@@ -25,12 +25,13 @@ export class BattleMessageUiHandler extends MessageUiHandler {
   public commandWindow: Phaser.GameObjects.NineSlice;
   public movesWindowContainer: Phaser.GameObjects.Container;
   public nameBoxContainer: Phaser.GameObjects.Container;
+  public messageContainer: Phaser.GameObjects.Container;
 
   constructor() {
     super(UiMode.MESSAGE);
   }
 
-  setup(): void {
+  protected override setup(): void {
     const ui = this.getUi();
 
     this.textTimer = null;
@@ -62,8 +63,8 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     this.movesWindowContainer.add([movesWindow, moveDetailsWindow]);
     ui.add(this.movesWindowContainer);
 
-    const messageContainer = globalScene.add.container(12, -39);
-    ui.add(messageContainer);
+    this.messageContainer = globalScene.add.container(12, -39);
+    ui.add(this.messageContainer);
 
     const message = addTextObject(0, 0, "", TextStyle.MESSAGE, {
       maxLines: 2,
@@ -71,7 +72,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
         width: this.wordWrapWidth,
       },
     });
-    messageContainer.add(message);
+    this.messageContainer.add(message);
 
     this.message = message;
 
@@ -96,9 +97,9 @@ export class BattleMessageUiHandler extends MessageUiHandler {
 
     this.nameBoxContainer.add(this.nameBox);
     this.nameBoxContainer.add(this.nameText);
-    messageContainer.add(this.nameBoxContainer);
+    this.messageContainer.add(this.nameBoxContainer);
 
-    this.initPromptSprite(messageContainer);
+    this.initPromptSprite(this.messageContainer);
 
     const levelUpStatsContainer = globalScene.add.container(0, 0);
     levelUpStatsContainer.setVisible(false);
@@ -144,14 +145,22 @@ export class BattleMessageUiHandler extends MessageUiHandler {
   }
 
   override show(): boolean {
-    super.show();
-
     this.commandWindow.setVisible(false);
     this.movesWindowContainer.setVisible(false);
     this.message.setWordWrapWidth(this.wordWrapWidth);
 
     return true;
   }
+
+  protected override tearDown(): void {
+    this.bg.destroy();
+    this.commandWindow.destroy();
+    this.movesWindowContainer.destroy();
+    this.levelUpStatsContainer.destroy();
+    this.messageContainer.destroy();
+  }
+
+  protected override clear() {}
 
   processInput(button: Button): boolean {
     const ui = this.getUi();
@@ -168,10 +177,6 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     }
 
     return false;
-  }
-
-  override clear() {
-    super.clear();
   }
 
   override showText(

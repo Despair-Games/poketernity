@@ -63,7 +63,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return error;
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const config = this.getInputFieldConfigs();

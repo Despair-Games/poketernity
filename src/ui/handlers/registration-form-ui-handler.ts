@@ -62,7 +62,7 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
     return inputFieldConfigs;
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.REGISTRATION_FORM_WARNING);

@@ -60,7 +60,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     super(UiMode.MYSTERY_ENCOUNTER);
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.cursorContainer = globalScene.add.container(18, -38.7);
@@ -118,6 +118,14 @@ export class MysteryEncounterUiHandler extends UiHandler {
     dexProgressIndicator.setScale(0.8);
     this.dexProgressContainer.add(dexProgressIndicator);
     this.dexProgressContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 24, 28), Phaser.Geom.Rectangle.Contains);
+  }
+
+  protected override tearDown(): void {
+    this.cursorContainer.destroy();
+    this.optionsContainer.destroy();
+    this.dexProgressContainer.destroy();
+    this.descriptionContainer.destroy();
+    this.tooltipContainer.destroy();
   }
 
   override show(settings?: OptionSelectSettings): boolean {
@@ -666,7 +674,6 @@ export class MysteryEncounterUiHandler extends UiHandler {
   }
 
   override clear(): void {
-    super.clear();
     this.overrideSettings = undefined;
     this.optionsContainer.setVisible(false);
     this.optionsContainer.removeAll(true);

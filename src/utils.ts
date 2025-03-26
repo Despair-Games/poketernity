@@ -632,6 +632,7 @@ export function hasTouchscreen(): boolean {
  * @returns `true` if the device is in landscape mode, otherwise `false` which means it is in portrait mode.
  */
 export function isLandscapeMode(): boolean {
+  // TODO: we should user Phaser's scale 'orientation' field instead
   const { width, height } = window.screen;
   return width > height;
 }

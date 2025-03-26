@@ -46,7 +46,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     super(UiMode.RUN_HISTORY);
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.runSelectContainer = globalScene.add.container(0, 0);
@@ -72,9 +72,11 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.runSelectContainer.destroy();
+  }
 
+  override show(): boolean {
     this.getUi().bringToTop(this.runSelectContainer);
     this.runSelectContainer.setVisible(true);
     this.populateRuns().then(() => {
@@ -232,7 +234,6 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Uses the functions clearCursor() and clearRuns()
    */
   override clear() {
-    super.clear();
     this.runSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.clearCursor();

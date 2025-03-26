@@ -14,7 +14,7 @@ export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
     globalScene.input.keyboard?.on("keydown", this.onKeyDown, this);
   }
 
-  override setup() {
+  protected override setup() {
     super.setup();
 
     // New button icon setup.

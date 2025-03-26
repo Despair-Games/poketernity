@@ -60,7 +60,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
     this.defaultText = i18next.t("egg:selectMachine");
   }
 
-  setup() {
+  protected override setup() {
     this.gachaCursor = 0;
 
     const ui = this.getUi();
@@ -326,9 +326,11 @@ export class EggGachaUiHandler extends MessageUiHandler {
     this.setCursor(0);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.eggGachaContainer.destroy();
+  }
 
+  public override show(): boolean {
     this.getUi().showText(this.defaultText, 0);
 
     this.setGachaCursor(1);
@@ -346,6 +348,11 @@ export class EggGachaUiHandler extends MessageUiHandler {
     handleTutorial(Tutorial.EGG_GACHA);
 
     return true;
+  }
+
+  protected override clear(): void {
+    this.setGachaCursor(-1);
+    this.eggGachaContainer.setVisible(false);
   }
 
   getDelayValue(delay: number) {
@@ -828,11 +835,5 @@ export class EggGachaUiHandler extends MessageUiHandler {
     }
 
     return changed;
-  }
-
-  override clear(): void {
-    super.clear();
-    this.setGachaCursor(-1);
-    this.eggGachaContainer.setVisible(false);
   }
 }

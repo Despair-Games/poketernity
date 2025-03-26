@@ -23,7 +23,7 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     super(UiMode.FORM_CHANGE_SCENE);
   }
 
-  setup() {
+  protected override setup() {
     this.canCancel = false;
 
     const ui = this.getUi();
@@ -55,9 +55,13 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     this.initPromptSprite(this.messageContainer);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.container.destroy();
+    this.messageBg.destroy();
+    this.messageContainer.destroy();
+  }
 
+  override show(): boolean {
     globalScene.ui.bringToTop(this.container);
     globalScene.ui.bringToTop(this.messageBg);
     globalScene.ui.bringToTop(this.messageContainer);

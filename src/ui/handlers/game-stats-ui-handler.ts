@@ -226,7 +226,7 @@ export class GameStatsUiHandler extends UiHandler {
     this.statValues = [];
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.gameStatsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
@@ -295,9 +295,11 @@ export class GameStatsUiHandler extends UiHandler {
     this.gameStatsContainer.setVisible(false);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.gameStatsContainer.destroy();
+  }
 
+  override show(): boolean {
     this.setCursor(0);
 
     this.updateStats();
@@ -389,7 +391,6 @@ export class GameStatsUiHandler extends UiHandler {
   }
 
   override clear() {
-    super.clear();
     this.gameStatsContainer.setVisible(false);
   }
 }

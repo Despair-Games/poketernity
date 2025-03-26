@@ -12,7 +12,7 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     super(mode);
     globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }
-  override setup() {
+  protected override setup() {
     super.setup();
 
     // New button icon setup.

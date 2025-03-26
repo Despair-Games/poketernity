@@ -13,7 +13,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     super(mode);
   }
 
-  override setup() {
+  protected override setup() {
     super.setup();
 
     const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
