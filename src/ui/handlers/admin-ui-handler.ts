@@ -1,19 +1,19 @@
-import { Button } from "#enums/buttons";
+import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import { setTextColor } from "#app/ui/text/text-utils";
 import { formatText } from "#app/utils";
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
+import { AdminMode } from "#enums/admin-mode";
+import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { globalScene } from "#app/global-scene";
-import { AdminMode } from "#enums/admin-mode";
-import { setTextColor } from "#app/ui/text/text-utils";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
 
-export default class AdminUiHandler extends FormModalUiHandler {
+export class AdminUiHandler extends FormModalUiHandler {
   private adminMode: AdminMode;
   private adminResult: AdminSearchInfo;
   private config: ModalConfig;
@@ -33,8 +33,8 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return `Username and ${service} successfully ${mode.toLowerCase()}ed`;
   };
 
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.ADMIN);
   }
 
   override getModalTitle(): string {
@@ -101,11 +101,15 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return false;
   }
 
-  override show(args: any[]): boolean {
-    this.config = args[0] as ModalConfig; // config
-    this.adminMode = args[1] as AdminMode; // admin mode
-    this.adminResult = args[2] ?? { username: "", discordId: "", googleId: "", lastLoggedIn: "", registered: "" }; // admin result, if any
-    const isMessageError = args[3]; // is the message shown a success or error
+  override show(
+    config: ModalConfig,
+    adminMode: AdminMode,
+    adminResult?: AdminSearchInfo,
+    isMessageError?: boolean,
+  ): boolean {
+    this.config = config;
+    this.adminMode = adminMode;
+    this.adminResult = adminResult ?? { username: "", discordId: "", googleId: "", lastLoggedIn: "", registered: "" };
 
     const fields = this.getInputFieldConfigs();
     const hasTitle = !!this.getModalTitle();
@@ -125,46 +129,48 @@ export default class AdminUiHandler extends FormModalUiHandler {
       setTextColor(this.errorMessage, TextStyle.SUMMARY_GREEN);
     }
 
-    if (super.show(args)) {
-      this.populateFields(this.adminMode, this.adminResult);
-      const originalSubmitAction = this.submitAction;
-      this.submitAction = (_) => {
-        this.submitAction = originalSubmitAction;
-        const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
-        const validFields = this.areFieldsValid(this.adminMode);
-        if (validFields.error) {
-          globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
-          return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
-        }
-        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-        if (this.adminMode === AdminMode.LINK) {
-          this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
-            .then((response) => {
-              if (response.error) {
-                return this.showMessage(response.errorType, adminSearchResult, true); // error or some kind
-              } else {
-                return this.showMessage(this.SUCCESS_SERVICE_MODE("discord", "link"), adminSearchResult, false); // success
-              }
-            });
-        } else if (this.adminMode === AdminMode.SEARCH) {
-          this.adminSearch(adminSearchResult) // admin search for username
-            .then((response) => {
-              if (response.error) {
-                return this.showMessage(response.errorType, adminSearchResult, true); // failure
-              }
-              this.updateAdminPanelInfo(response.adminSearchResult ?? adminSearchResult); // success
-            });
-        } else if (this.adminMode === AdminMode.ADMIN) {
-          this.updateAdminPanelInfo(adminSearchResult, AdminMode.SEARCH);
-        }
-      };
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
-    return false;
+
+    this.populateFields(this.adminMode, this.adminResult);
+    const originalSubmitAction = this.submitAction;
+    this.submitAction = (_) => {
+      this.submitAction = originalSubmitAction;
+      const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
+      const validFields = this.areFieldsValid(this.adminMode);
+      if (validFields.error) {
+        // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+        globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
+        return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
+      }
+      globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
+      if (this.adminMode === AdminMode.LINK) {
+        this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
+          .then((response) => {
+            if (response.error) {
+              return this.showMessage(response.errorType, adminSearchResult, true); // error or some kind
+            } else {
+              return this.showMessage(this.SUCCESS_SERVICE_MODE("discord", "link"), adminSearchResult, false); // success
+            }
+          });
+      } else if (this.adminMode === AdminMode.SEARCH) {
+        this.adminSearch(adminSearchResult) // admin search for username
+          .then((response) => {
+            if (response.error) {
+              return this.showMessage(response.errorType, adminSearchResult, true); // failure
+            }
+            this.updateAdminPanelInfo(response.adminSearchResult ?? adminSearchResult); // success
+          });
+      } else if (this.adminMode === AdminMode.ADMIN) {
+        this.updateAdminPanelInfo(adminSearchResult, AdminMode.SEARCH);
+      }
+    };
+    return true;
   }
 
   showMessage(message: string, adminResult: AdminSearchInfo, isError: boolean) {
-    globalScene.ui.setMode(
+    globalScene.ui.setMode<AdminUiHandler>(
       UiMode.ADMIN,
       Object.assign(this.config, { errorMessage: message?.trim() }),
       this.adminMode,
@@ -212,18 +218,19 @@ export default class AdminUiHandler extends FormModalUiHandler {
               const mode = adminResult[aR] === "" ? "Link" : "Unlink"; // this figures out if we're linking or unlinking a service
               const validFields = this.areFieldsValid(this.adminMode, service);
               if (validFields.error) {
-                globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+                // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+                globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                 return this.showMessage(validFields.errorMessage ?? "", adminResult, true);
               }
               this.adminLinkUnlink(this.convertInputsToAdmin(), service as AdminUiHandlerService, mode).then(
                 (response) => {
                   // attempts to link/unlink depending on the service
                   if (response.error) {
-                    globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+                    globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                     return this.showMessage(response.errorType, adminResult, true); // fail
                   } else {
                     // success, reload panel with new results
-                    globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+                    globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                     this.adminSearch(adminResult).then((response) => {
                       if (response.error) {
                         return this.showMessage(response.errorType, adminResult, true);
@@ -376,7 +383,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
   private updateAdminPanelInfo(adminSearchResult: AdminSearchInfo, mode?: AdminMode) {
     mode = mode ?? AdminMode.ADMIN;
-    globalScene.ui.setMode(
+    globalScene.ui.setMode<AdminUiHandler>(
       UiMode.ADMIN,
       {
         buttonActions: [

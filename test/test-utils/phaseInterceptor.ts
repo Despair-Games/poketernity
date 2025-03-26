@@ -1,5 +1,5 @@
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
-import UI from "#app/ui/ui";
+import { UI } from "#app/ui/ui";
 import { UiMode } from "#enums/ui-mode";
 import { Phase } from "#app/phase";
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";

@@ -1,4 +1,4 @@
-import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
 import { rgbHexToRgba, leftPad } from "#app/utils";
@@ -6,7 +6,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/data-lists";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { getEggTierForSpecies } from "#app/data/egg";
 import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
@@ -19,7 +19,7 @@ import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
  * Class for the hatch info summary of each pokemon
  * Holds an info container as well as an additional egg sprite, name, egg moves and main sprite
  */
-export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
+export class PokemonHatchInfoContainer extends PokemonInfoContainer {
   private currentPokemonSprite: Phaser.GameObjects.Sprite;
   private pokemonNumberText: Phaser.GameObjects.Text;
   private pokemonNameText: Phaser.GameObjects.Text;
@@ -179,7 +179,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     // will always have at least one egg move
     this.pokemonEggMovesContainer.setVisible(true);
 
-    if (species.speciesId === Species.MANAPHY || species.speciesId === Species.PHIONE) {
+    if (species.speciesId === SpeciesId.MANAPHY || species.speciesId === SpeciesId.PHIONE) {
       this.pokemonHatchedIcon.setFrame("manaphy");
     } else {
       this.pokemonHatchedIcon.setFrame(getEggTierForSpecies(species));

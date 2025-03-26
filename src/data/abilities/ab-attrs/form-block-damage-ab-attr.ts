@@ -1,13 +1,15 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
+import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/ab-attrs/received-move-damage-multiplier-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import type { NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multiplier-ab-attr";
+import { HitResult } from "#enums/hit-result";
 
 /**
- * Takes no damage from the first hit of a damaging move.
+ * Negates the damage from the first hit of a damaging move,
+ * then removes the appropriate `BattlerTag` from the pokemon.
+ *
  * This is used in the Disguise and Ice Face abilities.
  * @extends ReceivedMoveDamageMultiplierAbAttr
  */
@@ -32,16 +34,6 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     this.triggerMessageFunc = triggerMessageFunc;
   }
 
-  /**
-   * Applies the pre-defense ability to the Pokémon.
-   * Removes the appropriate `BattlerTagType` when hit by an attack and is in its defense form.
-   *
-   * @param pokemon The Pokémon with the ability.
-   * @param attacker The attacking Pokémon.
-   * @param move The move being used.
-   * @param args Additional arguments.
-   * @returns `true` if the immunity was applied.
-   */
   override apply(
     pokemon: Pokemon,
     simulated: boolean,
@@ -54,7 +46,12 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
         multiplier.value *= this.multiplier;
         pokemon.removeTag(this.tagType);
         if (this.recoilDamageFunc) {
-          pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), HitResult.OTHER, false, false, true, true);
+          pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), {
+            result: HitResult.OTHER,
+            preventEndure: true,
+            ignoreFaintPhase: true,
+            ignoreDynamaxReduction: true,
+          });
         }
       }
       return true;

@@ -1,12 +1,12 @@
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { DoubleBattleChanceBoosterModifier } from "#app/modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiMode } from "#enums/ui-mode";
-import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { Button } from "#enums/buttons";
 
 describe("Items - Double Battle Chance Boosters", () => {
@@ -53,7 +53,7 @@ describe("Items - Double Battle Chance Boosters", () => {
       .moveset(MoveId.SPLASH)
       .startingLevel(200);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU]);
 
     game.move.select(MoveId.SPLASH);
 

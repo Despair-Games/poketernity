@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
-import { type StockpilingTag } from "#app/data/battler-tags";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import type { NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**

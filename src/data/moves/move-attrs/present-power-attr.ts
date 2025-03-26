@@ -32,8 +32,7 @@ export class PresentPowerAttr extends VariablePowerAttr {
       power.value = 120;
     } else if (powerSeed < 100) {
       // If this move is multi-hit, disable all other hits
-      user.turnData.hitCount = 1;
-      user.turnData.hitsLeft = 1;
+      user.stopMultiHit();
       globalScene.queuePokemonHeal(true, target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
         message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
       });

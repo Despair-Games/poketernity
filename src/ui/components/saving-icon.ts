@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
-export default class SavingIcon extends Phaser.GameObjects.Container {
+export class SavingIcon extends Phaser.GameObjects.Container {
   private icon: Phaser.GameObjects.Sprite;
 
   private animActive: boolean;

@@ -3,7 +3,7 @@ import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { NumberHolder } from "#app/utils";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -31,7 +31,7 @@ describe("Items - Light Ball", () => {
   it("LIGHT_BALL activates in battle correctly", async () => {
     game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "LIGHT_BALL" }]);
     const consoleSpy = vi.spyOn(console, "log");
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -82,7 +82,7 @@ describe("Items - Light Ball", () => {
   });
 
   it("LIGHT_BALL held by PIKACHU", async () => {
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -111,7 +111,7 @@ describe("Items - Light Ball", () => {
   }, 20000);
 
   it("LIGHT_BALL not held by PIKACHU", async () => {
-    await game.startBattle([Species.MAROWAK]);
+    await game.startBattle([SpeciesId.MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 

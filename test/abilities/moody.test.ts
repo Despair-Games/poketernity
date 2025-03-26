@@ -1,7 +1,7 @@
 import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,9 +25,9 @@ describe("Abilities - Moody", () => {
 
     game.override
       .battleType("single")
-      .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .ability(Abilities.MOODY)
+      .enemySpecies(SpeciesId.RATTATA)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .ability(AbilityId.MOODY)
       .enemyMoveset(MoveId.SPLASH)
       .moveset(MoveId.SPLASH);
   });

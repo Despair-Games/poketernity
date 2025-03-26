@@ -104,6 +104,7 @@ import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs
 import { type EffectSporeAbAttr } from "#app/data/abilities/ab-attrs/effect-spore-ab-attr";
 import { type ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { type BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
+import { type ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -326,4 +327,6 @@ export enum AbAttrFlag {
   BYPASS_PARA_SPEED_REDUCTION,
   /** @see {@linkcode MockStatusEffectAbAttr} */
   MOCK_STATUS_EFFECT,
+  /** @see {@linkcode ReflectMovesAbAttr} */
+  REFLECT_MOVES,
 }

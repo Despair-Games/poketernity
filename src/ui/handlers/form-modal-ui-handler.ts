@@ -1,18 +1,14 @@
-import type { ModalConfig } from "#app/ui/handlers/modal-ui-handler";
-import { ModalUiHandler } from "#app/ui/handlers/modal-ui-handler";
-import type { UiMode } from "#enums/ui-mode";
+import { globalScene } from "#app/global-scene";
+import type { FormModalConfig, InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextInputObject, addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { fixedNumber } from "#app/utils";
 import { Button } from "#enums/buttons";
-import { globalScene } from "#app/global-scene";
-
-export interface FormModalConfig extends ModalConfig {
-  errorMessage?: string;
-}
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import { WindowVariant } from "#enums/window-variant";
+import type InputText from "phaser3-rex-plugins/plugins/inputtext";
+import { ModalUiHandler } from "./modal-ui-handler";
 
 export abstract class FormModalUiHandler extends ModalUiHandler {
   protected editing: boolean;
@@ -119,38 +115,36 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(args: any[]): boolean {
-    if (super.show(args)) {
-      this.inputContainers.map((ic) => ic.setVisible(true));
-
-      const config = args[0] as FormModalConfig;
-
-      this.submitAction = config.buttonActions.length ? config.buttonActions[0] : null;
-
-      if (this.buttonBgs.length) {
-        this.buttonBgs[0].off("pointerdown");
-        this.buttonBgs[0].on("pointerdown", () => {
-          if (this.submitAction) {
-            this.submitAction();
-          }
-        });
-      }
-
-      this.modalContainer.y += 24;
-      this.modalContainer.setAlpha(0);
-
-      this.tween = globalScene.tweens.add({
-        targets: this.modalContainer,
-        duration: fixedNumber(1000),
-        ease: "Sine.easeInOut",
-        y: "-=24",
-        alpha: 1,
-      });
-
-      return true;
+  override show(config: FormModalConfig, ..._args: unknown[]): boolean {
+    if (!super.show(config)) {
+      return false;
     }
 
-    return false;
+    this.inputContainers.map((ic) => ic.setVisible(true));
+
+    this.submitAction = config.buttonActions.length ? config.buttonActions[0] : null;
+
+    if (this.buttonBgs.length) {
+      this.buttonBgs[0].off("pointerdown");
+      this.buttonBgs[0].on("pointerdown", () => {
+        if (this.submitAction) {
+          this.submitAction();
+        }
+      });
+    }
+
+    this.modalContainer.y += 24;
+    this.modalContainer.setAlpha(0);
+
+    this.tween = globalScene.tweens.add({
+      targets: this.modalContainer,
+      duration: fixedNumber(1000),
+      ease: "Sine.easeInOut",
+      y: "-=24",
+      alpha: 1,
+    });
+
+    return true;
   }
 
   override processInput(button: Button): boolean {
@@ -187,10 +181,4 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       this.tween.remove();
     }
   }
-}
-
-export interface InputFieldConfig {
-  label: string;
-  isPassword?: boolean;
-  isReadOnly?: boolean;
 }

@@ -1,8 +1,8 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,16 +24,16 @@ describe("Abilities - Bulletproof", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BULLETPROOF)
+      .ability(AbilityId.BULLETPROOF)
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should prevent HP recovery from ally-directed Pollen Puff", async () => {
     game.override.moveset([MoveId.POLLEN_PUFF, MoveId.SPLASH]).battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.SLAKOTH]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.SLAKOTH]);
     const [playerPokemon1, playerPokemon2] = game.scene.getPlayerField();
     playerPokemon2.hp = 1;
 

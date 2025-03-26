@@ -1,10 +1,10 @@
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 import type { BattleStyle } from "#app/overrides";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -32,11 +32,11 @@ describe("Moves - Screen Moves", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.NO_GUARD) // Frost Breath is not 100% accurate
+      .ability(AbilityId.NO_GUARD) // Frost Breath is not 100% accurate
       .startingLevel(1000)
-      .enemyAbility(Abilities.STALL) // So that player always outspeeds enemy's screen move on turn 1
+      .enemyAbility(AbilityId.STALL) // So that player always outspeeds enemy's screen move on turn 1
       .enemyLevel(1000)
-      .enemySpecies(Species.MAGIKARP);
+      .enemySpecies(SpeciesId.MAGIKARP);
   });
 
   /**
@@ -56,7 +56,7 @@ describe("Moves - Screen Moves", () => {
     }
     game.override.battleType(battleType);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyParty = game.scene.getEnemyParty();
 
@@ -89,7 +89,7 @@ describe("Moves - Screen Moves", () => {
   async function testConfusionDamage(): Promise<void> {
     game.override.battleType("single").disableCrits();
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -220,7 +220,7 @@ describe("Moves - Screen Moves", () => {
     });
 
     it("should fail if the weather is suppressed by Cloud Nine or Air Lock", async () => {
-      game.override.ability(Abilities.CLOUD_NINE);
+      game.override.ability(AbilityId.CLOUD_NINE);
       await testDamageMultiplier("single", MoveId.EARTHQUAKE, 1);
     });
 

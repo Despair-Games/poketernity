@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { BerryPhase } from "#app/phases/berry-phase";
@@ -30,16 +30,16 @@ describe("Moves - Mat Block", () => {
 
     game.override.moveset([MoveId.MAT_BLOCK, MoveId.SPLASH]);
 
-    game.override.enemySpecies(Species.SNORLAX);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.enemyMoveset([MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
 
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
   });
 
   test("should protect the user and allies from attack moves", async () => {
-    await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -57,7 +57,7 @@ describe("Moves - Mat Block", () => {
   test("should not protect the user and allies from status moves", async () => {
     game.override.enemyMoveset([MoveId.GROWL]);
 
-    await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -73,7 +73,7 @@ describe("Moves - Mat Block", () => {
   });
 
   test("should fail when used after the first turn", async () => {
-    await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+    await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerField();
 

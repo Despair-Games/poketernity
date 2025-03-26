@@ -1,5 +1,5 @@
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -24,12 +24,12 @@ describe("Abilities - Dry Skin", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemyAbility(Abilities.DRY_SKIN)
+      .enemyAbility(AbilityId.DRY_SKIN)
       .enemyMoveset(MoveId.SPLASH)
-      .enemySpecies(Species.CHARMANDER)
-      .ability(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.CHARMANDER)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.SUNNY_DAY, MoveId.RAIN_DANCE, MoveId.SPLASH, MoveId.WATER_GUN])
-      .starterSpecies(Species.CHANDELURE);
+      .starterSpecies(SpeciesId.CHANDELURE);
   });
 
   it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {
@@ -82,7 +82,7 @@ describe("Abilities - Dry Skin", () => {
     const fireDamageTakenWithDrySkin = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
-    game.override.enemyAbility(Abilities.NONE);
+    game.override.enemyAbility(AbilityId.NONE);
 
     // second turn
     game.move.select(MoveId.FLAMETHROWER);

@@ -1,26 +1,27 @@
 import type { InfoToggle } from "#app/battle-scene";
-import { globalScene } from "#app/global-scene";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
-import { ElementalType } from "#enums/elemental-type";
-import { BattleCommand } from "#enums/battle-command";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
-import { fixedNumber, leftPad } from "#app/utils";
-import { MoveCategory } from "#enums/move-category";
-import i18next from "i18next";
-import { Button } from "#enums/buttons";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
-import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
-import { BattleType } from "#enums/battle-type";
 import { settings } from "#app/system/settings/settings-manager";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { GAME_WIDTH } from "#app/ui-constants";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
+import { fixedNumber, leftPad } from "#app/utils";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { BattleCommand } from "#enums/battle-command";
+import { BattleType } from "#enums/battle-type";
+import { Button } from "#enums/buttons";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveCategory } from "#enums/move-category";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { UiHandler } from "./abstract-ui-handler";
+import type { CommandUiHandler } from "./command-ui-handler";
 
-export default class FightUiHandler extends UiHandler implements InfoToggle {
+export class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
 
   private movesContainer: Phaser.GameObjects.Container;
@@ -114,10 +115,10 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     globalScene.addInfoToggle(this);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(fieldIndex: number = 0): boolean {
+    super.show();
 
-    this.fieldIndex = args.length ? (args[0] as number) : 0;
+    this.fieldIndex = fieldIndex;
 
     const messageHandler = this.getUi().getMessageHandler();
     messageHandler.bg.setVisible(false);
@@ -153,7 +154,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
         // Cannot back out of fight menu if skipToFightInput is enabled
         const { battleType, mysteryEncounter } = globalScene.currentBattle;
         if (battleType !== BattleType.MYSTERY_ENCOUNTER || !mysteryEncounter?.skipToFightInput) {
-          ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
           success = true;
         }
       }

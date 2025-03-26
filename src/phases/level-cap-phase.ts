@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { UiMode } from "#enums/ui-mode";
+import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Displays the message for when the level cap increases
@@ -14,7 +13,7 @@ export class LevelCapPhase extends FieldPhase {
   public override start(): void {
     super.start();
 
-    globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+    globalScene.ui.setMessageMode().then(() => {
       // Sound loaded into game as is
       globalScene.audioManager.playSound("level_up_fanfare");
       globalScene.ui.showText(

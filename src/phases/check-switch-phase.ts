@@ -3,15 +3,16 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SummonMissingPhase } from "#app/phases/summon-missing-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
+import { settings } from "#app/system/settings/settings-manager";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { UiMode } from "#enums/ui-mode";
+import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { SwitchType } from "#enums/switch-type";
-import { settings } from "#app/system/settings/settings-manager";
-import i18next from "i18next";
 import { PhaseId } from "#enums/phase-id";
-import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
+import { SwitchType } from "#enums/switch-type";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
@@ -76,16 +77,16 @@ export class CheckSwitchPhase extends BattlePhase {
       () => {
         const options: ConfirmModeConfig = {
           yesHandler: () => {
-            globalScene.ui.setMode(UiMode.MESSAGE);
+            globalScene.ui.setMessageMode();
             globalScene.unshiftPhase(new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
             this.end();
           },
           noHandler: () => {
-            globalScene.ui.setMode(UiMode.MESSAGE);
+            globalScene.ui.setMessageMode();
             this.end();
           },
         };
-        globalScene.ui.setMode(UiMode.CONFIRM, options);
+        globalScene.ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
       },
     );
   }

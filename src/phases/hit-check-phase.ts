@@ -1,4 +1,5 @@
-import type { ProtectedTag } from "#app/data/battler-tags";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
+import type { ProtectedTag } from "#app/data/battler-tags/protected-tag";
 import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#app/data/moves/move-attrs/toxic-accuracy-attr";
@@ -9,16 +10,15 @@ import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { ProtectionBattlerTagTypes, SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { ElementalType } from "#enums/elemental-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { ElementalType } from "#enums/elemental-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 //#region Types
 

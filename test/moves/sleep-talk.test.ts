@@ -1,7 +1,7 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,18 +27,18 @@ describe("Moves - Sleep Talk", () => {
     game.override
       .moveset([MoveId.SPLASH, MoveId.SLEEP_TALK])
       .statusEffect(StatusEffect.SLEEP)
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
   });
 
   it("should fail when the user is not asleep", async () => {
     game.override.statusEffect(StatusEffect.NONE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.SLEEP_TALK);
     await game.toNextTurn();
@@ -47,7 +47,7 @@ describe("Moves - Sleep Talk", () => {
 
   it("should fail if the user has no valid moves", async () => {
     game.override.moveset([MoveId.SLEEP_TALK, MoveId.DIG, MoveId.METRONOME, MoveId.SOLAR_BEAM]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.SLEEP_TALK);
     await game.toNextTurn();
@@ -56,7 +56,7 @@ describe("Moves - Sleep Talk", () => {
 
   it("should call a random valid move if the user is asleep", async () => {
     game.override.moveset([MoveId.SLEEP_TALK, MoveId.DIG, MoveId.FLY, MoveId.SWORDS_DANCE]); // Dig and Fly are invalid moves, Swords Dance should always be called
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.SLEEP_TALK);
     await game.toNextTurn();

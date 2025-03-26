@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -28,7 +28,7 @@ describe("Items - Lock Capsule", () => {
       .battleType("single")
       .startingLevel(200)
       .moveset([MoveId.SURF])
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingModifier([{ name: "LOCK_CAPSULE" }]);
   });
 

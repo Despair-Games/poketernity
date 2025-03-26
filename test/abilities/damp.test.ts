@@ -1,7 +1,7 @@
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -23,10 +23,10 @@ describe("Abilities - Damp", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.DAMP)
+      .ability(AbilityId.DAMP)
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it.each([
@@ -36,7 +36,7 @@ describe("Abilities - Damp", () => {
     { moveName: "Mind Blown", moveId: MoveId.MIND_BLOWN },
   ])("should prevent the move $moveName from being used", async ({ moveId }) => {
     game.override.moveset([MoveId.SPLASH, moveId]).battleType("double").enemyMoveset(moveId);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.ABRA]);
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
@@ -56,8 +56,8 @@ describe("Abilities - Damp", () => {
       .moveset(MoveId.TACKLE)
       .battleType("single")
       .enemyMoveset([MoveId.SPLASH])
-      .enemyAbility(Abilities.AFTERMATH);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+      .enemyAbility(AbilityId.AFTERMATH);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
 

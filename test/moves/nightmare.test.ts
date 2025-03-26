@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -25,16 +25,16 @@ describe("Moves - Nightmare", () => {
 
     game.override
       .battleType("single")
-      .enemySpecies(Species.RATTATA)
+      .enemySpecies(SpeciesId.RATTATA)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyStatusEffect(StatusEffect.SLEEP)
       .startingLevel(5)
       .moveset([MoveId.NIGHTMARE, MoveId.SPLASH]);
   });
 
   it("lowers enemy hp by 1/4 each turn while asleep", async () => {
-    await game.classicMode.startBattle([Species.HYPNO]);
+    await game.classicMode.startBattle([SpeciesId.HYPNO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyMaxHP = enemyPokemon.hp;

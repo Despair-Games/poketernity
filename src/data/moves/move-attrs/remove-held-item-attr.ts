@@ -1,13 +1,14 @@
+import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
-import i18next from "i18next";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import i18next from "i18next";
 
 /**
  * Removes a random held item (or berry) from target.
@@ -33,7 +34,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
 
     const cancelled = new BooleanHolder(false);
 
-    applyAbAttrs(AbAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled);
+    applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled);
 
     if (cancelled.value === true) {
       return false;

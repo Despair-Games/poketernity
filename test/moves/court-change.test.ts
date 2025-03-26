@@ -1,7 +1,7 @@
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
@@ -26,14 +26,14 @@ describe("Moves - Court Change", () => {
     game.override.battleType("single");
 
     game.override.moveset([MoveId.COURT_CHANGE, MoveId.SAFEGUARD]);
-    game.override.enemySpecies(Species.NINJASK);
+    game.override.enemySpecies(SpeciesId.NINJASK);
 
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
   });
 
   test("should swap arena tags to opponent", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
     game.override.enemyMoveset([MoveId.SPLASH]);
 
     game.move.select(MoveId.SAFEGUARD);
@@ -54,7 +54,7 @@ describe("Moves - Court Change", () => {
   });
 
   test("should not miss", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     game.override.enemyMoveset([MoveId.FLY]);
 

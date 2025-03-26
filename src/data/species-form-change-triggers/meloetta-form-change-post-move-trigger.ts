@@ -1,7 +1,7 @@
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Challenges } from "#enums/challenges";
 
 export class MeloettaFormChangePostMoveTrigger extends SpeciesFormChangePostMoveTrigger {
@@ -11,7 +11,7 @@ export class MeloettaFormChangePostMoveTrigger extends SpeciesFormChangePostMove
       return false;
     } else {
       // Meloetta will not transform if it has the ability Sheer Force when using Relic Song
-      if (pokemon.hasAbility(Abilities.SHEER_FORCE)) {
+      if (pokemon.hasAbility(AbilityId.SHEER_FORCE)) {
         return false;
       }
       return super.canChange(pokemon);

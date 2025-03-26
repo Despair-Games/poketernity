@@ -1,13 +1,13 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { TempCritBoosterModifier } from "#app/modifier/modifier";
 import { UiMode } from "#enums/ui-mode";
-import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { Button } from "#enums/buttons";
 import { CommandPhase } from "#app/phases/command-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
@@ -32,7 +32,7 @@ describe("Items - Dire Hit", () => {
     game = new GameManager(phaserGame);
 
     game.override
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.POUND])
       .startingHeldItems([{ name: "DIRE_HIT" }])
@@ -40,7 +40,7 @@ describe("Items - Dire Hit", () => {
   }, 20000);
 
   it("should raise CRIT stage by 1", async () => {
-    await game.startBattle([Species.GASTLY]);
+    await game.startBattle([SpeciesId.GASTLY]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -56,7 +56,7 @@ describe("Items - Dire Hit", () => {
   it("should renew how many battles are left of existing DIRE_HIT when picking up new DIRE_HIT", async () => {
     game.override.itemRewards([{ name: "DIRE_HIT" }]);
 
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([SpeciesId.PIKACHU]);
 
     game.move.select(MoveId.SPLASH);
 

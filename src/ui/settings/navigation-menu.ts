@@ -7,6 +7,7 @@ import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import type { SettingsUiHandler } from "./settings-ui-handler";
 
 const LEFT = "LEFT";
 const RIGHT = "RIGHT";
@@ -44,6 +45,13 @@ export class NavigationManager {
     ];
   }
 
+  /**
+   * Clear all references to {@linkcode NavigationMenu}s, allowing them to be garbage collected.
+   */
+  public clearMenus() {
+    this.navigationMenus = [];
+  }
+
   public reset() {
     this.selectedMode = UiMode.SETTINGS;
     this.updateNavigationMenus();
@@ -75,7 +83,7 @@ export class NavigationManager {
     } else {
       this.selectedMode = this.modes[pos + increment];
     }
-    globalScene.ui.setMode(this.selectedMode);
+    globalScene.ui.setMode<SettingsUiHandler>(this.selectedMode);
     this.updateNavigationMenus();
   }
 
@@ -99,7 +107,7 @@ export class NavigationManager {
 }
 
 // TODO: this could be a reusable component not tied to settings
-export default class NavigationMenu extends Phaser.GameObjects.Container {
+export class NavigationMenu extends Phaser.GameObjects.Container {
   private navigationIcons: InputsIcons;
   protected headerTitles: Phaser.GameObjects.Text[] = new Array<Phaser.GameObjects.Text>();
 
