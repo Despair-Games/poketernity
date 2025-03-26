@@ -619,6 +619,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(tradedPokemon.teraType),
+        isTerastallized: tradedPokemon.isTerastallized,
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
@@ -641,6 +642,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(tradedPokemon.teraType),
+        isTerastallized: tradedPokemon.isTerastallized,
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());

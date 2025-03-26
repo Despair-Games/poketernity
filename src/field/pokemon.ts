@@ -100,7 +100,7 @@ import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/varia
 import { getNatureStatMultiplier } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -157,7 +157,7 @@ import {
   isNullOrUndefined,
   randSeedInt,
   toDmgValue,
-  type nil,
+  type nil
 } from "#app/utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
@@ -268,8 +268,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public pokerus: boolean;
   public switchOutStatus: boolean;
   public evoCounter: number;
-  public teraType: ElementalType;
-  public isTerastallized: boolean = false;
+  protected _teraType: ElementalType;
+  public isTerastallized: boolean = false; // TODO: put this in battle data?
+  public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle data?
 
   private summonDataPrimer: PokemonSummonData | null;
 
@@ -365,6 +366,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.evoCounter = dataSource.evoCounter ?? 0;
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
+      this.teraType = dataSource.teraType;
+      this.isTerastallized = dataSource.isTerastallized;
+      this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
       this.generateId();
       this.ivs = ivs || getIvsFromId(this.id);
@@ -410,6 +414,48 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (!dataSource) {
       this.calculateStats();
+    }
+  }
+
+  public get teraType(): ElementalType {
+    switch (this.species.speciesId) {
+      case SpeciesId.TERAPAGOS:
+        return ElementalType.STELLAR;
+
+      case SpeciesId.OGERPON:
+        switch (this.formIndex) {
+          case 0:
+          case 4:
+            return ElementalType.GRASS;
+          case 1:
+          case 5:
+            return ElementalType.WATER;
+          case 2:
+          case 6:
+            return ElementalType.FIRE;
+          case 3:
+          case 7:
+            return ElementalType.ROCK;
+        }
+
+      case SpeciesId.SHEDINJA:
+        return ElementalType.BUG;
+    }
+
+    return this._teraType;
+  }
+
+  public set teraType(value: ElementalType) {
+    this._teraType = value;
+  }
+
+  public resetTera(): void {
+    const wasTerastallized = this.isTerastallized;
+    this.isTerastallized = false;
+    this.stellarTypesBoosted = [];
+    if (wasTerastallized) {
+      this.updateSpritePipelineData();
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeLapseTeraTrigger);
     }
   }
 
@@ -473,6 +519,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow,
         teraColor: getTypeRgb(this.teraType),
+        isTerastallized: this.isTerastallized,
       });
       return ret;
     };
@@ -788,7 +835,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   updateSpritePipelineData(): void {
     [this.getSprite(), this.getTintSprite()]
       .filter((s) => !!s)
-      .map((s) => (s.pipelineData["teraColor"] = getTypeRgb(this.teraType)));
+      .map((s) => {
+        s.pipelineData["teraColor"] = getTypeRgb(this.teraType);
+        s.pipelineData["isTerastallized"] = this.isTerastallized;
+      });
     this.updateInfo(true);
   }
 
@@ -1381,11 +1431,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (includeTeraType && this.isTerastallized) {
       const teraType = this.teraType;
+      if (!(forDefend && teraType === ElementalType.STELLAR)) {
         types.push(teraType);
         if (forDefend) {
           return types;
         }
       }
+    }
 
     if (!types.length || !includeTeraType) {
       if (!baseOnly && this.summonData?.types && this.summonData.types.length > 0) {

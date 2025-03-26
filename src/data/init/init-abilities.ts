@@ -74,7 +74,7 @@ import { PostAttackApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/po
 import { PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import { PostAttackStealHeldItemAbAttr } from "#app/data/abilities/ab-attrs/post-attack-steal-held-item-ab-attr";
 import { PostBattleInitFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-form-change-ab-attr";
-import { PostBattleInitStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-stat-stage-change-ab-attr";
+import { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { PostBattleLootAbAttr } from "#app/data/abilities/ab-attrs/post-battle-loot-ab-attr";
 import { PostBiomeChangeTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-terrain-change-ab-attr";
 import { PostBiomeChangeWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-weather-change-ab-attr";
@@ -1622,25 +1622,25 @@ export function initAbilities() {
       .attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC)
       .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(AbilityId.EMBODY_ASPECT_TEAL, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPD], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPD], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
       .partial(), // Ogerpon tera interactions
     new Ability(AbilityId.EMBODY_ASPECT_WELLSPRING, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPDEF], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPDEF], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
       .partial(), // Ogerpon tera interactions
     new Ability(AbilityId.EMBODY_ASPECT_HEARTHFLAME, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.ATK], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.ATK], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
       .partial(), // Ogerpon tera interactions
     new Ability(AbilityId.EMBODY_ASPECT_CORNERSTONE, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.DEF], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.DEF], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)

@@ -22,6 +22,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -451,13 +452,7 @@ function getPartyConfig(): EnemyPartyConfig {
         nature: Nature.ADAMANT,
         moveSet: [MoveId.METEOR_MASH, MoveId.FIRE_PUNCH, MoveId.ICE_PUNCH, MoveId.THUNDER_PUNCH],
         ivs: [31, 31, 31, 31, 31, 31],
-        // modifierConfigs: [
-        //   {
-        //     modifier: generateModifierType(modifierTypes.TERA_SHARD, [
-        //       ElementalType.STEEL,
-        //     ]) as PokemonHeldItemModifierType,
-        //   },
-        // ],
+        tera: ElementalType.STEEL,
           },
         ],
   };

@@ -335,6 +335,7 @@ export class SummaryUiHandler extends UiHandler {
       console.error(`Failed to play animation for ${spriteKey}`, err);
     }
     this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.teraType));
+    this.pokemonSprite.setPipelineData("isTerastallized", this.pokemon.isTerastallized);
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
     let key = "spriteColors";

@@ -12,6 +12,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
+import { TeraAIMode } from "#enums/tera-ai-mode";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
@@ -249,9 +250,39 @@ export const trainerPartyTemplates = {
 type PartyTemplateFunc = () => TrainerPartyTemplate;
 type PartyMemberFunc = (level: number, strength: PartyMemberStrength) => EnemyPokemon;
 type GenModifiersFunc = (party: EnemyPokemon[]) => PersistentModifier[];
+type GenAIFunc = (party: EnemyPokemon[]) => void;
 
 export interface PartyMemberFuncs {
   [key: number]: PartyMemberFunc;
+}
+
+class TrainerAI {
+  public teraMode: TeraAIMode;
+  public instantTeras: number[] = [];
+
+  /**
+   * @param canTerastallize Whether this trainer is allowed to tera
+   */
+  constructor(teraMode: TeraAIMode = TeraAIMode.NO_TERA) {
+    this.teraMode = teraMode;
+  }
+
+  /**
+   * Checks if a trainer can tera
+   * @returns Whether this trainer can currently tera
+   */
+  public canTerastallize(): boolean {
+    return this.teraMode !== TeraAIMode.NO_TERA;
+  }
+
+  /**
+   * Sets a pokemon on this AI to just instantly tera on first move used
+   * @param index The index of the pokemon to instantly tera
+   */
+  public setInstantTera(index: number): void {
+    this.teraMode = TeraAIMode.INSTANT_TERA;
+    this.instantTeras.push(index);
+  }
 }
 
 export class TrainerConfig {
@@ -278,6 +309,7 @@ export class TrainerConfig {
   public doubleEncounterBgm: string;
   public victoryBgm: string;
   public genModifiersFunc: GenModifiersFunc;
+  public genAIFuncs: GenAIFunc[] = [];
   public modifierRewardFuncs: ModifierTypeFunc[] = [];
   public partyTemplates: TrainerPartyTemplate[];
   public partyTemplateFunc: PartyTemplateFunc;
@@ -287,6 +319,7 @@ export class TrainerConfig {
   public speciesFilter: PokemonSpeciesFilter;
   public specialtyTypes: ElementalType[] = [];
   public hasVoucher: boolean = false;
+  public trainerAI: TrainerAI = new TrainerAI();
 
   public encounterMessages: string[] = [];
   public victoryMessages: string[] = [];
@@ -636,6 +669,36 @@ export class TrainerConfig {
 
   setGenModifiersFunc(genModifiersFunc: GenModifiersFunc): TrainerConfig {
     this.genModifiersFunc = genModifiersFunc;
+    return this;
+  }
+
+  /**
+   * Sets random pokemon from the trainers team to instant tera. Uses their specialty types is they have one.
+   * @param count The amount of pokemon to have instant tera
+   * @returns this
+   */
+  setRandomTeraModifiers(count: () => number): TrainerConfig {
+    this.genAIFuncs.push((party: EnemyPokemon[]) => {
+      const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
+      for (let t = 0; t < Math.min(count(), party.length); t++) {
+        const randomIndex = randSeedItem(partyMemberIndexes);
+        partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
+        if (this.specialtyTypes?.length) {
+          party[randomIndex].teraType = randSeedItem(this.specialtyTypes);
+        }
+        this.trainerAI.setInstantTera(randomIndex);
+      }
+    });
+    return this;
+  }
+
+  /**
+   * Sets a specific pokemon to instant tera
+   * @param index The index within the team to have instant tera
+   * @returns this
+   */
+  setInstantTera(index: number): TrainerConfig {
+    this.trainerAI.setInstantTera(index);
     return this;
   }
 
@@ -1246,6 +1309,7 @@ export class TrainerConfig {
   ): TrainerConfig {
     this.initForGymLeader(signatureSpecies, isMale, ...specialtyTypes);
     this.setBattleBgm("battle_paldea_gym");
+    // TODO: tera
     // this.setGenModifiersFunc((party) => {
     //   return getSpecificTeraModifier(party, party.length - 1, specialtyTypes[0]);
     // });
@@ -1310,6 +1374,7 @@ export class TrainerConfig {
     // this.setGenModifiersFunc((party) =>
     //   getRandomTeraModifiers(party, 1, specialtyTypes.length ? specialtyTypes : undefined),
     // );
+    this.setRandomTeraModifiers(() => 1); // TODO: is this what we want?
 
     return this;
   }

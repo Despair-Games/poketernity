@@ -20,12 +20,11 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { AbstractConstructor, nil } from "#app/utils";
 import { AbilityId } from "#enums/ability-id";
-import { ElementalType } from "#enums/elemental-type";
 import { FormChangeItem } from "#enums/form-change-item";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 
@@ -168,22 +167,7 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
-  /** The Tera type that triggers the form change */
-  private readonly teraType: ElementalType;
-
-  constructor(teraType: ElementalType) {
-    super();
-    this.teraType = teraType;
-  }
-
-  /**
-   * Checks if the associated Pokémon has the required Tera Shard that matches with the associated Tera type.
-   * @param pokemon the Pokémon that is trying to do the form change
-   * @returns `true` if the Pokémon can change forms, `false` otherwise
-   */
-  override canChange(pokemon: Pokemon): boolean {
-    return pokemon.isTerastallized && pokemon.teraType === this.teraType;
-  }
+  // description = i18next.t("pokemonEvolutions:Forms.tera");
 }
 
 /**
@@ -192,9 +176,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
-  override canChange(pokemon: Pokemon): boolean {
-    return !pokemon.isTerastallized; // TODO: is this correct?
-  }
+  // description = i18next.t("pokemonEvolutions:Forms.teraLapse");
 }
 
 /**
@@ -1841,26 +1823,20 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeItemTrigger(FormChangeItem.CORNERSTONE_MASK),
     ),
-    new SpeciesFormChange(
-      SpeciesId.OGERPON,
-      "teal-mask",
-      "teal-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementalType.GRASS),
-    ),
+    new SpeciesFormChange(SpeciesId.OGERPON, "teal-mask", "teal-mask-tera", new SpeciesFormChangeTeraTrigger(), true),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
       "teal-mask-tera",
       "teal-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      [],
-      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
       "wellspring-mask",
       "wellspring-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementalType.WATER),
+      new SpeciesFormChangeTeraTrigger(),
+      true,
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
@@ -1868,14 +1844,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "wellspring-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      [],
-      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.WATER),
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
       "hearthflame-mask",
       "hearthflame-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementalType.FIRE),
+      new SpeciesFormChangeTeraTrigger(),
+      true,
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
@@ -1883,14 +1858,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hearthflame-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      [],
-      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
       "cornerstone-mask",
       "cornerstone-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementalType.ROCK),
+      new SpeciesFormChangeTeraTrigger(),
+      true,
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
@@ -1898,27 +1872,12 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      [],
-      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.ROCK),
     ),
   ],
   [SpeciesId.TERAPAGOS]: [
     new SpeciesFormChange(SpeciesId.TERAPAGOS, "", "terastal", new SpeciesFormChangeManualTrigger(), true),
-    new SpeciesFormChange(
-      SpeciesId.TERAPAGOS,
-      "terastal",
-      "stellar",
-      new SpeciesFormChangeTeraTrigger(ElementalType.STELLAR),
-    ),
-    new SpeciesFormChange(
-      SpeciesId.TERAPAGOS,
-      "stellar",
-      "terastal",
-      new SpeciesFormChangeLapseTeraTrigger(),
-      true,
-      [],
-      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.STELLAR),
-    ),
+    new SpeciesFormChange(SpeciesId.TERAPAGOS, "terastal", "stellar", new SpeciesFormChangeTeraTrigger(), true),
+    new SpeciesFormChange(SpeciesId.TERAPAGOS, "stellar", "terastal", new SpeciesFormChangeLapseTeraTrigger(), true),
   ],
   [SpeciesId.GALAR_DARMANITAN]: [
     new SpeciesFormChange(SpeciesId.GALAR_DARMANITAN, "", "zen", new SpeciesFormChangeManualTrigger(), true),

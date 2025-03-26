@@ -10,6 +10,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
+import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
@@ -48,6 +49,9 @@ export default class PokemonData {
   public pokerus: boolean;
   public usedTMs: MoveId[];
   public evoCounter: number;
+  public teraType: ElementalType;
+  public isTerastallized: boolean;
+  public stellarTypesBoosted: ElementalType[];
 
   public boss: boolean;
   public bossSegments?: number;
@@ -89,6 +93,9 @@ export default class PokemonData {
     this.evoCounter = source.evoCounter ?? 0;
     this.pokerus = !!source.pokerus;
     this.usedTMs = source.usedTMs ?? [];
+    this.teraType = source.teraType;
+    this.isTerastallized = source.isTerastallized ?? false;
+    this.stellarTypesBoosted = source.stellarTypesBoosted ?? [];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 

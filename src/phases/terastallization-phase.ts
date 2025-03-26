@@ -1,0 +1,49 @@
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { CommonAnim } from "#enums/common-anim";
+import { ElementalType } from "#enums/elemental-type";
+import { PhaseId } from "#enums/phase-id";
+import i18next from "i18next";
+
+export class TerastallizationPhase extends BattlePhase {
+  public pokemon: Pokemon;
+  override readonly id = PhaseId.TERASTALLIZATION;
+
+  constructor(pokemon: Pokemon) {
+    super();
+
+    this.pokemon = pokemon;
+  }
+
+  public override start(): void {
+    super.start();
+
+    globalScene.phaseManager.queueMessagePhase(
+      i18next.t("battle:pokemonTerastallized", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
+        type: i18next.t(`pokemonInfo:Type.${ElementalType[this.pokemon.teraType]}`),
+      }),
+    );
+
+    new CommonBattleAnim(CommonAnim.TERASTALLIZE, this.pokemon).play(false, () => {
+      this.end();
+    });
+  }
+
+  public override end(): void {
+    this.pokemon.isTerastallized = true;
+    this.pokemon.updateSpritePipelineData();
+
+    if (this.pokemon.isPlayer()) {
+      globalScene.arena.playerTerasUsed += 1;
+    }
+
+    globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangeTeraTrigger);
+
+    super.end();
+  }
+}

@@ -70,6 +70,7 @@ export function doPokemonTransformationSequence(
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(previousPokemon.teraType),
+        isTerastallized: previousPokemon.isTerastallized,
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());

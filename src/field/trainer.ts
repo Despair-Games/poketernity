@@ -19,6 +19,7 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { TeraAIMode } from "#enums/tera-ai-mode";
 import i18next from "i18next";
 
 export default class Trainer extends Phaser.GameObjects.Container {
@@ -27,6 +28,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   public partyTemplateIndex: number;
   public override name: string;
   public partnerName: string;
+  public originalIndexes: { [key: number]: number } = {};
 
   constructor(
     trainerType: TrainerType,
@@ -618,6 +620,12 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return [];
   }
 
+  public genAI(party: EnemyPokemon[]): void {
+    if (this.config.genAIFuncs) {
+      this.config.genAIFuncs.forEach((f) => f(party));
+    }
+  }
+
   loadAssets(): Promise<void> {
     return this.config.loadAssets(this.variant);
   }
@@ -738,5 +746,14 @@ export default class Trainer extends Phaser.GameObjects.Container {
         tintSprite.setAlpha(1);
       }
     });
+  }
+
+  public shouldTera(pokemon: EnemyPokemon): boolean {
+    const isInstantTera: boolean = this.config.trainerAI.teraMode === TeraAIMode.INSTANT_TERA;
+    const hasInstantTeraIndex: boolean = this.config.trainerAI.instantTeras.includes(pokemon.initialTeamIndex);
+    if (isInstantTera && !pokemon.isTerastallized && hasInstantTeraIndex) {
+      return true;
+    }
+    return false;
   }
 }

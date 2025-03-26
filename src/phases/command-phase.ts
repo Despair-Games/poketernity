@@ -144,14 +144,19 @@ export class CommandPhase extends FieldPhase {
    */
   public handleCommand(command: BattleCommand.BALL | BattleCommand.RUN, cursor: number): boolean;
   /**
-   * @param command - {@linkcode BattleCommand.FIGHT}
+   * @param command - Which of {@linkcode BattleCommand.FIGHT} or {@linkcode BattleCommand.TERA} was chosen
    * @param cursor - Cursor index for the selected Move
    * @param ignorePp - (optional) `true` if the move shouldn't use PP
    * @param turnMove - (optional) A {@linkcode TurnMove} object for an existing queued move
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: BattleCommand.FIGHT, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
+  public handleCommand(
+    command: BattleCommand.FIGHT | BattleCommand.TERA,
+    cursor: number,
+    ignorePp?: boolean,
+    turnMove?: TurnMove,
+  ): boolean;
   /**
    * @param command - {@linkcode BattleCommand.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon
@@ -178,6 +183,7 @@ export class CommandPhase extends FieldPhase {
     };
 
     switch (command) {
+      case BattleCommand.TERA:
       case BattleCommand.FIGHT:
         const ignorePp = args[0] as boolean | undefined;
         const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
@@ -190,14 +196,14 @@ export class CommandPhase extends FieldPhase {
           } else if (turnMove !== undefined) {
             moveId = turnMove.move.id;
           } else if (cursor > -1) {
-            moveId = pokemon.getMoveset()[cursor]!.moveId;
+            moveId = pokemon.getMoveset()[cursor]?.moveId ?? MoveId.NONE;
           } else {
             moveId = MoveId.NONE;
           }
 
           const turnCommand: TurnCommand = {
             pokemon,
-            command: BattleCommand.FIGHT,
+            command,
             cursor,
             turnMove: {
               move: allMoves.get(moveId),

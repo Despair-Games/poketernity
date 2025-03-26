@@ -46,7 +46,7 @@ import DamageNumberHandler from "#app/field/damage-number-handler";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
+import PokemonSpriteTeraSparkleHandler from "#app/field/pokemon-sprite-tera-sparkle-handler";
 import Trainer from "#app/field/trainer";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
@@ -128,6 +128,7 @@ import {
   formatMoney,
   getEnumValues,
   getIvsFromId,
+  isBetween,
   isNullOrUndefined,
   NumberHolder,
   randItem,
@@ -258,7 +259,7 @@ export default class BattleScene extends SceneBase {
   public waveCycleOffset: number;
 
   public damageNumberHandler: DamageNumberHandler;
-  private spriteSparkleHandler: PokemonSpriteSparkleHandler;
+  private spriteTeraSparkleHandler: PokemonSpriteTeraSparkleHandler;
 
   public fieldSpritePipeline: FieldSpritePipeline;
   public spritePipeline: SpritePipeline;
@@ -582,8 +583,8 @@ export default class BattleScene extends SceneBase {
 
     this.damageNumberHandler = new DamageNumberHandler();
 
-    this.spriteSparkleHandler = new PokemonSpriteSparkleHandler();
-    this.spriteSparkleHandler.setup();
+    this.spriteTeraSparkleHandler = new PokemonSpriteTeraSparkleHandler();
+    this.spriteTeraSparkleHandler.setup();
 
     this.pokemonInfoContainer = new PokemonInfoContainer(GAME_WIDTH + 52, -GAME_HEIGHT + 66);
     this.pokemonInfoContainer.setup();
@@ -1372,7 +1373,16 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetWaveData();
+          pokemon.resetTera(); // TODO: put this in resetBattleData?
+
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+
+          if (
+            pokemon.species.speciesId === SpeciesId.TERAPAGOS
+            || (this.gameMode.isClassic && isBetween(this.currentBattle.waveIndex, 181, 190))
+          ) {
+            this.arena.playerTerasUsed = 0;
+          }
         }
 
         if (!this.trainer.visible) {
@@ -1712,8 +1722,9 @@ export default class BattleScene extends SceneBase {
       hasShadow: hasShadow,
       ignoreOverride: ignoreOverride,
       teraColor: pokemon ? getTypeRgb(pokemon.teraType) : undefined,
+      isTerastallized: pokemon ? pokemon.isTerastallized : false,
     });
-    this.spriteSparkleHandler.add(sprite);
+    this.spriteTeraSparkleHandler.add(sprite);
     return sprite;
   }
 
@@ -2623,6 +2634,7 @@ export default class BattleScene extends SceneBase {
               form: p.getFormKey(),
               types: p.getTypes().map((type) => ElementalType[type]),
               teraType: ElementalType[p.teraType],
+              isTerastallized: p.isTerastallized,
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),

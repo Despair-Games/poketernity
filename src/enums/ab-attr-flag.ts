@@ -64,6 +64,7 @@ import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock
 import type { PostMoveUsedAbAttr } from "#app/data/abilities/ab-attrs/post-move-used-ab-attr";
 import type { PostStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-stat-stage-change-ab-attr";
 import type { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
+import type { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
 import type { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
@@ -329,4 +330,6 @@ export enum AbAttrFlag {
   MOCK_STATUS_EFFECT,
   /** @see {@linkcode ReflectMovesAbAttr} */
   REFLECT_MOVES,
+  /** @see {@linkcode PostTeraFormChangeStatChangeAbAttr} */
+  POST_TERA_FORM_CHANGE_STAT_CHANGE,
 }
