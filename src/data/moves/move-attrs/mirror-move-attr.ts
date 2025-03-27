@@ -38,6 +38,7 @@ export class MirrorMoveAttr extends CallMoveAttr {
 }
 
 // TODO: Z-Moves can't be copied (if they are ever implemented)
+/** Note: This list diverges from mainline by removing some moves. */
 const invalidMirrorMoveMoves: ReadonlySet<MoveId> = Object.freeze(
   new Set([
     ...getMaxMoveList(),

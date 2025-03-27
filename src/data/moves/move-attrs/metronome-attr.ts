@@ -45,6 +45,7 @@ export class MetronomeAttr extends CallMoveAttr {
   }
 }
 
+/** Note: Many moves (mostly signature moves) were removed compared to mainline. */
 const invalidMetronomeMoves: ReadonlySet<MoveId> = Object.freeze(
   new Set([
     ...getMaxMoveList(),
