@@ -430,9 +430,6 @@ export class UI extends Phaser.GameObjects.Container {
     // Clear references to current handlers in the NavigationManager
     NavigationManager.getInstance().clearMenus();
 
-    // Stop the current handler
-    this.getHandler().stop();
-
     // Destroy all handlers
     for (const handler of this.handlers) {
       handler.destroy();

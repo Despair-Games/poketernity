@@ -1,25 +1,25 @@
 import { globalScene } from "#app/global-scene";
-import type { UiMode } from "#enums/ui-mode";
-import type { Button } from "#enums/buttons";
 import type { AwaitableUiHandler } from "#app/ui/handlers/awaitable-ui-handler";
+import type { Button } from "#enums/buttons";
+import type { UiMode } from "#enums/ui-mode";
 
 /**
  * A basic abstract class to act as a holder and processor for UI elements.
  *
  * Subclasses should override the following functions of a handler's lifecycle:
- *  - {@linkcode setup}, called once to initiliaze basic elements of the handler.
- *  - {@linkcode show}, called whenever the handler is to be shown.
- *  - {@linkcode clear}, called when the handler should no longer be shown. Elements created in `show` get destroyed here.
- *  - {@linkcode destroy}, called when the handler will never be of use again. Any remaining element should get destroyed.
+ *  - {@linkcode setup}, called once to initiliaze basic elements of the handler. Will mark it as `ready`.
+ *  - {@linkcode show}, called whenever the handler is to be shown. Will mark it as `active`.
+ *  - {@linkcode clear}, called when the handler should no longer be shown. Will mark it as no longer `active`
+ *     Elements created in `show` should get destroyed here.
+ *  - {@linkcode destroy}, called when the handler will never be of use again. Will mark it as no longer `ready`.
+ *     Any remaining element should get destroyed here.
  */
 export abstract class UiHandler {
   protected mode: number | null;
   protected cursor: number = 0;
 
-  /** `true` if the handler is ready to be displayed through calling `handler.show`. */
-  protected ready: boolean = false;
-  /** `true` if the handler is currently in use. */
-  public active: boolean = false;
+  private _ready: boolean = false;
+  private _active: boolean = false;
 
   /**
    * @param mode The mode of the UI element. These should be unique.
@@ -29,21 +29,51 @@ export abstract class UiHandler {
   }
 
   /**
-   * Prepares the handler for display.
-   * Should not be overridden. Calls {@linkcode setup}, which subclasses should override.
+   * Whether the handler is currently active. Can be made inactive by calling {@linkcode stop}.
    */
-  initialize(): void {
-    this.setup();
-    this.ready = true;
+  public get active(): boolean {
+    return this._active;
   }
 
   /**
-   * Teardown the handler.
+   * Whether the handler is setup and ready to be displayed through calling {@linkcode start}.
+   * note: unused for now since all handlers are ready at all times.
+   */
+  public get ready(): boolean {
+    return this._ready;
+  }
+
+  /**
+   * Prepares the handler for display.
+   * Should not be overridden. Calls {@linkcode setup}, which subclasses should override.
+   */
+  public initialize(): void {
+    if (this._ready) {
+      console.warn("Attempting to initialize an already ready handler. Aborting.");
+      return;
+    }
+
+    this.setup();
+    this._ready = true;
+  }
+
+  /**
+   * Destroys the handler and makes it no longer usable.
    * Should not be overridden. Calls {@linkcode tearDown}, which subclasses should override.
    */
-  destroy(): void {
+  public destroy(): void {
+    if (!this.ready) {
+      console.warn("Attempting to destroy a non initialized handler. Aborting.");
+      return;
+    }
+
+    // If the handler is active, stop it first.
+    if (this.active) {
+      this.stop();
+    }
+
     this.tearDown();
-    this.ready = false;
+    this._ready = false;
   }
 
   /**
@@ -52,9 +82,13 @@ export abstract class UiHandler {
    * @param args the arguments needed by this handler for display.
    * @returns `true` if the handler was setup successfully, `false` otherwise.
    */
-  start(...args: unknown[]): boolean {
-    this.active = true;
+  public start(...args: unknown[]): boolean {
+    if (!this.ready) {
+      console.warn("Attempting to start a non ready handler. Aborting.");
+      return false;
+    }
 
+    this._active = true;
     return this.show(...args);
   }
 
@@ -62,16 +96,21 @@ export abstract class UiHandler {
    * Ends display of the handler.
    * Should not be overridden. Calls {@linkcode clear}, which subclasses should override.
    */
-  stop(): void {
-    this.clear();
+  public stop(): void {
+    if (!this.active) {
+      console.warn("Attempting to stop a non active handler. Aborting.");
+      return;
+    }
 
-    this.active = false;
+    this.clear();
+    this._active = false;
   }
 
   /**
    * Create the basic building blocks of the ui handlers that will stay as long as it's meant to be used.
-   * In general, we create a main container here that gets added to `this.getUi()`.
-   * Elements (containers, listeners, ...) created here should be destroyed in {@linkcode destroy}.
+   * In general, we add basic containers or elements to `this.getUi()` here.
+   *
+   * Elements (containers, listeners, ...) created here should be destroyed in {@linkcode tearDown}.
    */
   protected abstract setup(): void;
 
@@ -85,8 +124,9 @@ export abstract class UiHandler {
   protected abstract tearDown(): void;
 
   /**
-   * Called when the mode corresponding this handler is shown, and it should
-   * Prepare the handler for display, based on the arguments provided.
+   * Called when the mode corresponding this handler is set, and it should
+   * prepare the handler for display, based on the arguments provided.
+   *
    * Elements (containers, gameObjects, listeners, ...) created here should be destroyed in {@linkcode clear}.
    *
    * @param _args the arguments needed by this handler for display.
@@ -100,26 +140,26 @@ export abstract class UiHandler {
    * Subclasses should destroy any element initialized in {@linkcode show} here.
    * This can include, but is not limited to:
    *  - calling `container.removeAll(true)` to destroy all objects in a container without destroying the container
-   *  - calling `gameObject.destroy()` to destroy any individual game object
-   *  - calling `gameObject.setVisible(false)` on non destroyed objects or containers
+   *  - calling `gameObject.destroy()` to destroy any individual game object or container
+   *  - calling `gameObject.setVisible(false)` on non destroyed objects or containers, like those created in {@linkcode setup}
    *  - calling `getUi().hideTooltip()` if the handler displays any sort of tooltip
-   *  - removing any event listener that is no longer relevant
-   *  - emptying arrays or other attributes needed for the handler to function
+   *  - removing any event listener related to destroyed objects
    *  - stopping any ongoing animation or timed event/callback
+   *  - emptying arrays or other attributes contained destroyed objects
    */
   protected abstract clear(): void;
 
   public abstract processInput(button: Button): boolean;
 
-  getUi() {
+  public getUi() {
     return globalScene.ui;
   }
 
-  getCursor(): number {
+  public getCursor(): number {
     return this.cursor;
   }
 
-  setCursor(cursor: number): boolean {
+  public setCursor(cursor: number): boolean {
     const changed = this.cursor !== cursor;
     if (changed) {
       this.cursor = cursor;
@@ -137,7 +177,7 @@ export abstract class UiHandler {
     globalScene.input.manager.canvas.style.cursor = cursorStyle;
   }
 
-  isAwaitableUiHandler(): this is AwaitableUiHandler {
+  public isAwaitableUiHandler(): this is AwaitableUiHandler {
     return false;
   }
 }
