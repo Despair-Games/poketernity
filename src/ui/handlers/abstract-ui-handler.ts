@@ -89,8 +89,9 @@ export abstract class UiHandler {
       return false;
     }
 
+    const success = this.show(...args);
     this._active = true;
-    return this.show(...args);
+    return success;
   }
 
   /**
@@ -100,7 +101,7 @@ export abstract class UiHandler {
   public stop(): void {
     if (!this.active) {
       console.warn("Attempting to stop a non active handler. Aborting.");
-      return;
+      //return; TODO: commenting for now or egg hatch ui handler does not get dismissed properly
     }
 
     this.clear();
