@@ -1,4 +1,4 @@
-import { Biome } from "#app/data/balance/biomes/biome";
+import { Biome } from "#app/data/biome";
 import {
   cavePokemonPool,
   caveTrainerPool,
