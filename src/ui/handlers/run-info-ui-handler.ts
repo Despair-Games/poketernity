@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { getBiomeName } from "#app/data/balance/biomes";
+import { getBiomeName } from "#app/data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getTypeRgb } from "#app/data/type";

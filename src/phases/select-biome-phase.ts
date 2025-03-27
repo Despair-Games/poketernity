@@ -1,4 +1,4 @@
-import { getBiomeName } from "#app/data/balance/biomes";
+import { getBiomeName } from "#app/data/biome-utils";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
