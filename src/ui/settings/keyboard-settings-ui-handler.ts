@@ -41,6 +41,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
     this.settingBlacklisted = settingKeyboardBlackList;
     this.device = Device.KEYBOARD;
 
+    // TODO remove listeners
     const deleteEvent = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
     const restoreDefaultEvent = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.HOME);
     deleteEvent && deleteEvent.on("up", this.onDeleteDown, this);
@@ -83,7 +84,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
   /**
    * Handle the home key press event: reset mappings for the current device
    */
-  onHomeDown(): void {
+  private onHomeDown(): void {
     if (![UiMode.SETTINGS_KEYBOARD, UiMode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
@@ -95,7 +96,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
   /**
    * Handle the delete key press event: remove mapping for the current button
    */
-  onDeleteDown(): void {
+  private onDeleteDown(): void {
     if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
       return;
     }
@@ -138,7 +139,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
   /**
    * Update the display of the chosen keyboard layout.
    */
-  updateChosenKeyboardDisplay(): void {
+  public updateChosenKeyboardDisplay(): void {
     // Update any bindings that might have changed since the last update.
     this.updateBindings();
 

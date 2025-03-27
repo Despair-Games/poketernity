@@ -125,7 +125,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Sets up the NavigationMenu by adding windows, icons, and labels.
    */
-  setup() {
+  private setup() {
     const navigationManager = NavigationManager.getInstance();
     const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
@@ -178,7 +178,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Updates the icons in the NavigationMenu based on the latest input recorded.
    */
-  updateIcons() {
+  public updateIcons() {
     const specialIcons = {
       BUTTON_HOME: "HOME.png",
       BUTTON_DELETE: "DEL.png",
@@ -207,7 +207,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
    * @param button The button pressed for navigation.
    * @returns A boolean indicating if the navigation was handled.
    */
-  navigate(button: Button): boolean {
+  public navigate(button: Button): boolean {
     const navigationManager = NavigationManager.getInstance();
     switch (button) {
       case Button.CYCLE_FORM:

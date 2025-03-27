@@ -554,7 +554,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
     return success; // Return whether the input resulted in a successful action.
   }
 
-  resetScroll() {
+  protected resetScroll() {
     this.cursorObj?.destroy();
     this.cursorObj = null;
     this.cursor = 0;
@@ -596,7 +596,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param scrollCursor - The scroll cursor position to set.
    * @returns `true` if the scroll cursor was set successfully.
    */
-  setScrollCursor(scrollCursor: number): boolean {
+  private setScrollCursor(scrollCursor: number): boolean {
     // Check if the new scroll position is the same as the current one; if so, do not update.
     if (scrollCursor === this.scrollCursor) {
       return false;
@@ -623,7 +623,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
+  public setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
     // Retrieve the specific setting using the settingIndex from the settingDevice enumeration.
     const setting = this.setting[Object.keys(this.setting)[settingIndex]];
 
@@ -656,7 +656,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Update the scroll position of the settings UI.
    */
-  updateSettingsScroll(): void {
+  private updateSettingsScroll(): void {
     // Return immediately if the options container is not initialized.
     if (!this.optionsContainer) {
       return;
@@ -692,7 +692,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Erase the cursor from the UI.
    */
-  eraseCursor(): void {
+  private eraseCursor(): void {
     // Check if a cursor object exists.
     if (this.cursorObj) {
       this.cursorObj.destroy();

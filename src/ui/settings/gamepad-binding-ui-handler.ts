@@ -49,11 +49,15 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     return super.show(target, cancelHandler);
   }
 
-  getSelectedDevice() {
+  private getSelectedDevice() {
     return globalScene.inputController?.selectedDevice[Device.GAMEPAD];
   }
 
-  gamepadButtonDown(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, _value: number): void {
+  private gamepadButtonDown(
+    pad: Phaser.Input.Gamepad.Gamepad,
+    button: Phaser.Input.Gamepad.Button,
+    _value: number,
+  ): void {
     const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
     if (
@@ -76,7 +80,7 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     this.onInputDown(buttonIcon, assignedButtonIcon, type);
   }
 
-  swapAction(): boolean {
+  protected override swapAction(): boolean {
     const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
     if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
       globalScene.gameData.saveMappingConfigs(this.getSelectedDevice(), activeConfig);

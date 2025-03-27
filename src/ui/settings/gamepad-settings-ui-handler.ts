@@ -86,7 +86,7 @@ export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
   /**
    * Update the display of the chosen gamepad.
    */
-  updateChosenGamepadDisplay(): void {
+  public updateChosenGamepadDisplay(): void {
     // Update any bindings that might have changed since the last update.
     this.updateBindings();
     this.resetScroll();

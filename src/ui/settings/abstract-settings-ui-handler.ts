@@ -214,7 +214,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Update the bindings for the current active device configuration.
    */
-  updateBindings(): void {
+  private updateBindings(): void {
     for (const settingName of Object.keys(this.navigationIcons)) {
       if (settingName === "BUTTON_HOME") {
         this.navigationIcons[settingName].setTexture("keyboard");
@@ -404,7 +404,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
+  protected setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
     if (settingIndex === -1) {
       settingIndex = this.cursor + this.scrollCursor;
     }
@@ -482,7 +482,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param scrollCursor - The scroll cursor position to set.
    * @returns `true` if the scroll cursor was set successfully.
    */
-  setScrollCursor(scrollCursor: number): boolean {
+  private setScrollCursor(scrollCursor: number): boolean {
     if (scrollCursor === this.scrollCursor) {
       return false;
     }
@@ -500,7 +500,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Update the scroll position of the settings UI.
    */
-  updateSettingsScroll(): void {
+  private updateSettingsScroll(): void {
     this.optionsContainer.setY(-16 * this.scrollCursor);
 
     for (let s = 0; s < this.settingLabels.length; s++) {
@@ -529,7 +529,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Erase the cursor from the UI.
    */
-  eraseCursor() {
+  private eraseCursor() {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }

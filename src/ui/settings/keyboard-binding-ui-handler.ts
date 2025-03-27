@@ -11,6 +11,7 @@ export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
     // Listen to gamepad button down events to initiate binding.
+    // TODO check listener removal
     globalScene.input.keyboard?.on("keydown", this.onKeyDown, this);
   }
 
@@ -35,11 +36,11 @@ export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
     return super.show(target, cancelHandler);
   }
 
-  getSelectedDevice() {
+  private getSelectedDevice() {
     return globalScene.inputController?.selectedDevice[Device.KEYBOARD];
   }
 
-  onKeyDown(event): void {
+  private onKeyDown(event): void {
     const blacklist = [
       Phaser.Input.Keyboard.KeyCodes.UP,
       Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -66,7 +67,7 @@ export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
     this.onInputDown(buttonIcon, null, "keyboard");
   }
 
-  swapAction(): boolean {
+  protected override swapAction(): boolean {
     const activeConfig = globalScene.inputController.getActiveConfig(Device.KEYBOARD);
     if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
       globalScene.gameData.saveMappingConfigs(this.getSelectedDevice(), activeConfig);
