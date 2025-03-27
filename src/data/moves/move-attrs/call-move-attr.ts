@@ -26,7 +26,7 @@ import { MoveTarget } from "#enums/move-target";
  * @extends OverrideMoveEffectAttr
  */
 export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
-  protected invalidMoves: MoveId[];
+  protected invalidMoves: ReadonlySet<MoveId>;
   protected hasTarget: boolean;
   public override readonly callsOtherMoves: boolean = true;
 
