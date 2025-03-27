@@ -1,47 +1,76 @@
-import { Biome } from "#app/data/biome";
+import { abyssBiome } from "#app/data/biomes/abyss";
+import { badlandsBiome } from "#app/data/biomes/badlands";
+import { beachBiome } from "#app/data/biomes/beach";
 import { caveBiome } from "#app/data/biomes/cave";
+import { constructionSiteBiome } from "#app/data/biomes/construction-site";
+import { desertBiome } from "#app/data/biomes/desert";
+import { dojoBiome } from "#app/data/biomes/dojo";
 import { endBiome } from "#app/data/biomes/end";
-import { townBiome, townPokemonPool, townTerrainPool, townTrainerPool, townWeatherPool } from "#app/data/biomes/town";
+import { factoryBiome } from "#app/data/biomes/factory";
+import { fairyCave } from "#app/data/biomes/fairy-cave";
+import { forestBiome } from "#app/data/biomes/forest";
+import { grassBiome } from "#app/data/biomes/grass";
+import { graveyardBiome } from "#app/data/biomes/graveyard";
+import { iceCaveBiome } from "#app/data/biomes/ice-cave";
+import { islandBiome } from "#app/data/biomes/island";
+import { jungleBiome } from "#app/data/biomes/jungle";
+import { laboratoryBiome } from "#app/data/biomes/laboratory";
+import { lakeBiome } from "#app/data/biomes/lake";
+import { meadowBiome } from "#app/data/biomes/meadow";
+import { metropolisBiome } from "#app/data/biomes/metropolis";
+import { mountainBiome } from "#app/data/biomes/mountain";
+import { plainsBiome } from "#app/data/biomes/plains";
+import { powerPlantBiome } from "#app/data/biomes/power-plant";
+import { ruinsBiome } from "#app/data/biomes/ruins";
+import { seaBiome } from "#app/data/biomes/sea";
+import { seabedBiome } from "#app/data/biomes/seabed";
+import { slumBiome } from "#app/data/biomes/slum";
+import { snowyForestBiome } from "#app/data/biomes/snowy-forest";
+import { spaceBiome } from "#app/data/biomes/space";
+import { swampBiome } from "#app/data/biomes/swamp";
+import { tallGrassBiome } from "#app/data/biomes/tall-grass";
+import { templeBiome } from "#app/data/biomes/temple";
+import { townBiome } from "#app/data/biomes/town";
 import { volcanoBiome } from "#app/data/biomes/volcano";
+import { wastelandBiome } from "#app/data/biomes/wasteland";
 import { allBiomes } from "#app/data/data-lists";
-import { BiomeId } from "#enums/biome-id";
 
 export function initBiomes() {
   const rawAllBiomes = [
     townBiome,
-    new Biome(BiomeId.PLAINS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.GRASS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.TALL_GRASS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.METROPOLIS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.FOREST, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.SEA, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.SWAMP, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.BEACH, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.LAKE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.SEABED, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.MOUNTAIN, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.BADLANDS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    plainsBiome,
+    grassBiome,
+    tallGrassBiome,
+    metropolisBiome,
+    forestBiome,
+    seaBiome,
+    swampBiome,
+    beachBiome,
+    lakeBiome,
+    seabedBiome,
+    mountainBiome,
+    badlandsBiome,
     caveBiome,
-    new Biome(BiomeId.DESERT, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.ICE_CAVE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.MEADOW, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.POWER_PLANT, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    desertBiome,
+    iceCaveBiome,
+    meadowBiome,
+    powerPlantBiome,
     volcanoBiome,
-    new Biome(BiomeId.GRAVEYARD, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.DOJO, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.FACTORY, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.RUINS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.WASTELAND, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.ABYSS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.SPACE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.CONSTRUCTION_SITE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.JUNGLE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.FAIRY_CAVE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.TEMPLE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.SLUM, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.SNOWY_FOREST, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.ISLAND, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.LABORATORY, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    graveyardBiome,
+    dojoBiome,
+    factoryBiome,
+    ruinsBiome,
+    wastelandBiome,
+    abyssBiome,
+    spaceBiome,
+    constructionSiteBiome,
+    jungleBiome,
+    fairyCave,
+    templeBiome,
+    slumBiome,
+    snowyForestBiome,
+    islandBiome,
+    laboratoryBiome,
     endBiome,
   ];
 
