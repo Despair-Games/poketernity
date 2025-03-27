@@ -1,23 +1,13 @@
 import { Biome } from "#app/data/biome";
-import {
-  cavePokemonPool,
-  caveTrainerPool,
-  caveWeatherPool,
-  caveTerrainPool,
-} from "#app/data/balance/biomes/PEBiome_cave";
-import { endPokemonPool, endTerrainPool, endTrainerPool, endWeatherPool } from "#app/data/balance/biomes/PEBiome_end";
-import {
-  townPokemonPool,
-  townTrainerPool,
-  townWeatherPool,
-  townTerrainPool,
-} from "#app/data/balance/biomes/PEBiome_town";
+import { cavePokemonPool, caveTrainerPool, caveWeatherPool, caveTerrainPool } from "#app/data/biomes/PEBiome_cave";
+import { endPokemonPool, endTerrainPool, endTrainerPool, endWeatherPool } from "#app/data/biomes/PEBiome_end";
+import { townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/PEBiome_town";
 import {
   volcanoPokemonPool,
   volcanoTrainerPool,
   volcanoWeatherPool,
   volcanoTerrainPool,
-} from "#app/data/balance/biomes/PEBiome_volcano";
+} from "#app/data/biomes/PEBiome_volcano";
 import { allBiomes } from "#app/data/data-lists";
 import { BiomeId } from "#enums/biome-id";
 
