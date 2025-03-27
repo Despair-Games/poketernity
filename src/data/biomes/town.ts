@@ -7,16 +7,14 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
-/**
- * This file represents all the data of the town biome
- */
+// This file represents all the data of the town biome
+// TODO: remove these exports
 export const townPokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [SpeciesId.HOOTHOOT],
-    // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
     [TimeOfDay.ALL]: [SpeciesId.SENTRET],
   },
   [BiomePoolTier.UNCOMMON]: {
