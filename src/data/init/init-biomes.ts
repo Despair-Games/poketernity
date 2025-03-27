@@ -1,19 +1,14 @@
 import { Biome } from "#app/data/biome";
-import { cavePokemonPool, caveTrainerPool, caveWeatherPool, caveTerrainPool } from "#app/data/biomes/cave";
-import { endPokemonPool, endTerrainPool, endTrainerPool, endWeatherPool } from "#app/data/biomes/end";
-import { townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
-import {
-  volcanoPokemonPool,
-  volcanoTrainerPool,
-  volcanoWeatherPool,
-  volcanoTerrainPool,
-} from "#app/data/biomes/volcano";
+import { caveBiome } from "#app/data/biomes/cave";
+import { endBiome } from "#app/data/biomes/end";
+import { townBiome, townPokemonPool, townTerrainPool, townTrainerPool, townWeatherPool } from "#app/data/biomes/town";
+import { volcanoBiome } from "#app/data/biomes/volcano";
 import { allBiomes } from "#app/data/data-lists";
 import { BiomeId } from "#enums/biome-id";
 
 export function initBiomes() {
   const rawAllBiomes = [
-    new Biome(BiomeId.TOWN, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    townBiome,
     new Biome(BiomeId.PLAINS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.GRASS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.TALL_GRASS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
@@ -26,19 +21,12 @@ export function initBiomes() {
     new Biome(BiomeId.SEABED, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.MOUNTAIN, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.BADLANDS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.CAVE, cavePokemonPool, caveTrainerPool, caveWeatherPool, caveTerrainPool, "cave"),
+    caveBiome,
     new Biome(BiomeId.DESERT, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.ICE_CAVE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.MEADOW, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.POWER_PLANT, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(
-      BiomeId.VOLCANO,
-      volcanoPokemonPool,
-      volcanoTrainerPool,
-      volcanoWeatherPool,
-      volcanoTerrainPool,
-      "volcano",
-    ),
+    volcanoBiome,
     new Biome(BiomeId.GRAVEYARD, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.DOJO, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.FACTORY, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
@@ -54,7 +42,7 @@ export function initBiomes() {
     new Biome(BiomeId.SNOWY_FOREST, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.ISLAND, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new Biome(BiomeId.LABORATORY, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new Biome(BiomeId.END, endPokemonPool, endTrainerPool, endWeatherPool, endTerrainPool, "end"),
+    endBiome,
   ];
 
   for (const pebiome of rawAllBiomes) {

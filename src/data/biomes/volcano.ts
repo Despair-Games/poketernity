@@ -1,3 +1,5 @@
+import { Biome } from "#app/data/biome";
+import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
@@ -8,7 +10,7 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This file represents all the data of the voclano biome
  */
-export const volcanoPokemonPool = {
+const pokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
@@ -75,7 +77,7 @@ export const volcanoPokemonPool = {
   },
 };
 
-export const volcanoTrainerPool = {
+const trainerPool = {
   [BiomePoolTier.COMMON]: [TrainerType.YOUNGSTER],
   [BiomePoolTier.UNCOMMON]: [],
   [BiomePoolTier.RARE]: [],
@@ -87,7 +89,7 @@ export const volcanoTrainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-export const volcanoWeatherPool = {
+const weatherPool = {
   [WeatherType.NONE]: 1,
   [WeatherType.SUNNY]: 100,
   [WeatherType.RAIN]: 0,
@@ -100,10 +102,12 @@ export const volcanoWeatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-export const volcanoTerrainPool = {
+const terrainPool = {
   [TerrainType.NONE]: 99,
   [TerrainType.MISTY]: 1,
   [TerrainType.ELECTRIC]: 0,
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
+
+export const volcanoBiome = new Biome(BiomeId.VOLCANO, pokemonPool, trainerPool, weatherPool, terrainPool, "volcano");

@@ -1,3 +1,5 @@
+import { Biome } from "#app/data/biome";
+import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
@@ -107,3 +109,12 @@ export const townTerrainPool = {
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
+
+export const townBiome = new Biome(
+  BiomeId.TOWN,
+  townPokemonPool,
+  townTrainerPool,
+  townWeatherPool,
+  townTerrainPool,
+  "town",
+);

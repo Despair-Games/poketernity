@@ -1,3 +1,5 @@
+import { Biome } from "#app/data/biome";
+import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
@@ -7,7 +9,7 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This file represents all the data of the end biome
  */
-export const endPokemonPool = {
+const pokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
@@ -93,7 +95,7 @@ export const endPokemonPool = {
   },
 };
 
-export const endTrainerPool = {
+const trainerPool = {
   [BiomePoolTier.COMMON]: [],
   [BiomePoolTier.UNCOMMON]: [],
   [BiomePoolTier.RARE]: [],
@@ -105,7 +107,7 @@ export const endTrainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-export const endWeatherPool = {
+const weatherPool = {
   [WeatherType.NONE]: 1,
   [WeatherType.SUNNY]: 1,
   [WeatherType.RAIN]: 0,
@@ -118,10 +120,12 @@ export const endWeatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-export const endTerrainPool = {
+const terrainPool = {
   [TerrainType.NONE]: 99,
   [TerrainType.MISTY]: 1,
   [TerrainType.ELECTRIC]: 0,
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
+
+export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, weatherPool, terrainPool, "end");
