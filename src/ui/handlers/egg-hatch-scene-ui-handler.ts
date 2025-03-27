@@ -52,7 +52,7 @@ export class EggHatchSceneUiHandler extends UiHandler {
     this.getUi().hideTooltip();
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (button === Button.ACTION || button === Button.CANCEL) {
       const phase = globalScene.getCurrentPhase();
       if (phase instanceof EggHatchPhase && phase.trySkip()) {
@@ -63,7 +63,7 @@ export class EggHatchSceneUiHandler extends UiHandler {
     return globalScene.ui.getMessageHandler().processInput(button);
   }
 
-  override setCursor(_cursor: number): boolean {
+  public override setCursor(_cursor: number): boolean {
     return false;
   }
 }

@@ -115,7 +115,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(config: FormModalConfig, ..._args: unknown[]): boolean {
+  public override show(config: FormModalConfig, ..._args: unknown[]): boolean {
     if (!super.show(config)) {
       return false;
     }
@@ -147,7 +147,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return true;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (button === Button.SUBMIT && this.submitAction) {
       this.submitAction();
       return true;
@@ -169,7 +169,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     this.errorMessage.setVisible(!!this.errorMessage.text);
   }
 
-  override clear(): void {
+  protected override clear(): void {
     super.clear();
     this.modalContainer.setVisible(false);
 

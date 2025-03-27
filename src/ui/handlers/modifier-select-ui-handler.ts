@@ -167,7 +167,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.moveInfoOverlay.destroy();
   }
 
-  override show(
+  public override show(
     player: boolean = false,
     typeOptions?: ModifierTypeOption[],
     actionCallback?: ModifierSelectCallback,
@@ -364,7 +364,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     if (!this.awaitingActionInput) {
@@ -486,7 +486,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ui = this.getUi();
     const ret = super.setCursor(cursor);
 
@@ -636,7 +636,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     setTextColor(this.lockRarityButtonText, textStyle);
   }
 
-  override clear() {
+  protected override clear() {
     this.moveInfoOverlay.clear();
     this.moveInfoOverlayActive = false;
     this.awaitingActionInput = false;

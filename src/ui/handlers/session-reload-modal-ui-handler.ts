@@ -44,7 +44,7 @@ export class SessionReloadModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     const config: ModalConfig = {
       buttonActions: [],
     };

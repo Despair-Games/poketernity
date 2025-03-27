@@ -79,6 +79,7 @@ export abstract class UiHandler {
   /**
    * Displays the handler.
    * Should not be overridden. Calls {@linkcode show}, which subclasses should override.
+   *
    * @param args the arguments needed by this handler for display.
    * @returns `true` if the handler was setup successfully, `false` otherwise.
    */

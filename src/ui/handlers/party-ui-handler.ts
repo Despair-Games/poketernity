@@ -210,7 +210,7 @@ export class PartyUiHandler extends MessageUiHandler {
     this.moveInfoOverlay.destroy();
   }
 
-  override show(
+  public override show(
     mode?: PartyUiMode,
     fieldIndex: number = -1,
     callback: PartySelectCallback | PartyModifierTransferSelectCallback | null = null,
@@ -242,7 +242,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     if (this.pendingPrompt || this.blockInput) {
@@ -667,7 +667,7 @@ export class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed: boolean;
 
     if (this.optionsMode) {
@@ -1148,7 +1148,7 @@ export class PartyUiHandler extends MessageUiHandler {
     this.optionsCursorObj = null;
   }
 
-  override clear() {
+  protected override clear() {
     // hide the overlay
     this.moveInfoOverlay.clear();
     this.partyContainer.setVisible(false);

@@ -38,7 +38,7 @@ export class TargetSelectUiHandler extends UiHandler {
 
   protected override tearDown(): void {}
 
-  override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
+  public override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
     this.fieldIndex = fieldIndex;
     this.moveId = moveId;
     this.targetSelectCallback = callback;
@@ -79,7 +79,7 @@ export class TargetSelectUiHandler extends UiHandler {
     this.setCursor(this.targets.includes(cursorN) ? cursorN : this.targets[0]);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -153,7 +153,7 @@ export class TargetSelectUiHandler extends UiHandler {
     }
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const allTargets = this.getTargetsByIndex();
     this.targetsHighlighted = this.getHighlightedPokemon(cursor);
 
@@ -234,7 +234,7 @@ export class TargetSelectUiHandler extends UiHandler {
     }
   }
 
-  override clear() {
+  protected override clear() {
     this.eraseCursor();
   }
 }

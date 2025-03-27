@@ -5,13 +5,13 @@ import { OptionSelectUiHandler } from "./option-select-ui-handler";
 export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   private modalContainer: Phaser.GameObjects.Container | null;
 
-  override show(config: OptionSelectModeConfig, container: Phaser.GameObjects.Container): boolean {
+  public override show(config: OptionSelectModeConfig, container: Phaser.GameObjects.Container): boolean {
     this.modalContainer = container;
 
     return super.show(config);
   }
 
-  override clear(): void {
+  protected override clear(): void {
     this.modalContainer = null;
   }
 
@@ -26,7 +26,7 @@ export class AutoCompleteUiHandler extends OptionSelectUiHandler {
     }
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     if (button === Button.SUBMIT) {
       const option = this.getCurrentOption();

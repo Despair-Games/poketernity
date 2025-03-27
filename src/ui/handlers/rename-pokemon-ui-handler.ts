@@ -38,7 +38,7 @@ export class RenamePokemonUiHandler extends FormModalUiHandler {
     return [{ label: i18next.t("menu:nickname") }];
   }
 
-  override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
+  public override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
     if (!super.show(config)) {
       return false;
     }

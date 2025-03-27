@@ -240,7 +240,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    *
    * @returns `true` if successful.
    */
-  override show(): boolean {
+  public override show(): boolean {
     this.updateBindings();
 
     this.uiItems.forEach((uiItem, s) => {
@@ -282,7 +282,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param button - The button pressed by the user.
    * @returns `true` if the action associated with the button was successfully processed, `false` otherwise.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
 
@@ -381,7 +381,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -515,7 +515,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear() {
+  protected override clear() {
     this.settingsContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();

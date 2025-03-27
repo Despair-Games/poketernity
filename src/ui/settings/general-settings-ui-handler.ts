@@ -31,7 +31,7 @@ export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
     super.tearDown();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     super.show();
 
     if (hasTouchscreen()) {

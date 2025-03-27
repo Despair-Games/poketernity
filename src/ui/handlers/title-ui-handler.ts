@@ -90,7 +90,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
       });
   }
 
-  override show(config: OptionSelectModeConfig): boolean {
+  public override show(config: OptionSelectModeConfig): boolean {
     const ret = super.show(config);
 
     if (ret) {
@@ -133,7 +133,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     return ret;
   }
 
-  override clear(): void {
+  protected override clear(): void {
     super.clear();
 
     const ui = this.getUi();

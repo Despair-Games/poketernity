@@ -299,7 +299,7 @@ export class GameStatsUiHandler extends UiHandler {
     this.gameStatsContainer.destroy();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.setCursor(0);
 
     this.updateStats();
@@ -349,7 +349,7 @@ export class GameStatsUiHandler extends UiHandler {
     this.arrowDown.setVisible(showDownArrow);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -379,7 +379,7 @@ export class GameStatsUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (ret) {
@@ -390,7 +390,7 @@ export class GameStatsUiHandler extends UiHandler {
     return ret;
   }
 
-  override clear() {
+  protected override clear() {
     this.gameStatsContainer.setVisible(false);
   }
 }

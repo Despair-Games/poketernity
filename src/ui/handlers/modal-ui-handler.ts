@@ -99,7 +99,7 @@ export abstract class ModalUiHandler extends UiHandler {
     this.modalContainer.add(buttonContainer);
   }
 
-  override show(config: ModalConfig | any, ..._args: unknown[]): boolean {
+  public override show(config: ModalConfig | any, ..._args: unknown[]): boolean {
     if (!config.hasOwnProperty("buttonActions")) {
       return false;
     }
@@ -169,11 +169,11 @@ export abstract class ModalUiHandler extends UiHandler {
     }
   }
 
-  processInput(_button: Button): boolean {
+  public override processInput(_button: Button): boolean {
     return false;
   }
 
-  override clear() {
+  protected override clear() {
     this.modalContainer.setVisible(false);
 
     this.buttonBgs.map((bg) => bg.off("pointerdown"));

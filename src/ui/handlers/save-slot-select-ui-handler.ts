@@ -78,7 +78,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.saveSlotSelectContainer.destroy();
   }
 
-  override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
+  public override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
     this.uiMode = mode;
     this.saveSlotSelectCallback = slotSelectCallback;
 
@@ -91,7 +91,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -236,7 +236,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
    * @param prevSlotIndex index of the previous session occupied by the cursor, between `0` and `SESSION_SLOTS_COUNT - 1` - optional
    * @returns `true` if the cursor position has changed | `false` if it has not
    */
-  override setCursor(cursor: number, prevSlotIndex?: number): boolean {
+  public override setCursor(cursor: number, prevSlotIndex?: number): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -325,7 +325,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  override clear() {
+  protected override clear() {
     this.saveSlotSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();

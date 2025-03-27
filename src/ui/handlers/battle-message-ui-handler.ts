@@ -144,7 +144,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     this.levelUpStatsValuesContent = levelUpStatsValuesContent;
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.commandWindow.setVisible(false);
     this.movesWindowContainer.setVisible(false);
     this.message.setWordWrapWidth(this.wordWrapWidth);
@@ -162,7 +162,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
 
   protected override clear() {}
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     if (this.awaitingActionInput) {
       if (button === Button.CANCEL || button === Button.ACTION) {

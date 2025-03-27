@@ -128,7 +128,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     this.tooltipContainer.destroy();
   }
 
-  override show(settings?: OptionSelectSettings): boolean {
+  public override show(settings?: OptionSelectSettings): boolean {
     this.overrideSettings = settings;
     const showDescriptionContainer = isNullOrUndefined(this.overrideSettings?.hideDescription)
       ? true
@@ -160,7 +160,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     return true;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -349,11 +349,11 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return this.cursor ? this.cursor : 0;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const prevCursor = this.getCursor();
     const changed = prevCursor !== cursor;
     if (changed) {
@@ -673,7 +673,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
   }
 
-  override clear(): void {
+  protected override clear(): void {
     this.overrideSettings = undefined;
     this.optionsContainer.setVisible(false);
     this.optionsContainer.removeAll(true);

@@ -80,7 +80,7 @@ export class UnavailableModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(reconnectCallback: () => void): boolean {
+  public override show(reconnectCallback: () => void): boolean {
     if (!reconnectCallback) {
       return false;
     }

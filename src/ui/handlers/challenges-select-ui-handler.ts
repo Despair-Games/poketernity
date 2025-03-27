@@ -308,7 +308,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     this.challengesContainer.update();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.startCursor.setVisible(false);
     this.updateChallengeArrows(false);
     this.challengesContainer.setVisible(true);
@@ -355,7 +355,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
    * @param button - The button pressed by the user.
    * @returns `true` if the action associated with the button was successfully processed, `false` otherwise.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
     const rowsToDisplay = 9;
@@ -466,7 +466,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {

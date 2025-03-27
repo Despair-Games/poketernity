@@ -133,7 +133,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     return inputFieldConfigs;
   }
 
-  override show(config: ModalConfig): boolean {
+  public override show(config: ModalConfig): boolean {
     if (!super.show(config)) {
       return false;
     }
@@ -170,7 +170,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     return true;
   }
 
-  override clear() {
+  protected override clear() {
     super.clear();
     this.externalPartyContainer.setVisible(false);
     this.infoContainer.setVisible(false);

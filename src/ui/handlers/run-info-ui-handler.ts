@@ -79,8 +79,10 @@ export class RunInfoUiHandler extends UiHandler {
     super(UiMode.RUN_INFO);
   }
 
-  override async setup() {
+  protected override async setup() {
     this.runContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
+    this.getUi().add(this.runContainer);
+
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
@@ -98,7 +100,7 @@ export class RunInfoUiHandler extends UiHandler {
    * @param sessionData - The {@linkcode SessionSaveData} for the run to show information for.
    * @param isVictory - optional. `true` is this is the data for a finished, victorious run.
    */
-  override show(mode: RunDisplayMode, sessionData: SessionSaveData, isVictory?: boolean): boolean {
+  public override show(mode: RunDisplayMode, sessionData: SessionSaveData, isVictory?: boolean): boolean {
     const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     runInfoBg.setOrigin(0, 0);
     this.runContainer.add(runInfoBg);
@@ -139,26 +141,22 @@ export class RunInfoUiHandler extends UiHandler {
     this.parsePartyInfo();
     this.showParty(true);
 
-    this.getUi().bringToTop(this.runContainer);
-    this.runContainer.setVisible(true);
-
     // Creates Hall of Fame if the run entry contains a victory
     if (this.isVictory) {
       this.createHallofFame();
-      this.getUi().bringToTop(this.hallofFameContainer);
     }
 
+    this.getUi().bringToTop(this.runContainer);
+    this.runContainer.setVisible(true);
+
     this.setCursor(0);
-
-    this.getUi().add(this.runContainer);
-
-    this.getUi().hideTooltip();
 
     return true;
   }
 
   protected override clear(): void {
-    // TODO
+    this.runContainer.removeAll(true);
+    this.runContainer.setVisible(false);
   }
 
   /**
@@ -983,7 +981,7 @@ export class RunInfoUiHandler extends UiHandler {
    * Button.CANCEL - removes all containers related to RunInfo and returns the user to Run History
    * Button.CYCLE_FORM, Button.CYCLE_SHINY, Button.CYCLE_ABILITY - runs the function buttonCycleOption()
    */
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -993,15 +991,6 @@ export class RunInfoUiHandler extends UiHandler {
       case Button.CANCEL:
         success = true;
         if (this.pageMode === RunInfoUiMode.MAIN) {
-          this.runInfoContainer.removeAll(true);
-          this.runResultContainer.removeAll(true);
-          this.partyContainer.removeAll(true);
-          this.runContainer.removeAll(true);
-          if (this.isVictory) {
-            this.hallofFameContainer.removeAll(true);
-          }
-          this.clear();
-          this.runContainer.setVisible(false);
           ui.revertMode();
         } else if (this.pageMode === RunInfoUiMode.HALL_OF_FAME) {
           this.hallofFameContainer.setVisible(false);

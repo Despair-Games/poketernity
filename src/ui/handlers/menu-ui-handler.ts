@@ -127,7 +127,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     this.initCommunityMenuOptions();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     const config = this.getMenuOptionsConfig();
 
     super.show(config);
@@ -684,7 +684,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     return success;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     if (button === Button.CANCEL) {
       ui.playSelect();
@@ -712,7 +712,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  override clear() {
+  protected override clear() {
     super.clear();
     this.bgmBar.toggleBgmBar(false);
   }

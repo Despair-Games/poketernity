@@ -115,7 +115,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     this.eggHatchContainer.destroy();
   }
 
-  override clear() {
+  protected override clear() {
     this.scrollGridHandler.reset();
     this.cursor = -1;
 
@@ -150,7 +150,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
   /**
    * @param hatchData - The {@linkcode EggHatchData} for each egg/pokemon hatched
    */
-  override show(hatchData: EggHatchData[]): boolean {
+  public override show(hatchData: EggHatchData[]): boolean {
     if (hatchData.length === 0) {
       console.log("Missing Egg Hatch Data in Egg Summary UI");
       return false;
@@ -224,7 +224,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     }
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -252,7 +252,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed = false;
 
     const lastCursor = this.cursor;

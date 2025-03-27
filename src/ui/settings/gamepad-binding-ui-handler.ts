@@ -45,7 +45,7 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     this.optionSelectContainer.add(this.targetButtonIcon);
   }
 
-  override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
+  public override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
     return super.show(target, cancelHandler);
   }
 
@@ -88,7 +88,7 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear() {
+  protected override clear() {
     super.clear();
     this.targetButtonIcon.setVisible(false);
     this.swapText.setVisible(false);

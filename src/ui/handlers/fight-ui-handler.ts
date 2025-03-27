@@ -122,7 +122,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     // TODO: removeInfoToggle
   }
 
-  override show(fieldIndex: number = 0): boolean {
+  public override show(fieldIndex: number = 0): boolean {
     this.fieldIndex = fieldIndex;
 
     const messageHandler = this.getUi().getMessageHandler();
@@ -141,7 +141,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -217,11 +217,11 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     return this.active;
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ui = this.getUi();
 
     this.moveInfoOverlay.clear();
@@ -352,7 +352,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     return moveColors[0];
   }
 
-  override clear() {
+  protected override clear() {
     const messageHandler = this.getUi().getMessageHandler();
     this.clearMoves();
     this.typeIcon.setVisible(false);

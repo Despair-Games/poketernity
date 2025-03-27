@@ -165,11 +165,11 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.mainContainer.setVisible(false);
   }
 
-  override tearDown(): void {
+  protected override tearDown(): void {
     this.mainContainer.destroy();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.headerBgX = this.headerBg.getTopRight().x;
     this.updateAchvIcons();
 
@@ -208,7 +208,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     );
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -290,7 +290,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     return success;
   }
 
-  override setCursor(cursor: number, pageChange?: boolean): boolean {
+  public override setCursor(cursor: number, pageChange?: boolean): boolean {
     const ret = super.setCursor(cursor);
 
     let update = ret;
@@ -434,7 +434,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.currentTotal = this.vouchersTotal;
   }
 
-  override clear() {
+  protected override clear() {
     this.currentPage = Page.ACHIEVEMENTS;
     this.mainContainer.setVisible(false);
     this.setScrollCursor(0);

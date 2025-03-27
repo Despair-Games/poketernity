@@ -51,7 +51,7 @@ export class CommandUiHandler extends UiHandler {
     this.commandsContainer.destroy();
   }
 
-  override show(fieldIndex: number = 0): boolean {
+  public override show(fieldIndex: number = 0): boolean {
     this.fieldIndex = fieldIndex;
 
     this.commandsContainer.setVisible(true);
@@ -82,7 +82,7 @@ export class CommandUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -154,11 +154,11 @@ export class CommandUiHandler extends UiHandler {
     return success;
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = this.getCursor() !== cursor;
     if (changed) {
       if (!this.fieldIndex) {
@@ -178,7 +178,7 @@ export class CommandUiHandler extends UiHandler {
     return changed;
   }
 
-  override clear(): void {
+  protected override clear(): void {
     this.getUi().getMessageHandler().commandWindow.setVisible(false);
     this.commandsContainer.setVisible(false);
     this.getUi().getMessageHandler().clearText();

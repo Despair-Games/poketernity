@@ -112,7 +112,7 @@ export class EggListUiHandler extends MessageUiHandler {
     //TODO: scrollgridHandler? iconAnimHandler?
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.initEggIcons();
 
     this.getUi().bringToTop(this.eggListContainer);
@@ -184,7 +184,7 @@ export class EggListUiHandler extends MessageUiHandler {
     this.eggGachaInfoText.setText(egg.getEggTypeDescriptor());
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -206,7 +206,7 @@ export class EggListUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed = false;
 
     const lastCursor = this.cursor;
@@ -228,7 +228,7 @@ export class EggListUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  override clear(): void {
+  protected override clear(): void {
     this.scrollGridHandler.reset();
     this.cursor = -1;
     this.eggListContainer.setVisible(false);

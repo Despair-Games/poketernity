@@ -76,7 +76,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     this.runSelectContainer.destroy();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.getUi().bringToTop(this.runSelectContainer);
     this.runSelectContainer.setVisible(true);
     this.populateRuns().then(() => {
@@ -99,7 +99,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Button.ACTION allows the user to access more information about their runs.
    * Button.CANCEL allows the user to go back.
    */
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -201,7 +201,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     this.runsContainer.add(emptyText);
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -233,7 +233,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Called when the player returns back to the menu
    * Uses the functions clearCursor() and clearRuns()
    */
-  override clear() {
+  protected override clear() {
     this.runSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.clearCursor();

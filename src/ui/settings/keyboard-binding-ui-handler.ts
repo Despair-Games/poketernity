@@ -31,7 +31,7 @@ export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
     this.optionSelectContainer.add(this.newButtonIcon);
   }
 
-  override show(target: SettingKeyboard, cancelHandler: (success: boolean) => boolean): boolean {
+  public override show(target: SettingKeyboard, cancelHandler: (success: boolean) => boolean): boolean {
     return super.show(target, cancelHandler);
   }
 

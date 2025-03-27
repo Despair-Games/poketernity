@@ -70,7 +70,7 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  override show(config: ModalConfig): boolean {
+  public override show(config: ModalConfig): boolean {
     if (!super.show(config)) {
       return false;
     }

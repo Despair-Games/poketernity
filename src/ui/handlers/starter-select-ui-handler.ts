@@ -1021,7 +1021,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.starterSelectContainer.destroy();
   }
 
-  override show(selectedStarterCallback?: StarterSelectCallback): boolean {
+  public override show(selectedStarterCallback?: StarterSelectCallback): boolean {
     if (!this.starterPreferences) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
@@ -1248,7 +1248,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return starterData.candyCount >= getSameSpeciesEggCandyCounts(speciesStarterCosts[speciesId]);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.blockInput) {
       return false;
     }
@@ -2865,7 +2865,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     });
   };
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed = false;
 
     if (this.filterMode) {
@@ -4005,7 +4005,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.goFilterLabel.setVisible(false);
   }
 
-  override clear(): void {
+  protected override clear(): void {
     StarterPrefs.save(this.starterPreferences);
     this.cursor = -1;
     this.hideInstructions();

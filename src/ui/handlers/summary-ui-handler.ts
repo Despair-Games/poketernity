@@ -309,7 +309,7 @@ export class SummaryUiHandler extends UiHandler {
    * @param isPlayerParty - boolean used to determine if the Pokemon is part of the player's party or not. Default: `true` (see PKR#2921)
    * @returns `true` is the UI was initiliazed properly
    */
-  override show(
+  public override show(
     pokemon: Pokemon,
     mode: SummaryUiMode = SummaryUiMode.DEFAULT,
     pageOrMove?: SummaryUiPage | Move,
@@ -454,7 +454,7 @@ export class SummaryUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.transitioning) {
       return false;
     }
@@ -608,7 +608,7 @@ export class SummaryUiHandler extends UiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number, overrideChanged: boolean = false): boolean {
+  public override setCursor(cursor: number, overrideChanged: boolean = false): boolean {
     let changed: boolean = overrideChanged || this.moveCursor !== cursor;
 
     if (this.moveSelect) {
@@ -1197,7 +1197,7 @@ export class SummaryUiHandler extends UiHandler {
     });
   }
 
-  override clear() {
+  protected override clear() {
     this.pokemon = null;
     this.cursor = -1;
     this.newMove = null;

@@ -655,7 +655,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
     this.transitionCancelled = false;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -801,7 +801,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {

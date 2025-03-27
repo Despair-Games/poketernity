@@ -75,7 +75,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     return [{ label: "Dialogue" }];
   }
 
-  override show(config: ModalConfig, prefilledText: string): boolean {
+  public override show(config: ModalConfig, prefilledText: string): boolean {
     const ui = this.getUi();
     const hasTitle = !!this.getModalTitle();
     this.updateFields(this.getInputFieldConfigs(), hasTitle);

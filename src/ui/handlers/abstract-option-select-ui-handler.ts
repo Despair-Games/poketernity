@@ -90,7 +90,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
   /**
    * @param args - args[0] should be of type `OptionSelectModeConfig<T>`.
    */
-  override show(...args: unknown[]): boolean {
+  public override show(...args: unknown[]): boolean {
     if (!args[0]?.hasOwnProperty("options")) {
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
@@ -308,7 +308,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     return this.options[this.cursor + this.scrollCursor];
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -398,7 +398,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     this.cursorObj?.setAlpha(1);
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = this.cursor !== cursor;
 
     if (changed) {
@@ -430,7 +430,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     return false;
   }
 
-  override clear(): void {
+  protected override clear(): void {
     this.config = null;
     this.options = [];
     this.maxOptions = DEFAULT_MAX_OPTIONS;

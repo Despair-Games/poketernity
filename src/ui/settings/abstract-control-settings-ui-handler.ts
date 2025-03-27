@@ -389,7 +389,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    *
    * @returns `true` if successful.
    */
-  override show(): boolean {
+  public override show(): boolean {
     this.updateNavigationDisplay();
     NavigationManager.getInstance().updateIcons();
     // Update the bindings for the current active gamepad configuration.
@@ -453,7 +453,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param button - The button to process.
    * @returns `true` if the input was processed successfully.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
     let success = false;
@@ -569,7 +569,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
     // If the optionsContainer is not initialized, return the result from the parent class directly.
     if (!this.optionsContainer) {
@@ -681,7 +681,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear(): void {
+  protected override clear(): void {
     // Hide the settings container to remove it from the view.
     this.settingsContainer.setVisible(false);
 

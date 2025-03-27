@@ -68,7 +68,7 @@ export class BallUiHandler extends UiHandler {
     this.pokeballSelectContainer.destroy();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     this.updateCounts();
     this.pokeballSelectContainer.setVisible(true);
     this.setCursor(this.cursor);
@@ -76,7 +76,7 @@ export class BallUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -126,7 +126,7 @@ export class BallUiHandler extends UiHandler {
     );
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -140,7 +140,7 @@ export class BallUiHandler extends UiHandler {
     return ret;
   }
 
-  override clear() {
+  protected override clear() {
     this.pokeballSelectContainer.setVisible(false);
     this.eraseCursor();
   }
