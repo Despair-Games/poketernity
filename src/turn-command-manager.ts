@@ -72,6 +72,7 @@ export class TurnCommandManager {
   /** Tracks how many pending turn commands are currently in the phase queue */
   public commandsInProgress: number = 0;
   private orderIndex: number = 0;
+  private appliedMoveHeaders = false;
 
   // #region Public Methods
 
@@ -181,6 +182,10 @@ export class TurnCommandManager {
    */
   public scheduleNextValidCommand(): void {
     while (!this.isEmpty()) {
+      if (!this.appliedMoveHeaders && this.turnCommands.every((tc) => tc.command === BattleCommand.FIGHT)) {
+        this.applyMoveHeaderAttrs();
+      }
+
       if (this.shiftNextCommand()) {
         return;
       }
@@ -216,6 +221,8 @@ export class TurnCommandManager {
    * are collected for the turn, then schedules the first turn action.
    */
   public startTurn(): void {
+    // Reset the flag indicating move header attributes have been checked and applied this turn
+    this.appliedMoveHeaders = false;
     // Apply speed-bypassing effects for all remaining Pokemon
     this.applyBypassSpeedEffects();
     // Shuffle and sort turn commands by speed, command type, priority, etc.
@@ -515,5 +522,7 @@ export class TurnCommandManager {
         globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
       }
     });
+
+    this.appliedMoveHeaders = true;
   }
 }
