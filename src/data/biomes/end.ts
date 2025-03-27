@@ -120,11 +120,7 @@ const weatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-<<<<<<<< HEAD:src/data/biomes/end.ts
 const terrainPool = {
-========
-export const endTerrainPool = {
->>>>>>>> 8c5ce978bb84c6e24b5fa5b9768d513a39aabc90:src/data/balance/biomes/end.ts
   [TerrainType.NONE]: 1,
   [TerrainType.MISTY]: 0,
   [TerrainType.ELECTRIC]: 0,
