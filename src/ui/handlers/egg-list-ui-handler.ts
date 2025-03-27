@@ -107,9 +107,8 @@ export class EggListUiHandler extends MessageUiHandler {
   }
 
   protected override tearDown(): void {
-    this.iconAnimHandler.removeAll();
+    this.iconAnimHandler.destroy();
     this.eggListContainer.destroy();
-    //TODO: scrollgridHandler? iconAnimHandler?
   }
 
   public override show(): boolean {

@@ -113,6 +113,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
   protected override tearDown(): void {
     this.summaryContainer.destroy();
     this.eggHatchContainer.destroy();
+    this.iconAnimHandler.destroy();
   }
 
   protected override clear() {

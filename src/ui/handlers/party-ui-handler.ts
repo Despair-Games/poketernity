@@ -208,6 +208,7 @@ export class PartyUiHandler extends MessageUiHandler {
   protected override tearDown(): void {
     this.partyContainer.destroy();
     this.moveInfoOverlay.destroy();
+    this.iconAnimHandler.destroy();
   }
 
   public override show(

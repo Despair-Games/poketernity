@@ -1019,6 +1019,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   protected override tearDown(): void {
     this.starterSelectContainer.destroy();
+    this.iconAnimHandler.destroy();
   }
 
   public override show(selectedStarterCallback?: StarterSelectCallback): boolean {

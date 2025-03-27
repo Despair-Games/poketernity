@@ -7,11 +7,14 @@ type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
 export class PokemonIconAnimHelper {
   private icons: Map<PokemonIcon, PokemonIconAnimMode>;
   private toggled: boolean;
+  private counterTween: Phaser.Tweens.Tween | undefined;
 
-  setup(): void {
+  constructor() {
     this.icons = new Map();
     this.toggled = false;
+  }
 
+  public setup(): void {
     const onAlternate = (tween: Phaser.Tweens.Tween) => {
       const value = tween.getValue();
       this.toggled = !!value;
@@ -21,7 +24,7 @@ export class PokemonIconAnimHelper {
         i.y += delta * (this.toggled ? 1 : -1);
       }
     };
-    globalScene.tweens.addCounter({
+    this.counterTween = globalScene.tweens.addCounter({
       duration: fixedNumber(200),
       from: 0,
       to: 1,
@@ -32,7 +35,7 @@ export class PokemonIconAnimHelper {
     });
   }
 
-  getModeYDelta(mode: PokemonIconAnimMode): number {
+  private getModeYDelta(mode: PokemonIconAnimMode): number {
     switch (mode) {
       case PokemonIconAnimMode.NONE:
         return 0;
@@ -43,7 +46,7 @@ export class PokemonIconAnimHelper {
     }
   }
 
-  addOrUpdate(icons: PokemonIcon | PokemonIcon[], mode: PokemonIconAnimMode): void {
+  public addOrUpdate(icons: PokemonIcon | PokemonIcon[], mode: PokemonIconAnimMode): void {
     if (!Array.isArray(icons)) {
       icons = [icons];
     }
@@ -60,7 +63,7 @@ export class PokemonIconAnimHelper {
     }
   }
 
-  remove(icons: PokemonIcon | PokemonIcon[]): void {
+  public remove(icons: PokemonIcon | PokemonIcon[]): void {
     if (!Array.isArray(icons)) {
       icons = [icons];
     }
@@ -74,7 +77,7 @@ export class PokemonIconAnimHelper {
     }
   }
 
-  removeAll(): void {
+  public removeAll(): void {
     for (const i of this.icons.keys()) {
       if (this.toggled) {
         const icon = this.icons.get(i);
@@ -82,6 +85,14 @@ export class PokemonIconAnimHelper {
         i.y -= delta;
       }
       this.icons.delete(i);
+    }
+  }
+
+  public destroy(): void {
+    this.removeAll();
+    if (this.counterTween) {
+      this.counterTween.destroy();
+      this.counterTween = undefined;
     }
   }
 }
