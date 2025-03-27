@@ -1,3 +1,10 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { type getRandomWeatherType } from "#app/data/weather";
+import { type Arena } from "#app/field/arena";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { BiomeId } from "#enums/biome-id";
 import type { BiomePoolTier } from "#enums/biome-pool-tier";
 import type { SpeciesId } from "#enums/species-id";
@@ -7,18 +14,21 @@ import type { TrainerType } from "#enums/trainer-type";
 import type { WeatherType } from "#enums/weather-type";
 
 /**
- * Contains the data for a Biome, including the Pokemon, trainer and weather/terrain pools.
+ * @todo
+ * - Consider `partial` and `Omit` or an interface for `pokemonPool` and `trainerPool`
+ * - `weatherPool` and `terrainPool` are not used anywhere, move {@linkcode getRandomWeatherType} here
+ * - Add image assets here like `biomeWithProps` (in `arena.ts`)
+ * - Consider moving `mysteryEncounterByBiome` here as well
+ * - Move bgm loop point here as well
+ * - Move {@linkcode Arena.getTrainerChance} as well
  */
 export class Biome {
   public biomeType: BiomeId;
-  // TODO: consider `partial` and `Omit`
   public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   public trainerPool: Record<BiomePoolTier, TrainerType[]>;
-  // TODO: weatherPool and terrainPool are currently not used
   public weatherPool: Record<WeatherType, number>;
   public terrainPool: Record<TerrainType, number>;
   public bgm: string;
-  // TODO: image assets should also be in here probably
 
   constructor(
     biomeType: BiomeId,
