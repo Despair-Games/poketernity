@@ -10,7 +10,7 @@ import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
-import { biomeLinks } from "#app/data/biomes/biome-links";
+import { biomeLinks } from "#app/data/biome-links";
 
 export class SelectBiomePhase extends BattlePhase {
   override readonly id = PhaseId.SELECT_BIOME;
