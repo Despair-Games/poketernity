@@ -1,33 +1,27 @@
-import { Biome } from "#app/data/biome";
-import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * This file represents all the data of the end biome
+ * This file represents all the data of the voclano biome
  */
-const pokemonPool = {
+export const volcanoPokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
     [TimeOfDay.ALL]: [
-      SpeciesId.GREAT_TUSK,
-      SpeciesId.SCREAM_TAIL,
-      SpeciesId.BRUTE_BONNET,
-      SpeciesId.FLUTTER_MANE,
-      SpeciesId.SLITHER_WING,
-      SpeciesId.SANDY_SHOCKS,
-      SpeciesId.IRON_TREADS,
-      SpeciesId.IRON_BUNDLE,
-      SpeciesId.IRON_HANDS,
-      SpeciesId.IRON_JUGULIS,
-      SpeciesId.IRON_MOTH,
-      SpeciesId.IRON_THORNS,
+      SpeciesId.VULPIX,
+      SpeciesId.GROWLITHE,
+      SpeciesId.PONYTA,
+      SpeciesId.SLUGMA,
+      SpeciesId.NUMEL,
+      SpeciesId.SALANDIT,
+      SpeciesId.ROLYCOLY,
     ],
   },
   [BiomePoolTier.UNCOMMON]: {
@@ -35,7 +29,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [SpeciesId.ROARING_MOON, SpeciesId.IRON_VALIANT],
+    [TimeOfDay.ALL]: [SpeciesId.MAGMAR, SpeciesId.TORKOAL, SpeciesId.PANSEAR, SpeciesId.HEATMOR, SpeciesId.TURTONATOR],
   },
   [BiomePoolTier.RARE]: {
     [TimeOfDay.DAWN]: [],
@@ -43,12 +37,13 @@ const pokemonPool = {
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
     [TimeOfDay.ALL]: [
-      SpeciesId.WALKING_WAKE,
-      SpeciesId.IRON_LEAVES,
-      SpeciesId.GOUGING_FIRE,
-      SpeciesId.RAGING_BOLT,
-      SpeciesId.IRON_BOULDER,
-      SpeciesId.IRON_CROWN,
+      SpeciesId.CHARMANDER,
+      SpeciesId.CYNDAQUIL,
+      SpeciesId.CHIMCHAR,
+      SpeciesId.TEPIG,
+      SpeciesId.LITTEN,
+      SpeciesId.SCORBUNNY,
+      SpeciesId.CHARCADET,
     ],
   },
   [BiomePoolTier.SUPER_RARE]: {
@@ -56,60 +51,97 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.FLAREON,
+      SpeciesId.ROTOM, // heat
+      SpeciesId.LARVESTA,
+      SpeciesId.HISUI_GROWLITHE,
+    ],
   },
   [BiomePoolTier.ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [],
+    [TimeOfDay.ALL]: [SpeciesId.ENTEI, SpeciesId.HEATRAN, SpeciesId.VOLCANION, SpeciesId.CHI_YU],
   },
   [BiomePoolTier.BOSS]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [SpeciesId.ETERNATUS],
+    [TimeOfDay.ALL]: [
+      SpeciesId.NINETALES,
+      SpeciesId.ARCANINE,
+      SpeciesId.RAPIDASH,
+      SpeciesId.MAGCARGO,
+      SpeciesId.CAMERUPT,
+      SpeciesId.TORKOAL,
+      SpeciesId.MAGMORTAR,
+      SpeciesId.SIMISEAR,
+      SpeciesId.HEATMOR,
+      SpeciesId.SALAZZLE,
+      SpeciesId.TURTONATOR,
+      SpeciesId.COALOSSAL,
+    ],
   },
   [BiomePoolTier.BOSS_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.CHARIZARD,
+      SpeciesId.FLAREON,
+      SpeciesId.TYPHLOSION,
+      SpeciesId.INFERNAPE,
+      SpeciesId.EMBOAR,
+      SpeciesId.VOLCARONA,
+      SpeciesId.DELPHOX,
+      SpeciesId.INCINEROAR,
+      SpeciesId.CINDERACE,
+      SpeciesId.ARMAROUGE,
+      SpeciesId.HISUI_ARCANINE,
+    ],
   },
   [BiomePoolTier.BOSS_SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.MOLTRES,
+      SpeciesId.ENTEI,
+      SpeciesId.ROTOM,
+      SpeciesId.HEATRAN,
+      SpeciesId.VOLCANION,
+      SpeciesId.CHI_YU,
+    ],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [],
+    [TimeOfDay.ALL]: [SpeciesId.RESHIRAM],
   },
 };
 
-const trainerPool = {
-  [BiomePoolTier.COMMON]: [],
+export const volcanoTrainerPool = {
+  [BiomePoolTier.COMMON]: [TrainerType.FIREBREATHER],
   [BiomePoolTier.UNCOMMON]: [],
   [BiomePoolTier.RARE]: [],
   [BiomePoolTier.SUPER_RARE]: [],
   [BiomePoolTier.ULTRA_RARE]: [],
-  [BiomePoolTier.BOSS]: [],
+  [BiomePoolTier.BOSS]: [TrainerType.BLAINE, TrainerType.FLANNERY, TrainerType.KABU],
   [BiomePoolTier.BOSS_RARE]: [],
   [BiomePoolTier.BOSS_SUPER_RARE]: [],
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-const weatherPool = {
+export const volcanoWeatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 0,
+  [WeatherType.SUNNY]: 1,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
@@ -120,16 +152,10 @@ const weatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-<<<<<<<< HEAD:src/data/biomes/end.ts
-const terrainPool = {
-========
-export const endTerrainPool = {
->>>>>>>> 8c5ce978bb84c6e24b5fa5b9768d513a39aabc90:src/data/balance/biomes/end.ts
+export const volcanoTerrainPool = {
   [TerrainType.NONE]: 1,
   [TerrainType.MISTY]: 0,
   [TerrainType.ELECTRIC]: 0,
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
-
-export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, weatherPool, terrainPool, "end");

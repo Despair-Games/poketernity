@@ -1,9 +1,9 @@
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import { Egg } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -40,15 +40,13 @@ describe("Manaphy Eggs", () => {
   });
 
   it("should have correct Manaphy rates and Rare Egg Move rates, from the egg gacha", () => {
-    const scene = game.scene;
-
     let manaphyCount = 0;
     let phioneCount = 0;
     let rareEggMoveCount = 0;
     for (let i = 0; i < EGG_HATCH_COUNT; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
-      const newEgg = new Egg({ scene, tier: EggTier.COMMON, sourceType: EggSourceType.GACHA_SHINY, id: 204 });
+      const newEgg = new Egg({ tier: EggTier.COMMON, sourceType: EggSourceType.GACHA_SHINY, id: 204 });
       const newHatch = newEgg.generatePlayerPokemon();
       if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
         manaphyCount++;
@@ -66,15 +64,13 @@ describe("Manaphy Eggs", () => {
   });
 
   it("should have correct Manaphy rates and Rare Egg Move rates, from Phione species eggs", () => {
-    const scene = game.scene;
-
     let manaphyCount = 0;
     let phioneCount = 0;
     let rareEggMoveCount = 0;
     for (let i = 0; i < EGG_HATCH_COUNT; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
-      const newEgg = new Egg({ scene, species: SpeciesId.PHIONE, sourceType: EggSourceType.SAME_SPECIES_EGG });
+      const newEgg = new Egg({ speciesId: SpeciesId.PHIONE, sourceType: EggSourceType.SAME_SPECIES_EGG });
       const newHatch = newEgg.generatePlayerPokemon();
       if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
         manaphyCount++;
@@ -92,15 +88,13 @@ describe("Manaphy Eggs", () => {
   });
 
   it("should have correct Manaphy rates and Rare Egg Move rates, from Manaphy species eggs", () => {
-    const scene = game.scene;
-
     let manaphyCount = 0;
     let phioneCount = 0;
     let rareEggMoveCount = 0;
     for (let i = 0; i < EGG_HATCH_COUNT; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
-      const newEgg = new Egg({ scene, species: SpeciesId.MANAPHY, sourceType: EggSourceType.SAME_SPECIES_EGG });
+      const newEgg = new Egg({ speciesId: SpeciesId.MANAPHY, sourceType: EggSourceType.SAME_SPECIES_EGG });
       const newHatch = newEgg.generatePlayerPokemon();
       if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
         manaphyCount++;

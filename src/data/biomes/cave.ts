@@ -10,7 +10,11 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This file represents all the data of the cave biome
  */
+<<<<<<<< HEAD:src/data/biomes/cave.ts
 const pokemonPool = {
+========
+export const cavePokemonPool = {
+>>>>>>>> 8c5ce978bb84c6e24b5fa5b9768d513a39aabc90:src/data/balance/biomes/cave.ts
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
@@ -98,7 +102,11 @@ const pokemonPool = {
   },
 };
 
+<<<<<<<< HEAD:src/data/biomes/cave.ts
 const trainerPool = {
+========
+export const caveTrainerPool = {
+>>>>>>>> 8c5ce978bb84c6e24b5fa5b9768d513a39aabc90:src/data/balance/biomes/cave.ts
   [BiomePoolTier.COMMON]: [TrainerType.BACKPACKER, TrainerType.HIKER],
   [BiomePoolTier.UNCOMMON]: [TrainerType.ACE_TRAINER, TrainerType.BLACK_BELT],
   [BiomePoolTier.RARE]: [],
@@ -110,7 +118,11 @@ const trainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
+<<<<<<<< HEAD:src/data/biomes/cave.ts
 const weatherPool = {
+========
+export const caveWeatherPool = {
+>>>>>>>> 8c5ce978bb84c6e24b5fa5b9768d513a39aabc90:src/data/balance/biomes/cave.ts
   [WeatherType.NONE]: 1,
   [WeatherType.SUNNY]: 0,
   [WeatherType.RAIN]: 0,
@@ -123,7 +135,11 @@ const weatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
+<<<<<<<< HEAD:src/data/biomes/cave.ts
 const terrainPool = {
+========
+export const caveTerrainPool = {
+>>>>>>>> 8c5ce978bb84c6e24b5fa5b9768d513a39aabc90:src/data/balance/biomes/cave.ts
   [TerrainType.NONE]: 1,
   [TerrainType.MISTY]: 0,
   [TerrainType.ELECTRIC]: 0,

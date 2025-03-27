@@ -208,7 +208,6 @@ export class GameData {
   public secretId: number;
 
   public dexData: DexData;
-  private defaultDexData: DexData | null;
 
   public starterData: StarterData;
 
@@ -379,6 +378,7 @@ export class GameData {
 
         localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemDataStr, bypassLogin));
 
+        // TODO: run history shouldn't be initialized here (and is it even needed?)
         const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
         const lsItem = localStorage.getItem(lsItemKey);
         if (!lsItem) {
@@ -390,34 +390,7 @@ export class GameData {
         this.trainerId = systemData.trainerId;
         this.secretId = systemData.secretId;
 
-        if (!systemData.starterData) {
-          this.initStarterData();
-
-          if (systemData["starterMoveData"]) {
-            const starterMoveData = systemData["starterMoveData"];
-            for (const s of Object.keys(starterMoveData)) {
-              this.starterData[s].moveset = starterMoveData[s];
-            }
-          }
-
-          if (systemData["starterEggMoveData"]) {
-            const starterEggMoveData = systemData["starterEggMoveData"];
-            for (const s of Object.keys(starterEggMoveData)) {
-              this.starterData[s].eggMoves = starterEggMoveData[s];
-            }
-          }
-
-          this.migrateStarterAbilities(systemData, this.starterData);
-
-          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
-          for (const s of starterIds) {
-            this.starterData[s].candyCount += systemData.dexData[s].caughtCount;
-            this.starterData[s].candyCount += systemData.dexData[s].hatchedCount * 2;
-            if (systemData.dexData[s].caughtAttr & DexAttr.SHINY) {
-              this.starterData[s].candyCount += 4;
-            }
-          }
-        } else {
+        if (systemData.starterData) {
           this.starterData = systemData.starterData;
         }
 
@@ -462,8 +435,6 @@ export class GameData {
         this.unlockPity = systemData.unlockPity ? systemData.unlockPity.slice(0) : [0, 0, 0, 0];
 
         this.dexData = Object.assign(this.dexData, systemData.dexData);
-        this.consolidateDexData(this.dexData);
-        this.defaultDexData = null;
 
         // Ensure that the player gender in settings matches the player gender in system data
         if (systemData.gender !== PlayerGender.UNSET && systemData.gender !== settings.display.playerGender) {
@@ -1478,7 +1449,6 @@ export class GameData {
       }
     }
 
-    this.defaultDexData = Object.assign({}, data);
     this.dexData = data;
   }
 
@@ -2013,41 +1983,5 @@ export class GameData {
 
   getFormAttr(formIndex: number): bigint {
     return BigInt(1) << BigInt(7 + formIndex);
-  }
-
-  consolidateDexData(dexData: DexData): void {
-    for (const k of Object.keys(dexData)) {
-      const entry = dexData[k] as DexEntry;
-      if (!entry.hasOwnProperty("hatchedCount")) {
-        entry.hatchedCount = 0;
-      }
-      if (!entry.hasOwnProperty("natureAttr") || (entry.caughtAttr && !entry.natureAttr)) {
-        entry.natureAttr = this.defaultDexData?.[k].natureAttr || 1 << randInt(25, 1);
-      }
-    }
-  }
-
-  migrateStarterAbilities(systemData: SystemSaveData, initialStarterData?: StarterData): void {
-    const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as SpeciesId);
-    const starterData = initialStarterData || systemData.starterData;
-    const dexData = systemData.dexData;
-    for (const s of starterIds) {
-      const dexAttr = dexData[s].caughtAttr;
-      starterData[s].abilityAttr =
-        (dexAttr & DexAttr.DEFAULT_VARIANT ? AbilityAttr.ABILITY_1 : 0)
-        | (dexAttr & DexAttr.VARIANT_2 ? AbilityAttr.ABILITY_2 : 0)
-        | (dexAttr & DexAttr.VARIANT_3 ? AbilityAttr.ABILITY_HIDDEN : 0);
-      if (dexAttr) {
-        if (!(dexAttr & DexAttr.DEFAULT_VARIANT)) {
-          dexData[s].caughtAttr ^= DexAttr.DEFAULT_VARIANT;
-        }
-        if (dexAttr & DexAttr.VARIANT_2) {
-          dexData[s].caughtAttr ^= DexAttr.VARIANT_2;
-        }
-        if (dexAttr & DexAttr.VARIANT_3) {
-          dexData[s].caughtAttr ^= DexAttr.VARIANT_3;
-        }
-      }
-    }
   }
 }

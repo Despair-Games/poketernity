@@ -22,7 +22,7 @@ import { Nature } from "#enums/nature";
 import { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { IEggOptions } from "#app/data/egg";
+import type { EggOptions } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -558,7 +558,7 @@ function calculateEggRewardsForPokemon(pokemon: PlayerPokemon): [number, number]
 
 function getEggOptions(commonEggs: number, rareEggs: number) {
   const eggDescription = i18next.t(`${namespace}:title`) + ":\n" + i18next.t(trainerNameKey);
-  const eggOptions: IEggOptions[] = [];
+  const eggOptions: EggOptions[] = [];
 
   if (commonEggs > 0) {
     for (let i = 0; i < commonEggs; i++) {
