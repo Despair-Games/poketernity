@@ -7,11 +7,9 @@ import type { TrainerType } from "#enums/trainer-type";
 import type { WeatherType } from "#enums/weather-type";
 
 /**
- * Calling it PEBiome for now to distinguish from Biome.ts and Biome the enum
- *
- * TODO: let's rename this Biome.ts in the future
+ * Contains the data for a Biome, including the Pokemon, trainer and weather/terrain pools.
  */
-export class PEBiome {
+export class Biome {
   public biomeType: BiomeId;
   // TODO: consider `partial` and `Omit`
   public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
