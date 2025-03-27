@@ -1,16 +1,16 @@
+import { biomeLinks } from "#app/data/biome-links";
 import { getBiomeName } from "#app/data/biome-utils";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { PartyHealPhase } from "#app/phases/party-heal-phase";
+import { SwitchBiomePhase } from "#app/phases/switch-biome-phase";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { randSeedInt } from "#app/utils";
 import { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
-import { BattlePhase } from "./abstract-battle-phase";
-import { PartyHealPhase } from "./party-heal-phase";
-import { SwitchBiomePhase } from "./switch-biome-phase";
-import { biomeLinks } from "#app/data/biome-links";
 
 export class SelectBiomePhase extends BattlePhase {
   override readonly id = PhaseId.SELECT_BIOME;
