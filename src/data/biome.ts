@@ -7,20 +7,21 @@ import type { TrainerType } from "#enums/trainer-type";
 import type { WeatherType } from "#enums/weather-type";
 
 /**
- * Calling it PEBiome for now to distinguish from Biome.ts and Biome the enum
- *
- * TODO: let's rename this Biome.ts in the future
+ * TODO:
+ * Consider `partial` and `Omit` or an interface for pokemonPool and trainerPool
+ * weatherPool and terrainPool are not used anywhere, move {@linkcode getRandomWeatherType} here
+ * Add image assets here like {@linkcode biomeWithProps}
+ * Consider moving {@linkcode mysteryEncounterByBiome} here as well
+ * Move bgm loop point here as well
+ * Move {@linkcode getTrainerChance} as well
  */
-export class PEBiome {
+export class Biome {
   public biomeType: BiomeId;
-  // TODO: consider `partial` and `Omit`
   public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   public trainerPool: Record<BiomePoolTier, TrainerType[]>;
-  // TODO: weatherPool and terrainPool are currently not used
   public weatherPool: Record<WeatherType, number>;
   public terrainPool: Record<TerrainType, number>;
   public bgm: string;
-  // TODO: image assets should also be in here probably
 
   constructor(
     biomeType: BiomeId,

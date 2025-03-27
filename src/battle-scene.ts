@@ -23,7 +23,7 @@ import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-bat
 import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
-import { getBiomeName } from "#app/data/balance/biomes";
+import { getBiomeName } from "#app/data/balance/biome-utils";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";

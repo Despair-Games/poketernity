@@ -32,7 +32,7 @@ import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fu
 import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
 import { GlobalTradeSystemEncounter } from "#app/data/mystery-encounters/encounters/global-trade-system-encounter";
 import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/encounters/the-expert-pokemon-breeder-encounter";
-import { getBiomeName } from "#app/data/balance/biomes";
+import { getBiomeName } from "#app/data/balance/biome-utils";
 
 export const EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.SEA,

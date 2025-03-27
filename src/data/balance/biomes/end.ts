@@ -2,107 +2,125 @@ import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
-import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * This file represents all the data of the cave biome
+ * This file represents all the data of the end biome
  */
-export const cavePokemonPool = {
+export const endPokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.GREAT_TUSK,
+      SpeciesId.SCREAM_TAIL,
+      SpeciesId.BRUTE_BONNET,
+      SpeciesId.FLUTTER_MANE,
+      SpeciesId.SLITHER_WING,
+      SpeciesId.SANDY_SHOCKS,
+      SpeciesId.IRON_TREADS,
+      SpeciesId.IRON_BUNDLE,
+      SpeciesId.IRON_HANDS,
+      SpeciesId.IRON_JUGULIS,
+      SpeciesId.IRON_MOTH,
+      SpeciesId.IRON_THORNS,
+    ],
   },
   [BiomePoolTier.UNCOMMON]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [SpeciesId.ROARING_MOON, SpeciesId.IRON_VALIANT],
   },
   [BiomePoolTier.RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.WALKING_WAKE,
+      SpeciesId.IRON_LEAVES,
+      SpeciesId.GOUGING_FIRE,
+      SpeciesId.RAGING_BOLT,
+      SpeciesId.IRON_BOULDER,
+      SpeciesId.IRON_CROWN,
+    ],
   },
   [BiomePoolTier.SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [],
   },
   [BiomePoolTier.ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [],
   },
   [BiomePoolTier.BOSS]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [SpeciesId.ETERNATUS],
   },
   [BiomePoolTier.BOSS_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [],
   },
   [BiomePoolTier.BOSS_SUPER_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
-    [TimeOfDay.NIGHT]: [SpeciesId.ZUBAT],
-    [TimeOfDay.ALL]: [SpeciesId.GEODUDE],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [],
   },
 };
 
-export const caveTrainerPool = {
-  [BiomePoolTier.COMMON]: [TrainerType.YOUNGSTER],
+export const endTrainerPool = {
+  [BiomePoolTier.COMMON]: [],
   [BiomePoolTier.UNCOMMON]: [],
   [BiomePoolTier.RARE]: [],
   [BiomePoolTier.SUPER_RARE]: [],
   [BiomePoolTier.ULTRA_RARE]: [],
-  [BiomePoolTier.BOSS]: [TrainerType.BROCK],
+  [BiomePoolTier.BOSS]: [],
   [BiomePoolTier.BOSS_RARE]: [],
   [BiomePoolTier.BOSS_SUPER_RARE]: [],
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-export const caveWeatherPool = {
+export const endWeatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 1,
+  [WeatherType.SUNNY]: 0,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
   [WeatherType.SNOW]: 0,
   [WeatherType.FOG]: 0,
   [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 1,
+  [WeatherType.HARSH_SUN]: 0,
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-export const caveTerrainPool = {
-  [TerrainType.NONE]: 99,
-  [TerrainType.MISTY]: 1,
+export const endTerrainPool = {
+  [TerrainType.NONE]: 1,
+  [TerrainType.MISTY]: 0,
   [TerrainType.ELECTRIC]: 0,
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,

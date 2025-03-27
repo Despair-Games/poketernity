@@ -2,7 +2,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { type Move } from "#app/data/moves/move";
 import { type MoveId } from "#enums/move-id";
 import type { Ability } from "#app/data/abilities/ability";
-import type { PEBiome } from "#app/data/balance/biomes/PEBiome";
+import type { Biome } from "#app/data/biome";
 import { type BiomeId } from "#enums/biome-id";
 
 interface DataMap<K, V> extends Map<K, V> {
@@ -15,4 +15,4 @@ export const allSpecies: PokemonSpecies[] = [];
 export const allMoves: DataMap<MoveId, Move> = new Map<MoveId, Move>();
 export const allAbilities: Ability[] = [];
 // @ts-expect-error
-export const allBiomes: DataMap<BiomeId, PEBiome> = new Map<BiomeId, PEBiome>();
+export const allBiomes: DataMap<BiomeId, Biome> = new Map<BiomeId, Biome>();
