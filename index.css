@@ -236,7 +236,7 @@ input:-internal-autofill-selected {
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleNature,
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleAbility,
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleGender,
-#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleVariant {
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleTera {
   display: none;
 }
 
