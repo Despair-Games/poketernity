@@ -3336,7 +3336,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       amount = 0;
     }
 
-    const ignoreDynamaxReduction = [HitResult.ONE_HIT_KO, HitResult.SELF_KO].includes(result) ? true : false;
+    const ignoreDynamaxReduction = [HitResult.ONE_HIT_KO, HitResult.SELF_KO].includes(result);
 
     const damage = this.damage(amount, { ignoreSegments, preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
 
