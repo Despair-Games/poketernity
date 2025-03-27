@@ -23,8 +23,3 @@ export type StarterMoveset = [MoveId] | [MoveId, MoveId] | [MoveId, MoveId, Move
 export interface StarterFormMoveData {
   [key: number]: StarterMoveset;
 }
-
-// TODO apparently unused?
-export interface StarterMoveData {
-  [key: number]: StarterMoveset | StarterFormMoveData;
-}

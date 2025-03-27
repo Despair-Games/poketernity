@@ -3316,7 +3316,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param ignoreSegments - If `true`, boss bars are ignored. Only applies to {@linkcode EnemyPokemon}. Default `false`
    * @param preventEndure - If `true`, bypasses the effects of Endure, Sturdy, etc. Default `false`
    * @param ignoreFaintPhase - If `true`, doesn't push a {@linkcode FaintPhase}. Default `false`
-   * @param ignoreDynamaxReduction - If `true`, dynamax damage reduction will be ignored. Default `false`
    * @param source - The source of the damage if it was a {@linkcode Pokemon}. Optional.
    * @returns The amount of damage actually dealt.
    */
@@ -3328,7 +3327,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ignoreSegments = false,
       preventEndure = false,
       ignoreFaintPhase = false,
-      ignoreDynamaxReduction = false,
       source,
     }: DamageFunctionOptions = {},
   ): number {
@@ -3337,6 +3335,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.switchOutStatus && source) {
       amount = 0;
     }
+
+    const ignoreDynamaxReduction = [HitResult.ONE_HIT_KO, HitResult.SELF_KO].includes(result);
 
     const damage = this.damage(amount, { ignoreSegments, preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
 
@@ -3364,7 +3364,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const healAmount = Math.min(amount, this.getMaxHp() - this.hp);
     this.hp += healAmount;
     if (!quiet && this.isOnField()) {
-      globalScene.damageNumberHandler.add(this, amount, HitResult.HEAL);
+      globalScene.damageNumberHandler.add(this, healAmount, HitResult.HEAL);
     }
     return healAmount;
   }
@@ -5439,7 +5439,8 @@ export type DamageResult =
   | HitResult.SUPER_EFFECTIVE
   | HitResult.NOT_VERY_EFFECTIVE
   | HitResult.ONE_HIT_KO
-  | HitResult.OTHER;
+  | HitResult.OTHER
+  | HitResult.SELF_KO;
 
 /** Interface containing the results of a damage calculation for a given move */
 export interface DamageCalculationResult {

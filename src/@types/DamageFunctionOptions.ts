@@ -7,5 +7,4 @@ export interface DamageFunctionOptions {
   preventEndure?: boolean;
   ignoreFaintPhase?: boolean;
   source?: Pokemon;
-  ignoreDynamaxReduction?: boolean;
 }
