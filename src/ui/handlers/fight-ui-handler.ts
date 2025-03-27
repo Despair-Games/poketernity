@@ -116,10 +116,14 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   protected override tearDown(): void {
+    // unregister the info toggle
+    globalScene.removeInfoToggle(this.moveInfoOverlay);
+    globalScene.removeInfoToggle(this);
+
+    // destroy the containers and their content
     this.movesContainer.destroy();
     this.moveInfoContainer.destroy();
     this.moveInfoOverlay.destroy();
-    // TODO: removeInfoToggle
   }
 
   public override show(fieldIndex: number = 0): boolean {

@@ -158,6 +158,8 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
   }
 
   protected override tearDown(): void {
+    globalScene.removeInfoToggle(this.moveInfoOverlay);
+
     this.modifierContainer.destroy();
     this.continueButtonContainer.destroy();
     this.transferButtonContainer.destroy();

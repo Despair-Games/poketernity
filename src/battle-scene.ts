@@ -958,6 +958,13 @@ export default class BattleScene extends SceneBase {
     this.infoToggles.push(infoToggle);
   }
 
+  removeInfoToggle(infoToggle: InfoToggle): void {
+    const infoToggleIndex = this.infoToggles.indexOf(infoToggle);
+    if (infoToggleIndex !== -1) {
+      this.infoToggles.splice(infoToggleIndex, 1);
+    }
+  }
+
   // return the stored info toggles; used by ui-inputs
   getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
     return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
