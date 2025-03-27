@@ -1178,7 +1178,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,
@@ -3985,7 +3985,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.statsContainer.updateIvs(this.speciesStarterDexEntry.ivs);
   }
 
-  override clearText() {
+  public override clearText() {
     this.starterSelectMessageBoxContainer.setVisible(false);
     super.clearText();
   }

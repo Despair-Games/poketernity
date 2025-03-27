@@ -9,23 +9,23 @@ export class LoadingModalUiHandler extends ModalUiHandler {
     super(mode);
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "";
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 80;
   }
 
-  getHeight(): number {
+  protected override getHeight(): number {
     return 32;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [];
   }
 

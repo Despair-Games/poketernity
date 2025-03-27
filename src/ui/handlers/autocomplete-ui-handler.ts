@@ -15,7 +15,7 @@ export class AutoCompleteUiHandler extends OptionSelectUiHandler {
     this.modalContainer = null;
   }
 
-  override updateSizeForOptions(options: any): void {
+  protected override updateSizeForOptions(options: any): void {
     super.updateSizeForOptions(options);
     if (this.modalContainer) {
       this.optionSelectContainer.setPositionRelative(

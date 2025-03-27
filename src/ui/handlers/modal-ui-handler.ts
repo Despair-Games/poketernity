@@ -25,17 +25,17 @@ export abstract class ModalUiHandler extends UiHandler {
     this.buttonLabels = [];
   }
 
-  abstract getModalTitle(config?: ModalConfig): string;
+  protected abstract getModalTitle(config?: ModalConfig): string;
 
-  abstract getWidth(config?: ModalConfig): number;
+  protected abstract getWidth(config?: ModalConfig): number;
 
-  abstract getHeight(config?: ModalConfig): number;
+  protected abstract getHeight(config?: ModalConfig): number;
 
-  abstract getMargin(config?: ModalConfig): [number, number, number, number];
+  protected abstract getMargin(config?: ModalConfig): [number, number, number, number];
 
-  abstract getButtonLabels(config?: ModalConfig): string[];
+  protected abstract getButtonLabels(config?: ModalConfig): string[];
 
-  getButtonTopMargin(): number {
+  protected getButtonTopMargin(): number {
     return 0;
   }
 
@@ -145,7 +145,7 @@ export abstract class ModalUiHandler extends UiHandler {
     return true;
   }
 
-  updateContainer(config?: ModalConfig): void {
+  protected updateContainer(config?: ModalConfig): void {
     const [marginTop, marginRight, marginBottom, marginLeft] = this.getMargin(config);
 
     const [width, height] = [this.getWidth(config), this.getHeight(config)];

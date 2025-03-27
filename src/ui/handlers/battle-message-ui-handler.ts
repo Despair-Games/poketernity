@@ -179,7 +179,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     return false;
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number | null,
     callback?: Function | null,
@@ -191,7 +191,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  override showDialogue(
+  public override showDialogue(
     text: string,
     name?: string,
     delay?: number | null,

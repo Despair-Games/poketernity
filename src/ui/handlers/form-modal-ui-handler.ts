@@ -43,9 +43,9 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
    * Gets used by {@linkcode updateFields} to add the proper text inputs and labels to the view
    * @returns array of {@linkcode InputFieldConfig}
    */
-  abstract getInputFieldConfigs(): InputFieldConfig[];
+  protected abstract getInputFieldConfigs(): InputFieldConfig[];
 
-  getHeight(config?: ModalConfig): number {
+  protected override getHeight(config?: ModalConfig): number {
     return (
       20 * this.getInputFieldConfigs().length
       + (this.getModalTitle() ? 26 : 0)
@@ -55,7 +55,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     );
   }
 
-  getReadableErrorMessage(error: string): string {
+  protected getReadableErrorMessage(error: string): string {
     if (error?.indexOf("connection refused") > -1) {
       return "Could not connect to the server";
     }
@@ -156,13 +156,13 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return false;
   }
 
-  sanitizeInputs(): void {
+  protected sanitizeInputs(): void {
     for (const input of this.inputs) {
       input.text = input.text.trim();
     }
   }
 
-  override updateContainer(config?: ModalConfig): void {
+  protected override updateContainer(config?: ModalConfig): void {
     super.updateContainer(config);
 
     this.errorMessage.setText(this.getReadableErrorMessage((config as FormModalConfig)?.errorMessage || ""));

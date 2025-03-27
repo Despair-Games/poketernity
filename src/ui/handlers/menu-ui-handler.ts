@@ -180,7 +180,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     };
   }
 
-  override computeWindowHeight(): number {
+  protected override computeWindowHeight(): number {
     return GAME_HEIGHT - 2; // always fill the screen
   }
 
@@ -699,7 +699,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     }
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,

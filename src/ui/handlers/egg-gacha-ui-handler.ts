@@ -618,7 +618,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
     });
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,

@@ -121,7 +121,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
    * @param activeConfig - The active keyboard configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  override setLayout(activeConfig: InterfaceConfig): boolean {
+  protected override setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.

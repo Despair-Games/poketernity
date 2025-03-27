@@ -416,7 +416,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param activeConfig - The active device configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  setLayout(activeConfig: InterfaceConfig): boolean {
+  protected setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.

@@ -730,7 +730,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number | null,
     callback?: Function | null,

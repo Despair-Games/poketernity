@@ -87,23 +87,23 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer.setVisible(false);
   }
 
-  override getModalTitle(): string {
+  protected override getModalTitle(): string {
     return i18next.t("menu:login");
   }
 
-  override getWidth(): number {
+  protected override getWidth(): number {
     return 160;
   }
 
-  override getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  override getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [i18next.t("menu:login"), i18next.t("menu:register")];
   }
 
-  override getReadableErrorMessage(error: string): string {
+  protected override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -126,7 +126,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     return super.getReadableErrorMessage(error);
   }
 
-  override getInputFieldConfigs(): InputFieldConfig[] {
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
     const inputFieldConfigs: InputFieldConfig[] = [];
     inputFieldConfigs.push({ label: i18next.t("menu:username") });
     inputFieldConfigs.push({ label: i18next.t("menu:password"), isPassword: true });

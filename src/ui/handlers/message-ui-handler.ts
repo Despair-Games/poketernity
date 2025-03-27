@@ -23,7 +23,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
    * Add the sprite to be displayed at the end of messages with prompts
    * @param container the container to add the sprite to
    */
-  initPromptSprite(container: Phaser.GameObjects.Container) {
+  protected initPromptSprite(container: Phaser.GameObjects.Container) {
     if (!this.prompt) {
       const promptSprite = globalScene.add.sprite(0, 0, "prompt");
       promptSprite.setVisible(false);
@@ -36,7 +36,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  showText(
+  public showText(
     text: string,
     delay?: number | null,
     callback?: Function | null,
@@ -47,7 +47,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  showDialogue(
+  public showDialogue(
     text: string,
     _name?: string,
     delay?: number | null,
@@ -212,7 +212,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  showPrompt(callback?: Function | null, callbackDelay?: number | null) {
+  private showPrompt(callback?: Function | null, callbackDelay?: number | null) {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
     const lastTextLine = wrappedTextLines[textLinesCount - 1];
@@ -246,7 +246,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     };
   }
 
-  isTextAnimationInProgress() {
+  public isTextAnimationInProgress() {
     if (this.textTimer) {
       return this.textTimer.repeatCount < this.textTimer.repeat;
     }
@@ -254,7 +254,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     return false;
   }
 
-  clearText() {
+  public clearText() {
     this.message.setText("");
     this.pendingPrompt = false;
   }
