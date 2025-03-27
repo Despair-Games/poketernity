@@ -695,22 +695,26 @@ export default class BattleScene extends SceneBase {
 
     this.trainer = trainer;
 
-    this.anims.create({
-      key: "prompt",
-      frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
-      frameRate: 6,
-      repeat: -1,
-      showOnStart: true,
-    });
+    if (!this.anims.exists("prompt")) {
+      this.anims.create({
+        key: "prompt",
+        frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
+        frameRate: 6,
+        repeat: -1,
+        showOnStart: true,
+      });
+    }
 
-    this.anims.create({
-      key: "tera_sparkle",
-      frames: this.anims.generateFrameNumbers("tera_sparkle", { start: 0, end: 12 }),
-      frameRate: 18,
-      repeat: 0,
-      showOnStart: true,
-      hideOnComplete: true,
-    });
+    if (!this.anims.exists("tera_sparkle")) {
+      this.anims.create({
+        key: "tera_sparkle",
+        frames: this.anims.generateFrameNumbers("tera_sparkle", { start: 0, end: 12 }),
+        frameRate: 18,
+        repeat: 0,
+        showOnStart: true,
+        hideOnComplete: true,
+      });
+    }
 
     this.reset(false, false, true);
 
@@ -1248,6 +1252,9 @@ export default class BattleScene extends SceneBase {
         ease: "Sine.easeInOut",
         onComplete: () => {
           this.clearPhaseQueue();
+
+          // stop the tera sparkle handler
+          this.spriteSparkleHandler.destroy();
 
           // destroying those containers will call 'container.removeAll(true)', destroying all their children as well
           this.uiContainer.destroy();

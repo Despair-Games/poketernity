@@ -104,7 +104,7 @@ export default class DamageNumberHandler {
         ease: "Sine.easeIn",
         onComplete: () => {
           this.damageNumbers.get(battlerIndex)!.splice(this.damageNumbers.get(battlerIndex)!.indexOf(damageNumber), 1);
-          damageNumber.destroy(true);
+          damageNumber.destroy();
         },
       });
       return;
@@ -190,7 +190,7 @@ export default class DamageNumberHandler {
             this.damageNumbers
               .get(battlerIndex)!
               .splice(this.damageNumbers.get(battlerIndex)!.indexOf(damageNumber), 1);
-            damageNumber.destroy(true);
+            damageNumber.destroy();
           },
         },
       ],
