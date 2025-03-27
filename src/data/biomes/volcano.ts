@@ -16,7 +16,6 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
     [TimeOfDay.ALL]: [SpeciesId.CYNDAQUIL],
   },
   [BiomePoolTier.UNCOMMON]: {
