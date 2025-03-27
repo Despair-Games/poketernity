@@ -44,7 +44,7 @@ export const EGG_SEED = 1073741824;
  * Egg options to override egg properties. The `EggSourceType` is mandatory.
  * Every other property is optional and if not provided will be randomly generated based on the source type.
  */
-export interface IEggOptions {
+export interface EggOptions {
   /**
    * Defines where the egg comes from. Applies specific modifiers.
    * Will also define the text displayed in the egg list.
@@ -162,8 +162,8 @@ export class Egg {
   // #endregion
   ////
 
-  constructor(eggOptions: IEggOptions) {
-    const generateEggProperties = (eggOptions: IEggOptions) => {
+  constructor(eggOptions: EggOptions) {
+    const generateEggProperties = (eggOptions: EggOptions) => {
       this._sourceType = eggOptions.sourceType;
       // Ensure _sourceType is defined before invoking rollEggTier(), as it is referenced
       this._tier = eggOptions.tier ?? Overrides.EGG_TIER_OVERRIDE ?? this.rollEggTier();
