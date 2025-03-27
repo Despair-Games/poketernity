@@ -179,13 +179,16 @@ export class CommandUiHandler extends UiHandler {
   }
 
   protected override clear(): void {
-    this.getUi().getMessageHandler().commandWindow.setVisible(false);
     this.commandsContainer.setVisible(false);
-    this.getUi().getMessageHandler().clearText();
+    const messageHandler = this.getUi().getMessageHandler();
+    if (messageHandler.ready) {
+      messageHandler.commandWindow.setVisible(false);
+      messageHandler.clearText();
+    }
     this.eraseCursor();
   }
 
-  eraseCursor(): void {
+  private eraseCursor(): void {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }
