@@ -126,10 +126,8 @@ export class Arena {
     const timeOfDay = this.getTimeOfDay();
     if (timeOfDay !== this.lastTimeOfDay) {
       this.pokemonPool = {};
-      for (const [tier] of Object.entries(allBiomes.get(this.biomeId).pokemonPool)) {
-        this.pokemonPool[tier] = Object.assign([], allBiomes.get(this.biomeId).pokemonPool[tier][TimeOfDay.ALL]).concat(
-          allBiomes.get(this.biomeId).pokemonPool[tier][timeOfDay],
-        );
+      for (const [tier, pool] of Object.entries(allBiomes.get(this.biomeId).pokemonPool)) {
+        this.pokemonPool[tier] = [...pool[TimeOfDay.ALL], ...pool[timeOfDay]];
       }
       this.lastTimeOfDay = timeOfDay;
     }
