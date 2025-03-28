@@ -24,6 +24,8 @@ import { UiMode } from "#enums/ui-mode";
  * @extends AbstractControlSettingsUiHandler
  */
 export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler {
+  private deleteKey: Phaser.Input.Keyboard.Key | undefined;
+  private homeKey: Phaser.Input.Keyboard.Key | undefined;
   /**
    * Creates an instance of KeyboardSettingsUiHandler.
    *
@@ -40,12 +42,6 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
     this.textureOverride = "keyboard";
     this.settingBlacklisted = settingKeyboardBlackList;
     this.device = Device.KEYBOARD;
-
-    // TODO remove listeners
-    const deleteEvent = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
-    const restoreDefaultEvent = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.HOME);
-    deleteEvent && deleteEvent.on("up", this.onDeleteDown, this);
-    restoreDefaultEvent && restoreDefaultEvent.on("up", this.onHomeDown, this);
   }
 
   setSetting = setSettingKeyboard;
@@ -79,12 +75,25 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
     // Map the 'noKeyboard' layout options for easy access.
     this.layout["noKeyboard"].optionsContainer = optionsContainer;
     this.layout["noKeyboard"].label = label;
+
+    // Listen to the home and delete key presses
+    this.deleteKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
+    this.homeKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.HOME);
+    this.deleteKey?.on("up", this.deleteBinding, this);
+    this.homeKey?.on("up", this.resetBindings, this);
+  }
+
+  protected override tearDown(): void {
+    this.deleteKey?.off("up", this.deleteBinding, this);
+    this.homeKey?.off("up", this.resetBindings, this);
+
+    super.tearDown();
   }
 
   /**
    * Handle the home key press event: reset mappings for the current device
    */
-  private onHomeDown(): void {
+  private resetBindings(): void {
     if (![UiMode.SETTINGS_KEYBOARD, UiMode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
@@ -96,7 +105,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
   /**
    * Handle the delete key press event: remove mapping for the current button
    */
-  private onDeleteDown(): void {
+  private deleteBinding(): void {
     if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
       return;
     }

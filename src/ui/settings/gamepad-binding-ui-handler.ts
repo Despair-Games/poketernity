@@ -10,7 +10,6 @@ import { AbstractBindingUiHandler } from "./abstract-binding-ui-handler";
 export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
-    globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }
   protected override setup() {
     super.setup();
@@ -43,6 +42,16 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     this.optionSelectContainer.add(this.newButtonIcon);
     this.optionSelectContainer.add(this.swapText);
     this.optionSelectContainer.add(this.targetButtonIcon);
+
+    // Listen to gamepad button down events to initiate binding.
+    globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
+  }
+
+  protected override tearDown(): void {
+    // Remove gamepad listener
+    globalScene.input.gamepad?.off("down", this.gamepadButtonDown, this);
+
+    super.tearDown();
   }
 
   public override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {

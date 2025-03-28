@@ -10,9 +10,6 @@ import { AbstractBindingUiHandler } from "./abstract-binding-ui-handler";
 export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
-    // Listen to gamepad button down events to initiate binding.
-    // TODO check listener removal
-    globalScene.input.keyboard?.on("keydown", this.onKeyDown, this);
   }
 
   protected override setup() {
@@ -30,6 +27,16 @@ export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
     this.actionsContainer.add(this.actionLabel);
 
     this.optionSelectContainer.add(this.newButtonIcon);
+
+    // Listen to keyboard button down events to initiate binding.
+    globalScene.input.keyboard?.on("keydown", this.onKeyDown, this);
+  }
+
+  protected override tearDown(): void {
+    // Remove keyboard listener
+    globalScene.input.keyboard?.off("keydown", this.onKeyDown, this);
+
+    super.tearDown();
   }
 
   public override show(target: SettingKeyboard, cancelHandler: (success: boolean) => boolean): boolean {
