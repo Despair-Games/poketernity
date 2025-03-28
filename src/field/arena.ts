@@ -17,7 +17,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type AbstractConstructor, randSeedInt } from "#app/utils";
+import { type AbstractConstructor, randSeedInt, randSeedItem } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -640,6 +640,31 @@ export class Arena {
     }
 
     return TimeOfDay.DAWN;
+  }
+
+  /**
+   * Sets a random weather based on the time of day and the current biome
+   */
+  setRandomWeather(): void {
+    const applySunBonus =
+      (this.getTimeOfDay() === TimeOfDay.DAWN || this.getTimeOfDay() === TimeOfDay.DAY)
+      && allBiomes.get(this.biomeType).sunBonus > 0;
+    const weatherPool = { ...allBiomes.get(this.biomeType).weatherPool };
+
+    // Applies an extra weight to sun if the time is dawn/day and the biome has a sunBonus
+    if (applySunBonus) {
+      weatherPool[1] += allBiomes.get(this.biomeType).sunBonus;
+    }
+
+    const weightedWeatherArray: WeatherType[] = [];
+    for (const weatherType in Object.keys(weatherPool)) {
+      const weight = weatherPool[weatherType];
+      for (let i = 0; i < weight; i++) {
+        weightedWeatherArray.push(weatherType as unknown as WeatherType);
+      }
+    }
+    const randomWeather = randSeedItem(weightedWeatherArray);
+    this.trySetWeather(randomWeather, false);
   }
 
   /**

@@ -141,9 +141,12 @@ const trainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
+/**
+ * 90% of Sun if dawn/day, none otherwise
+ */
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 1,
+  [WeatherType.SUNNY]: 0,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
@@ -162,4 +165,12 @@ const terrainPool = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const volcanoBiome = new Biome(BiomeId.VOLCANO, pokemonPool, trainerPool, weatherPool, terrainPool, "volcano");
+export const volcanoBiome = new Biome(
+  BiomeId.VOLCANO,
+  pokemonPool,
+  trainerPool,
+  weatherPool,
+  terrainPool,
+  "volcano",
+  9,
+);

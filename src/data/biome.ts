@@ -27,6 +27,8 @@ export class Biome {
   public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   public trainerPool: Record<BiomePoolTier, TrainerType[]>;
   public weatherPool: Record<WeatherType, number>;
+  /** A bonus weight granted to  */
+  public sunBonus: number;
   public terrainPool: Record<TerrainType, number>;
   public bgm: string;
 
@@ -37,6 +39,7 @@ export class Biome {
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,
     bgm: string,
+    sunBonus: number = 0,
   ) {
     this.biomeType = biomeType;
     this.pokemonPool = pokemonPool;
@@ -44,5 +47,6 @@ export class Biome {
     this.weatherPool = weatherPool;
     this.terrainPool = terrainPool;
     this.bgm = bgm;
+    this.sunBonus = sunBonus;
   }
 }
