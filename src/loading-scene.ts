@@ -80,6 +80,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("select_cursor_pokerus", ImagesFolder.UI_CURSORS);
     this.loadImage("select_gen_cursor", ImagesFolder.UI_CURSORS); // same as select_cursor, could be removed by using it as a nineslice
     this.loadAtlas("summary_moves_cursor", ImagesFolder.UI_CURSORS);
+    this.loadImage("cursor_tera", ImagesFolder.UI_CURSORS, { uiThemeDependant: true });
 
     this.loadImage("ability_bar_left", ImagesFolder.UI_NOTIFICATION_BARS);
     this.loadImage("bgm_bar", ImagesFolder.UI_NOTIFICATION_BARS); // same as abilitity_bar_left, could be removed by using it as a nineslice
