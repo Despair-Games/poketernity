@@ -13,7 +13,7 @@ import { AbstractControlSettingsUiHandler } from "#app/ui/settings/abstract-cont
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
-import { reverseValueToKeySetting, truncateString } from "#app/utils";
+import { truncateString } from "#app/utils";
 import { Device } from "#enums/devices";
 import i18next from "i18next";
 import { UiMode } from "#enums/ui-mode";
@@ -101,11 +101,9 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
       return;
     }
     const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.
-    const selection = this.settingLabels[cursor].text;
-    const key = reverseValueToKeySetting(selection);
-    const settingName = SettingKeyboard[key];
+    const target = this.setting[Object.keys(this.setting)[cursor]];
     const activeConfig = this.getActiveConfig();
-    const success = deleteBind(this.getActiveConfig(), settingName);
+    const success = deleteBind(this.getActiveConfig(), target);
     if (success) {
       globalScene.gameData.saveMappingConfigs(
         globalScene.inputController?.selectedDevice[Device.KEYBOARD],
