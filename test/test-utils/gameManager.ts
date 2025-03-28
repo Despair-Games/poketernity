@@ -25,7 +25,6 @@ import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleStyle } from "#enums/battle-style";
@@ -103,8 +102,8 @@ export class GameManager {
 
     if (!firstTimeScene) {
       this.scene.reset(false, true);
-      (this.scene.ui.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
       this.scene.clearAllPhases();
+      this.scene.ui.resetHandlers(); // reset ui state
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
       this.scene.pushPhase(new LoginPhase());

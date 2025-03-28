@@ -1020,10 +1020,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   protected override tearDown(): void {
     this.starterSelectContainer.destroy();
     this.iconAnimHandler.destroy();
+    this.clearStarterPreferences();
   }
 
   public override show(selectedStarterCallback?: StarterSelectCallback): boolean {
-    if (!this.starterPreferences) {
+    if (!this.starterPreferences || Object.keys(this.starterPreferences).length === 0) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
     }
@@ -4044,8 +4045,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   /**
    * Clears this UI's starter preferences.
-   *
-   * This is intended to only be used for unit tests that work with this UI.
    */
   clearStarterPreferences() {
     this.starterPreferences = {};

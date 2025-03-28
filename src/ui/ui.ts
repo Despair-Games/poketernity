@@ -110,6 +110,8 @@ const noTransitionModes = [
   UiMode.RUN_INFO,
 ];
 
+const DEFAULT_MODE = UiMode.MESSAGE;
+
 export class UI extends Phaser.GameObjects.Container {
   private mode: UiMode;
   private modeChain: UiMode[];
@@ -129,7 +131,7 @@ export class UI extends Phaser.GameObjects.Container {
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
 
-    this.mode = UiMode.MESSAGE;
+    this.mode = DEFAULT_MODE;
     this.modeChain = [];
     this.handlers = [
       new BattleMessageUiHandler(),
@@ -199,6 +201,38 @@ export class UI extends Phaser.GameObjects.Container {
     this.savingIcon.setup();
 
     globalScene.uiContainer.add(this.savingIcon);
+  }
+
+  /**
+   * Stop any active handler, clear the mode chain and go back to the default MESSAGE ui mode.
+   *
+   * For now, only used to reset all handlers between tests.
+   */
+  public resetHandlers(): void {
+    this.mode = DEFAULT_MODE;
+    const currentHandler = this.getHandler();
+    for (const handler of this.handlers.filter((h) => h.active && h !== currentHandler)) {
+      handler.stop();
+    }
+    (this.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
+    this.resetModeChain();
+  }
+
+  public resetModeChain(): void {
+    this.modeChain = [];
+    globalScene.updateGameInfo();
+  }
+
+  override destroy(fromScene?: boolean): void {
+    // Clear references to current handlers in the NavigationManager
+    NavigationManager.getInstance().clearMenus();
+
+    // Destroy all handlers
+    for (const handler of this.handlers) {
+      handler.destroy();
+    }
+
+    super.destroy(fromScene);
   }
 
   private setupTooltip() {
@@ -426,18 +460,6 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  override destroy(fromScene?: boolean): void {
-    // Clear references to current handlers in the NavigationManager
-    NavigationManager.getInstance().clearMenus();
-
-    // Destroy all handlers
-    for (const handler of this.handlers) {
-      handler.destroy();
-    }
-
-    super.destroy(fromScene);
-  }
-
   clearText(): void {
     this.getCurrentMessageHandler().clearText();
   }
@@ -576,11 +598,6 @@ export class UI extends Phaser.GameObjects.Container {
         doSetMode();
       }
     });
-  }
-
-  resetModeChain(): void {
-    this.modeChain = [];
-    globalScene.updateGameInfo();
   }
 
   revertMode(): Promise<boolean> {
