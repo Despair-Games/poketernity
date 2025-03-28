@@ -8,43 +8,60 @@ import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
+import type { OptionSelectItem } from "../interfaces/option-select-config";
 
 export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
+  private onLanguageChange = () => this.showLanguageOptions();
+
   constructor() {
     super("display", displaySettingUiItems);
+  }
 
-    eventBus.on("language/change", () => {
-      globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-        options: [
-          ...supportedLanguages
-            .filter((l) => l.key !== i18next.resolvedLanguage)
-            .map((l) => {
-              return {
-                label: l.label,
-                handler: () => {
-                  if (this.canLoseProgress()) {
-                    this.showConfirm(
-                      i18next.t("menuUiHandler:losingProgressionWarning"),
-                      () => this.handleChangeLanguage(l),
-                      () => this.handleCancelLanguageChange(),
-                    );
-                    return true;
-                  } else {
-                    return this.handleChangeLanguage(l);
-                  }
-                },
-              };
-            }),
-          {
-            label: i18next.t("settings:back"),
+  protected override setup(): void {
+    super.setup();
+
+    eventBus.on("language/change", this.onLanguageChange);
+  }
+
+  protected override tearDown(): void {
+    eventBus.off("language/change", this.onLanguageChange);
+
+    super.tearDown();
+  }
+
+  private showLanguageOptions() {
+    const languageOptions: OptionSelectItem[] = [
+      ...supportedLanguages
+        .filter((l) => l.key !== i18next.resolvedLanguage)
+        .map((l) => {
+          return {
+            label: l.label,
             handler: () => {
-              return this.handleCancelLanguageChange();
+              if (this.canLoseProgress()) {
+                this.showConfirm(
+                  i18next.t("menuUiHandler:losingProgressionWarning"),
+                  () => this.handleChangeLanguage(l),
+                  () => this.handleCancelLanguageChange(),
+                );
+                return true;
+              } else {
+                return this.handleChangeLanguage(l);
+              }
             },
-          },
-        ],
-        maxOptions: LANGUAGE_MAX_OPTIONS,
-        yOffset: 48,
-      });
+          };
+        }),
+      {
+        label: i18next.t("settings:back"),
+        handler: () => {
+          return this.handleCancelLanguageChange();
+        },
+      },
+    ];
+
+    globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
+      options: languageOptions,
+      maxOptions: LANGUAGE_MAX_OPTIONS,
+      yOffset: 48,
     });
   }
 
