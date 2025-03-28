@@ -21,6 +21,11 @@ export class NextEncounterPhase extends EncounterPhase {
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
         pokemon.resetBattleData();
+        /**
+         * TODO: Known bug where this gets called after the session has been saved so
+         * reloading a session will cause this 1 friendship gain to be lost. See
+         * https://github.com/Despair-Games/poketernity/issues/395
+         */
         if (!pokemon.isFainted()) {
           pokemon.addFriendship(FRIENDSHIP_GAIN_PER_WAVE);
         }

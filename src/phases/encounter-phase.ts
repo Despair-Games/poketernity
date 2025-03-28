@@ -340,6 +340,9 @@ export class EncounterPhase extends BattlePhase {
       globalScene.isMysteryEncounterValidForWave(battleType, waveIndex)
       && !currentBattle.isBattleMysteryEncounter()
     ) {
+      /**
+       * TODO: This does not occur in most cases. See https://github.com/Despair-Games/poketernity/issues/395
+       */
       // Increment ME spawn chance if an ME could have spawned but did not
       // Only do this AFTER session has been saved to avoid duplicating increments
       mysteryEncounterSaveData.encounterSpawnChance += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
