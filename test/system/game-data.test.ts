@@ -1,12 +1,10 @@
-import { api } from "#app/plugins/api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { AbilityId } from "#enums/ability-id";
-import { MoveId } from "#enums/move-id";
+import * as account from "#app/account";
+import * as constants from "#app/constants";
+import { api } from "#app/plugins/api/api";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as account from "#app/account";
-import * as constants from "#app/constants";
 
 describe("System - Game Data", () => {
   let phaserGame: Phaser.Game;
@@ -20,11 +18,6 @@ describe("System - Game Data", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
-      .moveset([MoveId.SPLASH])
-      .battleType("single")
-      .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(MoveId.SPLASH);
   });
 
   afterEach(() => {

@@ -66,7 +66,6 @@ export class PowderTag extends BattlerTag {
           if (!cancelDamage.value) {
             pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
               result: HitResult.OTHER,
-              ignoreDynamaxReduction: true,
             });
           }
 

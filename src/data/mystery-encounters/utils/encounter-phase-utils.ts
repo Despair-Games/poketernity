@@ -4,7 +4,7 @@ import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS
 import { biomeLinks } from "#app/data/balance/biomes";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { Egg, type IEggOptions } from "#app/data/egg";
+import { Egg, type EggOptions } from "#app/data/egg";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -758,7 +758,7 @@ export function selectOptionThenPokemon(
  */
 export function setEncounterRewards(
   customShopRewards?: CustomModifierSettings,
-  eggRewards?: IEggOptions[],
+  eggRewards?: EggOptions[],
   preRewardsCallback?: Function,
 ) {
   globalScene.currentBattle.mysteryEncounter!.doEncounterRewards = () => {
