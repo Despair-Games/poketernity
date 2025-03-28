@@ -775,6 +775,7 @@ export default class BattleScene extends SceneBase {
     this.updateScoreText();
   }
 
+  // TODO: it seems to have 2 versions of the masterlist in memory, one with back and one without
   async initVariantData(): Promise<void> {
     Object.keys(variantData).forEach((key) => delete variantData[key]);
     await this.cachedFetch("./images/pokemon/variant/_masterlist.json")
@@ -1142,6 +1143,7 @@ export default class BattleScene extends SceneBase {
 
   reset(clearScene: boolean = false, clearData: boolean = false, reloadI18n: boolean = false): void {
     if (clearData) {
+      // TODO seems like the old instance is not getting garbage collected
       this.gameData = new GameData();
     }
 
@@ -1255,6 +1257,10 @@ export default class BattleScene extends SceneBase {
 
           // stop the tera sparkle handler
           this.spriteSparkleHandler.destroy();
+
+          // destroy elements placed directly on the scene
+          this.arenaBg.destroy();
+          this.arenaBgTransition.destroy();
 
           // destroying those containers will call 'container.removeAll(true)', destroying all their children as well
           this.uiContainer.destroy();

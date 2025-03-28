@@ -81,6 +81,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   }
 
   protected updateFields(fieldsConfig: InputFieldConfig[], hasTitle: boolean) {
+    // TODO: should destroy existing container and inputs, or reuse them
     this.inputContainers = [];
     this.inputs = [];
     this.formLabels = [];

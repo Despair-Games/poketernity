@@ -38,8 +38,9 @@ export class LoginFormUiHandler extends FormModalUiHandler {
   private infoContainer: Phaser.GameObjects.Container;
   private externalPartyBg: Phaser.GameObjects.NineSlice;
   private externalPartyTitle: Phaser.GameObjects.Text;
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+
+  constructor() {
+    super(UiMode.LOGIN_FORM);
   }
 
   protected override setup(): void {
@@ -64,8 +65,17 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    // TODO: it seems like the password and username input remains in a detached state even after destruction
+    this.infoContainer.destroy();
+    this.externalPartyContainer.destroy();
+    super.tearDown();
+  }
+
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
+    this.getUi().add(this.externalPartyContainer);
+
     this.externalPartyContainer.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH / 2, GAME_HEIGHT / 2),
       Phaser.Geom.Rectangle.Contains,
@@ -81,7 +91,6 @@ export class LoginFormUiHandler extends FormModalUiHandler {
 
     this.externalPartyContainer.add(this.googleImage);
     this.externalPartyContainer.add(this.discordImage);
-    this.getUi().add(this.externalPartyContainer);
     this.externalPartyContainer.add(this.googleImage);
     this.externalPartyContainer.add(this.discordImage);
     this.externalPartyContainer.setVisible(false);
