@@ -74,7 +74,7 @@ export function initBiomes() {
     endBiome,
   ];
 
-  for (const pebiome of rawAllBiomes) {
-    allBiomes.set(pebiome.biomeType, pebiome);
+  for (const biome of rawAllBiomes) {
+    allBiomes.set(biome.biomeType, biome);
   }
 }

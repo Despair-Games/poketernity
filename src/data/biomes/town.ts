@@ -7,8 +7,12 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
-// This file represents all the data of the town biome
-// TODO: remove these exports
+/**
+ * This file represents all the data of the voclano biome
+ *
+ * TODO: Remove these exports. Currently exporting them as temporary
+ * filler values for all other biomes.
+ */
 export const townPokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [
