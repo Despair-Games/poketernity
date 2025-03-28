@@ -8,9 +8,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * This file represents all the data of the voclano biome
- *
- * TODO: Remove these exports. Currently exporting them as temporary
+ * @todo Remove these exports. Currently exporting them as temporary
  * filler values for all other biomes.
  */
 export const townPokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>> = {

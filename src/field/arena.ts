@@ -44,7 +44,8 @@ export class Arena {
   public ignoreAbilities: boolean;
   public ignoringEffectSource: BattlerIndex | null;
 
-  /** Used to keep track of the previous TimeOfDay.
+  /**
+   * Used to keep track of the previous TimeOfDay.
    * Only used in {@linkcode updatePoolsForTimeOfDay}
    */
   private lastTimeOfDay: TimeOfDay;
@@ -118,8 +119,8 @@ export class Arena {
   }
 
   /**
-   * Updates the pokemonPool if the time of day changes.
-   * The pokemonPool is a combination of a biome's TimeOfDay.ALL pool
+   * Updates the `pokemonPool` if the time of day changes.
+   * The `pokemonPool` is a combination of a biome's `TimeOfDay.ALL` pool
    * and the pool for the specific time of day
    */
   updatePoolsForTimeOfDay(): void {
@@ -1005,7 +1006,7 @@ export class Arena {
 }
 
 /**
- * Todo: Make the key (biomeId in lower case) not what
+ * @todo Make the key (`biomeId` in lower case) not what
  * generates everything including the music and image assets
  *
  * All that should also live in the biome class itself.
