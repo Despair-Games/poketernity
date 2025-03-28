@@ -23,11 +23,16 @@ import type { WeatherType } from "#enums/weather-type";
  * - Move {@linkcode Arena.getTrainerChance} as well
  */
 export class Biome {
+  /** The corresponding biomeId enum */
   public biomeType: BiomeId;
+  /** A mapping of BiomePoolTier to TimeOfDay to SpeciesId representing the wild Pokemon that appear */
   public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
+  /** A mapping of BiomePoolTier to a list of TrainerType representing the trainers that appear */
   public trainerPool: Record<BiomePoolTier, TrainerType[]>;
+  /** weatherPool and terrainPool are currently unused, to be implemented in a future PR */
   public weatherPool: Record<WeatherType, number>;
   public terrainPool: Record<TerrainType, number>;
+  /** String representing the bgm of the biome */
   public bgm: string;
 
   constructor(
