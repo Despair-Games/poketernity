@@ -285,7 +285,7 @@ interface WeatherPoolEntry {
 export function getRandomWeatherType(arena: Arena): WeatherType {
   let weatherPool: WeatherPoolEntry[] = [];
   const hasSun = arena.getTimeOfDay() < 2;
-  switch (arena.biomeType) {
+  switch (arena.biomeId) {
     case BiomeId.GRASS:
       weatherPool = [{ weatherType: WeatherType.NONE, weight: 7 }];
       if (hasSun) {

@@ -185,14 +185,14 @@ export class GameMode implements GameModeConfig {
     return false;
   }
 
-  isTrainerBoss(waveIndex: number, biomeType: BiomeId, offsetGym: boolean): boolean {
+  isTrainerBoss(waveIndex: number, biomeId: BiomeId, offsetGym: boolean): boolean {
     switch (this.modeId) {
       case GameModes.DAILY:
         return waveIndex > 10 && waveIndex < 50 && !(waveIndex % 10);
       default:
         return (
           waveIndex % 30 === (offsetGym ? 0 : 20)
-          && (biomeType !== BiomeId.END || this.isClassic || this.isWaveFinal(waveIndex))
+          && (biomeId !== BiomeId.END || this.isClassic || this.isWaveFinal(waveIndex))
         );
     }
   }

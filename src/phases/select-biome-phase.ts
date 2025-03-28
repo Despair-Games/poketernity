@@ -22,7 +22,7 @@ export class SelectBiomePhase extends BattlePhase {
     const { isClassic, isDaily, hasRandomBiomes, hasShortBiomes } = gameMode;
     const { waveIndex } = currentBattle;
 
-    const currentBiome = arena.biomeType;
+    const currentBiome = arena.biomeId;
 
     const setNextBiome = (nextBiome: BiomeId): void => {
       if (waveIndex % 10 === 1) {

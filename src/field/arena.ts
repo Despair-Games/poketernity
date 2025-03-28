@@ -4,7 +4,7 @@ import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
-import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/biome-utils";
+import { getBiomeBgm, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
@@ -36,7 +36,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 export class Arena {
-  public biomeType: BiomeId;
+  public biomeId: BiomeId;
   public weather: Weather | null;
   public terrain: Terrain | null;
   public tags: ArenaTag[];
@@ -44,6 +44,9 @@ export class Arena {
   public ignoreAbilities: boolean;
   public ignoringEffectSource: BattlerIndex | null;
 
+  /** Used to keep track of the previous TimeOfDay.
+   * Only used in {@linkcode updatePoolsForTimeOfDay}
+   */
   private lastTimeOfDay: TimeOfDay;
 
   private pokemonPool: PokemonPools;
@@ -51,21 +54,21 @@ export class Arena {
 
   public readonly eventTarget: EventTarget = new EventTarget();
 
-  constructor(biome: BiomeId, bgm: string) {
-    this.biomeType = biome;
+  constructor(biomeId: BiomeId) {
+    this.biomeId = biomeId;
     this.tags = [];
-    this.bgm = bgm;
-    this.trainerPool = allBiomes.get(biome).trainerPool;
+    this.bgm = getBiomeBgm(biomeId);
+    this.trainerPool = allBiomes.get(biomeId).trainerPool;
     this.updatePoolsForTimeOfDay();
   }
 
   init() {
-    const biomeKey = getBiomeKey(this.biomeType);
+    const biomeKey = getBiomeKey(this.biomeId);
 
-    globalScene.arenaPlayer.setBiome(this.biomeType);
-    globalScene.arenaPlayerTransition.setBiome(this.biomeType);
-    globalScene.arenaEnemy.setBiome(this.biomeType);
-    globalScene.arenaNextEnemy.setBiome(this.biomeType);
+    globalScene.arenaPlayer.setBiome(this.biomeId);
+    globalScene.arenaPlayerTransition.setBiome(this.biomeId);
+    globalScene.arenaEnemy.setBiome(this.biomeId);
+    globalScene.arenaNextEnemy.setBiome(this.biomeId);
     globalScene.arenaBg.setTexture(`${biomeKey}_bg`);
     globalScene.arenaBgTransition.setTexture(`${biomeKey}_bg`);
 
@@ -76,11 +79,11 @@ export class Arena {
 
   /**
    * Determines if the arena is in one the specified biomes.
-   * @param biome - {@linkcode BiomeId} or array of {@linkcode BiomeId} to check against
+   * @param biomeId - {@linkcode BiomeId} or array of {@linkcode BiomeId} to check against
    * @returns `true` if the arena is of the specified biome, `false` otherwise
    */
-  public isInBiome(biome: BiomeId | BiomeId[]): boolean {
-    return Array.isArray(biome) ? biome.includes(this.biomeType) : this.biomeType === biome;
+  public isInBiome(biomeId: BiomeId | BiomeId[]): boolean {
+    return Array.isArray(biomeId) ? biomeId.includes(this.biomeId) : this.biomeId === biomeId;
   }
 
   /**
@@ -114,15 +117,19 @@ export class Arena {
     return Array.isArray(timeOfDay) ? timeOfDay.includes(this.getTimeOfDay()) : this.getTimeOfDay() === timeOfDay;
   }
 
+  /**
+   * Updates the pokemonPool if the time of day changes.
+   * The pokemonPool is a combination of a biome's TimeOfDay.ALL pool
+   * and the pool for the specific time of day
+   */
   updatePoolsForTimeOfDay(): void {
     const timeOfDay = this.getTimeOfDay();
     if (timeOfDay !== this.lastTimeOfDay) {
       this.pokemonPool = {};
-      for (const tier of Object.keys(allBiomes.get(this.biomeType).pokemonPool)) {
-        this.pokemonPool[tier] = Object.assign(
-          [],
-          allBiomes.get(this.biomeType).pokemonPool[tier][TimeOfDay.ALL],
-        ).concat(allBiomes.get(this.biomeType).pokemonPool[tier][timeOfDay]);
+      for (const [tier] of Object.entries(allBiomes.get(this.biomeId).pokemonPool)) {
+        this.pokemonPool[tier] = Object.assign([], allBiomes.get(this.biomeId).pokemonPool[tier][TimeOfDay.ALL]).concat(
+          allBiomes.get(this.biomeId).pokemonPool[tier][timeOfDay],
+        );
       }
       this.lastTimeOfDay = timeOfDay;
     }
@@ -150,7 +157,7 @@ export class Arena {
     const isBossSpecies =
       !!globalScene.getEncounterBossSegments(waveIndex, level)
       && !!this.pokemonPool[BiomePoolTier.BOSS].length
-      && (this.biomeType !== BiomeId.END
+      && (this.biomeId !== BiomeId.END
         || globalScene.gameMode.isClassic
         || globalScene.gameMode.isWaveFinal(waveIndex));
     const randVal = isBossSpecies ? 64 : 512;
@@ -286,7 +293,7 @@ export class Arena {
   randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
       !!this.trainerPool[BiomePoolTier.BOSS].length
-      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
+      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
 
     // @todo Right now there are no super/ultra or rare boss trainers
@@ -312,7 +319,7 @@ export class Arena {
     switch (species.speciesId) {
       case SpeciesId.BURMY:
       case SpeciesId.WORMADAM:
-        switch (this.biomeType) {
+        switch (this.biomeId) {
           case BiomeId.BEACH:
             return 1;
           case BiomeId.SLUM:
@@ -320,7 +327,7 @@ export class Arena {
         }
         break;
       case SpeciesId.ROTOM:
-        switch (this.biomeType) {
+        switch (this.biomeId) {
           case BiomeId.VOLCANO:
             return 1;
           case BiomeId.SEA:
@@ -355,7 +362,7 @@ export class Arena {
    * @returns 0, 131/180 or 1
    */
   getBgTerrainColorRatioForBiome(): number {
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       case BiomeId.SPACE:
         return 1;
       case BiomeId.END:
@@ -563,7 +570,7 @@ export class Arena {
    * @returns n where 1/n is the chance of a trainer battle
    */
   getTrainerChance(): number {
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       case BiomeId.METROPOLIS:
         return 2;
       case BiomeId.SLUM:
@@ -621,7 +628,7 @@ export class Arena {
    * @returns the TimeOfDay
    */
   getTimeOfDay(): TimeOfDay {
-    if (this.biomeType === BiomeId.ABYSS) {
+    if (this.biomeId === BiomeId.ABYSS) {
       return TimeOfDay.NIGHT;
     }
 
@@ -659,7 +666,7 @@ export class Arena {
   ];
 
   isOutside(): boolean {
-    return !this.indoorBiomes.includes(this.biomeType);
+    return !this.indoorBiomes.includes(this.biomeId);
   }
 
   // @todo these tints feel like they belong in their own class somewhere
@@ -680,7 +687,7 @@ export class Arena {
     if (Overrides.ARENA_TINT_OVERRIDE !== null) {
       return this.overrideTint();
     }
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       case BiomeId.ABYSS:
         return [64, 64, 64];
       default:
@@ -696,7 +703,7 @@ export class Arena {
       return [0, 0, 0];
     }
 
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       default:
         return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
     }
@@ -706,7 +713,7 @@ export class Arena {
     if (Overrides.ARENA_TINT_OVERRIDE) {
       return this.overrideTint();
     }
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       case BiomeId.ABYSS:
       case BiomeId.SPACE:
       case BiomeId.END:
@@ -717,7 +724,7 @@ export class Arena {
       return [64, 64, 64];
     }
 
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       default:
         return [48, 48, 98];
     }
@@ -923,7 +930,7 @@ export class Arena {
   }
 
   getBgmLoopPoint(): number {
-    switch (this.biomeType) {
+    switch (this.biomeId) {
       case BiomeId.TOWN:
         return 7.288;
       case BiomeId.PLAINS:
@@ -993,14 +1000,20 @@ export class Arena {
       case BiomeId.SNOWY_FOREST:
         return 3.047;
       default:
-        console.warn(`missing bgm loop-point for biome "${BiomeId[this.biomeType]}" (=${this.biomeType})`);
+        console.warn(`missing bgm loop-point for biome "${BiomeId[this.biomeId]}" (=${this.biomeId})`);
         return 0;
     }
   }
 }
 
-export function getBiomeKey(biome: BiomeId): string {
-  return BiomeId[biome].toLowerCase();
+/**
+ * Todo: Make the key (biomeId in lower case) not what
+ * generates everything including the music and image assets
+ *
+ * All that should also live in the biome class itself.
+ */
+export function getBiomeKey(biomeId: BiomeId): string {
+  return BiomeId[biomeId].toLowerCase();
 }
 
 /**
@@ -1034,13 +1047,13 @@ const biomeWithProps = [
   BiomeId.END,
 ];
 
-export function getBiomeHasProps(biomeType: BiomeId): boolean {
-  return biomeWithProps.includes(biomeType);
+export function getBiomeHasProps(biomeId: BiomeId): boolean {
+  return biomeWithProps.includes(biomeId);
 }
 
 export class ArenaBase extends Phaser.GameObjects.Container {
   public player: boolean;
-  public biome: BiomeId;
+  public biomeId: BiomeId;
   public propValue: number;
   public base: Phaser.GameObjects.Sprite;
   public props: Phaser.GameObjects.Sprite[];
@@ -1068,7 +1081,7 @@ export class ArenaBase extends Phaser.GameObjects.Container {
     const biomeKey = getBiomeKey(biome);
     const baseKey = `${biomeKey}_${this.player ? "a" : "b"}`;
 
-    if (biome !== this.biome) {
+    if (biome !== this.biomeId) {
       this.base.setTexture(baseKey);
 
       if (this.base.texture.frameTotal > 1) {

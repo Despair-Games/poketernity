@@ -75,6 +75,6 @@ export function initBiomes() {
   ];
 
   for (const biome of rawAllBiomes) {
-    allBiomes.set(biome.biomeType, biome);
+    allBiomes.set(biome.biomeId, biome);
   }
 }

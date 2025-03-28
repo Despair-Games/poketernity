@@ -24,26 +24,26 @@ import type { WeatherType } from "#enums/weather-type";
  */
 export class Biome {
   /** The corresponding biomeId enum */
-  public biomeType: BiomeId;
+  public readonly biomeId: BiomeId;
   /** A mapping of BiomePoolTier to TimeOfDay to SpeciesId representing the wild Pokemon that appear */
-  public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
+  public readonly pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   /** A mapping of BiomePoolTier to a list of TrainerType representing the trainers that appear */
-  public trainerPool: Record<BiomePoolTier, TrainerType[]>;
+  public readonly trainerPool: Record<BiomePoolTier, TrainerType[]>;
   /** weatherPool and terrainPool are currently unused, to be implemented in a future PR */
-  public weatherPool: Record<WeatherType, number>;
-  public terrainPool: Record<TerrainType, number>;
+  public readonly weatherPool: Record<WeatherType, number>;
+  public readonly terrainPool: Record<TerrainType, number>;
   /** String representing the bgm of the biome */
-  public bgm: string;
+  public readonly bgm: string;
 
   constructor(
-    biomeType: BiomeId,
+    biomeId: BiomeId,
     pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>,
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,
     bgm: string,
   ) {
-    this.biomeType = biomeType;
+    this.biomeId = biomeId;
     this.pokemonPool = pokemonPool;
     this.trainerPool = trainerPool;
     this.weatherPool = weatherPool;
