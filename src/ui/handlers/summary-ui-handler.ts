@@ -787,9 +787,6 @@ export class SummaryUiHandler extends UiHandler {
         if (types.length > 1) {
           profileContainer.add(getTypeIcon(1, types[1]));
         }
-        if (this.pokemon?.isTerastallized) {
-          profileContainer.add(getTypeIcon(types.length, this.pokemon.teraType, true));
-        }
 
         if (this.pokemon?.getLuck()) {
           const luckLabelText = addTextObject(141, 28, i18next.t("common:luckIndicator"), TextStyle.SUMMARY_ALT);
@@ -805,6 +802,16 @@ export class SummaryUiHandler extends UiHandler {
           luckText.setOrigin(0, 0);
           luckText.setTint(getVariantTint(Math.min(this.pokemon.getLuck() - 1, 2) as Variant));
           profileContainer.add(luckText);
+        }
+
+        if (
+          /* globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
+            && */ !isNullOrUndefined(this.pokemon)
+        ) {
+          const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
+          teraIcon.setName("terrastallize-icon");
+          teraIcon.setFrame(ElementalType[this.pokemon.teraType].toLowerCase());
+          profileContainer.add(teraIcon);
         }
 
         this.abilityContainer = {
