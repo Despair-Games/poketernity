@@ -50,7 +50,6 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
             result: HitResult.OTHER,
             preventEndure: true,
             ignoreFaintPhase: true,
-            ignoreDynamaxReduction: true,
           });
         }
       }
