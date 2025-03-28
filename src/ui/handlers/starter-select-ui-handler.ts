@@ -1454,7 +1454,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         } else if (this.starterSpecies.length <= 6) {
           // checks to see if the party has 6 or fewer pokemon
           const ui = this.getUi();
-          let options: any[] = []; // TODO: add proper type
+          let options: OptionSelectItem[] = [];
 
           const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies); // checks to see if the pokemon is a duplicate; if it is, returns the index that will be removed
 
@@ -1514,7 +1514,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   return true;
                 },
-                overrideSound: true,
+                noSoundEffects: true,
               },
             ];
           } else if (isDupe) {
