@@ -50,7 +50,6 @@ export class GulpMissileTag extends BattlerTag {
       if (!cancelled.value) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
           result: HitResult.OTHER,
-          ignoreDynamaxReduction: true,
         });
       }
 

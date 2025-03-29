@@ -1,4 +1,4 @@
-import type { IEggOptions } from "#app/data/egg";
+import type { EggOptions } from "#app/data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
@@ -455,7 +455,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
     if (!eggs) {
       eggs = [];
       for (let i = 1; i <= pullCount; i++) {
-        const eggOptions: IEggOptions = { pulled: true, sourceType: this.gachaCursor };
+        const eggOptions: EggOptions = { pulled: true, sourceType: this.gachaCursor };
 
         // Before creating the last egg, check if the guaranteed egg tier was already generated
         // if not, override the egg tier
