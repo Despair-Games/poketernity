@@ -3412,6 +3412,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return maxForms.includes(this.getFormKey());
   }
 
+  isMega(): boolean {
+    const megaForms = [
+      SpeciesFormKey.MEGA,
+      SpeciesFormKey.MEGA_X,
+      SpeciesFormKey.MEGA_Y,
+      SpeciesFormKey.PRIMAL,
+    ] as string[];
+    return megaForms.includes(this.getFormKey());
+  }
+
   canAddTag(tagType: BattlerTagType): boolean {
     if (this.getTag(tagType)) {
       return false;

@@ -14,6 +14,7 @@ import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
 import { PartyUiMode } from "#enums/party-ui-mode";
+import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
@@ -182,13 +183,31 @@ export class CommandUiHandler extends UiHandler {
     return success;
   }
 
+  /**
+   * Determines if the player is allowed to Terastallize their Pokemon.
+   *
+   * Requirements:
+   * - The player has a Tera Orb
+   * - The player's Pokemon is not Mega, GMax, or Ultra Necrozma
+   * - The player has not yet Terastallized any Pokemon since the last Tera Orb refresh
+   * @returns `true` if the player is allowed to Terastallize
+   */
   public canTera(): boolean {
     const hasTeraOrb = globalScene.getModifiers(TerastallizeAccessModifier).length > 0;
+
+    const activePokemon = globalScene.getField()[this.fieldIndex];
+
+    const isUltraNecrozma =
+      activePokemon.species.speciesId === SpeciesId.NECROZMA && activePokemon.getFormKey() === "ultra";
+    const isBlockedForm = activePokemon.isMega() || activePokemon.isMax() || isUltraNecrozma;
+
     const { playerTerasUsed } = globalScene.arena;
+
     const commandPhase = this.getCommandPhase();
     const teraCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(commandPhase.getPokemon());
     const plannedTera = teraCommand?.command === BattleCommand.TERA && this.fieldIndex > 0 ? 1 : 0;
-    return hasTeraOrb && playerTerasUsed + plannedTera < 1;
+
+    return hasTeraOrb && !isBlockedForm && playerTerasUsed + plannedTera < 1;
   }
 
   public toggleTeraButton(): void {
