@@ -133,18 +133,13 @@ describe("Safari Zone - Mystery Encounter", () => {
 
     it("should not spawn any Paradox Pokemon", async () => {
       const NUM_ROLLS = 2000; // As long as this is greater than total number of species, this should cover all possible RNG rolls
-      let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 1
 
-      vi.spyOn(Phaser.Math.RND, "realInRange").mockImplementation((min: number, max: number) => {
-        return rngSweepProgress * (max - min) + min;
-      });
       vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation((arr: any[]) => arr);
 
-      for (let i = 0; i < NUM_ROLLS; i++) {
-        rngSweepProgress = (2 * i + 1) / (2 * NUM_ROLLS);
+      await game.rng.equalSample(NUM_ROLLS, () => {
         const simSpecies = getSafariSpeciesSpawn().speciesId;
         expect(getSpecialSpeciesList(SpeciesGroups.PARADOX, false)).not.toContain(simSpecies);
-      }
+      });
     });
 
     // TODO: Tests for player actions inside the Safari Zone (Pokeball, Mud, Bait, Flee)

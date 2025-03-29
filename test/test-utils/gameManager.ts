@@ -59,6 +59,7 @@ import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
 import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { RngHelper } from "#test/test-utils/helpers/rngHelper";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -78,6 +79,7 @@ export class GameManager {
   public readonly reload: ReloadHelper;
   public readonly modifiers: ModifierHelper;
   public readonly field: FieldHelper;
+  public readonly rng: RngHelper;
 
   /**
    * Creates an instance of GameManager.
@@ -123,6 +125,7 @@ export class GameManager {
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
     this.field = new FieldHelper(this);
+    this.rng = new RngHelper(this);
     this.override.sanitizeOverrides();
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
