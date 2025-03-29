@@ -981,7 +981,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleTera"),
-      TextStyle.PARTY,
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.teraLabel.setName("text-tera-label");
 
