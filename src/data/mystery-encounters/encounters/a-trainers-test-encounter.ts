@@ -15,7 +15,7 @@ import { SpeciesId } from "#enums/species-id";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { randSeedInt } from "#app/utils";
 import i18next from "i18next";
-import type { IEggOptions } from "#app/data/egg";
+import type { EggOptions } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
@@ -152,7 +152,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
 
       await transitionMysteryEncounterIntroVisuals();
 
-      const eggOptions: IEggOptions = {
+      const eggOptions: EggOptions = {
         pulled: false,
         sourceType: EggSourceType.EVENT,
         eggDescriptor: encounter.misc.trainerEggDescription,
@@ -180,7 +180,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       // Full heal party
       globalScene.unshiftPhase(new PartyHealPhase(true));
 
-      const eggOptions: IEggOptions = {
+      const eggOptions: EggOptions = {
         pulled: false,
         sourceType: EggSourceType.EVENT,
         eggDescriptor: encounter.misc.trainerEggDescription,

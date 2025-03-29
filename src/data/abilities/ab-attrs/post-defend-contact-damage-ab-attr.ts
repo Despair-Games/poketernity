@@ -25,7 +25,6 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
         result: HitResult.OTHER,
-        ignoreDynamaxReduction: true,
       });
       return true;
     }

@@ -592,6 +592,16 @@ export abstract class Move implements Localizable {
   }
 
   /**
+   * Sets the {@linkcode MoveFlags.SNATCHABLE} flag for the calling move
+   * @returns the {@linkcode Move} that called this function
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Snatch}
+   */
+  snatchable(): this {
+    this.setFlag(MoveFlags.SNATCHABLE, true);
+    return this;
+  }
+
+  /**
    * Sets the {@linkcode MoveFlags.BOUNCEABLE} flag for the calling Move
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Coat_(move)#Affected_moves | Moves affected by Magic Coat}
    * @returns The {@linkcode Move} that called this function
