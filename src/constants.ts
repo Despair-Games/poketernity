@@ -150,6 +150,6 @@ export const FRIENDSHIP_GAIN_PER_LEVEL_UP = 10;
 /** After this point, friendship gain is halved (rounded down). Used in {@linkcode addFriendship} */
 export const FRIENDSHIP_GAIN_CUTOFF = 150;
 /** Additional friendship gained from rare candy. Used in {@link PokemonLevelIncrementModifier} */
-export const FRIENDSHIP_FROM_CANDY = 5;
+export const FRIENDSHIP_GAIN_FROM_CANDY = 5;
 /** Penalty for losing friendship on faint. Used in {@link FaintPhase} */
 export const FRIENDSHIP_LOST_FROM_FAINTING = 10;
