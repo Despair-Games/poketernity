@@ -866,7 +866,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     this.starterSelectContainer.add(this.pokemonEggMovesContainer);
 
-    this.teraIcon = globalScene.add.sprite(85, 63, "button_tera"); // TODO: button_tera
+    this.teraIcon = globalScene.add.sprite(85, 63, "button_tera");
     this.teraIcon.setName("terastallize-icon");
     this.teraIcon.setFrame("fire");
     this.starterSelectContainer.add(this.teraIcon);
@@ -3456,8 +3456,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
         this.canCycleNature = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr).length > 1;
 
-        this.canCycleTera = /* globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
-          && */ !isNullOrUndefined(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
+        this.canCycleTera =
+          !this.statsMode
+          // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
+          && !isNullOrUndefined(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {
@@ -4045,20 +4047,33 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return props;
   }
 
-  toggleStatsMode(on?: boolean): void {
-    if (on === undefined) {
-      on = !this.statsMode;
-    }
+  toggleStatsMode(on: boolean = !this.statsMode): void {
     if (on) {
       this.showStats();
       this.statsMode = true;
       this.pokemonSprite.setVisible(false);
-    } else {
-      this.statsMode = false;
-      this.statsContainer.setVisible(false);
-      this.pokemonSprite.setVisible(!!this.speciesStarterDexEntry?.caughtAttr);
-      this.statsContainer.updateIvs(null);
+      this.teraIcon.setVisible(false);
+      this.canCycleTera = false;
+      this.updateInstructions();
+      return;
     }
+
+    this.statsMode = false;
+    this.statsContainer.setVisible(false);
+    this.pokemonSprite.setVisible(!!this.speciesStarterDexEntry?.caughtAttr);
+    this.statsContainer.updateIvs(null);
+    this.teraIcon.setVisible(true);
+    // this.teraIcon.setVisible(globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id));
+    const props = globalScene.gameData.getSpeciesDexAttrProps(
+      this.lastSpecies,
+      this.getCurrentDexProps(this.lastSpecies.speciesId),
+    );
+    const formIndex = props.formIndex;
+    this.canCycleTera =
+      !this.statsMode
+      // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
+      && !isNullOrUndefined(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
+    this.updateInstructions();
   }
 
   showStats(): void {
