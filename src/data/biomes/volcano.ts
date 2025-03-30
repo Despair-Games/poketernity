@@ -40,6 +40,7 @@ const pokemonPool = {
       SpeciesId.CYNDAQUIL,
       SpeciesId.CHIMCHAR,
       SpeciesId.TEPIG,
+      SpeciesId.FENNEKIN,
       SpeciesId.LITTEN,
       SpeciesId.SCORBUNNY,
       SpeciesId.CHARCADET,
