@@ -81,4 +81,6 @@ export class NextEncounterPhase extends EncounterPhase {
    * Do nothing (since this is simply the next wave in the same biome).
    */
   protected override trySetWeatherIfNewBiome(): void {}
+
+  protected override trySetTerrainIfNewBiome(): void {}
 }

@@ -311,6 +311,7 @@ export class EncounterPhase extends BattlePhase {
         if (!this.loaded) {
           // Set weather before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();
+          this.trySetTerrainIfNewBiome();
           // Game currently syncs to server on waves X1 and X6, or after 5 minutes have passed without a save
           gameData.saveAll(true, waveIndex % 5 === 1 || (globalScene.lastSavePlayTime ?? 0) >= 300).then((success) => {
             globalScene.disableMenu = false;
@@ -674,6 +675,20 @@ export class EncounterPhase extends BattlePhase {
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
       globalScene.arena.setRandomWeather();
+    }
+  }
+
+  /**
+   * Set biome terrain if and only if this encounter is the start of a new biome.
+   *
+   * By using function overrides, this should happen if and only if this phase
+   * is exactly a NewBiomeEncounterPhase or an EncounterPhase (to account for
+   * Wave 1 of a Daily Run), but NOT NextEncounterPhase (which starts the next
+   * wave in the same biome).
+   */
+  protected trySetTerrainIfNewBiome(): void {
+    if (!this.loaded) {
+      globalScene.arena.setRandomTerrain();
     }
   }
 }

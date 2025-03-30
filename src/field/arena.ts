@@ -664,6 +664,16 @@ export class Arena {
   }
 
   /**
+   * Sets a random terrain based on the current biome
+   */
+  setRandomTerrain(): void {
+    const terrainPool = { ...allBiomes.get(this.biomeId).terrainPool };
+
+    const randomTerrain = weightedPick(terrainPool) as unknown as TerrainType;
+    this.trySetTerrain(randomTerrain, false);
+  }
+
+  /**
    * Whether or not a biome is indoors affects tinting
    */
   private readonly indoorBiomes = [

@@ -55,4 +55,11 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
   protected override trySetWeatherIfNewBiome(): void {
     globalScene.arena.setRandomWeather();
   }
+
+  /**
+   * Set biome terrain.
+   */
+  protected override trySetTerrainIfNewBiome(): void {
+    globalScene.arena.setRandomTerrain();
+  }
 }

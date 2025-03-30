@@ -120,10 +120,13 @@ const weatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
+/**
+ * 20% of electric
+ */
 const terrainPool = {
-  [TerrainType.NONE]: 1,
+  [TerrainType.NONE]: 4,
   [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
+  [TerrainType.ELECTRIC]: 1,
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };

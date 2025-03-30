@@ -1,6 +1,7 @@
 import { Biome } from "#app/data/biome";
-import { townPokemonPool, townTrainerPool, townTerrainPool } from "#app/data/biomes/town";
+import { townPokemonPool, townTrainerPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
+import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
@@ -18,11 +19,16 @@ const weatherPool = {
   [WeatherType.HARSH_SUN]: 0,
   [WeatherType.STRONG_WINDS]: 0,
 };
-export const lakeBiome = new Biome(
-  BiomeId.LAKE,
-  townPokemonPool,
-  townTrainerPool,
-  weatherPool,
-  townTerrainPool,
-  "town",
-);
+
+/**
+ * 20% of mist
+ */
+const terrainPool: Record<TerrainType, number> = {
+  [TerrainType.NONE]: 4,
+  [TerrainType.MISTY]: 1,
+  [TerrainType.ELECTRIC]: 0,
+  [TerrainType.GRASSY]: 0,
+  [TerrainType.PSYCHIC]: 0,
+};
+
+export const lakeBiome = new Biome(BiomeId.LAKE, townPokemonPool, townTrainerPool, weatherPool, terrainPool, "town");
