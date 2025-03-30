@@ -116,7 +116,7 @@ export function randSeedItem<T>(items: T[]): T {
 
 /**
  * This picks items out of an array with a higher weight for earlier entries
- * 
+ *
  * Only used for Trainer partyTemplateIndex generation
  * @todo figure out how that actually works
  */
@@ -130,12 +130,11 @@ export function randSeedWeightedItem<T>(items: T[]): T {
  * @returns a randomly picked item according to the weights
  */
 export function weightedPick<T extends string | number | symbol>(items: Record<T, number>) {
-  const totalWeight = Object.values(items).reduce(
-    (a: number, b: number) => a + b, 0) as number;
+  const totalWeight = Object.values(items).reduce((a: number, b: number) => a + b, 0) as number;
   const randomNumber = randSeedInt(totalWeight);
-  
+
   let totalWeightSoFar = 0;
-  for (var i in items) {
+  for (const i in items) {
     totalWeightSoFar += items[i];
 
     // This is a < and not a <= since the first item can have 0 weight

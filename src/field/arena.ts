@@ -17,7 +17,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type AbstractConstructor, randSeedInt, randSeedItem, randSeedWeightedItem, weightedPick } from "#app/utils";
+import { type AbstractConstructor, randSeedInt, weightedPick } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -658,7 +658,7 @@ export class Arena {
     if ([TimeOfDay.DAWN, TimeOfDay.DAY].includes(this.getTimeOfDay())) {
       weatherPool[1] += allBiomes.get(this.biomeId).sunBonus;
     }
-    
+
     const randomWeather = weightedPick(weatherPool) as unknown as WeatherType;
     this.trySetWeather(randomWeather, false);
   }
