@@ -12237,7 +12237,7 @@
     "damage_class_id": 1,
     "effect_id": 1,
     "effect_chance": -1,
-    "flags": [13, 14]
+    "flags": [6, 13, 14]
   },
   {
     "id": 817,
@@ -12432,7 +12432,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6]
   },
   {
     "id": 830,
@@ -12552,7 +12552,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": [21]
+    "flags": [6, 21]
   },
   {
     "id": 838,
@@ -12627,7 +12627,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6]
   },
   {
     "id": 843,
@@ -12732,7 +12732,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6, 13]
   },
   {
     "id": 850,
@@ -12747,7 +12747,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6]
   },
   {
     "id": 851,
@@ -12942,7 +12942,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6, 13]
   },
   {
     "id": 864,
@@ -13017,7 +13017,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6]
   },
   {
     "id": 869,
@@ -13197,7 +13197,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6]
   },
   {
     "id": 881,
@@ -13227,7 +13227,7 @@
     "damage_class_id": 1,
     "effect_id": "",
     "effect_chance": -1,
-    "flags": ""
+    "flags": [6]
   },
   {
     "id": 883,

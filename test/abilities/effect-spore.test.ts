@@ -103,15 +103,6 @@ describe("Abilities - Effect Spore", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const abilityAttr = playerPokemon.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
 
-    let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 100
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: 0) => {
-      if (range === 100) {
-        return min + rngSweepProgress;
-      } else {
-        return min + range - 1;
-      }
-    });
-
     // Setup for counting number of times each status gets inflicted
     let sleepCount = 0;
     let parCount = 0;
@@ -129,9 +120,9 @@ describe("Abilities - Effect Spore", () => {
 
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
-    for (rngSweepProgress = 0; rngSweepProgress < 100; rngSweepProgress++) {
+    await game.rng.equalSample(100, () => {
       abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves.get(MoveId.TACKLE));
-    }
+    });
 
     expect(sleepCount).toBe(11);
     expect(parCount).toBe(10);

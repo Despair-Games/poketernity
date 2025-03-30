@@ -63,7 +63,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8), { ignoreDynamaxReduction: true });
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
       }
     }
 

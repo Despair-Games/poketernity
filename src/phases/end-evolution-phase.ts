@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
@@ -14,6 +15,6 @@ export class EndEvolutionPhase extends Phase {
   public override start(): void {
     super.start();
 
-    globalScene.ui.setModeForceTransition(UiMode.MESSAGE).then(() => this.end());
+    globalScene.ui.setModeForceTransition<MessageUiHandler>(UiMode.MESSAGE).then(() => this.end());
   }
 }

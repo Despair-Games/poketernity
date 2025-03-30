@@ -237,6 +237,7 @@ interface UseMoveInit {
   followUp?: boolean;
   ignorePp?: boolean;
   reflected?: boolean;
+  snatched?: boolean;
 }
 
 //#endregion
@@ -3548,10 +3549,11 @@ export default class BattleScene extends SceneBase {
     followUp = false,
     ignorePp = false,
     reflected = false,
+    snatched = false,
     when,
     phaseId,
   }: UseMoveInit) {
-    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected);
+    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected, snatched);
 
     if ((when === "before" || when === "after") && !phaseId) {
       throw new Error("phaseId is required for useMove.when === 'before' or 'after'");

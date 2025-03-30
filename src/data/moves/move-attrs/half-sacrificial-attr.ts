@@ -31,7 +31,6 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
         result: HitResult.OTHER,
         ignoreSegments: true,
         preventEndure: true,
-        ignoreDynamaxReduction: true,
       });
       globalScene.queueMessage(
         i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) }),

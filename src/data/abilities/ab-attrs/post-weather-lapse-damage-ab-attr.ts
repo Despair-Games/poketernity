@@ -37,7 +37,6 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
       );
       pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() * this.damageFactor), {
         result: HitResult.OTHER,
-        ignoreDynamaxReduction: true,
       });
     }
 

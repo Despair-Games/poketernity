@@ -6,6 +6,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
 
 export class RegistrationFormUiHandler extends FormModalUiHandler {
   constructor() {
@@ -79,10 +80,13 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
       // Prevent overlapping overrides on action modification
       this.submitAction = originalRegistrationAction;
       this.sanitizeInputs();
-      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
       const onFail = (error: string) => {
         const message = this.getReadableErrorMessage(error);
-        globalScene.ui.setMode(UiMode.REGISTRATION_FORM, Object.assign(config, { errorMessage: message.trim() }));
+        globalScene.ui.setMode<RegistrationFormUiHandler>(
+          UiMode.REGISTRATION_FORM,
+          Object.assign(config, { errorMessage: message.trim() }),
+        );
         globalScene.ui.playError();
       };
       if (!this.inputs[0].text) {

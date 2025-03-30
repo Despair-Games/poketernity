@@ -69,6 +69,7 @@ import { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
 import { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { SlowStartTag } from "#app/data/battler-tags/slow-start-tag";
 import { SnapTrapTag } from "#app/data/battler-tags/snap-trap-tag";
+import { SnatchingTag } from "#app/data/battler-tags/snatch-tag";
 import { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { SturdyTag } from "#app/data/battler-tags/sturdy-tag";
 import { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
@@ -314,6 +315,8 @@ export function getBattlerTag(
       return new QuashedTag();
     case BattlerTagType.MAGIC_COAT:
       return new MagicCoatTag();
+    case BattlerTagType.SNATCHING:
+      return new SnatchingTag();
     case BattlerTagType.ME_FIRST_POWER_BOOST:
       return new MeFirstPowerBoostTag();
     case BattlerTagType.NONE:

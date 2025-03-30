@@ -554,7 +554,7 @@ export class SummaryUiHandler extends UiHandler {
           }
 
           if (!fromPartyMode) {
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
           } else {
             ui.setMode<PartyUiHandler>(UiMode.PARTY);
           }

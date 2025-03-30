@@ -11,7 +11,7 @@ import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MessageUiHandler } from "./message-ui-handler";
 
@@ -20,7 +20,7 @@ enum Page {
   VOUCHERS,
 }
 
-export class AchvsUiHandler extends MessageUiHandler {
+export class AchievementsUiHandler extends MessageUiHandler {
   private readonly ROWS = 4;
   private readonly COLS = 17;
 
@@ -51,8 +51,8 @@ export class AchvsUiHandler extends MessageUiHandler {
   private cursorObj: Phaser.GameObjects.NineSlice | null;
   private currentPage: Page;
 
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.ACHIEVEMENTS);
 
     this.achvsTotal = Object.keys(achvs).length;
     this.vouchersTotal = Object.keys(vouchers).length;

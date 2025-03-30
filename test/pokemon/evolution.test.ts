@@ -178,18 +178,13 @@ describe("Evolution", () => {
   });
 
   it("wild Pokemon with multiple possible evolutions should pick a random evolution", async () => {
-    let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 1
-
-    vi.spyOn(Phaser.Math.RND, "realInRange").mockImplementation((min: number, max: number) => {
-      return rngSweepProgress * (max - min) + min;
-    });
-
     const actualEvolutions = new Set<SpeciesId>();
     const trials = 8; // For all 8 Eeveelutions
-    for (let i = 0; i < trials; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * trials);
+
+    await game.rng.equalSample(trials, () => {
       actualEvolutions.add(getPokemonSpecies(SpeciesId.EEVEE).getEnemySpeciesForLevel(100));
-    }
+    });
+
     expect(actualEvolutions.size).toBe(trials);
   });
 
