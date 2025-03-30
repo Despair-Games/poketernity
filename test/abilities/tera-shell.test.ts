@@ -76,7 +76,7 @@ describe("Abilities - Tera Shell", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(0.25);
   });
 

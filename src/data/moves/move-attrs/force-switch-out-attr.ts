@@ -126,7 +126,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
               false,
               false,
             ),
-            PhaseId.MOVE_END,
+            PhaseId.POST_ACTION,
           );
         }
       }
