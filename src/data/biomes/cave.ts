@@ -7,9 +7,6 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
-/**
- * This file represents all the data of the cave biome
- */
 const pokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
@@ -119,7 +116,7 @@ const weatherPool = {
   [WeatherType.SNOW]: 0,
   [WeatherType.FOG]: 0,
   [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 1,
+  [WeatherType.HARSH_SUN]: 0,
   [WeatherType.STRONG_WINDS]: 0,
 };
 

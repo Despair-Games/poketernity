@@ -23,7 +23,7 @@ export class NextEncounterPhase extends EncounterPhase {
       }
     }
 
-    arenaNextEnemy.setBiome(arena.biomeType);
+    arenaNextEnemy.setBiome(arena.biomeId);
     arenaNextEnemy.setVisible(true);
 
     const enemyField = globalScene.getEnemyField();
@@ -53,7 +53,7 @@ export class NextEncounterPhase extends EncounterPhase {
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        arenaEnemy.setBiome(arena.biomeType);
+        arenaEnemy.setBiome(arena.biomeId);
         arenaEnemy.setX(arenaNextEnemy.x);
         arenaEnemy.setAlpha(1);
         arenaNextEnemy.setX(arenaNextEnemy.x - 300);

@@ -55,4 +55,6 @@ export enum MoveFlags {
    * or {@linkcode MoveId.MAGIC_COAT}
    */
   BOUNCEABLE = 1 << 20,
+  /** Indicates a move can be stolen by another Pokemon with {@linkcode MoveId.SNATCH} */
+  SNATCHABLE = 1 << 21,
 }

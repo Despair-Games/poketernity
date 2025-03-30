@@ -238,6 +238,7 @@ interface UseMoveInit {
   followUp?: boolean;
   ignorePp?: boolean;
   reflected?: boolean;
+  snatched?: boolean;
 }
 
 //#endregion
@@ -1474,8 +1475,8 @@ export default class BattleScene extends SceneBase {
     return this.currentBattle;
   }
 
-  newArena(biome: BiomeId): Arena {
-    this.arena = new Arena(biome, allBiomes.get(biome).bgm);
+  newArena(biomeId: BiomeId): Arena {
+    this.arena = new Arena(biomeId);
     this.eventTarget.dispatchEvent(new NewArenaEvent());
 
     this.arenaBg.pipelineData = { terrainColorRatio: this.arena.getBgTerrainColorRatioForBiome() };
@@ -1874,7 +1875,7 @@ export default class BattleScene extends SceneBase {
 
   updateBiomeWaveText(): void {
     const isBoss = !(this.currentBattle.waveIndex % 10);
-    const biomeString: string = getBiomeName(this.arena.biomeType);
+    const biomeString: string = getBiomeName(this.arena.biomeId);
     this.fieldUI.moveAbove(this.biomeWaveText, this.luckText);
     this.biomeWaveText.setText(biomeString + " - " + this.currentBattle.waveIndex.toString());
     this.biomeWaveText.setColor(isBoss ? CommonColor.SOFT_PINK : CommonColor.WHITE);
@@ -2958,7 +2959,7 @@ export default class BattleScene extends SceneBase {
     const gameInfo = {
       playTime: this.sessionPlayTime ?? 0,
       gameMode: this.currentBattle ? this.gameMode.getName() : "Title",
-      biome: this.currentBattle ? getBiomeName(this.arena.biomeType) : "",
+      biome: this.currentBattle ? getBiomeName(this.arena.biomeId) : "",
       wave: this.currentBattle?.waveIndex ?? 0,
       party: this.party
         ? this.party.map((p) => {
@@ -3351,7 +3352,7 @@ export default class BattleScene extends SceneBase {
         ? this.mysteryEncounterSaveData.encounteredEvents[this.mysteryEncounterSaveData.encounteredEvents.length - 1]
             .type
         : null;
-    const biomeMysteryEncounters = mysteryEncountersByBiome.get(this.arena.biomeType) ?? [];
+    const biomeMysteryEncounters = mysteryEncountersByBiome.get(this.arena.biomeId) ?? [];
     // If no valid encounters exist at tier, checks next tier down, continuing until there are some encounters available
     while (availableEncounters.length === 0 && tier !== null) {
       availableEncounters = biomeMysteryEncounters
@@ -3531,10 +3532,11 @@ export default class BattleScene extends SceneBase {
     followUp = false,
     ignorePp = false,
     reflected = false,
+    snatched = false,
     when,
     phaseId,
   }: UseMoveInit) {
-    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected);
+    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected, snatched);
 
     if ((when === "before" || when === "after") && !phaseId) {
       throw new Error("phaseId is required for useMove.when === 'before' or 'after'");

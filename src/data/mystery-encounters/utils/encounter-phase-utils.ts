@@ -1039,7 +1039,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
         } else if (biomeLinks.hasOwnProperty(currentBiome)) {
           currentBiome = biomeLinks[currentBiome] as BiomeId;
         } else {
-          // Endless logic
+          // Special logic for endless mode
           if (!(i % 50)) {
             currentBiome = BiomeId.END;
           } else {

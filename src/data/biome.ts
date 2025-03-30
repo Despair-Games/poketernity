@@ -1,6 +1,5 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type getRandomWeatherType } from "#app/data/weather";
 import { type Arena } from "#app/field/arena";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
@@ -23,17 +22,24 @@ import type { WeatherType } from "#enums/weather-type";
  * - Move {@linkcode Arena.getTrainerChance} as well
  */
 export class Biome {
-  public biomeType: BiomeId;
-  public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
-  public trainerPool: Record<BiomePoolTier, TrainerType[]>;
-  public weatherPool: Record<WeatherType, number>;
-  /** A bonus weight granted to  */
-  public sunBonus: number;
-  public terrainPool: Record<TerrainType, number>;
-  public bgm: string;
+  /** The corresponding biomeId enum */
+  public readonly biomeId: BiomeId;
+  /** A mapping of BiomePoolTier to TimeOfDay to SpeciesId representing the wild Pokemon that appear */
+  public readonly pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
+  /** A mapping of BiomePoolTier to a list of TrainerType representing the trainers that appear */
+  public readonly trainerPool: Record<BiomePoolTier, TrainerType[]>;
+  /** A mapping of WeatherType to weight for a biome */
+  public readonly weatherPool: Record<WeatherType, number>;
+  /** A bonus weight added onto sunny weather for a biome if it is dawn/day */
+  // @todo maybe consider adding a bonus for other weather types or times of day
+  public readonly sunBonus: number;
+  /** terrainPool is currently unused, to be implemented in a future PR */
+  public readonly terrainPool: Record<TerrainType, number>;
+  /** String representing the bgm of the biome */
+  public readonly bgm: string;
 
   constructor(
-    biomeType: BiomeId,
+    biomeId: BiomeId,
     pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>,
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
     weatherPool: Record<WeatherType, number>,
@@ -41,7 +47,7 @@ export class Biome {
     bgm: string,
     sunBonus: number = 0,
   ) {
-    this.biomeType = biomeType;
+    this.biomeId = biomeId;
     this.pokemonPool = pokemonPool;
     this.trainerPool = trainerPool;
     this.weatherPool = weatherPool;

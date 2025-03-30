@@ -339,7 +339,7 @@ export function initAbilities() {
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonPressure", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       )
-      .partial(), // Does not affect PP cost for field-targeting moves,
+      .partial(), // Does not affect PP cost for field-targeting moves or Snatch
     new Ability(AbilityId.THICK_FAT, 3)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 0.5)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.ICE, 0.5)

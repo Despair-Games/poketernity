@@ -5,13 +5,12 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Manaphy Eggs", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
   const EGG_HATCH_COUNT: number = 48;
-  let rngSweepProgress: number = 0;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -22,30 +21,18 @@ describe("Manaphy Eggs", () => {
 
   afterEach(() => {
     game.phaseInterceptor.restoreOg();
-    vi.restoreAllMocks();
   });
 
   beforeEach(async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-
-    /**
-     * In our tests, we will perform an "RNG sweep" by letting rngSweepProgress
-     * increase uniformly from 0 to 1 in order to get a uniform sample of the
-     * possible RNG outcomes. This will let us quickly and consistently find
-     * the probability of each RNG outcome.
-     */
-    vi.spyOn(Phaser.Math.RND, "realInRange").mockImplementation((min: number, max: number) => {
-      return rngSweepProgress * (max - min) + min;
-    });
   });
 
-  it("should have correct Manaphy rates and Rare Egg Move rates, from the egg gacha", () => {
+  it("should have correct Manaphy rates and Rare Egg Move rates, from the egg gacha", async () => {
     let manaphyCount = 0;
     let phioneCount = 0;
     let rareEggMoveCount = 0;
-    for (let i = 0; i < EGG_HATCH_COUNT; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
+    await game.rng.equalSample(EGG_HATCH_COUNT, () => {
       const newEgg = new Egg({ tier: EggTier.COMMON, sourceType: EggSourceType.GACHA_SHINY, id: 204 });
       const newHatch = newEgg.generatePlayerPokemon();
       if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
@@ -56,20 +43,19 @@ describe("Manaphy Eggs", () => {
       if (newEgg.eggMoveIndex === 3) {
         rareEggMoveCount++;
       }
-    }
+    });
 
     expect(manaphyCount + phioneCount).toBe(EGG_HATCH_COUNT);
     expect(manaphyCount).toBe((1 / 8) * EGG_HATCH_COUNT);
     expect(rareEggMoveCount).toBe((1 / 12) * EGG_HATCH_COUNT);
   });
 
-  it("should have correct Manaphy rates and Rare Egg Move rates, from Phione species eggs", () => {
+  it("should have correct Manaphy rates and Rare Egg Move rates, from Phione species eggs", async () => {
     let manaphyCount = 0;
     let phioneCount = 0;
     let rareEggMoveCount = 0;
-    for (let i = 0; i < EGG_HATCH_COUNT; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
+    await game.rng.equalSample(EGG_HATCH_COUNT, () => {
       const newEgg = new Egg({ speciesId: SpeciesId.PHIONE, sourceType: EggSourceType.SAME_SPECIES_EGG });
       const newHatch = newEgg.generatePlayerPokemon();
       if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
@@ -80,20 +66,19 @@ describe("Manaphy Eggs", () => {
       if (newEgg.eggMoveIndex === 3) {
         rareEggMoveCount++;
       }
-    }
+    });
 
     expect(manaphyCount + phioneCount).toBe(EGG_HATCH_COUNT);
     expect(manaphyCount).toBe((1 / 8) * EGG_HATCH_COUNT);
     expect(rareEggMoveCount).toBe((1 / 6) * EGG_HATCH_COUNT);
   });
 
-  it("should have correct Manaphy rates and Rare Egg Move rates, from Manaphy species eggs", () => {
+  it("should have correct Manaphy rates and Rare Egg Move rates, from Manaphy species eggs", async () => {
     let manaphyCount = 0;
     let phioneCount = 0;
     let rareEggMoveCount = 0;
-    for (let i = 0; i < EGG_HATCH_COUNT; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * EGG_HATCH_COUNT);
 
+    await game.rng.equalSample(EGG_HATCH_COUNT, () => {
       const newEgg = new Egg({ speciesId: SpeciesId.MANAPHY, sourceType: EggSourceType.SAME_SPECIES_EGG });
       const newHatch = newEgg.generatePlayerPokemon();
       if (newHatch.species.speciesId === SpeciesId.MANAPHY) {
@@ -104,7 +89,7 @@ describe("Manaphy Eggs", () => {
       if (newEgg.eggMoveIndex === 3) {
         rareEggMoveCount++;
       }
-    }
+    });
 
     expect(phioneCount).toBe(0);
     expect(manaphyCount).toBe(EGG_HATCH_COUNT);
