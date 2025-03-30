@@ -47,18 +47,12 @@ describe("Moves - Present", () => {
     player.turnData.hitsLeft = hitsLeft;
     player.turnData.hitCount = 2;
 
-    let rngSweepProgress = 0; // This will simulate entire range of RNG calls by slowly sweeping from 0 to 1
-    vi.spyOn(player, "randSeedInt").mockImplementation((range: number, min: number = 0) => {
-      return Math.floor(min + rngSweepProgress * range);
-    });
+    let count40power = 0;
+    let count80power = 0;
+    let count120power = 0;
+    let countHeal = 0;
 
-    let count40power = 0,
-      count80power = 0,
-      count120power = 0,
-      countHeal = 0;
-    for (let i = 0; i < totalOutcomes; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * totalOutcomes);
-
+    await game.rng.equalSample(totalOutcomes, () => {
       const power = new NumberHolder(-1);
       presentAttr.apply(player, enemy, allMoves.get(MoveId.PRESENT), power);
       switch (power.value) {
@@ -74,7 +68,7 @@ describe("Moves - Present", () => {
         case -1:
           countHeal++;
       }
-    }
+    });
 
     expect(count40power).toBe(40);
     expect(count80power).toBe(30);

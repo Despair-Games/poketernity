@@ -164,6 +164,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.RAGE:
       case BattlerTagType.IMPRISONING:
       case BattlerTagType.BYPASS_SPEED:
+      case BattlerTagType.SNATCHING:
         return 3;
       case BattlerTagType.PROTECTED:
       case BattlerTagType.SPIKY_SHIELD:
