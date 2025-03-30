@@ -5,6 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 
 /**
@@ -33,9 +34,13 @@ export class MeFirstAttr extends CallMoveAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) => {
+    return (user, target, _move) => {
       const targetMove = this.getTargetMove(target);
-      return !!targetMove?.isAttackMove() && !invalidMeFirstMoves.has(targetMove.id);
+      return (
+        !!targetMove?.isAttackMove()
+        && !targetMove.checkFlag(MoveFlags.G_MAX_MOVE, user, target)
+        && !invalidMeFirstMoves.has(targetMove.id)
+      );
     };
   }
 
@@ -50,6 +55,7 @@ export const invalidMeFirstMoves: ReadonlySet<MoveId> = Object.freeze(
     MoveId.BEAK_BLAST,
     MoveId.BELCH,
     MoveId.CHATTER,
+    MoveId.COMEUPPANCE,
     MoveId.COUNTER,
     MoveId.COVET,
     MoveId.FOCUS_PUNCH,

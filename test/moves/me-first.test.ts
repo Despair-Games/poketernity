@@ -124,6 +124,7 @@ describe("Moves - Me First", () => {
     { moveId: MoveId.BEAK_BLAST, moveName: "Beak Blast" },
     { moveId: MoveId.BELCH, moveName: "Belch" },
     { moveId: MoveId.CHATTER, moveName: "Chatter" },
+    { moveId: MoveId.COMEUPPANCE, moveName: "Comeuppance" },
     { moveId: MoveId.COUNTER, moveName: "Counter" },
     { moveId: MoveId.COVET, moveName: "Covet" },
     { moveId: MoveId.FOCUS_PUNCH, moveName: "Focus Punch" },
