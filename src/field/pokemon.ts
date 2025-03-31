@@ -3451,6 +3451,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
+  /**
+   * Helper function to check if a Pokemon has any of the input tag types.
+   * @param tagTypes - The battler tag types to search for
+   * @returns `true` if the Pokemon has at least one of the battler tags, `false` otherwise
+   */
   public hasTag(...tagTypes: BattlerTagType[]): boolean {
     if (!this.summonData) {
       return false;
