@@ -198,7 +198,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       SpeciesId.FROSMOTH,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(90), new NightEvolutionCondition()],
+      [new SpeciesFriendshipEvolutionCondition(), new NightEvolutionCondition()],
       HAPPINESS_EVO_LEVEL,
     ),
   ],

@@ -24,7 +24,6 @@ import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
-import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
@@ -3091,7 +3090,6 @@ export default class BattleScene extends SceneBase {
         const pId = partyMember.id;
         const participated = participantIds.has(pId);
         if (participated && pokemonDefeated) {
-          partyMember.addFriendship(FRIENDSHIP_GAIN_FROM_BATTLE);
           const machoBraceModifier = partyMember
             .getHeldItems()
             .find((m) => m instanceof PokemonIncrementingStatModifier);
