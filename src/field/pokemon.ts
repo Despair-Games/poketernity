@@ -3451,6 +3451,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
+  public hasTag(...tagTypes: BattlerTagType[]): boolean {
+    if (!this.summonData) {
+      return false;
+    }
+    return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
+  }
+
   findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | nil {
     if (!this.summonData) {
       return null;
