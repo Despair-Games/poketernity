@@ -129,13 +129,13 @@ export function randSeedWeightedItem<T>(items: T[]): T {
  * @param items the mapping of item to weight
  * @returns a randomly picked item according to the weights
  */
-export function weightedPick<T extends string | number | symbol>(items: Record<T, number>): T {
-  const totalWeight = Object.values<number>(items).reduce((a: number, b: number) => a + b, 0);
+export function weightedPick<T>(items: Map<T, number>): T {
+  const totalWeight = [...items.values()].reduce((a: number, b: number) => a + b, 0);
   const randomNumber = randSeedInt(totalWeight);
 
   let totalWeightSoFar = 0;
-  for (const i in items) {
-    totalWeightSoFar += items[i];
+  for (const [i, weight] of items) {
+    totalWeightSoFar += weight;
 
     // This is a < and not a <= since the first item can have 0 weight
     if (randomNumber < totalWeightSoFar) {
@@ -145,7 +145,7 @@ export function weightedPick<T extends string | number | symbol>(items: Record<T
 
   // Failsafe if the above loop somehow failed (e.g., if all items have 0 weight)
   console.error("Random selection failed, selecting the first element instead. Original list of items:", items);
-  return Object.keys(items)[0] as T;
+  return items.keys()[0];
 }
 
 /**
