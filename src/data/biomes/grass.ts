@@ -6,7 +6,7 @@ import { WeatherType } from "#enums/weather-type";
 /** 30% of sun if dawn or day, none otherwise */
 const weatherPool = {
   [WeatherType.NONE]: 7,
-  [WeatherType.SUNNY]: 0,
+  [WeatherType.SUNNY]: 3,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
@@ -24,5 +24,4 @@ export const grassBiome = new Biome(
   weatherPool,
   townTerrainPool,
   "town",
-  3,
 );

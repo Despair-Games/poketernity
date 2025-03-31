@@ -3,9 +3,13 @@ import { townPokemonPool, townTrainerPool, townTerrainPool } from "#app/data/bio
 import { BiomeId } from "#enums/biome-id";
 import { WeatherType } from "#enums/weather-type";
 
+/**
+ * 5/16 Sunny, 3/16 Rain if dawn/day
+ * 3/11 Rain otherwise
+ */
 const weatherPool = {
   [WeatherType.NONE]: 8,
-  [WeatherType.SUNNY]: 0,
+  [WeatherType.SUNNY]: 5,
   [WeatherType.RAIN]: 3,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
@@ -22,5 +26,4 @@ export const beachBiome = new Biome(
   weatherPool,
   townTerrainPool,
   "town",
-  5,
 );

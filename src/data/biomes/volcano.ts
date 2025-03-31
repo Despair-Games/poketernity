@@ -144,7 +144,7 @@ const trainerPool = {
  */
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 0,
+  [WeatherType.SUNNY]: 9,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
@@ -163,12 +163,4 @@ const terrainPool = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const volcanoBiome = new Biome(
-  BiomeId.VOLCANO,
-  pokemonPool,
-  trainerPool,
-  weatherPool,
-  terrainPool,
-  "volcano",
-  9,
-);
+export const volcanoBiome = new Biome(BiomeId.VOLCANO, pokemonPool, trainerPool, weatherPool, terrainPool, "volcano");

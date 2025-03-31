@@ -9,7 +9,7 @@ import { WeatherType } from "#enums/weather-type";
  */
 const weatherPool = {
   [WeatherType.NONE]: 8,
-  [WeatherType.SUNNY]: 0,
+  [WeatherType.SUNNY]: 8,
   [WeatherType.RAIN]: 5,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,
@@ -27,5 +27,4 @@ export const tallGrassBiome = new Biome(
   weatherPool,
   townTerrainPool,
   "town",
-  8,
 );

@@ -31,8 +31,6 @@ export class Biome {
   /** A mapping of WeatherType to weight for a biome */
   public readonly weatherPool: Record<WeatherType, number>;
   /** A bonus weight added onto sunny weather for a biome if it is dawn/day */
-  // @todo maybe consider adding a bonus for other weather types or times of day
-  public readonly sunBonus: number;
   /** terrainPool is currently unused, to be implemented in a future PR */
   public readonly terrainPool: Record<TerrainType, number>;
   /** String representing the bgm of the biome */
@@ -45,7 +43,6 @@ export class Biome {
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,
     bgm: string,
-    sunBonus: number = 0,
   ) {
     this.biomeId = biomeId;
     this.pokemonPool = pokemonPool;
@@ -53,6 +50,5 @@ export class Biome {
     this.weatherPool = weatherPool;
     this.terrainPool = terrainPool;
     this.bgm = bgm;
-    this.sunBonus = sunBonus;
   }
 }

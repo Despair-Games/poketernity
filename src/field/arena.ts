@@ -649,12 +649,12 @@ export class Arena {
   setRandomWeather(): void {
     const weatherPool = { ...allBiomes.get(this.biomeId).weatherPool };
 
-    // Applies an extra weight to sun if the time is dawn/day and the biome has a sunBonus
-    if ([TimeOfDay.DAWN, TimeOfDay.DAY].includes(this.getTimeOfDay())) {
-      weatherPool[1] += allBiomes.get(this.biomeId).sunBonus;
+    // If the time is dusk or night, set the chance of sun to 0
+    if ([TimeOfDay.DUSK, TimeOfDay.NIGHT].includes(this.getTimeOfDay())) {
+      weatherPool[WeatherType.SUNNY] = 0;
     }
 
-    const randomWeather = weightedPick(weatherPool) as unknown as WeatherType;
+    const randomWeather = weightedPick(weatherPool);
     this.trySetWeather(randomWeather, false);
   }
 
