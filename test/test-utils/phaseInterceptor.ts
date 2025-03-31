@@ -1,6 +1,3 @@
-import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
-import { UI } from "#app/ui/ui";
-import { UiMode } from "#enums/ui-mode";
 import { Phase } from "#app/phase";
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -13,20 +10,36 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
+import { ExpPhase } from "#app/phases/exp-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { FormChangePhase } from "#app/phases/form-change-phase";
+import { GameOverModifierRewardPhase } from "#app/phases/game-over-modifier-reward-phase";
+import { GameOverPhase } from "#app/phases/game-over-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MessagePhase } from "#app/phases/message-phase";
+import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { PostActionPhase } from "#app/phases/post-action-phase";
+import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { MovePhase } from "#app/phases/move-phase";
+import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
+import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import { PartyExpPhase } from "#app/phases/party-exp-phase";
+import { PartyHealPhase } from "#app/phases/party-heal-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
+import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
+import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
+import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-phase";
+import { SelectBiomePhase } from "#app/phases/select-biome-phase";
 import { SelectGenderPhase } from "#app/phases/select-gender-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
@@ -43,23 +56,11 @@ import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { UnavailablePhase } from "#app/phases/unavailable-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
-import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { SelectBiomePhase } from "#app/phases/select-biome-phase";
-import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
-import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
-import { PartyExpPhase } from "#app/phases/party-exp-phase";
-import { ExpPhase } from "#app/phases/exp-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
-import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-phase";
-import { GameOverModifierRewardPhase } from "#app/phases/game-over-modifier-reward-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
-import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
-import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
+import { VictoryPhase } from "#app/phases/victory-phase";
+import { UI } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
+import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
 
 export interface PromptHandler {
   phaseTarget?: string;
@@ -85,6 +86,7 @@ type PhaseClass =
   | typeof CommandPhase
   | typeof EnemyCommandPhase
   | typeof TurnStartPhase
+  | typeof MoveHeaderPhase
   | typeof MovePhase
   | typeof MoveEffectPhase
   | typeof DamageAnimPhase
@@ -145,6 +147,7 @@ type PhaseString =
   | "CommandPhase"
   | "EnemyCommandPhase"
   | "TurnStartPhase"
+  | "MoveHeaderPhase"
   | "MovePhase"
   | "MoveEffectPhase"
   | "DamageAnimPhase"
@@ -229,6 +232,7 @@ export class PhaseInterceptor {
     [CommandPhase, this.startPhase],
     [EnemyCommandPhase, this.startPhase],
     [TurnStartPhase, this.startPhase],
+    [MoveHeaderPhase, this.startPhase],
     [MovePhase, this.startPhase],
     [MoveEffectPhase, this.startPhase],
     [DamageAnimPhase, this.startPhase],
