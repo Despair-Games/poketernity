@@ -2042,7 +2042,7 @@ export default class BattleScene extends SceneBase {
    */
   generateRandomBiome(_waveIndex: number): BiomeId {
     const excludedBiomeIds = [BiomeId.TOWN, BiomeId.END];
-    return randSeedItem([...allBiomes.keys()].filter(b => !excludedBiomeIds.includes(b)));
+    return randSeedItem([...allBiomes.keys()].filter((b) => !excludedBiomeIds.includes(b)));
   }
 
   toggleInvert(invert: boolean): void {
