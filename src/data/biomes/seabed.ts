@@ -1,10 +1,138 @@
 import { Biome } from "#app/data/biome";
-import { townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
+import { townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { SpeciesId } from "#enums/species-id";
+import { TimeOfDay } from "#enums/time-of-day";
+
+const pokemonPool = {
+  [BiomePoolTier.COMMON]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.CHINCHOU,
+      SpeciesId.REMORAID,
+      SpeciesId.CLAMPERL,
+      SpeciesId.BASCULIN,
+      SpeciesId.FRILLISH,
+      SpeciesId.ARROKUDA,
+      SpeciesId.VELUZA,
+    ],
+  },
+  [BiomePoolTier.UNCOMMON]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.TENTACOOL,
+      SpeciesId.SHELLDER,
+      SpeciesId.WAILMER,
+      SpeciesId.LUVDISC,
+      SpeciesId.SHELLOS,
+      SpeciesId.SKRELP,
+      SpeciesId.PINCURCHIN,
+      SpeciesId.DONDOZO,
+    ],
+  },
+  [BiomePoolTier.RARE]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.QWILFISH,
+      SpeciesId.CORSOLA,
+      SpeciesId.OCTILLERY,
+      SpeciesId.MANTYKE,
+      SpeciesId.ALOMOMOLA,
+      SpeciesId.TYNAMO,
+      SpeciesId.DHELMISE,
+    ],
+  },
+  [BiomePoolTier.SUPER_RARE]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.OMANYTE,
+      SpeciesId.KABUTO,
+      SpeciesId.RELICANTH,
+      SpeciesId.PYUKUMUKU,
+      SpeciesId.GALAR_CORSOLA,
+      SpeciesId.ARCTOVISH,
+      SpeciesId.HISUI_QWILFISH,
+    ],
+  },
+  [BiomePoolTier.ULTRA_RARE]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [SpeciesId.FEEBAS, SpeciesId.NIHILEGO],
+  },
+  [BiomePoolTier.BOSS]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.LANTURN,
+      SpeciesId.QWILFISH,
+      SpeciesId.CORSOLA,
+      SpeciesId.OCTILLERY,
+      SpeciesId.MANTINE,
+      SpeciesId.WAILORD,
+      SpeciesId.HUNTAIL,
+      SpeciesId.GOREBYSS,
+      SpeciesId.LUVDISC,
+      SpeciesId.JELLICENT,
+      SpeciesId.ALOMOMOLA,
+      SpeciesId.DRAGALGE,
+      SpeciesId.BARRASKEWDA,
+      SpeciesId.DONDOZO,
+    ],
+  },
+  [BiomePoolTier.BOSS_RARE]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [
+      SpeciesId.OMASTAR,
+      SpeciesId.KABUTOPS,
+      SpeciesId.RELICANTH,
+      SpeciesId.EELEKTROSS,
+      SpeciesId.PYUKUMUKU,
+      SpeciesId.DHELMISE,
+      SpeciesId.CURSOLA,
+      SpeciesId.ARCTOVISH,
+      SpeciesId.BASCULEGION,
+      SpeciesId.OVERQWIL,
+    ],
+  },
+  [BiomePoolTier.BOSS_SUPER_RARE]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [SpeciesId.MILOTIC, SpeciesId.NIHILEGO],
+  },
+  [BiomePoolTier.BOSS_ULTRA_RARE]: {
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
+    [TimeOfDay.NIGHT]: [],
+    [TimeOfDay.ALL]: [SpeciesId.KYOGRE],
+  },
+};
 
 export const seabedBiome = new Biome(
   BiomeId.SEABED,
-  townPokemonPool,
+  pokemonPool,
   townTrainerPool,
   townWeatherPool,
   townTerrainPool,
