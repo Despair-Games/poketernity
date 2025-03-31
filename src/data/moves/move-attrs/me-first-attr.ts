@@ -22,6 +22,7 @@ export class MeFirstAttr extends CallMoveAttr {
   constructor() {
     super();
     this.hasTarget = true;
+    this.invalidMoves = invalidMeFirstMoves;
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
@@ -39,7 +40,7 @@ export class MeFirstAttr extends CallMoveAttr {
       return (
         !!targetMove?.isAttackMove()
         && !targetMove.checkFlag(MoveFlags.G_MAX_MOVE, user, target)
-        && !invalidMeFirstMoves.has(targetMove.id)
+        && !this.invalidMoves.has(targetMove.id)
       );
     };
   }
@@ -50,7 +51,7 @@ export class MeFirstAttr extends CallMoveAttr {
   }
 }
 
-export const invalidMeFirstMoves: ReadonlySet<MoveId> = Object.freeze(
+const invalidMeFirstMoves: ReadonlySet<MoveId> = Object.freeze(
   new Set([
     MoveId.BEAK_BLAST,
     MoveId.BELCH,
