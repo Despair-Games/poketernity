@@ -1716,7 +1716,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
     // was grounded before receiving the `GroundedTag`.
     return (
-      !!this.getTag(BattlerTagType.IGNORE_FLYING)
+      this.hasTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
@@ -1726,7 +1726,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public isSemiInvulnerable(): boolean {
-    return !!this.getTag(...SemiInvulnerableBattlerTagTypes) || !!this.getTag(BattlerTagType.SKY_DROP);
+    return this.hasTag(...SemiInvulnerableBattlerTagTypes) || this.hasTag(BattlerTagType.SKY_DROP);
   }
 
   /**
@@ -1768,7 +1768,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
-      || !!this.getTag(...TrappedBattlerTagTypes)
+      || this.hasTag(...TrappedBattlerTagTypes)
       || !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
     );
   }
@@ -4933,7 +4933,7 @@ export class EnemyPokemon extends Pokemon {
               .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
               .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
-            const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
+            const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
 
             return (
               move.category !== MoveCategory.STATUS

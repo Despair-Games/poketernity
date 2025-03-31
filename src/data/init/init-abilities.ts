@@ -473,7 +473,7 @@ export function initAbilities() {
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.TANGLED_FEET, 4)
-      .conditionalAttr((pokemon) => !!pokemon.getTag(BattlerTagType.CONFUSED), StatMultiplierAbAttr, Stat.EVA, 2)
+      .conditionalAttr((pokemon) => pokemon.hasTag(BattlerTagType.CONFUSED), StatMultiplierAbAttr, Stat.EVA, 2)
       .ignorable(),
     new Ability(AbilityId.MOTOR_DRIVE, 4)
       .attr(TypeImmunityStatStageChangeAbAttr, ElementalType.ELECTRIC, Stat.SPD, 1)
@@ -1078,7 +1078,7 @@ export function initAbilities() {
       )
       .attr(
         FormBlockDamageAbAttr,
-        (target, user, move) => !!target.getTag(BattlerTagType.DISGUISE) && target.getMoveEffectiveness(user, move) > 0,
+        (target, user, move) => target.hasTag(BattlerTagType.DISGUISE) && target.getMoveEffectiveness(user, move) > 0,
         0,
         BattlerTagType.DISGUISE,
         (pokemon, abilityName) =>
@@ -1329,7 +1329,7 @@ export function initAbilities() {
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.ICE_FACE, 0, WeatherType.HAIL, WeatherType.SNOW)
       .attr(
         FormBlockDamageAbAttr,
-        (target, _user, move) => move.category === MoveCategory.PHYSICAL && !!target.getTag(BattlerTagType.ICE_FACE),
+        (target, _user, move) => move.category === MoveCategory.PHYSICAL && target.hasTag(BattlerTagType.ICE_FACE),
         0,
         BattlerTagType.ICE_FACE,
         (pokemon, abilityName) =>

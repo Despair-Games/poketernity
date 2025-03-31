@@ -1079,7 +1079,7 @@ export function initMoves() {
     new AttackMove(MoveId.UPROAR, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.UPROAR, true)
       .attr(MessageHeaderAttr, (user, _move) =>
-        !!user.getTag(BattlerTagType.UPROAR)
+        user.hasTag(BattlerTagType.UPROAR)
           // "{pokemonNameWithAffix} is making an uproar!"
           ? i18next.t("moveTriggers:isMakingAnUproar", { pokemonNameWithAffix: getPokemonNameWithAffix(user) })
           : undefined,
