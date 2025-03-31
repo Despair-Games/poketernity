@@ -10,7 +10,6 @@ import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab
 import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
 import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
@@ -38,6 +37,7 @@ import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
+import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -235,7 +235,7 @@ export class FaintPhase extends PokemonPhase {
 
     pokemon.faintCry(() => {
       if (pokemon.isPlayer()) {
-        pokemon.addFriendship(-FRIENDSHIP_LOSS_FROM_FAINT);
+        pokemon.addFriendship(-1 * FRIENDSHIP_LOST_FROM_FAINTING);
       }
       pokemon.hideInfo();
       globalScene.audioManager.playSound("se/faint");

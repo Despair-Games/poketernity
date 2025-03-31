@@ -12,7 +12,7 @@ import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, FRIENDSHIP_GAIN_CUTOFF, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -4429,9 +4429,7 @@ export class PlayerPokemon extends Pokemon {
   }
 
   /**
-   * Updates the Pokemon's friendship value and calls {@linkcode addCandyProgress}
-   * to also the update the `candyProgress` value of the Pokemon's root species in
-   * the game data if there is a postive gain
+   * Updates the Pokemon's friendship value
    * @param friendshipChange - The amount of friendship to add or remove
    */
   addFriendship(friendshipChange: number): void {
@@ -4444,18 +4442,20 @@ export class PlayerPokemon extends Pokemon {
     // Soothe bell multiplier applies here
     globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
 
+    // If the Pokemon's friendship is 150 or higher, the gain is halved
+    if (this.friendship >= FRIENDSHIP_GAIN_CUTOFF) {
+      amount.value = Math.floor(amount.value / 2);
+    }
+
     // Add friendship to this PlayerPokemon
     this.friendship = Math.min(this.friendship + amount.value, 255);
     if (this.friendship === 255) {
       globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
     }
-
-    // Add to candy progress for this mon's starter species
-    this.addCandyProgress(amount.value);
   }
 
   /**
-   * Helper function being called in {@linkcode addFriendship}.
+   * Not used right now
    * Updates the `candyProgress` of a starter and grants candy
    * if the requirement is met
    * @param candyProgressChange - The amount to increase the candy progress value by

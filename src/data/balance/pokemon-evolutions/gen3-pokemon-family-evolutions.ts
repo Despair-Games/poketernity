@@ -1,5 +1,6 @@
 import { SpeciesId } from "#enums/species-id";
 import {
+  BabySpeciesFriendshipEvolutionCondition,
   DayEvolutionCondition,
   FemaleEvolutionCondition,
   MaleEvolutionCondition,
@@ -7,7 +8,6 @@ import {
   type PokemonEvolutions,
   ShedinjaEvoCondition,
   SpeciesEvolution,
-  SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
@@ -75,7 +75,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       SpeciesId.ROSELIA,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70), new DayEvolutionCondition()],
+      [new BabySpeciesFriendshipEvolutionCondition(), new DayEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -110,7 +110,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       SpeciesId.CHIMECHO,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(90), new NightEvolutionCondition()],
+      [new BabySpeciesFriendshipEvolutionCondition(), new NightEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
