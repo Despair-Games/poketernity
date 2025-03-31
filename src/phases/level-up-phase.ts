@@ -8,6 +8,7 @@ import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants";
 
 /**
  * Handles the effects of a pokemon levelling up:
@@ -44,6 +45,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
 
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();
+    this.pokemon.addFriendship(FRIENDSHIP_GAIN_PER_LEVEL_UP);
     this.pokemon.updateInfo();
 
     const promptLevelUpStats = (): Promise<void> =>

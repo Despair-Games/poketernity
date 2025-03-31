@@ -23,7 +23,6 @@ import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-bat
 import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
-import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
@@ -2042,7 +2041,8 @@ export default class BattleScene extends SceneBase {
    * TODO: Rewrite this later for weighting?
    */
   generateRandomBiome(_waveIndex: number): BiomeId {
-    return randSeedItem([...allBiomes.keys()]);
+    const excludedBiomeIds = [BiomeId.TOWN, BiomeId.END];
+    return randSeedItem([...allBiomes.keys()].filter(b => !excludedBiomeIds.includes(b)));
   }
 
   toggleInvert(invert: boolean): void {
@@ -3074,7 +3074,6 @@ export default class BattleScene extends SceneBase {
         const pId = partyMember.id;
         const participated = participantIds.has(pId);
         if (participated && pokemonDefeated) {
-          partyMember.addFriendship(FRIENDSHIP_GAIN_FROM_BATTLE);
           const machoBraceModifier = partyMember
             .getHeldItems()
             .find((m) => m instanceof PokemonIncrementingStatModifier);

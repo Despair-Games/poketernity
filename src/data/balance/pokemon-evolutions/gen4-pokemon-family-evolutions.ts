@@ -34,13 +34,7 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.SHELLOS]: [new SpeciesEvolution(SpeciesId.GASTRODON, 30, null, null)],
   [SpeciesId.DRIFLOON]: [new SpeciesEvolution(SpeciesId.DRIFBLIM, 28, null, null)],
   [SpeciesId.BUNEARY]: [
-    new SpeciesEvolution(
-      SpeciesId.LOPUNNY,
-      1,
-      null,
-      [new SpeciesFriendshipEvolutionCondition(70)],
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(SpeciesId.LOPUNNY, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [SpeciesId.GLAMEOW]: [new SpeciesEvolution(SpeciesId.PURUGLY, 38, null, null)],
   [SpeciesId.STUNKY]: [new SpeciesEvolution(SpeciesId.SKUNTANK, 34, null, null)],
@@ -52,7 +46,7 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
       SpeciesId.LUCARIO,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new DayEvolutionCondition()],
+      [new SpeciesFriendshipEvolutionCondition(), new DayEvolutionCondition()],
       HAPPINESS_EVO_LEVEL,
     ),
   ],

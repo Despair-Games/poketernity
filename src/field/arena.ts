@@ -182,12 +182,7 @@ export class Arena {
       ret = globalScene.randomSpecies(waveIndex, level);
     } else {
       const entry = tierPool[randSeedInt(tierPool.length)];
-      let species: SpeciesId;
-      if (typeof entry === "number") {
-        species = entry as SpeciesId;
-      }
-
-      ret = getPokemonSpecies(species!);
+      ret = getPokemonSpecies(entry);
       regen = this.determineRerollIfLegendLike(ret, level);
     }
 
