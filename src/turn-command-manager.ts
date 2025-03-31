@@ -382,7 +382,7 @@ export class TurnCommandManager {
 
     if (success) {
       const forMove = turnCommand.command === BattleCommand.FIGHT;
-      globalScene.pushPhase(new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove));
+      globalScene.unshiftPhase(new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove));
       this.commandsInProgress++;
     }
 
@@ -413,7 +413,7 @@ export class TurnCommandManager {
       targets: targets ?? turnMove.targets,
       move,
       ignorePp: cursor !== 1 && turnMove.ignorePP,
-      when: "defer",
+      when: "eager",
     });
 
     return true;
@@ -434,7 +434,7 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.pushPhase(new AttemptCapturePhase(targets[0] % 2, cursor));
+    globalScene.unshiftPhase(new AttemptCapturePhase(targets[0] % 2, cursor));
     return true;
   }
 
@@ -453,7 +453,9 @@ export class TurnCommandManager {
     }
 
     const switchType = args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-    globalScene.pushPhase(new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()));
+    globalScene.unshiftPhase(
+      new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
+    );
     return true;
   }
 
@@ -475,7 +477,7 @@ export class TurnCommandManager {
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.pushPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
+    globalScene.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
     return true;
   }
 
