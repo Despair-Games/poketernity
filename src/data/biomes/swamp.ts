@@ -25,7 +25,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [SpeciesId.TOTODIL, SpeciesId.MUDKIP],
+    [TimeOfDay.ALL]: [SpeciesId.TOTODILE, SpeciesId.MUDKIP],
   },
   [BiomePoolTier.SUPER_RARE]: {
     [TimeOfDay.DAWN]: [SpeciesId.GALAR_SLOWPOKE, SpeciesId.HISUI_SLIGGOO],
