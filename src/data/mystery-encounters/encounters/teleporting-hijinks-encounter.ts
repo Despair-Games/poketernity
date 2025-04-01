@@ -185,7 +185,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
 
   // Calculate new biome (cannot be current biome)
-  const filteredBiomes = BIOME_CANDIDATES.filter((b) => globalScene.arena.biomeType !== b);
+  const filteredBiomes = BIOME_CANDIDATES.filter((b) => globalScene.arena.biomeId !== b);
   const newBiome = filteredBiomes[randSeedInt(filteredBiomes.length)];
 
   // Show dialogue and transition biome

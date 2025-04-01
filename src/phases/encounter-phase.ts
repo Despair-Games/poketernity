@@ -144,7 +144,7 @@ export class EncounterPhase extends BattlePhase {
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
             && !gameMode.isBoss(waveIndex)
-            && arena.biomeType !== BiomeId.END
+            && arena.biomeId !== BiomeId.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);

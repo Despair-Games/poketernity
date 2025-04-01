@@ -25,7 +25,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     if (terrainType !== TerrainType.NONE) {
       typeChange = this.getTypeForTerrain(globalScene.arena.getTerrainType());
     } else {
-      typeChange = this.getTypeForBiome(globalScene.arena.biomeType);
+      typeChange = this.getTypeForBiome(globalScene.arena.biomeId);
     }
 
     user.summonData.types = [typeChange];
@@ -64,11 +64,11 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
 
   /**
    * Retrieves a type from the current biome
-   * @param biomeType {@linkcode BiomeId}
+   * @param biomeId {@linkcode BiomeId}
    * @returns the {@linkcode ElementalType} corresponding to the biome
    */
-  private getTypeForBiome(biomeType: BiomeId): ElementalType {
-    switch (biomeType) {
+  private getTypeForBiome(biomeId: BiomeId): ElementalType {
+    switch (biomeId) {
       case BiomeId.TOWN:
       case BiomeId.PLAINS:
       case BiomeId.METROPOLIS:

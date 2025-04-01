@@ -1,7 +1,7 @@
 import { loggedInUser } from "#app/account";
 import type { Ability } from "#app/data/abilities/ability";
-import { getBiomeName } from "#app/data/balance/biomes";
 import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
+import { getBiomeName } from "#app/data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import type { Move } from "#app/data/moves/move";
@@ -9,16 +9,15 @@ import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { starterColors } from "#app/data/starter-colors";
 import { getTypeRgb } from "#app/data/type";
-import type { Variant } from "#app/data/variant";
-import { getVariantTint } from "#app/data/variant";
+import { getVariantTint, type Variant } from "#app/data/variant";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { modifierSortFunc } from "#app/modifier/modifier";
+import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import {
   fixedNumber,
@@ -42,7 +41,6 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
-import type { PartyUiHandler } from "./party-ui-handler";
 
 /** Holds all objects related to an ability for each iteration */
 interface abilityContainer {
