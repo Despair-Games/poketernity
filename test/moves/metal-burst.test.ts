@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,25 +25,25 @@ describe("Moves - Metal Burst", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.METAL_BURST, MoveId.FISSURE, MoveId.PRECIPICE_BLADES])
-      .ability(Abilities.PURE_POWER)
+      .ability(AbilityId.PURE_POWER)
       .startingLevel(10)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.PICHU)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.PICHU)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);
   });
 
   it("should redirect target if intended target faints", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.FEEBAS]);
 
     const [, enemy2] = game.scene.getEnemyField();
 
     game.move.select(MoveId.METAL_BURST);
     game.move.select(MoveId.FISSURE, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
@@ -56,15 +56,15 @@ describe("Moves - Metal Burst", () => {
   });
 
   it("should not crash if both opponents faint before the move is used", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ARCEUS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.ARCEUS]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
     game.move.select(MoveId.METAL_BURST);
     game.move.select(MoveId.PRECIPICE_BLADES, 1);
 
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 

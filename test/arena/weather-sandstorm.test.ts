@@ -1,7 +1,7 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -27,11 +27,11 @@ describe("Weather - Sandstorm", () => {
       .battleType("single")
       .moveset(MoveId.SPLASH)
       .enemyMoveset(MoveId.SANDSTORM)
-      .enemySpecies(Species.MAGIKARP);
+      .enemySpecies(SpeciesId.MAGIKARP);
   });
 
   it("inflicts damage equal to 1/16 of Pokemon's max HP at turn end", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
 
@@ -43,7 +43,7 @@ describe("Weather - Sandstorm", () => {
   });
 
   it("should not inflict damage on the turn that the weather expires", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
@@ -66,7 +66,7 @@ describe("Weather - Sandstorm", () => {
 
   it("does not inflict damage to a Pokemon that is underwater (Dive) or underground (Dig)", async () => {
     game.override.moveset([MoveId.DIVE]);
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.DIVE);
 
@@ -82,11 +82,11 @@ describe("Weather - Sandstorm", () => {
   it("does not inflict damage to Rock, Ground and Steel type Pokemon", async () => {
     game.override
       .battleType("double")
-      .enemySpecies(Species.SANDSHREW)
-      .ability(Abilities.BALL_FETCH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemySpecies(SpeciesId.SANDSHREW)
+      .ability(AbilityId.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH);
 
-    await game.classicMode.startBattle([Species.ROCKRUFF, Species.KLINK]);
+    await game.classicMode.startBattle([SpeciesId.ROCKRUFF, SpeciesId.KLINK]);
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.SPLASH, 1);
@@ -99,7 +99,7 @@ describe("Weather - Sandstorm", () => {
   });
 
   it("increases Rock type Pokemon Sp.Def by 50%", async () => {
-    await game.classicMode.startBattle([Species.ROCKRUFF]);
+    await game.classicMode.startBattle([SpeciesId.ROCKRUFF]);
 
     // Stall 1 turn to let opponent use Sandstorm
     game.move.select(MoveId.SPLASH);

@@ -1,28 +1,37 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/constants";
-import { SESSION_ID_COOKIE } from "#app/constants";
+import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { getAdminModeName } from "#app/ui/handlers/admin-ui-handler";
-import BgmBar from "#app/ui/components/bgm-bar";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { BgmBar } from "#app/ui/components/bgm-bar";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getCookie, getEnumKeys, isBeta } from "#app/utils";
+import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
-import i18next from "i18next";
-import type AwaitableUiHandler from "./awaitable-ui-handler";
-import { UiMode } from "#enums/ui-mode";
-import { TextStyle } from "#enums/text-style";
-import { AdminMode } from "#enums/admin-mode";
-import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
 import { PhaseId } from "#enums/phase-id";
-import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { TextStyle } from "#enums/text-style";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import type { SettingsUiHandler } from "../settings/settings-ui-handler";
+import type { AchievementsUiHandler } from "./achievements-ui-handler";
+import type { AdminUiHandler } from "./admin-ui-handler";
+import { getAdminModeName } from "./admin-ui-handler";
+import type { AwaitableUiHandler } from "./awaitable-ui-handler";
+import type { ConfirmUiHandler } from "./confirm-ui-handler";
+import type { EggGachaUiHandler } from "./egg-gacha-ui-handler";
+import type { EggListUiHandler } from "./egg-list-ui-handler";
+import type { GameStatsUiHandler } from "./game-stats-ui-handler";
+import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
+import { OptionSelectUiHandler } from "./option-select-ui-handler";
+import type { RunHistoryUiHandler } from "./run-history-ui-handler";
+import type { TestDialogueUiHandler } from "./test-dialogue-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -39,7 +48,7 @@ enum MenuOptions {
 
 const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_DONATE_URL } = import.meta.env;
 
-export default class MenuUiHandler extends OptionSelectUiHandler {
+export class MenuUiHandler extends OptionSelectUiHandler {
   private readonly textPadding = 8;
 
   private menuContainer: Phaser.GameObjects.Container;
@@ -118,10 +127,10 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.initCommunityMenuOptions();
   }
 
-  override show(_args: any[]): boolean {
-    const config: OptionSelectModeConfig = this.getMenuOptionsConfig();
+  override show(): boolean {
+    const config = this.getMenuOptionsConfig();
 
-    super.show([config]);
+    super.show(config);
 
     // Make sure the tutorial overlay sits above everything, but below the message box
     this.menuContainer.bringToTop(this.tutorialOverlay);
@@ -212,7 +221,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
           xOffset: this.optionSelectBg.displayWidth,
           yOffset: this.menuMessageBox.displayHeight + 1,
         };
-        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, config);
+        ui.setOverlayMode<OptionSelectUiHandler>(UiMode.MENU_OPTION_SELECT, config);
       });
     };
     // Import Session
@@ -359,7 +368,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               ui.revertMode();
             },
           ];
-          ui.setMode(UiMode.TEST_DIALOGUE, buttonAction, prefilledText);
+          ui.setMode<TestDialogueUiHandler>(UiMode.TEST_DIALOGUE, buttonAction, prefilledText);
           return true;
         },
         keepOpen: true,
@@ -458,7 +467,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 label: getAdminModeName(mode as AdminMode),
                 handler: () => {
                   ui.playSelect();
-                  ui.setOverlayMode(
+                  ui.setOverlayMode<AdminUiHandler>(
                     UiMode.ADMIN,
                     {
                       buttonActions: [
@@ -473,7 +482,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                         },
                       ],
                     },
-                    mode,
+                    mode as AdminMode,
                   ); // mode is our AdminMode enum
                   return true;
                 },
@@ -486,7 +495,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               return true;
             },
           });
-          globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
+          globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options: options,
             yOffset: this.menuMessageBox.displayHeight + 1,
           });
@@ -515,25 +524,25 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     const ui = this.getUi();
     switch (option) {
       case MenuOptions.GAME_SETTINGS:
-        ui.setOverlayMode(UiMode.SETTINGS);
+        ui.setOverlayMode<SettingsUiHandler>(UiMode.SETTINGS);
         success = true;
         break;
       case MenuOptions.ACHIEVEMENTS:
-        ui.setOverlayMode(UiMode.ACHIEVEMENTS);
+        ui.setOverlayMode<AchievementsUiHandler>(UiMode.ACHIEVEMENTS);
         success = true;
         break;
       case MenuOptions.STATS:
-        ui.setOverlayMode(UiMode.GAME_STATS);
+        ui.setOverlayMode<GameStatsUiHandler>(UiMode.GAME_STATS);
         success = true;
         break;
       case MenuOptions.RUN_HISTORY:
-        ui.setOverlayMode(UiMode.RUN_HISTORY);
+        ui.setOverlayMode<RunHistoryUiHandler>(UiMode.RUN_HISTORY);
         success = true;
         break;
       case MenuOptions.EGG_LIST:
         if (globalScene.gameData.eggs.length) {
           ui.revertMode();
-          ui.setOverlayMode(UiMode.EGG_LIST);
+          ui.setOverlayMode<EggListUiHandler>(UiMode.EGG_LIST);
           success = true;
         } else {
           ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
@@ -541,7 +550,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         break;
       case MenuOptions.EGG_GACHA:
         ui.revertMode();
-        ui.setOverlayMode(UiMode.EGG_GACHA);
+        ui.setOverlayMode<EggGachaUiHandler>(UiMode.EGG_GACHA);
         success = true;
         break;
       case MenuOptions.MANAGE_DATA:
@@ -600,18 +609,18 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
             },
           );
         }
-        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, this.manageDataConfig);
+        ui.setOverlayMode<OptionSelectUiHandler>(UiMode.MENU_OPTION_SELECT, this.manageDataConfig);
         success = true;
         break;
       case MenuOptions.COMMUNITY:
-        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, this.communityConfig);
+        ui.setOverlayMode<OptionSelectUiHandler>(UiMode.MENU_OPTION_SELECT, this.communityConfig);
         success = true;
         break;
       case MenuOptions.SAVE_AND_QUIT:
         if (globalScene.currentBattle) {
           success = true;
           const doSaveQuit = () => {
-            ui.setMode(UiMode.LOADING, {
+            ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, {
               buttonActions: [],
               fadeOut: () =>
                 globalScene.gameData.saveAll(true, true, true, true).then(() => {
@@ -633,7 +642,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 },
                 xOffset: this.optionSelectBg.displayWidth,
               };
-              ui.setOverlayMode(UiMode.CONFIRM, options);
+              ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
             });
           } else {
             doSaveQuit();
@@ -643,7 +652,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       case MenuOptions.LOG_OUT:
         success = true;
         const doLogout = () => {
-          ui.setMode(UiMode.LOADING, {
+          ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, {
             buttonActions: [],
             fadeOut: () =>
               api.account.logout().then(() => {
@@ -665,7 +674,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               },
               xOffset: this.optionSelectBg.displayWidth,
             };
-            ui.setOverlayMode(UiMode.CONFIRM, options);
+            ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
           });
         } else {
           doLogout();
@@ -681,7 +690,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       ui.playSelect();
       ui.revertMode().then((result) => {
         if (!result) {
-          ui.setMode(UiMode.MESSAGE);
+          ui.setMessageMode();
         }
       });
       return true;

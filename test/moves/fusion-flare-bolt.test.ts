@@ -6,7 +6,7 @@ import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -36,7 +36,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     game.override.moveset([fusionFlare.id, fusionBolt.id]);
     game.override.startingLevel(1);
 
-    game.override.enemySpecies(Species.RESHIRAM);
+    game.override.enemySpecies(SpeciesId.RESHIRAM);
     game.override.enemyMoveset([MoveId.REST, MoveId.REST, MoveId.REST, MoveId.REST]);
 
     game.override.battleType("double");
@@ -48,7 +48,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   });
 
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT", async () => {
-    await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
     game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
@@ -68,7 +68,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_BOLT should double power of subsequent FUSION_FLARE", async () => {
-    await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
 
     game.move.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
     game.move.select(fusionFlare.id, 1, BattlerIndex.ENEMY);
@@ -88,7 +88,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT if a move failed in between", async () => {
-    await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.PLAYER);
     game.move.select(fusionBolt.id, 1, BattlerIndex.PLAYER);
@@ -114,7 +114,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   it("FUSION_FLARE should not double power of subsequent FUSION_BOLT if a move succeeded in between", async () => {
     game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
-    await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
     game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
@@ -138,7 +138,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT if moves are aimed at allies", async () => {
-    await game.startBattle([Species.ZEKROM, Species.RESHIRAM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.RESHIRAM]);
 
     game.move.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
     game.move.select(fusionFlare.id, 1, BattlerIndex.PLAYER);
@@ -159,7 +159,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves", async () => {
     game.override.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
-    await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
 
     const party = game.scene.getPlayerParty();
     const enemyParty = game.scene.getEnemyParty();
@@ -213,7 +213,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves if moves are aimed at allies", async () => {
     game.override.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
-    await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
 
     const party = game.scene.getPlayerParty();
     const enemyParty = game.scene.getEnemyParty();

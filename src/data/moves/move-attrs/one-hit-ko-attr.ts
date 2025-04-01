@@ -1,9 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { BlockOneHitKOAbAttr } from "#app/data/abilities/ab-attrs/block-one-hit-ko-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Pokemon } from "#app/field/pokemon";
+import { BooleanHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
@@ -30,7 +31,7 @@ export class OneHitKOAttr extends MoveAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.BLOCK_ONE_HIT_KO, target, false, cancelled);
+      applyAbAttrs<BlockOneHitKOAbAttr>(AbAttrFlag.BLOCK_ONE_HIT_KO, target, false, cancelled);
       return !cancelled.value && user.level >= target.level && !target.isMax(false);
     };
   }

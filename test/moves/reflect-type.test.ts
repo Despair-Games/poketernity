@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -22,32 +22,32 @@ describe("Moves - Reflect Type", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.ability(Abilities.BALL_FETCH).battleType("single").disableCrits().enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH).battleType("single").disableCrits().enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("will make the user Normal/Grass if targetting a typeless Pokemon affected by Forest's Curse", async () => {
     game.override
       .moveset([MoveId.FORESTS_CURSE, MoveId.REFLECT_TYPE])
       .startingLevel(60)
-      .enemySpecies(Species.CHARMANDER)
+      .enemySpecies(SpeciesId.CHARMANDER)
       .enemyMoveset([MoveId.BURN_UP, MoveId.SPLASH]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.BURN_UP);
+    await game.move.selectEnemyMove(MoveId.BURN_UP);
     await game.toNextTurn();
 
     game.move.select(MoveId.FORESTS_CURSE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     expect(enemyPokemon?.getTypes().includes(ElementalType.UNKNOWN)).toBe(true);
     expect(enemyPokemon?.getTypes().includes(ElementalType.GRASS)).toBe(true);
 
     game.move.select(MoveId.REFLECT_TYPE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
     expect(playerPokemon?.getTypes()[0]).toBe(ElementalType.NORMAL);
     expect(playerPokemon?.getTypes().includes(ElementalType.GRASS)).toBe(true);

@@ -1,10 +1,10 @@
-import type { ModalConfig } from "./modal-ui-handler";
-import { ModalUiHandler } from "./modal-ui-handler";
+import type { ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import { ModalUiHandler } from "./modal-ui-handler";
 
-export default class SessionReloadModalUiHandler extends ModalUiHandler {
+export class SessionReloadModalUiHandler extends ModalUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
   }
@@ -44,11 +44,11 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  override show(_args: any[]): boolean {
+  override show(): boolean {
     const config: ModalConfig = {
       buttonActions: [],
     };
 
-    return super.show([config]);
+    return super.show(config);
   }
 }

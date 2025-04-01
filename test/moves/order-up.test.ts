@@ -3,9 +3,9 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,11 +28,11 @@ describe("Moves - Order Up", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset(MoveId.ORDER_UP)
-      .ability(Abilities.COMMANDER)
+      .ability(AbilityId.COMMANDER)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -47,9 +47,9 @@ describe("Moves - Order Up", () => {
   ])(
     "should raise the user's $statName when the user is commanded by a $formName Tatsugiri",
     async ({ formIndex, stat }) => {
-      game.override.starterForms({ [Species.TATSUGIRI]: formIndex });
+      game.override.starterForms({ [SpeciesId.TATSUGIRI]: formIndex });
 
-      await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+      await game.classicMode.startBattle([SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
 
       const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -71,9 +71,9 @@ describe("Moves - Order Up", () => {
   );
 
   it("should be boosted by Sheer Force while still applying a stat boost", async () => {
-    game.override.passiveAbility(Abilities.SHEER_FORCE).starterForms({ [Species.TATSUGIRI]: 0 });
+    game.override.passiveAbility(AbilityId.SHEER_FORCE).starterForms({ [SpeciesId.TATSUGIRI]: 0 });
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicMode.startBattle([SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -89,7 +89,7 @@ describe("Moves - Order Up", () => {
 
     await game.toEndOfTurn();
 
-    expect(dondozo.battleData.abilitiesApplied.includes(Abilities.SHEER_FORCE)).toBeTruthy();
+    expect(dondozo.battleData.abilitiesApplied.includes(AbilityId.SHEER_FORCE)).toBeTruthy();
     expect(dondozo.getStatStage(Stat.ATK)).toBe(3);
   });
 });

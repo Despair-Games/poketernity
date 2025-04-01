@@ -1,6 +1,6 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -23,14 +23,14 @@ describe.todo("Items - Scope Lens", () => {
     game = new GameManager(phaserGame);
 
     game.override
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.POUND])
       .battleType("single");
   }, 20000);
 
   it("should raise CRIT stage by 1", async () => {
-    await game.startBattle([Species.GASTLY]);
+    await game.startBattle([SpeciesId.GASTLY]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

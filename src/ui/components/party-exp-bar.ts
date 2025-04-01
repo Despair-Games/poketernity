@@ -5,7 +5,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
-export default class PartyExpBar extends Phaser.GameObjects.Container {
+export class PartyExpBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.NineSlice;
   private pokemonIcon: Phaser.GameObjects.Container;
   private expText: Phaser.GameObjects.Text;

@@ -1,7 +1,7 @@
 import { WeatherType } from "#enums/weather-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,14 +25,14 @@ describe("Abilities - Sand Spit", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SILICOBRA)
-      .enemyAbility(Abilities.SAND_SPIT)
+      .enemySpecies(SpeciesId.SILICOBRA)
+      .enemyAbility(AbilityId.SAND_SPIT)
       .enemyMoveset([MoveId.SPLASH])
       .moveset([MoveId.TACKLE, MoveId.WATERFALL, MoveId.SURF, MoveId.GROWL]);
   });
 
   it("should trigger when hit with damaging move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
@@ -42,7 +42,7 @@ describe("Abilities - Sand Spit", () => {
 
   it("should trigger when KO'd", async () => {
     game.override.startingLevel(1000).enemyLevel(1);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.WATERFALL);
     await game.phaseInterceptor.to("FaintPhase");
@@ -51,7 +51,7 @@ describe("Abilities - Sand Spit", () => {
   });
 
   it("should not trigger when targetted with status moves", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     game.move.select(MoveId.GROWL);
     await game.toNextTurn();
 

@@ -3,16 +3,16 @@
 import { GameManager } from "#test/test-utils/gameManager";
 
 import type { Variant } from "#app/data/variant";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
 import type { Unlockables } from "#enums/unlockables";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { expect, vi } from "vitest";
@@ -35,9 +35,9 @@ export class OverridesHelper extends GameManagerHelper {
    * @warning Any event listeners that are attached to [NewArenaEvent](events\battle-scene.ts) may need to be handled down the line
    * @param biome the biome to set
    */
-  public startingBiome(biome: Biome): this {
+  public startingBiome(biome: BiomeId): this {
     this.game.scene.newArena(biome);
-    this.log(`Starting biome set to ${Biome[biome]} (=${biome})!`);
+    this.log(`Starting biome set to ${BiomeId[biome]} (=${biome})!`);
     return this;
   }
 
@@ -57,7 +57,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @param level the (pokemon) level to set
    * @returns `this`
    */
-  public startingLevel(level: Species | number): this {
+  public startingLevel(level: SpeciesId | number): this {
     vi.spyOn(Overrides, "STARTING_LEVEL_OVERRIDE", "get").mockReturnValue(level);
     this.log(`Player Pokemon starting level set to ${level}!`);
     return this;
@@ -86,13 +86,13 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode Species | species}
-   * @param species the (pokemon) {@linkcode Species | species} to set
+   * Override the player (pokemon) {@linkcode SpeciesId | species}
+   * @param species the (pokemon) {@linkcode SpeciesId | species} to set
    * @returns `this`
    */
-  public starterSpecies(species: Species | number): this {
+  public starterSpecies(species: SpeciesId | number): this {
     vi.spyOn(Overrides, "STARTER_SPECIES_OVERRIDE", "get").mockReturnValue(species);
-    this.log(`Player Pokemon species set to ${Species[species]} (=${species})!`);
+    this.log(`Player Pokemon species set to ${SpeciesId[species]} (=${species})!`);
     return this;
   }
 
@@ -101,10 +101,10 @@ export class OverridesHelper extends GameManagerHelper {
    * @param forms the (pokemon) forms to set
    * @returns `this`
    */
-  public starterForms(forms: Partial<Record<Species, number>>): this {
+  public starterForms(forms: Partial<Record<SpeciesId, number>>): this {
     vi.spyOn(Overrides, "STARTER_FORM_OVERRIDES", "get").mockReturnValue(forms);
     const formsStr = Object.entries(forms)
-      .map(([speciesId, formIndex]) => `${Species[speciesId]}=${formIndex}`)
+      .map(([speciesId, formIndex]) => `${SpeciesId[speciesId]}=${formIndex}`)
       .join(", ");
     this.log(`Player Pokemon form set to: ${formsStr}!`);
     return this;
@@ -115,10 +115,10 @@ export class OverridesHelper extends GameManagerHelper {
    * @param forms the (pokemon) forms to set
    * @returns `this`
    */
-  public enemyForms(forms: Partial<Record<Species, number>>): this {
+  public enemyForms(forms: Partial<Record<SpeciesId, number>>): this {
     vi.spyOn(Overrides, "ENEMY_FORM_OVERRIDES", "get").mockReturnValue(forms);
     const formsStr = Object.entries(forms)
-      .map(([speciesId, formIndex]) => `${Species[speciesId]}=${formIndex}`)
+      .map(([speciesId, formIndex]) => `${SpeciesId[speciesId]}=${formIndex}`)
       .join(", ");
     this.log(`Enemy Pokemon form set to: ${formsStr}!`);
     return this;
@@ -136,28 +136,28 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode Abilities | ability}
+   * Override the player (pokemon) {@linkcode AbilityId | ability}
    *
    * For more fine-grained control over setting specific species to have specific abilities,
    * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
    *
-   * @param ability the (pokemon) {@linkcode Abilities | ability} to set
+   * @param ability the (pokemon) {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public ability(ability: Abilities): this {
+  public ability(ability: AbilityId): this {
     vi.spyOn(Overrides, "ABILITY_OVERRIDE", "get").mockReturnValue(ability);
-    this.log(`Player Pokemon ability set to ${Abilities[ability]} (=${ability})!`);
+    this.log(`Player Pokemon ability set to ${AbilityId[ability]} (=${ability})!`);
     return this;
   }
 
   /**
-   * Override the player (pokemon) **passive** {@linkcode Abilities | ability}
-   * @param passiveAbility the (pokemon) **passive** {@linkcode Abilities | ability} to set
+   * Override the player (pokemon) **passive** {@linkcode AbilityId | ability}
+   * @param passiveAbility the (pokemon) **passive** {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public passiveAbility(passiveAbility: Abilities): this {
+  public passiveAbility(passiveAbility: AbilityId): this {
     vi.spyOn(Overrides, "PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(passiveAbility);
-    this.log(`Player Pokemon PASSIVE ability set to ${Abilities[passiveAbility]} (=${passiveAbility})!`);
+    this.log(`Player Pokemon PASSIVE ability set to ${AbilityId[passiveAbility]} (=${passiveAbility})!`);
     return this;
   }
 
@@ -244,39 +244,39 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the enemy (pokemon) {@linkcode Species | species}
-   * @param species the (pokemon) {@linkcode Species | species} to set
+   * Override the enemy (pokemon) {@linkcode SpeciesId | species}
+   * @param species the (pokemon) {@linkcode SpeciesId | species} to set
    * @returns `this`
    */
-  public enemySpecies(species: Species | number): this {
+  public enemySpecies(species: SpeciesId | number): this {
     vi.spyOn(Overrides, "ENEMY_SPECIES_OVERRIDE", "get").mockReturnValue(species);
-    this.log(`Enemy Pokemon species set to ${Species[species]} (=${species})!`);
+    this.log(`Enemy Pokemon species set to ${SpeciesId[species]} (=${species})!`);
     return this;
   }
 
   /**
-   * Override the enemy (pokemon) {@linkcode Abilities | ability}
+   * Override the enemy (pokemon) {@linkcode AbilityId | ability}
    *
    * For more fine-grained control over setting specific species to have specific abilities,
    * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
    *
-   * @param ability the (pokemon) {@linkcode Abilities | ability} to set
+   * @param ability the (pokemon) {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public enemyAbility(ability: Abilities): this {
+  public enemyAbility(ability: AbilityId): this {
     vi.spyOn(Overrides, "ENEMY_ABILITY_OVERRIDE", "get").mockReturnValue(ability);
-    this.log(`Enemy Pokemon ability set to ${Abilities[ability]} (=${ability})!`);
+    this.log(`Enemy Pokemon ability set to ${AbilityId[ability]} (=${ability})!`);
     return this;
   }
 
   /**
-   * Override the enemy (pokemon) **passive** {@linkcode Abilities | ability}
-   * @param passiveAbility the (pokemon) **passive** {@linkcode Abilities | ability} to set
+   * Override the enemy (pokemon) **passive** {@linkcode AbilityId | ability}
+   * @param passiveAbility the (pokemon) **passive** {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public enemyPassiveAbility(passiveAbility: Abilities): this {
+  public enemyPassiveAbility(passiveAbility: AbilityId): this {
     vi.spyOn(Overrides, "ENEMY_PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(passiveAbility);
-    this.log(`Enemy Pokemon PASSIVE ability set to ${Abilities[passiveAbility]} (=${passiveAbility})!`);
+    this.log(`Enemy Pokemon PASSIVE ability set to ${AbilityId[passiveAbility]} (=${passiveAbility})!`);
     return this;
   }
 

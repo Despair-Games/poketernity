@@ -1,9 +1,11 @@
-import AwaitableUiHandler from "./awaitable-ui-handler";
-import type { UiMode } from "#enums/ui-mode";
-import { getFrameMs } from "#app/utils";
 import { globalScene } from "#app/global-scene";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { getFrameMs } from "#app/utils";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import { AwaitableUiHandler } from "./awaitable-ui-handler";
 
-export default abstract class MessageUiHandler extends AwaitableUiHandler {
+export abstract class MessageUiHandler extends AwaitableUiHandler {
   protected textTimer: Phaser.Time.TimerEvent | null;
   protected textCallbackTimer: Phaser.Time.TimerEvent | null;
   public pendingPrompt: boolean;
@@ -213,11 +215,10 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
   showPrompt(callback?: Function | null, callbackDelay?: number | null) {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
-    const lastTextLine = wrappedTextLines[wrappedTextLines.length - 1];
-    const lastLineTest = globalScene.add.text(0, 0, lastTextLine, { font: "96px emerald" });
-    lastLineTest.setScale(this.message.scale);
-    const lastLineWidth = lastLineTest.displayWidth;
-    lastLineTest.destroy();
+    const lastTextLine = wrappedTextLines[textLinesCount - 1];
+    const lastLineTextObject = addTextObject(0, 0, lastTextLine, TextStyle.MESSAGE);
+    const lastLineWidth = lastLineTextObject.displayWidth;
+    lastLineTextObject.destroy();
     if (this.prompt) {
       this.prompt.setPosition(this.message.x + lastLineWidth + 2, this.message.y + (textLinesCount - 1) * 18 + 2);
       this.prompt.play("prompt");

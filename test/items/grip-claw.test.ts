@@ -1,10 +1,10 @@
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -30,9 +30,9 @@ describe("Items - Grip Claw", () => {
       .battleType("double")
       .moveset([MoveId.TACKLE, MoveId.SPLASH, MoveId.ATTRACT])
       .startingHeldItems([{ name: "GRIP_CLAW", count: 1 }])
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.UNNERVE)
-      .ability(Abilities.UNNERVE)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.UNNERVE)
+      .ability(AbilityId.UNNERVE)
       .enemyMoveset(MoveId.SPLASH)
       .enemyHeldItems([
         { name: "BERRY", type: BerryType.SITRUS, count: 2 },
@@ -42,7 +42,7 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should steal items on contact and only from the attack target", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [playerPokemon] = game.scene.getPlayerField();
 
@@ -71,7 +71,7 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should not steal items when using a targetted, non attack move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [playerPokemon] = game.scene.getPlayerField();
 

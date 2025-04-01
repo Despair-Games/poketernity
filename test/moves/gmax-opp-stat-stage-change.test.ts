@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
@@ -28,9 +28,9 @@ describe("Moves - G-Max debuff both opponents", () => {
       .battleType("double")
       .startingLevel(100)
       .moveset([MoveId.G_MAX_FOAM_BURST, MoveId.G_MAX_TARTNESS, MoveId.SPLASH])
-      .enemySpecies(Species.HAPPINY)
+      .enemySpecies(SpeciesId.HAPPINY)
       .enemyLevel(1)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -38,7 +38,7 @@ describe("Moves - G-Max debuff both opponents", () => {
     { gmaxMoveId: MoveId.G_MAX_FOAM_BURST, statDropped: Stat.SPD, statChangeAmt: -2 },
     { gmaxMoveId: MoveId.G_MAX_TARTNESS, statDropped: Stat.EVA, statChangeAmt: -1 },
   ])("G-Max moves should debuff both opponents", async ({ gmaxMoveId, statDropped, statChangeAmt }) => {
-    await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
     game.move.select(gmaxMoveId, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -57,8 +57,8 @@ describe("Moves - G-Max debuff both opponents", () => {
   });
 
   it("G-Max debuff moves should still drop stats through substitute", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
-    await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+    game.override.enemyAbility(AbilityId.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
+    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
     game.move.select(MoveId.G_MAX_FOAM_BURST, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -74,8 +74,8 @@ describe("Moves - G-Max debuff both opponents", () => {
   });
 
   it("G-Max debuff moves should not drop stats through clear body", async () => {
-    game.override.enemyAbility(Abilities.CLEAR_BODY).enemyMoveset([MoveId.SUBSTITUTE]);
-    await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+    game.override.enemyAbility(AbilityId.CLEAR_BODY).enemyMoveset([MoveId.SUBSTITUTE]);
+    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
     game.move.select(MoveId.G_MAX_FOAM_BURST, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);

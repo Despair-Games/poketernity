@@ -1,12 +1,13 @@
-import type { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
+import type { RechargingTag } from "#app/data/battler-tags/recharging-tag";
+import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerable-tag";
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -34,11 +35,11 @@ describe("Moves - Metronome", () => {
       .moveset([MoveId.METRONOME, MoveId.SPLASH])
       .battleType("single")
       .startingLevel(100)
-      .starterSpecies(Species.REGIELEKI)
+      .starterSpecies(SpeciesId.REGIELEKI)
       .enemyLevel(100)
-      .enemySpecies(Species.SHUCKLE)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should have one semi-invulnerable turn and deal damage on the second turn when a semi-invulnerable move is called", async () => {
@@ -82,7 +83,7 @@ describe("Moves - Metronome", () => {
 
   it("should only target ally for Aromatic Mist", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.RATTATA]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.AROMATIC_MIST);
@@ -118,17 +119,11 @@ describe("Moves - Metronome", () => {
 
     const user = game.field.getPlayerPokemon();
 
-    let rngSweepProgress = 0; // This will simulate entire range of RNG calls by slowly sweeping from 0 to 1
-    vi.spyOn(user, "randSeedInt").mockImplementation((range: number, min: number = 0) => {
-      return Math.floor(min + rngSweepProgress * range);
-    });
+    const NUM_ROLLS = 2000; // As long as this is greater than total number of moves, this should cover all possible RNG rolls
 
-    const trials = 1000;
-    for (let i = 0; i < trials; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * trials);
-
+    await game.rng.equalSample(NUM_ROLLS, () => {
       const moveId = randomMoveAttr.getRandomMove(user);
       expect(allMoves.get(moveId).hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
-    }
+    });
   });
 });

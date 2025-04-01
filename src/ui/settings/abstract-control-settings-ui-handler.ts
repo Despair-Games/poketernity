@@ -4,8 +4,8 @@ import type { InterfaceConfig } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigation-menu";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
@@ -30,7 +30,7 @@ export interface LayoutConfig {
 /**
  * Abstract class for handling UI elements related to control settings.
  */
-export default abstract class AbstractControlSettingsUiHandler extends UiHandler {
+export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   protected settingsContainer: Phaser.GameObjects.Container;
   protected optionsContainer: Phaser.GameObjects.Container;
   protected navigationContainer: NavigationMenu;
@@ -383,11 +383,10 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.updateNavigationDisplay();
     NavigationManager.getInstance().updateIcons();

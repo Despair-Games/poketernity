@@ -4,6 +4,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import type { TimedEvent } from "#app/@types/TimedEvent";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Egg } from "#app/data/egg";
+import { EggSourceType } from "#enums/egg-source-types";
 
 describe("Shiny Chance Modifier Event", () => {
   let phaserGame: Phaser.Game;
@@ -54,7 +55,7 @@ describe("Shiny Chance Modifier Event", () => {
 
     let nonShinies = 0;
     for (let i = 0; i < 10; i++) {
-      const egg = new Egg();
+      const egg = new Egg({ sourceType: EggSourceType.GACHA_MOVE });
       if (!egg.isShiny) {
         nonShinies += 1;
       }

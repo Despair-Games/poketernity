@@ -17,11 +17,11 @@ import {
 } from "./modifier-pools";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { isNullOrUndefined } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Unlockables } from "#enums/unlockables";
 
@@ -328,12 +328,12 @@ export function initModifierPools() {
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
-            Abilities.QUICK_FEET,
-            Abilities.GUTS,
-            Abilities.MARVEL_SCALE,
-            Abilities.TOXIC_BOOST,
-            Abilities.POISON_HEAL,
-            Abilities.MAGIC_GUARD,
+            AbilityId.QUICK_FEET,
+            AbilityId.GUTS,
+            AbilityId.MARVEL_SCALE,
+            AbilityId.TOXIC_BOOST,
+            AbilityId.POISON_HEAL,
+            AbilityId.MAGIC_GUARD,
           ].some((a) => p.hasAbility(a, false, true));
 
           if (!isHoldingOrb) {
@@ -370,11 +370,11 @@ export function initModifierPools() {
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
-            Abilities.QUICK_FEET,
-            Abilities.GUTS,
-            Abilities.MARVEL_SCALE,
-            Abilities.FLARE_BOOST,
-            Abilities.MAGIC_GUARD,
+            AbilityId.QUICK_FEET,
+            AbilityId.GUTS,
+            AbilityId.MARVEL_SCALE,
+            AbilityId.FLARE_BOOST,
+            AbilityId.MAGIC_GUARD,
           ].some((a) => p.hasAbility(a, false, true));
 
           if (!isHoldingOrb) {
@@ -395,12 +395,12 @@ export function initModifierPools() {
       modifierTypes.WHITE_HERB,
       (party: Pokemon[]) => {
         const checkedAbilities = [
-          Abilities.WEAK_ARMOR,
-          Abilities.CONTRARY,
-          Abilities.MOODY,
-          Abilities.ANGER_SHELL,
-          Abilities.COMPETITIVE,
-          Abilities.DEFIANT,
+          AbilityId.WEAK_ARMOR,
+          AbilityId.CONTRARY,
+          AbilityId.MOODY,
+          AbilityId.ANGER_SHELL,
+          AbilityId.COMPETITIVE,
+          AbilityId.DEFIANT,
         ];
         const weightMultiplier = party.filter(
           (p) =>

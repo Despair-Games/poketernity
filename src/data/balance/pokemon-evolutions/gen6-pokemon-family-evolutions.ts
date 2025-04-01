@@ -1,4 +1,4 @@
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import {
   DayEvolutionCondition,
   FemaleEvolutionCondition,
@@ -17,62 +17,64 @@ import {
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 
 export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
-  [Species.CHESPIN]: [new SpeciesEvolution(Species.QUILLADIN, 16, null, null)],
-  [Species.QUILLADIN]: [new SpeciesEvolution(Species.CHESNAUGHT, 36, null, null)],
-  [Species.FENNEKIN]: [new SpeciesEvolution(Species.BRAIXEN, 16, null, null)],
-  [Species.BRAIXEN]: [new SpeciesEvolution(Species.DELPHOX, 36, null, null)],
-  [Species.FROAKIE]: [new SpeciesEvolution(Species.FROGADIER, 16, null, null)],
-  [Species.FROGADIER]: [new SpeciesEvolution(Species.GRENINJA, 36, null, null)],
-  [Species.BUNNELBY]: [new SpeciesEvolution(Species.DIGGERSBY, 20, null, null)],
-  [Species.FLETCHLING]: [new SpeciesEvolution(Species.FLETCHINDER, 17, null, null)],
-  [Species.FLETCHINDER]: [new SpeciesEvolution(Species.TALONFLAME, 35, null, null)],
-  [Species.SCATTERBUG]: [new SpeciesEvolution(Species.SPEWPA, 9, null, null)],
-  [Species.SPEWPA]: [new SpeciesEvolution(Species.VIVILLON, 12, null, null)],
-  [Species.LITLEO]: [new SpeciesEvolution(Species.PYROAR, 35, null, null)],
-  [Species.FLABEBE]: [new SpeciesEvolution(Species.FLOETTE, 19, null, null)],
-  [Species.FLOETTE]: [
-    new SpeciesEvolution(Species.FLORGES, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.CHESPIN]: [new SpeciesEvolution(SpeciesId.QUILLADIN, 16, null, null)],
+  [SpeciesId.QUILLADIN]: [new SpeciesEvolution(SpeciesId.CHESNAUGHT, 36, null, null)],
+  [SpeciesId.FENNEKIN]: [new SpeciesEvolution(SpeciesId.BRAIXEN, 16, null, null)],
+  [SpeciesId.BRAIXEN]: [new SpeciesEvolution(SpeciesId.DELPHOX, 36, null, null)],
+  [SpeciesId.FROAKIE]: [new SpeciesEvolution(SpeciesId.FROGADIER, 16, null, null)],
+  [SpeciesId.FROGADIER]: [new SpeciesEvolution(SpeciesId.GRENINJA, 36, null, null)],
+  [SpeciesId.BUNNELBY]: [new SpeciesEvolution(SpeciesId.DIGGERSBY, 20, null, null)],
+  [SpeciesId.FLETCHLING]: [new SpeciesEvolution(SpeciesId.FLETCHINDER, 17, null, null)],
+  [SpeciesId.FLETCHINDER]: [new SpeciesEvolution(SpeciesId.TALONFLAME, 35, null, null)],
+  [SpeciesId.SCATTERBUG]: [new SpeciesEvolution(SpeciesId.SPEWPA, 9, null, null)],
+  [SpeciesId.SPEWPA]: [new SpeciesEvolution(SpeciesId.VIVILLON, 12, null, null)],
+  [SpeciesId.LITLEO]: [new SpeciesEvolution(SpeciesId.PYROAR, 35, null, null)],
+  [SpeciesId.FLABEBE]: [new SpeciesEvolution(SpeciesId.FLOETTE, 19, null, null)],
+  [SpeciesId.FLOETTE]: [
+    new SpeciesEvolution(SpeciesId.FLORGES, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.SKIDDO]: [new SpeciesEvolution(Species.GOGOAT, 32, null, null)],
-  [Species.PANCHAM]: [new SpeciesEvolution(Species.PANGORO, 32, null, [new PangoroEvoCondition()])],
-  [Species.ESPURR]: [
-    new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, [new MaleEvolutionCondition()]),
-    new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, [new FemaleEvolutionCondition()]),
+  [SpeciesId.SKIDDO]: [new SpeciesEvolution(SpeciesId.GOGOAT, 32, null, null)],
+  [SpeciesId.PANCHAM]: [new SpeciesEvolution(SpeciesId.PANGORO, 32, null, [new PangoroEvoCondition()])],
+  [SpeciesId.ESPURR]: [
+    new SpeciesFormEvolution(SpeciesId.MEOWSTIC, "", "", 25, null, [new MaleEvolutionCondition()]),
+    new SpeciesFormEvolution(SpeciesId.MEOWSTIC, "", "female", 25, null, [new FemaleEvolutionCondition()]),
   ],
-  [Species.HONEDGE]: [new SpeciesEvolution(Species.DOUBLADE, 35, null, null)],
-  [Species.DOUBLADE]: [
-    new SpeciesEvolution(Species.AEGISLASH, 1, EvolutionItem.DUSK_STONE, null, ADVANCED_ITEM_EVO_LEVEL),
+  [SpeciesId.HONEDGE]: [new SpeciesEvolution(SpeciesId.DOUBLADE, 35, null, null)],
+  [SpeciesId.DOUBLADE]: [
+    new SpeciesEvolution(SpeciesId.AEGISLASH, 1, EvolutionItem.DUSK_STONE, null, ADVANCED_ITEM_EVO_LEVEL),
   ],
-  [Species.SPRITZEE]: [new SpeciesEvolution(Species.AROMATISSE, 1, EvolutionItem.SACHET, null, GENERIC_ITEM_EVO_LEVEL)],
-  [Species.SWIRLIX]: [
-    new SpeciesEvolution(Species.SLURPUFF, 1, EvolutionItem.WHIPPED_DREAM, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.SPRITZEE]: [
+    new SpeciesEvolution(SpeciesId.AROMATISSE, 1, EvolutionItem.SACHET, null, GENERIC_ITEM_EVO_LEVEL),
+  ],
+  [SpeciesId.SWIRLIX]: [
+    new SpeciesEvolution(SpeciesId.SLURPUFF, 1, EvolutionItem.WHIPPED_DREAM, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   /** Does not need to be upside down */
-  [Species.INKAY]: [new SpeciesEvolution(Species.MALAMAR, 30, null, null)],
-  [Species.BINACLE]: [new SpeciesEvolution(Species.BARBARACLE, 39, null, null)],
-  [Species.SKRELP]: [new SpeciesEvolution(Species.DRAGALGE, 48, null, null)],
-  [Species.CLAUNCHER]: [new SpeciesEvolution(Species.CLAWITZER, 37, null, null)],
-  [Species.HELIOPTILE]: [
-    new SpeciesEvolution(Species.HELIOLISK, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.INKAY]: [new SpeciesEvolution(SpeciesId.MALAMAR, 30, null, null)],
+  [SpeciesId.BINACLE]: [new SpeciesEvolution(SpeciesId.BARBARACLE, 39, null, null)],
+  [SpeciesId.SKRELP]: [new SpeciesEvolution(SpeciesId.DRAGALGE, 48, null, null)],
+  [SpeciesId.CLAUNCHER]: [new SpeciesEvolution(SpeciesId.CLAWITZER, 37, null, null)],
+  [SpeciesId.HELIOPTILE]: [
+    new SpeciesEvolution(SpeciesId.HELIOLISK, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.TYRUNT]: [new SpeciesEvolution(Species.TYRANTRUM, 39, null, [new DayEvolutionCondition()])],
-  [Species.AMAURA]: [new SpeciesEvolution(Species.AURORUS, 39, null, [new NightEvolutionCondition()])],
-  [Species.GOOMY]: [
-    new SpeciesEvolution(Species.SLIGGOO, 40, null, [new DayEvolutionCondition()]),
-    new SpeciesEvolution(Species.HISUI_SLIGGOO, 40, null, [new NightEvolutionCondition()]),
+  [SpeciesId.TYRUNT]: [new SpeciesEvolution(SpeciesId.TYRANTRUM, 39, null, [new DayEvolutionCondition()])],
+  [SpeciesId.AMAURA]: [new SpeciesEvolution(SpeciesId.AURORUS, 39, null, [new NightEvolutionCondition()])],
+  [SpeciesId.GOOMY]: [
+    new SpeciesEvolution(SpeciesId.SLIGGOO, 40, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(SpeciesId.HISUI_SLIGGOO, 40, null, [new NightEvolutionCondition()]),
   ],
-  [Species.SLIGGOO]: [new SpeciesEvolution(Species.GOODRA, 50, null, [new GoodraEvoCondition()])],
+  [SpeciesId.SLIGGOO]: [new SpeciesEvolution(SpeciesId.GOODRA, 50, null, [new GoodraEvoCondition()])],
   /** Hisui Sliggoo is from Gen 8 */
-  [Species.HISUI_SLIGGOO]: [new SpeciesEvolution(Species.HISUI_GOODRA, 50, null, [new GoodraEvoCondition()])],
-  [Species.PHANTUMP]: [
-    new SpeciesEvolution(Species.TREVENANT, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.HISUI_SLIGGOO]: [new SpeciesEvolution(SpeciesId.HISUI_GOODRA, 50, null, [new GoodraEvoCondition()])],
+  [SpeciesId.PHANTUMP]: [
+    new SpeciesEvolution(SpeciesId.TREVENANT, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.PUMPKABOO]: [
-    new SpeciesEvolution(Species.GOURGEIST, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
+  [SpeciesId.PUMPKABOO]: [
+    new SpeciesEvolution(SpeciesId.GOURGEIST, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.BERGMITE]: [
-    new SpeciesEvolution(Species.AVALUGG, 37, null, [new DayEvolutionCondition()]),
-    new SpeciesEvolution(Species.HISUI_AVALUGG, 37, null, [new NightEvolutionCondition()]),
+  [SpeciesId.BERGMITE]: [
+    new SpeciesEvolution(SpeciesId.AVALUGG, 37, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(SpeciesId.HISUI_AVALUGG, 37, null, [new NightEvolutionCondition()]),
   ],
-  [Species.NOIBAT]: [new SpeciesEvolution(Species.NOIVERN, 48, null, null)],
+  [SpeciesId.NOIBAT]: [new SpeciesEvolution(SpeciesId.NOIVERN, 48, null, null)],
 };

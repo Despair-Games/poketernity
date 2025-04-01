@@ -244,6 +244,13 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW,
   },
 
+  [TextStyle.MOVE_INFO_DESCRIPTION]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_72PX_MEDIUM_SHADOW,
+  },
   [TextStyle.MOVE_INFO_CONTENT]: {
     color: {
       [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,

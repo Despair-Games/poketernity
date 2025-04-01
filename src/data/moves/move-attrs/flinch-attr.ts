@@ -1,12 +1,14 @@
+import type { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ab-attrs/ignore-move-effects-ab-attr";
+import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { Move } from "#app/data/moves/move";
+import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute adding a chance to flinch the target.
@@ -27,7 +29,14 @@ export class FlinchAttr extends AddBattlerTagAttr {
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER, user, false, moveChance, move, showAbility);
+    applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
+      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
+      user,
+      false,
+      moveChance,
+      move,
+      showAbility,
+    );
 
     if (moveChance.value <= move.chance) {
       const userSide = user.getArenaTagSide();
@@ -35,7 +44,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
     }
 
     if (!selfEffect) {
-      applyAbAttrs(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+      applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

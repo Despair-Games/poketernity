@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -28,18 +28,18 @@ describe("Abilities - Pastel Veil", () => {
     game.override
       .battleType("double")
       .moveset([MoveId.TOXIC_THREAD, MoveId.SPLASH])
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemySpecies(Species.SUNKERN)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.SUNKERN)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("prevents the user and its allies from being afflicted by poison", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.GALAR_PONYTA]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.GALAR_PONYTA]);
     const ponyta = game.scene.getPlayerField()[1];
     const magikarp = game.scene.getPlayerField()[0];
     ponyta.abilityIndex = 1;
 
-    expect(ponyta.hasAbility(Abilities.PASTEL_VEIL)).toBe(true);
+    expect(ponyta.hasAbility(AbilityId.PASTEL_VEIL)).toBe(true);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
@@ -50,12 +50,12 @@ describe("Abilities - Pastel Veil", () => {
   });
 
   it("it heals the poisoned status condition of allies if user is sent out into battle", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.FEEBAS, Species.GALAR_PONYTA]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS, SpeciesId.GALAR_PONYTA]);
     const ponyta = game.scene.getPlayerParty()[2];
     const magikarp = game.scene.getPlayerField()[0];
     ponyta.abilityIndex = 1;
 
-    expect(ponyta.hasAbility(Abilities.PASTEL_VEIL)).toBe(true);
+    expect(ponyta.hasAbility(AbilityId.PASTEL_VEIL)).toBe(true);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.TOXIC_THREAD, 1, BattlerIndex.PLAYER);

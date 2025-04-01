@@ -4,7 +4,7 @@ import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
 
-export default class PokemonIconAnimHelper {
+export class PokemonIconAnimHelper {
   private icons: Map<PokemonIcon, PokemonIconAnimMode>;
   private toggled: boolean;
 

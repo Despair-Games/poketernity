@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#enums/battler-index";
+import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -6,13 +6,17 @@ import Overrides from "#app/overrides";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { type EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { SelectTargetPhase } from "#app/phases/select-target-phase";
+import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
+import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
 import { BattleCommand } from "#enums/battle-command";
-import { UiMode } from "#enums/ui-mode";
+import { BattlerIndex } from "#enums/battler-index";
+import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
+import { UiMode } from "#enums/ui-mode";
 import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
 
 /**
  * Helper to handle a Pokemon's move
@@ -55,14 +59,17 @@ export class MoveHelper extends GameManagerHelper {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, moveId);
 
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      this.game.scene.ui.setMode(UiMode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
+      this.game.scene.ui.setMode<FightUiHandler>(
+        UiMode.FIGHT,
+        (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex(),
+      );
     });
     this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, movePosition, false);
     });
 
     if (targetIndex !== null) {
-      this.game.selectTarget(movePosition, targetIndex);
+      this.selectTarget(movePosition, targetIndex);
     }
   }
 
@@ -84,9 +91,7 @@ export class MoveHelper extends GameManagerHelper {
       : [Overrides.MOVESET_OVERRIDE];
     if (movesetOverride.length > 0) {
       vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
-      console.warn(
-        "Warning: Player moveset override disabled! Do not use the moveset override when using this function!",
-      );
+      console.warn("Warning: `use` overwrites the Pokemon's moveset and disables the player moveset override!");
     }
 
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
@@ -129,7 +134,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveId The {@linkcode MoveId | move} the enemy will use
    * @param target (Optional) the {@linkcode BattlerIndex | target} which the enemy will use the given move against
    */
-  async selectEnemyMove(moveId: MoveId, target?: BattlerIndex) {
+  public async selectEnemyMove(moveId: MoveId, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
     const enemy =
@@ -163,7 +168,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveId The {@linkcode MoveId | move} the enemy will use
    * @param target (Optional) the {@linkcode BattlerIndex | target} which the enemy will use the given move against
    */
-  async forceEnemyMove(moveId: MoveId, target?: BattlerIndex) {
+  public async forceEnemyMove(moveId: MoveId, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
     const enemy =
@@ -175,7 +180,7 @@ export class MoveHelper extends GameManagerHelper {
     if (movesetOverride.length > 0) {
       vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
-        "Warning: Enemy moveset override disabled! Do not use the moveset override when using this function!",
+        "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",
       );
     }
     enemy.moveset = [new PokemonMove(moveId)];
@@ -196,5 +201,37 @@ export class MoveHelper extends GameManagerHelper {
      * force a move for each enemy in a double battle.
      */
     await this.game.phaseInterceptor.to("EnemyCommandPhase");
+  }
+
+  /**
+   * Emulate a player's target selection after a move is chosen, called automatically by {@linkcode MoveHelper.select}.
+   * Will trigger during the next {@linkcode SelectTargetPhase}
+   * @param movePosition - The index of the move in the Pokemon's {@linkcode Pokemon.moveset | moveset}
+   * @param targetIndex - The index of the attack target, or `undefined` for multi-target attacks
+   */
+  private selectTarget(movePosition: number, targetIndex?: BattlerIndex) {
+    this.game.onNextPrompt(
+      "SelectTargetPhase",
+      UiMode.TARGET_SELECT,
+      () => {
+        const handler = this.game.scene.ui.getHandler() as TargetSelectUiHandler;
+        const move = (this.game.scene.getCurrentPhase() as SelectTargetPhase)
+          .getPokemon()
+          .getMoveset()
+          [movePosition].getMove();
+        if (!move.isMultiTarget()) {
+          handler.setCursor(targetIndex !== undefined ? targetIndex : BattlerIndex.ENEMY);
+        }
+        if (move.isMultiTarget() && targetIndex !== undefined) {
+          throw new Error(`targetIndex was passed to selectMove() but move ("${move.name}") is not targetted`);
+        }
+        handler.processInput(Button.ACTION);
+      },
+      () =>
+        this.game.isCurrentPhase("CommandPhase")
+        || this.game.isCurrentPhase("MovePhase")
+        || this.game.isCurrentPhase("TurnStartPhase")
+        || this.game.isCurrentPhase("TurnEndPhase"),
+    );
   }
 }

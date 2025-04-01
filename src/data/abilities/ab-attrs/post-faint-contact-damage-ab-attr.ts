@@ -1,14 +1,16 @@
+import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
+import type { FieldPreventExplosionLikeAbAttr } from "#app/data/abilities/ab-attrs/field-prevent-explosion-like-ab-attr";
+import { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
-import i18next from "i18next";
-import { PostFaintAbAttr } from "./post-faint-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
+import { MoveFlags } from "#enums/move-flags";
+import i18next from "i18next";
 
 /**
  * Attribute that damages an attacker for a fraction of its HP if the attacker KO's the user with a contact move.
@@ -34,7 +36,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
       globalScene
         .getField(true)
         .map((p) =>
-          applyAbAttrs(
+          applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
             AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
             p,
             simulated,
@@ -44,15 +46,16 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
           ),
         );
 
-      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
       if (cancelled.value) {
         return false;
       }
       if (!simulated) {
         const abilityDamage = toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
-        attacker.damageAndUpdate(abilityDamage, HitResult.OTHER, false, false, true);
-        // TODO: This should be handled by `damage()`
-        attacker.turnData.damageTaken += abilityDamage;
+        attacker.damageAndUpdate(abilityDamage, {
+          result: HitResult.OTHER,
+          preventEndure: true,
+        });
       }
       return true;
     }

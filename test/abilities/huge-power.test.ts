@@ -1,14 +1,14 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Stat } from "#enums/stat";
 
 describe.each([
-  { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
-  { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
+  { abilityName: "Huge Power", ability: AbilityId.HUGE_POWER },
+  { abilityName: "Pure Power", ability: AbilityId.PURE_POWER },
 ])("Abilities - $abilityName", ({ ability }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -29,15 +29,15 @@ describe.each([
       .ability(ability)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyLevel(20)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should double the attack stat of the ability-holder", async () => {
     game.override.moveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
@@ -50,7 +50,7 @@ describe.each([
 
   it("should double the attack stat when using Body Press", async () => {
     game.override.ability(ability).moveset(MoveId.BODY_PRESS);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
@@ -64,7 +64,7 @@ describe.each([
 
   it("should not double the attack stat when calculating confusion damage", async () => {
     game.override.ability(ability).moveset(MoveId.SPLASH).enemyMoveset(MoveId.SUPERSONIC).statusActivation(true);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 

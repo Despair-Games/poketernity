@@ -11,7 +11,7 @@ import { getTypeRgb } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
 import { getVariantTint } from "#app/data/variant";
 import { Stat } from "#enums/stat";
-import BattleFlyout from "#app/ui/components/battle-flyout";
+import { BattleFlyout } from "#app/ui/components/battle-flyout";
 import { addWindow } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
@@ -19,7 +19,7 @@ import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
-export default class BattleInfo extends Phaser.GameObjects.Container {
+export class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
 
   private baseY: number;

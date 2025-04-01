@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { type StockpilingTag } from "#app/data/battler-tags";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import type { Move } from "#app/data/moves/move";
 import { HealAttr } from "#app/data/moves/move-attrs/heal-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
@@ -14,14 +14,12 @@ export class SwallowHealAttr extends HealAttr {
     const stockpilingTag = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING);
 
     switch (stockpilingTag?.stockpiledCount) {
-      case 1:
-        return 0.25;
-      case 2:
-        return 0.5;
       case 3:
         return 1.0;
+      case 2:
+        return 0.5;
       default:
-        return 0;
+        return 0.25;
     }
   }
 }

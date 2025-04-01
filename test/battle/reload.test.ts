@@ -1,8 +1,8 @@
 import { GameModes } from "#enums/game-modes";
 import { api } from "#app/plugins/api/api";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "#enums/buttons";
@@ -74,7 +74,7 @@ describe("Reload", () => {
   it("should not have weather inconsistencies after a biome switch", async () => {
     game.override
       .startingWave(10)
-      .startingBiome(Biome.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
+      .startingBiome(BiomeId.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
@@ -150,7 +150,7 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run wave 50 Boss fight", async () => {
     game.override.battleType("single").startingWave(50);
-    await game.runToFinalBossEncounter([Species.BULBASAUR], GameModes.DAILY);
+    await game.runToFinalBossEncounter([SpeciesId.BULBASAUR], GameModes.DAILY);
 
     const preReloadRngState = Phaser.Math.RND.state();
 
@@ -162,8 +162,8 @@ describe("Reload", () => {
   });
 
   it("should save status effects properly", async () => {
-    game.override.battleType("single").enemySpecies(Species.MAREANIE).enemyMoveset(MoveId.TOXIC);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.battleType("single").enemySpecies(SpeciesId.MAREANIE).enemyMoveset(MoveId.TOXIC);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();

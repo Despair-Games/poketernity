@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -23,17 +23,17 @@ describe("Moves - Endure", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.THUNDER, MoveId.BULLET_SEED, MoveId.TOXIC])
-      .ability(Abilities.SKILL_LINK)
+      .ability(AbilityId.SKILL_LINK)
       .startingLevel(100)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.NO_GUARD)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.NO_GUARD)
       .enemyMoveset(MoveId.ENDURE);
   });
 
   it("should let the pokemon survive with 1 HP", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicMode.startBattle([SpeciesId.ARCEUS]);
 
     game.move.select(MoveId.THUNDER);
     await game.toEndOfTurn();
@@ -42,7 +42,7 @@ describe("Moves - Endure", () => {
   });
 
   it("should let the pokemon survive with 1 HP when hit with a multihit move", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicMode.startBattle([SpeciesId.ARCEUS]);
 
     game.move.select(MoveId.BULLET_SEED);
     await game.toEndOfTurn();
@@ -52,7 +52,7 @@ describe("Moves - Endure", () => {
 
   it("shouldn't prevent fainting from indirect damage", async () => {
     game.override.enemyLevel(100);
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicMode.startBattle([SpeciesId.ARCEUS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 2;

@@ -1,6 +1,7 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -23,25 +24,61 @@ describe("Abilities - Corrosion", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.GRIMER)
-      .enemyAbility(Abilities.CORROSION)
+      .enemySpecies(SpeciesId.GRIMER)
+      .enemyAbility(AbilityId.CORROSION)
       .enemyMoveset(MoveId.TOXIC);
   });
 
-  it("If a Poison- or Steel-type Pokémon with this Ability poisons a target with Synchronize, Synchronize does not gain the ability to poison Poison- or Steel-type Pokémon.", async () => {
-    game.override.ability(Abilities.SYNCHRONIZE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+  it("allows the user to poison a Poison or Steel type pokemon", async () => {
+    await game.classicMode.startBattle([SpeciesId.MUK]);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
 
-    game.move.select(MoveId.SPLASH);
+    game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
     expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.TOXIC);
     expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+  });
+
+  it("does not allow the user to get poisoned if the user is Poison or Steel type and poisons a target with Synchronize", async () => {
+    game.override.ability(AbilityId.SYNCHRONIZE);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.TOXIC);
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+  });
+
+  it("does not allow the user to get poisoned if the user is Poison or Steel type and poisons a target with Magic Bounce", async () => {
+    game.override.ability(AbilityId.MAGIC_BOUNCE);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+  });
+
+  it("allows the user to poison a Poison or Steel type if the user reflects a status move that poisons", async () => {
+    game.override.enemyMoveset(MoveId.MAGIC_COAT);
+    await game.classicMode.startBattle([SpeciesId.MUK]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+
+    game.move.use(MoveId.TOXIC);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
+
+    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.TOXIC);
   });
 });
