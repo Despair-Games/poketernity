@@ -9,7 +9,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 /**
  * This ability applies the Perish Song tag to the attacking pokemon
  * and the defending pokemon if the move makes physical contact and
- * at least one pokemon doesn't already have the Perish Song tag.
+ * the attacker doesn't already have the Perish Song tag.
  * @extends PostDefendAbAttr
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
@@ -17,13 +17,13 @@ export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       if (attacker.getTag(BattlerTagType.PERISH_SONG)) {
         return false;
-      } else {
-        if (!simulated) {
-          attacker.addTag(BattlerTagType.PERISH_SONG, 4);
-          pokemon.addTag(BattlerTagType.PERISH_SONG, 4);
-        }
-        return true;
       }
+
+      if (!simulated) {
+        attacker.addTag(BattlerTagType.PERISH_SONG, 4);
+        pokemon.addTag(BattlerTagType.PERISH_SONG, 4);
+      }
+      return true;
     }
     return false;
   }

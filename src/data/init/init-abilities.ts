@@ -1350,7 +1350,8 @@ export function initAbilities() {
     new Ability(AbilityId.STEELY_SPIRIT, 8)
       .attr(UserFieldMoveTypePowerBoostAbAttr, ElementalType.STEEL),
     new Ability(AbilityId.PERISH_BODY, 8)
-      .attr(PostDefendPerishSongAbAttr),
+      .attr(PostDefendPerishSongAbAttr)
+      .bypassFaint(),
     new Ability(AbilityId.WANDERING_SPIRIT, 8)
       .attr(PostDefendAbilitySwapAbAttr)
       .bypassFaint()
