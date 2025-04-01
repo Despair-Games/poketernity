@@ -1,15 +1,13 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
-import { MoveResult } from "#enums/move-result";
-import { BerryPhase } from "#app/phases/berry-phase";
-import { PostActionPhase } from "#app/phases/post-action-phase";
 import { type MovePhase } from "#app/phases/move-phase";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { PhaseId } from "#enums/phase-id";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { PhaseId } from "#enums/phase-id";
 
 describe("Moves - Shell Trap", () => {
   let phaserGame: Phaser.Game;
@@ -39,30 +37,32 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should activate after the user is hit by a physical attack", async () => {
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.TURTONATOR]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.TURTONATOR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to(PostActionPhase);
+    await game.phaseInterceptor.to("PostActionPhase");
+
+    console.log(game.scene.phaseQueue.map((phase) => phase.constructor.name));
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.id).toBe(PhaseId.MOVE);
     expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
 
-    await game.phaseInterceptor.to(PostActionPhase);
+    await game.phaseInterceptor.to("PostActionPhase");
     enemyPokemon.forEach((p) => expect(p.hp).toBeLessThan(p.getMaxHp()));
   });
 
   it("should fail if the user is only hit by special attacks", async () => {
     game.override.enemyMoveset([MoveId.SWIFT]);
 
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.TURTONATOR]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.TURTONATOR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -72,20 +72,20 @@ describe("Moves - Shell Trap", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to(PostActionPhase);
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.toEndOfTurn();
     enemyPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
   });
 
   it("should fail if the user isn't hit with any attack", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
 
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.TURTONATOR]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.TURTONATOR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -95,20 +95,20 @@ describe("Moves - Shell Trap", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to(PostActionPhase);
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.toEndOfTurn();
     enemyPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
   });
 
   it("should not activate from an ally's attack", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
 
-    await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -116,7 +116,7 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SHELL_TRAP);
     game.move.select(MoveId.BULLDOZE, 1);
 
-    await game.phaseInterceptor.to(PostActionPhase);
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
@@ -124,7 +124,7 @@ describe("Moves - Shell Trap", () => {
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.toEndOfTurn();
     enemyPokemon.forEach((p, i) => expect(p.hp).toBe(enemyStartingHp[i]));
   });
 
@@ -132,14 +132,14 @@ describe("Moves - Shell Trap", () => {
     game.override.battleType("single");
     vi.spyOn(allMoves.get(MoveId.RAZOR_LEAF), "priority", "get").mockReturnValue(-4);
 
-    await game.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SHELL_TRAP);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
