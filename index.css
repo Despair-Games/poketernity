@@ -119,7 +119,7 @@ input:-internal-autofill-selected {
 }
 
 /* autofill text and cursor appears in a color that depends on the ui theme */
-input:-webkit-autofill {
+input:is(:-webkit-autofill, :autofill) {
   -webkit-text-fill-color: var(--color-autofill);
   caret-color: var(--color-autofill);
 }
