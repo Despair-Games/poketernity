@@ -162,7 +162,7 @@ export class TargetSelectUiHandler extends UiHandler {
     if (this.targetFlashTween) {
       this.targetFlashTween.stop();
       for (const pokemon of allTargets) {
-        pokemon.setAlpha(!!pokemon.getTag(BattlerTagType.SUBSTITUTE) ? 0.5 : 1);
+        pokemon.setAlpha(pokemon.hasTag(BattlerTagType.SUBSTITUTE) ? 0.5 : 1);
         this.highlightItems(pokemon.id, 1);
       }
     }
@@ -214,7 +214,7 @@ export class TargetSelectUiHandler extends UiHandler {
     }
 
     for (const pokemon of this.targetsHighlighted) {
-      pokemon.setAlpha(!!pokemon.getTag(BattlerTagType.SUBSTITUTE) ? 0.5 : 1);
+      pokemon.setAlpha(pokemon.hasTag(BattlerTagType.SUBSTITUTE) ? 0.5 : 1);
       this.highlightItems(pokemon.id, 1);
     }
 

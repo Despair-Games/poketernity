@@ -115,4 +115,5 @@ export enum BattlerTagType {
   UPROAR,
   MAGIC_COAT,
   SNATCHING,
+  ME_FIRST_POWER_BOOST,
 }

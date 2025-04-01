@@ -1716,7 +1716,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
     // was grounded before receiving the `GroundedTag`.
     return (
-      !!this.getTag(BattlerTagType.IGNORE_FLYING)
+      this.hasTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
@@ -1726,7 +1726,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public isSemiInvulnerable(): boolean {
-    return !!this.getTag(...SemiInvulnerableBattlerTagTypes) || !!this.getTag(BattlerTagType.SKY_DROP);
+    return this.hasTag(...SemiInvulnerableBattlerTagTypes) || this.hasTag(BattlerTagType.SKY_DROP);
   }
 
   /**
@@ -1768,7 +1768,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
-      || !!this.getTag(...TrappedBattlerTagTypes)
+      || this.hasTag(...TrappedBattlerTagTypes)
       || !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
     );
   }
@@ -3451,6 +3451,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
+  /**
+   * Helper function to check if a Pokemon has any of the input tag types.
+   * @param tagTypes - The battler tag types to search for
+   * @returns `true` if the Pokemon has at least one of the battler tags, `false` otherwise
+   */
+  public hasTag(...tagTypes: BattlerTagType[]): boolean {
+    if (!this.summonData) {
+      return false;
+    }
+    return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
+  }
+
   findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | nil {
     if (!this.summonData) {
       return null;
@@ -4926,7 +4938,7 @@ export class EnemyPokemon extends Pokemon {
               .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
               .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
-            const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
+            const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
 
             return (
               move.category !== MoveCategory.STATUS

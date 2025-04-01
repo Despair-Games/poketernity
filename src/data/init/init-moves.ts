@@ -111,6 +111,7 @@ import { LowHpPowerAttr } from "#app/data/moves/move-attrs/low-hp-power-attr";
 import { magnitudeMessageFunc, MagnitudePowerAttr } from "#app/data/moves/move-attrs/magnitude-power-attr";
 import { MatchHpAttr } from "#app/data/moves/move-attrs/match-hp-attr";
 import { MatchUserTypeAttr } from "#app/data/moves/move-attrs/match-user-type-attr";
+import { MeFirstAttr } from "#app/data/moves/move-attrs/me-first-attr";
 import { MessageHeaderAttr } from "#app/data/moves/move-attrs/message-header-attr";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { MirrorMoveAttr } from "#app/data/moves/move-attrs/mirror-move-attr";
@@ -1078,7 +1079,7 @@ export function initMoves() {
     new AttackMove(MoveId.UPROAR, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.UPROAR, true)
       .attr(MessageHeaderAttr, (user, _move) =>
-        !!user.getTag(BattlerTagType.UPROAR)
+        user.hasTag(BattlerTagType.UPROAR)
           // "{pokemonNameWithAffix} is making an uproar!"
           ? i18next.t("moveTriggers:isMakingAnUproar", { pokemonNameWithAffix: getPokemonNameWithAffix(user) })
           : undefined,
@@ -1546,9 +1547,9 @@ export function initMoves() {
       .snatchable()
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ME_FIRST, ElementalType.NORMAL, -1, 20, -1, 0, 4)
+      .attr(MeFirstAttr)
       .ignoresSubstitute()
-      .target(MoveTarget.NEAR_ENEMY)
-      .unimplemented(),
+      .target(MoveTarget.NEAR_ENEMY),
     new SelfStatusMove(MoveId.COPYCAT, ElementalType.NORMAL, -1, 20, -1, 0, 4)
       .attr(CopycatAttr),
     new StatusMove(MoveId.POWER_SWAP, ElementalType.PSYCHIC, -1, 10, 100, 0, 4)
