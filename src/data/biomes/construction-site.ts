@@ -1,5 +1,5 @@
 import { Biome } from "#app/data/biome";
-import { townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
+import { townTrainerPool, townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
@@ -71,11 +71,24 @@ const pokemonPool = {
   },
 };
 
+const weatherPool = {
+  [WeatherType.NONE]: 1,
+  [WeatherType.SUNNY]: 0,
+  [WeatherType.RAIN]: 0,
+  [WeatherType.SANDSTORM]: 0,
+  [WeatherType.HAIL]: 0,
+  [WeatherType.SNOW]: 0,
+  [WeatherType.FOG]: 0,
+  [WeatherType.HEAVY_RAIN]: 0,
+  [WeatherType.HARSH_SUN]: 0,
+  [WeatherType.STRONG_WINDS]: 0,
+};
+
 export const constructionSiteBiome = new Biome(
   BiomeId.CONSTRUCTION_SITE,
   pokemonPool,
   townTrainerPool,
-  townWeatherPool,
+  weatherPool,
   townTerrainPool,
   "town",
 );

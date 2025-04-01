@@ -15,8 +15,7 @@ import type { WeatherType } from "#enums/weather-type";
 
 /**
  * @todo
- * - Consider `partial` and `Omit` or an interface for `pokemonPool` and `trainerPool`
- * - `weatherPool` and `terrainPool` are not used anywhere, move {@linkcode getRandomWeatherType} here
+ * - Consider `map`, `partial` and `Omit` or an interface for `pokemonPool` and `trainerPool`
  * - Add image assets here like `biomeWithProps` (in `arena.ts`)
  * - Consider moving `mysteryEncounterByBiome` here as well
  * - Move bgm loop point here as well
@@ -29,8 +28,11 @@ export class Biome {
   public readonly pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   /** A mapping of BiomePoolTier to a list of TrainerType representing the trainers that appear */
   public readonly trainerPool: Record<BiomePoolTier, TrainerType[]>;
-  /** weatherPool and terrainPool are currently unused, to be implemented in a future PR */
+  /** A mapping of WeatherType to weight for what weather the biome will attempt to set upon entry
+   * The chance of sun is set to 0 if it is dusk/night
+   */
   public readonly weatherPool: Record<WeatherType, number>;
+  /** terrainPool is currently unused, to be implemented in a later PR */
   public readonly terrainPool: Record<TerrainType, number>;
   /** String representing the bgm of the biome */
   public readonly bgm: string;

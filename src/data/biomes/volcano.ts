@@ -141,7 +141,7 @@ const trainerPool = {
 
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 1,
+  [WeatherType.SUNNY]: 9,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 0,

@@ -14,7 +14,6 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getNatureName } from "#app/data/nature";
-import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -677,7 +676,7 @@ export class EncounterPhase extends BattlePhase {
    */
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
-      globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
+      globalScene.arena.setRandomWeather();
     }
   }
 }

@@ -17,7 +17,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type AbstractConstructor, randSeedInt } from "#app/utils";
+import { type AbstractConstructor, getEnumValues, randSeedInt, weightedPick } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -641,6 +641,25 @@ export class Arena {
     }
 
     return TimeOfDay.DAWN;
+  }
+
+  /**
+   * Sets a random weather based on the time of day and the current biome
+   */
+  setRandomWeather(): void {
+    const weatherPool = allBiomes.get(this.biomeId).weatherPool;
+    const weatherMap = new Map<WeatherType, number>();
+    for (const id of getEnumValues(WeatherType)) {
+      weatherMap.set(id, weatherPool[id]);
+    }
+
+    // If the time is dusk or night, set the chance of sun to 0
+    if ([TimeOfDay.DUSK, TimeOfDay.NIGHT].includes(this.getTimeOfDay())) {
+      weatherMap.set(WeatherType.SUNNY, 0);
+    }
+
+    const randomWeather = weightedPick(weatherMap);
+    this.trySetWeather(randomWeather, false);
   }
 
   /**
