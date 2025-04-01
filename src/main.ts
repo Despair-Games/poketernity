@@ -1,3 +1,5 @@
+import { settings } from "#app/system/settings/settings-manager";
+import { UiTheme } from "#enums/ui-theme";
 import Phaser from "phaser";
 
 // Catch global errors and display them in an alert so users can report the issue.
@@ -33,6 +35,8 @@ Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
 Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
 
 document.fonts.load("16px emerald").then(() => document.fonts.load("10px pkmnems"));
+
+document.documentElement.setAttribute("data-ui-theme", settings.display.uiTheme === UiTheme.DARK ? "dark" : "light");
 
 const startGame = async (manifest?: any) => {
   try {
