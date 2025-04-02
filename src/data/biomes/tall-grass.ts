@@ -11,7 +11,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [SpeciesId.NIDORAN_F, SpeciesId.NIDORAN_M, SpeciesId.BOUNSWEET],
     [TimeOfDay.DUSK]: [SpeciesId.ODDISH, SpeciesId.KRICKETOT],
     [TimeOfDay.NIGHT]: [SpeciesId.ODDISH, SpeciesId.KRICKETOT],
-    [TimeOfDay.ALL]: [SpeciesId.NINCADA, SpeciesId.FOMANTIS, SpeciesId.NYMBLE],
+    [TimeOfDay.ALL]: [SpeciesId.NINJASK, SpeciesId.FOMANTIS, SpeciesId.NYMBLE],
   },
   [BiomePoolTier.UNCOMMON]: {
     [TimeOfDay.DAWN]: [],
