@@ -69,4 +69,16 @@ describe("Abilities - Perish Body", () => {
     expect((milotic.getTag(BattlerTagType.PERISH_SONG) as PerishSongTag).turnCount).toBe(3);
     expect((enemy.getTag(BattlerTagType.PERISH_SONG) as PerishSongTag).turnCount).toBe(1);
   });
+
+  it("should trigger if the defender faints", async () => {
+    game.override.startingLevel(200);
+    await game.classicMode.startBattle([SpeciesId.MILOTIC]);
+
+    const player = game.field.getPlayerPokemon();
+
+    game.move.use(MoveId.EXTREME_SPEED);
+    await game.toEndOfTurn();
+
+    expect(player.hasTag(BattlerTagType.PERISH_SONG)).toBe(true);
+  });
 });

@@ -28,6 +28,8 @@ const pokemonPool = {
     [TimeOfDay.DUSK]: [SpeciesId.WEEDLE, SpeciesId.PINECO, SpeciesId.SEEDOT, SpeciesId.SHROOMISH, SpeciesId.VENIPEDE],
     [TimeOfDay.NIGHT]: [
       SpeciesId.WEEDLE,
+      SpeciesId.VENONAT,
+      SpeciesId.SPINARAK,
       SpeciesId.PINECO,
       SpeciesId.SEEDOT,
       SpeciesId.SHROOMISH,
