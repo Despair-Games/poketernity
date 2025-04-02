@@ -98,12 +98,12 @@ const pokemonPool = {
  * 4/8 of snow, 1/8 of hail
  */
 const weatherPool = {
-  [WeatherType.NONE]: 0,
+  [WeatherType.NONE]: 3,
   [WeatherType.SUNNY]: 0,
   [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 0,
   [WeatherType.HAIL]: 1,
-  [WeatherType.SNOW]: 3,
+  [WeatherType.SNOW]: 4,
   [WeatherType.FOG]: 0,
   [WeatherType.HEAVY_RAIN]: 0,
   [WeatherType.HARSH_SUN]: 0,
