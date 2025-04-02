@@ -16,6 +16,14 @@ import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
 
+/**
+ * Applies the end-of-turn effects from active {@linkcode Weather}, including
+ * - the weather's post-turn animation and message
+ * - the damaging effects of Hail and Sandstorm
+ * - all post-turn ability triggers dependent on the current weather
+ * (e.g. Rain Dish, Dry Skin)
+ * @extends FieldPhase
+ */
 export class WeatherEffectPhase extends FieldPhase {
   override readonly id = PhaseId.WEATHER_EFFECT;
 
@@ -35,6 +43,7 @@ export class WeatherEffectPhase extends FieldPhase {
     }
 
     const weatherAnimType: CommonAnim = CommonAnim.SUNNY + (weather.weatherType - 1);
+    /** @todo Rework animation params so that the placeholder "user" can be removed */
     const weatherAnim = new CommonBattleAnim(weatherAnimType, globalScene.getPlayerPokemon()!, undefined, true);
 
     globalScene.ui.showText(getWeatherLapseMessage(weather.weatherType) ?? "", null, () => {
@@ -50,9 +59,9 @@ export class WeatherEffectPhase extends FieldPhase {
    * Applies the end-of-turn effects from the current weather, including
    * - Damage from Sandstorm and Hail
    * - Ability triggers, e.g. healing from {@link https://bulbapedia.bulbagarden.net/wiki/Rain_Dish_(Ability) | Rain Dish}
-   * @param weather the current {@linkcode Weather} on the field
+   * @param weather - The current {@linkcode Weather} on the field
    */
-  protected applyWeatherEffects(weather: Weather): void {
+  private applyWeatherEffects(weather: Weather): void {
     if (this.tryCancelWeatherEffects(weather)) {
       return;
     }
@@ -68,14 +77,14 @@ export class WeatherEffectPhase extends FieldPhase {
 
   /**
    * Checks the field for effects that nullify the current weather's end-of-turn effects
-   * @param weather the current {@linkcode Weather} on the field
+   * @param weather - The current {@linkcode Weather} on the field
    * @returns `true` if the weather is suppressed
    *
    * @todo Merge this logic with {@linkcode Weather.isEffectSuppressed}. This method applies the suppressing attributes directly
    * while `isEffectSuppressed` uses a `hasAbility` check to avoid flyouts appearing at the wrong time. These may
    * be combined by rewriting `isEffectSuppressed` to support simulated application.
    */
-  protected tryCancelWeatherEffects(weather: Weather): boolean {
+  private tryCancelWeatherEffects(weather: Weather): boolean {
     const cancelled = new BooleanHolder(false);
 
     this.executeForAll((pokemon: Pokemon) =>
@@ -90,10 +99,10 @@ export class WeatherEffectPhase extends FieldPhase {
    * of specific {@linkcode WeatherType | types of weather}. This accounts for
    * immunity to weather-based damage from the Pokemon's typing, abilities, and
    * other effects.
-   * @param weather the current {@linkcode Weather} on the field
-   * @param pokemon the {@linkcode Pokemon} to which damage may apply
+   * @param weather - The current {@linkcode Weather} on the field
+   * @param pokemon - The {@linkcode Pokemon} to which damage may apply
    */
-  protected tryInflictWeatherDamage(weather: Weather, pokemon: Pokemon): void {
+  private tryInflictWeatherDamage(weather: Weather, pokemon: Pokemon): void {
     if (!weather.isDamaging()) {
       return;
     }
