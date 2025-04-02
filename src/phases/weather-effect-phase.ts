@@ -38,7 +38,8 @@ export class WeatherEffectPhase extends FieldPhase {
     const weatherAnim = new CommonBattleAnim(weatherAnimType, globalScene.getPlayerPokemon()!, undefined, true);
 
     globalScene.ui.showText(getWeatherLapseMessage(weather.weatherType) ?? "", null, () => {
-      weatherAnim.play(false, () => {
+      // (36, 80) is the player's center-field position
+      weatherAnim.playWithoutTargets(36, 80, 2, 5, () => {
         this.applyWeatherEffects(weather);
         this.end();
       });
