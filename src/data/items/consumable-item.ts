@@ -7,8 +7,6 @@ export abstract class ConsumableItem extends BaseItem {}
 
 export abstract class LearnMoveItem extends ConsumableItem {}
 
-export abstract class HealingItem extends ConsumableItem {}
-
 export abstract class BallItem extends ConsumableItem {}
 
 export abstract class FormChangeItem extends ConsumableItem {}
