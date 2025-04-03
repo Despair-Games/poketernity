@@ -27,7 +27,7 @@ export class Biome {
   public readonly pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   /** A mapping of BiomePoolTier to a list of TrainerType representing the trainers that appear */
   public readonly trainerPool: Record<BiomePoolTier, TrainerType[]>;
-  /** A mapping of WeatherType to weight for what weather the biome will attempt to set upon entry
+  /** A mapping of {@linkcode WeatherType} to weight for what weather the biome will attempt to set upon entry
    * The chance of sun is set to 0 if it is dusk/night
    */
   public readonly weatherPool: Record<WeatherType, number>;
