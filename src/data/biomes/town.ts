@@ -196,4 +196,4 @@ export const townTerrainPool: Record<TerrainType, number> = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const townBiome = new Biome(BiomeId.TOWN, pokemonPool, townTrainerPool, weatherPool, townTerrainPool, "town");
+export const townBiome = new Biome(BiomeId.TOWN, pokemonPool, townTrainerPool, 0, weatherPool, townTerrainPool, "town");
