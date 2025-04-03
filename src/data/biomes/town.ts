@@ -175,7 +175,7 @@ export const townTrainerPool: Record<BiomePoolTier, TrainerType[]> = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-const weatherPool: Record<WeatherType, number> = {
+const weatherPool: Partial<Record<WeatherType, number>> = {
   [WeatherType.NONE]: 1,
 };
 
