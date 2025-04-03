@@ -128,4 +128,4 @@ const terrainPool = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const caveBiome = new Biome(BiomeId.CAVE, pokemonPool, trainerPool, weatherPool, terrainPool, "cave");
+export const caveBiome = new Biome(BiomeId.CAVE, pokemonPool, trainerPool, 6, weatherPool, terrainPool, "cave");

@@ -125,4 +125,4 @@ const terrainPool = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, weatherPool, terrainPool, "end");
+export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, 0, weatherPool, terrainPool, "end");

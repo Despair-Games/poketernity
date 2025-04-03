@@ -1,9 +1,10 @@
 import { Biome } from "#app/data/biome";
-import { townTrainerPool, townTerrainPool } from "#app/data/biomes/town";
+import { townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 const pokemonPool = {
@@ -87,6 +88,18 @@ const pokemonPool = {
   },
 };
 
+const trainerPool = {
+  [BiomePoolTier.COMMON]: [],
+  [BiomePoolTier.UNCOMMON]: [],
+  [BiomePoolTier.RARE]: [],
+  [BiomePoolTier.SUPER_RARE]: [],
+  [BiomePoolTier.ULTRA_RARE]: [],
+  [BiomePoolTier.BOSS]: [TrainerType.NESSA],
+  [BiomePoolTier.BOSS_RARE]: [],
+  [BiomePoolTier.BOSS_SUPER_RARE]: [],
+  [BiomePoolTier.BOSS_ULTRA_RARE]: [],
+};
+
 /**
  * 1/8 for rain 2/8 for sun if dawn/day
  * 1/6 for rain if dusk/night
@@ -104,11 +117,4 @@ const weatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-export const islandBiome = new Biome(
-  BiomeId.ISLAND,
-  pokemonPool,
-  townTrainerPool,
-  weatherPool,
-  townTerrainPool,
-  "town",
-);
+export const islandBiome = new Biome(BiomeId.ISLAND, pokemonPool, trainerPool, 0, weatherPool, townTerrainPool, "town");

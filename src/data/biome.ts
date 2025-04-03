@@ -27,6 +27,8 @@ export class Biome {
   public readonly pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>;
   /** A mapping of BiomePoolTier to a list of TrainerType representing the trainers that appear */
   public readonly trainerPool: Record<BiomePoolTier, TrainerType[]>;
+  /** The chance of a trainer where trainerChance is the denominator. A value of 0 means no trainer */
+  public readonly trainerChance: number;
   /** A mapping of {@linkcode WeatherType} to weight for what weather the biome will attempt to set upon entry
    * The chance of sun is set to 0 if it is dusk/night
    */
@@ -40,6 +42,7 @@ export class Biome {
     biomeId: BiomeId,
     pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>,
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
+    trainerChance: number,
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,
     bgm: string,
@@ -47,6 +50,7 @@ export class Biome {
     this.biomeId = biomeId;
     this.pokemonPool = pokemonPool;
     this.trainerPool = trainerPool;
+    this.trainerChance = trainerChance;
     this.weatherPool = weatherPool;
     this.terrainPool = terrainPool;
     this.bgm = bgm;

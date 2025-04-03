@@ -160,4 +160,12 @@ const terrainPool = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const volcanoBiome = new Biome(BiomeId.VOLCANO, pokemonPool, trainerPool, weatherPool, terrainPool, "volcano");
+export const volcanoBiome = new Biome(
+  BiomeId.VOLCANO,
+  pokemonPool,
+  trainerPool,
+  12,
+  weatherPool,
+  terrainPool,
+  "volcano",
+);
