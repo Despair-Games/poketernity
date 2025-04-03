@@ -97,17 +97,10 @@ const trainerPool = {
  * 2/15 of sandstorm, 5/15 of sun during dawn/day
  * 2/10 of sandstorm during dusk/night
  */
-const weatherPool: Record<WeatherType, number> = {
+const weatherPool: Partial<Record<WeatherType, number>> = {
   [WeatherType.NONE]: 8,
   [WeatherType.SUNNY]: 5,
-  [WeatherType.RAIN]: 0,
   [WeatherType.SANDSTORM]: 2,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
 };
 
 export const badlandsBiome = new Biome(

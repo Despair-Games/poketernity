@@ -149,16 +149,7 @@ const trainerPool = {
  * Always raining
  */
 const weatherPool = {
-  [WeatherType.NONE]: 0,
-  [WeatherType.SUNNY]: 0,
   [WeatherType.RAIN]: 1,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
 };
 
 export const seabedBiome = new Biome(

@@ -116,15 +116,6 @@ const trainerPool = {
 
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 0,
-  [WeatherType.RAIN]: 0,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
 };
 
 export const fairyCave = new Biome(

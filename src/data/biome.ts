@@ -32,7 +32,7 @@ export class Biome {
   /** A mapping of {@linkcode WeatherType} to weight for what weather the biome will attempt to set upon entry
    * The chance of sun is set to 0 if it is dusk/night
    */
-  public readonly weatherPool: Record<WeatherType, number>;
+  public readonly weatherPool: Partial<Record<WeatherType, number>>;
   /** terrainPool is currently unused, to be implemented in a later PR */
   public readonly terrainPool: Record<TerrainType, number>;
   /** String representing the bgm of the biome */
@@ -43,7 +43,7 @@ export class Biome {
     pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>>,
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
     trainerChance: number,
-    weatherPool: Record<WeatherType, number>,
+    weatherPool: Partial<Record<WeatherType, number>>,
     terrainPool: Record<TerrainType, number>,
     bgm: string,
   ) {

@@ -610,7 +610,7 @@ export class Arena {
     const weatherPool = allBiomes.get(this.biomeId).weatherPool;
     const weatherMap = new Map<WeatherType, number>();
     for (const id of getEnumValues(WeatherType)) {
-      weatherMap.set(id, weatherPool[id]);
+      weatherMap.set(id, weatherPool[id] ?? 0);
     }
 
     // If the time is dusk or night, set the chance of sun to 0

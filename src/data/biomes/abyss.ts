@@ -107,17 +107,8 @@ const trainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-const weatherPool: Record<WeatherType, number> = {
+const weatherPool: Partial<Record<WeatherType, number>> = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 0,
-  [WeatherType.RAIN]: 0,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
 };
 
 export const abyssBiome = new Biome(BiomeId.ABYSS, pokemonPool, trainerPool, 16, weatherPool, townTerrainPool, "town");

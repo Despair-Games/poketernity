@@ -163,15 +163,7 @@ const trainerPool = {
  */
 const weatherPool = {
   [WeatherType.NONE]: 8,
-  [WeatherType.SUNNY]: 0,
   [WeatherType.RAIN]: 5,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
 };
 
 export const forestBiome = new Biome(BiomeId.FOREST, pokemonPool, trainerPool, 8, weatherPool, townTerrainPool, "town");
