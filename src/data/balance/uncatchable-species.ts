@@ -1,3 +1,31 @@
-import type { SpeciesId } from "#enums/species-id";
+import { SpeciesId } from "#enums/species-id";
 
-export const uncatchableSpecies: SpeciesId[] = [];
+export const uncatchableSpecies: SpeciesId[] = [
+  SpeciesId.MEW,
+  SpeciesId.CELEBI,
+  SpeciesId.JIRACHI,
+  SpeciesId.DEOXYS,
+  SpeciesId.MANAPHY,
+  SpeciesId.ARCEUS,
+  SpeciesId.VICTINI,
+  SpeciesId.MELTAN,
+  SpeciesId.MELMETAL,
+  SpeciesId.ETERNATUS,
+  SpeciesId.GREAT_TUSK,
+  SpeciesId.SCREAM_TAIL,
+  SpeciesId.BRUTE_BONNET,
+  SpeciesId.FLUTTER_MANE,
+  SpeciesId.SLITHER_WING,
+  SpeciesId.SANDY_SHOCKS,
+  SpeciesId.IRON_TREADS,
+  SpeciesId.IRON_BUNDLE,
+  SpeciesId.IRON_HANDS,
+  SpeciesId.IRON_JUGULIS,
+  SpeciesId.IRON_MOTH,
+  SpeciesId.IRON_THORNS,
+  SpeciesId.GOUGING_FIRE,
+  SpeciesId.RAGING_BOLT,
+  SpeciesId.IRON_BOULDER,
+  SpeciesId.IRON_CROWN,
+  SpeciesId.PECHARUNT,
+];
