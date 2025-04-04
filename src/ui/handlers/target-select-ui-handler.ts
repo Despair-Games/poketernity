@@ -207,7 +207,14 @@ export class TargetSelectUiHandler extends UiHandler {
     return ret;
   }
 
-  eraseCursor() {
+  private highlightItems(targetId: number, val: number): void {
+    const targetItems = this.enemyModifiers.getAll("name", targetId.toString());
+    for (const item of targetItems as Phaser.GameObjects.Container[]) {
+      item.setAlpha(val);
+    }
+  }
+
+  protected override clear() {
     if (this.targetFlashTween) {
       this.targetFlashTween.stop();
       this.targetFlashTween = null;
@@ -225,16 +232,8 @@ export class TargetSelectUiHandler extends UiHandler {
     for (const pokemon of this.targetsHighlighted) {
       pokemon.getBattleInfo().resetY();
     }
-  }
 
-  private highlightItems(targetId: number, val: number): void {
-    const targetItems = this.enemyModifiers.getAll("name", targetId.toString());
-    for (const item of targetItems as Phaser.GameObjects.Container[]) {
-      item.setAlpha(val);
-    }
-  }
-
-  protected override clear() {
-    this.eraseCursor();
+    this.targets = [];
+    this.targetsHighlighted = [];
   }
 }
