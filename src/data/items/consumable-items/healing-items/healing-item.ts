@@ -1,5 +1,5 @@
-import type { Item } from "#app/@types/Item";
-import { ConsumableItem } from "#app/data/items/consumable/consumable-item";
+import type { Item } from "#app/@types/item/Item";
+import { ConsumableItem } from "#app/data/items/consumable-items/consumable-item";
 import type { Pokemon } from "#app/field/pokemon";
 
 interface HealItemInit extends Item {

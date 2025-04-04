@@ -1,4 +1,4 @@
-import type { Item } from "#app/@types/Item";
+import type { Item } from "#app/@types/item/Item";
 import type { ItemRarity } from "#enums/item-rarity";
 import { ItemId } from "#enums/ItemId";
 import { t } from "i18next";

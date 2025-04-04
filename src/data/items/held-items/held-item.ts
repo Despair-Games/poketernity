@@ -1,5 +1,4 @@
-import type { ElementalType } from "#enums/elemental-type";
-import { BaseItem } from "./base-item";
+import { BaseItem } from "../base-item";
 
 /**
  * Held items are items that are held onto by Pokemon
@@ -16,13 +15,3 @@ export abstract class HeldItem extends BaseItem {
 }
 
 export abstract class FormChangeHeldItem extends HeldItem {}
-
-/**
- * For beries which are held by Pokemon and consumed
- */
-export abstract class BerryItem extends HeldItem {
-  public naturalGiftPower: number;
-  public naturalGiftType: ElementalType;
-
-  getBerryEatenEffect(): void {}
-}
