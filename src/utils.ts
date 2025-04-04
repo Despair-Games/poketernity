@@ -7,7 +7,6 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
 import type { Pokemon } from "#app/field/pokemon";
-import type { Percentage } from "#app/@types/Percentage";
 
 export type nil = null | undefined;
 
@@ -635,15 +634,4 @@ export function hasTouchscreen(): boolean {
 export function isLandscapeMode(): boolean {
   const { width, height } = window.screen;
   return width > height;
-}
-
-/**
- * Convert a {@linkcode Percentage} to a `number`
- * @param percent The percentage to convert
- * @returns The converted `number`
- * @example
- *  percentToNumber("50%") // -> 0.5
- */
-export function percentToNumber(percent: Percentage): number {
-  return Number.parseInt(percent) / 100;
 }
