@@ -2021,7 +2021,7 @@ export default class BattleScene extends SceneBase {
       ? [
           ...new Set(
             allSpecies
-              .filter((s) => s.isCatchable())
+              .filter((s) => s.canSpawnAsRandomSpecies())
               .filter(speciesFilter)
               .map((s) => {
                 if (!filterAllEvolutions) {
@@ -2033,7 +2033,7 @@ export default class BattleScene extends SceneBase {
               }),
           ),
         ]
-      : allSpecies.filter((s) => s.isCatchable());
+      : allSpecies.filter((s) => s.canSpawnAsRandomSpecies());
     return filteredSpecies[randSeedInt(filteredSpecies.length)];
   }
 
