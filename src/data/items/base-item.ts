@@ -1,21 +1,22 @@
 import type { Item } from "#app/@types/Item";
-import { eventBus } from "#app/event-bus";
 import type { ItemRarity } from "#enums/item-rarity";
-import type { ItemId } from "#enums/ItemId";
+import { ItemId } from "#enums/ItemId";
+import { t } from "i18next";
 
 export abstract class BaseItem implements Item {
-  public abstract readonly id: ItemId;
-
-  public readonly price: number;
+  public readonly id: ItemId;
   public readonly rarity: ItemRarity;
-  public readonly stackCount: number;
-  public readonly maxStackCount: number;
 
-  public abstract get name(): string;
+  public get name(): string {
+    return t(`item:${ItemId[this.id]}.name`);
+  }
 
-  public abstract get description(): string;
+  public get description(): string {
+    return t(`item:${ItemId[this.id]}.description`);
+  }
 
-  public use() {
-    eventBus.emit(`item/use`, this);
+  constructor({ id, rarity }: Item) {
+    this.id = id;
+    this.rarity = rarity;
   }
 }
