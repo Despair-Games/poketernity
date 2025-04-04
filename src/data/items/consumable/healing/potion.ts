@@ -12,14 +12,3 @@ export class Potion extends HealingItem {
     });
   }
 }
-
-export class SuperPotion extends HealingItem {
-  constructor() {
-    super({
-      id: ItemId.SUPER_POTION,
-      rarity: ItemRarity.GREAT,
-      healAmount: 50,
-      healPercentage: 0.25,
-    });
-  }
-}
