@@ -1,8 +1,8 @@
 import { Biome } from "#app/data/biome";
-import { townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
+import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
@@ -109,4 +109,12 @@ const weatherPool = {
   [WeatherType.FOG]: 1,
 };
 
-export const lakeBiome = new Biome(BiomeId.LAKE, pokemonPool, trainerPool, 6, weatherPool, townTerrainPool, "town");
+/**
+ * 1/5 for misty
+ */
+const terrainPool: Partial<Record<TerrainType, number>> = {
+  [TerrainType.NONE]: 4,
+  [TerrainType.MISTY]: 1,
+};
+
+export const lakeBiome = new Biome(BiomeId.LAKE, pokemonPool, trainerPool, 6, weatherPool, terrainPool, "town");
