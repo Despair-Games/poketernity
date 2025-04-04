@@ -163,7 +163,7 @@ const pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>> = {
   },
 };
 
-export const townTrainerPool: Record<BiomePoolTier, TrainerType[]> = {
+const trainerPool: Record<BiomePoolTier, TrainerType[]> = {
   [BiomePoolTier.COMMON]: [TrainerType.YOUNGSTER],
   [BiomePoolTier.UNCOMMON]: [],
   [BiomePoolTier.RARE]: [],
@@ -187,4 +187,4 @@ export const townTerrainPool: Record<TerrainType, number> = {
   [TerrainType.PSYCHIC]: 0,
 };
 
-export const townBiome = new Biome(BiomeId.TOWN, pokemonPool, townTrainerPool, 0, weatherPool, townTerrainPool, "town");
+export const townBiome = new Biome(BiomeId.TOWN, pokemonPool, trainerPool, 0, weatherPool, townTerrainPool, "town");

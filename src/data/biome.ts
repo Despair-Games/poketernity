@@ -29,7 +29,8 @@ export class Biome {
   public readonly trainerPool: Record<BiomePoolTier, TrainerType[]>;
   /** The chance of a trainer where trainerChance is the denominator. A value of 0 means no trainer */
   public readonly trainerChance: number;
-  /** A mapping of {@linkcode WeatherType} to weight for what weather the biome will attempt to set upon entry
+  /**
+   * A mapping of {@linkcode WeatherType} to weight for what weather the biome will attempt to set upon entry
    * The chance of sun is set to 0 if it is dusk/night
    */
   public readonly weatherPool: Partial<Record<WeatherType, number>>;

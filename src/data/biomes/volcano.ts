@@ -139,6 +139,9 @@ const trainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
+/**
+ * 9/10 of Sunny during dawn/day
+ */
 const weatherPool = {
   [WeatherType.NONE]: 1,
   [WeatherType.SUNNY]: 9,

@@ -103,4 +103,4 @@ const weatherPool = {
   [WeatherType.NONE]: 1,
 };
 
-export const plainsBiome = new Biome(BiomeId.PLAINS, pokemonPool, trainerPool, 4, weatherPool, townTerrainPool, "town");
+export const plainsBiome = new Biome(BiomeId.PLAINS, pokemonPool, trainerPool, 6, weatherPool, townTerrainPool, "town");
