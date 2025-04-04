@@ -178,12 +178,12 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
     it("should transport to a new area", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, defaultParty);
 
-      const previousBiome = scene.arena.biomeType;
+      const previousBiome = scene.arena.biomeId;
 
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
-      expect(previousBiome).not.toBe(scene.arena.biomeType);
-      expect(TRANSPORT_BIOMES).toContain(scene.arena.biomeType);
+      expect(previousBiome).not.toBe(scene.arena.biomeId);
+      expect(TRANSPORT_BIOMES).toContain(scene.arena.biomeId);
     });
 
     it("should start a battle against an enraged boss below wave 50", { retry: 5 }, async () => {
@@ -250,12 +250,12 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
     it("should transport to a new area", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, [SpeciesId.PIKACHU]);
 
-      const previousBiome = scene.arena.biomeType;
+      const previousBiome = scene.arena.biomeId;
 
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      expect(previousBiome).not.toBe(scene.arena.biomeType);
-      expect(TRANSPORT_BIOMES).toContain(scene.arena.biomeType);
+      expect(previousBiome).not.toBe(scene.arena.biomeId);
+      expect(TRANSPORT_BIOMES).toContain(scene.arena.biomeId);
     });
 
     it("should start a battle against an enraged boss below wave 50", async () => {

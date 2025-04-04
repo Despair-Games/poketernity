@@ -1,7 +1,7 @@
+import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants";
 import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -2371,7 +2371,7 @@ export class PokemonLevelIncrementModifier extends ConsumablePokemonModifier {
       playerPokemon.levelExp = 0;
     }
 
-    playerPokemon.addFriendship(FRIENDSHIP_GAIN_FROM_RARE_CANDY);
+    playerPokemon.addFriendship(FRIENDSHIP_GAIN_FROM_CANDY);
 
     globalScene.unshiftPhase(
       new LevelUpPhase(

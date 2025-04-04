@@ -21,7 +21,7 @@ import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/e
 import { TrainerType } from "#enums/trainer-type";
 import { EggTier } from "#enums/egg-type";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
@@ -193,10 +193,8 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       await game.phaseInterceptor.to(PostMysteryEncounterPhase);
 
       const friendshipAfter = scene.currentBattle.mysteryEncounter!.misc.pokemon1.friendship;
-      // 20 from ME + extra from winning battle (that extra is not accurate to what happens in game.
-      // The Pokemon normally gets FRIENDSHIP_GAIN_FROM_BATTLE 3 times, once for each defeated Pokemon
-      // but due to how skipBattleRunMysteryEncounterRewardsPhase is implemented, it only receives it once)
-      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_FROM_BATTLE);
+      // 20 from ME + extra from winning battle
+      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_PER_LEVEL_UP);
     });
   });
 
@@ -278,7 +276,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       await game.phaseInterceptor.to(PostMysteryEncounterPhase);
 
       const friendshipAfter = scene.currentBattle.mysteryEncounter!.misc.pokemon2.friendship;
-      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_FROM_BATTLE); // 20 from ME + extra for friendship gained from winning battle
+      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_PER_LEVEL_UP); // 20 from ME + extra for friendship gained from winning battle
     });
   });
 
@@ -360,7 +358,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       await game.phaseInterceptor.to(PostMysteryEncounterPhase);
 
       const friendshipAfter = scene.currentBattle.mysteryEncounter!.misc.pokemon3.friendship;
-      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_FROM_BATTLE); // 20 + extra for friendship gained from winning battle
+      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_PER_LEVEL_UP); // 20 + extra for friendship gained from winning battle
     });
   });
 });

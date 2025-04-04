@@ -273,7 +273,7 @@ export class CommandPhase extends FieldPhase {
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
           && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
 
-        if (arena.biomeType === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
+        if (arena.biomeId === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
           failCatchRun("battle:noPokeballForce");
         } else if (battleType === BattleType.TRAINER) {
           failCatchRun("battle:noPokeballTrainer");
@@ -316,7 +316,7 @@ export class CommandPhase extends FieldPhase {
         }
         break;
       case BattleCommand.RUN:
-        if (arena.biomeType === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
+        if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
         } else if (

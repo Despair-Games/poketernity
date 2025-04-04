@@ -374,11 +374,52 @@ export class GholdengoEvoCondition extends SpeciesEvolutionCondition {
 }
 
 /**
+ * Values obtained from the friendship values needed to evolve in generations 2-7 and 8-9
+ */
+const BABY_FRIENDSHIP_EVO_REQUIREMENT = 160;
+const FRIENDSHIP_EVO_REQUIREMENT = 220;
+
+/**
+ * For baby evolutions that require friendship
+ * Used for the following:
+ * ```
+ * Pichu
+ * Cleffa
+ * Igglybuff
+ * Happiny
+ * Togepi
+ * Azurill
+ * Budew
+ * Chingling
+ * ```
+ */
+export class BabySpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super((p) => p.friendship >= BABY_FRIENDSHIP_EVO_REQUIREMENT);
+    this.description = "with friendship: " + BABY_FRIENDSHIP_EVO_REQUIREMENT;
+  }
+}
+
+/**
  * For evolutions that require friendship
+ * Used for the following:
+ * ```
+ * Golbat
+ * Chansey
+ * Eevee
+ * Munchlax
+ * Riolu
+ * Buneary
+ * Woobat
+ * Swadloon
+ * Type:Null
+ * Alola Meowth
+ * Snom
+ * ```
  */
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
-  constructor(friendshipAmount: number) {
-    super((p) => p.friendship >= friendshipAmount);
-    this.description = "with friendship: " + friendshipAmount;
+  constructor() {
+    super((p) => p.friendship >= FRIENDSHIP_EVO_REQUIREMENT);
+    this.description = "with friendship: " + FRIENDSHIP_EVO_REQUIREMENT;
   }
 }

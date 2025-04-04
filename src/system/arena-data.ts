@@ -13,7 +13,7 @@ export default class ArenaData {
 
   constructor(source: Arena | any) {
     const sourceArena = source instanceof Arena ? (source as Arena) : null;
-    this.biome = sourceArena ? sourceArena.biomeType : source.biome;
+    this.biome = sourceArena ? sourceArena.biomeId : source.biome;
     this.weather = sourceArena
       ? sourceArena.weather
       : source.weather

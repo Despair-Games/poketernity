@@ -1,7 +1,7 @@
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
 import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
-import { biomeLinks } from "#app/data/balance/biomes";
+import { biomeLinks } from "#app/data/biome-links";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#app/data/egg";
@@ -1039,6 +1039,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
         } else if (biomeLinks.hasOwnProperty(currentBiome)) {
           currentBiome = biomeLinks[currentBiome] as BiomeId;
         } else {
+          // Special logic for endless mode
           if (!(i % 50)) {
             currentBiome = BiomeId.END;
           } else {

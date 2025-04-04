@@ -12,7 +12,7 @@ import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, FRIENDSHIP_GAIN_CUTOFF, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -386,7 +386,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.friendship = species.baseFriendship;
       this.metLevel = level;
-      this.metBiome = globalScene.currentBattle ? globalScene.arena.biomeType : -1;
+      this.metBiome = globalScene.currentBattle ? globalScene.arena.biomeId : -1;
       this.metSpecies = species.speciesId;
       this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
       this.pokerus = false;
@@ -1716,7 +1716,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
     // was grounded before receiving the `GroundedTag`.
     return (
-      !!this.getTag(BattlerTagType.IGNORE_FLYING)
+      this.hasTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
@@ -1726,7 +1726,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public isSemiInvulnerable(): boolean {
-    return !!this.getTag(...SemiInvulnerableBattlerTagTypes) || !!this.getTag(BattlerTagType.SKY_DROP);
+    return this.hasTag(...SemiInvulnerableBattlerTagTypes) || this.hasTag(BattlerTagType.SKY_DROP);
   }
 
   /**
@@ -1768,7 +1768,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
-      || !!this.getTag(...TrappedBattlerTagTypes)
+      || this.hasTag(...TrappedBattlerTagTypes)
       || !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
     );
   }
@@ -2188,7 +2188,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   trySetShiny(thresholdOverride?: number): boolean {
     // Shiny Pokemon should not spawn in the end biome in endless
-    if (globalScene.gameMode.isEndless && globalScene.arena.biomeType === BiomeId.END) {
+    if (globalScene.gameMode.isEndless && globalScene.arena.biomeId === BiomeId.END) {
       return false;
     }
 
@@ -3451,6 +3451,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
+  /**
+   * Helper function to check if a Pokemon has any of the input tag types.
+   * @param tagTypes - The battler tag types to search for
+   * @returns `true` if the Pokemon has at least one of the battler tags, `false` otherwise
+   */
+  public hasTag(...tagTypes: BattlerTagType[]): boolean {
+    if (!this.summonData) {
+      return false;
+    }
+    return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
+  }
+
   findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | nil {
     if (!this.summonData) {
       return null;
@@ -4429,9 +4441,7 @@ export class PlayerPokemon extends Pokemon {
   }
 
   /**
-   * Updates the Pokemon's friendship value and calls {@linkcode addCandyProgress}
-   * to also the update the `candyProgress` value of the Pokemon's root species in
-   * the game data if there is a postive gain
+   * Updates the Pokemon's friendship value
    * @param friendshipChange - The amount of friendship to add or remove
    */
   addFriendship(friendshipChange: number): void {
@@ -4444,18 +4454,20 @@ export class PlayerPokemon extends Pokemon {
     // Soothe bell multiplier applies here
     globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
 
+    // If the Pokemon's friendship is 150 or higher, the gain is halved
+    if (this.friendship >= FRIENDSHIP_GAIN_CUTOFF) {
+      amount.value = Math.floor(amount.value / 2);
+    }
+
     // Add friendship to this PlayerPokemon
     this.friendship = Math.min(this.friendship + amount.value, 255);
     if (this.friendship === 255) {
       globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
     }
-
-    // Add to candy progress for this mon's starter species
-    this.addCandyProgress(amount.value);
   }
 
   /**
-   * Helper function being called in {@linkcode addFriendship}.
+   * Not used right now
    * Updates the `candyProgress` of a starter and grants candy
    * if the requirement is met
    * @param candyProgressChange - The amount to increase the candy progress value by
@@ -4926,7 +4938,7 @@ export class EnemyPokemon extends Pokemon {
               .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
               .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
-            const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
+            const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
 
             return (
               move.category !== MoveCategory.STATUS
@@ -5345,7 +5357,7 @@ export class EnemyPokemon extends Pokemon {
     if (party.length < PLAYER_PARTY_MAX_SIZE) {
       this.pokeball = pokeballType;
       this.metLevel = this.level;
-      this.metBiome = globalScene.arena.biomeType;
+      this.metBiome = globalScene.arena.biomeId;
       this.metWave = globalScene.currentBattle.waveIndex;
       this.metSpecies = this.species.speciesId;
       const newPokemon = globalScene.addPlayerPokemon(

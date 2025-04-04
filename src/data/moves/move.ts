@@ -10,7 +10,9 @@ import type { UserFieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-a
 import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
 import type { WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { MeFirstPowerBoostTag } from "#app/data/battler-tags/me-first-power-boost-tag";
 import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
@@ -592,6 +594,16 @@ export abstract class Move implements Localizable {
   }
 
   /**
+   * Sets the {@linkcode MoveFlags.SNATCHABLE} flag for the calling move
+   * @returns the {@linkcode Move} that called this function
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Snatch}
+   */
+  snatchable(): this {
+    this.setFlag(MoveFlags.SNATCHABLE, true);
+    return this;
+  }
+
+  /**
    * Sets the {@linkcode MoveFlags.BOUNCEABLE} flag for the calling Move
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Coat_(move)#Affected_moves | Moves affected by Magic Coat}
    * @returns The {@linkcode Move} that called this function
@@ -851,6 +863,8 @@ export abstract class Move implements Localizable {
     if (source.getTag(BattlerTagType.HELPING_HAND)) {
       power.value *= 1.5;
     }
+
+    applyBattlerTags<MeFirstPowerBoostTag>(BattlerTagType.ME_FIRST_POWER_BOOST, source, simulated, power);
 
     return power.value;
   }

@@ -14,7 +14,6 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getNatureName } from "#app/data/nature";
-import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -144,7 +143,7 @@ export class EncounterPhase extends BattlePhase {
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
             && !gameMode.isBoss(waveIndex)
-            && arena.biomeType !== BiomeId.END
+            && arena.biomeId !== BiomeId.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);
@@ -340,6 +339,9 @@ export class EncounterPhase extends BattlePhase {
       globalScene.isMysteryEncounterValidForWave(battleType, waveIndex)
       && !currentBattle.isBattleMysteryEncounter()
     ) {
+      /**
+       * TODO: This does not occur in most cases. See https://github.com/Despair-Games/poketernity/issues/395
+       */
       // Increment ME spawn chance if an ME could have spawned but did not
       // Only do this AFTER session has been saved to avoid duplicating increments
       mysteryEncounterSaveData.encounterSpawnChance += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
@@ -674,7 +676,7 @@ export class EncounterPhase extends BattlePhase {
    */
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
-      globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
+      globalScene.arena.setRandomWeather();
     }
   }
 }

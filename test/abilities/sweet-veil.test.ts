@@ -68,7 +68,7 @@ describe("Abilities - Sweet Veil", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField().some((p) => !!p.getTag(BattlerTagType.DROWSY))).toBe(false);
+    expect(game.scene.getPlayerField().some((p) => p.hasTag(BattlerTagType.DROWSY))).toBe(false);
   });
 
   it("prevents the user and its allies already drowsy due to Yawn from falling asleep.", async () => {
@@ -81,7 +81,7 @@ describe("Abilities - Sweet Veil", () => {
 
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerField().some((p) => !!p.getTag(BattlerTagType.DROWSY))).toBe(true);
+    expect(game.scene.getPlayerField().some((p) => p.hasTag(BattlerTagType.DROWSY))).toBe(true);
 
     // Turn 2: Switch into Swirlix with Sweet Veil
     game.move.use(MoveId.SPLASH);

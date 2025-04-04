@@ -7,6 +7,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
 import type { MagicCoatTag } from "#app/data/battler-tags/magic-coat-tag";
+import type { SnatchingTag } from "#app/data/battler-tags/snatch-tag";
 import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
@@ -73,6 +74,7 @@ export class MovePhase extends BattlePhase {
   protected followUp: boolean;
   protected ignorePp: boolean;
   protected reflected: boolean;
+  public snatched: boolean;
   protected failed: boolean = false;
   protected cancelled: boolean = false;
 
@@ -87,6 +89,7 @@ export class MovePhase extends BattlePhase {
     followUp: boolean = false,
     ignorePp: boolean = false,
     reflected: boolean = false,
+    snatched: boolean = false,
   ) {
     super();
 
@@ -96,6 +99,7 @@ export class MovePhase extends BattlePhase {
     this.followUp = followUp;
     this.ignorePp = ignorePp;
     this.reflected = reflected;
+    this.snatched = snatched;
   }
 
   public get pokemon(): Pokemon {
@@ -194,6 +198,8 @@ export class MovePhase extends BattlePhase {
       this.resolveRedirectTarget();
 
       this.resolveCounterAttackTarget();
+
+      this.trySnatchMove();
 
       this.tryReflectMove();
     }
@@ -337,6 +343,65 @@ export class MovePhase extends BattlePhase {
       ) {
         this.cancel();
         break;
+      }
+    }
+  }
+
+  /**
+   * Checks if any active Pokemon's Snatch can steal this phase's move. If so, the
+   * Pokemon with Snatch steals the move, cancelling this phase and starting a duplicate phase
+   * with the snatching Pokemon as the user.
+   */
+  protected trySnatchMove(): void {
+    const move = this.move.getMove();
+
+    if (this.snatched || !move.checkFlag(MoveFlags.SNATCHABLE, this.pokemon, null)) {
+      return;
+    }
+
+    // Rest and Swallow are only stolen if they would have an effect on the original user
+    if (
+      [MoveId.REST, MoveId.SWALLOW].includes(this.move.moveId)
+      && !this.move.getMove().applyConditions(this.pokemon, this.pokemon, this.move.getMove())
+    ) {
+      return;
+    }
+
+    /**
+     * All Pokemon on the field that have acted this turn, excluding the user and any Pokemon
+     * under the effects of Sky Drop, in order of when they acted.
+     */
+    const otherPokemon = globalScene
+      .getField(true)
+      .filter((p) => p !== this.pokemon && p.turnData.acted && !p.getTag(BattlerTagType.SKY_DROP))
+      .sort((pokemonA, pokemonB) => {
+        const [orderA, orderB] = [pokemonA, pokemonB].map((p) => p.turnData.order);
+        return orderA - orderB;
+      });
+
+    /**
+     * The first Pokemon in turn order to have Snatch in effect uses this phase's move
+     * for itself and cancels the original move's execution.
+     */
+    for (const p of otherPokemon) {
+      if (applyBattlerTags<SnatchingTag>(BattlerTagType.SNATCHING, p, false, this.pokemon)) {
+        globalScene.useMove({
+          pokemon: p,
+          targets: getMoveTargets(p, this.move.moveId).targets,
+          move: this.move,
+          followUp: true,
+          snatched: true,
+          when: "eager",
+        });
+
+        /**
+         * Remove Snatch's effect from the Pokemon to prevent it from
+         * stealing subsequent moves in the turn.
+         */
+        p.removeTag(BattlerTagType.SNATCHING);
+        // Cancel the original move
+        this.cancel();
+        return;
       }
     }
   }
@@ -750,7 +815,7 @@ export class MovePhase extends BattlePhase {
    * the pokemon is on a recharge turn (ie: {@link MoveId.HYPER_BEAM Hyper Beam}), or a 2-turn move was interrupted (ie: {@link MoveId.FLY Fly}).
    */
   public showMoveText(): void {
-    if (this.reflected || this.move.moveId === MoveId.NONE) {
+    if (this.reflected || this.snatched || this.move.moveId === MoveId.NONE) {
       return;
     }
 

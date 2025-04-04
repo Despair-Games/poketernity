@@ -119,17 +119,11 @@ describe("Moves - Metronome", () => {
 
     const user = game.field.getPlayerPokemon();
 
-    let rngSweepProgress = 0; // This will simulate entire range of RNG calls by slowly sweeping from 0 to 1
-    vi.spyOn(user, "randSeedInt").mockImplementation((range: number, min: number = 0) => {
-      return Math.floor(min + rngSweepProgress * range);
-    });
+    const NUM_ROLLS = 2000; // As long as this is greater than total number of moves, this should cover all possible RNG rolls
 
-    const trials = 1000;
-    for (let i = 0; i < trials; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * trials);
-
+    await game.rng.equalSample(NUM_ROLLS, () => {
       const moveId = randomMoveAttr.getRandomMove(user);
       expect(allMoves.get(moveId).hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
-    }
+    });
   });
 });

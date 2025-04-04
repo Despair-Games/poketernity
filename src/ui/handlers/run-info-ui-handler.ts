@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { getBiomeName } from "#app/data/balance/biomes";
+import { getBiomeName } from "#app/data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getTypeRgb } from "#app/data/type";
@@ -12,6 +12,7 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import {
@@ -38,7 +39,6 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
-import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
