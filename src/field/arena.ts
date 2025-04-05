@@ -908,7 +908,12 @@ export class Arena {
     if (this.weather?.turnsLeft !== 0) {
       this.trySetWeather(WeatherType.NONE, false);
     }
-    this.trySetTerrain(TerrainType.NONE, false, true);
+
+    // Don't reset terrain if a Biome's permanent terrain is active
+    if (this.terrain?.turnsLeft !== 0) {
+      this.trySetTerrain(TerrainType.NONE, false, true);
+    }
+
     this.removeAllTags();
   }
 

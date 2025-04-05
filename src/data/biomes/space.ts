@@ -96,6 +96,9 @@ const weatherPool = {
   [WeatherType.NONE]: 1,
 };
 
+/**
+ * 1/2 of psychic
+ */
 const terrainPool: Partial<Record<TerrainType, number>> = {
   [TerrainType.NONE]: 1,
   [TerrainType.PSYCHIC]: 1,
