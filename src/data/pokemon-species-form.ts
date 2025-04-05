@@ -173,7 +173,7 @@ export abstract class PokemonSpeciesForm {
    * @returns whether or not this Pokemon can spawn as a random species
    */
   canSpawnAsRandomSpecies(): boolean {
-    return noRandomSpeciesSpawn.indexOf(this.speciesId) === -1;
+    return !noRandomSpeciesSpawn.includes(this.speciesId);
   }
 
   isRegional(): boolean {
