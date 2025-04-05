@@ -61,6 +61,9 @@ interface PokemonFaintInit {
   source?: Pokemon;
 }
 
+/**
+ * This is responsible for managing the game's {@linkcode Phase | phases}.
+ */
 export class PhaseManager {
   /** PhaseQueue: dequeue/remove the first element to get the next phase */
   public phaseQueue: Phase[] = [];
