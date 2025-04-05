@@ -78,7 +78,7 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
       }
     }
 
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:swapArenaTags", { pokemonName: getPokemonNameWithAffix(user) }),
     );
     return true;

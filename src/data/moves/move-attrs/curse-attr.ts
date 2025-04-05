@@ -23,7 +23,7 @@ export class CurseAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getTypes(true).includes(ElementalType.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
-        globalScene.phaseManager.queueMessage(i18next.t("battle:attackFailed"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackFailed"));
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
@@ -32,7 +32,7 @@ export class CurseAttr extends MoveEffectAttr {
         ignoreSegments: true,
         preventEndure: true,
       });
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:cursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
           pokemonName: getPokemonNameWithAffix(target),

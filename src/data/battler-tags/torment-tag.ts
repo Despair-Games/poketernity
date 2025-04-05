@@ -27,7 +27,7 @@ export class TormentTag extends MoveRestrictionBattlerTag {
    */
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:tormentOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       1500,
     );

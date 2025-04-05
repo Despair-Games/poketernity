@@ -85,7 +85,7 @@ describe("BattlerTag - SubstituteTag", () => {
 
       expect(subject.sourceInFocus).toBeFalsy();
       expect((mockPokemon.scene as BattleScene).triggerPokemonBattleAnim).toHaveBeenCalledTimes(1);
-      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessage).toHaveBeenCalledTimes(1);
+      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessagePhase).toHaveBeenCalledTimes(1);
     });
 
     it("removes effects that trap the source", async () => {
@@ -126,7 +126,7 @@ describe("BattlerTag - SubstituteTag", () => {
       subject.onRemove(mockPokemon);
 
       expect((mockPokemon.scene as BattleScene).triggerPokemonBattleAnim).toHaveBeenCalledTimes(1);
-      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessage).toHaveBeenCalledTimes(1);
+      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessagePhase).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -172,7 +172,7 @@ describe("BattlerTag - SubstituteTag", () => {
 
       expect(subject.sourceInFocus).toBeTruthy();
       expect((mockPokemon.scene as BattleScene).triggerPokemonBattleAnim).toHaveBeenCalledTimes(1);
-      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessage).not.toHaveBeenCalled();
+      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessagePhase).not.toHaveBeenCalled();
     });
 
     it("AFTER_MOVE lapse triggers post-move animation", async () => {
@@ -191,7 +191,7 @@ describe("BattlerTag - SubstituteTag", () => {
 
       expect(subject.sourceInFocus).toBeFalsy();
       expect((mockPokemon.scene as BattleScene).triggerPokemonBattleAnim).toHaveBeenCalledTimes(1);
-      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessage).not.toHaveBeenCalled();
+      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessagePhase).not.toHaveBeenCalled();
     });
 
     // TODO: Figure out how to mock a MoveEffectPhase correctly for this test
@@ -216,7 +216,7 @@ describe("BattlerTag - SubstituteTag", () => {
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.HIT)).toBeTruthy();
 
       expect((mockPokemon.scene as BattleScene).triggerPokemonBattleAnim).not.toHaveBeenCalled();
-      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessage).toHaveBeenCalledTimes(1);
+      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessagePhase).toHaveBeenCalledTimes(1);
     });
 
     it("CUSTOM lapse flags the tag for removal", async () => {
@@ -237,7 +237,7 @@ describe("BattlerTag - SubstituteTag", () => {
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.TURN_END)).toBeTruthy();
 
       expect((mockPokemon.scene as BattleScene).triggerPokemonBattleAnim).not.toHaveBeenCalled();
-      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessage).not.toHaveBeenCalled();
+      expect((mockPokemon.scene as BattleScene).phaseManager.queueMessagePhase).not.toHaveBeenCalled();
     });
   });
 });

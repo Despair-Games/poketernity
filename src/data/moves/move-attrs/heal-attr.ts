@@ -46,7 +46,7 @@ export class HealAttr extends MoveEffectAttr {
    * This heals the target and shows the appropriate message.
    */
   addHealPhase(target: Pokemon, healRatio: number) {
-    globalScene.phaseManager.queuePokemonHeal(
+    globalScene.phaseManager.queuePokemonHealPhase(
       true,
       target.getBattlerIndex(),
       toDmgValue(target.getMaxHp() * healRatio),

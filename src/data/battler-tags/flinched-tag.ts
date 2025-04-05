@@ -39,7 +39,7 @@ export class FlinchedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
       (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:flinchedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

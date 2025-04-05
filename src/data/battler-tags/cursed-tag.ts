@@ -39,7 +39,7 @@ export class CursedTag extends BattlerTag {
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
-        globalScene.phaseManager.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("battlerTags:cursedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
       }

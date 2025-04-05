@@ -477,13 +477,13 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
   }
   if (showMessage) {
     if (changeValue < 0) {
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("mysteryEncounterMessages:paid_money", { amount: -changeValue }),
         null,
         true,
       );
     } else {
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("mysteryEncounterMessages:receive_money", { amount: changeValue }),
         null,
         true,

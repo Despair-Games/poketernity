@@ -55,7 +55,7 @@ export class RecoilAttr extends MoveEffectAttr {
       ignoreSegments: true,
       preventEndure: true,
     });
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }),
     );
 

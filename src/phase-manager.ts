@@ -330,7 +330,7 @@ export class PhaseManager {
    * @param promptDelay optional param for MessagePhase constructor
    * @param defer boolean for which queue to add it to, false -> add to PhaseQueuePrepend, true -> nextCommandPhaseQueue
    */
-  public queueMessage(
+  public queueMessagePhase(
     message: string,
     callbackDelay?: number | null,
     prompt?: boolean | null,
@@ -354,7 +354,7 @@ export class PhaseManager {
    * @param hpHealed - The amount of HP to heal
    * @param params_2 - The various {@linkcode PokemonHealPhaseOptions | optional parameters} of `PokemonHealPhase`
    */
-  queuePokemonHeal(eager: boolean, ...params: ConstructorParameters<typeof PokemonHealPhase>) {
+  public queuePokemonHealPhase(eager: boolean, ...params: ConstructorParameters<typeof PokemonHealPhase>) {
     const pokemonHealPhase = new PokemonHealPhase(...params);
 
     if (eager) {
@@ -370,7 +370,7 @@ export class PhaseManager {
    * @param targets The targets {@linkcode BattlerIndex}
    * @param move The {@linkcode PokemonMove} being used
    */
-  queueChargeMove(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove): void {
+  public queueMoveChargePhase(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove): void {
     this.unshiftPhase(new MoveChargePhase(battlerIndex, targets, move));
   }
 
@@ -378,7 +378,7 @@ export class PhaseManager {
    * Inserts a new {@linkcode SelectTargetPhase} to the phase queue.
    * @param battlerIndex The selected targets {@linkcode BattlerIndex}
    */
-  queueSelectTarget(battlerIndex: BattlerIndex): void {
+  public queueSelectTargetPhase(battlerIndex: BattlerIndex): void {
     this.unshiftPhase(new SelectTargetPhase(battlerIndex));
   }
 
@@ -388,7 +388,7 @@ export class PhaseManager {
    * @param moveId The {@linkcode MoveId} to be used
    * @param user The {@linkcode Pokemon} using the move
    */
-  queueMoveChargeAnimation(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon) {
+  public queueMoveAnimPhase(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon) {
     this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
   }
 
@@ -404,7 +404,7 @@ export class PhaseManager {
    * GameOverPhase, VictoryPhase, etc.. that will interfere with anything else that happens during this MoveEffectPhase).
    * Once the MoveEffectPhase is over (and calls it's .end() function, shiftPhase() will reset the PhaseQueueSplice via clearPhaseQueueSplice() )_
    */
-  queueBattlerFaintPhase(
+  public queueBattlerFaintPhase(
     battlerIndex: BattlerIndex,
     { preventEndure = false, destinyTag = null, grudgeTag = null, source }: PokemonFaintInit,
   ): void {
@@ -412,7 +412,7 @@ export class PhaseManager {
     this.unshiftPhase(new FaintPhase(battlerIndex, preventEndure, destinyTag, grudgeTag, source));
   }
 
-  queueMovePhase({
+  public queueMovePhase({
     pokemon,
     targets,
     move,
@@ -448,10 +448,31 @@ export class PhaseManager {
   }
 
   /**
+   * Ends the current battle and starts a new one.
+   * @param isVictory Whether the player won the battle
+   */
+  public queueNextBattle(isVictory: boolean): void {
+    this.pushPhase(new BattleEndPhase(isVictory));
+    this.pushPhase(new NewBattlePhase());
+  }
+
+  /**
+   * Ends the game.
+   * @param isVictory Whether the player won the game
+   * @param clearPhaseQueue Whether to clear the phase queue
+   */
+  public queueGameOverPhase({ isVictory, clearPhaseQueue }: GameOverInit = {}): void {
+    if (clearPhaseQueue) {
+      this.clearPhaseQueue();
+    }
+    this.pushPhase(new GameOverPhase(isVictory));
+  }
+
+  /**
    * Returns the game to the title screen(/phase).
    * @param init Optional {@linkcode ToTitleScreenInit} arguments
    */
-  toTitleScreen({ eager, clearPhaseQueue }: ToTitleScreenInit = {}): void {
+  public toTitleScreen({ eager, clearPhaseQueue }: ToTitleScreenInit = {}): void {
     if (clearPhaseQueue) {
       this.clearPhaseQueue();
     }
@@ -467,7 +488,7 @@ export class PhaseManager {
    * Sends the player to the login screen.
    * @param showText Whether to show text
    */
-  toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
+  public toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
     const loginPhase = new LoginPhase(showText);
 
     if (eager) {
@@ -475,26 +496,5 @@ export class PhaseManager {
     } else {
       this.pushPhase(loginPhase);
     }
-  }
-
-  /**
-   * Ends the current battle and starts a new one.
-   * @param isVictory Whether the player won the battle
-   */
-  queueNextBattle(isVictory: boolean): void {
-    this.pushPhase(new BattleEndPhase(isVictory));
-    this.pushPhase(new NewBattlePhase());
-  }
-
-  /**
-   * Ends the game.
-   * @param isVictory Whether the player won the game
-   * @param clearPhaseQueue Whether to clear the phase queue
-   */
-  queueGameOverPhase({ isVictory, clearPhaseQueue }: GameOverInit = {}): void {
-    if (clearPhaseQueue) {
-      this.clearPhaseQueue();
-    }
-    this.pushPhase(new GameOverPhase(isVictory));
   }
 }

@@ -1634,7 +1634,7 @@ export class SurviveDamageModifier extends PokemonHeldItemModifier {
     if (!surviveDamage.value && pokemon.randSeedInt(10) < this.getStackCount()) {
       surviveDamage.value = true;
 
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("modifier:surviveDamageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -1674,7 +1674,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
       const hasQuickClaw = this.type.isPokemonHeldItemModifierType() && this.type.id === "QUICK_CLAW";
 
       if (hasQuickClaw) {
-        globalScene.phaseManager.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             itemName: i18next.t("modifierType:ModifierType.QUICK_CLAW.name"),
@@ -1764,7 +1764,7 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHeal(
+      globalScene.phaseManager.queuePokemonHealPhase(
         true,
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
@@ -1869,7 +1869,7 @@ export class HitHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHeal(
+      globalScene.phaseManager.queuePokemonHealPhase(
         true,
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
@@ -2059,14 +2059,19 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.phaseManager.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
-      message: i18next.t("modifier:pokemonInstantReviveApply", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        typeName: this.type.name,
-      }),
-      showFullHpMessage: false,
-      revive: true,
-    });
+    globalScene.phaseManager.queuePokemonHealPhase(
+      true,
+      pokemon.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / 2),
+      {
+        message: i18next.t("modifier:pokemonInstantReviveApply", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          typeName: this.type.name,
+        }),
+        showFullHpMessage: false,
+        revive: true,
+      },
+    );
 
     // Remove any status the Pokemon had before fainting
     pokemon.resetStatus(false, true);
@@ -2118,7 +2123,7 @@ export class ResetNegativeStatStageModifier extends PokemonHeldItemModifier {
     }
 
     if (statRestored) {
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("modifier:resetNegativeStatStageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -2936,7 +2941,7 @@ export class MoneyInterestModifier extends PersistentModifier {
       moneyAmount: formattedMoneyAmount,
       typeName: this.type.name,
     });
-    globalScene.phaseManager.queueMessage(message, undefined, true);
+    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
 
     return true;
   }
@@ -3250,7 +3255,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
     }
 
     for (const mt of transferredModifierTypes) {
-      globalScene.phaseManager.queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
+      globalScene.phaseManager.queueMessagePhase(this.getTransferMessage(pokemon, targetPokemon, mt));
     }
 
     return !!transferredModifierTypes.length;

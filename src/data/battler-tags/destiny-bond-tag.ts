@@ -38,13 +38,13 @@ export class DestinyBondTag extends BattlerTag {
     }
 
     if (pokemon.isBossImmune()) {
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:destinyBondLapseIsBoss", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       return false;
     }
 
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:destinyBondLapse", {
         pokemonNameWithAffix: getPokemonNameWithAffix(source),
         pokemonNameWithAffix2: getPokemonNameWithAffix(pokemon),

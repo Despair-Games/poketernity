@@ -1990,7 +1990,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ) {
       multiplier /= 2;
       if (!simulated) {
-        globalScene.phaseManager.queueMessage(i18next.t("weather:strongWindsEffectMessage"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("weather:strongWindsEffectMessage"));
       }
     }
     return multiplier as TypeDamageMultiplier;

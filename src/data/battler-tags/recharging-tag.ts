@@ -30,7 +30,7 @@ export class RechargingTag extends BattlerTag {
   /** Cancels the source's move this turn and queues a "__ must recharge!" message */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:rechargingLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();

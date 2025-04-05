@@ -13,7 +13,7 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
  */
 export class AfterYouAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }),
     );
 

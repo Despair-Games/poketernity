@@ -31,7 +31,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
       new PokemonTransformPhase(pokemon.getBattlerIndex(), target.getBattlerIndex(), true),
     );
 
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("abilityTriggers:postSummonTransform", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         targetName: target.name,

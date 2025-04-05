@@ -301,14 +301,14 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.phaseManager.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         globalScene.phaseManager.unshiftPhase(
           new CommonAnimPhase(this.pokemon.getBattlerIndex(), undefined, CommonAnim.POISON + (statusEffect - 1)),
         );
       } else if (healed) {
-        globalScene.phaseManager.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
@@ -626,7 +626,7 @@ export class MovePhase extends BattlePhase {
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
-      globalScene.phaseManager.queueChargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
+      globalScene.phaseManager.queueMoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.getMove(),
@@ -829,7 +829,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:useMove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
         moveName: this.move.getName(),
@@ -839,7 +839,7 @@ export class MovePhase extends BattlePhase {
   }
 
   public showFailedText(failedText?: string): void {
-    globalScene.phaseManager.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
+    globalScene.phaseManager.queueMessagePhase(failedText ?? i18next.t("battle:attackFailed"));
   }
 
   /**

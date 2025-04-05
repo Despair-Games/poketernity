@@ -374,7 +374,7 @@ export class Arena {
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
     globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-    globalScene.phaseManager.queueMessage(getWeatherStartMessage(weather) ?? "");
+    globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -420,10 +420,10 @@ export class Arena {
       globalScene.phaseManager.unshiftPhase(
         new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)),
       );
-      globalScene.phaseManager.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
-      globalScene.phaseManager.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getWeatherClearMessage(oldWeatherType) ?? "");
       this.weather = null;
     }
 
@@ -499,9 +499,9 @@ export class Arena {
           new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)),
         );
       }
-      globalScene.phaseManager.queueMessage(getTerrainStartMessage(terrain) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     } else {
-      globalScene.phaseManager.queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene

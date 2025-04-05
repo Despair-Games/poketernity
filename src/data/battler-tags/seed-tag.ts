@@ -43,7 +43,7 @@ export class SeedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:seededOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
     this.sourceIndex = globalScene.getPokemonById(this.sourceId!)!.getBattlerIndex(); // TODO: are those bangs correct?
@@ -66,7 +66,7 @@ export class SeedTag extends BattlerTag {
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
-          globalScene.phaseManager.queuePokemonHeal(
+          globalScene.phaseManager.queuePokemonHealPhase(
             true,
             source.getBattlerIndex(),
             !reverseDrain ? damage : damage * -1,

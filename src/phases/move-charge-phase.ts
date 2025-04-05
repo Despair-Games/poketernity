@@ -39,7 +39,7 @@ export class MoveChargePhase extends HitCheckPhase {
     if (![HitCheckResult.HIT, HitCheckResult.MISS].includes(targetHitCheck)) {
       switch (targetHitCheck) {
         case HitCheckResult.NO_EFFECT:
-          globalScene.phaseManager.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
           );
           break;

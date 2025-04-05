@@ -63,7 +63,7 @@ export class StockpilingTag extends BattlerTag {
     if (this.stockpiledCount < 3) {
       this.stockpiledCount++;
 
-      globalScene.phaseManager.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:stockpilingOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           stockpiledCount: this.stockpiledCount,

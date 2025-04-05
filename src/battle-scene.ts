@@ -2040,7 +2040,7 @@ export default class BattleScene extends SceneBase {
         }
       } else if (!virtual) {
         const defaultModifierType = getDefaultModifierTypeForTier(modifier.type.tier);
-        this.phaseManager.queueMessage(
+        this.phaseManager.queueMessagePhase(
           i18next.t("battle:itemStackFull", { fullItemName: modifier.type.name, itemName: defaultModifierType.name }),
           undefined,
           true,

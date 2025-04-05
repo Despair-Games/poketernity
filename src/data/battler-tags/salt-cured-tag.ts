@@ -40,7 +40,7 @@ export class SaltCuredTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:saltCuredOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
     this.sourceIndex = globalScene.getPokemonById(this.sourceId!)!.getBattlerIndex(); // TODO: are those bangs correct?
@@ -61,7 +61,7 @@ export class SaltCuredTag extends BattlerTag {
         const pokemonSteelOrWater = pokemon.isOfType(ElementalType.STEEL) || pokemon.isOfType(ElementalType.WATER);
         pokemon.damageAndUpdate(toDmgValue(pokemonSteelOrWater ? pokemon.getMaxHp() / 4 : pokemon.getMaxHp() / 8));
 
-        globalScene.phaseManager.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("battlerTags:saltCuredLapse", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             moveName: this.getMoveName(),

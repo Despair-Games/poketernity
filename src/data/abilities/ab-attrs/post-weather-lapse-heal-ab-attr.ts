@@ -36,7 +36,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     if (!pokemon.isFullHp()) {
       const abilityName = this.source.name;
       if (!simulated) {
-        globalScene.phaseManager.queuePokemonHeal(
+        globalScene.phaseManager.queuePokemonHealPhase(
           true,
           pokemon.getBattlerIndex(),
           toDmgValue(pokemon.getMaxHp() * this.healRatio),
