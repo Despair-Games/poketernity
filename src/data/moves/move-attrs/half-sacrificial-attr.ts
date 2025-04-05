@@ -32,7 +32,7 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
         ignoreSegments: true,
         preventEndure: true,
       });
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessage(
         i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) }),
       ); // Queue recoil message
     }

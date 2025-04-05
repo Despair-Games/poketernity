@@ -33,7 +33,7 @@ export class BeakBlastChargingTag extends BattlerTag {
     new MoveChargeAnim(ChargeAnim.BEAK_BLAST_CHARGING, this.sourceMoveId, pokemon).play();
 
     // Queue Beak Blast's header message
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("moveTriggers:startedHeatingUpBeak", { pokemonName: getPokemonNameWithAffix(pokemon) }),
     );
   }

@@ -5,7 +5,7 @@ import type { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 export const hasStockpileStacksCondition: MoveConditionFunc = (user) => {
-  const snatched = globalScene.getCurrentPhase<MovePhase>()?.snatched;
+  const snatched = globalScene.phaseManager.getCurrentPhase<MovePhase>()?.snatched;
   const hasStockpilingTag = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING);
   return !!snatched || (!!hasStockpilingTag && hasStockpilingTag.stockpiledCount > 0);
 };

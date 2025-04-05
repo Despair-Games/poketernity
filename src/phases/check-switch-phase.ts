@@ -46,7 +46,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...if the checked Pokemon is somehow not on the field
     if (globalScene.field.getAll().indexOf(pokemon) === -1) {
-      globalScene.unshiftPhase(new SummonMissingPhase(this.fieldIndex));
+      globalScene.phaseManager.unshiftPhase(new SummonMissingPhase(this.fieldIndex));
       return this.end();
     }
 
@@ -78,7 +78,9 @@ export class CheckSwitchPhase extends BattlePhase {
         const options: ConfirmModeConfig = {
           yesHandler: () => {
             globalScene.ui.setMessageMode();
-            globalScene.unshiftPhase(new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
+            globalScene.phaseManager.unshiftPhase(
+              new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true),
+            );
             this.end();
           },
           noHandler: () => {

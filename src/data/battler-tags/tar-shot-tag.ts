@@ -26,7 +26,7 @@ export class TarShotTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("battlerTags:tarShotOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

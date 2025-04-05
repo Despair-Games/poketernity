@@ -187,7 +187,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           const allowedPokemon = globalScene.getPokemonAllowedInBattle();
           if (allowedPokemon.length === 0) {
             // If there are no longer any legal pokemon in the party, game over.
-            globalScene.gameOver({ clearPhaseQueue: true });
+            globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
           } else {
             // Show which Pokemon was KOed, then start battle against Gimmighoul
             await transitionMysteryEncounterIntroVisuals(true, true, 500);

@@ -144,7 +144,7 @@ export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounter
     },
     async () => {
       // Refuse the challenge, they full heal the party and give the player a Rarer Candy
-      globalScene.unshiftPhase(new PartyHealPhase(true));
+      globalScene.phaseManager.unshiftPhase(new PartyHealPhase(true));
       setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.RARER_CANDY], fillRemaining: false });
       leaveEncounterWithoutBattle();
     },
@@ -201,7 +201,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
       globalScene.arena.resetArenaEffects();
       const playerField = globalScene.getPlayerField();
       playerField.forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-      playerField.forEach((_, p) => globalScene.unshiftPhase(new ReturnPhase(p)));
+      playerField.forEach((_, p) => globalScene.phaseManager.unshiftPhase(new ReturnPhase(p)));
 
       for (const pokemon of globalScene.getPlayerParty()) {
         // Only trigger form change when Eiscue is in Noice form
@@ -217,7 +217,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
       }
 
-      globalScene.unshiftPhase(new ShowTrainerPhase());
+      globalScene.phaseManager.unshiftPhase(new ShowTrainerPhase());
       // Hide the trainer and init next battle
       const trainer = globalScene.currentBattle.trainer;
       // Unassign previous trainer from battle so it isn't destroyed before animation completes

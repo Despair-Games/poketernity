@@ -25,7 +25,7 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       if (!pokemon.isFullHp() && !simulated) {
         const abilityName = this.source.name;
-        globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 4), {
+        globalScene.phaseManager.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 4), {
           message: i18next.t("abilityTriggers:typeImmunityHeal", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             abilityName,

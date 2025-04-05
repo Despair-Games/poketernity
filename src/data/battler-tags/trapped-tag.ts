@@ -39,13 +39,13 @@ export class TrappedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.queueMessage(this.getTrapMessage(pokemon));
+    globalScene.phaseManager.queueMessage(this.getTrapMessage(pokemon));
   }
 
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("battlerTags:trappedOnRemove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: this.getMoveName(),

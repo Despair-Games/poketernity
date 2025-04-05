@@ -21,7 +21,7 @@ export class OctolockTag extends TrappedTag {
     const shouldLapse = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (shouldLapse) {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(pokemon.getBattlerIndex(), null, [Stat.DEF, Stat.SPDEF], -1, { bypassReflect: true }),
       );
       return true;

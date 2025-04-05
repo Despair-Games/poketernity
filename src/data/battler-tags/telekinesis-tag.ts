@@ -35,7 +35,7 @@ export class TelekinesisTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon) {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("battlerTags:telekinesisOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

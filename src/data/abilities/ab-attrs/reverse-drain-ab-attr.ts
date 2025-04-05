@@ -32,7 +32,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
   override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.hasAttr(HitHealAttr)) {
       if (!simulated) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessage(
           i18next.t("abilityTriggers:reverseDrain", { pokemonNameWithAffix: getPokemonNameWithAffix(attacker) }),
         );
       }

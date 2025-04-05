@@ -18,7 +18,7 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
     target.summonData.abilitySuppressed = true;
     globalScene.arena.triggerWeatherBasedFormChangesToNormal();
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("moveTriggers:suppressAbilities", { pokemonName: getPokemonNameWithAffix(target) }),
     );
 

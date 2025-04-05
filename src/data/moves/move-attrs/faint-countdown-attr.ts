@@ -23,7 +23,7 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("moveTriggers:faintCountdown", {
         pokemonName: getPokemonNameWithAffix(target),
         turnCount: this.turnCountMin - 1,

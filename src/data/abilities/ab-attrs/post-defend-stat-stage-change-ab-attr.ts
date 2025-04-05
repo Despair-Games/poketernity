@@ -56,13 +56,13 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
           otherPokemon.push(allyPokemon);
         }
         for (const other of otherPokemon) {
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new StatStageChangePhase(other.getBattlerIndex(), pokemon, [this.stat], this.stages),
           );
         }
         return true;
       }
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(
           (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
           pokemon,

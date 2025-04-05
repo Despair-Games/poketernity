@@ -28,7 +28,7 @@ export class MoveHelper extends GameManagerHelper {
    */
   public async forceHit(): Promise<void> {
     await this.game.phaseInterceptor.to(MoveEffectPhase, false);
-    const moveEffectPhase = this.game.scene.getCurrentPhase() as MoveEffectPhase;
+    const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
     vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy").mockReturnValue(-1);
   }
 
@@ -39,7 +39,7 @@ export class MoveHelper extends GameManagerHelper {
    */
   public async forceMiss(firstTargetOnly: boolean = false): Promise<void> {
     await this.game.phaseInterceptor.to(MoveEffectPhase, false);
-    const moveEffectPhase = this.game.scene.getCurrentPhase() as MoveEffectPhase;
+    const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
     const accuracy = vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy");
 
     if (firstTargetOnly) {
@@ -61,11 +61,15 @@ export class MoveHelper extends GameManagerHelper {
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       this.game.scene.ui.setMode<FightUiHandler>(
         UiMode.FIGHT,
-        (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex(),
+        (this.game.scene.phaseManager.getCurrentPhase() as CommandPhase).getFieldIndex(),
       );
     });
     this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
-      (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, movePosition, false);
+      (this.game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
+        BattleCommand.FIGHT,
+        movePosition,
+        false,
+      );
     });
 
     if (targetIndex !== null) {
@@ -138,7 +142,9 @@ export class MoveHelper extends GameManagerHelper {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
     const enemy =
-      this.game.scene.getEnemyField()[(this.game.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
+      this.game.scene.getEnemyField()[
+        (this.game.scene.phaseManager.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()
+      ];
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
@@ -172,7 +178,9 @@ export class MoveHelper extends GameManagerHelper {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
     const enemy =
-      this.game.scene.getEnemyField()[(this.game.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
+      this.game.scene.getEnemyField()[
+        (this.game.scene.phaseManager.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()
+      ];
 
     const movesetOverride = Array.isArray(Overrides.ENEMY_MOVESET_OVERRIDE)
       ? Overrides.ENEMY_MOVESET_OVERRIDE
@@ -215,7 +223,7 @@ export class MoveHelper extends GameManagerHelper {
       UiMode.TARGET_SELECT,
       () => {
         const handler = this.game.scene.ui.getHandler() as TargetSelectUiHandler;
-        const move = (this.game.scene.getCurrentPhase() as SelectTargetPhase)
+        const move = (this.game.scene.phaseManager.getCurrentPhase() as SelectTargetPhase)
           .getPokemon()
           .getMoveset()
           [movePosition].getMove();

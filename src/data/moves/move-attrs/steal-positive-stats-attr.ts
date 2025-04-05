@@ -41,7 +41,7 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
     }
 
     if (statsStolen) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessage(
         i18next.t("moveTriggers:stealPositiveStats", {
           pokemonName: getPokemonNameWithAffix(user),
         }),

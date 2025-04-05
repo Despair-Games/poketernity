@@ -23,7 +23,7 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("moveTriggers:exposedMove", {
         pokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),

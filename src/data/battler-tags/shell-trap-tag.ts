@@ -22,7 +22,7 @@ export class ShellTrapTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessage(
       i18next.t("moveTriggers:setUpShellTrap", { pokemonName: getPokemonNameWithAffix(pokemon) }),
     );
   }

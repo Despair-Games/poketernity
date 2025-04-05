@@ -373,8 +373,8 @@ export class Arena {
    */
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-    globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
+    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
+    globalScene.phaseManager.queueMessage(getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -417,11 +417,13 @@ export class Arena {
     const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)));
-      globalScene.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
+      globalScene.phaseManager.unshiftPhase(
+        new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)),
+      );
+      globalScene.phaseManager.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
-      globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
+      globalScene.phaseManager.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
       this.weather = null;
     }
 
@@ -493,11 +495,13 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.phaseManager.unshiftPhase(
+          new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)),
+        );
       }
-      globalScene.queueMessage(getTerrainStartMessage(terrain) ?? "");
+      globalScene.phaseManager.queueMessage(getTerrainStartMessage(terrain) ?? "");
     } else {
-      globalScene.queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
+      globalScene.phaseManager.queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene

@@ -22,7 +22,7 @@ export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
           target.setStatStage(s, 0);
         }
 
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessage(
           i18next.t("abilityTriggers:postSummonClearAllyStats", {
             pokemonNameWithAffix: getPokemonNameWithAffix(target),
           }),
