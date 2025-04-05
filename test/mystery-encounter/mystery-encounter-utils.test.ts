@@ -283,7 +283,7 @@ describe("Mystery Encounter Utils", () => {
     it("queues a message with encounter dialogue tokens", async () => {
       scene.currentBattle.mysteryEncounter = new MysteryEncounter(null);
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
-      const spy = vi.spyOn(game.scene.phaseManager, "queueMessage");
+      const spy = vi.spyOn(game.scene.phaseManager, "queueMessagePhase");
       const phaseSpy = vi.spyOn(game.scene.phaseManager, "unshiftPhase");
 
       queueEncounterMessage("mysteryEncounter:unit_test_dialogue");

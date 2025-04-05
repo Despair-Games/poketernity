@@ -32,7 +32,7 @@ describe("BattlerTag - StockpilingTag", () => {
         getBattlerIndex: () => 0,
       } as Pokemon;
 
-      vi.spyOn(game.scene.phaseManager, "queueMessage").mockImplementation(() => {});
+      vi.spyOn(game.scene.phaseManager, "queueMessagePhase").mockImplementation(() => {});
 
       const subject = new StockpilingTag(1);
 
@@ -55,7 +55,7 @@ describe("BattlerTag - StockpilingTag", () => {
         getBattlerIndex: () => 0,
       } as unknown as Pokemon;
 
-      vi.spyOn(game.scene.phaseManager, "queueMessage").mockImplementation(() => {});
+      vi.spyOn(game.scene.phaseManager, "queueMessagePhase").mockImplementation(() => {});
 
       mockPokemon.summonData.statStages[Stat.DEF - 1] = 6;
       mockPokemon.summonData.statStages[Stat.SPD - 1] = 5;
@@ -82,7 +82,7 @@ describe("BattlerTag - StockpilingTag", () => {
         getBattlerIndex: () => 0,
       } as Pokemon;
 
-      vi.spyOn(game.scene.phaseManager, "queueMessage").mockImplementation(() => {});
+      vi.spyOn(game.scene.phaseManager, "queueMessagePhase").mockImplementation(() => {});
 
       const subject = new StockpilingTag(1);
 
@@ -107,7 +107,7 @@ describe("BattlerTag - StockpilingTag", () => {
         getBattlerIndex: () => 0,
       } as Pokemon;
 
-      vi.spyOn(game.scene.phaseManager, "queueMessage").mockImplementation(() => {});
+      vi.spyOn(game.scene.phaseManager, "queueMessagePhase").mockImplementation(() => {});
 
       mockPokemon.summonData.statStages[Stat.DEF - 1] = 5;
       mockPokemon.summonData.statStages[Stat.SPD - 1] = 4;

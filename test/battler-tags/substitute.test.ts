@@ -62,7 +62,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(MoveId.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockReturnValue(true);
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       subject.onAdd(mockPokemon);
 
@@ -79,7 +79,7 @@ describe("BattlerTag - SubstituteTag", () => {
         },
       );
 
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       subject.onAdd(mockPokemon);
 
@@ -91,7 +91,7 @@ describe("BattlerTag - SubstituteTag", () => {
     it("removes effects that trap the source", async () => {
       const subject = new SubstituteTag(MoveId.SUBSTITUTE, mockPokemon.id);
 
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       subject.onAdd(mockPokemon);
       expect(mockPokemon.findAndRemoveTags).toHaveBeenCalledTimes(1);
@@ -121,7 +121,7 @@ describe("BattlerTag - SubstituteTag", () => {
         },
       );
 
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       subject.onRemove(mockPokemon);
 
@@ -166,7 +166,7 @@ describe("BattlerTag - SubstituteTag", () => {
         },
       );
 
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.PRE_MOVE)).toBeTruthy();
 
@@ -185,7 +185,7 @@ describe("BattlerTag - SubstituteTag", () => {
         },
       );
 
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.AFTER_MOVE)).toBeTruthy();
 
@@ -199,7 +199,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(MoveId.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockReturnValue(true);
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       const pokemonMove = {
         getMove: vi.fn().mockReturnValue(allMoves.get(MoveId.TACKLE)) as PokemonMove["getMove"],
@@ -223,7 +223,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(MoveId.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockReturnValue(true);
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.CUSTOM)).toBeFalsy();
     });
@@ -232,7 +232,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(MoveId.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockReturnValue(true);
-      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessage").mockReturnValue();
+      vi.spyOn((mockPokemon.scene as BattleScene).phaseManager, "queueMessagePhase").mockReturnValue();
 
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.TURN_END)).toBeTruthy();
 
