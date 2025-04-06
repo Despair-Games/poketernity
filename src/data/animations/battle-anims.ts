@@ -76,20 +76,18 @@ export abstract class BattleAnim {
    * @param onSubstitute - If `true`, and the "target" of the animation has an active substitute,
    * the substitute's sprite is treated as the animation's target instead of its source {@linkcode Pokemon}
    * @returns a Map of Maps containing the animation's frame data. The first dimension's key
-   * is a {@linkcode AnimFrameTarget} (despite having `number` as its type), and the second
-   * dimension's key corresponds with the frame's index in animation order (despite having
-   * {@linkcode AnimFrameTarget} as its type)
-   * @todo The returned data structure is needlessly complicated, and the dimension types
-   * for the returned Map are mixed up
+   * is an {@linkcode AnimFrameTarget}, and the second dimension's key corresponds with the
+   * frame's index in animation order.
+   * @todo The returned data structure is overly complex
    */
   private getGraphicFrameData(
     frames: AnimFrame[],
     onSubstitute: boolean = false,
   ): Map<number, Map<AnimFrameTarget, GraphicFrameData>> {
-    const ret: Map<number, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
-      [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>()],
-      [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>()],
-      [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>()],
+    const ret: Map<AnimFrameTarget, Map<number, GraphicFrameData>> = new Map([
+      [AnimFrameTarget.GRAPHIC, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.USER, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.TARGET, new Map<number, GraphicFrameData>()],
     ]);
 
     const isOppAnim = this.isOppAnim();
