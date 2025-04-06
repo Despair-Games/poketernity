@@ -57,7 +57,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
           moveName: this.getMoveName(),
         }),
       );
-      globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, this.commonAnim));
+      globalScene.unshiftPhase(new CommonAnimPhase(this.commonAnim, pokemon.getBattlerIndex()));
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

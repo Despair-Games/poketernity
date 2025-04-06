@@ -32,7 +32,7 @@ export class ConfusedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CONFUSION));
+    globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
     globalScene.queueMessage(
       i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
@@ -63,7 +63,7 @@ export class ConfusedTag extends BattlerTag {
       globalScene.queueMessage(
         i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CONFUSION));
+      globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
 
       const damage = this.getDamage(pokemon);
       if (damage > 0) {

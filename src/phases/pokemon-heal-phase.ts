@@ -58,7 +58,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
       fullRestorePP = false,
     }: PokemonHealPhaseOptions = {},
   ) {
-    super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
+    super(CommonAnim.HEALTH_UP, battlerIndex);
 
     this.hpHealed = hpHealed;
     this.message = message;

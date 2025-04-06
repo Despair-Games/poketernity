@@ -1249,7 +1249,7 @@ class FireGrassPledgeTag extends ArenaTag {
         );
         // TODO: Replace this with a proper animation
         globalScene.unshiftPhase(
-          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.MAGMA_STORM),
+          new CommonAnimPhase(CommonAnim.MAGMA_STORM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
         );
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
       });
@@ -1365,7 +1365,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
         );
         // TODO: Replace this with a proper animation
         globalScene.unshiftPhase(
-          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
+          new CommonAnimPhase(this.getAnimationForType(), pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
         );
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
       });

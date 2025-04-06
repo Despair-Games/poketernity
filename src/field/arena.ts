@@ -373,7 +373,7 @@ export class Arena {
    */
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
+    globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
     globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
     return true;
   }
@@ -417,7 +417,7 @@ export class Arena {
     const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)));
+      globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
       globalScene.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
@@ -493,7 +493,7 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
       }
       globalScene.queueMessage(getTerrainStartMessage(terrain) ?? "");
     } else {

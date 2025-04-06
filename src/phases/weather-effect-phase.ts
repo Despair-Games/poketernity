@@ -18,6 +18,11 @@ import { WeatherType } from "#enums/weather-type";
 export class WeatherEffectPhase extends CommonAnimPhase {
   override readonly id = PhaseId.WEATHER_EFFECT;
 
+  constructor() {
+    /** This is overwritten in {@linkcode start} */
+    super(CommonAnim.SUNNY);
+  }
+
   public override start(): void {
     // Get current weather state at end of turn
     const { arena } = globalScene;
