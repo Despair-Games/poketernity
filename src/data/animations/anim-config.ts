@@ -129,7 +129,11 @@ export class AnimFrame {
   public tone: number[];
   /** Unused */
   public flash: number[];
-  /** Unused */
+  /**
+   * If the item list for a frame is smaller than previous frames,
+   * graphics are assumed to be deleted in reverse item order.
+   * This, if `true`, prevents that for this item in future frames.
+   */
   public locked: boolean;
   /**
    * The depth or z-position of the animated sprite
