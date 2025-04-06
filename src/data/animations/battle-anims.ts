@@ -83,7 +83,7 @@ export abstract class BattleAnim {
   private getGraphicFrameData(
     frames: AnimFrame[],
     onSubstitute: boolean = false,
-  ): Map<number, Map<AnimFrameTarget, GraphicFrameData>> {
+  ): Map<AnimFrameTarget, Map<number, GraphicFrameData>> {
     const ret: Map<AnimFrameTarget, Map<number, GraphicFrameData>> = new Map([
       [AnimFrameTarget.GRAPHIC, new Map<number, GraphicFrameData>()],
       [AnimFrameTarget.USER, new Map<number, GraphicFrameData>()],
