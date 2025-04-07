@@ -76,14 +76,13 @@ export class PhaseManager {
   private phaseQueue: Phase[] = [];
   /** A temporary storage of what will be added to the front of {@linkcode phaseQueue} */
   private phaseQueuePrepend: Phase[] = [];
-
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
-  public phaseQueuePrependSpliceIndex: number = -1;
-  public conditionalQueue: Array<[() => boolean, Phase]> = [];
-  public nextCommandPhaseQueue: Phase[] = [];
+  private phaseQueuePrependSpliceIndex: number = -1;
+  private conditionalQueue: Array<[() => boolean, Phase]> = [];
+  private nextCommandPhaseQueue: Phase[] = [];
 
-  public currentPhase: Phase | null = null;
-  public standbyPhase: Phase | null = null;
+  private currentPhase: Phase | null = null;
+  private standbyPhase: Phase | null = null;
 
   public getCurrentPhase<P extends Phase = Phase>(): P | null {
     return this.currentPhase as P;
