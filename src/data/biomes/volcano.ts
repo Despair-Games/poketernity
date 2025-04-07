@@ -159,4 +159,5 @@ export const volcanoBiome = new Biome(
   weatherPool,
   terrainPool,
   "volcano",
+  5.116,
 );

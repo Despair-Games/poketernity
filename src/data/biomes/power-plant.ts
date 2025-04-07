@@ -145,5 +145,6 @@ export const powerPlantBiome = new Biome(
   8,
   weatherPool,
   terrainPool,
-  "town",
+  "power_plant",
+  2.81,
 );

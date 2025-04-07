@@ -100,5 +100,6 @@ export const metropolisBiome = new Biome(
   2,
   weatherPool,
   terrainPool,
-  "town",
+  "metropolis",
+  4.867,
 );

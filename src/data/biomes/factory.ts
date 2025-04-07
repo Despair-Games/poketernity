@@ -97,4 +97,13 @@ const terrainPool: Partial<Record<TerrainType, number>> = {
   [TerrainType.ELECTRIC]: 1,
 };
 
-export const factoryBiome = new Biome(BiomeId.FACTORY, pokemonPool, trainerPool, 8, weatherPool, terrainPool, "town");
+export const factoryBiome = new Biome(
+  BiomeId.FACTORY,
+  pokemonPool,
+  trainerPool,
+  8,
+  weatherPool,
+  terrainPool,
+  "factory",
+  4.985,
+);
