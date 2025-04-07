@@ -126,16 +126,17 @@ export class AnimFrame {
   public graphicFrame: number;
   /** The alpha value for the animated sprite */
   public opacity: number;
-  /** Unused */
+  /** @deprecated */
   public color: number[];
   /** The animated sprite's tone (RGBA) */
   public tone: number[];
-  /** Unused */
+  /** @deprecated */
   public flash: number[];
   /**
-   * If the item list for a frame is smaller than previous frames,
-   * graphics are assumed to be deleted in reverse item order.
-   * This, if `true`, prevents that for this item in future frames.
+   * If the item (or "graphic") list for a frame is smaller than previous frames,
+   * graphics are automatically destroyed in reverse item order.
+   * This, if `true`, prevents the associated graphic from being destroyed by
+   * that process in future frames.
    */
   public locked: boolean;
   /**

@@ -11,11 +11,11 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import Phaser from "phaser";
 
 interface GraphicFrameData {
-  x: number;
-  y: number;
-  zoomX: number;
-  zoomY: number;
-  angle: number;
+  readonly x: number;
+  readonly y: number;
+  readonly zoomX: number;
+  readonly zoomY: number;
+  readonly angle: number;
 }
 
 interface SpriteCache {
@@ -81,7 +81,7 @@ export abstract class BattleAnim {
   }
 
   /**
-   * Creates a 2-D data table from the animation frames specified in this animation's
+   * Creates a 2D data table from the animation frames specified in this animation's
    * corresponding JSON, organized by frame target, then frame number.
    * @param frames - The {@linkcode AnimFrame | animation frames} collected from the animation's
    * JSON data
@@ -165,7 +165,7 @@ export abstract class BattleAnim {
       }
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.GRAPHIC ? g++ : frame.target === AnimFrameTarget.USER ? u++ : t++;
-      ret.get(frame.target)!.set(key, { x: x, y: y, zoomX: zoomX, zoomY: zoomY, angle: angle }); // TODO: is the bang correct?
+      ret.get(frame.target)!.set(key, { x, y, zoomX, zoomY, angle }); // TODO: is the bang correct?
     }
 
     return ret;
@@ -175,7 +175,7 @@ export abstract class BattleAnim {
    * Plays the animation between the defined {@linkcode user}
    * and {@linkcode target}.
    *
-   * Note that this assumes the user and target are defined, and will
+   * **Note**: This assumes the user and target are defined, and will
    * likely crash the game otherwise unless {@linkcode playRegardlessOfIssues}
    * is enabled. If `playRegardlessOfIssues` is enabled, animation frames
    * targeting an undefined user or target are not played.
@@ -283,7 +283,7 @@ export abstract class BattleAnim {
 
     /**
      * Frames are set for each asset of the animation
-     * every 6 ms. This includes the user, target, and all graphics.
+     * every 3 ms. This includes the user, target, and all graphics.
      */
     globalScene.tweens.addCounter({
       duration: getFrameMs(3),
@@ -512,13 +512,14 @@ export abstract class BattleAnim {
 
     for (const frame of frames) {
       let { x, y } = frame;
-      const zoomX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
+      const { mirror } = frame;
+      const zoomX = (frame.zoomX / 100) * (mirror ? -1 : 1);
       const zoomY = frame.zoomY / 100;
       x += targetInitialX;
       y += targetInitialY;
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.GRAPHIC ? g++ : frame.target === AnimFrameTarget.USER ? u++ : t++;
-      ret.get(frame.target)?.set(key, { x: x, y: y, zoomX: zoomX, zoomY: zoomY, angle: angle });
+      ret.get(frame.target)?.set(key, { x, y, zoomX, zoomY, angle });
     }
 
     return ret;
