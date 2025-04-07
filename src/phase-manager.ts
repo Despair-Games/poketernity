@@ -73,9 +73,10 @@ interface PokemonFaintInit {
  */
 export class PhaseManager {
   /** dequeue/remove the first element to get the next phase */
-  public phaseQueue: Phase[] = [];
+  private phaseQueue: Phase[] = [];
   /** A temporary storage of what will be added to the front of {@linkcode phaseQueue} */
-  public phaseQueuePrepend: Phase[] = [];
+  private phaseQueuePrepend: Phase[] = [];
+
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   public phaseQueuePrependSpliceIndex: number = -1;
   public conditionalQueue: Array<[() => boolean, Phase]> = [];
@@ -100,6 +101,7 @@ export class PhaseManager {
    *
    * @param phase - The {@linkcode Phase} to be added to the conditional queue.
    * @param condition - A function that returns a boolean indicating whether the phase should be executed.
+   * @todo conditional queue in general should be deprecated, see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830}
    *
    */
   public pushConditionalPhase(phase: Phase, condition: () => boolean): void {
@@ -110,6 +112,7 @@ export class PhaseManager {
    * Queues a phase to be run at a future point in time.
    * @param phase - The {@linkcode Phase} to add
    * @param defer - If `false`, adds the phase to `phaseQueue`. If `true`, adds the phase to `nextCommandPhaseQueue`. Default `false`.
+   * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
    */
   public pushPhase(phase: Phase, defer: boolean = false): void {
     (!defer ? this.phaseQueue : this.nextCommandPhaseQueue).push(phase);

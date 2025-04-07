@@ -17,6 +17,9 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
+/**
+ * @todo This file needs to be updated, since scene has been removed from Pokemon objects (#5).
+ */
 describe("BattlerTag - SubstituteTag", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
