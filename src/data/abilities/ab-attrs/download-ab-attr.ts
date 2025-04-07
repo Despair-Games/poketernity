@@ -38,7 +38,9 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     // only activate if there's actually an enemy to download from
     if (this.enemyDef > 0 && this.enemySpDef > 0) {
       if (!simulated) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, 1));
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, 1),
+        );
       }
       return true;
     }

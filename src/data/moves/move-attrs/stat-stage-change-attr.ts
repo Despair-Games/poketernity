@@ -67,7 +67,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     }
 
     const stages = this.getLevels(user);
-    globalScene.unshiftPhase(
+    globalScene.phaseManager.unshiftPhase(
       new StatStageChangePhase((this.selfTarget ? user : target).getBattlerIndex(), user, this.stats, stages, {
         showMessage: this.showMessage,
       }),

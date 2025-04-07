@@ -36,7 +36,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
      * There should be an arena tag applied to the field which should expire whenever the heal
      * would be needed
      */
-    globalScene.queuePokemonHeal(false, user.getBattlerIndex(), maxPartyMemberHp, {
+    globalScene.phaseManager.queuePokemonHealPhase(false, user.getBattlerIndex(), maxPartyMemberHp, {
       message: i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
       healStatus: true,
       fullRestorePP: this.restorePP,

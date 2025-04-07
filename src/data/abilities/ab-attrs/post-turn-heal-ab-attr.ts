@@ -10,12 +10,17 @@ export class PostTurnHealAbAttr extends PostTurnAbAttr {
     if (!pokemon.isFullHp()) {
       if (!simulated) {
         const abilityName = this.source.name;
-        globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
-          message: i18next.t("abilityTriggers:postTurnHeal", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            abilityName,
-          }),
-        });
+        globalScene.phaseManager.queuePokemonHealPhase(
+          true,
+          pokemon.getBattlerIndex(),
+          toDmgValue(pokemon.getMaxHp() / 16),
+          {
+            message: i18next.t("abilityTriggers:postTurnHeal", {
+              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+              abilityName,
+            }),
+          },
+        );
       }
 
       return true;

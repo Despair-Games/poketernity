@@ -55,11 +55,11 @@ export class CommandUiHandler extends UiHandler {
     this.commandsContainer.setVisible(true);
 
     let commandPhase: CommandPhase;
-    const currentPhase = globalScene.getCurrentPhase();
+    const currentPhase = globalScene.phaseManager.getCurrentPhase();
     if (currentPhase instanceof CommandPhase) {
       commandPhase = currentPhase;
     } else {
-      commandPhase = globalScene.getStandbyPhase() as CommandPhase;
+      commandPhase = globalScene.phaseManager.getStandbyPhase() as CommandPhase;
     }
 
     const messageHandler = this.getUi().getMessageHandler();
@@ -92,7 +92,10 @@ export class CommandUiHandler extends UiHandler {
         switch (cursor) {
           // Fight
           case BattleCommand.FIGHT:
-            ui.setMode<FightUiHandler>(UiMode.FIGHT, (globalScene.getCurrentPhase() as CommandPhase).getFieldIndex());
+            ui.setMode<FightUiHandler>(
+              UiMode.FIGHT,
+              (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getFieldIndex(),
+            );
             success = true;
             break;
           // Ball
@@ -105,7 +108,7 @@ export class CommandUiHandler extends UiHandler {
             ui.setMode<PartyUiHandler>(
               UiMode.PARTY,
               PartyUiMode.SWITCH,
-              (globalScene.getCurrentPhase() as CommandPhase).getPokemon().getFieldIndex(),
+              (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon().getFieldIndex(),
               null,
               PartyFilterNonFainted,
             );
@@ -113,12 +116,12 @@ export class CommandUiHandler extends UiHandler {
             break;
           // Run
           case BattleCommand.RUN:
-            (globalScene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.RUN, 0);
+            (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.RUN, 0);
             success = true;
             break;
         }
       } else {
-        (globalScene.getCurrentPhase() as CommandPhase).cancel();
+        (globalScene.phaseManager.getCurrentPhase() as CommandPhase).cancel();
       }
     } else {
       switch (button) {

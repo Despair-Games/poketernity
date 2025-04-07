@@ -14,7 +14,7 @@ import { PhaseId } from "#enums/phase-id";
 export function getMoveEffectPhaseData(
   _pokemon: Pokemon,
 ): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
-  const phase = globalScene.getCurrentPhase();
+  const phase = globalScene.phaseManager.getCurrentPhase();
   if (phase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
     return {
       phase: phase,

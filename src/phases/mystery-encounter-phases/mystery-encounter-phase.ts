@@ -55,8 +55,8 @@ export class MysteryEncounterPhase extends Phase {
     const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
 
     // Clears out queued phases that are part of standard battle
-    globalScene.clearPhaseQueue();
-    globalScene.clearPhaseQueueSplice();
+    globalScene.phaseManager.clearPhaseQueue();
+    globalScene.phaseManager.clearPhaseQueueSplice();
 
     mysteryEncounter.updateSeedOffset();
 
@@ -123,7 +123,7 @@ export class MysteryEncounterPhase extends Phase {
     const { currentBattle, ui } = globalScene;
 
     const endDialogueAndContinueEncounter = (): void => {
-      globalScene.pushPhase(new MysteryEncounterOptionSelectedPhase());
+      globalScene.phaseManager.pushPhase(new MysteryEncounterOptionSelectedPhase());
       this.end();
     };
 

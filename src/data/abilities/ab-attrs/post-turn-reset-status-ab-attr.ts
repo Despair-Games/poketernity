@@ -26,7 +26,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
     }
     if (this.target?.hasNonVolatileStatusEffect(false, true)) {
       if (!simulated) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           getStatusEffectHealText(this.target.getStatusEffect(true), getPokemonNameWithAffix(this.target)),
         );
         this.target.resetStatus();

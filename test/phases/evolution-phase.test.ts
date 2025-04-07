@@ -98,7 +98,7 @@ describe("Evolution Phase", () => {
     await game.phaseInterceptor.to("EvolutionPhase", false);
 
     // Cancel the evolution
-    (game.scene.getCurrentPhase() as EvolutionPhase).cancelEvolution();
+    (game.scene.phaseManager.getCurrentPhase() as EvolutionPhase).cancelEvolution();
 
     // Say yes to pausing the evolution
     game.onNextPrompt("EvolutionPhase", UiMode.CONFIRM, () => game.scene.ui.processInput(Button.ACTION));

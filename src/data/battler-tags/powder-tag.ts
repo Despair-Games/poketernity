@@ -32,7 +32,7 @@ export class PowderTag extends BattlerTag {
     super.onAdd(pokemon);
 
     // "{Pokemon} is covered in powder!"
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:powderOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -46,7 +46,7 @@ export class PowderTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      const currPhase = globalScene.getCurrentPhase();
+      const currPhase = globalScene.phaseManager.getCurrentPhase();
       if (currPhase?.is<MovePhase>(PhaseId.MOVE)) {
         const move = currPhase.move.getMove();
         const weather = globalScene.arena.weather;
@@ -57,7 +57,7 @@ export class PowderTag extends BattlerTag {
           currPhase.fail();
           currPhase.showMoveText();
 
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.POWDER),
           );
 
@@ -70,7 +70,7 @@ export class PowderTag extends BattlerTag {
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
-          globalScene.queueMessage(i18next.t("battlerTags:powderLapse", { moveName: move.name }));
+          globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:powderLapse", { moveName: move.name }));
         }
       }
       return true;

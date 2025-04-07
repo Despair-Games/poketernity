@@ -171,7 +171,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
 
-    globalScene.unshiftPhase(new EndEvolutionPhase());
+    globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
 
     ui.showText(
       i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -272,9 +272,11 @@ export class EvolutionPhase extends FormChangeBasePhase {
           .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
-          globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));
+          globalScene.phaseManager.unshiftPhase(
+            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]),
+          );
         }
-        globalScene.unshiftPhase(new EndEvolutionPhase());
+        globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
 
         globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);

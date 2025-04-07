@@ -26,7 +26,7 @@ export class CheckStatusEffectPhase extends Phase {
         !isNullOrUndefined(p)
         && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
       ) {
-        globalScene.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
+        globalScene.phaseManager.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
       }
     });
 

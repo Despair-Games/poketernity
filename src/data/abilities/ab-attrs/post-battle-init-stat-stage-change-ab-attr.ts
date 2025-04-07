@@ -35,9 +35,9 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
 
       for (const statStageChangePhase of statStageChangePhases) {
         if (!this.selfTarget && !statStageChangePhase.getPokemon()?.summonData) {
-          globalScene.pushPhase(statStageChangePhase);
+          globalScene.phaseManager.pushPhase(statStageChangePhase);
         } else {
-          globalScene.unshiftPhase(statStageChangePhase);
+          globalScene.phaseManager.unshiftPhase(statStageChangePhase);
         }
       }
     }

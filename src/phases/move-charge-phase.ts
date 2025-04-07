@@ -39,7 +39,7 @@ export class MoveChargePhase extends HitCheckPhase {
     if (![HitCheckResult.HIT, HitCheckResult.MISS].includes(targetHitCheck)) {
       switch (targetHitCheck) {
         case HitCheckResult.NO_EFFECT:
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
           );
           break;
@@ -73,9 +73,17 @@ export class MoveChargePhase extends HitCheckPhase {
 
       if (instantCharge.value) {
         // this MoveEndPhase will be duplicated by the queued MovePhase if not removed
-        globalScene.tryRemovePhase((phase) => phase instanceof MoveEndPhase && phase.getPokemon() === user);
+        globalScene.phaseManager.tryRemovePhase(
+          (phase) => phase instanceof MoveEndPhase && phase.getPokemon() === user,
+        );
         // queue a new MovePhase for this move's attack phase
-        globalScene.useMove({ pokemon: user, targets: this.targets, move: this.move, followUp: false, when: "eager" });
+        globalScene.phaseManager.queueMovePhase({
+          pokemon: user,
+          targets: this.targets,
+          move: this.move,
+          followUp: false,
+          when: "eager",
+        });
       } else {
         user.getMoveQueue().push({ move, targets: this.targets, type: user.getMoveType(move) });
       }

@@ -20,7 +20,7 @@ export class MagicCoatTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:magicCoatOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -33,7 +33,7 @@ export class MagicCoatTag extends BattlerTag {
     reflected: BooleanHolder,
   ): boolean {
     if (!simulated) {
-      globalScene.queueMessage(this.getReflectionMessage(attacker, move));
+      globalScene.phaseManager.queueMessagePhase(this.getReflectionMessage(attacker, move));
     }
     reflected.value = true;
     return true;

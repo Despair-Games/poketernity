@@ -46,7 +46,7 @@ function getTextWithDialogueTokens(keyOrString: string): string | null {
  */
 export function queueEncounterMessage(contentKey: string): void {
   const text: string | null = getEncounterText(contentKey);
-  globalScene.queueMessage(text ?? "", null, true);
+  globalScene.phaseManager.queueMessagePhase(text ?? "", null, true);
 }
 
 /**

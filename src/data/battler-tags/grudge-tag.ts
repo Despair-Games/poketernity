@@ -20,7 +20,7 @@ export class GrudgeTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:grudgeOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -39,7 +39,7 @@ export class GrudgeTag extends BattlerTag {
         const lastMoveData = sourcePokemon.getMoveset().find((m) => m.moveId === lastMove.moveId);
         if (lastMoveData && lastMove.moveId !== MoveId.STRUGGLE) {
           lastMoveData.ppUsed = lastMoveData.getMovePp();
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("battlerTags:grudgeLapse", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               moveName: lastMoveData.getName(),

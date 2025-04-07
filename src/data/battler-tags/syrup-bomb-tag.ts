@@ -26,7 +26,7 @@ export class SyrupBombTag extends BattlerTag {
    */
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:syrupBombOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -42,10 +42,10 @@ export class SyrupBombTag extends BattlerTag {
       return false;
     }
     // Custom message in lieu of an animation in mainline
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.unshiftPhase(
+    globalScene.phaseManager.unshiftPhase(
       new StatStageChangePhase(pokemon.getBattlerIndex(), null, [Stat.SPD], -1, { bypassReflect: true }),
     );
     return --this.turnCount > 0;

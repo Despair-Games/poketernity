@@ -221,7 +221,7 @@ export class CommandPhase extends FieldPhase {
             (isFieldTargeted(moveTargets.targets) && double)
             || (moveTargets.targets.length > 1 && moveTargets.multiple)
           ) {
-            globalScene.selectTarget(this.fieldIndex);
+            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
           }
           if (turnCommand.turnMove && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.turnMove.targets = moveTargets.targets;
@@ -232,7 +232,7 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.selectTarget(this.fieldIndex);
+            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
           }
 
           turnManager.addCommand(turnCommand);
@@ -399,8 +399,8 @@ export class CommandPhase extends FieldPhase {
 
   public cancel(): void {
     if (this.fieldIndex) {
-      globalScene.unshiftPhase(new CommandPhase(0));
-      globalScene.unshiftPhase(new CommandPhase(1));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(0));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(1));
       this.end();
     }
   }

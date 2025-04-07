@@ -27,7 +27,7 @@ export class UproarTag extends MoveLockTag {
    */
   override onAdd(pokemon: Pokemon): void {
     // "{pokemonNameWithAffix} caused an uproar!"
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:uproarOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
@@ -36,7 +36,7 @@ export class UproarTag extends MoveLockTag {
       if (p.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
         p.resetStatus();
         // "The uproar woke {pokemonNameWithAffix}!"
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("battlerTags:uproarOnCureSleep", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
       }
@@ -45,7 +45,7 @@ export class UproarTag extends MoveLockTag {
 
   override onRemove(pokemon: Pokemon): void {
     // "{pokemonNameWithAffix} calmed down."
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:uproarOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
@@ -68,7 +68,7 @@ export class UproarTag extends MoveLockTag {
   ): boolean {
     if (!simulated) {
       // "But the uproar kept {pokemonNameWithAffix} awake!"
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:uproarOnPreventSleep", {
           pokemonNameWithAffix: getPokemonNameWithAffix(affectedPokemon),
         }),

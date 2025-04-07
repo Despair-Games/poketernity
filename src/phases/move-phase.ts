@@ -301,12 +301,16 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.queueMessage(getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
-        globalScene.unshiftPhase(
+        globalScene.phaseManager.queueMessagePhase(
+          getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
+        );
+        globalScene.phaseManager.unshiftPhase(
           new CommonAnimPhase(this.pokemon.getBattlerIndex(), undefined, CommonAnim.POISON + (statusEffect - 1)),
         );
       } else if (healed) {
-        globalScene.queueMessage(getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
+        globalScene.phaseManager.queueMessagePhase(
+          getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
+        );
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();
       }
@@ -385,7 +389,7 @@ export class MovePhase extends BattlePhase {
      */
     for (const p of otherPokemon) {
       if (applyBattlerTags<SnatchingTag>(BattlerTagType.SNATCHING, p, false, this.pokemon)) {
-        globalScene.useMove({
+        globalScene.phaseManager.queueMovePhase({
           pokemon: p,
           targets: getMoveTargets(p, this.move.moveId).targets,
           move: this.move,
@@ -453,7 +457,7 @@ export class MovePhase extends BattlePhase {
       applyAbAttrs<ReflectMovesAbAttr>(AbAttrFlag.REFLECT_MOVES, target, false, this.pokemon, move, reflected);
 
       if (reflected.value) {
-        globalScene.useMove({
+        globalScene.phaseManager.queueMovePhase({
           pokemon: target,
           targets: this.getReflectionTargets(target),
           move: move.id,
@@ -556,7 +560,9 @@ export class MovePhase extends BattlePhase {
     if (success) {
       applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
       this.showPreMoveMessages();
-      globalScene.unshiftPhase(new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
+      globalScene.phaseManager.unshiftPhase(
+        new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move),
+      );
     } else {
       if ([MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.move.moveId)) {
         applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
@@ -620,7 +626,7 @@ export class MovePhase extends BattlePhase {
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
-      globalScene.chargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
+      globalScene.phaseManager.queueMoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.getMove(),
@@ -657,7 +663,7 @@ export class MovePhase extends BattlePhase {
    */
   public override end(): void {
     if (!this.followUp) {
-      globalScene.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
+      globalScene.phaseManager.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
     }
 
     super.end();
@@ -730,7 +736,7 @@ export class MovePhase extends BattlePhase {
 
         if (this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)) {
           redirectTarget.value = currentTarget;
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new ShowAbilityPhase(
               this.pokemon.getBattlerIndex(),
               this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
@@ -823,7 +829,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:useMove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
         moveName: this.move.getName(),
@@ -833,7 +839,7 @@ export class MovePhase extends BattlePhase {
   }
 
   public showFailedText(failedText?: string): void {
-    globalScene.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
+    globalScene.phaseManager.queueMessagePhase(failedText ?? i18next.t("battle:attackFailed"));
   }
 
   /**

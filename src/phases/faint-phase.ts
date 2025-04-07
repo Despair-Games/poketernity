@@ -156,7 +156,7 @@ export class FaintPhase extends PokemonPhase {
       enemyFaintsHistory.push({ pokemon: pokemon, turn: turn });
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       null,
       true,
@@ -200,29 +200,31 @@ export class FaintPhase extends PokemonPhase {
       /** The total number of legal player Pokemon that aren't currently on the field */
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
-        globalScene.gameOver({ clearPhaseQueue: false });
+        globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
       } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, push a phase that moves that Pokemon to center position.
          */
-        globalScene.pushPhase(new ToggleDoublePositionPhase(true));
+        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
       } else if (legalPlayerPartyPokemon.length > 0) {
         /**
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
          * push a phase that prompts the player to summon a Pokemon from their party.
          */
-        globalScene.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
+        globalScene.phaseManager.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
       }
     } else {
-      globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
+      globalScene.phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
       if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
         const hasReservePartyMember = !!globalScene
           .getEnemyParty()
           .filter((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot)
           .length;
         if (hasReservePartyMember) {
-          globalScene.pushPhase(new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false));
+          globalScene.phaseManager.pushPhase(
+            new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false),
+          );
         }
       }
     }
@@ -276,7 +278,7 @@ export class FaintPhase extends PokemonPhase {
     } else {
       // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
       enemy.hp++;
-      globalScene.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
+      globalScene.phaseManager.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
       this.end();
     }
   }

@@ -27,7 +27,7 @@ export class CommandedTag extends BattlerTag {
   /** Caches the Tatsugiri's form key and sharply boosts the tagged Pokemon's stats */
   override onAdd(pokemon: Pokemon): void {
     this._tatsugiriFormKey = this.getSourcePokemon()?.getFormKey() ?? "curly";
-    globalScene.unshiftPhase(
+    globalScene.phaseManager.unshiftPhase(
       new StatStageChangePhase(
         pokemon.getBattlerIndex(),
         pokemon,

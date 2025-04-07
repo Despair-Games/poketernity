@@ -18,7 +18,7 @@ export class DestinyBondAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       `${i18next.t("moveTriggers:tryingToTakeFoeDown", { pokemonName: getPokemonNameWithAffix(user) })}`,
     );
     user.addTag(BattlerTagType.DESTINY_BOND, undefined, move.id, user.id);

@@ -12,7 +12,7 @@ export abstract class Phase {
   }
 
   public end(): void {
-    globalScene.shiftPhase();
+    globalScene.phaseManager.shiftPhase();
   }
 
   public is<T extends Phase = Phase>(phaseId: T["id"]): this is T {

@@ -35,11 +35,11 @@ export class BerryPhase extends FieldPhase {
           .map((opp) => applyAbAttrs<PreventBerryUseAbAttr>(AbAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
 
         if (cancelled.value) {
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("abilityTriggers:preventBerryUse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
           );
         } else {
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.USE_ITEM),
           );
 
