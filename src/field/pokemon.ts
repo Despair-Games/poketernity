@@ -852,7 +852,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
-      const currentPhase = globalScene.getCurrentPhase();
+      const currentPhase = globalScene.phaseManager.getCurrentPhase();
       if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getPokemon() === this) {
         return false;
       }
@@ -1990,7 +1990,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ) {
       multiplier /= 2;
       if (!simulated) {
-        globalScene.queueMessage(i18next.t("weather:strongWindsEffectMessage"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("weather:strongWindsEffectMessage"));
       }
     }
     return multiplier as TypeDamageMultiplier;
@@ -3302,7 +3302,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.turnData.damageTaken += amount;
     }
     if (this.isFainted() && !ignoreFaintPhase) {
-      globalScene.faintBattler(this.getBattlerIndex(), { preventEndure });
+      globalScene.phaseManager.queueBattlerFaintPhase(this.getBattlerIndex(), { preventEndure });
     }
     return amount;
   }
@@ -3331,7 +3331,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }: DamageFunctionOptions = {},
   ): number {
     const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
-    globalScene.unshiftPhase(damagePhase);
+    globalScene.phaseManager.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       amount = 0;
     }
@@ -3940,14 +3940,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * cancel the attack's subsequent hits.
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
-      const currentPhase = globalScene.getCurrentPhase();
+      const currentPhase = globalScene.phaseManager.getCurrentPhase();
       if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getUserPokemon() === this) {
         this.stopMultiHit();
       }
     }
 
     if (asPhase) {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new ObtainStatusEffectPhase(this.getBattlerIndex(), effect, turnsRemaining, sourceText, sourcePokemon),
       );
       return true;
@@ -4428,7 +4428,7 @@ export class PlayerPokemon extends Pokemon {
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            globalScene.prependToPhase(
+            globalScene.phaseManager.prependToPhase(
               new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
               PhaseId.MOVE_END,
             );
@@ -5327,7 +5327,7 @@ export class EnemyPokemon extends Pokemon {
         stages++;
       }
 
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(this.getBattlerIndex(), this, [boostedStat!], stages, { ignoreAbilities: true }),
       );
       this.bossSegmentIndex--;

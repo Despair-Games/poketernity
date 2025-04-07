@@ -115,7 +115,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.stat_boost`);
-            globalScene.unshiftPhase(
+            globalScene.phaseManager.unshiftPhase(
               new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.DEF, Stat.SPDEF], 2),
             );
           },

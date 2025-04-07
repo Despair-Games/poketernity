@@ -79,7 +79,7 @@ export class LoginPhase extends Phase {
                       });
                     },
                     (): void => {
-                      globalScene.toLoginScreen({ showText: false, eager: true });
+                      globalScene.phaseManager.toLoginScreen({ showText: false, eager: true });
                       this.end();
                     },
                   ],
@@ -103,7 +103,7 @@ export class LoginPhase extends Phase {
           removeCookie(SESSION_ID_COOKIE);
           globalScene.reset(true, true);
         } else {
-          globalScene.unshiftPhase(new UnavailablePhase());
+          globalScene.phaseManager.unshiftPhase(new UnavailablePhase());
           super.end();
         }
         return null;
@@ -124,7 +124,7 @@ export class LoginPhase extends Phase {
     globalScene.ui.setMessageMode();
 
     if (settings.display.playerGender === PlayerGender.UNSET) {
-      globalScene.unshiftPhase(new SelectGenderPhase());
+      globalScene.phaseManager.unshiftPhase(new SelectGenderPhase());
     }
 
     handleTutorial(Tutorial.INTRO).then(() => super.end());

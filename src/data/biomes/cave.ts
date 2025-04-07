@@ -111,12 +111,12 @@ const weatherPool = {
   [WeatherType.NONE]: 1,
 };
 
+/**
+ * 1/5 of electric
+ */
 const terrainPool = {
-  [TerrainType.NONE]: 1,
-  [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
-  [TerrainType.GRASSY]: 0,
-  [TerrainType.PSYCHIC]: 0,
+  [TerrainType.NONE]: 4,
+  [TerrainType.ELECTRIC]: 1,
 };
 
 export const caveBiome = new Biome(BiomeId.CAVE, pokemonPool, trainerPool, 6, weatherPool, terrainPool, "cave");

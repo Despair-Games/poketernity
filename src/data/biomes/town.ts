@@ -7,10 +7,6 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
-/**
- * @todo Remove these exports. Currently exporting them as temporary
- * filler values for all other biomes.
- */
 const pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, SpeciesId[]>> = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [
@@ -179,12 +175,8 @@ const weatherPool: Partial<Record<WeatherType, number>> = {
   [WeatherType.NONE]: 1,
 };
 
-export const townTerrainPool: Record<TerrainType, number> = {
+const terrainPool: Partial<Record<TerrainType, number>> = {
   [TerrainType.NONE]: 1,
-  [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
-  [TerrainType.GRASSY]: 0,
-  [TerrainType.PSYCHIC]: 0,
 };
 
-export const townBiome = new Biome(BiomeId.TOWN, pokemonPool, trainerPool, 0, weatherPool, townTerrainPool, "town");
+export const townBiome = new Biome(BiomeId.TOWN, pokemonPool, trainerPool, 0, weatherPool, terrainPool, "town");

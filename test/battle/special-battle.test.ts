@@ -35,62 +35,62 @@ describe("Test Battle Phase", () => {
     game.override.battleType("single").startingWave(10);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 2vs2 boss", async () => {
     game.override.battleType("double").startingWave(10);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 2vs2 trainer", async () => {
     game.override.battleType("double").startingWave(5);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 2vs1 trainer", async () => {
     game.override.battleType("single").startingWave(5);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 2vs1 rival", async () => {
     game.override.battleType("single").startingWave(8);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 2vs2 rival", async () => {
     game.override.battleType("double").startingWave(8);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 1vs1 trainer", async () => {
     game.override.battleType("single").startingWave(5);
     await game.startBattle([SpeciesId.BLASTOISE]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 2vs2 trainer", async () => {
     game.override.battleType("double").startingWave(5);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 
   it("startBattle 4vs2 trainer", async () => {
     game.override.battleType("double").startingWave(5);
     await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD, SpeciesId.DARKRAI, SpeciesId.GABITE]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
+    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(CommandPhase.name);
   }, 20000);
 });

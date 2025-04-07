@@ -61,7 +61,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       if (legalIndex === -1) {
         console.error("Party Details:\n", party);
         console.error("All available Pokemon were fainted or illegal!");
-        globalScene.gameOver({ clearPhaseQueue: true });
+        globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
         return this.end();
       }
 
@@ -272,7 +272,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
-      globalScene.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+      globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
     }
 
     pokemon.resetTurnData();
@@ -288,7 +288,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   protected queuePostSummon(): void {
-    globalScene.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    globalScene.phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 
   public getTrainerSlot(): TrainerSlot {

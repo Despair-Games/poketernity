@@ -67,7 +67,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
     });
 
     matchingAttrs.forEach((attr) => {
-      globalScene.setPhaseQueueSplice();
+      globalScene.phaseManager.setPhaseQueueSplice();
 
       const result = attr.apply(pokemon, simulated, ...args);
       if (result && !simulated) {
@@ -90,13 +90,13 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
         const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
         if (message) {
           if (!simulated) {
-            globalScene.queueMessage(message);
+            globalScene.phaseManager.queueMessagePhase(message);
           }
           messages.push(message);
         }
       }
 
-      globalScene.clearPhaseQueueSplice();
+      globalScene.phaseManager.clearPhaseQueueSplice();
     });
   });
 

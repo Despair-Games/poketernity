@@ -5,7 +5,7 @@ import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { uncatchableSpecies } from "#app/data/balance/uncatchable-species";
+import { noRandomSpeciesSpawn } from "#app/data/balance/no-random-species-spawn";
 import type { PokemonForm } from "./pokemon-form";
 import { variantData, type VariantSet, type Variant } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
@@ -160,12 +160,20 @@ export abstract class PokemonSpeciesForm {
     return Math.floor(this.speciesId / 2000) as PokemonRegion;
   }
 
+  /**
+   * Deprecated function Sam created to slowly introduce Pokemon into the game generation by generation
+   * @todo remove this function as it will always return true
+   */
   isObtainable(): boolean {
     return this.generation <= 9 || pokemonPreEvolutions.hasOwnProperty(this.speciesId);
   }
 
-  isCatchable(): boolean {
-    return this.isObtainable() && uncatchableSpecies.indexOf(this.speciesId) === -1;
+  /**
+   * Checks if this Pokemon appears in {@linkcode noRandomSpeciesSpawn}
+   * @returns whether or not this Pokemon can spawn as a random species
+   */
+  canSpawnAsRandomSpecies(): boolean {
+    return !noRandomSpeciesSpawn.includes(this.speciesId);
   }
 
   isRegional(): boolean {

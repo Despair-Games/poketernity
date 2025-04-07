@@ -21,7 +21,7 @@ export class CritBoostStackableTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     this.stackCount += 1;
     // This actually does not have any messages in the mainline games
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:critBoostOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

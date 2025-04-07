@@ -187,7 +187,7 @@ export default class Battle {
     const userLocale = navigator.language || "en-US";
     const formattedMoneyAmount = moneyAmount.value.toLocaleString(userLocale);
     const message = i18next.t("battle:moneyPickedUp", { moneyAmount: formattedMoneyAmount });
-    globalScene.queueMessage(message, undefined, true);
+    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
 
     globalScene.currentBattle.moneyScattered = 0;
   }

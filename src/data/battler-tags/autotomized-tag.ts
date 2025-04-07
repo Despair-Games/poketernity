@@ -27,7 +27,7 @@ export class AutotomizedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     const minWeight = 0.1;
     if (pokemon.getWeight() > minWeight) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:autotomizeOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         }),

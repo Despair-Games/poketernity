@@ -28,7 +28,7 @@ export class PostGameOverPhase extends Phase {
             return globalScene.reset(true);
           }
           globalScene.reset();
-          globalScene.toTitleScreen({ eager: true });
+          globalScene.phaseManager.toTitleScreen({ eager: true });
           this.end();
         });
       });

@@ -373,8 +373,8 @@ export class Arena {
    */
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
-    globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
+    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
+    globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -417,11 +417,13 @@ export class Arena {
     const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
-      globalScene.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
+      globalScene.phaseManager.unshiftPhase(
+        new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)),
+      );
+      globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
-      globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getWeatherClearMessage(oldWeatherType) ?? "");
       this.weather = null;
     }
 
@@ -493,11 +495,13 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.phaseManager.unshiftPhase(
+          new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)),
+        );
       }
-      globalScene.queueMessage(getTerrainStartMessage(terrain) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     } else {
-      globalScene.queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene
@@ -620,6 +624,20 @@ export class Arena {
 
     const randomWeather = weightedPick(weatherMap);
     this.trySetWeather(randomWeather, false);
+  }
+
+  /**
+   * Sets a random terrain based on the biome
+   */
+  setRandomTerrain(): void {
+    const terrainPool = allBiomes.get(this.biomeId).terrainPool;
+    const terrainMap = new Map<TerrainType, number>();
+    for (const id of getEnumValues(TerrainType)) {
+      terrainMap.set(id, terrainPool[id] ?? 0);
+    }
+
+    const randomTerrain = weightedPick(terrainMap);
+    this.trySetTerrain(randomTerrain, false);
   }
 
   /**
@@ -894,7 +912,12 @@ export class Arena {
     if (this.weather?.turnsLeft !== 0) {
       this.trySetWeather(WeatherType.NONE, false);
     }
-    this.trySetTerrain(TerrainType.NONE, false, true);
+
+    // Don't reset terrain if a Biome's permanent terrain is active
+    if (this.terrain?.turnsLeft !== 0) {
+      this.trySetTerrain(TerrainType.NONE, false, true);
+    }
+
     this.removeAllTags();
   }
 

@@ -3773,15 +3773,15 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     const doExit = () => {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
-      globalScene.clearPhaseQueue();
+      globalScene.phaseManager.clearPhaseQueue();
       if (globalScene.gameMode.isChallenge) {
-        globalScene.pushPhase(new SelectChallengePhase());
-        globalScene.pushPhase(new EncounterPhase());
+        globalScene.phaseManager.pushPhase(new SelectChallengePhase());
+        globalScene.phaseManager.pushPhase(new EncounterPhase());
       } else {
-        globalScene.toTitleScreen();
+        globalScene.phaseManager.toTitleScreen();
       }
       this.clearText();
-      globalScene.getCurrentPhase()?.end();
+      globalScene.phaseManager.getCurrentPhase()?.end();
     };
     const cancelExit = () => {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);

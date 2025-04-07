@@ -33,12 +33,12 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
       // Cancel the affected pokemon's selected move
-      const phase = globalScene.getCurrentPhase() as MovePhase;
+      const phase = globalScene.phaseManager.getCurrentPhase() as MovePhase;
       const move = phase.move;
 
       if (this.isMoveRestricted(move.moveId, pokemon)) {
         if (this.getInterruptedText(pokemon, move.moveId)) {
-          globalScene.queueMessage(this.getInterruptedText(pokemon, move.moveId));
+          globalScene.phaseManager.queueMessagePhase(this.getInterruptedText(pokemon, move.moveId));
         }
         phase.cancel();
       }

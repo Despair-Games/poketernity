@@ -19,7 +19,7 @@ export class ElectrifiedTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon): void {
     // "{pokemonNameWithAffix}'s moves have been electrified!"
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:electrifiedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
