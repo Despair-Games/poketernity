@@ -1,9 +1,11 @@
 import type { Pokemon } from "#app/field/pokemon";
 
+/**
+ * An item that can be consumed by a {@linkcode Pokemon}.
+ */
 export interface Consumable {
-  beforeConsume?(): void;
+  /** Called when the item is consumed */
   onConsume(context: ConsumeContext): void;
-  afterConsume?(): void;
 }
 
 //#region Utility types

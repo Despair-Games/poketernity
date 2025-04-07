@@ -1,5 +1,9 @@
+/**
+ * An item that can be purchased
+ */
 export interface Purchaseable {
+  /** The price of the item */
   readonly price: number;
-
-  onPurchase?(): void;
+  /** Called when the item is purchased */
+  onPurchase(): void;
 }

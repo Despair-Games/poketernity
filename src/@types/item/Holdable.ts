@@ -1,8 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 
+/**
+ * An item that can be held by a {@linkcode Pokemon}.
+ */
 export interface Holdable {
-  readonly isTransferable: boolean;
-  readonly isIgnorable: boolean;
+  readonly flingDamage: number;
 
   onFling(context: FlingContext): void;
 }
@@ -10,7 +12,7 @@ export interface Holdable {
 //#region Utility types
 
 export interface FlingContext {
-  sourcePokemon: Pokemon;
+  /** The {@linkcode Pokemon} that the item is flung at */
   targetPokemon: Pokemon;
 }
 

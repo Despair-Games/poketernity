@@ -1,6 +1,6 @@
-import { HealingItem } from "#app/data/items/consumable-items/healing-items/healing-item";
+import { HealingItem } from "#app/data/items/healing-items/healing-item";
 import { ItemRarity } from "#enums/item-rarity";
-import { ItemId } from "#enums/ItemId";
+import { ItemId } from "#enums/item-id";
 
 export class SuperPotion extends HealingItem {
   constructor() {
