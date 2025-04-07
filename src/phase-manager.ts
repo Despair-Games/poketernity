@@ -1,26 +1,33 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { VictoryPhase } from "#app/phases/victory-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
+import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
+import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import type { Phase } from "#app/phase";
+import { BattleEndPhase } from "#app/phases/battle-end-phase";
+import { FaintPhase } from "#app/phases/faint-phase";
+import { GameOverPhase } from "#app/phases/game-over-phase";
+import { LoginPhase } from "#app/phases/login-phase";
+import { MessagePhase } from "#app/phases/message-phase";
+import { MoveAnimPhase } from "#app/phases/move-anim-phase";
+import { MoveChargePhase } from "#app/phases/move-charge-phase";
+import { MovePhase } from "#app/phases/move-phase";
+import { NewBattlePhase } from "#app/phases/new-battle-phase";
+import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
+import { SelectTargetPhase } from "#app/phases/select-target-phase";
+import { TitlePhase } from "#app/phases/title-phase";
+import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { ChargeAnim } from "#enums/charge-anim";
 import type { MoveId } from "#enums/move-id";
 import type { PhaseId } from "#enums/phase-id";
-import { MoveChargeAnim } from "./data/animations/move-charge-anim";
-import type { DestinyBondTag } from "./data/battler-tags/destiny-bond-tag";
-import type { GrudgeTag } from "./data/battler-tags/grudge-tag";
-import type { Pokemon } from "./field/pokemon";
-import type { PokemonMove } from "./field/pokemon-move";
-import type { Phase } from "./phase";
-import { BattleEndPhase } from "./phases/battle-end-phase";
-import { FaintPhase } from "./phases/faint-phase";
-import { GameOverPhase } from "./phases/game-over-phase";
-import { LoginPhase } from "./phases/login-phase";
-import { MessagePhase } from "./phases/message-phase";
-import { MoveAnimPhase } from "./phases/move-anim-phase";
-import { MoveChargePhase } from "./phases/move-charge-phase";
-import { MovePhase } from "./phases/move-phase";
-import { NewBattlePhase } from "./phases/new-battle-phase";
-import { PokemonHealPhase } from "./phases/pokemon-heal-phase";
-import { SelectTargetPhase } from "./phases/select-target-phase";
-import { TitlePhase } from "./phases/title-phase";
-import { TurnInitPhase } from "./phases/turn-init-phase";
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -48,7 +55,7 @@ interface ToTitleScreenInit {
 }
 
 interface ToLoginScreenInit {
-  /** Whether to show text. @default true*/
+  /** Whether to show text. @default true */
   showText?: boolean;
   /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
   eager?: boolean;
@@ -65,11 +72,11 @@ interface PokemonFaintInit {
  * This is responsible for managing the game's {@linkcode Phase | phases}.
  */
 export class PhaseManager {
-  /** PhaseQueue: dequeue/remove the first element to get the next phase */
+  /** dequeue/remove the first element to get the next phase */
   public phaseQueue: Phase[] = [];
-  /** phaseManager.phaseQueuePrepend: is a temp storage of what will be added to PhaseQueue */
+  /** A temporary storage of what will be added to the front of {@linkcode phaseQueue} */
   public phaseQueuePrepend: Phase[] = [];
-  /** overrides default of inserting phases to end of phaseQueuePrepend array, useful or inserting Phases "out of order" */
+  /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   public phaseQueuePrependSpliceIndex: number = -1;
   public conditionalQueue: Array<[() => boolean, Phase]> = [];
   public nextCommandPhaseQueue: Phase[] = [];
@@ -91,8 +98,8 @@ export class PhaseManager {
    * This method allows deferring the execution of a phase until certain conditions are met, which is useful for handling
    * situations like abilities and entry hazards that depend on specific game states.
    *
-   * @param phase The {@linkcode Phase} to be added to the conditional queue.
-   * @param condition A function that returns a boolean indicating whether the phase should be executed.
+   * @param phase - The {@linkcode Phase} to be added to the conditional queue.
+   * @param condition - A function that returns a boolean indicating whether the phase should be executed.
    *
    */
   public pushConditionalPhase(phase: Phase, condition: () => boolean): void {
@@ -100,17 +107,18 @@ export class PhaseManager {
   }
 
   /**
-   * Adds a phase to nextCommandPhaseQueue, as long as boolean passed in is false
-   * @param phase {@linkcode Phase} the phase to add
-   * @param defer boolean on which queue to add to, defaults to false, and adds to phaseQueue
+   * Queues a phase to be run at a future point in time.
+   * @param phase - The {@linkcode Phase} to add
+   * @param defer - If `false`, adds the phase to `phaseQueue`. If `true`, adds the phase to `nextCommandPhaseQueue`. Default `false`.
    */
   public pushPhase(phase: Phase, defer: boolean = false): void {
     (!defer ? this.phaseQueue : this.nextCommandPhaseQueue).push(phase);
   }
 
   /**
-   * Adds Phase to the end of phaseQueuePrepend, or at phaseQueuePrependSpliceIndex
-   * @param phase {@linkcode Phase} the phase to add
+   * Adds a phase to the end of {@linkcode phaseQueuePrepend},
+   * or at {@linkcode phaseQueuePrependSpliceIndex} if it's set.
+   * @param phase - The {@linkcode Phase} to add
    */
   public unshiftPhase(phase: Phase): void {
     if (this.phaseQueuePrependSpliceIndex === -1) {
@@ -121,9 +129,9 @@ export class PhaseManager {
   }
 
   /**
-   * Clears the phaseQueue, but does not clear any other phase-related stuff.
+   * Clears the {@linkcode phaseQueue}, but does not clear any other phase-related stuff.
    *
-   * TODO: Should this function be replaced by {@linkcode clearAllPhases}?
+   * @todo Should this function be replaced by {@linkcode clearAllPhases}?
    */
   clearPhaseQueue(): void {
     this.phaseQueue.splice(0, this.phaseQueue.length);
@@ -142,23 +150,31 @@ export class PhaseManager {
   }
 
   /**
-   * Used by function unshiftPhase(), sets index to start inserting at current length instead of the end of the array, useful if phaseQueuePrepend gets longer with Phases
+   * Used by {@linkcode unshiftPhase} and sets the index to start inserting at current length instead of the end of the array.
+   * Useful if {@linkcode phaseQueuePrepend} contains many phases.
    */
   setPhaseQueueSplice(): void {
     this.phaseQueuePrependSpliceIndex = this.phaseQueuePrepend.length;
   }
 
   /**
-   * Resets phaseQueuePrependSpliceIndex to -1, implies that calls to unshiftPhase will insert at end of phaseQueuePrepend
+   * Resets {@linkcode phaseQueuePrependSpliceIndex} to `-1`,
+   * meaning that calls to {@linkcode unshiftPhase} will insert at end of {@linkcode phaseQueuePrepend}
    */
   public clearPhaseQueueSplice(): void {
     this.phaseQueuePrependSpliceIndex = -1;
   }
 
   /**
-   * Is called by each Phase implementations "end()" by default
-   * We dump everything from phaseQueuePrepend to the start of of phaseQueue
-   * then removes first Phase and starts it
+   * Called by each Phase's `end()` method by default.
+   * Does the following:
+   * - If there is an existing {@linkcode standbyPhase}, set {@linkcode currentPhase} to `standbyPhase`
+   *     and set `standbyPhase` to `null`, then `return`
+   * - Calls {@linkcode clearPhaseQueueSplice} and dumps everything from
+   *     {@linkcode phaseQueuePrepend} to the start of of {@linkcode phaseQueue}
+   * - Calls {@linkcode populatePhaseQueue}
+   * - Checks the {@linkcode conditionalQueue | conditional phase queue}
+   * - Remove the first phase from the queue and run its `start()` method.
    */
   public shiftPhase(): void {
     if (this.standbyPhase) {
@@ -170,14 +186,14 @@ export class PhaseManager {
     if (this.phaseQueuePrependSpliceIndex > -1) {
       this.clearPhaseQueueSplice();
     }
-    if (this.phaseQueuePrepend.length) {
-      while (this.phaseQueuePrepend.length) {
-        const poppedPhase = this.phaseQueuePrepend.pop();
-        if (poppedPhase) {
-          this.phaseQueue.unshift(poppedPhase);
-        }
+
+    while (this.phaseQueuePrepend.length) {
+      const poppedPhase = this.phaseQueuePrepend.pop();
+      if (poppedPhase) {
+        this.phaseQueue.unshift(poppedPhase);
       }
     }
+
     if (!this.phaseQueue.length) {
       this.populatePhaseQueue();
       // Clear the conditionalQueue if there are no phases left in the phaseQueue
@@ -224,18 +240,17 @@ export class PhaseManager {
   /**
    * Find a specific {@linkcode Phase} in the phase queue.
    *
-   * @param phaseFilter filter function to use to find the wanted phase
-   * @returns the found phase or undefined if none found
+   * @param phaseFilter - Filter function to find the wanted phase
+   * @returns the found phase or `undefined` if none is found
    */
   public findPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean): P | undefined {
     return this.phaseQueue.find(phaseFilter) as P;
   }
 
   /**
-   * @todo this is unused, may be removed?
    * Checks if the phase queue contains a phase that matches the filter function
    *
-   * @param phaseFilter filter function to use to check the expected phase
+   * @param phaseFilter - Filter function to find the wanted phase
    * @returns `true` if the phase exists, `false` otherwise
    */
   public hasPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean): boolean {
@@ -264,9 +279,9 @@ export class PhaseManager {
   }
 
   /**
-   * @todo this is unused, may be removed?
    * Will search for a specific phase in {@linkcode phaseQueuePrepend} via filter, and remove the first result if a match is found.
-   * @param phaseFilter filter function
+   * @param phaseFilter - The filter function to find the desired phase
+   * @todo This is currently unused. It should probably be merged into {@linkcode tryRemovePhase}
    */
   public tryRemoveUnshiftedPhase(phaseFilter: (phase: Phase) => boolean): boolean {
     const phaseIndex = this.phaseQueuePrepend.findIndex(phaseFilter);
@@ -278,10 +293,12 @@ export class PhaseManager {
   }
 
   /**
-   * Tries to add the input phase to index before target phase in the phaseQueue, else simply calls unshiftPhase()
-   * @param phase {@linkcode Phase} the phase to be added
-   * @param targetPhaseId {@linkcode PhaseId} of phase to search for in phaseQueue
-   * @returns boolean if a targetPhase was found and added
+   * Tries to add the input phase to the index before the target phase in the {@linkcode phaseQueue},
+   * otherwise it calls {@linkcode unshiftPhase} instead
+   * @param phase - The {@linkcode Phase} to be added
+   * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @returns `true` if the phase was successfully added to the queue before the target phase,
+   *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
   public prependToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
     const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
@@ -296,10 +313,12 @@ export class PhaseManager {
   }
 
   /**
-   * Tries to add the input phase to index after target phase in the {@linkcode phaseQueue}, else simply calls {@linkcode unshiftPhase}
-   * @param phase {@linkcode Phase} the phase to be added
-   * @param targetPhaseId {@linkcode PhaseId} the type of phase to search for in {@linkcode phaseQueue}
-   * @returns `true` if a `targetPhase` was found to append to
+   * Tries to add the input phase to the index after the target phase in the {@linkcode phaseQueue},
+   * otherwise it calls {@linkcode unshiftPhase} instead
+   * @param phase - The {@linkcode Phase} to be added
+   * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @returns `true` if the phase was successfully added to the queue after the target phase,
+   *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
   public appendToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
     const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
@@ -314,8 +333,7 @@ export class PhaseManager {
   }
 
   /**
-   * @todo this is unused, may be removed?
-   * Moves everything from nextCommandPhaseQueue to phaseQueue (keeping order)
+   * Moves everything from the {@linkcode nextCommandPhaseQueue} to the {@linkcode phaseQueue} (keeping order)
    */
   public populatePhaseQueue(): void {
     if (this.nextCommandPhaseQueue.length) {
@@ -326,26 +344,25 @@ export class PhaseManager {
   }
 
   /**
-   * Adds a MessagePhase, either to PhaseQueuePrepend or nextCommandPhaseQueue
-   * @param message string for MessagePhase
-   * @param callbackDelay optional param for MessagePhase constructor
-   * @param prompt optional param for MessagePhase constructor
-   * @param promptDelay optional param for MessagePhase constructor
-   * @param defer boolean for which queue to add it to, false -> add to PhaseQueuePrepend, true -> nextCommandPhaseQueue
+   * Adds a {@linkcode MessagePhase}, either to {@linkcode phaseQueuePrepend} or {@linkcode phaseQueue}
+   * @param message - The message to display (passed to `MessagePhase`)
+   * @param callbackDelay - (Optional) (passed to `MessagePhase`)
+   * @param prompt - (Optional) (passed to `MessagePhase`)
+   * @param promptDelay - (Optional) (passed to `MessagePhase`)
+   * @param defer - (Optional, default `false`)
+   *   Whether to use {@linkcode unshiftPhase} (`false`) or {@linkcode pushPhase} (`true`)
    */
   public queueMessagePhase(
     message: string,
     callbackDelay?: number | null,
     prompt?: boolean | null,
     promptDelay?: number | null,
-    defer?: boolean | null,
+    defer: boolean = false,
   ) {
     const phase = new MessagePhase(message, callbackDelay, prompt, promptDelay);
     if (!defer) {
-      // adds to the end of PhaseQueuePrepend
       this.unshiftPhase(phase);
     } else {
-      //remember that pushPhase adds it to nextCommandPhaseQueue
       this.pushPhase(phase);
     }
   }
@@ -369,9 +386,9 @@ export class PhaseManager {
 
   /**
    * Adds a new {@linkcode MoveChargePhase} to the phase queue.
-   * @param battlerIndex The users {@linkcode BattlerIndex}
-   * @param targets The targets {@linkcode BattlerIndex}
-   * @param move The {@linkcode PokemonMove} being used
+   * @param battlerIndex - The user's {@linkcode BattlerIndex}
+   * @param targets - Array of target `BattlerIndex`es
+   * @param move - The {@linkcode PokemonMove} being used
    */
   public queueMoveChargePhase(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove): void {
     this.unshiftPhase(new MoveChargePhase(battlerIndex, targets, move));
@@ -379,7 +396,7 @@ export class PhaseManager {
 
   /**
    * Inserts a new {@linkcode SelectTargetPhase} to the phase queue.
-   * @param battlerIndex The selected targets {@linkcode BattlerIndex}
+   * @param battlerIndex - The selected target's {@linkcode BattlerIndex}
    */
   public queueSelectTargetPhase(battlerIndex: BattlerIndex): void {
     this.unshiftPhase(new SelectTargetPhase(battlerIndex));
@@ -387,25 +404,30 @@ export class PhaseManager {
 
   /**
    * Adds a new {@linkcode MoveAnimPhase} to the phase queue.
-   * @param chargeAnim The {@linkcode ChargeAnim} to be used
-   * @param moveId The {@linkcode MoveId} to be used
-   * @param user The {@linkcode Pokemon} using the move
+   * @param chargeAnim - The {@linkcode ChargeAnim} to be used
+   * @param moveId - The {@linkcode MoveId} to be used
+   * @param user - The {@linkcode Pokemon} using the move
    */
-  public queueMoveAnimPhase(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon) {
+  public queueMoveAnimPhase(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon): void {
     this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
   }
 
   /**
    * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
    *
-   * @param battlerIndex The {@linkcode BattlerIndex} to faint
-   * @param init Optional {@linkcode PokemonFaintInit} arguments
+   * @param battlerIndex - The {@linkcode BattlerIndex} to faint
+   * @param preventEndure - (Optional, default `false`) Whether or not enduring (Reviver Seed) should be prevented
+   * @param destinyTag - (Optional) Destiny Bond tag belonging to the currently fainting Pokemon, if applicable
+   * @param grudgeTag - (Optional) Grudge tag belonging to the currently fainting Pokemon, if applicable
+   * @param source - (Optional) The source {@linkcode Pokemon} that dealt fatal damage
    *
-   * **Regarding {@linkcode PhaseManager.setPhaseQueueSplice} call:**\
-   * _When adding the FaintPhase, want to toggle future phaseManager.unshiftPhase() and queueMessage() calls
-   * to appear before the FaintPhase (as FaintPhase will potentially end the encounter and add Phases such as
-   * GameOverPhase, VictoryPhase, etc.. that will interfere with anything else that happens during this MoveEffectPhase).
-   * Once the MoveEffectPhase is over (and calls it's .end() function, shiftPhase() will reset the PhaseQueueSplice via clearPhaseQueueSplice() )_
+   * **Regarding {@linkcode setPhaseQueueSplice} call:**\
+   * _When adding the `FaintPhase`, want to toggle future {@linkcode unshiftPhase} and {@linkcode queueMessagePhase} calls
+   * to appear before the `FaintPhase` as `FaintPhase` will potentially end the encounter (and add Phases such as
+   * {@linkcode GameOverPhase}, {@linkcode VictoryPhase}, etc that will interfere
+   * with anything else that happens during this {@linkcode MoveEffectPhase}).
+   * Once the `MoveEffectPhase` is over (and calls it's `.end()` method),
+   * {@linkcode shiftPhase} will reset the {@linkcode phaseQueuePrependSpliceIndex} via {@linkcode clearPhaseQueueSplice}_
    */
   public queueBattlerFaintPhase(
     battlerIndex: BattlerIndex,
@@ -452,7 +474,7 @@ export class PhaseManager {
 
   /**
    * Ends the current battle and starts a new one.
-   * @param isVictory Whether the player won the battle
+   * @param isVictory - Whether the player won the battle
    */
   public queueNextBattle(isVictory: boolean): void {
     this.pushPhase(new BattleEndPhase(isVictory));
@@ -461,8 +483,8 @@ export class PhaseManager {
 
   /**
    * Ends the game.
-   * @param isVictory Whether the player won the game
-   * @param clearPhaseQueue Whether to clear the phase queue
+   * @param isVictory - (Optional) Whether the player won the game
+   * @param clearPhaseQueue - (Optional) Whether to clear the phase queue
    */
   public queueGameOverPhase({ isVictory, clearPhaseQueue }: GameOverInit = {}): void {
     if (clearPhaseQueue) {
@@ -472,8 +494,8 @@ export class PhaseManager {
   }
 
   /**
-   * Returns the game to the title screen(/phase).
-   * @param init Optional {@linkcode ToTitleScreenInit} arguments
+   * @param eager - (Optional) `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
+   * @param clearPhaseQueue - (Optional) `true` to clear the phase queue
    */
   public toTitleScreen({ eager, clearPhaseQueue }: ToTitleScreenInit = {}): void {
     if (clearPhaseQueue) {
@@ -488,8 +510,8 @@ export class PhaseManager {
   }
 
   /**
-   * Sends the player to the login screen.
-   * @param showText Whether to show text
+   * @param eager - (Optional) `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
+   * @param showText - (Optional, default `true`) Whether to show text
    */
   public toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
     const loginPhase = new LoginPhase(showText);
