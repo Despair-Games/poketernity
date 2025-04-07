@@ -103,9 +103,9 @@ export class AnimFrame {
    */
   public y: number;
   /** Horizontal scale factor (%) */
-  public scaleX: number;
+  public zoomX: number;
   /** Vertical scale factor (%) */
-  public scaleY: number;
+  public zoomY: number;
   /** Rotation angle (degrees) */
   public angle: number;
   /** If `true`, inverts the sprite horizontally */
@@ -155,8 +155,8 @@ export class AnimFrame {
   constructor(
     x: number,
     y: number,
-    scaleX: number,
-    scaleY: number,
+    zoomX: number,
+    zoomY: number,
     angle: number,
     mirror: boolean,
     visible: boolean,
@@ -182,15 +182,15 @@ export class AnimFrame {
   ) {
     this.x = !init ? ((x || 0) - 128) * 0.5 : x;
     this.y = !init ? ((y || 0) - 224) * 0.5 : y;
-    if (scaleX) {
-      this.scaleX = scaleX;
+    if (zoomX) {
+      this.zoomX = zoomX;
     } else if (init) {
-      this.scaleX = 0;
+      this.zoomX = 0;
     }
-    if (scaleY) {
-      this.scaleY = scaleY;
+    if (zoomY) {
+      this.zoomY = zoomY;
     } else if (init) {
-      this.scaleY = 0;
+      this.zoomY = 0;
     }
     if (angle) {
       this.angle = angle;
@@ -266,8 +266,8 @@ class ImportedAnimFrame extends AnimFrame {
     super(
       source.x,
       source.y,
-      source.scaleX,
-      source.scaleY,
+      source.zoomX,
+      source.zoomY,
       source.angle,
       source.mirror,
       source.visible,

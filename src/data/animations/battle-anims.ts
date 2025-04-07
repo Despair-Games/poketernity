@@ -13,8 +13,8 @@ import Phaser from "phaser";
 interface GraphicFrameData {
   x: number;
   y: number;
-  scaleX: number;
-  scaleY: number;
+  zoomX: number;
+  zoomY: number;
   angle: number;
 }
 
@@ -128,8 +128,8 @@ export abstract class BattleAnim {
        */
       let x = frame.x + userFocusX;
       let y = frame.y + userFocusY;
-      let scaleX = (frame.scaleX / 100) * (!frame.mirror ? 1 : -1);
-      const scaleY = frame.scaleY / 100;
+      let zoomX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
+      const zoomY = frame.zoomY / 100;
       switch (frame.focus) {
         case AnimFocus.TARGET:
           x += targetInitialX - targetFocusX;
@@ -159,13 +159,13 @@ export abstract class BattleAnim {
             frame.target === AnimFrameTarget.GRAPHIC
             && isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
           ) {
-            scaleX = scaleX * -1;
+            zoomX = zoomX * -1;
           }
           break;
       }
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.GRAPHIC ? g++ : frame.target === AnimFrameTarget.USER ? u++ : t++;
-      ret.get(frame.target)!.set(key, { x: x, y: y, scaleX: scaleX, scaleY: scaleY, angle: angle }); // TODO: is the bang correct?
+      ret.get(frame.target)!.set(key, { x: x, y: y, zoomX: zoomX, zoomY: zoomY, angle: angle }); // TODO: is the bang correct?
     }
 
     return ret;
@@ -356,8 +356,8 @@ export abstract class BattleAnim {
 
             pokemonSprite.setAngle(graphicFrameData.angle);
             pokemonSprite.setScale(
-              graphicFrameData.scaleX * spriteSourceScale,
-              graphicFrameData.scaleY * spriteSourceScale,
+              graphicFrameData.zoomX * spriteSourceScale,
+              graphicFrameData.zoomY * spriteSourceScale,
             );
 
             pokemonSprite.setData("locked", frame.locked);
@@ -438,7 +438,7 @@ export abstract class BattleAnim {
             const graphicFrameData = frameData.get(frame.target)!.get(graphicIndex)!; // TODO: are those bangs correct?
             moveSprite.setPosition(graphicFrameData.x, graphicFrameData.y);
             moveSprite.setAngle(graphicFrameData.angle);
-            moveSprite.setScale(graphicFrameData.scaleX, graphicFrameData.scaleY);
+            moveSprite.setScale(graphicFrameData.zoomX, graphicFrameData.zoomY);
 
             moveSprite.setAlpha(frame.opacity / 255);
             moveSprite.setVisible(frame.visible);
@@ -512,13 +512,13 @@ export abstract class BattleAnim {
 
     for (const frame of frames) {
       let { x, y } = frame;
-      const scaleX = (frame.scaleX / 100) * (!frame.mirror ? 1 : -1);
-      const scaleY = frame.scaleY / 100;
+      const zoomX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
+      const zoomY = frame.zoomY / 100;
       x += targetInitialX;
       y += targetInitialY;
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.GRAPHIC ? g++ : frame.target === AnimFrameTarget.USER ? u++ : t++;
-      ret.get(frame.target)?.set(key, { x: x, y: y, scaleX: scaleX, scaleY: scaleY, angle: angle });
+      ret.get(frame.target)?.set(key, { x: x, y: y, zoomX: zoomX, zoomY: zoomY, angle: angle });
     }
 
     return ret;
@@ -627,7 +627,7 @@ export abstract class BattleAnim {
           if (graphicFrameData) {
             moveSprite.setPosition(graphicFrameData.x, graphicFrameData.y);
             moveSprite.setAngle(graphicFrameData.angle);
-            moveSprite.setScale(graphicFrameData.scaleX, graphicFrameData.scaleY);
+            moveSprite.setScale(graphicFrameData.zoomX, graphicFrameData.zoomY);
 
             moveSprite.setAlpha(frame.opacity / 255);
             moveSprite.setVisible(frame.visible);
