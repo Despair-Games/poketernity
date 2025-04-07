@@ -16,7 +16,7 @@ export class HpSplitAttr extends MoveEffectAttr {
       } else if (p.hp > hpValue) {
         // Neither ignoring nor not ignoring the dynamax damage reduction is correct,
         // but there's no alternative to picking one of them.
-        p.damageAndUpdate(p.hp - hpValue, { ignoreSegments: true, ignoreDynamaxReduction: true });
+        p.damageAndUpdate(p.hp - hpValue, { ignoreSegments: true });
       }
       p.updateInfo();
     });

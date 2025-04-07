@@ -54,7 +54,6 @@ export class DestinyBondTag extends BattlerTag {
     pokemon.damageAndUpdate(pokemon.hp, {
       result: HitResult.ONE_HIT_KO,
       preventEndure: true,
-      ignoreDynamaxReduction: true,
     });
 
     return false;

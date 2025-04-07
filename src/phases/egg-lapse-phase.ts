@@ -1,18 +1,19 @@
 import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import { settings } from "#app/system/settings/settings-manager";
-import { EggSkipPreference } from "#enums/egg-skip-preference";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
+import { settings } from "#app/system/settings/settings-manager";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { EggHatchPhase } from "./egg-hatch-phase";
 import { EggSummaryPhase } from "./egg-summary-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.
@@ -54,7 +55,7 @@ export class EggLapsePhase extends Phase {
             };
             // show prompt for skip, blocking inputs for 1 second
             globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
-            globalScene.ui.setModeWithoutClear(UiMode.CONFIRM, options);
+            globalScene.ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
           },
           100,
           true,

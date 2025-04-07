@@ -40,7 +40,6 @@ export class PerishSongTag extends BattlerTag {
         result: HitResult.ONE_HIT_KO,
         ignoreSegments: true,
         preventEndure: true,
-        ignoreDynamaxReduction: true,
       });
     }
 

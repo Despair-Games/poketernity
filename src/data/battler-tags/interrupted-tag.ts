@@ -20,7 +20,7 @@ export class InterruptedTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !!pokemon.getTag(BattlerTagType.FLYING);
+    return pokemon.hasTag(BattlerTagType.FLYING);
   }
 
   override onAdd(pokemon: Pokemon): void {

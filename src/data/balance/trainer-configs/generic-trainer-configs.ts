@@ -12,7 +12,10 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { ElementalType } from "#enums/elemental-type";
-
+/**
+ * If a trainer does not have any species filter then they use the default
+ * filters of excluding sublegendary, legendary, mythic, eternal floette, and bloodmoon ursaluna
+ */
 let t = 0;
 export const genericTrainerConfigs: TrainerConfigs = {
   [TrainerType.UNKNOWN]: new TrainerConfig(t).setHasGenders(),

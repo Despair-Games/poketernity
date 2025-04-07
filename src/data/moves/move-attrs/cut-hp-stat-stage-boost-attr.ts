@@ -33,7 +33,6 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), {
       result: HitResult.OTHER,
       ignoreSegments: true,
-      ignoreDynamaxReduction: true,
     });
     user.updateInfo();
     const ret = super.applyEffect(user, target, move);

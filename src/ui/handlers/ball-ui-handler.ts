@@ -9,6 +9,7 @@ import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { UiHandler } from "./abstract-ui-handler";
+import type { CommandUiHandler } from "./command-ui-handler";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
@@ -86,15 +87,15 @@ export class BallUiHandler extends UiHandler {
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {
           if (commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
-            globalScene.ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
-            globalScene.ui.setMode(UiMode.MESSAGE);
+            globalScene.ui.setMode<CommandUiHandler>(UiMode.COMMAND, commandPhase.getFieldIndex());
+            globalScene.ui.setMessageMode();
             success = true;
           }
         } else {
           ui.playError();
         }
       } else {
-        ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
+        ui.setMode<CommandUiHandler>(UiMode.COMMAND, commandPhase.getFieldIndex());
         success = true;
       }
     } else {

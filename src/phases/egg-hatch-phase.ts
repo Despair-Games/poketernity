@@ -1,21 +1,21 @@
 import type { AnySound } from "#app/audio-manager";
 import type { Egg } from "#app/data/egg";
+import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
-import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
-import { UiMode } from "#enums/ui-mode";
+import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";
+import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { EggLapsePhase } from "./egg-lapse-phase";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Class that represents egg hatching
@@ -83,7 +83,7 @@ export class EggHatchPhase extends Phase {
   public override start(): void {
     super.start();
 
-    globalScene.ui.setModeForceTransition(UiMode.EGG_HATCH_SCENE).then(() => {
+    globalScene.ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE).then(() => {
       if (!this.egg) {
         return this.end();
       }

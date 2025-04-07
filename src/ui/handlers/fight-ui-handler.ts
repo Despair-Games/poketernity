@@ -19,6 +19,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { UiHandler } from "./abstract-ui-handler";
+import type { CommandUiHandler } from "./command-ui-handler";
 
 export class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
@@ -153,7 +154,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
         // Cannot back out of fight menu if skipToFightInput is enabled
         const { battleType, mysteryEncounter } = globalScene.currentBattle;
         if (battleType !== BattleType.MYSTERY_ENCOUNTER || !mysteryEncounter?.skipToFightInput) {
-          ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
           success = true;
         }
       }

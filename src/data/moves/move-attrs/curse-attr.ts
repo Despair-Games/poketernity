@@ -31,7 +31,6 @@ export class CurseAttr extends MoveEffectAttr {
         result: HitResult.OTHER,
         ignoreSegments: true,
         preventEndure: true,
-        ignoreDynamaxReduction: true,
       });
       globalScene.queueMessage(
         i18next.t("battlerTags:cursedOnAdd", {

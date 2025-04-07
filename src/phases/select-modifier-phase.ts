@@ -22,6 +22,7 @@ import {
 } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
@@ -113,7 +114,7 @@ export class SelectModifierPhase extends BattlePhase {
         const skipRewardConfirmOptions: ConfirmModeConfig = {
           yesHandler: () => {
             ui.revertMode();
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
             super.end();
           },
           noHandler: () => {
@@ -127,7 +128,7 @@ export class SelectModifierPhase extends BattlePhase {
           },
         };
         ui.showText(i18next.t("battle:skipItemQuestion"), null, () => {
-          ui.setOverlayMode(UiMode.CONFIRM, skipRewardConfirmOptions);
+          ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, skipRewardConfirmOptions);
         });
         return false;
       }
@@ -154,7 +155,7 @@ export class SelectModifierPhase extends BattlePhase {
                 );
 
                 ui.clearText();
-                ui.setMode(UiMode.MESSAGE).then(() => super.end());
+                ui.setMessageMode().then(() => super.end());
 
                 if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
                   globalScene.money -= rerollCost;
@@ -205,7 +206,7 @@ export class SelectModifierPhase extends BattlePhase {
               );
               break;
             case 2:
-              ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
+              ui.setModeWithoutClear<PartyUiHandler>(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
                 ui.setMode<ModifierSelectUiHandler>(
                   UiMode.MODIFIER_SELECT,
                   this.isPlayer(),
@@ -233,7 +234,7 @@ export class SelectModifierPhase extends BattlePhase {
         case 1:
           if (this.typeOptions.length === 0) {
             ui.clearText();
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
             super.end();
             return true;
           }
@@ -287,7 +288,7 @@ export class SelectModifierPhase extends BattlePhase {
           }
         } else {
           ui.clearText();
-          ui.setMode(UiMode.MESSAGE);
+          ui.setMessageMode();
           super.end();
         }
       };

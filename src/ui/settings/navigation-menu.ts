@@ -7,6 +7,7 @@ import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import type { SettingsUiHandler } from "./settings-ui-handler";
 
 const LEFT = "LEFT";
 const RIGHT = "RIGHT";
@@ -82,7 +83,7 @@ export class NavigationManager {
     } else {
       this.selectedMode = this.modes[pos + increment];
     }
-    globalScene.ui.setMode(this.selectedMode);
+    globalScene.ui.setMode<SettingsUiHandler>(this.selectedMode);
     this.updateNavigationMenus();
   }
 

@@ -14,7 +14,6 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getNatureName } from "#app/data/nature";
-import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -54,7 +53,6 @@ import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
-import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
@@ -145,7 +143,7 @@ export class EncounterPhase extends BattlePhase {
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
             && !gameMode.isBoss(waveIndex)
-            && arena.biomeType !== BiomeId.END
+            && arena.biomeId !== BiomeId.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);
@@ -309,10 +307,11 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      ui.setMode(UiMode.MESSAGE).then(() => {
+      ui.setMessageMode().then(() => {
         if (!this.loaded) {
-          // Set weather before session gets saved to ensure it's properly added to session data
+          // Set weather and terrain before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();
+          this.trySetTerrainIfNewBiome();
           // Game currently syncs to server on waves X1 and X6, or after 5 minutes have passed without a save
           gameData.saveAll(true, waveIndex % 5 === 1 || (globalScene.lastSavePlayTime ?? 0) >= 300).then((success) => {
             globalScene.disableMenu = false;
@@ -341,6 +340,9 @@ export class EncounterPhase extends BattlePhase {
       globalScene.isMysteryEncounterValidForWave(battleType, waveIndex)
       && !currentBattle.isBattleMysteryEncounter()
     ) {
+      /**
+       * TODO: This does not occur in most cases. See https://github.com/Despair-Games/poketernity/issues/395
+       */
       // Increment ME spawn chance if an ME could have spawned but did not
       // Only do this AFTER session has been saved to avoid duplicating increments
       mysteryEncounterSaveData.encounterSpawnChance += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
@@ -666,7 +668,7 @@ export class EncounterPhase extends BattlePhase {
   }
 
   /**
-   * Set biome weather if and only if this encounter is the start of a new biome.
+   * Set biome weather and terrain if and only if this encounter is the start of a new biome.
    *
    * By using function overrides, this should happen if and only if this phase
    * is exactly a NewBiomeEncounterPhase or an EncounterPhase (to account for
@@ -675,7 +677,13 @@ export class EncounterPhase extends BattlePhase {
    */
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
-      globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
+      globalScene.arena.setRandomWeather();
+    }
+  }
+
+  protected trySetTerrainIfNewBiome(): void {
+    if (!this.loaded) {
+      globalScene.arena.setRandomTerrain();
     }
   }
 }

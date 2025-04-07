@@ -23,7 +23,7 @@ export class NaturePowerAttr extends CallMoveAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     let moveId: MoveId;
     const getBiomeMoveId = (): MoveId => {
-      switch (globalScene.arena.biomeType) {
+      switch (globalScene.arena.biomeId) {
         case BiomeId.TOWN:
           return MoveId.ROUND;
         case BiomeId.METROPOLIS:

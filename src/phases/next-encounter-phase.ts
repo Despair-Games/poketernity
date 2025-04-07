@@ -1,3 +1,4 @@
+import { FRIENDSHIP_GAIN_PER_WAVE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 import { EncounterPhase } from "./encounter-phase";
@@ -20,10 +21,18 @@ export class NextEncounterPhase extends EncounterPhase {
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
         pokemon.resetBattleData();
+        /**
+         * TODO: Known bug where this gets called after the session has been saved so
+         * reloading a session will cause this 1 friendship gain to be lost. See
+         * https://github.com/Despair-Games/poketernity/issues/395
+         */
+        if (!pokemon.isFainted()) {
+          pokemon.addFriendship(FRIENDSHIP_GAIN_PER_WAVE);
+        }
       }
     }
 
-    arenaNextEnemy.setBiome(arena.biomeType);
+    arenaNextEnemy.setBiome(arena.biomeId);
     arenaNextEnemy.setVisible(true);
 
     const enemyField = globalScene.getEnemyField();
@@ -53,7 +62,7 @@ export class NextEncounterPhase extends EncounterPhase {
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        arenaEnemy.setBiome(arena.biomeType);
+        arenaEnemy.setBiome(arena.biomeId);
         arenaEnemy.setX(arenaNextEnemy.x);
         arenaEnemy.setAlpha(1);
         arenaNextEnemy.setX(arenaNextEnemy.x - 300);
@@ -81,4 +90,9 @@ export class NextEncounterPhase extends EncounterPhase {
    * Do nothing (since this is simply the next wave in the same biome).
    */
   protected override trySetWeatherIfNewBiome(): void {}
+
+  /**
+   * Do nothing (since this is simply the next wave in the same biome).
+   */
+  protected override trySetTerrainIfNewBiome(): void {}
 }

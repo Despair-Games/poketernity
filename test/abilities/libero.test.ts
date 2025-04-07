@@ -133,7 +133,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.scene.arena.biomeType = BiomeId.MOUNTAIN;
+    game.scene.arena.biomeId = BiomeId.MOUNTAIN;
     game.move.select(MoveId.NATURE_POWER);
     await game.phaseInterceptor.to(TurnEndPhase);
 

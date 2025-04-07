@@ -114,8 +114,38 @@ export function randSeedItem<T>(items: T[]): T {
   return items.length === 1 ? items[0] : Phaser.Math.RND.pick(items);
 }
 
+/**
+ * This picks items out of an array with a higher weight for earlier entries
+ *
+ * Only used for Trainer partyTemplateIndex generation
+ * @todo figure out how that actually works
+ */
 export function randSeedWeightedItem<T>(items: T[]): T {
   return items.length === 1 ? items[0] : Phaser.Math.RND.weightedPick(items);
+}
+
+/**
+ * Use this utils function for picking a item out of a mapping with given weights
+ * @param items the mapping of item to weight
+ * @returns a randomly picked item according to the weights
+ */
+export function weightedPick<T>(items: Map<T, number>): T {
+  const totalWeight = [...items.values()].reduce((a: number, b: number) => a + b, 0);
+  const randomNumber = randSeedInt(totalWeight);
+
+  let totalWeightSoFar = 0;
+  for (const [i, weight] of items) {
+    totalWeightSoFar += weight;
+
+    // This is a < and not a <= since the first item can have 0 weight
+    if (randomNumber < totalWeightSoFar) {
+      return i;
+    }
+  }
+
+  // Failsafe if the above loop somehow failed (e.g., if all items have 0 weight)
+  console.error("Random selection failed, selecting the first element instead. Original list of items:", items);
+  return items.keys()[0];
 }
 
 /**
