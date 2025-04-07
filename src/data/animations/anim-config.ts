@@ -103,9 +103,9 @@ export class AnimFrame {
    */
   public y: number;
   /** Horizontal scale factor (%) */
-  public zoomX: number;
+  public scaleX: number;
   /** Vertical scale factor (%) */
-  public zoomY: number;
+  public scaleY: number;
   /** Rotation angle (degrees) */
   public angle: number;
   /** If `true`, inverts the sprite horizontally */
@@ -117,7 +117,10 @@ export class AnimFrame {
    * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
    */
   public blendType: AnimBlendType;
-  /** The type of sprite affected by this frame */
+  /**
+   * The type of sprite affected by this frame
+   * @see {@linkcode AnimFrameTarget}
+   */
   public target: AnimFrameTarget;
   /** If {@linkcode target} is "graphic", specifies the sprite index for the frame */
   public graphicFrame: number;
@@ -152,8 +155,8 @@ export class AnimFrame {
   constructor(
     x: number,
     y: number,
-    zoomX: number,
-    zoomY: number,
+    scaleX: number,
+    scaleY: number,
     angle: number,
     mirror: boolean,
     visible: boolean,
@@ -179,15 +182,15 @@ export class AnimFrame {
   ) {
     this.x = !init ? ((x || 0) - 128) * 0.5 : x;
     this.y = !init ? ((y || 0) - 224) * 0.5 : y;
-    if (zoomX) {
-      this.zoomX = zoomX;
+    if (scaleX) {
+      this.scaleX = scaleX;
     } else if (init) {
-      this.zoomX = 0;
+      this.scaleX = 0;
     }
-    if (zoomY) {
-      this.zoomY = zoomY;
+    if (scaleY) {
+      this.scaleY = scaleY;
     } else if (init) {
-      this.zoomY = 0;
+      this.scaleY = 0;
     }
     if (angle) {
       this.angle = angle;
@@ -263,8 +266,8 @@ class ImportedAnimFrame extends AnimFrame {
     super(
       source.x,
       source.y,
-      source.zoomX,
-      source.zoomY,
+      source.scaleX,
+      source.scaleY,
       source.angle,
       source.mirror,
       source.visible,

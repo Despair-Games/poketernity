@@ -47,7 +47,19 @@ export abstract class BattleAnim {
    */
   public playRegardlessOfIssues: boolean;
 
+  /**
+   * When playing the animation, this stores the endpoints of a line
+   * between the user and target's "focal points", i.e.
+   * ({@linkcode userFocusX}, {@linkcode userFocusY}) and
+   * ({@linkcode targetFocusX}, {@linkcode targetFocusY})
+   * @todo this seems unnecessary, everything in this is a const
+   */
   private srcLine: number[];
+  /**
+   * When playing the animation, this stores the endpoints of a line
+   * between the user and target's sprite positions in the format
+   * `[ux, uy, tx, ty]`
+   */
   private dstLine: number[];
 
   constructor(user?: Pokemon, target?: Pokemon, playRegardlessOfIssues: boolean = false) {
@@ -116,8 +128,8 @@ export abstract class BattleAnim {
        */
       let x = frame.x + userFocusX;
       let y = frame.y + userFocusY;
-      let scaleX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
-      const scaleY = frame.zoomY / 100;
+      let scaleX = (frame.scaleX / 100) * (!frame.mirror ? 1 : -1);
+      const scaleY = frame.scaleY / 100;
       switch (frame.focus) {
         case AnimFocus.TARGET:
           x += targetInitialX - targetFocusX;
@@ -500,8 +512,8 @@ export abstract class BattleAnim {
 
     for (const frame of frames) {
       let { x, y } = frame;
-      const scaleX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
-      const scaleY = frame.zoomY / 100;
+      const scaleX = (frame.scaleX / 100) * (!frame.mirror ? 1 : -1);
+      const scaleY = frame.scaleY / 100;
       x += targetInitialX;
       y += targetInitialY;
       const angle = -frame.angle;
