@@ -88,8 +88,8 @@ export class PhaseManager {
     return this.currentPhase as P;
   }
 
-  public getStandbyPhase(): Phase | null {
-    return this.standbyPhase;
+  public getStandbyPhase<P extends Phase = Phase>(): P | null {
+    return this.standbyPhase as P;
   }
 
   /**
