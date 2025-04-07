@@ -38,7 +38,7 @@ export class Biome {
   public readonly terrainPool: Partial<Record<TerrainType, number>>;
   /** String representing the bgm of the biome */
   public readonly bgm: string;
-  /** number representing the loop point of the biome's bgm */
+  /** number representing the loop point of the biome's bgm in seconds */
   public readonly bgmLoopPoint: number;
 
   constructor(

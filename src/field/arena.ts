@@ -926,7 +926,7 @@ export class Arena {
   }
 
   /**
-   * @returns the bgmLoopPoint of a biome's associated bgm
+   * @returns the {@linkcode Biome.bgmLoopPoint | loop point} of a biome's associated bgm in seconds
    */
   getBgmLoopPoint(): number {
     return allBiomes.get(this.biomeId).bgmLoopPoint;
