@@ -148,7 +148,7 @@ export class AnimFrame {
    */
   public priority: number;
   /**
-   * The {@linkcode AnimFocus} specifying the reference point for
+   * The {@linkcode AnimFocus} specifying the point of origin for
    * this animation's x- and y-position.
    */
   public focus: AnimFocus;
