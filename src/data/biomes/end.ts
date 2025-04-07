@@ -110,10 +110,6 @@ const weatherPool = {
 
 const terrainPool = {
   [TerrainType.NONE]: 1,
-  [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
-  [TerrainType.GRASSY]: 0,
-  [TerrainType.PSYCHIC]: 0,
 };
 
 export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, 0, weatherPool, terrainPool, "end");

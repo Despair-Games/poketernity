@@ -34,8 +34,8 @@ export class Biome {
    * The chance of sun is set to 0 if it is dusk/night
    */
   public readonly weatherPool: Partial<Record<WeatherType, number>>;
-  /** terrainPool is currently unused, to be implemented in a later PR */
-  public readonly terrainPool: Record<TerrainType, number>;
+  /** A mapping of {@linkcode TerrainType} to weight for what terrain the biome will attempt to set upon entry */
+  public readonly terrainPool: Partial<Record<TerrainType, number>>;
   /** String representing the bgm of the biome */
   public readonly bgm: string;
 
@@ -45,7 +45,7 @@ export class Biome {
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
     trainerChance: number,
     weatherPool: Partial<Record<WeatherType, number>>,
-    terrainPool: Record<TerrainType, number>,
+    terrainPool: Partial<Record<TerrainType, number>>,
     bgm: string,
   ) {
     this.biomeId = biomeId;
