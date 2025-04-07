@@ -202,7 +202,7 @@ export default class BattleScene extends SceneBase {
   public gameData: GameData;
   public sessionSlotId: number;
 
-  public phaseManager: PhaseManager;
+  public readonly phaseManager: PhaseManager;
 
   public field: Phaser.GameObjects.Container;
   public fieldUI: Phaser.GameObjects.Container;
