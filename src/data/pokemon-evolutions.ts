@@ -330,8 +330,8 @@ export class LowKeyToxtricityEvoCondition extends SpeciesEvolutionCondition {
 /** Pancham requires the player to have a Dark type Pokemon (not including Tera) on the team */
 export class PangoroEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
-    super(
-      () => !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
+    super(() =>
+      globalScene.getPlayerParty().some((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
     );
     this.description = "Requires a Dark type Pokemon on the team";
   }

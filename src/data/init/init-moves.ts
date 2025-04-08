@@ -2323,7 +2323,7 @@ export function initMoves() {
     new StatusMove(MoveId.MAGNETIC_FLUX, ElementalType.ELECTRIC, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], 1, false, {
         condition: (_user, target, _move) =>
-          !![AbilityId.PLUS, AbilityId.MINUS].find((a) => target.hasAbility(a, false)),
+          [AbilityId.PLUS, AbilityId.MINUS].some((a) => target.hasAbility(a, false)),
       })
       .ignoresSubstitute()
       .snatchable()

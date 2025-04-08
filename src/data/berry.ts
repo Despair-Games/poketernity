@@ -55,7 +55,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
       return (pokemon: Pokemon) => {
         const threshold = new NumberHolder(0.25);
         applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
-        return !!pokemon.getMoveset().find((m) => !m.getPpRatio());
+        return pokemon.getMoveset().some((m) => !m.getPpRatio());
       };
   }
 }
