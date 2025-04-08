@@ -34,7 +34,7 @@ describe("Items - Lock Capsule", () => {
 
   it("doesn't set the cost of common tier items to 0", async () => {
     await game.classicMode.startBattle();
-    game.scene.overridePhase(
+    game.scene.phaseManager.overridePhase(
       new SelectModifierPhase({
         customModifierSettings: {
           guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON],
@@ -44,7 +44,7 @@ describe("Items - Lock Capsule", () => {
     );
 
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
-      const selectModifierPhase = game.scene.getCurrentPhase() as SelectModifierPhase;
+      const selectModifierPhase = game.scene.phaseManager.getCurrentPhase() as SelectModifierPhase;
       const rerollCost = selectModifierPhase.getRerollCost(true);
       expect(rerollCost).toBe(150);
     });

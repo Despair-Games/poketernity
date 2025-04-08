@@ -373,8 +373,8 @@ export class Arena {
    */
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-    globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
+    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
+    globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -417,11 +417,11 @@ export class Arena {
     const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)));
-      globalScene.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
+      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
+      globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
-      globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getWeatherClearMessage(oldWeatherType) ?? "");
       this.weather = null;
     }
 
@@ -493,11 +493,11 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
       }
-      globalScene.queueMessage(getTerrainStartMessage(terrain) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     } else {
-      globalScene.queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene
@@ -921,80 +921,11 @@ export class Arena {
     globalScene.loadBgm(this.bgm);
   }
 
+  /**
+   * @returns the {@linkcode Biome.bgmLoopPoint | loop point} of a biome's associated bgm in seconds
+   */
   getBgmLoopPoint(): number {
-    switch (this.biomeId) {
-      case BiomeId.TOWN:
-        return 7.288;
-      case BiomeId.PLAINS:
-        return 7.693;
-      case BiomeId.GRASS:
-        return 1.995;
-      case BiomeId.TALL_GRASS:
-        return 9.608;
-      case BiomeId.METROPOLIS:
-        return 4.867;
-      case BiomeId.FOREST:
-        return 4.294;
-      case BiomeId.SEA:
-        return 0.024;
-      case BiomeId.SWAMP:
-        return 4.461;
-      case BiomeId.BEACH:
-        return 3.462;
-      case BiomeId.LAKE:
-        return 5.35;
-      case BiomeId.SEABED:
-        return 2.629;
-      case BiomeId.MOUNTAIN:
-        return 4.018;
-      case BiomeId.BADLANDS:
-        return 17.79;
-      case BiomeId.CAVE:
-        return 14.24;
-      case BiomeId.DESERT:
-        return 1.143;
-      case BiomeId.ICE_CAVE:
-        return 15.01;
-      case BiomeId.MEADOW:
-        return 3.891;
-      case BiomeId.POWER_PLANT:
-        return 2.81;
-      case BiomeId.VOLCANO:
-        return 5.116;
-      case BiomeId.GRAVEYARD:
-        return 3.232;
-      case BiomeId.DOJO:
-        return 6.205;
-      case BiomeId.FACTORY:
-        return 4.985;
-      case BiomeId.RUINS:
-        return 2.27;
-      case BiomeId.WASTELAND:
-        return 6.336;
-      case BiomeId.ABYSS:
-        return 5.13;
-      case BiomeId.SPACE:
-        return 21.347;
-      case BiomeId.CONSTRUCTION_SITE:
-        return 1.222;
-      case BiomeId.JUNGLE:
-        return 2.477;
-      case BiomeId.FAIRY_CAVE:
-        return 4.542;
-      case BiomeId.TEMPLE:
-        return 2.547;
-      case BiomeId.ISLAND:
-        return 2.751;
-      case BiomeId.LABORATORY:
-        return 0.797;
-      case BiomeId.SLUM:
-        return 1.221;
-      case BiomeId.SNOWY_FOREST:
-        return 3.047;
-      default:
-        console.warn(`missing bgm loop-point for biome "${BiomeId[this.biomeId]}" (=${this.biomeId})`);
-        return 0;
-    }
+    return allBiomes.get(this.biomeId).bgmLoopPoint;
   }
 }
 

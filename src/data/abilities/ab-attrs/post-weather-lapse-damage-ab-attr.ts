@@ -29,7 +29,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
 
     if (!simulated) {
       const abilityName = this.source.name;
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("abilityTriggers:postWeatherLapseDamage", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           abilityName,

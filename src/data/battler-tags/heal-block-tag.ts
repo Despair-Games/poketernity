@@ -90,7 +90,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:battlerTagsHealBlockOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       null,
       false,

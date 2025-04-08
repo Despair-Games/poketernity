@@ -220,7 +220,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         pokemon.usedTMs = [];
       }
       pokemon.usedTMs.push(this.moveId);
-      globalScene.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+      globalScene.phaseManager.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
         if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
@@ -230,7 +230,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         }
         globalScene.audioManager.playSound("se/buy");
       } else {
-        globalScene.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+        globalScene.phaseManager.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
       }
     }
 

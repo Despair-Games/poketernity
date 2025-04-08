@@ -133,7 +133,8 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     messageHandler.bg.setVisible(false);
     messageHandler.commandWindow.setVisible(false);
     messageHandler.movesWindowContainer.setVisible(true);
-    const pokemon = (globalScene.getCurrentPhase() as CommandPhase).getPokemon();
+
+    const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
     if (pokemon.battleSummonData?.turnCount > 1) {
       this.setCursor(this.getCursor());
     } else {
@@ -154,7 +155,9 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
 
     if (button === Button.CANCEL || button === Button.ACTION) {
       if (button === Button.ACTION) {
-        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, cursor, false)) {
+        if (
+          (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, cursor, false)
+        ) {
           success = true;
         } else {
           ui.playError();
@@ -243,7 +246,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
       ui.add(this.cursorObj);
     }
 
-    const pokemon = (globalScene.getCurrentPhase() as CommandPhase).getPokemon();
+    const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
     const moveset = pokemon.getMoveset();
 
     const hasMove = cursor < moveset.length;
@@ -315,7 +318,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   displayMoves() {
-    const pokemon = (globalScene.getCurrentPhase() as CommandPhase).getPokemon();
+    const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
     const moveset = pokemon.getMoveset();
 
     for (let moveIndex = 0; moveIndex < 4; moveIndex++) {
@@ -375,7 +378,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   clearMoves() {
     this.movesContainer.removeAll(true);
 
-    const opponents = (globalScene.getCurrentPhase() as CommandPhase).getPokemon().getOpponents();
+    const opponents = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon().getOpponents();
     opponents.forEach((opponent) => {
       opponent.updateEffectiveness(undefined);
     });

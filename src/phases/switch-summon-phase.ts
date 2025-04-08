@@ -223,6 +223,6 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   protected override queuePostSummon(): void {
-    globalScene.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    globalScene.phaseManager.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 }

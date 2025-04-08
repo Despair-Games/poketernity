@@ -57,7 +57,9 @@ export class CommanderAbAttr extends AbAttr {
     turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
     // The first move in the turn is already added to the phase queue at this point.
     // If this move is from the source Pokemon, the turn manager needs to queue the next valid move command.
-    if (globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon)) {
+    if (
+      globalScene.phaseManager.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon)
+    ) {
       turnManager.scheduleNextValidCommand();
     }
   }

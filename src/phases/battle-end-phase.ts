@@ -41,7 +41,7 @@ export class BattleEndPhase extends BattlePhase {
 
     // Endless graceful end
     if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
-      globalScene.gameOver({ clearPhaseQueue: true, isVictory: true });
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
     }
 
     for (const pokemon of globalScene.getField()) {
@@ -60,10 +60,12 @@ export class BattleEndPhase extends BattlePhase {
 
     globalScene.clearEnemyHeldItemModifiers();
 
-    try {
-      globalScene.getEnemyParty().forEach((p) => p.destroy());
-    } catch {
-      console.warn("Unable to destroy stale pokemon objects in BattleEndPhase.");
+    for (const p of globalScene.getEnemyParty()) {
+      try {
+        p.destroy();
+      } catch {
+        console.warn("Unable to destroy stale pokemon object in BattleEndPhase:", p);
+      }
     }
 
     const lapsingModifiers = globalScene.findModifiers(

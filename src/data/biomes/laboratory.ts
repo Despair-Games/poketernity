@@ -113,5 +113,6 @@ export const laboratoryBiome = new Biome(
   0,
   weatherPool,
   terrainPool,
-  "town",
+  "laboratory",
+  0.797,
 );

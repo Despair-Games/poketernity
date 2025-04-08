@@ -27,7 +27,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
     target.summonData.types = [this.type];
     target.updateInfo();
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(target),
         typeName: i18next.t(`pokemonInfo:Type.${ElementalType[this.type]}`),

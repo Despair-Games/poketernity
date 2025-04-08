@@ -20,8 +20,8 @@ export function getPokemonWithWeatherBasedForms() {
 }
 
 export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
-  globalScene.clearPhaseQueueSplice();
+  globalScene.phaseManager.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
+  globalScene.phaseManager.clearPhaseQueueSplice();
 }
 
 export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {

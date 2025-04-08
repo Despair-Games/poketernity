@@ -146,4 +146,13 @@ const terrainPool: Partial<Record<TerrainType, number>> = {
   [TerrainType.GRASSY]: 1,
 };
 
-export const meadowBiome = new Biome(BiomeId.MEADOW, pokemonPool, trainerPool, 8, weatherPool, terrainPool, "town");
+export const meadowBiome = new Biome(
+  BiomeId.MEADOW,
+  pokemonPool,
+  trainerPool,
+  8,
+  weatherPool,
+  terrainPool,
+  "meadow",
+  3.891,
+);

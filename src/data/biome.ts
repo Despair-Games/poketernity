@@ -38,6 +38,8 @@ export class Biome {
   public readonly terrainPool: Partial<Record<TerrainType, number>>;
   /** String representing the bgm of the biome */
   public readonly bgm: string;
+  /** number representing the loop point of the biome's bgm in seconds */
+  public readonly bgmLoopPoint: number;
 
   constructor(
     biomeId: BiomeId,
@@ -47,6 +49,7 @@ export class Biome {
     weatherPool: Partial<Record<WeatherType, number>>,
     terrainPool: Partial<Record<TerrainType, number>>,
     bgm: string,
+    bgmLoopPoint: number,
   ) {
     this.biomeId = biomeId;
     this.pokemonPool = pokemonPool;
@@ -55,5 +58,6 @@ export class Biome {
     this.weatherPool = weatherPool;
     this.terrainPool = terrainPool;
     this.bgm = bgm;
+    this.bgmLoopPoint = bgmLoopPoint;
   }
 }

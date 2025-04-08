@@ -49,7 +49,7 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
     }
 
     if (!simulated && source) {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(source.id, pokemon, reflectedStats, stages, { bypassReflect: true }),
       );
     }

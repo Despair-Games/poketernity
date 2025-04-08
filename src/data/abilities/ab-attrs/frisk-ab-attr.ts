@@ -8,7 +8,7 @@ export class FriskAbAttr extends PostSummonAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
       for (const opponent of pokemon.getOpponents()) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("abilityTriggers:frisk", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             opponentName: opponent.name,

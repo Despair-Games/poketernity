@@ -232,7 +232,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     let error = false;
     if (button === Button.CANCEL) {
       if (!this.blockExit) {
-        const phase = globalScene.getCurrentPhase();
+        const phase = globalScene.phaseManager.getCurrentPhase();
         if (phase instanceof EggSummaryPhase) {
           phase.end();
         }

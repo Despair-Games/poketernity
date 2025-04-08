@@ -80,13 +80,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
             PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
             PhaseId.MOVE_END,
           );
@@ -112,13 +112,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
             PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(
               this.switchType,
               switchOutTarget.getFieldIndex(),
@@ -158,7 +158,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
           null,
           true,
@@ -175,7 +175,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          globalScene.nextBattle(false);
+          globalScene.phaseManager.queueNextBattle(false);
         }
       }
     }

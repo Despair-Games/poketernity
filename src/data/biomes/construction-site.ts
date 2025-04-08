@@ -100,5 +100,6 @@ export const constructionSiteBiome = new Biome(
   4,
   weatherPool,
   terrainPool,
-  "town",
+  "construction_site",
+  1.222,
 );

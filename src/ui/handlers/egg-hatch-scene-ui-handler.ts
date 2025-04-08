@@ -54,7 +54,7 @@ export class EggHatchSceneUiHandler extends UiHandler {
 
   public override processInput(button: Button): boolean {
     if (button === Button.ACTION || button === Button.CANCEL) {
-      const phase = globalScene.getCurrentPhase();
+      const phase = globalScene.phaseManager.getCurrentPhase();
       if (phase instanceof EggHatchPhase && phase.trySkip()) {
         return true;
       }

@@ -18,7 +18,7 @@ export class PreMoveMessageAttr extends MoveAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const message = typeof this.message === "string" ? (this.message as string) : this.message(user, target, move);
     if (message) {
-      globalScene.queueMessage(message, 500);
+      globalScene.phaseManager.queueMessagePhase(message, 500);
       return true;
     }
     return false;

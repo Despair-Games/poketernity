@@ -112,4 +112,4 @@ const terrainPool = {
   [TerrainType.NONE]: 1,
 };
 
-export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, 0, weatherPool, terrainPool, "end");
+export const endBiome = new Biome(BiomeId.END, pokemonPool, trainerPool, 0, weatherPool, terrainPool, "end", 42.6);

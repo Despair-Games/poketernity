@@ -26,11 +26,13 @@ export class ResetStatsAttr extends MoveEffectAttr {
       // Target all pokemon on the field when Freezy Frost or Haze are used
       const activePokemon = globalScene.getField(true);
       activePokemon.forEach((p) => this.resetStats(p));
-      globalScene.queueMessage(i18next.t("moveTriggers:statEliminated"));
+      globalScene.phaseManager.queueMessagePhase(i18next.t("moveTriggers:statEliminated"));
     } else {
       // Affects only the single target when Clear Smog is used
       this.resetStats(target);
-      globalScene.queueMessage(i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }));
+      globalScene.phaseManager.queueMessagePhase(
+        i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }),
+      );
     }
     return true;
   }

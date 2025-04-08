@@ -46,7 +46,9 @@ export class SkyDropTag extends BattlerTag {
         if (this.sourceId === pokemon.id) {
           globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
           if (
-            globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id)
+            globalScene.phaseManager.tryRemovePhase(
+              (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id,
+            )
           ) {
             // Just in case we removed a queued `MovePhase`, queue the next `MovePhase`.
             const { turnManager } = globalScene.currentBattle;

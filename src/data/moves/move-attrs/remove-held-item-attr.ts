@@ -55,7 +55,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
       globalScene.updateModifiers(target.isPlayer());
 
       if (this.berriesOnly) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:incineratedItem", {
             pokemonName: getPokemonNameWithAffix(user),
             targetName: getPokemonNameWithAffix(target),
@@ -63,7 +63,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
           }),
         );
       } else {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:knockedOffItem", {
             pokemonName: getPokemonNameWithAffix(user),
             targetName: getPokemonNameWithAffix(target),

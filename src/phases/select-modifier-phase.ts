@@ -147,7 +147,7 @@ export class SelectModifierPhase extends BattlePhase {
                 return false;
               } else {
                 globalScene.reroll = true;
-                globalScene.unshiftPhase(
+                globalScene.phaseManager.unshiftPhase(
                   new SelectModifierPhase({
                     rerollCount: this.rerollCount + 1,
                     modifierTiers: this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
@@ -270,7 +270,7 @@ export class SelectModifierPhase extends BattlePhase {
         // If the player selects either of these, then escapes out of consuming them,
         // they are returned to a shop in the same state.
         if (modifier.type instanceof RememberMoveModifierType || modifier.type instanceof TmModifierType) {
-          globalScene.unshiftPhase(this.copy());
+          globalScene.phaseManager.unshiftPhase(this.copy());
         }
 
         if (cost && !(modifier.type instanceof RememberMoveModifierType)) {

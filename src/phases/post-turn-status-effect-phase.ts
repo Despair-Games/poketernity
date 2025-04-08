@@ -42,7 +42,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       return this.end();
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
     );
 

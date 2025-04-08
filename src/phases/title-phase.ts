@@ -116,7 +116,7 @@ export class TitlePhase extends Phase {
             options.push({
               label: i18next.t("menu:cancel"),
               handler: () => {
-                globalScene.toTitleScreen({ clearPhaseQueue: true });
+                globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
                 super.end();
                 return true;
               },
@@ -200,9 +200,9 @@ export class TitlePhase extends Phase {
     const { gameData, time, ui } = globalScene;
 
     ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
-      globalScene.clearPhaseQueue();
+      globalScene.phaseManager.clearPhaseQueue();
       if (slotId === -1) {
-        globalScene.toTitleScreen();
+        globalScene.phaseManager.toTitleScreen();
         return super.end();
       }
       globalScene.sessionSlotId = slotId;
@@ -303,32 +303,32 @@ export class TitlePhase extends Phase {
       arena.preloadBgm();
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
-        globalScene.pushPhase(new SelectChallengePhase());
+        globalScene.phaseManager.pushPhase(new SelectChallengePhase());
       } else {
-        globalScene.pushPhase(new SelectStarterPhase());
+        globalScene.phaseManager.pushPhase(new SelectStarterPhase());
       }
       globalScene.newArena(globalScene.gameMode.getStartingBiome());
     } else {
       globalScene.audioManager.playBgm();
     }
 
-    globalScene.pushPhase(new EncounterPhase(this.loaded));
+    globalScene.phaseManager.pushPhase(new EncounterPhase(this.loaded));
 
     if (this.loaded) {
       const { battleType, double, waveIndex } = currentBattle;
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-      globalScene.pushPhase(new SummonPhase(0, true, true));
+      globalScene.phaseManager.pushPhase(new SummonPhase(0, true, true));
       if (double && availablePartyMembers > 1) {
-        globalScene.pushPhase(new SummonPhase(1, true, true));
+        globalScene.phaseManager.pushPhase(new SummonPhase(1, true, true));
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !globalScene.gameMode.isDaily)) {
         const minPartySize = double ? 2 : 1;
         if (availablePartyMembers > minPartySize) {
-          globalScene.pushPhase(new CheckSwitchPhase(0, double));
+          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
           if (double) {
-            globalScene.pushPhase(new CheckSwitchPhase(1, double));
+            globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
           }
         }
       }

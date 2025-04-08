@@ -8,6 +8,11 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 
+/**
+ * Animation for effects during the use of a move.
+ * @extends BattleAnim
+ * @todo Should "target" or "targetIndex" be used?
+ */
 export class MoveAnim extends BattleAnim {
   public moveId: MoveId;
 

@@ -27,7 +27,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 
     if (this.message) {
-      globalScene.queueMessage(this.message);
+      globalScene.phaseManager.queueMessagePhase(this.message);
     }
 
     return true;
@@ -47,7 +47,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
       pokemon.resetStatus();
       pokemon.updateInfo();
     } else {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new ShowAbilityPhase(pokemon.id, pokemon.getPassiveAbility()?.id === this.abilityCondition),
       );
     }

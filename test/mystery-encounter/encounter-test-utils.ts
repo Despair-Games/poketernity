@@ -66,9 +66,9 @@ export async function runMysteryEncounterToEnd(
 
     // If a battle is started, fast forward to end of the battle
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      game.scene.clearPhaseQueue();
-      game.scene.clearPhaseQueueSplice();
-      game.scene.unshiftPhase(new VictoryPhase(0));
+      game.scene.phaseManager.clearPhaseQueue();
+      game.scene.phaseManager.clearPhaseQueueSplice();
+      game.scene.phaseManager.unshiftPhase(new VictoryPhase(0));
       game.endPhase();
     });
 
@@ -193,13 +193,13 @@ async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number,
  * @param runRewardsPhase
  */
 export async function skipBattleRunMysteryEncounterRewardsPhase(game: GameManager, runRewardsPhase: boolean = true) {
-  game.scene.clearPhaseQueue();
-  game.scene.clearPhaseQueueSplice();
+  game.scene.phaseManager.clearPhaseQueue();
+  game.scene.phaseManager.clearPhaseQueueSplice();
   game.scene.getEnemyParty().forEach((p) => {
     p.faint();
     game.scene.field.remove(p);
   });
-  game.scene.pushPhase(new VictoryPhase(0));
+  game.scene.phaseManager.pushPhase(new VictoryPhase(0));
   game.phaseInterceptor.superEndPhase();
   game.setMode(UiMode.MESSAGE);
   await game.phaseInterceptor.to(MysteryEncounterRewardsPhase, runRewardsPhase);
