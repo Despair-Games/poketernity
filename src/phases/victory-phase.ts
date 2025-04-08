@@ -29,7 +29,7 @@ export class VictoryPhase extends PokemonPhase {
   public override start(): void {
     super.start();
 
-    const { currentBattle, gameData, gameMode, offsetGym } = globalScene;
+    const { currentBattle, gameData, gameMode } = globalScene;
     const { battleType, mysteryEncounter, waveIndex } = currentBattle;
     const { isClassic, isDaily, isEndless } = gameMode;
 
@@ -77,15 +77,14 @@ export class VictoryPhase extends PokemonPhase {
             globalScene.phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
         } else {
-          const superExpWave = !isEndless ? (offsetGym ? 0 : 20) : 10;
           if (isEndless && waveIndex === 10) {
             globalScene.phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_SHARE));
           }
 
-          if (waveIndex <= 750 && (waveIndex <= 500 || waveIndex % 30 === superExpWave)) {
+          if (waveIndex <= 750 && (waveIndex <= 500 || gameMode.isGymWave(waveIndex))) {
             globalScene.phaseManager.pushPhase(
               new ModifierRewardPhase(
-                waveIndex % 30 !== superExpWave || waveIndex > 250
+                !gameMode.isGymWave(waveIndex) || waveIndex > 250
                   ? modifierTypes.EXP_CHARM
                   : modifierTypes.SUPER_EXP_CHARM,
               ),
