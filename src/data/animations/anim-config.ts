@@ -216,13 +216,13 @@ export class AnimFrame {
       this.blendType = AnimBlendType.NORMAL;
     }
     if (!init) {
-      let target = AnimFrameTarget.GRAPHIC;
+      let target = AnimFrameTarget.IMAGE;
       switch (pattern) {
         case -2:
           target = AnimFrameTarget.TARGET;
           break;
         case -1:
-          target = AnimFrameTarget.USER;
+          target = AnimFrameTarget.SOURCE;
           break;
       }
       this.target = target;
