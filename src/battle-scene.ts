@@ -254,7 +254,7 @@ export default class BattleScene extends SceneBase {
 
   public seed: string;
   public waveSeed: string;
-  /** @todo what is this? */
+  /** Random multiple of `5` between `0-35` used to start at a random time of day */
   public waveCycleOffset: number;
 
   public damageNumberHandler: DamageNumberHandler;
@@ -1554,7 +1554,7 @@ export default class BattleScene extends SceneBase {
     return this.arena.getSpeciesFormIndex(species);
   }
 
-  /** @todo what is this? */
+  /** @returns A random multiple of 5 between 0-35, used to start at a random time of day */
   private getGeneratedWaveCycleOffset(): number {
     let ret = 0;
     this.executeWithSeedOffset(
