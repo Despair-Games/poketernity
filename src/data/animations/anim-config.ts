@@ -93,20 +93,22 @@ export class AnimConfig {
  */
 export class AnimFrame {
   /**
-   * The x-position of the sprite, relative
-   * to the frame's {@linkcode AnimFocus | focal point}
+   * The *x*-position of the sprite, relative
+   * to the frame's {@linkcode AnimFocus | focal point}.
+   * The sprite will move to the right as *x* increases.
    */
   public x: number;
   /**
-   * The y-position of the sprite, relative
-   * to the frame's {@linkcode AnimFocus | focal point}
+   * The *y*-position of the sprite, relative
+   * to the frame's {@linkcode AnimFocus | focal point}.
+   * The sprite will move downward as *y* increases.
    */
   public y: number;
   /** Horizontal scale factor (%) */
   public zoomX: number;
   /** Vertical scale factor (%) */
   public zoomY: number;
-  /** Rotation angle (degrees) */
+  /** Rotation angle (degrees, right-hand clockwise) */
   public angle: number;
   /** If `true`, inverts the sprite horizontally */
   public mirror: boolean;

@@ -14,7 +14,7 @@ export enum AnimFocus {
    */
   USER_TARGET,
   /**
-   * Centers the animation frame on the default user reference point
+   * Centers the animation frame on the default player reference point
    * (i.e. [106, 116])
    */
   SCREEN,
