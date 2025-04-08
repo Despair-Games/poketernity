@@ -283,7 +283,7 @@ export abstract class BattleAnim {
 
     /**
      * Frames are set for each asset of the animation
-     * every 3 ms. This includes the user, target, and all graphics.
+     * every 50 ms. This includes the user, target, and all graphics.
      */
     globalScene.tweens.addCounter({
       duration: getFrameMs(3),
