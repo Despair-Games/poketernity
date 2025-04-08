@@ -117,5 +117,6 @@ export const tallGrassBiome = new Biome(
   8,
   weatherPool,
   terrainPool,
-  "town",
+  "tall_grass",
+  9.608,
 );
