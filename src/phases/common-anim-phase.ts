@@ -13,10 +13,10 @@ export class CommonAnimPhase extends PokemonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode CommonAnimPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.COMMON_ANIM;
 
-  private anim: CommonAnim | null;
+  private anim: CommonAnim;
   private readonly targetIndex?: BattlerIndex;
 
-  constructor(battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex, anim: CommonAnim | null = null) {
+  constructor(anim: CommonAnim, battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex) {
     super(battlerIndex);
 
     this.anim = anim;

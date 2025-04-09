@@ -11,11 +11,11 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import Phaser from "phaser";
 
 interface GraphicFrameData {
-  x: number;
-  y: number;
-  scaleX: number;
-  scaleY: number;
-  angle: number;
+  readonly x: number;
+  readonly y: number;
+  readonly zoomX: number;
+  readonly zoomY: number;
+  readonly angle: number;
 }
 
 interface SpriteCache {
@@ -34,24 +34,37 @@ const targetFocusY = 84 - 32;
 //#region Export
 
 export abstract class BattleAnim {
-  public user: Pokemon | null;
-  public target: Pokemon | null;
-  public sprites: Phaser.GameObjects.Sprite[];
+  /** The {@linkcode Pokemon} from which the effect of this animation originated */
+  public user?: Pokemon;
+  /** The {@linkcode Pokemon} targeted by the effect of this animation */
+  public target?: Pokemon;
+  /** The background sprite to show during the animation */
   public bgSprite: Phaser.GameObjects.TileSprite | Phaser.GameObjects.Rectangle;
   /**
-   * Will attempt to play as much of an animation as possible, even if not all targets are on the field.
-   * Will also play the animation, even if the user has selected "Move Animations" OFF in Settings.
-   * Exclusively used by MEs atm, for visual animations at the start of an encounter.
+   * If `true`, allows the animation to show its {@linkcode AnimFrameTarget.GRAPHIC | graphic} components
+   * without requiring a user or target to be defined. This also causes the animation to play regardless
+   * of whether the player has "Move Animations" enabled or disabled in Settings.
    */
   public playRegardlessOfIssues: boolean;
 
+  /**
+   * When playing the animation, this stores the endpoints of a line
+   * between the user and target's "focal points", i.e.
+   * ({@linkcode userFocusX}, {@linkcode userFocusY}) and
+   * ({@linkcode targetFocusX}, {@linkcode targetFocusY})
+   * @todo this seems unnecessary, everything in this is a const
+   */
   private srcLine: number[];
+  /**
+   * When playing the animation, this stores the endpoints of a line
+   * between the user and target's sprite positions in the format
+   * `[ux, uy, tx, ty]`
+   */
   private dstLine: number[];
 
   constructor(user?: Pokemon, target?: Pokemon, playRegardlessOfIssues: boolean = false) {
-    this.user = user ?? null;
-    this.target = target ?? null;
-    this.sprites = [];
+    this.user = user;
+    this.target = target;
     this.playRegardlessOfIssues = playRegardlessOfIssues;
   }
 
@@ -67,14 +80,26 @@ export abstract class BattleAnim {
     return false;
   }
 
+  /**
+   * Creates a 2D data table from the animation frames specified in this animation's
+   * corresponding JSON, organized by frame target, then frame number.
+   * @param frames - The {@linkcode AnimFrame | animation frames} collected from the animation's
+   * JSON data
+   * @param onSubstitute - If `true`, and the "target" of the animation has an active substitute,
+   * the substitute's sprite is treated as the animation's target instead of its source {@linkcode Pokemon}
+   * @returns a Map of Maps containing the animation's frame data. The first dimension's key
+   * is an {@linkcode AnimFrameTarget}, and the second dimension's key corresponds with the
+   * frame's index in animation order.
+   * @todo The returned data structure is overly complex
+   */
   private getGraphicFrameData(
     frames: AnimFrame[],
-    onSubstitute?: boolean,
-  ): Map<number, Map<AnimFrameTarget, GraphicFrameData>> {
-    const ret: Map<number, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
-      [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>()],
-      [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>()],
-      [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>()],
+    onSubstitute: boolean = false,
+  ): Map<AnimFrameTarget, Map<number, GraphicFrameData>> {
+    const ret: Map<AnimFrameTarget, Map<number, GraphicFrameData>> = new Map([
+      [AnimFrameTarget.GRAPHIC, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.USER, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.TARGET, new Map<number, GraphicFrameData>()],
     ]);
 
     const isOppAnim = this.isOppAnim();
@@ -97,10 +122,14 @@ export abstract class BattleAnim {
     let t = 0;
 
     for (const frame of frames) {
-      let x = frame.x + 106;
-      let y = frame.y + 116;
-      let scaleX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
-      const scaleY = frame.zoomY / 100;
+      /**
+       * The frame's position (x, y) is initially assumed to be relative to
+       * the player's focal point, then updated based on the frame's "focus" value
+       */
+      let x = frame.x + userFocusX;
+      let y = frame.y + userFocusY;
+      let zoomX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
+      const zoomY = frame.zoomY / 100;
       switch (frame.focus) {
         case AnimFocus.TARGET:
           x += targetInitialX - targetFocusX;
@@ -111,15 +140,16 @@ export abstract class BattleAnim {
           y += userInitialY - userHalfHeight - userFocusY;
           break;
         case AnimFocus.USER_TARGET:
+          /** Comments are based on the values set during {@linkcode play} */
           const point = transformPoint(
-            this.srcLine[0],
-            this.srcLine[1],
-            this.srcLine[2],
-            this.srcLine[3],
-            this.dstLine[0],
-            this.dstLine[1] - userHalfHeight,
-            this.dstLine[2],
-            this.dstLine[3] - targetHalfHeight,
+            this.srcLine[0], // userFocusX
+            this.srcLine[1], // userFocusY
+            this.srcLine[2], // targetFocusX
+            this.srcLine[3], // targetFocusY
+            this.dstLine[0], // userInitialX
+            this.dstLine[1] - userHalfHeight, // userInitialY - userHalfHeight
+            this.dstLine[2], // targetInitialX
+            this.dstLine[3] - targetHalfHeight, // targetInitialY - targetHalfHeight
             x,
             y,
           );
@@ -129,19 +159,33 @@ export abstract class BattleAnim {
             frame.target === AnimFrameTarget.GRAPHIC
             && isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
           ) {
-            scaleX = scaleX * -1;
+            zoomX = zoomX * -1;
           }
           break;
       }
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.GRAPHIC ? g++ : frame.target === AnimFrameTarget.USER ? u++ : t++;
-      ret.get(frame.target)!.set(key, { x: x, y: y, scaleX: scaleX, scaleY: scaleY, angle: angle }); // TODO: is the bang correct?
+      ret.get(frame.target)!.set(key, { x, y, zoomX, zoomY, angle }); // TODO: is the bang correct?
     }
 
     return ret;
   }
 
-  play(onSubstitute?: boolean, callback?: Function) {
+  /**
+   * Plays the animation between the defined {@linkcode user}
+   * and {@linkcode target}.
+   *
+   * **Note**: This assumes the user and target are defined, and will
+   * likely crash the game otherwise unless {@linkcode playRegardlessOfIssues}
+   * is enabled. If `playRegardlessOfIssues` is enabled, animation frames
+   * targeting an undefined user or target are not played.
+   * @param onSubstitute - If `true`, and the target {@linkcode Pokemon} has
+   * an active {@linkcode SubstituteTag | substitute}, the animation will treat
+   * the substitute's sprite
+   * @param callback - If defined, is executed immediately after
+   * the animation completes.
+   */
+  play(onSubstitute?: boolean, callback?: () => void): void {
     const isOppAnim = this.isOppAnim();
     const user = !isOppAnim ? this.user! : this.target!; // TODO: are those bangs correct?
     const target = !isOppAnim ? this.target! : this.user!;
@@ -166,6 +210,12 @@ export abstract class BattleAnim {
     };
     const spritePriorities: number[] = [];
 
+    /**
+     * Destroys all sprites generated during the animation and resets
+     * the visibility of the user and target's sprites (if the animation
+     * isn't meant to hide the user/target). Once animation assets are
+     * cleaned, this calls the given {@linkcode callback} with no arguments.
+     */
     const cleanUpAndComplete = () => {
       userSprite.setPosition(0, 0);
       userSprite.setScale(1);
@@ -231,16 +281,26 @@ export abstract class BattleAnim {
     let r = anim?.frames.length ?? 0;
     let f = 0;
 
+    /**
+     * Frames are set for each asset of the animation
+     * every 50 ms. This includes the user, target, and all graphics.
+     */
     globalScene.tweens.addCounter({
       duration: getFrameMs(3),
       repeat: anim?.frames.length ?? 0,
       onRepeat: () => {
-        if (!f) {
+        /**
+         * Animations hide the user and target's
+         * base sprites, instead playing on copies of their
+         * sprites under the same pipeline
+         */
+        if (f === 0) {
           userSprite.setVisible(false);
           targetSprite.setVisible(false);
         }
 
-        const spriteFrames = anim!.frames[f]; // TODO: is the bang correcT?
+        /** The properties of all assets for the current frame */
+        const spriteFrames = anim!.frames[f]; // TODO: is the bang correct?
         const frameData = this.getGraphicFrameData(anim!.frames[f], onSubstitute); // TODO: is the bang correct?
         let u = 0;
         let t = 0;
@@ -257,6 +317,7 @@ export abstract class BattleAnim {
             const spriteSource = isUser ? userSprite : targetSprite;
             if ((isUser ? u : t) === sprites.length) {
               if (isUser || !targetSubstitute) {
+                /** Create (and pipeline) a duplicate Pokemon sprite to animate on */
                 const sprite = globalScene.addPokemonSprite(
                   isUser ? user : target,
                   0,
@@ -272,6 +333,7 @@ export abstract class BattleAnim {
                 globalScene.field.add(sprite);
                 sprites.push(sprite);
               } else {
+                /** Create a duplicate Substitute sprite to animate on */
                 const sprite = globalScene.addFieldSprite(spriteSource.x, spriteSource.y, spriteSource.texture);
                 spriteSource.on("animationupdate", (_anim, frame) => sprite.setFrame(frame.textureFrame));
                 globalScene.field.add(sprite);
@@ -279,6 +341,7 @@ export abstract class BattleAnim {
               }
             }
 
+            /** Set the Pokemon (or substitute) sprite's properties to match frame data */
             const spriteIndex = isUser ? u++ : t++;
             const pokemonSprite = sprites[spriteIndex];
             const graphicFrameData = frameData.get(frame.target)!.get(spriteIndex)!; // TODO: are the bangs correct?
@@ -293,8 +356,8 @@ export abstract class BattleAnim {
 
             pokemonSprite.setAngle(graphicFrameData.angle);
             pokemonSprite.setScale(
-              graphicFrameData.scaleX * spriteSourceScale,
-              graphicFrameData.scaleY * spriteSourceScale,
+              graphicFrameData.zoomX * spriteSourceScale,
+              graphicFrameData.zoomY * spriteSourceScale,
             );
 
             pokemonSprite.setData("locked", frame.locked);
@@ -375,7 +438,7 @@ export abstract class BattleAnim {
             const graphicFrameData = frameData.get(frame.target)!.get(graphicIndex)!; // TODO: are those bangs correct?
             moveSprite.setPosition(graphicFrameData.x, graphicFrameData.y);
             moveSprite.setAngle(graphicFrameData.angle);
-            moveSprite.setScale(graphicFrameData.scaleX, graphicFrameData.scaleY);
+            moveSprite.setScale(graphicFrameData.zoomX, graphicFrameData.zoomY);
 
             moveSprite.setAlpha(frame.opacity / 255);
             moveSprite.setVisible(frame.visible);
@@ -449,35 +512,41 @@ export abstract class BattleAnim {
 
     for (const frame of frames) {
       let { x, y } = frame;
-      const scaleX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
-      const scaleY = frame.zoomY / 100;
+      const { mirror } = frame;
+      const zoomX = (frame.zoomX / 100) * (mirror ? -1 : 1);
+      const zoomY = frame.zoomY / 100;
       x += targetInitialX;
       y += targetInitialY;
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.GRAPHIC ? g++ : frame.target === AnimFrameTarget.USER ? u++ : t++;
-      ret.get(frame.target)?.set(key, { x: x, y: y, scaleX: scaleX, scaleY: scaleY, angle: angle });
+      ret.get(frame.target)?.set(key, { x, y, zoomX, zoomY, angle });
     }
 
     return ret;
   }
 
   /**
-   * @param targetInitialX
-   * @param targetInitialY
-   * @param frameTimeMult
-   * @param frameTimedEventPriority
+   * Plays this animation ignoring frame data for "user" or
+   * "target" Pokemon. This only plays the {@linkcode AnimFrameTarget.GRAPHIC | graphic}
+   * components of the animation.
+   * @param targetInitialX - The x-coordinate of the animation's start point,
+   * relative to {@linkcode userFocusX}
+   * @param targetInitialY - The y-coordinate of the animation's start point,
+   * relative to {@linkcode userFocusY}
+   * @param frameTimeMult - A multiplier for the delay between graphic frames
+   * @param frameTimedEventPriority - The depth (or z-coordinate) of animated graphics:
    * - 0 is behind all other sprites (except BG)
-   * - 1 on top of player field
+   * - 1 is on top of player field
    * - 3 is on top of both fields
    * - 5 is on top of player sprite
-   * @param callback
+   * @param callback - A function invoked immediately after the animation completes
    */
   playWithoutTargets(
     targetInitialX: number,
     targetInitialY: number,
     frameTimeMult: number,
     frameTimedEventPriority?: 0 | 1 | 3 | 5,
-    callback?: Function,
+    callback?: () => void,
   ) {
     const spriteCache: SpriteCache = {
       [AnimFrameTarget.GRAPHIC]: [],
@@ -559,7 +628,7 @@ export abstract class BattleAnim {
           if (graphicFrameData) {
             moveSprite.setPosition(graphicFrameData.x, graphicFrameData.y);
             moveSprite.setAngle(graphicFrameData.angle);
-            moveSprite.setScale(graphicFrameData.scaleX, graphicFrameData.scaleY);
+            moveSprite.setScale(graphicFrameData.zoomX, graphicFrameData.zoomY);
 
             moveSprite.setAlpha(frame.opacity / 255);
             moveSprite.setVisible(frame.visible);
@@ -619,6 +688,7 @@ export abstract class BattleAnim {
 //#endregion
 //#region Helpers
 
+/** @todo Review and simplify this and other geometric helper functions */
 function transformPoint(
   x1: number,
   y1: number,

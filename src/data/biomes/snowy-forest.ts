@@ -104,5 +104,6 @@ export const snowyForestBiome = new Biome(
   8,
   weatherPool,
   terrainPool,
-  "town",
+  "snowy_forest",
+  3.047,
 );

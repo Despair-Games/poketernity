@@ -86,23 +86,73 @@ export class AnimConfig {
     return Array.from(backgrounds.values());
   }
 }
+
+/**
+ * Contains data for a single frame of an asset in a battle animation
+ * @see {@linkcode BattleAnim}
+ */
 export class AnimFrame {
+  /**
+   * The *x*-position of the sprite, relative
+   * to the frame's {@linkcode AnimFocus | focal point}.
+   * The sprite will move to the right as *x* increases.
+   */
   public x: number;
+  /**
+   * The *y*-position of the sprite, relative
+   * to the frame's {@linkcode AnimFocus | focal point}.
+   * The sprite will move downward as *y* increases.
+   */
   public y: number;
+  /** Horizontal scale factor (%) */
   public zoomX: number;
+  /** Vertical scale factor (%) */
   public zoomY: number;
+  /** Rotation angle (degrees, right-hand clockwise) */
   public angle: number;
+  /** If `true`, inverts the sprite horizontally */
   public mirror: boolean;
+  /** Whether or not the sprite is visible */
   public visible: boolean;
+  /**
+   * The blend mode to specify how the sprite is rendered on the canvas
+   * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
+   */
   public blendType: AnimBlendType;
+  /**
+   * The type of sprite affected by this frame
+   * @see {@linkcode AnimFrameTarget}
+   */
   public target: AnimFrameTarget;
+  /** If {@linkcode target} is "graphic", specifies the sprite index for the frame */
   public graphicFrame: number;
+  /** The alpha value for the animated sprite */
   public opacity: number;
+  /** @deprecated */
   public color: number[];
+  /** The animated sprite's tone (RGBA) */
   public tone: number[];
+  /** @deprecated */
   public flash: number[];
+  /**
+   * If the item (or "graphic") list for a frame is smaller than previous frames,
+   * graphics are automatically destroyed in reverse item order.
+   * This, if `true`, prevents the associated graphic from being destroyed by
+   * that process in future frames.
+   */
   public locked: boolean;
+  /**
+   * The depth or z-position of the animated sprite
+   * - 0 is behind all other sprites (except BG)
+   * - 1 is on top of player field
+   * - 3 is on top of both fields
+   * - 5 is on top of player sprite
+   */
   public priority: number;
+  /**
+   * The {@linkcode AnimFocus} specifying the point of origin for
+   * this animation's x- and y-position.
+   */
   public focus: AnimFocus;
 
   constructor(

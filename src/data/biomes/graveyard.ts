@@ -129,5 +129,6 @@ export const graveyardBiome = new Biome(
   8,
   weatherPool,
   terrainPool,
-  "town",
+  "graveyard",
+  3.232,
 );

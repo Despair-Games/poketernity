@@ -60,7 +60,7 @@ export class SeedTag extends BattlerTag {
 
         if (!cancelled.value) {
           globalScene.phaseManager.unshiftPhase(
-            new CommonAnimPhase(source.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.LEECH_SEED),
+            new CommonAnimPhase(CommonAnim.LEECH_SEED, source.getBattlerIndex(), pokemon.getBattlerIndex()),
           );
 
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));

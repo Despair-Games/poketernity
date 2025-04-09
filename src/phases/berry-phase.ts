@@ -40,7 +40,7 @@ export class BerryPhase extends FieldPhase {
           );
         } else {
           globalScene.phaseManager.unshiftPhase(
-            new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.USE_ITEM),
+            new CommonAnimPhase(CommonAnim.USE_ITEM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
           );
 
           for (const berryModifier of globalScene.applyModifiers(BerryModifier, pokemon.isPlayer(), pokemon)) {
