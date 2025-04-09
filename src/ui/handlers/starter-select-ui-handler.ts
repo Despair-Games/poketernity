@@ -11,7 +11,7 @@ import {
   getSameSpeciesEggCandyCounts,
   getValueReductionCandyCounts,
   speciesStarterCosts,
-} from "#app/data/balance/starters";
+} from "#app/data/starters";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";

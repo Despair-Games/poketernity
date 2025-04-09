@@ -1,4 +1,4 @@
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import {
   getEncounterText,

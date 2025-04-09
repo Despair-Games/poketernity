@@ -64,7 +64,7 @@ import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
   getCandyProgressRequirement,
   speciesStarterCosts,
-} from "#app/data/balance/starters";
+} from "#app/data/starters";
 import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";

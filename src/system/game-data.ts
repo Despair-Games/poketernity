@@ -21,7 +21,7 @@ import {
   STARTER_CANDY_MULIPLIER_FOR_EGG,
   getCandyGainMultiplierForShinies,
   speciesStarterCosts,
-} from "#app/data/balance/starters";
+} from "#app/data/starters";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";

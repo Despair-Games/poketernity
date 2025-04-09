@@ -1,6 +1,6 @@
 import type { TurnMove } from "#app/@types/TurnMove";
 import { type FairyLockTag } from "#app/data/arena-tag";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#app/data/battler-tags/trapped-tag";

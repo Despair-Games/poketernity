@@ -17,7 +17,7 @@ import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { SpeciesId } from "#enums/species-id";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { Nature } from "#enums/nature";
 import { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#app/field/pokemon";

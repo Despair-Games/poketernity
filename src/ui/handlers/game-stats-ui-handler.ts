@@ -1,4 +1,4 @@
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { DexAttr } from "#app/data/dex-attributes";
 import { globalScene } from "#app/global-scene";
 import type { GameData } from "#app/system/game-data";
