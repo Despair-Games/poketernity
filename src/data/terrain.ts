@@ -16,18 +16,18 @@ export class Terrain {
   public terrainType: TerrainType;
   public turnsLeft: number;
 
-  constructor(terrainType: TerrainType, turnsLeft?: number) {
+  constructor(terrainType: TerrainType, turnsLeft: number = 0) {
     this.terrainType = terrainType;
-    this.turnsLeft = turnsLeft || 0;
+    this.turnsLeft = turnsLeft;
   }
 
   /**
-   * Decrements turnsLeft and checks if it is greater than 0
-   * @returns true if turnsLeft is greater than 0
+   * Decrements {@linkcode turnsLeft} and checks if it is greater than `0`
+   * @returns `true` if `turnsLeft` is greater than `0`
    */
   lapse(): boolean {
     if (this.turnsLeft) {
-      return !!--this.turnsLeft;
+      return --this.turnsLeft !== 0;
     }
 
     return true;

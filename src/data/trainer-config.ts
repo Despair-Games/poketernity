@@ -32,11 +32,11 @@ export class TrainerPartyTemplate {
   public sameSpecies: boolean;
   public balanced: boolean;
 
-  constructor(size: number, strength: PartyMemberStrength, sameSpecies?: boolean, balanced?: boolean) {
+  constructor(size: number, strength: PartyMemberStrength, sameSpecies: boolean = false, balanced: boolean = false) {
     this.size = size;
     this.strength = strength;
-    this.sameSpecies = !!sameSpecies;
-    this.balanced = !!balanced;
+    this.sameSpecies = sameSpecies;
+    this.balanced = balanced;
   }
 
   getStrength(_index: number): PartyMemberStrength {
@@ -313,7 +313,7 @@ export class TrainerConfig {
     return TrainerType[this.getDerivedType()].toString().toLowerCase();
   }
 
-  getSpriteKey(female?: boolean, isDouble: boolean = false): string {
+  getSpriteKey(female: boolean = false, isDouble: boolean = false): string {
     let ret = this.getKey();
     if (this.hasGenders) {
       ret += `_${female ? "f" : "m"}`;

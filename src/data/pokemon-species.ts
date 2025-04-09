@@ -50,7 +50,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     growthRate: GrowthRate,
     malePercent: number | null,
     genderDiffs: boolean,
-    canChangeForm?: boolean,
+    canChangeForm: boolean = false,
     ...forms: PokemonForm[]
   ) {
     super(
@@ -82,7 +82,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     this.growthRate = growthRate;
     this.malePercent = malePercent;
     this.genderDiffs = genderDiffs;
-    this.canChangeForm = !!canChangeForm;
+    this.canChangeForm = canChangeForm;
     this.forms = forms;
 
     this.localize();

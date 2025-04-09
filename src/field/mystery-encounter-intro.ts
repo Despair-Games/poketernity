@@ -87,24 +87,24 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
       return;
     }
 
-    const getSprite = (spriteKey: string, hasShadow?: boolean, yShadow?: number) => {
+    const getSprite = (spriteKey: string, hasShadow: boolean = false, yShadow: number = 0) => {
       const ret = globalScene.addFieldSprite(0, 0, spriteKey);
       ret.setOrigin(0.5, 1);
       ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
-        hasShadow: !!hasShadow,
-        yShadowOffset: yShadow ?? 0,
+        hasShadow,
+        yShadowOffset: yShadow,
       });
       return ret;
     };
 
-    const getItemSprite = (spriteKey: string, hasShadow?: boolean, yShadow?: number) => {
+    const getItemSprite = (spriteKey: string, hasShadow: boolean = false, yShadow: number = 0) => {
       const icon = globalScene.add.sprite(-19, 2, "items", spriteKey);
       icon.setOrigin(0.5, 1);
       icon.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
-        hasShadow: !!hasShadow,
-        yShadowOffset: yShadow ?? 0,
+        hasShadow,
+        yShadowOffset: yShadow,
       });
       return icon;
     };

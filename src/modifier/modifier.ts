@@ -876,12 +876,12 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
   }
 
   /**
-   * Lapse the {@linkcode battlesLeft} counter (reduce it by 1)
-   * @param _args arguments passed (not used here)
-   * @returns `true` if {@linkcode battlesLeft} is not null
+   * Reduce {@linkcode battlesLeft} by `1` and check if it's greater than `0`
+   * @param _args - used by subclasses
+   * @returns `true` if `battlesLeft > 0`
    */
   public lapse(..._args: unknown[]): boolean {
-    return !!--this.battlesLeft;
+    return --this.battlesLeft > 0;
   }
 
   /**
@@ -2181,14 +2181,14 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
     restorePoints: number,
     restorePercent: number,
     healStatus: boolean,
-    fainted?: boolean,
+    fainted: boolean = false,
   ) {
     super(type, pokemonId);
 
     this.restorePoints = restorePoints;
     this.restorePercent = restorePercent;
     this.healStatus = healStatus;
-    this.fainted = !!fainted;
+    this.fainted = fainted;
   }
 
   /**
@@ -3258,7 +3258,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
       globalScene.phaseManager.queueMessagePhase(this.getTransferMessage(pokemon, targetPokemon, mt));
     }
 
-    return !!transferredModifierTypes.length;
+    return transferredModifierTypes.length > 0;
   }
 
   abstract getTransferredItemCount(): number;

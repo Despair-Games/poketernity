@@ -2012,7 +2012,7 @@ export default class BattleScene extends SceneBase {
     modifier: Modifier | null,
     ignoreUpdate?: boolean,
     playSound?: boolean,
-    virtual?: boolean,
+    virtual: boolean = false,
     instant?: boolean,
     cost?: number,
   ): boolean {
@@ -2028,7 +2028,7 @@ export default class BattleScene extends SceneBase {
           ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId),
         );
       }
-      if ((modifier as PersistentModifier).add(this.modifiers, !!virtual)) {
+      if ((modifier as PersistentModifier).add(this.modifiers, virtual)) {
         if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
           const pokemon = this.getPokemonById(modifier.pokemonId);
           if (pokemon) {
@@ -2952,7 +2952,7 @@ export default class BattleScene extends SceneBase {
       && this.mysteryEncounterSaveData.queuedEncounters.length > 0
     ) {
       let i = 0;
-      while (i < this.mysteryEncounterSaveData.queuedEncounters.length && !!encounter) {
+      while (i < this.mysteryEncounterSaveData.queuedEncounters.length && encounter) {
         const candidate = this.mysteryEncounterSaveData.queuedEncounters[i];
         const forcedChance = candidate.spawnPercent;
         if (randSeedInt(100) < forcedChance) {

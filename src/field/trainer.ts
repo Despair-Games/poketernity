@@ -88,14 +88,14 @@ export default class Trainer extends Phaser.GameObjects.Container {
       Object.keys(trainerPartyTemplates)[Object.values(trainerPartyTemplates).indexOf(this.getPartyTemplate())],
     );
 
-    const getSprite = (hasShadow?: boolean, forceFemale?: boolean) => {
+    const getSprite = (hasShadow: boolean = false, forceFemale: boolean = false) => {
       const ret = globalScene.addFieldSprite(
         0,
         0,
         this.config.getSpriteKey(variant === TrainerVariant.FEMALE || forceFemale, this.isDouble()),
       );
       ret.setOrigin(0.5, 1);
-      ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], hasShadow: !!hasShadow });
+      ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], hasShadow });
       return ret;
     };
 
@@ -123,7 +123,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     }
   }
 
-  getKey(forceFemale?: boolean): string {
+  getKey(forceFemale: boolean = false): string {
     return this.config.getSpriteKey(this.variant === TrainerVariant.FEMALE || forceFemale, this.isDouble());
   }
 
@@ -623,8 +623,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
   }
 
   initSprite(): void {
-    this.getSprites().map((sprite, i) => sprite.setTexture(this.getKey(!!i)).setFrame(0));
-    this.getTintSprites().map((tintSprite, i) => tintSprite.setTexture(this.getKey(!!i)).setFrame(0));
+    this.getSprites().map((sprite, i) => sprite.setTexture(this.getKey(i !== 0)).setFrame(0));
+    this.getTintSprites().map((tintSprite, i) => tintSprite.setTexture(this.getKey(i !== 0)).setFrame(0));
   }
 
   /**
