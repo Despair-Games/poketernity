@@ -13,7 +13,7 @@ import {
   bypassLogin,
 } from "#app/constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
-import { defaultStarterSpecies } from "#app/data/balance/default-starters";
+import { defaultStarterSpecies } from "#app/data/default-starters";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import {
   STARTER_CANDY_GAIN_FROM_CATCH,
