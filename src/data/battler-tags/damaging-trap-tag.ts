@@ -8,7 +8,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { CommonAnim } from "#enums/common-anim";
@@ -60,7 +60,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(this.commonAnim, pokemon.getBattlerIndex()));
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));

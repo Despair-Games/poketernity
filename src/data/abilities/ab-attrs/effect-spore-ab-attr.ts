@@ -5,7 +5,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Effect Spore's ability attribute
@@ -19,7 +19,7 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
 
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.EFFECT_SPORE);
+    this._flags.add(abAttrFlag.EFFECT_SPORE);
   }
 
   /**

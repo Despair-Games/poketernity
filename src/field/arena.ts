@@ -19,7 +19,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { type AbstractConstructor, getEnumValues, randSeedInt, weightedPick } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
@@ -434,7 +434,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === newWeatherType),
         );
-        applyAbAttrs<PostWeatherChangeAbAttr>(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
+        applyAbAttrs<PostWeatherChangeAbAttr>(abAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
       });
 
     return true;
@@ -507,8 +507,8 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
         );
-        applyAbAttrs<PostTerrainChangeAbAttr>(AbAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
-        applyAbAttrs<TerrainEventTypeChangeAbAttr>(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
+        applyAbAttrs<PostTerrainChangeAbAttr>(abAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
+        applyAbAttrs<TerrainEventTypeChangeAbAttr>(abAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
       });
 
     return true;

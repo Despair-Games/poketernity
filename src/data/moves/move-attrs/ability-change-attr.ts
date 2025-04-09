@@ -8,7 +8,7 @@ import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to change a target's ability to a set ability.
@@ -43,7 +43,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !(this.selfTarget ? user : target).getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      !(this.selfTarget ? user : target).getAbility().hasAttrFlag(abAttrFlag.UNSUPPRESSABLE_ABILITY)
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
   }
 }

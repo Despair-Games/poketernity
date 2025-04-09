@@ -8,7 +8,7 @@ import { BerryModifier } from "#app/modifier/modifier";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
@@ -32,7 +32,7 @@ export class BerryPhase extends FieldPhase {
         const cancelled = new BooleanHolder(false);
         pokemon
           .getOpponents()
-          .map((opp) => applyAbAttrs<PreventBerryUseAbAttr>(AbAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
+          .map((opp) => applyAbAttrs<PreventBerryUseAbAttr>(abAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
 
         if (cancelled.value) {
           globalScene.phaseManager.queueMessagePhase(
@@ -53,7 +53,7 @@ export class BerryPhase extends FieldPhase {
 
           globalScene.updateModifiers(pokemon.isPlayer());
 
-          applyAbAttrs<HealFromBerryUseAbAttr>(AbAttrFlag.HEAL_FROM_BERRY_USE, pokemon, false);
+          applyAbAttrs<HealFromBerryUseAbAttr>(abAttrFlag.HEAL_FROM_BERRY_USE, pokemon, false);
         }
       }
     });

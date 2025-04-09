@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "#app/data/moves/move";
 import { MoveCategory } from "#enums/move-category";
@@ -20,7 +20,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
    */
   constructor(chance: number) {
     super(true);
-    this._flags.add(AbAttrFlag.BYPASS_SPEED_CHANCE);
+    this._flags.add(abAttrFlag.BYPASS_SPEED_CHANCE);
     this.chance = chance;
   }
 

@@ -16,7 +16,7 @@ import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -150,7 +150,7 @@ export class MistTag extends ArenaTag {
   override apply(_arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
     if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
+      applyAbAttrs<InfiltratorAbAttr>(abAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -215,7 +215,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
+      applyAbAttrs<InfiltratorAbAttr>(abAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -751,7 +751,7 @@ class SpikesTag extends EntryHazardTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -956,7 +956,7 @@ class TypeHazardTag extends EntryHazardTag {
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
+    applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
 
     if (cancelled.value) {
       return false;
@@ -1040,7 +1040,7 @@ class StickyWebTag extends EntryHazardTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<ProtectStatAbAttr>(AbAttrFlag.PROTECT_STAT, pokemon, simulated, Stat.SPD, cancelled);
+      applyAbAttrs<ProtectStatAbAttr>(abAttrFlag.PROTECT_STAT, pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -1242,7 +1242,7 @@ class FireGrassPledgeTag extends ArenaTag {
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }
@@ -1357,7 +1357,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }

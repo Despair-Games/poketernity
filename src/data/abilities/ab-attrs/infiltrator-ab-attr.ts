@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -10,7 +10,7 @@ import { AbAttr } from "./ab-attr";
 export class InfiltratorAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.INFILTRATOR);
+    this._flags.add(abAttrFlag.INFILTRATOR);
   }
 
   /**

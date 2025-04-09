@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
@@ -17,7 +17,7 @@ export class ReduceSleepDurationAbAttr extends AbAttr {
 
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.REDUCE_SLEEP_DURATION);
+    this._flags.add(abAttrFlag.REDUCE_SLEEP_DURATION);
   }
 
   /**

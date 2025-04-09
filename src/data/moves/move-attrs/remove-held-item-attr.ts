@@ -7,7 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 
 /**
@@ -34,7 +34,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
 
     const cancelled = new BooleanHolder(false);
 
-    applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled);
+    applyAbAttrs<BlockItemTheftAbAttr>(abAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled);
 
     if (cancelled.value === true) {
       return false;

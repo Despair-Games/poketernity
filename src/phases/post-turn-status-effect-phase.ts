@@ -9,7 +9,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
@@ -35,8 +35,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     pokemon.status!.incrementTurn();
 
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
-    applyAbAttrs<BlockStatusDamageAbAttr>(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs<BlockStatusDamageAbAttr>(abAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
 
     if (cancelled.value) {
       return this.end();
@@ -56,14 +56,14 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         break;
       case StatusEffect.BURN:
         damage.value = pokemon.getMaxHp() / 16;
-        applyAbAttrs<ReduceBurnDamageAbAttr>(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
+        applyAbAttrs<ReduceBurnDamageAbAttr>(abAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
         break;
     }
 
     if (damage.value) {
       // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
       pokemon.damageAndUpdate(toDmgValue(damage.value), { preventEndure: true });
-      applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
+      applyAbAttrs<PostDamageAbAttr>(abAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
     }
 
     // TODO: this should be handled by some sort of animation manager instead of instantiating a new `CommonBattleAnim` class

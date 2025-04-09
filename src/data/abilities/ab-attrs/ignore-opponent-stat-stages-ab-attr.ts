@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { type BattleStat, BATTLE_STATS } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
@@ -13,7 +13,7 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
 
   constructor(stats?: BattleStat[]) {
     super(false);
-    this._flags.add(AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES);
+    this._flags.add(abAttrFlag.IGNORE_OPPONENT_STAT_STAGES);
 
     this.stats = stats ?? BATTLE_STATS;
   }

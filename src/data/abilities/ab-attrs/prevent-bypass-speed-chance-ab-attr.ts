@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * This attribute checks if a Pokemon's move meets a provided condition to determine if the Pokemon can use Quick Claw
@@ -17,7 +17,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
 
   constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
     super(true);
-    this._flags.add(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE);
+    this._flags.add(abAttrFlag.PREVENT_BYPASS_SPEED_CHANCE);
     this.condition = condition;
   }
 

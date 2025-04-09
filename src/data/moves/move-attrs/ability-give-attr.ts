@@ -6,7 +6,7 @@ import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to give the user's ability to the target.
@@ -29,8 +29,8 @@ export class AbilityGiveAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !user.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
-      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      !user.getAbility().hasAttrFlag(abAttrFlag.UNCOPIABLE_ABILITY)
+      && !target.getAbility().hasAttrFlag(abAttrFlag.UNSUPPRESSABLE_ABILITY)
       && user.getAbility().id !== target.getAbility().id;
   }
 }

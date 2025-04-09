@@ -1,6 +1,6 @@
 import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#app/data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -92,7 +92,7 @@ describe("Moves - Trick Room", () => {
     game.override.ability(AbilityId.QUICK_DRAW);
 
     const quickDrawAbAttr = allAbilities[AbilityId.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(
-      AbAttrFlag.BYPASS_SPEED_CHANCE,
+      abAttrFlag.BYPASS_SPEED_CHANCE,
     )[0];
     vi.spyOn(quickDrawAbAttr, "chance", "get").mockReturnValue(100);
 

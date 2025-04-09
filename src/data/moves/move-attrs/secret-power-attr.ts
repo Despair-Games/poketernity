@@ -9,7 +9,7 @@ import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr"
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { Stat } from "#enums/stat";
@@ -139,7 +139,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
-      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
+      abAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
       user,
       false,
       moveChance,
@@ -148,7 +148,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
     );
 
     if (!selfEffect) {
-      applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+      applyAbAttrs<IgnoreMoveEffectsAbAttr>(abAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

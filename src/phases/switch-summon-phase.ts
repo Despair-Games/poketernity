@@ -9,7 +9,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
@@ -116,7 +116,7 @@ export class SwitchSummonPhase extends SummonPhase {
     const party = this.getAlliedParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
-    applyAbAttrs<PreSwitchOutAbAttr>(AbAttrFlag.PRE_SWITCH_OUT, this.lastPokemon, false);
+    applyAbAttrs<PreSwitchOutAbAttr>(abAttrFlag.PRE_SWITCH_OUT, this.lastPokemon, false);
     if (this.switchType === SwitchType.BATON_PASS && switchedInPokemon) {
       this.getOpposingField().forEach((opposingPokemon: Pokemon) =>
         opposingPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id),

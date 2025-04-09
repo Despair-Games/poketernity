@@ -7,7 +7,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
@@ -60,7 +60,7 @@ export class PowderTag extends BattlerTag {
           globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.POWDER, pokemon.getBattlerIndex()));
 
           const cancelDamage = new BooleanHolder(false);
-          applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
+          applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
           if (!cancelDamage.value) {
             pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
               result: HitResult.OTHER,

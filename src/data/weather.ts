@@ -6,7 +6,7 @@ import { type SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/s
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { WeatherType } from "#enums/weather-type";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Weather types that are associated with the primal forms of the Generation III cover legendaries and cannot be overwritten by weaker weather types
@@ -140,10 +140,10 @@ export class Weather {
     for (const pokemon of field) {
       let suppressWeatherEffectAbAttr: SuppressWeatherEffectAbAttr | null = pokemon
         .getAbility()
-        .getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0];
+        .getAttrs<SuppressWeatherEffectAbAttr>(abAttrFlag.SUPPRESS_WEATHER_EFFECT)[0];
       if (!suppressWeatherEffectAbAttr) {
         suppressWeatherEffectAbAttr = pokemon.hasPassive()
-          ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
+          ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(abAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
           : null;
       }
       if (suppressWeatherEffectAbAttr && (!this.isPrimal() || suppressWeatherEffectAbAttr.affectsPrimal)) {

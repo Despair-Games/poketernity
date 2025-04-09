@@ -28,7 +28,7 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { isNullOrUndefined } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -166,7 +166,7 @@ export class FaintPhase extends PokemonPhase {
     if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
       applyAbAttrs<PostFaintAbAttr>(
-        AbAttrFlag.POST_FAINT,
+        abAttrFlag.POST_FAINT,
         pokemon,
         false,
         this.source,
@@ -174,15 +174,15 @@ export class FaintPhase extends PokemonPhase {
       );
     } else {
       //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
-      applyAbAttrs<PostFaintAbAttr>(AbAttrFlag.POST_FAINT, pokemon, false);
+      applyAbAttrs<PostFaintAbAttr>(abAttrFlag.POST_FAINT, pokemon, false);
     }
 
     const alivePlayField = globalScene.getField(true);
-    alivePlayField.forEach((p) => applyAbAttrs<PostKnockOutAbAttr>(AbAttrFlag.POST_KNOCK_OUT, p, false, pokemon));
+    alivePlayField.forEach((p) => applyAbAttrs<PostKnockOutAbAttr>(abAttrFlag.POST_KNOCK_OUT, p, false, pokemon));
     if (pokemon.turnData?.attacksReceived?.length) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
-        applyAbAttrs<PostVictoryAbAttr>(AbAttrFlag.POST_VICTORY, defeatSource, false);
+        applyAbAttrs<PostVictoryAbAttr>(abAttrFlag.POST_VICTORY, defeatSource, false);
         // TODO: Refactor Fell Stinger
         const pvmove = allMoves.get(pokemon.turnData.attacksReceived[0].moveId);
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);

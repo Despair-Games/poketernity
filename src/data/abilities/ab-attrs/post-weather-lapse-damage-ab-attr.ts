@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -23,7 +23,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
-    if (pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+    if (pokemon.hasAbilityWithAttr(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
       return false;
     }
 

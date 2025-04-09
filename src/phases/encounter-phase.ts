@@ -40,7 +40,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
@@ -163,7 +163,7 @@ export class EncounterPhase extends BattlePhase {
             .reverse()
             .forEach((playerPokemon) => {
               applyAbAttrs<SyncEncounterNatureAbAttr>(
-                AbAttrFlag.SYNC_ENCOUNTER_NATURE,
+                abAttrFlag.SYNC_ENCOUNTER_NATURE,
                 playerPokemon,
                 false,
                 currentBattle.enemyParty[e],

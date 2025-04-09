@@ -6,7 +6,7 @@ import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
@@ -52,12 +52,12 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       let ret =
-        !target.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
-        && !user.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY);
+        !target.getAbility().hasAttrFlag(abAttrFlag.UNCOPIABLE_ABILITY)
+        && !user.getAbility().hasAttrFlag(abAttrFlag.UNSUPPRESSABLE_ABILITY);
       if (this.copyToPartner && globalScene.currentBattle?.double) {
         ret =
           ret
-          && (user.getAlly()?.hp === 0 || !user.getAlly()?.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
+          && (user.getAlly()?.hp === 0 || !user.getAlly()?.getAbility().hasAttrFlag(abAttrFlag.UNSUPPRESSABLE_ABILITY));
       } else {
         ret = ret && user.getAbility().id !== target.getAbility().id;
       }

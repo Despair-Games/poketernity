@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 import i18next from "i18next";
 
@@ -17,7 +17,7 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
 
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE);
+    this._flags.add(abAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE);
   }
 
   /**

@@ -3,12 +3,12 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 export class BlockRecoilDamageAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.BLOCK_RECOIL_DAMAGE);
+    this._flags.add(abAttrFlag.BLOCK_RECOIL_DAMAGE);
   }
 
   override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {

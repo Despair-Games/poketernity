@@ -9,7 +9,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Poison Touch", () => {
   let phaserGame: Phaser.Game;
@@ -66,7 +66,7 @@ describe("Abilities - Poison Touch", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const abilityAttr = playerPokemon
       .getAbility()
-      .getAttrs<PostAttackApplyStatusEffectAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT)[0];
+      .getAttrs<PostAttackApplyStatusEffectAbAttr>(abAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT)[0];
 
     await checkSucceedPoison(MoveId.DRAINING_KISS, enemyPokemon);
     expect(abilityAttr.chance).toBe(30);

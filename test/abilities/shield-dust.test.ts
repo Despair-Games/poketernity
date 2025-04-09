@@ -3,7 +3,7 @@ import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-at
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -55,7 +55,7 @@ describe("Abilities - Shield Dust", () => {
 
     const chance = new NumberHolder(move.chance);
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
-      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
+      abAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
       phase.getUserPokemon()!,
       false,
       chance,
@@ -63,7 +63,7 @@ describe("Abilities - Shield Dust", () => {
       false,
     );
     applyAbAttrs<IgnoreMoveEffectsAbAttr>(
-      AbAttrFlag.IGNORE_MOVE_EFFECTS,
+      abAttrFlag.IGNORE_MOVE_EFFECTS,
       phase.getFirstTarget()!,
       false,
       phase.getUserPokemon()!,

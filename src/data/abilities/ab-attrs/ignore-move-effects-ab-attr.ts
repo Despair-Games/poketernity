@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -12,7 +12,7 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.IGNORE_MOVE_EFFECTS);
+    this._flags.add(abAttrFlag.IGNORE_MOVE_EFFECTS);
   }
 
   /**

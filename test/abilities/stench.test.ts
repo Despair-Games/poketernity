@@ -7,7 +7,7 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Stench", () => {
   let phaserGame: Phaser.Game;
@@ -41,7 +41,7 @@ describe("Abilities - Stench", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
     const abilityAttr = playerPokemon!
       .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(abAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -56,7 +56,7 @@ describe("Abilities - Stench", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
     const abilityAttr = playerPokemon!
       .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(abAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
     const headbuttMove = playerPokemon
       ?.getMoveset()
       .find((m) => m?.moveId === MoveId.HEADBUTT)
@@ -76,7 +76,7 @@ describe("Abilities - Stench", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
     const abilityAttr = playerPokemon!
       .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(abAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
@@ -100,7 +100,7 @@ describe("Abilities - Stench", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const abilityAttr = playerPokemon
       .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(abAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
 
     vi.spyOn(abilityAttr, "getChance");
 

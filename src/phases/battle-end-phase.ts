@@ -3,7 +3,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -51,7 +51,7 @@ export class BattleEndPhase extends BattlePhase {
     }
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
+      applyAbAttrs<PostBattleAbAttr>(abAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
     }
 
     if (currentBattle.moneyScattered) {

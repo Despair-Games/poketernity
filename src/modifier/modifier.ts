@@ -32,7 +32,7 @@ import { achvs } from "#app/system/achievements";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -2078,7 +2078,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false));
+    field.forEach((p) => applyAbAttrs<CommanderAbAttr>(abAttrFlag.COMMANDER, p, false));
     return true;
   }
 

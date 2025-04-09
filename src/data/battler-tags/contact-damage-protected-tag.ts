@@ -3,7 +3,7 @@ import { DamageProtectedTag } from "#app/data/battler-tags/damage-protected-tag"
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
@@ -38,7 +38,7 @@ export class ContactDamageProtectedTag extends DamageProtectedTag {
     }
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
-      if (!attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+      if (!attacker.hasAbilityWithAttr(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
           result: HitResult.OTHER,
         });

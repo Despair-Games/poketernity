@@ -1,13 +1,13 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
   constructor(showAbility: boolean = true) {
     super(showAbility);
-    this._flags.add(AbAttrFlag.VARIABLE_MOVE_POWER);
+    this._flags.add(abAttrFlag.VARIABLE_MOVE_POWER);
   }
 
   /**

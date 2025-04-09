@@ -6,7 +6,7 @@ import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-at
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
@@ -30,7 +30,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
-      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
+      abAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
       user,
       false,
       moveChance,
@@ -44,7 +44,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
     }
 
     if (!selfEffect) {
-      applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+      applyAbAttrs<IgnoreMoveEffectsAbAttr>(abAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

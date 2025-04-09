@@ -7,7 +7,7 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, getEnumKeys, toDmgValue, type AbstractConstructor } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
@@ -19,7 +19,7 @@ export const FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {
   const cancelled = new BooleanHolder(false);
-  applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
+  applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
   if (cancelled.value) {
     return false;
   }

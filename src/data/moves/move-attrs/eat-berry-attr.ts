@@ -7,7 +7,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute that causes targets of the move to eat a berry.
@@ -54,6 +54,6 @@ export class EatBerryAttr extends MoveEffectAttr {
 
   eatBerry(consumer: Pokemon, berryOwner?: Pokemon) {
     getBerryEffectFunc(this.chosenBerry!.berryType)(consumer, berryOwner); // consumer eats the berry
-    applyAbAttrs<HealFromBerryUseAbAttr>(AbAttrFlag.HEAL_FROM_BERRY_USE, consumer, false);
+    applyAbAttrs<HealFromBerryUseAbAttr>(abAttrFlag.HEAL_FROM_BERRY_USE, consumer, false);
   }
 }

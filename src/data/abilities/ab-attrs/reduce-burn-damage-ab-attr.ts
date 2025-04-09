@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { type NumberHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -10,7 +10,7 @@ import { AbAttr } from "./ab-attr";
 export class ReduceBurnDamageAbAttr extends AbAttr {
   constructor(protected multiplier: number) {
     super(false);
-    this._flags.add(AbAttrFlag.REDUCE_BURN_DAMAGE);
+    this._flags.add(abAttrFlag.REDUCE_BURN_DAMAGE);
   }
 
   /**

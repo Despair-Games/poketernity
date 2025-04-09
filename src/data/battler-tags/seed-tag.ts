@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
@@ -56,7 +56,7 @@ export class SeedTag extends BattlerTag {
       const source = pokemon.getOpponents().find((o) => o.getBattlerIndex() === this.sourceIndex);
       if (source) {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
         if (!cancelled.value) {
           globalScene.phaseManager.unshiftPhase(
@@ -64,7 +64,7 @@ export class SeedTag extends BattlerTag {
           );
 
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
-          const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
+          const reverseDrain = pokemon.hasAbilityWithAttr(abAttrFlag.REVERSE_DRAIN, false);
 
           globalScene.phaseManager.queuePokemonHealPhase(
             true,

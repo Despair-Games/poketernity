@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -39,7 +39,7 @@ describe("Abilities - Effect Spore", () => {
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(abAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -56,7 +56,7 @@ describe("Abilities - Effect Spore", () => {
     game.override.enemyAbility(AbilityId.OVERCOAT);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(abAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -71,7 +71,7 @@ describe("Abilities - Effect Spore", () => {
     game.override.enemySpecies(SpeciesId.TREECKO);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(abAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -85,7 +85,7 @@ describe("Abilities - Effect Spore", () => {
   it("should require contact to activate", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(abAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -101,7 +101,7 @@ describe("Abilities - Effect Spore", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    const abilityAttr = playerPokemon.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = playerPokemon.getAbilityAttrs(abAttrFlag.EFFECT_SPORE)[0]!;
 
     // Setup for counting number of times each status gets inflicted
     let sleepCount = 0;

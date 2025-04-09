@@ -138,7 +138,7 @@ import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -1188,7 +1188,7 @@ export default class BattleScene extends SceneBase {
     const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
     playerField.forEach((p) =>
-      applyAbAttrs<DoubleBattleChanceAbAttr>(AbAttrFlag.DOUBLE_BATTLE_CHANCE, p, false, doubleChance),
+      applyAbAttrs<DoubleBattleChanceAbAttr>(abAttrFlag.DOUBLE_BATTLE_CHANCE, p, false, doubleChance),
     );
     return Math.max(doubleChance.value, 1);
   }
@@ -1372,7 +1372,7 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetBattleData();
-          applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+          applyAbAttrs<PostBattleInitAbAttr>(abAttrFlag.POST_BATTLE_INIT, pokemon, false);
         }
 
         if (!this.trainer.visible) {
@@ -2145,7 +2145,7 @@ export default class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, source, false, cancelled);
+      applyAbAttrs<BlockItemTheftAbAttr>(abAttrFlag.BLOCK_ITEM_THEFT, source, false, cancelled);
     }
 
     if (cancelled.value) {
@@ -2185,13 +2185,13 @@ export default class BattleScene extends SceneBase {
           if (target.isPlayer()) {
             this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
             if (source && itemLost) {
-              applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
+              applyAbAttrs<PostItemLostAbAttr>(abAttrFlag.POST_ITEM_LOST, source, false);
             }
             return true;
           } else {
             this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
             if (source && itemLost) {
-              applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
+              applyAbAttrs<PostItemLostAbAttr>(abAttrFlag.POST_ITEM_LOST, source, false);
             }
             return true;
           }

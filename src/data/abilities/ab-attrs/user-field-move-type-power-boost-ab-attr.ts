@@ -1,4 +1,4 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import { PreAttackFieldMoveTypePowerBoostAbAttr } from "./pre-attack-field-move-type-power-boost-ab-attr";
 
@@ -9,6 +9,6 @@ import { PreAttackFieldMoveTypePowerBoostAbAttr } from "./pre-attack-field-move-
 export class UserFieldMoveTypePowerBoostAbAttr extends PreAttackFieldMoveTypePowerBoostAbAttr {
   constructor(boostedType: ElementalType) {
     super(boostedType);
-    this._flags.add(AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST);
+    this._flags.add(abAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST);
   }
 }

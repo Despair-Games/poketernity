@@ -5,7 +5,7 @@ import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to swap the user and target's abilities (if both are swappable).
@@ -31,7 +31,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !user.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY)
-      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY);
+      !user.getAbility().hasAttrFlag(abAttrFlag.UNSWAPPABLE_ABILITY)
+      && !target.getAbility().hasAttrFlag(abAttrFlag.UNSWAPPABLE_ABILITY);
   }
 }

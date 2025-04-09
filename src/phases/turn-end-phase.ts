@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#app/modifier/modifier";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { PhaseId } from "#enums/phase-id";
 import { TerrainType } from "#enums/terrain-type";
@@ -40,7 +40,7 @@ export class TurnEndPhase extends FieldPhase {
             },
           );
         }
-        applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.POST_TURN, pokemon, false);
+        applyAbAttrs<PostTurnAbAttr>(abAttrFlag.POST_TURN, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

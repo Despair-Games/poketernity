@@ -11,7 +11,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Moves - Secret Power", () => {
   let phaserGame: Phaser.Game;
@@ -72,7 +72,7 @@ describe("Moves - Secret Power", () => {
 
     await game.toEndOfTurn();
 
-    const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
+    const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs(abAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
     vi.spyOn(sereneGraceAttr, "apply");
 
     let rainbowEffect = game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);

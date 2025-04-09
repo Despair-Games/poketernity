@@ -5,7 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { MovePhase } from "#app/phases/move-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
@@ -27,7 +27,7 @@ export class FlinchedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    applyAbAttrs<FlinchEffectAbAttr>(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
+    applyAbAttrs<FlinchEffectAbAttr>(abAttrFlag.FLINCH_EFFECT, pokemon, false);
   }
 
   /**

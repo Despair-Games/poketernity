@@ -3,7 +3,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
 import i18next from "i18next";
@@ -21,7 +21,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     if (
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+      && !attacker.hasAbilityWithAttr(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
         result: HitResult.OTHER,

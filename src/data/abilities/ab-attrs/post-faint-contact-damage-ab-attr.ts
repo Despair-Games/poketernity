@@ -7,7 +7,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
 import i18next from "i18next";
@@ -37,7 +37,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
         .getField(true)
         .map((p) =>
           applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
-            AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
+            abAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
             p,
             simulated,
             cancelled,
@@ -46,7 +46,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
           ),
         );
 
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
       if (cancelled.value) {
         return false;
       }

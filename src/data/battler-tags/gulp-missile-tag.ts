@@ -8,7 +8,7 @@ import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { GulpMissileBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
@@ -45,7 +45,7 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
 
       if (!cancelled.value) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {

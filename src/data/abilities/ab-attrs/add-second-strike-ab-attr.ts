@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 /**
@@ -15,7 +15,7 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
 
   constructor(damageMultiplier: number) {
     super(false);
-    this._flags.add(AbAttrFlag.ADD_SECOND_STRIKE);
+    this._flags.add(abAttrFlag.ADD_SECOND_STRIKE);
 
     this.damageMultiplier = damageMultiplier;
   }

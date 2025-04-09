@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -11,7 +11,7 @@ import { AbAttr } from "./ab-attr";
 export class BypassParaSpeedReductionAbAttr extends AbAttr {
   constructor() {
     super(false);
-    this._flags.add(AbAttrFlag.BYPASS_PARA_SPEED_REDUCTION);
+    this._flags.add(abAttrFlag.BYPASS_PARA_SPEED_REDUCTION);
   }
 
   override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {

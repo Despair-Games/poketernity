@@ -21,7 +21,7 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -214,7 +214,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetBattleData();
-        applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+        applyAbAttrs<PostBattleInitAbAttr>(abAttrFlag.POST_BATTLE_INIT, pokemon, false);
       }
 
       globalScene.phaseManager.unshiftPhase(new ShowTrainerPhase());

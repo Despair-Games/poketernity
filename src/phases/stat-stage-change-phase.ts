@@ -13,7 +13,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { CANVAS_SCALE } from "#app/ui-constants";
 import { BooleanHolder, NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
@@ -87,7 +87,7 @@ export class StatStageChangePhase extends PokemonPhase {
     if (!this.ignoreAbilities && !this.bypassReflect) {
       const reflected = new BooleanHolder(false);
       applyAbAttrs<ReflectStatStageChangeAbAttr>(
-        AbAttrFlag.REFLECT_STAT_STAGE_CHANGE,
+        abAttrFlag.REFLECT_STAT_STAGE_CHANGE,
         pokemon,
         false,
         this.source,
@@ -114,7 +114,7 @@ export class StatStageChangePhase extends PokemonPhase {
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs<StatStageChangeMultiplierAbAttr>(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
+      applyAbAttrs<StatStageChangeMultiplierAbAttr>(abAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
     }
 
     let simulate = false;
@@ -127,7 +127,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {
-        applyAbAttrs<ProtectStatAbAttr>(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
+        applyAbAttrs<ProtectStatAbAttr>(abAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -186,7 +186,7 @@ export class StatStageChangePhase extends PokemonPhase {
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
           applyAbAttrs<StatStageChangeCopyAbAttr>(
-            AbAttrFlag.STAT_STAGE_CHANGE_COPY,
+            abAttrFlag.STAT_STAGE_CHANGE_COPY,
             opponent,
             false,
             this.stats,
@@ -196,7 +196,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       applyAbAttrs<PostStatStageChangeAbAttr>(
-        AbAttrFlag.POST_STAT_STAGE_CHANGE,
+        abAttrFlag.POST_STAT_STAGE_CHANGE,
         pokemon,
         false,
         filteredStats,

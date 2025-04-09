@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { BATTLE_STATS } from "#enums/stat";
 import i18next from "i18next";
@@ -27,7 +27,7 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
       if (target.getStatStage(s) > 0) {
         const userStatChange = new NumberHolder(target.getStatStage(s));
         applyAbAttrs<StatStageChangeMultiplierAbAttr>(
-          AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER,
+          abAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER,
           user,
           false,
           userStatChange,

@@ -2,7 +2,7 @@ import type { PostBiomeChangeAbAttr } from "#app/data/abilities/ab-attrs/post-bi
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -24,7 +24,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
     }
 
     for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
-      applyAbAttrs<PostBiomeChangeAbAttr>(AbAttrFlag.POST_BIOME_CHANGE, pokemon, false);
+      applyAbAttrs<PostBiomeChangeAbAttr>(abAttrFlag.POST_BIOME_CHANGE, pokemon, false);
     }
 
     const enemyField = globalScene.getEnemyField();

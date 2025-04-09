@@ -1,4 +1,4 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
@@ -450,7 +450,7 @@ export class TurnCommandManager {
         return;
       }
 
-      applyAbAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false, turnMove.move);
+      applyAbAttrs<BypassSpeedChanceAbAttr>(abAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false, turnMove.move);
       globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
     });
   }

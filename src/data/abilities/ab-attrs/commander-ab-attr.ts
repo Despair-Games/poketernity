@@ -7,7 +7,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";
 
@@ -20,7 +20,7 @@ import { PhaseId } from "#enums/phase-id";
 export class CommanderAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.COMMANDER);
+    this._flags.add(abAttrFlag.COMMANDER);
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

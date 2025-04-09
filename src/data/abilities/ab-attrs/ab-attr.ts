@@ -1,7 +1,7 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Pokemon } from "#app/field/pokemon";
 import type { Ability } from "#app/data/abilities/ability";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag, type AbAttrFlag } from "#enums/ab-attr-flag";
 
 export abstract class AbAttr {
   /** A set of flags for this attribute. Cascaded top to bottom. */
@@ -12,14 +12,14 @@ export abstract class AbAttr {
   private extraCondition: AbAttrCondition;
 
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    this._flags.add(AbAttrFlag.UNSPECIFIED);
+    this._flags.add(abAttrFlag.UNSPECIFIED);
     this.showAbility = showAbility;
     this.showAbilityInstant = showAbilityInstant;
   }
 
   /**
-   * Checks if this attribute has the provided {@linkcode AbAttrFlag}.
-   * @param flag The {@linkcode AbAttrFlag} to check
+   * Checks if this attribute has the provided {@linkcode abAttrFlag}.
+   * @param flag The {@linkcode abAttrFlag} to check
    * @returns true if the attribute has the flag
    */
   hasFlag(flag: AbAttrFlag) {

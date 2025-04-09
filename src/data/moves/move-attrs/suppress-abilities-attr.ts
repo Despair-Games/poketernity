@@ -5,7 +5,7 @@ import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
@@ -28,6 +28,6 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
   /** Causes the effect to fail when the target's ability is unsupressable or already suppressed. */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) =>
-      !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
+      !target.getAbility().hasAttrFlag(abAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
   }
 }

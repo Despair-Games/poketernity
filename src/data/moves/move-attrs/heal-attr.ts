@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 
 /**
@@ -37,7 +37,7 @@ export class HealAttr extends MoveEffectAttr {
    */
   protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
     const healRatio = new NumberHolder(this.healRatio);
-    applyAbAttrs<RecoveryBoostAbAttr>(AbAttrFlag.RECOVERY_BOOST, user, false, move, target, healRatio);
+    applyAbAttrs<RecoveryBoostAbAttr>(abAttrFlag.RECOVERY_BOOST, user, false, move, target, healRatio);
     return healRatio.value;
   }
 

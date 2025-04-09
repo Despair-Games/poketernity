@@ -6,7 +6,7 @@ import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";
 
 /**
@@ -78,7 +78,7 @@ export class MultiHitAttr extends MoveAttr {
          */
         const rand = user.randSeedInt(20);
         const hitValue = new NumberHolder(rand);
-        applyAbAttrs<MaxMultiHitAbAttr>(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
+        applyAbAttrs<MaxMultiHitAbAttr>(abAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
         if (hitValue.value >= 13) {
           return 2;
         } else if (hitValue.value >= 6) {

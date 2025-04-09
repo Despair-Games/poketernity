@@ -3,7 +3,7 @@ import { allAbilities } from "#app/data/data-lists";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -46,7 +46,7 @@ describe("Abilities - Sand Veil", () => {
     game.field.mockAbility(leadPokemon[0], AbilityId.SAND_VEIL);
 
     const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
+      abAttrFlag.STAT_MULTIPLIER,
     )[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
       if (stat === Stat.EVA && game.scene.arena.hasWeather(WeatherType.SANDSTORM)) {

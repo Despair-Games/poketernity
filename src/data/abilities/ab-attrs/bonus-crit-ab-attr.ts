@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -14,7 +14,7 @@ export class BonusCritAbAttr extends AbAttr {
 
   constructor(stages: number, showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.BONUS_CRIT);
+    this._flags.add(abAttrFlag.BONUS_CRIT);
     this.stages = stages;
   }
 

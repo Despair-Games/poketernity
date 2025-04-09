@@ -1,7 +1,7 @@
 import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { PreWeatherEffectAbAttr } from "./pre-weather-effect-ab-attr";
 
 export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
@@ -9,7 +9,7 @@ export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
 
   constructor(affectsPrimal: boolean = false) {
     super();
-    this._flags.add(AbAttrFlag.SUPPRESS_WEATHER_EFFECT);
+    this._flags.add(abAttrFlag.SUPPRESS_WEATHER_EFFECT);
 
     this.affectsPrimal = affectsPrimal;
   }

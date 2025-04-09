@@ -2,7 +2,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
@@ -45,7 +45,7 @@ export class StatMultiplierAbAttr extends AbAttr {
 
   constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
     super();
-    this._flags.add(AbAttrFlag.STAT_MULTIPLIER);
+    this._flags.add(abAttrFlag.STAT_MULTIPLIER);
 
     this.stat = stat;
     this.multiplier = multiplier;

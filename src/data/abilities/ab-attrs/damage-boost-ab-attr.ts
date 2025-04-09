@@ -8,7 +8,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Class for abilities that boost the damage of moves
@@ -22,7 +22,7 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
 
   constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
     super(true);
-    this._flags.add(AbAttrFlag.DAMAGE_BOOST);
+    this._flags.add(abAttrFlag.DAMAGE_BOOST);
     this.damageMultiplier = damageMultiplier;
     this.condition = condition;
   }

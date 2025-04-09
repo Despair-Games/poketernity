@@ -6,7 +6,7 @@ import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Heals user as a side effect of a move that hits a target.
@@ -33,7 +33,7 @@ export class HitHealAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
     let message = "";
-    const reverseDrain = target.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
+    const reverseDrain = target.hasAbilityWithAttr(abAttrFlag.REVERSE_DRAIN, false);
     if (this.healStat !== null) {
       // Strength Sap formula
       healAmount = target.getEffectiveStat(this.healStat);
@@ -44,7 +44,7 @@ export class HitHealAttr extends MoveEffectAttr {
       message = i18next.t("battle:regainHealth", { pokemonName: getPokemonNameWithAffix(user) });
     }
     if (reverseDrain) {
-      if (user.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+      if (user.hasAbilityWithAttr(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
         healAmount = 0;
         message = "";
       } else {

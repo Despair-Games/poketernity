@@ -8,7 +8,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
@@ -44,7 +44,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
       globalScene.ui.showText(getWeatherLapseMessage(weather.weatherType) ?? "", null, () => {
         this.executeForAll((pokemon: Pokemon) => {
           if (!pokemon.switchOutStatus) {
-            applyAbAttrs<PostWeatherLapseAbAttr>(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false, weather);
+            applyAbAttrs<PostWeatherLapseAbAttr>(abAttrFlag.POST_WEATHER_LAPSE, pokemon, false, weather);
           }
         });
 
@@ -59,7 +59,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     const cancelled = new BooleanHolder(false);
 
     this.executeForAll((pokemon: Pokemon) =>
-      applyAbAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, false, weather, cancelled),
+      applyAbAttrs<SuppressWeatherEffectAbAttr>(abAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, false, weather, cancelled),
     );
 
     if (cancelled.value) {
@@ -69,8 +69,8 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     const inflictDamage = (pokemon: Pokemon): void => {
       const cancelled = new BooleanHolder(false);
 
-      applyAbAttrs<PreWeatherDamageAbAttr>(AbAttrFlag.PRE_WEATHER_DAMAGE, pokemon, false, weather, cancelled);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+      applyAbAttrs<PreWeatherDamageAbAttr>(abAttrFlag.PRE_WEATHER_DAMAGE, pokemon, false, weather, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (cancelled.value || pokemon.getTag(BattlerTagType.UNDERGROUND) || pokemon.getTag(BattlerTagType.UNDERWATER)) {
         return;

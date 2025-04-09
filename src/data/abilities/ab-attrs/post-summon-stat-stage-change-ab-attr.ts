@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 
@@ -41,9 +41,9 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     for (const opponent of pokemon.getOpponents()) {
       const cancelled = new BooleanHolder(false);
       if (this.intimidate) {
-        applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INITIMIDATE_IMMUNITY, opponent, simulated, cancelled);
+        applyAbAttrs<IntimidateImmunityAbAttr>(abAttrFlag.INITIMIDATE_IMMUNITY, opponent, simulated, cancelled);
         applyAbAttrs<PostIntimidateStatStageChangeAbAttr>(
-          AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
+          abAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
           opponent,
           simulated,
           cancelled,

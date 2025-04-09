@@ -6,7 +6,7 @@ import { MoveEffectAttr, type MoveEffectAttrOptions } from "#app/data/moves/move
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
 export interface ChanceBasedMoveEffectAttrOptions extends MoveEffectAttrOptions {
@@ -64,7 +64,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
-      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
+      abAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
       user,
       false,
       moveChance,
@@ -76,7 +76,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
     if (!selfEffect) {
-      applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+      applyAbAttrs<IgnoreMoveEffectsAbAttr>(abAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

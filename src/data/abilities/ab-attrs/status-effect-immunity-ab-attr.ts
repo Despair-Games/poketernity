@@ -1,4 +1,4 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
 import { PreSetStatusEffectImmunityAbAttr } from "./pre-set-status-effect-immunity-ab-attr";
 
@@ -9,6 +9,6 @@ import { PreSetStatusEffectImmunityAbAttr } from "./pre-set-status-effect-immuni
 export class StatusEffectImmunityAbAttr extends PreSetStatusEffectImmunityAbAttr {
   constructor(...immuneEffects: StatusEffect[]) {
     super(...immuneEffects);
-    this._flags.add(AbAttrFlag.STATUS_EFFECT_IMMUNITY);
+    this._flags.add(abAttrFlag.STATUS_EFFECT_IMMUNITY);
   }
 }

@@ -7,7 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Flame Body/Poison Point/Static", () => {
   let phaserGame: Phaser.Game;
@@ -44,7 +44,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     vi.spyOn(
       pokemon!
         .getAbility()
-        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
+        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(abAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
       "chance",
       "get",
     ).mockReturnValue(100);
@@ -68,7 +68,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     vi.spyOn(
       pokemon!
         .getAbility()
-        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
+        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(abAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
       "chance",
       "get",
     ).mockReturnValue(100);
@@ -88,7 +88,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     vi.spyOn(
       pokemon!
         .getAbility()
-        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
+        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(abAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
       "chance",
       "get",
     ).mockReturnValue(100);

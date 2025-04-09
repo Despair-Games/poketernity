@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { StatusEffect } from "#enums/status-effect";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
@@ -19,7 +19,7 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
   constructor(...effects: StatusEffect[]) {
     /** This effect does not require a damaging move */
     super(false);
-    this._flags.add(AbAttrFlag.CONFUSION_ON_STATUS_EFFECT);
+    this._flags.add(abAttrFlag.CONFUSION_ON_STATUS_EFFECT);
     this.effects = effects;
   }
 

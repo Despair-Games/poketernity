@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
@@ -26,7 +26,7 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
 
   constructor(moveFunc: AbAttrMoveCondition, changeAmount: number) {
     super(true);
-    this._flags.add(AbAttrFlag.CHANGE_MOVE_PRIORITY);
+    this._flags.add(abAttrFlag.CHANGE_MOVE_PRIORITY);
 
     this.moveFunc = moveFunc;
     this.changeAmount = changeAmount;

@@ -5,7 +5,7 @@ import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-bas
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
 import type { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
@@ -59,7 +59,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
 
     if (pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)) {
       applyAbAttrs<ConfusionOnStatusEffectAbAttr>(
-        AbAttrFlag.CONFUSION_ON_STATUS_EFFECT,
+        abAttrFlag.CONFUSION_ON_STATUS_EFFECT,
         user,
         false,
         target,

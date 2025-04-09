@@ -14,6 +14,7 @@ import { type BlockRedirectAbAttr } from "#app/data/abilities/ab-attrs/block-red
 import { type BlockStatusDamageAbAttr } from "#app/data/abilities/ab-attrs/block-status-damage-ab-attr";
 import { type BonusCritAbAttr } from "#app/data/abilities/ab-attrs/bonus-crit-ab-attr";
 import { type BypassBurnDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-burn-damage-reduction-ab-attr";
+import { type BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { type BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
 import { type CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
 import { type ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
@@ -21,6 +22,8 @@ import { type ConfusionOnStatusEffectAbAttr } from "#app/data/abilities/ab-attrs
 import { type DamageBoostAbAttr } from "#app/data/abilities/ab-attrs/damage-boost-ab-attr";
 import { type DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import { type DoubleBerryEffectAbAttr } from "#app/data/abilities/ab-attrs/double-berry-effect-ab-attr";
+import { type EffectSporeAbAttr } from "#app/data/abilities/ab-attrs/effect-spore-ab-attr";
+import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
 import { type FieldMultiplyStatAbAttr } from "#app/data/abilities/ab-attrs/field-multiply-stat-ab-attr";
 import { type FieldPreventExplosionLikeAbAttr } from "#app/data/abilities/ab-attrs/field-prevent-explosion-like-ab-attr";
 import { type FieldPriorityMoveImmunityAbAttr } from "#app/data/abilities/ab-attrs/field-priority-move-immunity-ab-attr";
@@ -65,8 +68,10 @@ import { type PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-
 import { type PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 import { type PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 import { type PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
+import { type PostWeatherLapseAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-ab-attr";
 import { type PreDefendFullHpEndureAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-full-hp-endure-ab-attr";
 import { type PreSwitchOutAbAttr } from "#app/data/abilities/ab-attrs/pre-switch-out-ab-attr";
+import { type PreWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/pre-weather-damage-ab-attr";
 import { type PreventBerryUseAbAttr } from "#app/data/abilities/ab-attrs/prevent-berry-use-ab-attr";
 import { type PreventBypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { type ProtectStatAbAttr } from "#app/data/abilities/ab-attrs/protect-stat-ab-attr";
@@ -76,6 +81,8 @@ import { type RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-m
 import { type ReduceBerryUseThresholdAbAttr } from "#app/data/abilities/ab-attrs/reduce-berry-use-threshold-ab-attr";
 import { type ReduceBurnDamageAbAttr } from "#app/data/abilities/ab-attrs/reduce-burn-damage-ab-attr";
 import { type ReduceSleepDurationAbAttr } from "#app/data/abilities/ab-attrs/reduce-sleep-duration-ab-attr";
+import { type ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
+import { type ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { type ReverseDrainAbAttr } from "#app/data/abilities/ab-attrs/reverse-drain-ab-attr";
 import { type RunSuccessAbAttr } from "#app/data/abilities/ab-attrs/run-success-ab-attr";
 import { type StabBoostAbAttr } from "#app/data/abilities/ab-attrs/stab-boost-ab-attr";
@@ -98,235 +105,234 @@ import { type UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/ab
 import { type VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
 import { type WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight-multiplier-ab-attr";
 import { type WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
-import { type PreWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/pre-weather-damage-ab-attr";
-import { type PostWeatherLapseAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-ab-attr";
-import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
-import { type EffectSporeAbAttr } from "#app/data/abilities/ab-attrs/effect-spore-ab-attr";
-import { type ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
-import { type BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
-import { type ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-export enum AbAttrFlag {
+/**
+ * Enum of various flags that an {@linkcode AbAttr} can have.
+ */
+export const abAttrFlag = Object.freeze({
   /** @see {@linkcode AbAttr} */
-  UNSPECIFIED,
+  UNSPECIFIED: 1,
   /** @see {@linkcode UncopiableAbilityAbAttr} */
-  UNCOPIABLE_ABILITY,
+  UNCOPIABLE_ABILITY: 2,
   /** @see {@linkcode UnsuppressableAbilityAbAttr} */
-  UNSUPPRESSABLE_ABILITY,
+  UNSUPPRESSABLE_ABILITY: 3,
   /** @see {@linkcode PostDefendAbilityGiveAbAttr} */
-  POST_DEFEND_ABILITY_GIVE,
+  POST_DEFEND_ABILITY_GIVE: 4,
   /** @see {@linkcode UnswappableAbilityAbAttr} */
-  UNSWAPPABLE_ABILITY,
+  UNSWAPPABLE_ABILITY: 5,
   /** @see {@linkcode PostDamageForceSwitchAbAttr} */
-  POST_DAMAGE_FORCE_SWITCH,
+  POST_DAMAGE_FORCE_SWITCH: 6,
   /** @see {@linkcode SuppressFieldAbilitiesAbAttr} */
-  SUPPRESS_FIELD_ABILITIES,
+  SUPPRESS_FIELD_ABILITIES: 7,
   /** @see {@linkcode BlockRedirectAbAttr} */
-  BLOCK_REDIRECT,
+  BLOCK_REDIRECT: 8,
   /** @see {@linkcode IgnoreMoveEffectsAbAttr} */
-  IGNORE_MOVE_EFFECTS,
+  IGNORE_MOVE_EFFECTS: 9,
   /** @see {@linkcode IgnoreTypeImmunityAbAttr} */
-  IGNORE_TYPE_IMMUNITY,
+  IGNORE_TYPE_IMMUNITY: 10,
   /** @see {@linkcode CommanderAbAttr} */
-  COMMANDER,
+  COMMANDER: 11,
   /** @see {@linkcode BlockNonDirectDamageAbAttr} */
-  BLOCK_NON_DIRECT_DAMAGE,
+  BLOCK_NON_DIRECT_DAMAGE: 12,
   /** @see {@linkcode ReverseDrainAbAttr} */
-  REVERSE_DRAIN,
+  REVERSE_DRAIN: 13,
   /** @see {@linkcode IgnoreContactAbAttr} */
-  IGNORE_CONTACT,
+  IGNORE_CONTACT: 14,
   /** @see {@linkcode MoveAbilityBypassAbAttr} */
-  MOVE_ABILITY_BYPASS,
+  MOVE_ABILITY_BYPASS: 15,
   /** @see {@linkcode IgnoreProtectOnContactAbAttr} */
-  IGNORE_PROTECT_ON_CONTACT,
+  IGNORE_PROTECT_ON_CONTACT: 16,
   /** @see {@linkcode IncreasePpAbAttr} */
-  INCREASE_PP,
+  INCREASE_PP: 17,
   /** @see {@linkcode AlwaysHitAbAttr} */
-  ALWAYS_HIT,
+  ALWAYS_HIT: 18,
   /** @see {@linkcode MaxMultiHitAbAttr} */
-  MAX_MULTI_HIT,
+  MAX_MULTI_HIT: 19,
   /** @see {@linkcode SuppressWeatherEffectAbAttr} */
-  SUPPRESS_WEATHER_EFFECT,
+  SUPPRESS_WEATHER_EFFECT: 20,
   /** @see {@linkcode ReceivedMoveDamageMultiplierAbAttr} */
-  RECEIVED_MOVE_DAMAGE_MULTIPLIER,
+  RECEIVED_MOVE_DAMAGE_MULTIPLIER: 21,
   /** @see {@linkcode PostAttackApplyStatusEffectAbAttr} */
-  POST_ATTACK_APPLY_STATUS_EFFECT,
+  POST_ATTACK_APPLY_STATUS_EFFECT: 22,
   /** @see {@linkcode PostDefendContactApplyStatusEffectAbAttr} */
-  POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT,
+  POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT: 23,
   /** @see {@linkcode BypassSpeedChanceAbAttr} */
-  BYPASS_SPEED_CHANCE,
+  BYPASS_SPEED_CHANCE: 24,
   /** @see {@linkcode PreventBypassSpeedChanceAbAttr} */
-  PREVENT_BYPASS_SPEED_CHANCE,
+  PREVENT_BYPASS_SPEED_CHANCE: 25,
   /** @see {@linkcode StatMultiplierAbAttr} */
-  STAT_MULTIPLIER,
+  STAT_MULTIPLIER: 26,
   /** @see {@linkcode PostAttackApplyBattlerTagAbAttr} */
-  POST_ATTACK_APPLY_BATTLER_TAG,
+  POST_ATTACK_APPLY_BATTLER_TAG: 27,
   /** @see {@linkcode MoveEffectChanceMultiplierAbAttr} */
-  MOVE_EFFECT_CHANCE_MULTIPLIER,
+  MOVE_EFFECT_CHANCE_MULTIPLIER: 28,
   /** @see {@linkcode DoubleBattleChanceAbAttr} */
-  DOUBLE_BATTLE_CHANCE,
+  DOUBLE_BATTLE_CHANCE: 29,
   /** @see {@linkcode PostBattleInitAbAttr} */
-  POST_BATTLE_INIT,
+  POST_BATTLE_INIT: 30,
   /** @see {@linkcode PostItemLostAbAttr} */
-  POST_ITEM_LOST,
+  POST_ITEM_LOST: 31,
   /** @see {@linkcode BlockItemTheftAbAttr} */
-  BLOCK_ITEM_THEFT,
+  BLOCK_ITEM_THEFT: 32,
   /** @see {@linkcode ForceSwitchOutImmunityAbAttr} */
-  FORCE_SWITCH_OUT_IMMUNITY,
+  FORCE_SWITCH_OUT_IMMUNITY: 33,
   /** @see {@linkcode FieldPreventExplosionLikeAbAttr} */
-  FIELD_PREVENT_EXPLOSION_LIKE,
+  FIELD_PREVENT_EXPLOSION_LIKE: 34,
   /** @see {@linkcode IntimidateImmunityAbAttr} */
-  INITIMIDATE_IMMUNITY,
+  INITIMIDATE_IMMUNITY: 35,
   /** @see {@linkcode PostIntimidateStatStageChangeAbAttr} */
-  POST_INTIMIDATE_STAT_STAGE_CHANGE,
+  POST_INTIMIDATE_STAT_STAGE_CHANGE: 36,
   /** @see {@linkcode InfiltratorAbAttr} */
-  INFILTRATOR,
+  INFILTRATOR: 37,
   /** @see {@linkcode ProtectStatAbAttr} */
-  PROTECT_STAT,
+  PROTECT_STAT: 38,
   /** @see {@linkcode FlinchEffectAbAttr} */
-  FLINCH_EFFECT,
+  FLINCH_EFFECT: 39,
   /** @see {@linkcode ReduceBerryUseThresholdAbAttr} */
-  REDUCE_BERRY_USE_THRESHOLD,
+  REDUCE_BERRY_USE_THRESHOLD: 40,
   /** @see {@linkcode DoubleBerryEffectAbAttr} */
-  DOUBLE_BERRY_EFFECT,
+  DOUBLE_BERRY_EFFECT: 41,
   /** @see {@linkcode HealFromBerryUseAbAttr} */
-  HEAL_FROM_BERRY_USE,
+  HEAL_FROM_BERRY_USE: 42,
   /** @see {@linkcode RecoveryBoostAbAttr} */
-  RECOVERY_BOOST,
+  RECOVERY_BOOST: 43,
   /** @see {@linkcode BlockOneHitKoAbAttr} */
-  BLOCK_ONE_HIT_KO,
+  BLOCK_ONE_HIT_KO: 44,
   /** @see {@linkcode BlockRecoilDamageAbAttr} */
-  BLOCK_RECOIL_DAMAGE,
+  BLOCK_RECOIL_DAMAGE: 45,
   /** @see {@linkcode ConfusionOnStatusEffectAbAttr} */
-  CONFUSION_ON_STATUS_EFFECT,
+  CONFUSION_ON_STATUS_EFFECT: 46,
   /** @see {@linkcode StatStageChangeMultiplierAbAttr} */
-  STAT_STAGE_CHANGE_MULTIPLIER,
+  STAT_STAGE_CHANGE_MULTIPLIER: 47,
   /** @see {@linkcode WonderSkinAbAttr} */
-  WONDER_SKIN,
+  WONDER_SKIN: 48,
   /** @see {@linkcode MoveTypeChangeAbAttr} */
-  MOVE_TYPE_CHANGE,
+  MOVE_TYPE_CHANGE: 49,
   /** @see {@linkcode VariableMovePowerAbAttr} */
-  VARIABLE_MOVE_POWER,
+  VARIABLE_MOVE_POWER: 50,
   /** @see {@linkcode AllyMoveCategoryPowerBoostAbAttr} */
-  ALLY_MOVE_CATEGORY_POWER_BOOST,
+  ALLY_MOVE_CATEGORY_POWER_BOOST: 51,
   /** @see {@linkcode UserFieldMoveTypePowerBoostAbAttr} */
-  USER_FIELD_MOVE_TYPE_POWER_BOOST,
+  USER_FIELD_MOVE_TYPE_POWER_BOOST: 52,
   /** @see {@linkcode ChangeMovePriorityAbAttr} */
-  CHANGE_MOVE_PRIORITY,
+  CHANGE_MOVE_PRIORITY: 53,
   /** @see {@linkcode PostWeatherChangeAbAttr} */
-  POST_WEATHER_CHANGE,
+  POST_WEATHER_CHANGE: 54,
   /** @see {@linkcode PostTerrainChangeAbAttr} */
-  POST_TERRAIN_CHANGE,
+  POST_TERRAIN_CHANGE: 55,
   /** @see {@linkcode TerrainEventTypeChangeAbAttr} */
-  TERRAIN_EVENT_TYPE_CHANGE,
+  TERRAIN_EVENT_TYPE_CHANGE: 56,
   /** @see {@linkcode BonusCritAbAttr} */
-  BONUS_CRIT,
+  BONUS_CRIT: 57,
   /** @see {@linkcode FieldMultiplyStatAbAttr} */
-  FIELD_MULTIPLY_STAT,
+  FIELD_MULTIPLY_STAT: 58,
   /** @see {@linkcode RunSuccessAbAttr} */
-  RUN_SUCCESS,
+  RUN_SUCCESS: 59,
   /** @see {@linkcode PostBattleAbAttr} */
-  POST_BATTLE,
+  POST_BATTLE: 60,
   /** @see {@linkcode PreventBerryUseAbAttr} */
-  PREVENT_BERRY_USE,
+  PREVENT_BERRY_USE: 61,
   /** @see {@linkcode SyncEncounterNatureAbAttr} */
-  SYNC_ENCOUNTER_NATURE,
+  SYNC_ENCOUNTER_NATURE: 62,
   /** @see {@linkcode PostFaintAbAttr} */
-  POST_FAINT,
+  POST_FAINT: 63,
   /** @see {@linkcode PostKnockOutAbAttr} */
-  POST_KNOCK_OUT,
+  POST_KNOCK_OUT: 64,
   /** @see {@linkcode PostVictoryAbAttr} */
-  POST_VICTORY,
+  POST_VICTORY: 65,
   /** @see {@linkcode AddSecondStrikeAbAttr} */
-  ADD_SECOND_STRIKE,
+  ADD_SECOND_STRIKE: 66,
   /** @see {@linkcode PostDamageAbAttr} */
-  POST_DAMAGE,
+  POST_DAMAGE: 67,
   /** @see {@linkcode PostAttackAbAttr} */
-  POST_ATTACK,
+  POST_ATTACK: 68,
   /** @see {@linkcode PostDefendAbAttr} */
-  POST_DEFEND,
+  POST_DEFEND: 69,
   /** @see {@linkcode WeightMultiplierAbAttr} */
-  WEIGHT_MULTIPLIER,
+  WEIGHT_MULTIPLIER: 70,
   /** @see {@linkcode ArenaTrapAbAttr} */
-  ARENA_TRAP,
+  ARENA_TRAP: 71,
   /** @see {@linkcode TypeImmunityAbAttr} */
-  TYPE_IMMUNITY,
+  TYPE_IMMUNITY: 72,
   /** @see {@linkcode MoveImmunityAbAttr} */
-  MOVE_IMMUNITY,
+  MOVE_IMMUNITY: 73,
   /** @see {@linkcode FieldPriorityMoveImmunityAbAttr} */
-  FIELD_PRIORITY_MOVE_IMMUNITY,
+  FIELD_PRIORITY_MOVE_IMMUNITY: 74,
   /** @see {@linkcode FullHpResistTypeAbAttr} */
-  FULL_HP_RESIST_TYPE,
+  FULL_HP_RESIST_TYPE: 75,
   /** @see {@linkcode IgnoreOpponentStatStagesAbAttr} */
-  IGNORE_OPPONENT_STAT_STAGES,
+  IGNORE_OPPONENT_STAT_STAGES: 76,
   /** @see {@linkcode MultCritAbAttr} */
-  MULT_CRIT,
+  MULT_CRIT: 77,
   /** @see {@linkcode StabBoostAbAttr} */
-  STAB_BOOST,
+  STAB_BOOST: 78,
   /** @see {@linkcode BypassBurnDamageReductionAbAttr} */
-  BYPASS_BURN_DAMAGE_REDUCTION,
+  BYPASS_BURN_DAMAGE_REDUCTION: 79,
   /** @see {@linkcode DamageBoostAbAttr} */
-  DAMAGE_BOOST,
+  DAMAGE_BOOST: 80,
   /** @see {@linkcode AlliedFieldDamageReductionAbAttr} */
-  ALLIED_FIELD_DAMAGE_REDUCTION,
+  ALLIED_FIELD_DAMAGE_REDUCTION: 81,
   /** @see {@linkcode PreDefendFullHpEndureAbAttr} */
-  PRE_DEFEND_FULL_HP_ENDURE,
+  PRE_DEFEND_FULL_HP_ENDURE: 82,
   /** @see {@linkcode ConditionalCritAbAttr} */
-  CONDITIONAL_CRIT,
+  CONDITIONAL_CRIT: 83,
   /** @see {@linkcode BlockCritAbAttr} */
-  BLOCK_CRIT,
+  BLOCK_CRIT: 84,
   /** @see {@linkcode BattlerTagImmunityAbAttr} */
-  BATTLER_TAG_IMMUNITY,
+  BATTLER_TAG_IMMUNITY: 85,
   /** @see {@linkcode UserFieldBattlerTagImmunityAbAttr} */
-  USER_FIELD_BATTLER_TAG_IMMUNITY,
+  USER_FIELD_BATTLER_TAG_IMMUNITY: 86,
   /** @see {@linkcode IgnoreTypeStatusEffectImmunityAbAttr} */
-  IGNORE_TYPE_STATUS_EFFECT_IMMUNITY,
+  IGNORE_TYPE_STATUS_EFFECT_IMMUNITY: 87,
   /** @see {@linkcode StatusEffectImmunityAbAttr} */
-  STATUS_EFFECT_IMMUNITY,
+  STATUS_EFFECT_IMMUNITY: 88,
   /** @see {@linkcode UserFieldStatusEffectImmunityAbAttr} */
-  USER_FIELD_STATUS_EFFECT_IMMUNITY,
+  USER_FIELD_STATUS_EFFECT_IMMUNITY: 89,
   /** @see {@linkcode SynchronizeStatusAbAttr} */
-  SYNCHRONIZE_STATUS,
+  SYNCHRONIZE_STATUS: 90,
   /** @see {@linkcode ReduceSleepDurationAbAttr} */
-  REDUCE_SLEEP_DURATION,
+  REDUCE_SLEEP_DURATION: 91,
   /** @see {@linkcode PokemonTypeChangeAbAttr} */
-  POKEMON_TYPE_CHANGE,
+  POKEMON_TYPE_CHANGE: 92,
   /** @see {@linkcode PostMoveUsedAbAttr} */
-  POST_MOVE_USED,
+  POST_MOVE_USED: 93,
   /** @see {@linkcode RedirectMoveAbAttr} */
-  REDIRECT_MOVE,
+  REDIRECT_MOVE: 94,
   /** @see {@linkcode PostBiomeChangeAbAttr} */
-  POST_BIOME_CHANGE,
+  POST_BIOME_CHANGE: 95,
   /** @see {@linkcode PostSummonAbAttr} */
-  POST_SUMMON,
+  POST_SUMMON: 96,
   /** @see {@linkcode BlockStatusDamageAbAttr} */
-  BLOCK_STATUS_DAMAGE,
+  BLOCK_STATUS_DAMAGE: 97,
   /** @see {@linkcode ReduceBurnDamageAbAttr} */
-  REDUCE_BURN_DAMAGE,
+  REDUCE_BURN_DAMAGE: 98,
   /** @see {@linkcode StatStageChangeCopyAbAttr} */
-  STAT_STAGE_CHANGE_COPY,
+  STAT_STAGE_CHANGE_COPY: 99,
   /** @see {@linkcode PostStatStageChangeAbAttr} */
-  POST_STAT_STAGE_CHANGE,
+  POST_STAT_STAGE_CHANGE: 100,
   /** @see {@linkcode PreSwitchOutAbAttr} */
-  PRE_SWITCH_OUT,
+  PRE_SWITCH_OUT: 101,
   /** @see {@linkcode PostTurnAbAttr} */
-  POST_TURN,
+  POST_TURN: 102,
   /** @see {@linkcode PreWeatherDamageAbAttr} */
-  PRE_WEATHER_DAMAGE,
+  PRE_WEATHER_DAMAGE: 103,
   /** @see {@linkcode PostWeatherLapseAbAttr} */
-  POST_WEATHER_LAPSE,
+  POST_WEATHER_LAPSE: 104,
   /** @see {@linkcode FieldMoveTypePowerBoostAbAttr} */
-  FIELD_MOVE_TYPE_POWER_BOOST,
+  FIELD_MOVE_TYPE_POWER_BOOST: 105,
   /** @see {@linkcode EffectSporeAbAttr} */
-  EFFECT_SPORE,
+  EFFECT_SPORE: 106,
   /** @see {@linkcode ReflectStatStageChangeAbAttr} */
-  REFLECT_STAT_STAGE_CHANGE,
+  REFLECT_STAT_STAGE_CHANGE: 107,
   /** @see {@linkcode BypassParaSpeedReductionAbAttr} */
-  BYPASS_PARA_SPEED_REDUCTION,
+  BYPASS_PARA_SPEED_REDUCTION: 108,
   /** @see {@linkcode MockStatusEffectAbAttr} */
-  MOCK_STATUS_EFFECT,
+  MOCK_STATUS_EFFECT: 109,
   /** @see {@linkcode ReflectMovesAbAttr} */
-  REFLECT_MOVES,
-}
+  REFLECT_MOVES: 110,
+});
+
+/** @see {@linkcode abAttrFlag} */
+export type AbAttrFlag = (typeof abAttrFlag)[keyof typeof abAttrFlag];

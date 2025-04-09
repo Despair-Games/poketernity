@@ -5,7 +5,7 @@ import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NumberHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Punk Rock", () => {
   let phaserGame: Phaser.Game;
@@ -37,7 +37,7 @@ describe("Abilities - Punk Rock", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(abAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.UPROAR);
     await game.toEndOfTurn();

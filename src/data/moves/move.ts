@@ -36,7 +36,7 @@ import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -324,7 +324,7 @@ export abstract class Move implements Localizable {
 
     const bypassed = new BooleanHolder(false);
     // TODO: Allow this to be simulated
-    applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, user, false, bypassed);
+    applyAbAttrs<InfiltratorAbAttr>(abAttrFlag.INFILTRATOR, user, false, bypassed);
 
     return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
@@ -624,15 +624,15 @@ export abstract class Move implements Localizable {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
-        if (user.hasAbilityWithAttr(AbAttrFlag.IGNORE_CONTACT) || this.hitsSubstitute(user, target)) {
+        if (user.hasAbilityWithAttr(abAttrFlag.IGNORE_CONTACT) || this.hitsSubstitute(user, target)) {
           return false;
         }
         break;
       case MoveFlags.IGNORE_ABILITIES:
-        if (user.hasAbilityWithAttr(AbAttrFlag.MOVE_ABILITY_BYPASS)) {
+        if (user.hasAbilityWithAttr(abAttrFlag.MOVE_ABILITY_BYPASS)) {
           const abilityEffectsIgnored = new BooleanHolder(false);
           applyAbAttrs<MoveAbilityBypassAbAttr>(
-            AbAttrFlag.MOVE_ABILITY_BYPASS,
+            abAttrFlag.MOVE_ABILITY_BYPASS,
             user,
             false,
             abilityEffectsIgnored,
@@ -645,7 +645,7 @@ export abstract class Move implements Localizable {
         break;
       case MoveFlags.IGNORE_PROTECT:
         if (
-          user.hasAbilityWithAttr(AbAttrFlag.IGNORE_PROTECT_ON_CONTACT)
+          user.hasAbilityWithAttr(abAttrFlag.IGNORE_PROTECT_ON_CONTACT)
           && this.checkFlag(MoveFlags.MAKES_CONTACT, user, null)
         ) {
           return true;
@@ -747,7 +747,7 @@ export abstract class Move implements Localizable {
     const moveAccuracy = new NumberHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyAbAttrs<WonderSkinAbAttr>(AbAttrFlag.WONDER_SKIN, target, simulated, user, this, moveAccuracy);
+    applyAbAttrs<WonderSkinAbAttr>(abAttrFlag.WONDER_SKIN, target, simulated, user, this, moveAccuracy);
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
@@ -783,7 +783,7 @@ export abstract class Move implements Localizable {
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
     applyAbAttrs<MoveTypeChangeAbAttr>(
-      AbAttrFlag.MOVE_TYPE_CHANGE,
+      abAttrFlag.MOVE_TYPE_CHANGE,
       source,
       true,
       this,
@@ -794,7 +794,7 @@ export abstract class Move implements Localizable {
 
     applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
-    applyAbAttrs<VariableMovePowerAbAttr>(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
+    applyAbAttrs<VariableMovePowerAbAttr>(abAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
 
     const sourceTeraType = source.getTeraType();
     if (
@@ -811,7 +811,7 @@ export abstract class Move implements Localizable {
     const allyPokemon = source.getAlly();
     if (allyPokemon) {
       applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
-        AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
+        abAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
         allyPokemon,
         simulated,
         this,
@@ -825,7 +825,7 @@ export abstract class Move implements Localizable {
         .getField(true)
         .map(
           (p) =>
-            p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
+            p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(abAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
               const condition = attr.getCondition();
               return !condition || condition(p);
             }) as FieldMoveTypePowerBoostAbAttr[],
@@ -839,7 +839,7 @@ export abstract class Move implements Localizable {
     const alliedField: Pokemon[] = source.getField();
     alliedField.forEach((p) =>
       applyAbAttrs<UserFieldMoveTypePowerBoostAbAttr>(
-        AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST,
+        abAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST,
         p,
         simulated,
         this,
@@ -873,7 +873,7 @@ export abstract class Move implements Localizable {
     const priority = new NumberHolder(this.priority);
 
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
-    applyAbAttrs<ChangeMovePriorityAbAttr>(AbAttrFlag.CHANGE_MOVE_PRIORITY, user, simulated, this, priority);
+    applyAbAttrs<ChangeMovePriorityAbAttr>(abAttrFlag.CHANGE_MOVE_PRIORITY, user, simulated, this, priority);
 
     return priority.value;
   }

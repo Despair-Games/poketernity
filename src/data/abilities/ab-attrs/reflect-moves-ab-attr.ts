@@ -4,7 +4,7 @@ import type { MovePhase } from "#app/phases/move-phase";
 // -- end tsdoc imports
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -20,7 +20,7 @@ import type { Move } from "#app/data/moves/move";
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   constructor() {
     super();
-    this._flags.add(AbAttrFlag.REFLECT_MOVES);
+    this._flags.add(abAttrFlag.REFLECT_MOVES);
   }
 
   override apply(

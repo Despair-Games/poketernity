@@ -2,7 +2,7 @@ import { PreAttackAbAttr } from "#app/data/abilities/ab-attrs/pre-attack-ab-attr
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
@@ -16,7 +16,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
 
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
+    this._flags.add(abAttrFlag.POKEMON_TYPE_CHANGE);
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {

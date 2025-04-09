@@ -4,7 +4,7 @@ import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type { AbAttrFlag } from "#enums/ab-attr-flag";
+import { type AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class Ability implements Localizable {
   public id: AbilityId;
@@ -42,7 +42,7 @@ export class Ability implements Localizable {
 
   /**
    * Get all ability attributes that match the given {@linkcode flag}
-   * @param flag The {@linkcode AbAttrFlag} to check for
+   * @param flag The {@linkcode abAttrFlag} to check for
    * @returns Array of attributes that match the given {@linkcode flag}, Empty Array if none match.
    */
   getAttrs<T extends AbAttr>(flag: AbAttrFlag): T[] {
@@ -51,7 +51,7 @@ export class Ability implements Localizable {
 
   /**
    * Check if an ability has an attribute that matches {@linkcode flag}
-   * @param flag The {@linkcode AbAttrFlag} to check
+   * @param flag The {@linkcode abAttrFlag} to check
    * @returns true if the ability has an attribute with the given {@linkcode flag}
    */
   hasAttrFlag(flag: AbAttrFlag): boolean {

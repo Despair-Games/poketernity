@@ -30,7 +30,7 @@ import {
 import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -136,7 +136,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
-      applyAbAttrs<AddSecondStrikeAbAttr>(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
+      applyAbAttrs<AddSecondStrikeAbAttr>(abAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
       // TODO: re-add multi-lens calculation
       // Set the user's relevant turnData fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
@@ -318,7 +318,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
+        applyAbAttrs<PostDamageAbAttr>(abAttrFlag.POST_DAMAGE, target, false, 0, user);
       }
     }
   }
@@ -573,7 +573,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
-    applyAbAttrs<PostAttackAbAttr>(AbAttrFlag.POST_ATTACK, user, false, target, move);
+    applyAbAttrs<PostAttackAbAttr>(abAttrFlag.POST_ATTACK, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move.isAttackMove(user, target)) {
@@ -632,7 +632,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
-    applyAbAttrs<PostDefendAbAttr>(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
+    applyAbAttrs<PostDefendAbAttr>(abAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 
@@ -649,7 +649,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     if (
       dealsDamage
-      && !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+      && !target.hasAbilityWithAttr(abAttrFlag.IGNORE_MOVE_EFFECTS)
       && !this.move.getMove().hitsSubstitute(user, target)
     ) {
       const flinched = new BooleanHolder(false);

@@ -8,7 +8,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Moves - Safeguard", () => {
   let phaserGame: Phaser.Game;
@@ -141,7 +141,7 @@ describe("Moves - Safeguard", () => {
     game.override.ability(AbilityId.STATIC);
     vi.spyOn(
       allAbilities[AbilityId.STATIC].getAttrs<PostDefendContactApplyStatusEffectAbAttr>(
-        AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT,
+        abAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT,
       )[0],
       "chance",
       "get",

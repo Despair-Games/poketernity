@@ -9,7 +9,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BooleanHolder } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
@@ -56,7 +56,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+        target.getAbility().hasAttrFlag(abAttrFlag.POST_DAMAGE_FORCE_SWITCH)
         && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
@@ -137,7 +137,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+        target.getAbility().hasAttrFlag(abAttrFlag.POST_DAMAGE_FORCE_SWITCH)
         && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
@@ -190,7 +190,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
   override getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(abAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
@@ -219,7 +219,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
         const blockedByAbility = new BooleanHolder(false);
         applyAbAttrs<ForceSwitchOutImmunityAbAttr>(
-          AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
+          abAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
           target,
           false,
           blockedByAbility,

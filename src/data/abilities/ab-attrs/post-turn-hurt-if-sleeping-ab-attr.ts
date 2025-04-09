@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
@@ -19,7 +19,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
     for (const opp of pokemon.getOpponents()) {
       if (
         opp.hasStatusEffect(StatusEffect.SLEEP)
-        && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+        && !opp.hasAbilityWithAttr(abAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
         && !opp.switchOutStatus
       ) {
         if (!simulated) {

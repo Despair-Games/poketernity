@@ -1,4 +1,4 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { abAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { PreApplyBattlerTagImmunityAbAttr } from "./pre-apply-battler-tag-immunnity-ab-attr";
 
@@ -9,6 +9,6 @@ import { PreApplyBattlerTagImmunityAbAttr } from "./pre-apply-battler-tag-immunn
 export class BattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {
   constructor(immuneTagTypes: BattlerTagType | BattlerTagType[]) {
     super(immuneTagTypes);
-    this._flags.add(AbAttrFlag.BATTLER_TAG_IMMUNITY);
+    this._flags.add(abAttrFlag.BATTLER_TAG_IMMUNITY);
   }
 }
