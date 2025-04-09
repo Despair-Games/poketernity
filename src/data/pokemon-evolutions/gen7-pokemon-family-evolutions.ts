@@ -15,7 +15,7 @@ import {
   HAPPINESS_EVO_LEVEL,
   NAGANADEL_EVO_LEVEL,
   TSAREENA_EVO_LEVEL,
-} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { MoveId } from "#enums/move-id";
 
 export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {

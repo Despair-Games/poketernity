@@ -5,7 +5,7 @@ import i18next from "i18next";
 import { randSeedGauss, randSeedItem } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type { ElementalType } from "#enums/elemental-type";
 import { variantData } from "#app/data/variant";

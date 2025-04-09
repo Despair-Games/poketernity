@@ -14,7 +14,7 @@ import { EvolutionItem } from "#enums/evolution-item";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
-} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 
 export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.CHESPIN]: [new SpeciesEvolution(SpeciesId.QUILLADIN, 16, null, null)],
