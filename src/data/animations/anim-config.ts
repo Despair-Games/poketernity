@@ -311,6 +311,7 @@ export abstract class AnimTimedEvent {
 
   abstract getEventType(): string;
 }
+
 export class AnimTimedSoundEvent extends AnimTimedEvent {
   public volume: number = 100;
   public pitch: number = 100;
