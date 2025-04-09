@@ -190,7 +190,8 @@ export class GameMode implements GameModeConfig {
 
   /** @returns `true` if the wave is a multiple of `20` between `20-160` in classic mode */
   public isGymWave(waveIndex: number): boolean {
-    return this.isClassic && waveIndex % 20 === 0 && waveIndex <= 160;
+    const gymWaves = [20, 40, 60, 80, 100, 120, 140, 160];
+    return this.isClassic && gymWaves.includes(waveIndex);
   }
 
   isTrainerBoss(waveIndex: number, biomeId: BiomeId): boolean {
