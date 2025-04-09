@@ -1,9 +1,9 @@
 ### How to add a biome
 
 #### Pokemon Pool
-A biome's pokemonPool consists of a mapping of a BiomePoolTier (common, uncommon, rare, super rare, ultra rare, boss, boss rare, boss super rare, boss ultra rare) to time of day (dawn, day, dusk, night all), and finally to the pokemon that appear. The current time of day is combined with the ALL pool to determine what Pokemon can appear. The rarirty is rolled first, and if there are no available selections in that tier, it is automatically downgraded according to the above order in BiomePoolTier.
+A biome's pokemonPool consists of a mapping of a BiomePoolTier (common, uncommon, rare, super rare, ultra rare, boss, boss rare, boss super rare, boss ultra rare) to time of day (dawn, day, dusk, night, all), and finally to the pokemon that appear. The current time of day is combined with the ALL pool to determine what Pokemon can appear. The rarity is rolled first, and if there are no available selections in that tier, it is automatically downgraded according to the above order in BiomePoolTier.
 
-Sam's general design philosophy had all the boss tiers contain Pokemon one tier higher than the non boss tier. Boss rare and uncommon would share Pokemon, Boss super rare and rare, Boss ultra rare and super rare, with Boss ultra rare being reserved for the truly rare Pokemon.
+Sam's general design philosophy had all the boss tiers contain Pokemon one tier higher than the non boss tier. `BOSS` would use some Pokemon from `COMMON`, `UNCOMMON`, and `RARE`; `BOSS_RARE` would use some Pokemon from `RARE` and `SUPER_RARE`; `BOSS_SUPER_RARE` would use Pokemon from `ULTRA_RARE`; and `BOSS_ULTRA_RARE` would be reserved for the truly rare Pokemon (usually box legends).
 
 For the most part, there is no need to specify evolutions in the Pokemon pool since Pokemon will automatically evolve or de-evolve based on level. The only reason to specify an evolved form is wanting to guarantee that form shows up. (Specifying Gardevoir means Ralts, Kirlia, and Gardevoir can appear, but not Gallade). For Pokemon with specific forms, check the bottom section for how to determine that based on biome.
 
@@ -18,14 +18,11 @@ These represent the likelihood of weather/terrain being set when the player ente
 ### Assets
 
 #### bgm and bgm loop point
-The bgm is the spring representation of the background music of a biome saved as a mp3 like `public/audio/bgm/town.mp3`. Right now all the bgm's are named as the lowercase representation of the biome id, but this can be set to anything.
+All BGM files must be stored in the `public/audio/bgm` directory, then the `bgm` parameter passed into a biome's constructor should match the name of the BGM file. For example, if the file is saved as `public/audio/bgm/town.mp3`, the `bgm` parameter should be `town`. Right now all the bgm's are named as the lowercase representation of the biome ID. This can be set to anything, but make sure to update the corresponding keys in `bgm-name.json` translation files.
 
-The loop point is a number that represents the loop point of a bgm in seconds.
+The loop point of a bgm, measured in seconds, should be set to ensure that the bgm loops/replays smoothly after the bgm file's ending.
 
 #### Props and bg
-TBD
-
-TBD (talk about background tinting and indoor biomes)
 
 biomeName_a represents the player's field circle.
 biomeName_b represents the opponent's field circle.
@@ -35,9 +32,12 @@ Props are extra items that show up on the opponent's side of the field. They are
 
 Power plant and end also have animated biome props that have associated json's
 
+If a biome is NOT an indoor biome, then it is affected by tinting in `field-sprite.onBind`
+
 ### Other code that needs updating
 * Don't forget to add connections to and from the biome in `biome-link.ts`
+* For now, don't forget to update `arena.indoorBiomes` and `arena.biomeWithProps` to account for tinting and prop display
 * For Pokemon with specific forms in certain biomes, `arena.getSpeciesFormIndex` can set specific forms for specific biomes
-* The move Camoflage uses the CopyBiomeTypeAttr which changes the user's type based on the current biome
-* The move Secret Power uses the SecretPowerAttr which applies a secondary effect based on the current biome
-* The move Nature Power uses the NaturePowerAttr which changes into a different attack depending on the current biome
+* The move Camoflage uses the [CopyBiomeTypeAttr](../moves/move-attrs/copy-biome-type-attr.ts) which changes the user's type based on the current biome
+* The move Secret Power uses the [SecretPowerAttr](../moves/move-attrs/secret-power-attr.ts) which applies a secondary effect based on the current biome
+* The move Nature Power uses the [NaturePowerAttr](../moves/move-attrs/nature-power-attr.ts) which changes into a different attack depending on the current biome
