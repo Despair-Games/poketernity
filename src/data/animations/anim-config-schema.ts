@@ -1,7 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { AnimConfig } from "#app/data/animations/anim-config";
-import type { AnimTimedSoundEvent, AnimTimedAddBgEvent } from "#app/data/animations/anim-config";
+import type { AnimConfig, AnimTimedSoundEvent, AnimTimedAddBgEvent } from "#app/data/animations/anim-config";
 import { easeFunctions } from "#app/data/animations/ease-functions";
 import type { MoveAnim } from "#app/data/animations/move-anim";
 /* eslint-enable @typescript-eslint/no-unused-vars */
