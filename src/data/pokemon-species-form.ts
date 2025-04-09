@@ -5,7 +5,7 @@ import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { noRandomSpeciesSpawn } from "#app/data/balance/no-random-species-spawn";
+import { noRandomSpeciesSpawn } from "#app/data/no-random-species-spawn";
 import type { PokemonForm } from "./pokemon-form";
 import { variantData, type VariantSet, type Variant } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
