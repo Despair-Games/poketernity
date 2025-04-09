@@ -25,8 +25,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
     case BerryType.LUM:
       return (pokemon: Pokemon) => pokemon.hasNonVolatileStatusEffect(true, true);
     case BerryType.ENIGMA:
-      return (pokemon: Pokemon) =>
-        !!pokemon.turnData.attacksReceived.filter((a) => a.result === HitResult.SUPER_EFFECTIVE).length;
+      return (pokemon: Pokemon) => pokemon.turnData.attacksReceived.some((a) => a.result === HitResult.SUPER_EFFECTIVE);
     case BerryType.LIECHI:
     case BerryType.GANLON:
     case BerryType.PETAYA:
