@@ -53,7 +53,7 @@ import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/egg-moves";
 import { starterPassiveAbilities } from "#app/data/passives";
 import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
-import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
   BASE_SHINY_CHANCE,
