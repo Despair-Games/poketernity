@@ -19,7 +19,7 @@ export class HitsTagAttr extends MoveAttr {
     super();
 
     this.tagType = tagType;
-    this.doubleDamage = !!doubleDamage;
+    this.doubleDamage = doubleDamage;
   }
 
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {

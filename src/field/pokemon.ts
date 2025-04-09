@@ -226,7 +226,7 @@ import {
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
-import type { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -336,7 +336,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.hp = dataSource.hp;
       this.stats = dataSource.stats;
       this.ivs = dataSource.ivs;
-      this.passive = !!dataSource.passive;
+      this.passive = dataSource.passive;
       if (this.variant === undefined) {
         this.variant = 0;
       }
@@ -352,7 +352,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         dataSource.metSpecies ?? (this.metBiome !== -1 ? this.species.speciesId : this.species.getRootSpeciesId(true));
       this.metWave = dataSource.metWave ?? (this.metBiome === -1 ? -1 : 0);
       this.pauseEvolutions = dataSource.pauseEvolutions;
-      this.pokerus = !!dataSource.pokerus;
+      this.pokerus = dataSource.pokerus;
       this.evoCounter = dataSource.evoCounter ?? 0;
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
@@ -450,7 +450,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.fieldUI.addAt(this.battleInfo, 0);
 
-    const getSprite = (hasShadow?: boolean) => {
+    const getSprite = (hasShadow: boolean = false) => {
       const ret = globalScene.addPokemonSprite(
         this,
         0,
@@ -462,7 +462,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ret.setOrigin(0.5, 1);
       ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
-        hasShadow: !!hasShadow,
+        hasShadow,
         teraColor: getTypeRgb(this.getTeraType()),
       });
       return ret;
@@ -4751,7 +4751,8 @@ export class EnemyPokemon extends Pokemon {
     );
 
     this.trainerSlot = trainerSlot;
-    this.isPopulatedFromDataSource = !!dataSource; // if a dataSource is provided, then it was populated from dataSource
+    // if a dataSource is provided, then it was populated from dataSource
+    this.isPopulatedFromDataSource = !!dataSource;
     if (boss) {
       this.setBoss(boss, dataSource?.bossSegments);
     }
@@ -5180,11 +5181,11 @@ export class EnemyPokemon extends Pokemon {
   }
 
   hasTrainer(): boolean {
-    return !!this.trainerSlot;
+    return this.trainerSlot !== TrainerSlot.NONE;
   }
 
   isBoss(): boolean {
-    return !!this.bossSegments;
+    return this.bossSegments > 0;
   }
 
   getBossSegments(): number {

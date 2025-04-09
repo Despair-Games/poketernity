@@ -34,6 +34,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   private preEvolvedPokemonName: string;
 
+  /** @todo why is this able to be `null`? */
   private readonly evolution: SpeciesFormEvolution | null;
   private evolutionBgm: AnySound;
 

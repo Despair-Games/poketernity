@@ -48,7 +48,7 @@ export class FormChangePhase extends FormChangeBasePhase {
   }
 
   public override validate(): boolean {
-    return !!this.formChange;
+    return true;
   }
 
   public override setMode(): Promise<void> {

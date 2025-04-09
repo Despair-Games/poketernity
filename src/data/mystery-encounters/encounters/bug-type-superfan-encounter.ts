@@ -750,7 +750,6 @@ function doBugTypeMoveTutor(): Promise<void> {
       undefined,
       onHoverOverCancel,
     );
-    // let forceExit = !!result;
     if (!result) {
       moveInfoOverlay.active = false;
       moveInfoOverlay.setVisible(false);
