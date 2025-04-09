@@ -1,7 +1,7 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { Pokemon } from "#app/field/pokemon";

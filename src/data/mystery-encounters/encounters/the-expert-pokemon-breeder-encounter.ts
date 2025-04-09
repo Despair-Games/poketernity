@@ -32,7 +32,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";

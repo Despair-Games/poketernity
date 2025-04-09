@@ -22,7 +22,7 @@ import {
   getCandyGainMultiplierForShinies,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import type { Egg } from "#app/data/egg";

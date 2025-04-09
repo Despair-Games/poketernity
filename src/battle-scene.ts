@@ -17,7 +17,7 @@ import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/doub
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
 import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";

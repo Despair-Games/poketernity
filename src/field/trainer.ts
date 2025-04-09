@@ -18,7 +18,7 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { TrainerVariant } from "#enums/trainer-variant";
 
 export default class Trainer extends Phaser.GameObjects.Container {

@@ -14,7 +14,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/mysteriousChallengers";
