@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { AnimConfig } from "#app/data/animations/anim-config";
 import type { AnimTimedSoundEvent, AnimTimedAddBgEvent } from "#app/data/animations/anim-config";
+import { easeFunctions } from "#app/data/animations/ease-functions";
 import type { MoveAnim } from "#app/data/animations/move-anim";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
@@ -47,7 +48,7 @@ const keyFrameSchema: Schema = {
       type: ["number", "object"],
       properties: {
         value: { type: "number" },
-        ease: { type: "string" }, // TODO: can this be more specific to Phaser's ease functions?
+        ease: { enum: easeFunctions },
       },
     },
 
@@ -66,7 +67,7 @@ const keyFrameSchema: Schema = {
       type: ["number", "object"],
       properties: {
         value: { type: "number" },
-        ease: { type: "string" }, // TODO: can this be more specific to Phaser's ease functions?
+        ease: { enum: easeFunctions },
       },
     },
 
@@ -154,7 +155,7 @@ const keyFrameSchema: Schema = {
      * @see {@link https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ease-function/#get-ease-function-via-string | Ease Functions}
      */
     ease: {
-      type: "string",
+      enum: easeFunctions,
       default: "Linear",
     },
   },
