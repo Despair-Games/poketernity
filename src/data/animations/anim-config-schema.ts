@@ -7,7 +7,7 @@ import type { MoveAnim } from "#app/data/animations/move-anim";
 // -- end tsdoc imports --
 
 import { AnimBlendType } from "#enums/anim-blend-type";
-import { AnimFrameTarget } from "#enums/anim-frame-target";
+import { AnimFrameTargets } from "#enums/anim-frame-target";
 import { MoveId } from "#enums/move-id";
 import { type Schema } from "jsonschema";
 
@@ -162,7 +162,7 @@ const keyFrameSchema: Schema = {
 
 /**
  * Schema for the animation properties of an object.
- * This specifies the property's {@linkcode AnimFrameTarget | focus}
+ * This specifies the property's {@linkcode AnimFrameTargets | focus}
  * and contains the {@linkcode keyFrameSchema | keyframes} applied
  * to the focus.
  */
@@ -171,9 +171,9 @@ const animPropSchema: Schema = {
   properties: {
     /**
      * The type of sprite affected by the animation
-     * @see {@linkcode AnimFrameTarget}
+     * @see {@linkcode AnimFrameTargets}
      */
-    focus: { enum: Object.values(AnimFrameTarget) },
+    focus: { enum: Object.values(AnimFrameTargets) },
 
     /**
      * The keyframes used to animate the sprite.
