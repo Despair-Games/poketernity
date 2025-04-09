@@ -59,7 +59,7 @@ import {
   BASE_SHINY_CHANCE,
   SHINY_EPIC_CHANCE,
   SHINY_VARIANT_CHANCE,
-} from "#app/data/balance/rates";
+} from "#app/data/rates";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
   getCandyProgressRequirement,
