@@ -69,7 +69,7 @@ export abstract class ArenaTag {
   public onOverlap(_arena: Arena): void {}
 
   public lapse(_arena: Arena): boolean {
-    return this.turnCount < 1 || !!--this.turnCount;
+    return this.turnCount < 1 || --this.turnCount !== 0;
   }
 
   public getMoveName(): string | null {

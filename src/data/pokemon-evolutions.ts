@@ -253,7 +253,7 @@ export class RngFormEvoCondition extends SpeciesEvolutionCondition {
  */
 export class SpeciesOwnedEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredSpecies: SpeciesId) {
-    super(() => !!globalScene.gameData.dexData[requiredSpecies].caughtAttr);
+    super(() => globalScene.gameData.dexData[requiredSpecies].caughtAttr > 0);
     // Todo: find efficient way to get species name from Species
     this.description = "requires owning " + requiredSpecies;
   }

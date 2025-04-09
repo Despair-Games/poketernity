@@ -154,8 +154,8 @@ export class Arena {
 
     // Boss pool is 0-63, non Boss pool is 0-512
     const isBossSpecies =
-      !!globalScene.getEncounterBossSegments(waveIndex, level)
-      && !!this.pokemonPool[BiomePoolTier.BOSS].length
+      globalScene.getEncounterBossSegments(waveIndex, level) > 0
+      && this.pokemonPool[BiomePoolTier.BOSS].length > 0
       && (this.biomeId !== BiomeId.END
         || globalScene.gameMode.isClassic
         || globalScene.gameMode.isWaveFinal(waveIndex));
@@ -286,7 +286,7 @@ export class Arena {
    */
   randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
-      !!this.trainerPool[BiomePoolTier.BOSS].length
+      this.trainerPool[BiomePoolTier.BOSS].length > 0
       && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
 
@@ -532,7 +532,7 @@ export class Arena {
    * @returns whether the move was cancelled by terrain
    */
   public isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
-    return !!this.terrain && this.terrain.isMoveTerrainCancelled(user, targets, move);
+    return !!this.terrain?.isMoveTerrainCancelled(user, targets, move);
   }
 
   public getTerrainType(): TerrainType {

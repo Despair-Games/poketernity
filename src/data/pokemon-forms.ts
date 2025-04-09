@@ -309,7 +309,7 @@ export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: Specie
  * @returns A {@linkcode SpeciesFormChangeCondition} checking if that species is registered as caught
  */
 function getSpeciesDependentFormChangeCondition(species: SpeciesId): SpeciesFormChangeCondition {
-  return new SpeciesFormChangeCondition((_p) => !!globalScene.gameData.dexData[species].caughtAttr);
+  return new SpeciesFormChangeCondition((_p) => globalScene.gameData.dexData[species].caughtAttr > 0);
 }
 
 interface PokemonFormChanges {

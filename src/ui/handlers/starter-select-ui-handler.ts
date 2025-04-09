@@ -1821,7 +1821,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                     // update the passive background
                     if (starterContainer) {
                       starterContainer.starterPassiveBgs.setVisible(
-                        !!globalScene.gameData.starterData[this.lastSpecies.speciesId].passiveAttr,
+                        globalScene.gameData.starterData[this.lastSpecies.speciesId].passiveAttr > 0,
                       );
                     }
                     return true;
@@ -2617,11 +2617,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         .some((type) => container.species.isOfType((type as number) - 1));
 
       // Caught / Shiny filter
-      const isNonShinyCaught = !!(caughtAttr & DexAttr.NON_SHINY);
-      const isShinyCaught = !!(caughtAttr & DexAttr.SHINY);
-      const isVariant1Caught = isShinyCaught && !!(caughtAttr & DexAttr.DEFAULT_VARIANT);
-      const isVariant2Caught = isShinyCaught && !!(caughtAttr & DexAttr.VARIANT_2);
-      const isVariant3Caught = isShinyCaught && !!(caughtAttr & DexAttr.VARIANT_3);
+      const isNonShinyCaught: boolean = (caughtAttr & DexAttr.NON_SHINY) > 0;
+      const isShinyCaught: boolean = (caughtAttr & DexAttr.SHINY) > 0;
+      const isVariant1Caught: boolean = isShinyCaught && (caughtAttr & DexAttr.DEFAULT_VARIANT) > 0;
+      const isVariant2Caught: boolean = isShinyCaught && (caughtAttr & DexAttr.VARIANT_2) > 0;
+      const isVariant3Caught: boolean = isShinyCaught && (caughtAttr & DexAttr.VARIANT_3) > 0;
       const isUncaught = !isNonShinyCaught && !isVariant1Caught && !isVariant2Caught && !isVariant3Caught;
       const fitsCaught = this.filterBar.getVals(DropDownColumn.CAUGHT).some((caught) => {
         if (caught === "SHINY3") {
@@ -2836,7 +2836,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const speciesVariants =
           speciesId && globalScene.gameData.dexData[speciesId].caughtAttr & DexAttr.SHINY
             ? [DexAttr.DEFAULT_VARIANT, DexAttr.VARIANT_2, DexAttr.VARIANT_3].filter(
-                (v) => !!(globalScene.gameData.dexData[speciesId].caughtAttr & v),
+                (v) => (globalScene.gameData.dexData[speciesId].caughtAttr & v) > 0,
               )
             : [];
         for (let v = 0; v < 3; v++) {
@@ -2851,10 +2851,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
         }
 
-        container.starterPassiveBgs.setVisible(!!globalScene.gameData.starterData[speciesId].passiveAttr);
+        container.starterPassiveBgs.setVisible(globalScene.gameData.starterData[speciesId].passiveAttr > 0);
         container.hiddenAbilityIcon.setVisible(
-          !!globalScene.gameData.dexData[speciesId].caughtAttr
-            && !!(globalScene.gameData.starterData[speciesId].abilityAttr & 4),
+          globalScene.gameData.dexData[speciesId].caughtAttr > 0
+            && (globalScene.gameData.starterData[speciesId].abilityAttr & 4) > 0,
         );
         container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
         container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
@@ -3001,7 +3001,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const colorScheme = starterColors[species.speciesId];
 
         const luck = globalScene.gameData.getDexAttrLuck(this.speciesStarterDexEntry.caughtAttr);
-        this.pokemonLuckText.setVisible(!!luck);
+        this.pokemonLuckText.setVisible(luck > 0);
         this.pokemonLuckText.setText(luck.toString());
         this.pokemonLuckText.setTint(getVariantTint(Math.min(luck - 1, 2) as Variant));
         this.pokemonLuckLabelText.setVisible(this.pokemonLuckText.visible);
@@ -3331,7 +3331,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           species,
           isValidForChallenge,
           globalScene.gameData.getSpeciesDexAttrProps(species, this.dexAttrCursor),
-          !!this.starterSpecies.length,
+          this.starterSpecies.length > 0,
         );
         const currentFilteredContainer = this.filteredStarterContainers.find(
           (p) => p.species.speciesId === species.speciesId,
@@ -3345,17 +3345,17 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           currentFilteredContainer.checkIconId(female!, formIndex, shiny, variant);
         }
 
-        const isNonShinyCaught = !!(caughtAttr & DexAttr.NON_SHINY);
-        const isShinyCaught = !!(caughtAttr & DexAttr.SHINY);
-        const isVariant1Caught = isShinyCaught && !!(caughtAttr & DexAttr.DEFAULT_VARIANT);
-        const isVariant2Caught = isShinyCaught && !!(caughtAttr & DexAttr.VARIANT_2);
-        const isVariant3Caught = isShinyCaught && !!(caughtAttr & DexAttr.VARIANT_3);
+        const isNonShinyCaught: boolean = (caughtAttr & DexAttr.NON_SHINY) > 0;
+        const isShinyCaught: boolean = (caughtAttr & DexAttr.SHINY) > 0;
+        const isVariant1Caught: boolean = isShinyCaught && (caughtAttr & DexAttr.DEFAULT_VARIANT) > 0;
+        const isVariant2Caught: boolean = isShinyCaught && (caughtAttr & DexAttr.VARIANT_2) > 0;
+        const isVariant3Caught: boolean = isShinyCaught && (caughtAttr & DexAttr.VARIANT_3) > 0;
 
         this.canToggleShiny = isNonShinyCaught && isShinyCaught;
         this.canCycleVariant = [isVariant1Caught, isVariant2Caught, isVariant3Caught].filter((v) => v).length > 1;
 
-        const isMaleCaught = !!(caughtAttr & DexAttr.MALE);
-        const isFemaleCaught = !!(caughtAttr & DexAttr.FEMALE);
+        const isMaleCaught: boolean = (caughtAttr & DexAttr.MALE) > 0;
+        const isFemaleCaught: boolean = (caughtAttr & DexAttr.FEMALE) > 0;
         this.canCycleGender = isMaleCaught && isFemaleCaught;
 
         const hasAbility1 = abilityAttr & AbilityAttr.ABILITY_1;
@@ -3415,8 +3415,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         }
 
         if (passiveAbility) {
-          const isUnlocked = !!(passiveAttr & PassiveAttr.UNLOCKED);
-          const isEnabled = !!(passiveAttr & PassiveAttr.ENABLED);
+          const isUnlocked: boolean = (passiveAttr & PassiveAttr.UNLOCKED) > 0;
+          const isEnabled: boolean = (passiveAttr & PassiveAttr.ENABLED) > 0;
 
           this.pokemonPassiveLabelText.setVisible(true);
           setTextColor(this.pokemonPassiveLabelText, TextStyle.SUMMARY_ALT);

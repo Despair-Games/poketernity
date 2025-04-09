@@ -271,7 +271,7 @@ export class CommandPhase extends FieldPhase {
             .getEnemyField()
             .filter((p) => p.isActive(true))
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
-          && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
+          && gameData.getStarterCount((d) => d.caughtAttr > 0) < Object.keys(speciesStarterCosts).length - 1;
 
         if (arena.biomeId === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
           failCatchRun("battle:noPokeballForce");

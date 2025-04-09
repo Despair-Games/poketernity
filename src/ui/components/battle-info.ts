@@ -222,7 +222,8 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     const startingX = this.player ? -this.statsBox.width + 8 : -this.statsBox.width + 5;
     const paddingX = this.player ? 4 : 2;
     const statOverflow = this.player ? 1 : 0;
-    this.statOrder = this.player ? this.statOrderPlayer : this.statOrderEnemy; // this tells us whether or not to use the player or enemy battle stat order
+    // this tells us whether or not to use the player or enemy battle stat order
+    this.statOrder = this.player ? this.statOrderPlayer : this.statOrderEnemy;
 
     this.statOrder.map((s, i) => {
       // we do a check for i > statOverflow to see when the stat labels go onto the next column
@@ -230,15 +231,20 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       // For players, we don't have HP, so we start with i = 0 and i = 1 for our first column, and so need to check for i > 1
       const statX =
         i > statOverflow
-          ? this.statNumbers[Math.max(i - 2, 0)].x + this.statNumbers[Math.max(i - 2, 0)].width + paddingX
-          : startingX; // we have the Math.max(i - 2, 0) in there so for i===1 to not return a negative number; since this is now based on anything >0 instead of >1, we need to allow for i-2 < 0
+          ? // we have the Math.max(i - 2, 0) in there so for i===1 to not return a negative number;
+            // since this is now based on anything >0 instead of >1, we need to allow for i-2 < 0
+            this.statNumbers[Math.max(i - 2, 0)].x + this.statNumbers[Math.max(i - 2, 0)].width + paddingX
+          : startingX;
 
       const baseY = -this.statsBox.height / 2 + 4; // this is the baseline for the y-axis
       let statY: number; // this will be the y-axis placement for the labels
       if (this.statOrder[i] === Stat.SPD || this.statOrder[i] === Stat.HP) {
         statY = baseY + 5;
       } else {
-        statY = baseY + (!!(i % 2) === this.player ? 10 : 0); // we compare i % 2 against this.player to tell us where to place the label; because this.battleStatOrder for enemies has HP, this.battleStatOrder[1]=ATK, but for players this.battleStatOrder[0]=ATK, so this comparing i % 2 to this.player fixes this issue for us
+        // we compare i % 2 against this.player to tell us where to place the label;
+        // because this.battleStatOrder for enemies has HP, this.battleStatOrder[1]=ATK,
+        // but for players this.battleStatOrder[0]=ATK, so this comparing i % 2 to this.player fixes this issue for us
+        statY = baseY + (!!(i % 2) === this.player ? 10 : 0);
       }
 
       const statLabel = globalScene.add.sprite(statX, statY, "pbinfo_stat", Stat[s]);
@@ -382,7 +388,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       }
 
       const dexEntry = globalScene.gameData.dexData[pokemon.species.speciesId];
-      this.ownedIcon.setVisible(!!dexEntry.caughtAttr);
+      this.ownedIcon.setVisible(dexEntry.caughtAttr > 0);
       const opponentPokemonDexAttr = pokemon.getDexAttr();
       if (globalScene.gameMode.isClassic) {
         if (
@@ -502,10 +508,10 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   }
 
   updateBossSegments(pokemon: EnemyPokemon): void {
-    const boss = !!pokemon.bossSegments;
+    const isBoss: boolean = pokemon.bossSegments > 0;
 
-    if (boss !== this.boss) {
-      this.boss = boss;
+    if (isBoss !== this.boss) {
+      this.boss = isBoss;
 
       [
         this.nameText,
@@ -517,15 +523,15 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         this.statusIndicator,
         this.levelContainer,
         this.statValuesContainer,
-      ].map((e) => (e.x += 48 * (boss ? -1 : 1)));
-      this.hpBar.x += 38 * (boss ? -1 : 1);
+      ].map((e) => (e.x += 48 * (isBoss ? -1 : 1)));
+      this.hpBar.x += 38 * (isBoss ? -1 : 1);
       this.hpBar.y += 2 * (this.boss ? -1 : 1);
-      this.hpBar.setTexture(`overlay_hp${boss ? "_boss" : ""}`);
+      this.hpBar.setTexture(`overlay_hp${isBoss ? "_boss" : ""}`);
       this.box.setTexture(this.getTextureName());
       this.statsBox.setTexture(`${this.getTextureName()}_stats`);
     }
 
-    this.bossSegments = boss ? pokemon.bossSegments : 0;
+    this.bossSegments = isBoss ? pokemon.bossSegments : 0;
     this.updateBossSegmentDividers(pokemon);
   }
 

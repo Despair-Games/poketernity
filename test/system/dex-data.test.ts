@@ -29,7 +29,7 @@ describe("Dex Data", () => {
     const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
     const defaultIVs = new Array(6).fill(15);
 
-    const caughtCount = gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(defaultStarterSpecies.length);
 
     for (const speciesId of defaultStarterSpecies) {

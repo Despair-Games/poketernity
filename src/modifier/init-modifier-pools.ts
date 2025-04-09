@@ -449,7 +449,7 @@ export function initModifierPools() {
       modifierTypes.CATCHING_CHARM,
       () =>
         !globalScene.gameMode.isFreshStartChallenge()
-        && globalScene.gameData.getSpeciesCount((d) => !!d.caughtAttr) > 100
+        && globalScene.gameData.getSpeciesCount((d) => d.caughtAttr > 0) > 100
           ? 4
           : 0,
       4,

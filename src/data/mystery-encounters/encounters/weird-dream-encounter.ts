@@ -730,7 +730,7 @@ async function addEggMoveToNewPokemonMoveset(
       if (
         !forBattle
         && !isNullOrUndefined(randomEggMoveIndex)
-        && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
+        && globalScene.gameData.dexData[speciesRootForm].caughtAttr > 0
       ) {
         await globalScene.gameData.setEggMoveUnlocked(
           getPokemonSpecies(speciesRootForm),
