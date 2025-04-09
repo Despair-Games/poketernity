@@ -20,7 +20,7 @@ import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/myst
 import { CommandPhase } from "#app/phases/command-phase";
 import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
 import { type MovePhase } from "#app/phases/move-phase";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { speciesEggMoves } from "#app/data/egg-moves";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BerryType } from "#enums/berry-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";

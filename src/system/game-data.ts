@@ -14,7 +14,7 @@ import {
 } from "#app/constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { defaultStarterSpecies } from "#app/data/default-starters";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { speciesEggMoves } from "#app/data/egg-moves";
 import {
   STARTER_CANDY_GAIN_FROM_CATCH,
   STARTER_CANDY_MULIPLIER_FOR_BOSS,

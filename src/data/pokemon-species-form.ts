@@ -1,6 +1,6 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { AnySound } from "#app/audio-manager";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { speciesEggMoves } from "#app/data/egg-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";

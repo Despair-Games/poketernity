@@ -2,7 +2,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { speciesEggMoves } from "#app/data/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
