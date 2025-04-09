@@ -65,7 +65,7 @@ import {
   getCandyProgressRequirement,
   speciesStarterCosts,
 } from "#app/data/starters";
-import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
+import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/tms";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";

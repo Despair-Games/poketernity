@@ -1,4 +1,4 @@
-import { tmSpecies } from "#app/data/balance/tms";
+import { tmSpecies } from "#app/data/tms";
 import {
   getRandomPartyMemberFunc,
   getWavePartyTemplate,

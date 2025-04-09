@@ -665,3 +665,18 @@ export function isLandscapeMode(): boolean {
   const { width, height } = window.screen;
   return width > height;
 }
+
+/** @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360} */
+export function deepFreeze<T>(obj: T): Readonly<T> {
+  if (obj === null || typeof obj !== "object") return obj;
+  // support objects with reference loops
+  if (Object.isFrozen(obj)) return obj;
+
+  Object.freeze(obj);
+  if (Array.isArray(obj)) {
+    for (const elem of obj) deepFreeze(elem);
+  } else {
+    for (const elem of Object.values(obj)) deepFreeze(elem);
+  }
+  return obj;
+}
