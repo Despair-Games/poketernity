@@ -6,7 +6,7 @@ import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-conf
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { signatureSpecies } from "#app/data/balance/signatureSpecies";
+import { signatureSpecies } from "#app/data/signatureSpecies";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
 import type { PersistentModifier } from "#app/modifier/modifier";
