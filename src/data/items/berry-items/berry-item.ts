@@ -11,6 +11,7 @@ export interface BerryItemInit extends Omit<BaseItemInit, "category"> {
   readonly holder: Pokemon;
   readonly flingDamage: number;
   readonly isTransferable?: boolean;
+  readonly isEffectPreventable?: boolean;
 }
 
 //#endregion
@@ -19,12 +20,14 @@ export abstract class BerryItem extends BaseItem implements Edible, Holdable {
   public readonly flingDamage: number;
   public readonly holder: Pokemon;
   public readonly isTransferable: boolean;
+  public readonly isEffectPreventable: boolean;
 
-  constructor({ id, rarity, holder, flingDamage, isTransferable = true }: BerryItemInit) {
+  constructor({ id, rarity, holder, flingDamage, isTransferable = true, isEffectPreventable = true }: BerryItemInit) {
     super({ id, rarity, category: ItemCategory.BERRY });
     this.holder = holder;
     this.flingDamage = flingDamage;
     this.isTransferable = isTransferable;
+    this.isEffectPreventable = isEffectPreventable;
   }
 
   //#region Event Handlers
