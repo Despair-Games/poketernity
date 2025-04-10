@@ -36,6 +36,6 @@ export class CounterDamageAttr extends FixedDamageAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (user, _target, _move) => !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(ar.moveId)).length;
+    return (user, _target, _move) => user.turnData.attacksReceived.some((ar) => this.moveFilter(ar.moveId));
   }
 }

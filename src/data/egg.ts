@@ -22,9 +22,9 @@ import {
   SAME_SPECIES_EGG_SHINY_RATE,
   SHINY_EPIC_CHANCE,
   SHINY_VARIANT_CHANCE,
-} from "#app/data/balance/rates";
-import { speciesEggTiers } from "#app/data/balance/species-egg-tiers";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+} from "#app/data/rates";
+import { speciesEggTiers } from "#app/data/species-egg-tiers";
+import { speciesStarterCosts } from "#app/data/starters";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PlayerPokemon } from "#app/field/pokemon";

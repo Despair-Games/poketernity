@@ -41,8 +41,8 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
     if (!virtual) {
       overridden.value = true;
-      globalScene.queueMoveChargeAnimation(this.chargeAnim, move.id, user);
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMoveAnimPhase(this.chargeAnim, move.id, user);
+      globalScene.phaseManager.queueMessagePhase(
         this.chargeText
           .replace("{TARGET}", getPokemonNameWithAffix(target))
           .replace("{USER}", getPokemonNameWithAffix(user)),
@@ -62,7 +62,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       }
       return true;
     } else {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("moveTriggers:tookMoveAttack", {
           pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
           moveName: move.name,

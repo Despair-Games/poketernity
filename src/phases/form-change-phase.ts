@@ -48,7 +48,7 @@ export class FormChangePhase extends FormChangeBasePhase {
   }
 
   public override validate(): boolean {
-    return !!this.formChange;
+    return true;
   }
 
   public override setMode(): Promise<void> {
@@ -225,10 +225,12 @@ export class FormChangePhase extends FormChangeBasePhase {
       // then end the form change cutscene via `EndEvolutionPhase`.
       for (const [, learnMoveId] of this.pokemon.getLevelMoves(1, true)) {
         if (this.formChange.movesToLearn.includes(learnMoveId)) {
-          globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+          globalScene.phaseManager.unshiftPhase(
+            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId),
+          );
         }
       }
-      globalScene.unshiftPhase(new EndEvolutionPhase());
+      globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
 
       super.end();
     }

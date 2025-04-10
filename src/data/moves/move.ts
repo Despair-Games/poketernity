@@ -146,8 +146,8 @@ export abstract class Move implements Localizable {
    * @param attrPredicate
    * @returns the first {@linkcode MoveAttr} element in attrs that makes the input function return true
    */
-  findAttr(attrPredicate: (attr: MoveAttr) => boolean): MoveAttr {
-    return this.attrs.find(attrPredicate)!; // TODO: is the bang correct?
+  findAttr(attrPredicate: (attr: MoveAttr) => boolean): MoveAttr | undefined {
+    return this.attrs.find(attrPredicate);
   }
 
   /**
@@ -203,12 +203,13 @@ export abstract class Move implements Localizable {
 
   /**
    * Getter function that returns if this Move has a MoveFlag
-   * @param flag {@linkcode MoveFlags} to check
-   * @returns boolean
+   * @param flag - {@linkcode MoveFlags} to check
+   * @returns `true` if the checked flag is on the move
+   * @todo make `private`?
    */
   hasFlag(flag: MoveFlags): boolean {
     // internally it is taking the bitwise AND (MoveFlags are represented as bit-shifts) and returning False if result is 0 and true otherwise
-    return !!(this.flags & flag);
+    return (this.flags & flag) > 0;
   }
 
   /**
@@ -263,12 +264,12 @@ export abstract class Move implements Localizable {
   }
 
   isAttackMove(user?: Pokemon, target?: Pokemon): this is AttackMove {
-    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    const moveCategory = user && target ? user.getMoveCategory(target, this) : this.category;
     return moveCategory === MoveCategory.PHYSICAL || moveCategory === MoveCategory.SPECIAL;
   }
 
   isStatusMove(user?: Pokemon, target?: Pokemon): this is StatusMove {
-    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    const moveCategory = user && target ? user.getMoveCategory(target, this) : this.category;
     return moveCategory === MoveCategory.STATUS;
   }
 
@@ -620,7 +621,7 @@ export abstract class Move implements Localizable {
    * @param target {@linkcode Pokemon} the Pokemon receiving the move
    * @returns boolean
    */
-  checkFlag(flag: MoveFlags, user: Pokemon, target: Pokemon | null): boolean {
+  public checkFlag(flag: MoveFlags, user: Pokemon, target: Pokemon | null): boolean {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
@@ -653,7 +654,7 @@ export abstract class Move implements Localizable {
         break;
     }
 
-    return !!(this.flags & flag);
+    return this.hasFlag(flag);
   }
 
   /**

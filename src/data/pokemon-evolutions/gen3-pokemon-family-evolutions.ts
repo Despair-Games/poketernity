@@ -14,7 +14,7 @@ import {
   ADVANCED_ITEM_EVO_LEVEL,
   BABY_HAPPINESS_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
-} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 
 export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.TREECKO]: [new SpeciesEvolution(SpeciesId.GROVYLE, 16, null, null)],

@@ -691,8 +691,7 @@ export function initAbilities() {
     new Ability(AbilityId.UNNERVE, 5)
       .attr(PreventBerryUseAbAttr),
     new Ability(AbilityId.DEFIANT, 5)
-      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.ATK], 2)
-      .edgeCase(), // Should not boost stats if switching into court changed sticky web
+      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.ATK], 2),
     new Ability(AbilityId.DEFEATIST, 5)
       .attr(StatMultiplierAbAttr, Stat.ATK, 0.5)
       .attr(StatMultiplierAbAttr, Stat.SPATK, 0.5)
@@ -874,8 +873,7 @@ export function initAbilities() {
       .attr(MoveFlagImmunityAbAttr, MoveFlags.BULLET_MOVE)
       .ignorable(),
     new Ability(AbilityId.COMPETITIVE, 6)
-      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2)
-      .edgeCase(), // Should not boost stats if switching into court changed sticky web
+      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2),
     new Ability(AbilityId.STRONG_JAW, 6)
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.BITING_MOVE, 1.5),
     new Ability(AbilityId.REFRIGERATE, 6)

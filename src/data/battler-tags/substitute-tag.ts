@@ -44,12 +44,12 @@ export class SubstituteTag extends BattlerTag {
     // Queue battle animation and message
     globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_ADD);
     if (this.sourceMoveId === MoveId.SHED_TAIL) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:shedTailOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         1500,
       );
     } else {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:substituteOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         1500,
       );
@@ -67,7 +67,7 @@ export class SubstituteTag extends BattlerTag {
     } else {
       this.sprite.destroy();
     }
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:substituteOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -101,7 +101,7 @@ export class SubstituteTag extends BattlerTag {
 
   /** If the Substitute redirects damage, queue a message to indicate it. */
   onHit(pokemon: Pokemon): void {
-    const moveEffectPhase = globalScene.getCurrentPhase();
+    const moveEffectPhase = globalScene.phaseManager.getCurrentPhase();
     if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
       const attacker = moveEffectPhase.getUserPokemon();
       if (!attacker) {
@@ -111,7 +111,7 @@ export class SubstituteTag extends BattlerTag {
       const firstHit = attacker.turnData.hitCount === attacker.turnData.hitsLeft;
 
       if (firstHit && move.hitsSubstitute(attacker, pokemon)) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("battlerTags:substituteOnHit", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
       }

@@ -18,7 +18,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { TurnCommandManager } from "./turn-command-manager";
 import { settings } from "./system/settings/settings-manager";
 import { BattleType } from "#enums/battle-type";
@@ -187,7 +187,7 @@ export default class Battle {
     const userLocale = navigator.language || "en-US";
     const formattedMoneyAmount = moneyAmount.value.toLocaleString(userLocale);
     const message = i18next.t("battle:moneyPickedUp", { moneyAmount: formattedMoneyAmount });
-    globalScene.queueMessage(message, undefined, true);
+    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
 
     globalScene.currentBattle.moneyScattered = 0;
   }

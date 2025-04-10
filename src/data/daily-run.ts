@@ -7,7 +7,7 @@ import type { PokemonSpeciesForm } from "./pokemon-species-form";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { api } from "#app/plugins/api/api";
 
 export interface DailyRunConfig {

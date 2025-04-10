@@ -274,7 +274,7 @@ async function summonSafariPokemon() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   // Message pokemon remaining
   encounter.setDialogueToken("remainingCount", encounter.misc.safariPokemonRemaining);
-  globalScene.queueMessage(getEncounterText(`${namespace}:safari.remaining_count`) ?? "", null, true);
+  globalScene.phaseManager.queueMessagePhase(getEncounterText(`${namespace}:safari.remaining_count`) ?? "", null, true);
 
   // Generate pokemon using safariPokemonRemaining so they are always the same pokemon no matter how many turns are taken
   // Safari pokemon roll twice on shiny and HA chances, but are otherwise normal
@@ -323,7 +323,7 @@ async function summonSafariPokemon() {
   encounter.misc.pokemon = pokemon;
   encounter.misc.safariPokemonRemaining -= 1;
 
-  globalScene.unshiftPhase(new SummonPhase(0, false));
+  globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
 
   encounter.setDialogueToken("pokemonName", getPokemonNameWithAffix(pokemon));
 
@@ -334,7 +334,7 @@ async function summonSafariPokemon() {
 
   const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
   if (ivScannerModifier) {
-    globalScene.pushPhase(
+    globalScene.phaseManager.pushPhase(
       new ScanIvsPhase(pokemon.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
     );
   }
@@ -559,7 +559,12 @@ async function doEndTurn(cursorIndex: number) {
       leaveEncounterWithoutBattle(true);
     }
   } else {
-    globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", null, null, 1000);
+    globalScene.phaseManager.queueMessagePhase(
+      getEncounterText(`${namespace}:safari.watching`) ?? "",
+      null,
+      null,
+      1000,
+    );
     initSubsequentOptionSelect({
       overrideOptions: safariZoneGameOptions,
       startingCursorIndex: cursorIndex,

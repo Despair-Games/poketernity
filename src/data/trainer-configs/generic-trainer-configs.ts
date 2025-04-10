@@ -1,4 +1,4 @@
-import { tmSpecies } from "#app/data/balance/tms";
+import { tmSpecies } from "#app/data/tms";
 import {
   getRandomPartyMemberFunc,
   getWavePartyTemplate,
@@ -12,7 +12,10 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { ElementalType } from "#enums/elemental-type";
-
+/**
+ * If a trainer does not have any species filter then they use the default
+ * filters of excluding sublegendary, legendary, mythic, eternal floette, and bloodmoon ursaluna
+ */
 let t = 0;
 export const genericTrainerConfigs: TrainerConfigs = {
   [TrainerType.UNKNOWN]: new TrainerConfig(t).setHasGenders(),
@@ -213,13 +216,11 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setHasDouble("Medical Team")
     .setMoneyMultiplier(3)
     .setEncounterBgm(TrainerType.CLERK)
-    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === MoveId.HEAL_PULSE)),
+    .setSpeciesFilter((s) => s.getLevelMoves().some((plm) => plm[1] === MoveId.HEAL_PULSE)),
   [TrainerType.FIREBREATHER]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.4)
     .setEncounterBgm(TrainerType.ROUGHNECK)
-    .setSpeciesFilter(
-      (s) => !!s.getLevelMoves().find((plm) => plm[1] === MoveId.SMOG) || s.isOfType(ElementalType.FIRE),
-    ),
+    .setSpeciesFilter((s) => s.getLevelMoves().some((plm) => plm[1] === MoveId.SMOG) || s.isOfType(ElementalType.FIRE)),
   [TrainerType.FISHERMAN]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.25)
     .setEncounterBgm(TrainerType.BACKPACKER)
@@ -334,7 +335,7 @@ export const genericTrainerConfigs: TrainerConfigs = {
   [TrainerType.MAID]: new TrainerConfig(++t).setMoneyMultiplier(1.6).setEncounterBgm(TrainerType.RICH),
   [TrainerType.MUSICIAN]: new TrainerConfig(++t)
     .setEncounterBgm(TrainerType.ROUGHNECK)
-    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === MoveId.SING)),
+    .setSpeciesFilter((s) => s.getLevelMoves().some((plm) => plm[1] === MoveId.SING)),
   [TrainerType.HEX_MANIAC]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .setEncounterBgm(TrainerType.PSYCHIC)

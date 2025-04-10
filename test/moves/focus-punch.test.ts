@@ -114,7 +114,7 @@ describe("Moves - Focus Punch", () => {
 
     await game.phaseInterceptor.to(TurnStartPhase);
 
-    expect(game.scene.getCurrentPhase() instanceof SwitchSummonPhase).toBeTruthy();
-    expect(game.scene.phaseQueue.find((phase) => phase instanceof MoveHeaderPhase)).toBeDefined();
+    expect(game.scene.phaseManager.getCurrentPhase() instanceof SwitchSummonPhase).toBeTruthy();
+    expect(game.scene.phaseManager["phaseQueue"].find((phase) => phase instanceof MoveHeaderPhase)).toBeDefined();
   });
 });

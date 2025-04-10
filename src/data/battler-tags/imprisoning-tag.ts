@@ -22,7 +22,7 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
   }
 
   override onAdd(pokemon: Pokemon): void {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:imprisonOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -39,7 +39,7 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
   override apply(pokemon: Pokemon, simulated: boolean, actingPokemon: Pokemon, moveId: MoveId): boolean {
     if (pokemon.getMoveset().some((mv) => mv.moveId === moveId)) {
       if (!simulated) {
-        globalScene.queueMessage(this.getInterruptedText(actingPokemon, moveId));
+        globalScene.phaseManager.queueMessagePhase(this.getInterruptedText(actingPokemon, moveId));
       }
       return true;
     }

@@ -20,6 +20,6 @@ export class SpeciesFormChangeCompoundTrigger {
   }
 
   hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
-    return !!this.triggers.find((t) => t.hasTriggerType(triggerType));
+    return this.triggers.some((t) => t.hasTriggerType(triggerType));
   }
 }

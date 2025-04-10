@@ -12,7 +12,7 @@ import {
   SUDOWOODO_EVO_LEVEL,
   WYRDEER_EVO_LEVEL,
   YANMEGA_EVO_LEVEL,
-} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
   type PokemonEvolutions,
   SpeciesFormEvolution,

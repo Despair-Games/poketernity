@@ -4,7 +4,7 @@ import { type FormChangePhase } from "#app/phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
-import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import { EVOLVE_MOVE } from "#app/data/pokemon-level-moves";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -34,6 +34,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   private preEvolvedPokemonName: string;
 
+  /** @todo why is this able to be `null`? */
   private readonly evolution: SpeciesFormEvolution | null;
   private evolutionBgm: AnySound;
 
@@ -171,7 +172,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
 
-    globalScene.unshiftPhase(new EndEvolutionPhase());
+    globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
 
     ui.showText(
       i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -272,9 +273,11 @@ export class EvolutionPhase extends FormChangeBasePhase {
           .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
-          globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));
+          globalScene.phaseManager.unshiftPhase(
+            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]),
+          );
         }
-        globalScene.unshiftPhase(new EndEvolutionPhase());
+        globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
 
         globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);

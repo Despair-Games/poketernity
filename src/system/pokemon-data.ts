@@ -56,6 +56,7 @@ export default class PokemonData {
   /** Data that can customize a Pokemon in non-standard ways from its Species */
   public customPokemonData: CustomPokemonData;
 
+  // TODO: this shouldn't be `| any`
   constructor(source: Pokemon | any, forHistory: boolean = false) {
     const sourcePokemon = source.type === "Pokemon" ? source : null;
     this.id = source.id;
@@ -97,7 +98,7 @@ export default class PokemonData {
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
     if (!forHistory) {
-      this.boss = (source instanceof EnemyPokemon && !!source.bossSegments) || (!this.player && !!source.boss);
+      this.boss = (source instanceof EnemyPokemon && source.bossSegments > 0) || (!this.player && !!source.boss);
       this.bossSegments = source.bossSegments;
     }
 

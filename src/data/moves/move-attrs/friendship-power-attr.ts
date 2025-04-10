@@ -13,10 +13,10 @@ import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-att
 export class FriendshipPowerAttr extends VariablePowerAttr {
   private invert: boolean;
 
-  constructor(invert?: boolean) {
+  constructor(invert: boolean = false) {
     super();
 
-    this.invert = !!invert;
+    this.invert = invert;
   }
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

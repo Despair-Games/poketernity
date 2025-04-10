@@ -1,22 +1,22 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { AnySound } from "#app/audio-manager";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { speciesEggMoves } from "#app/data/egg-moves";
+import { noRandomSpeciesSpawn } from "#app/data/no-random-species-spawn";
+import type { PokemonForm } from "#app/data/pokemon-form";
+import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
+import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";
-import { speciesStarterCosts } from "#app/data/balance/starters";
-import { uncatchableSpecies } from "#app/data/balance/uncatchable-species";
-import type { PokemonForm } from "./pokemon-form";
-import { variantData, type VariantSet, type Variant } from "#app/data/variant";
+import { speciesStarterCosts } from "#app/data/starters";
+import { type Variant, variantData, type VariantSet } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";
+import type { ElementalType } from "#enums/elemental-type";
 import { PokemonRegion } from "#enums/pokemon-regions";
-import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
-import type { ElementalType } from "#enums/elemental-type";
 
 //#region Types
 
@@ -160,12 +160,20 @@ export abstract class PokemonSpeciesForm {
     return Math.floor(this.speciesId / 2000) as PokemonRegion;
   }
 
+  /**
+   * Deprecated function Sam created to slowly introduce Pokemon into the game generation by generation
+   * @todo remove this function as it will always return true
+   */
   isObtainable(): boolean {
     return this.generation <= 9 || pokemonPreEvolutions.hasOwnProperty(this.speciesId);
   }
 
-  isCatchable(): boolean {
-    return this.isObtainable() && uncatchableSpecies.indexOf(this.speciesId) === -1;
+  /**
+   * Checks if this Pokemon appears in {@linkcode noRandomSpeciesSpawn}
+   * @returns whether or not this Pokemon can spawn as a random species
+   */
+  canSpawnAsRandomSpecies(): boolean {
+    return !noRandomSpeciesSpawn.includes(this.speciesId);
   }
 
   isRegional(): boolean {

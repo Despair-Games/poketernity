@@ -23,7 +23,7 @@ export class CurseAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getTypes(true).includes(ElementalType.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
-        globalScene.queueMessage(i18next.t("battle:attackFailed"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackFailed"));
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
@@ -32,7 +32,7 @@ export class CurseAttr extends MoveEffectAttr {
         ignoreSegments: true,
         preventEndure: true,
       });
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:cursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
           pokemonName: getPokemonNameWithAffix(target),
@@ -42,8 +42,10 @@ export class CurseAttr extends MoveEffectAttr {
       target.addTag(BattlerTagType.CURSED, 0, move.id, user.id);
       return true;
     } else {
-      globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.ATK, Stat.DEF], 1));
-      globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.SPD], -1));
+      globalScene.phaseManager.unshiftPhase(
+        new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.ATK, Stat.DEF], 1),
+      );
+      globalScene.phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.SPD], -1));
       return true;
     }
   }

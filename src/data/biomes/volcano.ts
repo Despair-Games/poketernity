@@ -139,25 +139,25 @@ const trainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
+/**
+ * 9/10 of Sunny during dawn/day
+ */
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 1,
-  [WeatherType.RAIN]: 0,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
+  [WeatherType.SUNNY]: 9,
 };
 
 const terrainPool = {
   [TerrainType.NONE]: 1,
-  [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
-  [TerrainType.GRASSY]: 0,
-  [TerrainType.PSYCHIC]: 0,
 };
 
-export const volcanoBiome = new Biome(BiomeId.VOLCANO, pokemonPool, trainerPool, weatherPool, terrainPool, "volcano");
+export const volcanoBiome = new Biome(
+  BiomeId.VOLCANO,
+  pokemonPool,
+  trainerPool,
+  12,
+  weatherPool,
+  terrainPool,
+  "volcano",
+  5.116,
+);

@@ -1,9 +1,11 @@
 import { Biome } from "#app/data/biome";
-import { townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
+import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
+import { WeatherType } from "#enums/weather-type";
 
 const pokemonPool = {
   [BiomePoolTier.COMMON]: {
@@ -88,11 +90,37 @@ const pokemonPool = {
   },
 };
 
+const trainerPool = {
+  [BiomePoolTier.COMMON]: [TrainerType.PSYCHIC, TrainerType.SCIENTIST],
+  [BiomePoolTier.UNCOMMON]: [TrainerType.ACE_TRAINER, TrainerType.BLACK_BELT],
+  [BiomePoolTier.RARE]: [],
+  [BiomePoolTier.SUPER_RARE]: [],
+  [BiomePoolTier.ULTRA_RARE]: [],
+  [BiomePoolTier.BOSS]: [TrainerType.SABRINA, TrainerType.TATE, TrainerType.LIZA, TrainerType.TULIP],
+  [BiomePoolTier.BOSS_RARE]: [],
+  [BiomePoolTier.BOSS_SUPER_RARE]: [],
+  [BiomePoolTier.BOSS_ULTRA_RARE]: [],
+};
+
+const weatherPool = {
+  [WeatherType.NONE]: 1,
+};
+
+/**
+ * Always psychic
+ */
+const terrainPool: Partial<Record<TerrainType, number>> = {
+  [TerrainType.NONE]: 0,
+  [TerrainType.PSYCHIC]: 1,
+};
+
 export const ruinsBiome = new Biome(
   BiomeId.RUINS,
   pokemonPool,
-  townTrainerPool,
-  townWeatherPool,
-  townTerrainPool,
-  "town",
+  trainerPool,
+  12,
+  weatherPool,
+  terrainPool,
+  "ruins",
+  2.27,
 );

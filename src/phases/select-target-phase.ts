@@ -39,7 +39,7 @@ export class SelectTargetPhase extends PokemonPhase {
           .getRestrictingTag(moveId, user, firstTarget)
           ?.getSelectionDeniedText(user, moveObject.id);
 
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name }),
           0,
           true,
@@ -49,7 +49,7 @@ export class SelectTargetPhase extends PokemonPhase {
 
       if (targets.length < 1) {
         turnManager.tryRemoveCommand((tc) => tc.pokemon === user);
-        globalScene.unshiftPhase(new CommandPhase(this.fieldIndex));
+        globalScene.phaseManager.unshiftPhase(new CommandPhase(this.fieldIndex));
       } else {
         if (turnCommand) {
           turnCommand.targets = targets;

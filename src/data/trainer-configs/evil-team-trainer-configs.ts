@@ -12,7 +12,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.ROCKET_GRUNT;
-export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
+export const evilTeamTrainerConfigs: TrainerConfigs = {
   [TrainerType.ROCKET_GRUNT]: new TrainerConfig(t)
     .setHasGenders("Rocket Grunt Female")
     .setHasDouble("Rocket Grunts")

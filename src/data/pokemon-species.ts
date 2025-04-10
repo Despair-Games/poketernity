@@ -5,7 +5,7 @@ import i18next from "i18next";
 import { randSeedGauss, randSeedItem } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type { ElementalType } from "#enums/elemental-type";
 import { variantData } from "#app/data/variant";
@@ -50,7 +50,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     growthRate: GrowthRate,
     malePercent: number | null,
     genderDiffs: boolean,
-    canChangeForm?: boolean,
+    canChangeForm: boolean = false,
     ...forms: PokemonForm[]
   ) {
     super(
@@ -82,7 +82,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     this.growthRate = growthRate;
     this.malePercent = malePercent;
     this.genderDiffs = genderDiffs;
-    this.canChangeForm = !!canChangeForm;
+    this.canChangeForm = canChangeForm;
     this.forms = forms;
 
     this.localize();

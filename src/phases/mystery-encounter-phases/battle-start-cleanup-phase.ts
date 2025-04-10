@@ -55,8 +55,8 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     });
 
     // Remove any status tick phases
-    while (globalScene.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
-      globalScene.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
+    while (globalScene.phaseManager.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
+      globalScene.phaseManager.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
     }
 
     /** The total number of Pokemon in the player's party that can legally fight */
@@ -64,7 +64,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     /** The total number of legal player Pokemon that aren't currently on the field */
     const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
-      globalScene.gameOver({ clearPhaseQueue: false });
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
       return this.end();
     }
 
@@ -73,13 +73,13 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const playerField = globalScene.getPlayerField();
     playerField.forEach((pokemon, i) => {
       if (!pokemon.isAllowedInBattle() && legalPlayerPartyPokemon.length > i) {
-        globalScene.unshiftPhase(new SwitchPhase(SwitchType.SWITCH, i, true, false));
+        globalScene.phaseManager.unshiftPhase(new SwitchPhase(SwitchType.SWITCH, i, true, false));
       }
     });
 
     // THEN, if is a double battle, and player only has 1 summoned pokemon, center pokemon on field
     if (globalScene.currentBattle.double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
-      globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
+      globalScene.phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
     }
 
     this.end();

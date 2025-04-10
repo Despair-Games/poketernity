@@ -1,3 +1,4 @@
+import { deepFreeze } from "#app/utils";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -31,7 +32,7 @@ export const reverseCompatibleTms: MoveId[] = []; /*[
     MoveId.ROUND
 ];*/
 
-export const tmSpecies: TmSpecies = {
+export const tmSpecies = deepFreeze<TmSpecies>({
   [MoveId.MEGA_PUNCH]: [
     SpeciesId.CHARMANDER,
     SpeciesId.CHARMELEON,
@@ -67954,13 +67955,13 @@ export const tmSpecies: TmSpecies = {
     SpeciesId.HISUI_LILLIGANT,
     SpeciesId.HISUI_DECIDUEYE,
   ],
-};
+});
 
 interface TmPoolTiers {
   [key: number]: ModifierTier;
 }
 
-export const tmPoolTiers: TmPoolTiers = {
+export const tmPoolTiers = deepFreeze<TmPoolTiers>({
   [MoveId.MEGA_PUNCH]: ModifierTier.GREAT,
   [MoveId.PAY_DAY]: ModifierTier.ULTRA,
   [MoveId.FIRE_PUNCH]: ModifierTier.GREAT,
@@ -68277,4 +68278,4 @@ export const tmPoolTiers: TmPoolTiers = {
   [MoveId.SUPERCELL_SLAM]: ModifierTier.GREAT,
   [MoveId.PSYCHIC_NOISE]: ModifierTier.GREAT,
   [MoveId.UPPER_HAND]: ModifierTier.COMMON,
-};
+});

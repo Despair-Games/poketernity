@@ -109,23 +109,14 @@ const trainerPool = {
 
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 0,
-  [WeatherType.RAIN]: 0,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
 };
 
+/**
+ * 1/5 of electric
+ */
 const terrainPool = {
-  [TerrainType.NONE]: 1,
-  [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
-  [TerrainType.GRASSY]: 0,
-  [TerrainType.PSYCHIC]: 0,
+  [TerrainType.NONE]: 4,
+  [TerrainType.ELECTRIC]: 1,
 };
 
-export const caveBiome = new Biome(BiomeId.CAVE, pokemonPool, trainerPool, weatherPool, terrainPool, "cave");
+export const caveBiome = new Biome(BiomeId.CAVE, pokemonPool, trainerPool, 6, weatherPool, terrainPool, "cave", 14.24);

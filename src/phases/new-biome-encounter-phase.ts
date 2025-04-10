@@ -1,6 +1,5 @@
 import type { PostBiomeChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getRandomWeatherType } from "#app/data/weather";
 import { globalScene } from "#app/global-scene";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -54,6 +53,6 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
    * Set biome weather.
    */
   protected override trySetWeatherIfNewBiome(): void {
-    globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
+    globalScene.arena.setRandomWeather();
   }
 }
