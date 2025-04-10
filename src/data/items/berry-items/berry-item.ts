@@ -1,4 +1,4 @@
-import type { Eatable } from "#app/@types/item/Eatable";
+import type { Edible } from "#app/@types/item/Edible";
 import type { FlingContext, Holdable } from "#app/@types/item/Holdable";
 import { BaseItem, type BaseItemInit } from "#app/data/items/base-item";
 import type { Pokemon } from "#app/field/pokemon";
@@ -14,7 +14,7 @@ export interface BerryItemInit extends Omit<BaseItemInit, "category"> {
 
 //#endregion
 
-export abstract class BerryItem extends BaseItem implements Eatable, Holdable {
+export abstract class BerryItem extends BaseItem implements Edible, Holdable {
   public readonly flingDamage: number;
   public readonly holder: Pokemon;
 
