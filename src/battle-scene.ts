@@ -254,8 +254,8 @@ export default class BattleScene extends SceneBase {
 
   public seed: string;
   public waveSeed: string;
+  /** Random multiple of `5` between `0-35` used to start at a random time of day */
   public waveCycleOffset: number;
-  public offsetGym: boolean;
 
   public damageNumberHandler: DamageNumberHandler;
   private spriteSparkleHandler: PokemonSpriteSparkleHandler;
@@ -1039,7 +1039,6 @@ export default class BattleScene extends SceneBase {
     this.seed = seed;
     this.rngCounter = 0;
     this.waveCycleOffset = this.getGeneratedWaveCycleOffset();
-    this.offsetGym = this.gameMode.isClassic && this.getGeneratedOffsetGym();
   }
 
   /**
@@ -1555,18 +1554,7 @@ export default class BattleScene extends SceneBase {
     return this.arena.getSpeciesFormIndex(species);
   }
 
-  private getGeneratedOffsetGym(): boolean {
-    let ret = false;
-    this.executeWithSeedOffset(
-      () => {
-        ret = !randSeedInt(2);
-      },
-      0,
-      this.seed.toString(),
-    );
-    return ret;
-  }
-
+  /** @returns A random multiple of 5 between 0-35, used to start at a random time of day */
   private getGeneratedWaveCycleOffset(): number {
     let ret = 0;
     this.executeWithSeedOffset(

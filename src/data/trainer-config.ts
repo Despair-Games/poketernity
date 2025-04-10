@@ -169,6 +169,7 @@ export const trainerPartyTemplates = {
   SIX_WEAK_SAME: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, true),
   SIX_WEAK_BALANCED: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, false, true),
 
+  // TODO: adjust gym leader templates
   GYM_LEADER_1: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
@@ -1579,17 +1580,11 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
   const wavesToScale = 30;
   const offsetWave = 20;
 
-  const wave = Overrides.STARTING_WAVE_OVERRIDE || 1;
-  return templates[
-    Phaser.Math.Clamp(
-      Math.ceil(
-        (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - offsetWave)
-          / wavesToScale,
-      ),
-      0,
-      templates.length - 1,
-    )
-  ];
+  const wave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
+  const { currentBattle, gameMode } = globalScene;
+  const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? wave, true);
+  const targetTemplate = Math.ceil((adjustedWave - offsetWave) / wavesToScale);
+  return templates[Phaser.Math.Clamp(targetTemplate, 0, templates.length - 1)];
 }
 
 /**

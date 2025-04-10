@@ -287,13 +287,11 @@ export class Arena {
   randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
       this.trainerPool[BiomePoolTier.BOSS].length > 0
-      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId, globalScene.offsetGym) || isBoss);
-    console.log(isBoss, this.trainerPool);
+      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId) || isBoss);
 
     // @todo Right now there are no super/ultra or rare boss trainers
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
-    console.log(BiomePoolTier[tier]);
 
     while (tier && !this.trainerPool[tier].length) {
       console.log(`Downgraded trainer rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
