@@ -194,7 +194,7 @@ export class GameMode implements GameModeConfig {
     return this.isClassic && gymWaves.includes(waveIndex);
   }
 
-  isTrainerBoss(waveIndex: number, biomeId: BiomeId): boolean {
+  public isTrainerBoss(waveIndex: number, biomeId: BiomeId): boolean {
     switch (this.modeId) {
       case GameModes.DAILY:
         return waveIndex > 10 && waveIndex < 50 && !(waveIndex % 10);
