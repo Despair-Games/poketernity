@@ -17,7 +17,7 @@ export class CheriBerry extends BerryItem {
     });
   }
 
-  public override eat(): void {
+  public override onEat(): void {
     if (this.holder.status?.statusEffect === StatusEffect.PARALYSIS) {
       this.holder.resetStatus();
     }
@@ -25,7 +25,7 @@ export class CheriBerry extends BerryItem {
 
   public override onStatusEffectApplied({ statusEffect }: StatusEffectAppliedContext): void {
     if (statusEffect === StatusEffect.PARALYSIS) {
-      this.eat();
+      this.onEat();
     }
   }
 }

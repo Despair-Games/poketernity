@@ -16,7 +16,7 @@ export class SitrusBerry extends BerryItem {
     });
   }
 
-  public override eat(): void {
+  public override onEat(): void {
     const healAmount = this.holder.getMaxHp() * SitrusBerry.HEAL_PERCENTAGE; // 25% of max-hp
     this.holder.heal(healAmount);
     // TODO: remove/delete berry
@@ -26,7 +26,7 @@ export class SitrusBerry extends BerryItem {
     const halfHp = this.holder.getMaxHp() / 2;
 
     if (this.holder.getMaxHp() <= halfHp) {
-      this.eat();
+      this.onEat();
     }
   }
 }
