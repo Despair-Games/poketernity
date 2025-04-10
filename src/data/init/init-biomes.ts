@@ -27,6 +27,7 @@ import { seabedBiome } from "#app/data/biomes/seabed";
 import { slumBiome } from "#app/data/biomes/slum";
 import { snowyForestBiome } from "#app/data/biomes/snowy-forest";
 import { spaceBiome } from "#app/data/biomes/space";
+import { steamVentBiome } from "#app/data/biomes/steam-vent";
 import { swampBiome } from "#app/data/biomes/swamp";
 import { tallGrassBiome } from "#app/data/biomes/tall-grass";
 import { templeBiome } from "#app/data/biomes/temple";
@@ -69,6 +70,7 @@ export function initBiomes() {
     templeBiome,
     slumBiome,
     snowyForestBiome,
+    steamVentBiome,
     islandBiome,
     laboratoryBiome,
     endBiome,

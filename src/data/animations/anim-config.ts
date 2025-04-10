@@ -1,11 +1,11 @@
-import { type BattleAnim } from "./battle-anims";
-import { type MoveAnim } from "./move-anim";
 import { globalScene } from "#app/global-scene";
 import { getFrameMs, isNullOrUndefined } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
-import { AnimFrameTarget } from "#enums/anim-frame-target";
+import { AnimFrameTargets, type AnimFrameTarget } from "#enums/anim-frame-target";
 import type Phaser from "phaser";
+import { type BattleAnim } from "./battle-anims";
+import { type MoveAnim } from "./move-anim";
 
 export class AnimConfig {
   public id: number;
@@ -216,13 +216,13 @@ export class AnimFrame {
       this.blendType = AnimBlendType.NORMAL;
     }
     if (!init) {
-      let target = AnimFrameTarget.GRAPHIC;
+      let target: AnimFrameTarget = AnimFrameTargets.IMAGE;
       switch (pattern) {
         case -2:
-          target = AnimFrameTarget.TARGET;
+          target = AnimFrameTargets.TARGET;
           break;
         case -1:
-          target = AnimFrameTarget.USER;
+          target = AnimFrameTargets.SOURCE;
           break;
       }
       this.target = target;
@@ -311,6 +311,7 @@ export abstract class AnimTimedEvent {
 
   abstract getEventType(): string;
 }
+
 export class AnimTimedSoundEvent extends AnimTimedEvent {
   public volume: number = 100;
   public pitch: number = 100;

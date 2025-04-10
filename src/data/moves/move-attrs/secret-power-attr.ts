@@ -95,6 +95,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case BiomeId.SNOWY_FOREST:
         return new StatusEffectAttr(StatusEffect.FREEZE, false, undefined, undefined, -1);
       case BiomeId.VOLCANO:
+      case BiomeId.STEAM_VENT:
         return new StatusEffectAttr(StatusEffect.BURN, false, undefined, undefined, -1);
       case BiomeId.FAIRY_CAVE:
         return new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });

@@ -1,0 +1,36 @@
+/**
+ * Contains the query strings for Phaser"s built-in easing equations.
+ * @see {@link https://phaser.io/examples/v3.85.0/tweens/eases/view/ease-equations}
+ */
+export const easeFunctions = [
+  "Linear",
+  "Quad.easeIn",
+  "Cubic.easeIn",
+  "Quart.easeIn",
+  "Quint.easeIn",
+  "Sine.easeIn",
+  "Expo.easeIn",
+  "Circ.easeIn",
+  "Back.easeIn",
+  "Bounce.easeIn",
+  "Quad.easeOut",
+  "Cubic.easeOut",
+  "Quart.easeOut",
+  "Quint.easeOut",
+  "Sine.easeOut",
+  "Expo.easeOut",
+  "Circ.easeOut",
+  "Back.easeOut",
+  "Bounce.easeOut",
+  "Quad.easeInOut",
+  "Cubic.easeInOut",
+  "Quart.easeInOut",
+  "Quint.easeInOut",
+  "Sine.easeInOut",
+  "Expo.easeInOut",
+  "Circ.easeInOut",
+  "Back.easeInOut",
+  "Bounce.easeInOut",
+  "Elastic",
+  "Stepped",
+];

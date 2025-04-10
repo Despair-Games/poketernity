@@ -23,7 +23,7 @@ interface BiomeLinks {
 export const biomeLinks: BiomeLinks = {
   [BiomeId.TOWN]: BiomeId.PLAINS,
   [BiomeId.PLAINS]: [BiomeId.GRASS, BiomeId.METROPOLIS, BiomeId.LAKE],
-  [BiomeId.GRASS]: BiomeId.TALL_GRASS,
+  [BiomeId.GRASS]: [BiomeId.TALL_GRASS, BiomeId.STEAM_VENT],
   [BiomeId.TALL_GRASS]: [BiomeId.FOREST, BiomeId.CAVE],
   [BiomeId.SLUM]: [BiomeId.CONSTRUCTION_SITE, [BiomeId.SWAMP, 2]],
   [BiomeId.FOREST]: [BiomeId.JUNGLE, BiomeId.MEADOW],
@@ -55,4 +55,5 @@ export const biomeLinks: BiomeLinks = {
   [BiomeId.SNOWY_FOREST]: [BiomeId.FOREST, [BiomeId.MOUNTAIN, 2], [BiomeId.LAKE, 2]],
   [BiomeId.ISLAND]: BiomeId.SEA,
   [BiomeId.LABORATORY]: BiomeId.CONSTRUCTION_SITE,
+  [BiomeId.STEAM_VENT]: BiomeId.PLAINS,
 };
