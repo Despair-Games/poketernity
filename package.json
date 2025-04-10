@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "@material/material-color-utilities": "^0.2.7",
+    "ajv": "^8.17.1",
     "compare-versions": "^6.1.1",
     "crypto-js": "^4.2.0",
     "eslint-config-prettier": "^9.1.0",
@@ -64,7 +65,6 @@
     "i18next-http-backend": "^2.6.1",
     "i18next-korean-postposition-processor": "^1.0.0",
     "json-stable-stringify": "^1.1.0",
-    "jsonschema": "^1.5.0",
     "jszip": "^3.10.1",
     "phaser": "^3.70.0",
     "phaser3-rex-plugins": "^1.1.84"

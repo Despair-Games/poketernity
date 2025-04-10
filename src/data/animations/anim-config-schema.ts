@@ -9,7 +9,7 @@ import type { MoveAnim } from "#app/data/animations/move-anim";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFrameTargets } from "#enums/anim-frame-target";
 import { MoveId } from "#enums/move-id";
-import { type Schema } from "jsonschema";
+import type { Schema } from "ajv";
 
 /**
  * Schema for a single keyframe of an animated object.
@@ -128,8 +128,8 @@ const keyFrameSchema: Schema = {
         minimum: 0,
         maximum: 255,
       },
-      minLength: 3,
-      maxLength: 4,
+      minItems: 3,
+      maxItems: 4,
     },
 
     /**
@@ -287,7 +287,7 @@ export const animConfigSchema: Schema = {
     props: {
       type: "array",
       items: animPropSchema,
-      minLength: 1,
+      minItems: 1,
     },
 
     /**
@@ -297,7 +297,7 @@ export const animConfigSchema: Schema = {
     timedEvents: {
       type: "array",
       items: animTimedEventSchema,
-      minLength: 1,
+      minItems: 1,
     },
   },
   required: ["props"],
