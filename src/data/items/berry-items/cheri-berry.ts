@@ -1,4 +1,4 @@
-import type { StatusEffectAppliedContext } from "#app/data/items/base-item";
+import type { TurnEndContext } from "#app/data/items/base-item";
 import { BerryItem } from "#app/data/items/berry-items/berry-item";
 import type { Pokemon } from "#app/field/pokemon";
 import { ItemId } from "#enums/item-id";
@@ -17,15 +17,32 @@ export class CheriBerry extends BerryItem {
     });
   }
 
+  //#region Getters/Setters
+
+  private get isHolderParalyzed(): boolean {
+    return this.holder.status?.statusEffect === StatusEffect.PARALYSIS;
+  }
+
+  //#endregion
+  //#region Event Handlers
+
   public override onEat(): void {
-    if (this.holder.status?.statusEffect === StatusEffect.PARALYSIS) {
+    if (this.isHolderParalyzed) {
       this.holder.resetStatus();
     }
   }
 
-  public override onStatusEffectApplied({ statusEffect }: StatusEffectAppliedContext): void {
-    if (statusEffect === StatusEffect.PARALYSIS) {
+  /**
+   * Trigger eating the berry when the holder is paralyzed
+   * @override
+   * @see {@linkcode BerryItem.onTurnEnd}
+   */
+  public override onTurnEnd(context: TurnEndContext): void {
+    super.onTurnEnd?.(context);
+    if (this.isHolderParalyzed) {
       this.onEat();
     }
   }
+
+  //#endregion
 }

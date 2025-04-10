@@ -17,13 +17,14 @@ export interface DamageReceivedContext {
   damage: number;
 }
 
-/** The context of a status effect applied event */
 export interface StatusEffectAppliedContext {
   /** The {@linkcode Pokemon} that received the status effect */
   pokemon: Pokemon;
   /** The {@linkcode StatusEffect} that was applied */
   statusEffect: StatusEffect;
 }
+
+export interface TurnEndContext {}
 
 //#endregion
 
@@ -58,5 +59,9 @@ export abstract class BaseItem implements Item {
    */
   public onStatusEffectApplied?(context: StatusEffectAppliedContext): void;
 
-  // TODO: more listeners
+  /**
+   * Event handler for the end of a turn
+   * @param context The {@linkcode TurnEndContext}
+   */
+  public onTurnEnd?(context: TurnEndContext): void;
 }

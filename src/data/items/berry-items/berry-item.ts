@@ -27,6 +27,8 @@ export abstract class BerryItem extends BaseItem implements Edible, Holdable {
     this.isTransferable = isTransferable;
   }
 
+  //#region Event Handlers
+
   public onFling({ targetPokemon }: FlingContext): void {
     // this.holder.removeHeldItem(this); TODO: implement removing the held item/destroying the instance?
     targetPokemon.damageAndUpdate(toDmgValue(this.flingDamage));
@@ -40,4 +42,6 @@ export abstract class BerryItem extends BaseItem implements Edible, Holdable {
   }
 
   public abstract onEat(): void;
+
+  //#endregion;
 }
