@@ -666,7 +666,11 @@ export function isLandscapeMode(): boolean {
   return width > height;
 }
 
-/** @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360} */
+/**
+ * Recursively calls `Object.freeze` on an object and all its properties.
+ * @param obj - The object to freeze
+ * @returns The input object after it has been frozen
+ * @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360} */
 export function deepFreeze<T>(obj: T): Readonly<T> {
   if (obj === null || typeof obj !== "object") return obj;
   // support objects with reference loops
