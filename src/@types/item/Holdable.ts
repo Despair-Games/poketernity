@@ -10,6 +10,8 @@ export interface Holdable {
   readonly isTransferable: boolean;
   /** Whether the item's effect can be prevented. E.g. by the {@link https://bulbapedia.bulbagarden.net/wiki/Klutz_(Ability) Klutz} ability */
   readonly isEffectPreventable: boolean;
+  /** The {@linkcode Pokemon} holding the item */
+  readonly holder: Pokemon;
 
   /** Event handler for the item being flung */
   onFling(context: FlingContext): void;
