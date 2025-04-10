@@ -40,7 +40,7 @@ export abstract class BerryItem extends BaseItem implements Edible, Holdable {
   public onTransfer(_context: TransferContext): void {
     if (this.isTransferable) {
       // context.sourcePokemon.removeHeldItem(this); TODO: implement removing the held item/destroying the instance?
-      // context.targetPokemon.addHeldItem(this); TODO implement adding the held item
+      // context.targetPokemon.addHeldItem(this); TODO: implement adding the held item
     }
   }
 

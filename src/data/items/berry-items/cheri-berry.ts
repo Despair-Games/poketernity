@@ -6,8 +6,6 @@ import { ItemRarity } from "#enums/item-rarity";
 import { StatusEffect } from "#enums/status-effect";
 
 export class CheriBerry extends BerryItem {
-  public static readonly HEAL_PERCENTAGE = 0.25;
-
   constructor(holder: Pokemon) {
     super({
       id: ItemId.CHERI_BERRY,
