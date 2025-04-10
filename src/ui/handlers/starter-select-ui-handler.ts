@@ -2854,7 +2854,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         container.starterPassiveBgs.setVisible(globalScene.gameData.starterData[speciesId].passiveAttr > 0);
         container.hiddenAbilityIcon.setVisible(
           globalScene.gameData.dexData[speciesId].caughtAttr > 0
-            && (globalScene.gameData.starterData[speciesId].abilityAttr & 4) > 0,
+            && (globalScene.gameData.starterData[speciesId].abilityAttr & AbilityAttr.ABILITY_HIDDEN) > 0,
         );
         container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
         container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
