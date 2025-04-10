@@ -47,7 +47,7 @@ export class NaturePowerAttr extends CallMoveAttr {
         case BiomeId.SWAMP:
           return MoveId.MUD_BOMB;
         case BiomeId.BEACH:
-          return MoveId.SCALD;
+          return MoveId.SURF;
         case BiomeId.LAKE:
           return MoveId.BUBBLE_BEAM;
         case BiomeId.SEABED:
@@ -96,6 +96,8 @@ export class NaturePowerAttr extends CallMoveAttr {
           return MoveId.ETERNABEAM;
         case BiomeId.STEAM_VENT:
           return MoveId.SCALD;
+        case BiomeId.CHARGESTONE_CAVE:
+          return MoveId.CHARGE_BEAM;
       }
     };
     switch (globalScene.arena.getTerrainType()) {
