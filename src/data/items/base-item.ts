@@ -1,5 +1,6 @@
 import { type Item } from "#app/@types/item/Item";
 import { type Pokemon } from "#app/field/pokemon";
+import type { NumberHolder } from "#app/utils";
 import { type ItemCategory } from "#enums/item-category";
 import { ItemId } from "#enums/item-id";
 import { type ItemRarity } from "#enums/item-rarity";
@@ -25,6 +26,11 @@ export interface StatusEffectAppliedContext {
 }
 
 export interface TurnEndContext {}
+
+export interface DefenseCalculationContext {
+  /** The multiplier applied to the defense */
+  multiplier: NumberHolder;
+}
 
 //#endregion
 
@@ -64,4 +70,10 @@ export abstract class BaseItem implements Item {
    * @param context The {@linkcode TurnEndContext}
    */
   public onTurnEnd?(context: TurnEndContext): void;
+
+  /**
+   * Event handler for a pokemon's defense being calculated
+   * @param context The {@linkcode DefenseCalculationContext}
+   */
+  public onDefenseCalulation?(context: DefenseCalculationContext): void;
 }

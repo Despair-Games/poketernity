@@ -13,6 +13,7 @@ export enum ItemId {
   INVALID,
   // Key Items
   MAP = 100,
+  BOULDER_BADGE,
   // Meds
   POTION = 200,
   SUPER_POTION,
