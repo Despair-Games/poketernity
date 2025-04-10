@@ -18,6 +18,7 @@ export class SitrusBerry extends BerryItem {
 
   //#region Getters/Setters
 
+  /** Check if the holder is half hp or less */
   public get isHolderHalfHpOrLess(): boolean {
     const holderHalfHp = this.holder.getMaxHp() / 2;
     return this.holder.getMaxHp() <= holderHalfHp;

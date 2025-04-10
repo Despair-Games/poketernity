@@ -19,6 +19,7 @@ export class CheriBerry extends BerryItem {
 
   //#region Getters/Setters
 
+  /** Check if the holder has the {@linkcode StatusEffect.PARALYSIS} status */
   private get isHolderParalyzed(): boolean {
     return this.holder.status?.statusEffect === StatusEffect.PARALYSIS;
   }
@@ -26,10 +27,15 @@ export class CheriBerry extends BerryItem {
   //#endregion
   //#region Event Handlers
 
+  /**
+   * Upon eating the berry, the holder healed of the {@linkcode StatusEffect.PARALYSIS} status
+   * @override
+   */
   public override onEat(): void {
     if (this.isHolderParalyzed) {
       this.holder.resetStatus();
     }
+    //TODO: remove/delete berry
   }
 
   /**
