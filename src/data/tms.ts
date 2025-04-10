@@ -32,7 +32,7 @@ export const reverseCompatibleTms: MoveId[] = []; /*[
     MoveId.ROUND
 ];*/
 
-export const tmSpecies: Readonly<TmSpecies> = deepFreeze({
+export const tmSpecies = deepFreeze<TmSpecies>({
   [MoveId.MEGA_PUNCH]: [
     SpeciesId.CHARMANDER,
     SpeciesId.CHARMELEON,
@@ -67961,7 +67961,7 @@ interface TmPoolTiers {
   [key: number]: ModifierTier;
 }
 
-export const tmPoolTiers: Readonly<TmPoolTiers> = deepFreeze({
+export const tmPoolTiers = deepFreeze<TmPoolTiers>({
   [MoveId.MEGA_PUNCH]: ModifierTier.GREAT,
   [MoveId.PAY_DAY]: ModifierTier.ULTRA,
   [MoveId.FIRE_PUNCH]: ModifierTier.GREAT,
