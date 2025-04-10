@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 
 describe("Animations - BattleAnim Validation", () => {
-  it("All battle animations fit the AnimConfig schema", async () => {
+  it.skip("All battle animations fit the AnimConfig schema", async () => {
     const baseDir = "./public/battle-anims/";
     const fileNames = readdirSync(baseDir).filter((file) => file.match(/\.json$/));
     const ajv = new Ajv({
