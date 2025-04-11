@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { GameOverPhase } from "#app/phases/game-over-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports--
 
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
