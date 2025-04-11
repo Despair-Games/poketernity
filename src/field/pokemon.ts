@@ -4287,10 +4287,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 }
 
+/** @todo Move these fields into {@linkcode PokemonSummonData} */
 export class PokemonBattleSummonData {
   /** The number of turns the pokemon has passed since entering the battle */
   public turnCount: number = 0;
-  /** The number of turns the pokemon has passed since the start of the wave */
+  /**
+   * The number of turns the pokemon has passed since the start of the wave.
+   * @todo Remove this
+   */
   public waveTurnCount: number = 0;
   /** The list of moves the pokemon has used since entering the battle */
   public moveHistory: TurnMove[] = [];
