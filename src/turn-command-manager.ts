@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Phase } from "#app/phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -236,10 +236,11 @@ export class TurnCommandManager {
 
   /** Schedules all phases for the game's end-of-turn sequence */
   public endTurn(): void {
-    globalScene.unshiftPhase(new WeatherEffectPhase());
-    globalScene.unshiftPhase(new BerryPhase());
-    globalScene.unshiftPhase(new CheckStatusEffectPhase());
-    globalScene.unshiftPhase(new TurnEndPhase());
+    const { phaseManager } = globalScene;
+    phaseManager.unshiftPhase(new WeatherEffectPhase());
+    phaseManager.unshiftPhase(new BerryPhase());
+    phaseManager.unshiftPhase(new CheckStatusEffectPhase());
+    phaseManager.unshiftPhase(new TurnEndPhase());
   }
 
   public isEmpty(): boolean {
@@ -387,7 +388,7 @@ export class TurnCommandManager {
       turnCommand.pokemon.turnData.order = this.orderIndex++;
 
       const forMove = turnCommand.command === BattleCommand.FIGHT;
-      globalScene.appendToPhase(
+      globalScene.phaseManager.appendToPhase(
         new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove),
         this.getNextTurnCommandPhaseId(turnCommand),
       );
@@ -424,7 +425,6 @@ export class TurnCommandManager {
   private handleFightCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, turnMove, targets } = turnCommand;
     if (!pokemon.isActive(true) || !turnMove) {
-      console.warn(`FIGHT command from ${pokemon?.name} is invalid`);
       return false;
     }
 
@@ -432,9 +432,15 @@ export class TurnCommandManager {
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
 
-    globalScene.phaseManager.unshiftPhase(
-      new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
-    );
+    globalScene.phaseManager.queueMovePhase({
+      pokemon,
+      targets: targets ?? turnMove.targets,
+      move,
+      ignorePp: cursor !== -1 && turnMove.ignorePP,
+      when: "after",
+      phaseId: PhaseId.POST_ACTION,
+    });
+
     return true;
   }
 

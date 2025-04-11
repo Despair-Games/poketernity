@@ -49,8 +49,6 @@ describe("Moves - Shell Trap", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    console.log(game.scene.phaseQueue.map((phase) => phase.constructor.name));
-
     const movePhase = game.scene.phaseManager.getCurrentPhase();
     expect(movePhase?.id).toBe(PhaseId.MOVE);
     expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
