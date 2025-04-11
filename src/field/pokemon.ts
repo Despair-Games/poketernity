@@ -8,6 +8,7 @@ import type { FaintPhase } from "#app/phases/faint-phase";
 
 import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
 import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
@@ -50,22 +51,6 @@ import type { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight
 import type { Ability } from "#app/data/abilities/ability";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { starterPassiveAbilities } from "#app/data/passives";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
-import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
-import {
-  BASE_HIDDEN_ABILITY_CHANCE,
-  BASE_SHINY_CHANCE,
-  SHINY_EPIC_CHANCE,
-  SHINY_VARIANT_CHANCE,
-} from "#app/data/rates";
-import {
-  CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
-  getCandyProgressRequirement,
-  speciesStarterCosts,
-} from "#app/data/starters";
-import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/tms";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";
@@ -85,6 +70,7 @@ import { getBattlerTag } from "#app/data/battler-tags/utils/get-battler-tag";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import { DexAttr } from "#app/data/dex-attributes";
+import { speciesEggMoves } from "#app/data/egg-moves";
 import { getLevelTotalExp } from "#app/data/exp";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
 import { getMoveTargets, type Move } from "#app/data/moves/move";
@@ -113,16 +99,31 @@ import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-t
 import { VariableMoveTypeChartAttr } from "#app/data/moves/move-attrs/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/variable-move-type-multiplier-attr";
 import { getNatureStatMultiplier } from "#app/data/nature";
+import { starterPassiveAbilities } from "#app/data/passives";
 import { type SpeciesEvolutionCondition, type SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
+import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import {
+  BASE_HIDDEN_ABILITY_CHANCE,
+  BASE_SHINY_CHANCE,
+  SHINY_EPIC_CHANCE,
+  SHINY_VARIANT_CHANCE,
+} from "#app/data/rates";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import { SpeciesFormChangeStatusEffectTrigger } from "#app/data/species-form-change-triggers/species-form-change-status-effect-trigger";
+import {
+  CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
+  getCandyProgressRequirement,
+  speciesStarterCosts,
+} from "#app/data/starters";
 import { Status, getNonVolatileStatusEffects } from "#app/data/status-effect";
+import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
 import { variantData, type Variant } from "#app/data/variant";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -185,8 +186,8 @@ import { applyMoveAttrs } from "#app/utils/move-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/ability-id";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -212,8 +213,8 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
 import {
   BATTLE_STATS,
   EFFECTIVE_STATS,
@@ -5445,14 +5446,4 @@ export class PokemonTurnData {
   public switchedInThisTurn: boolean = false;
   public failedRunAway: boolean = false;
   public joinedRound: boolean = false;
-}
-
-/** Interface containing the results of a damage calculation for a given move */
-export interface DamageCalculationResult {
-  /** `true` if the move was cancelled (thus suppressing "No Effect" messages) */
-  cancelled: boolean;
-  /** The effectiveness of the move */
-  result: HitResult;
-  /** The damage dealt by the move */
-  damage: number;
 }
