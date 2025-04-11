@@ -18,7 +18,8 @@ import { NoEffectAttr } from "#app/data/moves/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { DamageResult, Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { DamageResult } from "#app/@types/DamageResult";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {

@@ -5447,14 +5447,6 @@ export class PokemonTurnData {
   public joinedRound: boolean = false;
 }
 
-export type DamageResult =
-  | HitResult.EFFECTIVE
-  | HitResult.SUPER_EFFECTIVE
-  | HitResult.NOT_VERY_EFFECTIVE
-  | HitResult.ONE_HIT_KO
-  | HitResult.OTHER
-  | HitResult.SELF_KO;
-
 /** Interface containing the results of a damage calculation for a given move */
 export interface DamageCalculationResult {
   /** `true` if the move was cancelled (thus suppressing "No Effect" messages) */
