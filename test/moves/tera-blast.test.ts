@@ -98,7 +98,7 @@ describe("Moves - Tera Blast", () => {
 
       game.move.select(MoveId.TERA_BLAST);
       await game.toEndOfTurn();
-      expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(AbilityId.TOXIC_DEBRIS);
+      expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.TOXIC_DEBRIS);
     },
     20000,
   );

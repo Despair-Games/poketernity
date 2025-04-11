@@ -10,6 +10,7 @@ import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
 import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
+import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants";
@@ -119,7 +120,7 @@ import { tmPoolTiers, tmSpecies } from "#app/data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
 import { variantData, type Variant } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { PlayerPokemon } from "#app/field/player-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
@@ -150,6 +151,7 @@ import type { BattleInfo } from "#app/ui/components/battle-info";
 import {
   BooleanHolder,
   NumberHolder,
+  deepFreeze,
   fixedNumber,
   getEnumValues,
   getIvsFromId,
@@ -176,7 +178,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -205,6 +206,18 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+
+interface AbilityData {
+  ability: Ability;
+  passive: boolean;
+}
+
+const defaultWaveData = deepFreeze<PokemonWaveData>({
+  hitCount: 0,
+  berriesEaten: [],
+  abilitiesApplied: [],
+  abilitiesRevealed: [],
+});
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -242,7 +255,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   private summonDataPrimer: PokemonSummonData | null;
 
   public summonData: PokemonSummonData;
-  public battleData: PokemonBattleData;
+  public waveData: PokemonWaveData;
   public battleSummonData: PokemonBattleSummonData;
   public turnData: PokemonTurnData;
   public customPokemonData: CustomPokemonData;
@@ -1473,7 +1486,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public hasRevealedAbility(abilityId: AbilityId) {
-    return this.battleData?.abilitiesRevealed.includes(abilityId);
+    return this.waveData?.abilitiesRevealed.includes(abilityId);
   }
 
   /**
@@ -2631,21 +2644,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the Pokemon on the allied field
    */
   getField(): Pokemon[] {
-    return this instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    return this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
   }
 
   /**
    * @returns the party of the Pokemon
    */
   getParty(): Pokemon[] {
-    return this instanceof PlayerPokemon ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+    return this.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
   }
 
   /**
    * @returns the {@linkcode ArenaTagSide} of the Pokemon
    */
   getArenaTagSide(): ArenaTagSide.PLAYER | ArenaTagSide.ENEMY {
-    return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    return this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
   }
 
   /**
@@ -4005,7 +4018,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     this.summonData = new PokemonSummonData();
     this.setSwitchOutStatus(false);
-    if (!this.battleData) {
+    if (!this.waveData) {
       this.resetBattleData();
     }
     this.resetBattleSummonData();
@@ -4035,7 +4048,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetBattleData(): void {
-    this.battleData = new PokemonBattleData();
+    this.waveData = deepCopy<PokemonWaveData>(defaultWaveData);
   }
 
   resetBattleSummonData(): void {
@@ -4254,28 +4267,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
   }
-}
-
-interface AbilityData {
-  ability: Ability;
-  passive: boolean;
-}
-
-/** Container for Pokemon-specific data that resets at the end of each wave. */
-export class PokemonBattleData {
-  /** How many hits the Pokemon has taken */
-  public hitCount: number = 0;
-  /** The berries eaten by the Pokemon */
-  public berriesEaten: BerryType[] = [];
-  /** The abilities this Pokemon has applied */
-  public abilitiesApplied: AbilityId[] = [];
-  /**
-   * The abilities revealed from this Pokemon.
-   * This differs from {@linkcode abilitiesApplied} in that
-   * effects such as Frisk and Trace can reveal abilities
-   * without applying them.
-   */
-  public abilitiesRevealed: AbilityId[] = [];
 }
 
 export class PokemonBattleSummonData {

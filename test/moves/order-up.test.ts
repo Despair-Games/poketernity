@@ -89,7 +89,7 @@ describe("Moves - Order Up", () => {
 
     await game.toEndOfTurn();
 
-    expect(dondozo.battleData.abilitiesApplied.includes(AbilityId.SHEER_FORCE)).toBeTruthy();
+    expect(dondozo.waveData.abilitiesApplied.includes(AbilityId.SHEER_FORCE)).toBeTruthy();
     expect(dondozo.getStatStage(Stat.ATK)).toBe(3);
   });
 });
