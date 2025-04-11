@@ -22,12 +22,14 @@ import { MovePhase } from "#app/phases/move-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
+import { StatStageChangePhase, type SSCPhaseOptions } from "#app/phases/stat-stage-change-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { ChargeAnim } from "#enums/charge-anim";
 import type { MoveId } from "#enums/move-id";
 import type { PhaseId } from "#enums/phase-id";
+import type { BattleStat } from "#enums/stat";
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -522,6 +524,22 @@ export class PhaseManager {
       this.unshiftPhase(loginPhase);
     } else {
       this.pushPhase(loginPhase);
+    }
+  }
+
+  public queueStatStageChangePhase(
+    battlerIndex: BattlerIndex,
+    source: Pokemon | null,
+    stats: BattleStat[],
+    stages: number,
+    options: SSCPhaseOptions = {},
+    eager: boolean = true,
+  ): void {
+    const statStageChangePhase = new StatStageChangePhase(battlerIndex, source, stats, stages, options);
+    if (eager) {
+      this.unshiftPhase(statStageChangePhase);
+    } else {
+      this.pushPhase(statStageChangePhase);
     }
   }
 }

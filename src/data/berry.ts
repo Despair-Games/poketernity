@@ -6,7 +6,6 @@ import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import { getBerryName } from "#app/utils/berry-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -106,8 +105,11 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const stat: BattleStat = berryType - BerryType.ENIGMA;
         const statStages = new NumberHolder(1);
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, statStages);
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [stat], statStages.value),
+        globalScene.phaseManager.queueStatStageChangePhase(
+          pokemon.getBattlerIndex(),
+          pokemon,
+          [stat],
+          statStages.value,
         );
         applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, berryOwner ?? pokemon, false);
       };
@@ -127,8 +129,11 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const randStat = randSeedInt(Stat.SPD, Stat.ATK);
         const stages = new NumberHolder(2);
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, stages);
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [randStat], stages.value),
+        globalScene.phaseManager.queueStatStageChangePhase(
+          pokemon.getBattlerIndex(),
+          pokemon,
+          [randStat],
+          stages.value,
         );
         applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, berryOwner ?? pokemon, false);
       };
