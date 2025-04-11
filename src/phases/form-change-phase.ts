@@ -5,7 +5,8 @@ import { type EvolutionPhase } from "#app/phases/evolution-phase";
 
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
-import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achievements";

@@ -20,7 +20,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/starters";
 import { Nature } from "#enums/nature";
 import { MoveId } from "#enums/move-id";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { EggOptions } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";

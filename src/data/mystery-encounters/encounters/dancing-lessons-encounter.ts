@@ -21,7 +21,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { TrainerSlot } from "#enums/trainer-slot";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";

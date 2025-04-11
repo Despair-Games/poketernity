@@ -22,7 +22,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";

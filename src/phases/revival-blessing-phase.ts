@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";

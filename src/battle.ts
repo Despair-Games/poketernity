@@ -23,7 +23,8 @@ import {
 } from "#app/data/special-waves";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";

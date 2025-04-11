@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Status } from "#app/data/status-effect";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MoveId } from "#enums/move-id";
