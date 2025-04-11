@@ -7,7 +7,8 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 
 import { updateUserInfo } from "#app/account";
 import BattleScene from "#app/battle-scene";
-import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";

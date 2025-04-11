@@ -23,7 +23,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { NumberHolder, isNullOrUndefined, randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {

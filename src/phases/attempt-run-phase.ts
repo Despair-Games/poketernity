@@ -1,6 +1,7 @@
 import type { RunSuccessAbAttr } from "#app/data/abilities/ab-attrs/run-success-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { NumberHolder } from "#app/utils";
