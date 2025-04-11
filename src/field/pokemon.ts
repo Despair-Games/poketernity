@@ -7,9 +7,9 @@ import type { FaintPhase } from "#app/phases/faint-phase";
 // -- end tsdoc imports --
 
 import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
-import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
 import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
+import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
@@ -146,11 +146,11 @@ import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase"
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
-import type { TurnCommand } from "#app/turn-command-manager";
 import type { BattleInfo } from "#app/ui/components/battle-info";
 import {
   BooleanHolder,
   NumberHolder,
+  deepCopy,
   deepFreeze,
   fixedNumber,
   getEnumValues,
@@ -217,6 +217,24 @@ const defaultWaveData = deepFreeze<PokemonWaveData>({
   berriesEaten: [],
   abilitiesApplied: [],
   abilitiesRevealed: [],
+});
+
+const defaultTurnData = deepFreeze<PokemonTurnData>({
+  flinched: false,
+  acted: false,
+  hitCount: 0,
+  hitsLeft: -1,
+  totalDamageDealt: 0,
+  singleHitDamageDealt: 0,
+  damageTaken: 0,
+  attacksReceived: [],
+  order: 0,
+  statStagesIncreased: false,
+  statStagesDecreased: false,
+  moveEffectiveness: null,
+  switchedInThisTurn: false,
+  failedRunAway: false,
+  joinedRound: false,
 });
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
@@ -4062,7 +4080,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetTurnData(): void {
-    this.turnData = new PokemonTurnData();
+    this.turnData = deepCopy<PokemonTurnData>(defaultTurnData);
   }
 
   getExpValue(): number {
@@ -4276,29 +4294,4 @@ export class PokemonBattleSummonData {
   public waveTurnCount: number = 0;
   /** The list of moves the pokemon has used since entering the battle */
   public moveHistory: TurnMove[] = [];
-}
-
-export class PokemonTurnData {
-  public turnCommand?: TurnCommand;
-  public flinched: boolean = false;
-  public acted: boolean = false;
-  /** How many times the move should hit the target(s) */
-  public hitCount: number = 0;
-  /**
-   * - `-1` = Calculate how many hits are left
-   * - `0` = Move is finished
-   */
-  public hitsLeft: number = -1;
-  public totalDamageDealt: number = 0;
-  public singleHitDamageDealt: number = 0;
-  public damageTaken: number = 0;
-  public attacksReceived: AttackMoveResult[] = [];
-  public order: number;
-  public statStagesIncreased: boolean = false;
-  public statStagesDecreased: boolean = false;
-  public moveEffectiveness: TypeDamageMultiplier | null = null;
-  public combiningPledge?: MoveId;
-  public switchedInThisTurn: boolean = false;
-  public failedRunAway: boolean = false;
-  public joinedRound: boolean = false;
 }
