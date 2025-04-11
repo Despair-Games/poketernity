@@ -73,7 +73,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
       berryModifier.stackCount++;
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("abilityTriggers:postTurnLootCreateEatenBerry", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         berryName: chosenBerry.name,

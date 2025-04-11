@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { getFrameMs } from "#app/utils";
+import { getFrameMs, isNullOrUndefined } from "#app/utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { AwaitableUiHandler } from "./awaitable-ui-handler";
@@ -44,6 +44,9 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     prompt?: boolean | null,
     promptDelay?: number | null,
   ) {
+    if (isNullOrUndefined(text)) {
+      console.error(`Missing text parameter in ${this.constructor.name}#showText(), please report this`);
+    }
     this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 

@@ -39,7 +39,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
       globalScene.audioManager.playSound("se/flee");
-      globalScene.queueMessage(i18next.t("battle:runAwaySuccess"), null, true, 500);
+      globalScene.phaseManager.queueMessagePhase(i18next.t("battle:runAwaySuccess"), null, true, 500);
 
       globalScene.tweens.add({
         targets: [globalScene.arenaEnemy, enemyField].flat(),
@@ -58,10 +58,10 @@ export class AttemptRunPhase extends PokemonPhase {
         enemyPokemon.faint(); // TODO: why are we fainting the pokemon at all, let alone after using `.destroy()` on them?
       });
 
-      globalScene.nextBattle(false);
+      globalScene.phaseManager.queueNextBattle(false);
     } else {
       playerPokemon.turnData.failedRunAway = true;
-      globalScene.queueMessage(i18next.t("battle:runAwayCannotEscape"), null, true, 500);
+      globalScene.phaseManager.queueMessagePhase(i18next.t("battle:runAwayCannotEscape"), null, true, 500);
     }
 
     this.end();

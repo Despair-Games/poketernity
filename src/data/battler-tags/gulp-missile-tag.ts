@@ -32,7 +32,7 @@ export class GulpMissileTag extends BattlerTag {
       return true;
     }
 
-    const moveEffectPhase = globalScene.getCurrentPhase();
+    const moveEffectPhase = globalScene.phaseManager.getCurrentPhase();
     if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
       const attacker = moveEffectPhase.getUserPokemon();
 
@@ -54,7 +54,9 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {
-        globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [Stat.DEF], -1));
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [Stat.DEF], -1),
+        );
       } else {
         attacker.trySetStatus(StatusEffect.PARALYSIS, true, pokemon);
       }

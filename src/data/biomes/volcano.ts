@@ -63,7 +63,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [SpeciesId.ENTEI, SpeciesId.HEATRAN, SpeciesId.VOLCANION, SpeciesId.CHI_YU],
+    [TimeOfDay.ALL]: [SpeciesId.MOLTRES, SpeciesId.ENTEI, SpeciesId.HEATRAN],
   },
   [BiomePoolTier.BOSS]: {
     [TimeOfDay.DAWN]: [],
@@ -109,14 +109,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [
-      SpeciesId.MOLTRES,
-      SpeciesId.ENTEI,
-      SpeciesId.ROTOM,
-      SpeciesId.HEATRAN,
-      SpeciesId.VOLCANION,
-      SpeciesId.CHI_YU,
-    ],
+    [TimeOfDay.ALL]: [SpeciesId.MOLTRES, SpeciesId.ENTEI, SpeciesId.HEATRAN],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
@@ -133,7 +126,7 @@ const trainerPool = {
   [BiomePoolTier.RARE]: [],
   [BiomePoolTier.SUPER_RARE]: [],
   [BiomePoolTier.ULTRA_RARE]: [],
-  [BiomePoolTier.BOSS]: [TrainerType.BLAINE, TrainerType.FLANNERY, TrainerType.KABU],
+  [BiomePoolTier.BOSS]: [TrainerType.BLAINE, TrainerType.KABU],
   [BiomePoolTier.BOSS_RARE]: [],
   [BiomePoolTier.BOSS_SUPER_RARE]: [],
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
@@ -159,4 +152,5 @@ export const volcanoBiome = new Biome(
   weatherPool,
   terrainPool,
   "volcano",
+  5.116,
 );

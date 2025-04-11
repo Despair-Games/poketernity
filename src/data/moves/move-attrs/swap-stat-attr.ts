@@ -26,7 +26,7 @@ export class SwapStatAttr extends MoveEffectAttr {
     user.setStat(this.stat, target.getStat(this.stat, false), false);
     target.setStat(this.stat, temp, false);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:switchedStat", {
         pokemonName: getPokemonNameWithAffix(user),
         stat: i18next.t(getStatKey(this.stat)),

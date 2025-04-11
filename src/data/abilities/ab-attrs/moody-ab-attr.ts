@@ -20,11 +20,15 @@ export class MoodyAbAttr extends PostTurnAbAttr {
       if (canRaise.length > 0) {
         const raisedStat = canRaise[pokemon.randSeedInt(canRaise.length)];
         canLower = canLower.filter((s) => s !== raisedStat);
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [raisedStat], 2));
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [raisedStat], 2),
+        );
       }
       if (canLower.length > 0) {
         const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [loweredStat], -1));
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [loweredStat], -1),
+        );
       }
     }
 

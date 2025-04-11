@@ -7,7 +7,7 @@ import {
   SpeciesEvolution,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
-import { HAPPINESS_EVO_LEVEL } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { HAPPINESS_EVO_LEVEL } from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 
 export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.TURTWIG]: [new SpeciesEvolution(SpeciesId.GROTLE, 18, null, null)],

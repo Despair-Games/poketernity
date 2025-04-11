@@ -25,7 +25,7 @@ export class CopyTypeAttr extends MoveEffectAttr {
     user.summonData.types = targetTypes;
     user.updateInfo();
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:copyType", {
         pokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),

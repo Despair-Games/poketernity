@@ -36,7 +36,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
       }
     }
     if (!simulated) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("abilityTriggers:forewarn", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           moveName: maxMove,

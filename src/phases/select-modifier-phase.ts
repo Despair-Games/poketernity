@@ -147,7 +147,7 @@ export class SelectModifierPhase extends BattlePhase {
                 return false;
               } else {
                 globalScene.reroll = true;
-                globalScene.unshiftPhase(
+                globalScene.phaseManager.unshiftPhase(
                   new SelectModifierPhase({
                     rerollCount: this.rerollCount + 1,
                     modifierTiers: this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
@@ -270,7 +270,7 @@ export class SelectModifierPhase extends BattlePhase {
         // If the player selects either of these, then escapes out of consuming them,
         // they are returned to a shop in the same state.
         if (modifier.type instanceof RememberMoveModifierType || modifier.type instanceof TmModifierType) {
-          globalScene.unshiftPhase(this.copy());
+          globalScene.phaseManager.unshiftPhase(this.copy());
         }
 
         if (cost && !(modifier.type instanceof RememberMoveModifierType)) {
@@ -378,12 +378,12 @@ export class SelectModifierPhase extends BattlePhase {
     if (Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
       return baseValue;
     } else if (lockRarities) {
-      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be part of balance files
+      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be extracted to a const
       for (const opt of this.typeOptions) {
         baseValue += tierValues[opt.type.tier ?? 0];
       }
     } else {
-      baseValue = 250; // TODO: this should be part of balance files
+      baseValue = 250; // TODO: this should be extracted to a const
     }
 
     const baseMultiplier = Math.min(

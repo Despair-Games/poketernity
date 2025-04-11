@@ -229,11 +229,11 @@ export class MoveEffectPhase extends HitCheckPhase {
             break;
           case HitCheckResult.NO_EFFECT:
             if (move.id === MoveId.SHEER_COLD) {
-              globalScene.queueMessage(
+              globalScene.phaseManager.queueMessagePhase(
                 i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(target) }),
               );
             } else {
-              globalScene.queueMessage(
+              globalScene.phaseManager.queueMessagePhase(
                 i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
               );
             }
@@ -242,7 +242,7 @@ export class MoveEffectPhase extends HitCheckPhase {
             applyMoveAttrs(NoEffectAttr, user, target, move);
             break;
           case HitCheckResult.MISS:
-            globalScene.queueMessage(
+            globalScene.phaseManager.queueMessagePhase(
               i18next.t("battle:attackMissed", { pokemonNameWithAffix: getPokemonNameWithAffix(target) }),
             );
             applyMoveAttrs(MissEffectAttr, user, target, move);
@@ -518,7 +518,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         }
 
         if (isCritical) {
-          globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
+          globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultCriticalHit"));
         }
 
         // `.isFainted()` is here in case a multi hit move ends early
@@ -526,13 +526,13 @@ export class MoveEffectPhase extends HitCheckPhase {
         if (user.turnData.hitsLeft === 1 || target.isFainted()) {
           switch (result) {
             case HitResult.SUPER_EFFECTIVE:
-              globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
+              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultSuperEffective"));
               break;
             case HitResult.NOT_VERY_EFFECTIVE:
-              globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
+              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultNotVeryEffective"));
               break;
             case HitResult.ONE_HIT_KO:
-              globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
+              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultOneHitKO"));
               break;
           }
         }
@@ -540,7 +540,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     if (target.isFainted()) {
-      globalScene.faintBattler(target.getBattlerIndex(), {
+      globalScene.phaseManager.queueBattlerFaintPhase(target.getBattlerIndex(), {
         preventEndure: isOneHitKo,
         destinyTag,
         grudgeTag,
@@ -607,14 +607,14 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (user) {
       if (user.turnData.hitsLeft && --user.turnData.hitsLeft >= 1 && this.getFirstTarget()?.isActive()) {
-        globalScene.unshiftPhase(this.getNewHitPhase());
+        globalScene.phaseManager.unshiftPhase(this.getNewHitPhase());
       } else {
         // Queue message for number of hits made by multi-move
         // If multi-hit attack only hits once, still want to render a message
         const hitsTotal = user.turnData.hitCount - Math.max(user.turnData.hitsLeft, 0);
         if (hitsTotal > 1 || user.turnData.hitsLeft > 0) {
           // If there are multiple hits, or if there are hits of the multi-hit move left
-          globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
+          globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
         globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets

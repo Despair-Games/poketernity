@@ -19,14 +19,14 @@ export class PowerTrickTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon): void {
     this.swapStat(pokemon);
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:powerTrickActive", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
 
   override onRemove(pokemon: Pokemon): void {
     this.swapStat(pokemon);
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:powerTrickActive", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

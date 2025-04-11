@@ -31,7 +31,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     user.summonData.types = [typeChange];
     user.updateInfo();
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         typeName: i18next.t(`pokemonInfo:Type.${ElementalType[typeChange]}`),
@@ -104,6 +104,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
       case BiomeId.POWER_PLANT:
         return ElementalType.ELECTRIC;
       case BiomeId.VOLCANO:
+      case BiomeId.STEAM_VENT:
         return ElementalType.FIRE;
       case BiomeId.GRAVEYARD:
       case BiomeId.TEMPLE:

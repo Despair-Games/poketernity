@@ -12,7 +12,7 @@ import {
   MR_MIME_EVO_LEVEL,
   SLOWPOKE_FAMILY_EVO_LEVEL,
   TANGROWTH_EVO_LEVEL,
-} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
   type PokemonEvolutions,
   SpeciesFormEvolution,

@@ -401,7 +401,7 @@ describe("Moves - Substitute", () => {
 
     // Simulate a Baton switch for the player this turn
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.POKEMON, 1, true);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.POKEMON, 1, true);
     });
 
     await game.phaseInterceptor.to("MovePhase", false);

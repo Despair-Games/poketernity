@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import type { FORM_CHANGE_MOVE } from "#app/data/pokemon-level-moves";
 import type { FormChangePhase } from "#app/phases/form-change-phase";
 import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -309,7 +309,7 @@ export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: Specie
  * @returns A {@linkcode SpeciesFormChangeCondition} checking if that species is registered as caught
  */
 function getSpeciesDependentFormChangeCondition(species: SpeciesId): SpeciesFormChangeCondition {
-  return new SpeciesFormChangeCondition((_p) => !!globalScene.gameData.dexData[species].caughtAttr);
+  return new SpeciesFormChangeCondition((_p) => globalScene.gameData.dexData[species].caughtAttr > 0);
 }
 
 interface PokemonFormChanges {

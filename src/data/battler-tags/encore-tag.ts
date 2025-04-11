@@ -40,7 +40,7 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
     const lastMove = pokemon.getLastXMoves(-1).filter((mv) => !mv.virtual)[0];
     this.moveId = lastMove?.move.id;
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
@@ -92,7 +92,7 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:encoreOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

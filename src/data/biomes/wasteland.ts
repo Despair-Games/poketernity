@@ -119,5 +119,6 @@ export const wastelandBiome = new Biome(
   12,
   weatherPool,
   terrainPool,
-  "town",
+  "wasteland",
+  6.336,
 );

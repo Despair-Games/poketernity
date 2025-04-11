@@ -840,7 +840,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.BELLY_DRUM, ElementalType.NORMAL, -1, 10, -1, 0, 2)
       .attr(CutHpStatStageBoostAttr, [Stat.ATK], 12, 2,
         (user) => {
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("moveTriggers:cutOwnHpAndMaximizedStat", {
               pokemonName: getPokemonNameWithAffix(user),
               statName: i18next.t(getStatKey(Stat.ATK)),
@@ -2323,7 +2323,7 @@ export function initMoves() {
     new StatusMove(MoveId.MAGNETIC_FLUX, ElementalType.ELECTRIC, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], 1, false, {
         condition: (_user, target, _move) =>
-          !![AbilityId.PLUS, AbilityId.MINUS].find((a) => target.hasAbility(a, false)),
+          [AbilityId.PLUS, AbilityId.MINUS].some((a) => target.hasAbility(a, false)),
       })
       .ignoresSubstitute()
       .snatchable()
@@ -2568,7 +2568,7 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
       .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true)
       .attr(RemoveTypeAttr, ElementalType.FIRE, (user) => {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }),
         );
       }),
@@ -3414,7 +3414,7 @@ export function initMoves() {
       })
       .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true)
       .attr(RemoveTypeAttr, ElementalType.ELECTRIC, (user) => {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }),
         );
       }),

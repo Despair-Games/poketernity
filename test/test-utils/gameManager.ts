@@ -106,12 +106,12 @@ export class GameManager {
     if (!firstTimeScene) {
       this.scene.reset(false, true);
       (this.scene.ui.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
-      this.scene.clearAllPhases();
+      this.scene.phaseManager.clearAllPhases();
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
-      this.scene.pushPhase(new LoginPhase());
-      this.scene.toTitleScreen();
-      this.scene.shiftPhase();
+      this.scene.phaseManager.pushPhase(new LoginPhase());
+      this.scene.phaseManager.toTitleScreen();
+      this.scene.phaseManager.shiftPhase();
 
       this.gameWrapper.scene = this.scene;
     }
@@ -161,7 +161,7 @@ export class GameManager {
    * Ends the current phase.
    */
   endPhase() {
-    this.scene.getCurrentPhase()?.end();
+    this.scene.phaseManager.getCurrentPhase()?.end();
   }
 
   /**
@@ -217,7 +217,7 @@ export class GameManager {
       this.scene.gameMode = getGameMode(mode);
       const starters = generateStarter(this.scene, species);
       const selectStarterPhase = new SelectStarterPhase();
-      this.scene.pushPhase(new EncounterPhase(false));
+      this.scene.phaseManager.pushPhase(new EncounterPhase(false));
       selectStarterPhase.initBattle(starters);
     });
 
@@ -253,7 +253,7 @@ export class GameManager {
         this.scene.gameMode = getGameMode(GameModes.CLASSIC);
         const starters = generateStarter(this.scene, species);
         const selectStarterPhase = new SelectStarterPhase();
-        this.scene.pushPhase(new EncounterPhase(false));
+        this.scene.phaseManager.pushPhase(new EncounterPhase(false));
         selectStarterPhase.initBattle(starters);
       },
       () => this.isCurrentPhase("EncounterPhase"),
@@ -404,7 +404,7 @@ export class GameManager {
    */
   isCurrentPhase(phaseTarget: PhaseInterceptorPhase) {
     const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
-    return this.scene.getCurrentPhase()?.constructor.name === targetName;
+    return this.scene.phaseManager.getCurrentPhase()?.constructor.name === targetName;
   }
 
   /**
@@ -451,7 +451,7 @@ export class GameManager {
   async killPokemon(pokemon: PlayerPokemon | EnemyPokemon) {
     return new Promise<void>(async (resolve, reject) => {
       pokemon.hp = 0;
-      this.scene.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
+      this.scene.phaseManager.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
       await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
       resolve();
     });

@@ -4,7 +4,7 @@ import {
   GHOLDENGO_EVO_LEVEL,
   PAWMOT_EVO_LEVEL,
   RABSCA_EVO_LEVEL,
-} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
   FemaleEvolutionCondition,
   GholdengoEvoCondition,

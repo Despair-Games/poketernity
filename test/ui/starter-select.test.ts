@@ -39,11 +39,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - shiny - variant 2 male", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -96,11 +96,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - shiny - variant 2 female hardy overgrow", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -155,11 +155,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - shiny - variant 2 female lonely chlorophyl", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -217,11 +217,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - shiny - variant 2 female", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -275,11 +275,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - not shiny", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -332,11 +332,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - shiny - variant 1", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -391,11 +391,11 @@ describe("UI - Starter select", () => {
 
   it("Bulbasaur - shiny - variant 0", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -449,11 +449,11 @@ describe("UI - Starter select", () => {
 
   it("Check if first pokemon in party is caterpie from gen 1 and 1rd row, 3rd column", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });
@@ -510,11 +510,11 @@ describe("UI - Starter select", () => {
 
   it("Check if first pokemon in party is nidoran_m from gen 1 and 2nd row, 4th column (cursor (9+4)-1)", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
-    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => !!dexEntry.caughtAttr);
+    const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
     await game.runToTitle();
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const currentPhase = game.scene.getCurrentPhase() as TitlePhase;
+      const currentPhase = game.scene.phaseManager.getCurrentPhase() as TitlePhase;
       currentPhase.gameMode = GameModes.CLASSIC;
       currentPhase.end();
     });

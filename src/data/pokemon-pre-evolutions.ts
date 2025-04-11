@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import type { PokemonPreEvolutions as PokemonPreEvolutions } from "#app/data/pokemon-evolutions";
 import type { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";

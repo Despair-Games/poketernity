@@ -342,7 +342,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
         this.pokemonShinyNewIcon.setText("(+)");
         setTextColor(this.pokemonShinyNewIcon, TextStyle.SUMMARY_BLUE);
         const newShinyOrVariant = (newShiny & caughtAttr) === BigInt(0) || (newVariant & caughtAttr) === BigInt(0);
-        this.pokemonShinyNewIcon.setVisible(!!newShinyOrVariant);
+        this.pokemonShinyNewIcon.setVisible(newShinyOrVariant);
       } else if ((caughtAttr & DexAttr.NON_SHINY) === BigInt(0) && (caughtAttr & DexAttr.SHINY) === DexAttr.SHINY) {
         //If the player has *only* caught any shiny variant of this species, not a non-shiny
         this.pokemonShinyNewIcon.setVisible(true);

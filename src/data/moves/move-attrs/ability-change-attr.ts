@@ -31,7 +31,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     moveTarget.summonData.ability = this.ability;
     globalScene.triggerPokemonFormChange(moveTarget, SpeciesFormChangeRevertWeatherFormTrigger);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:acquiredAbility", {
         pokemonName: getPokemonNameWithAffix(this.selfTarget ? user : target),
         abilityName: allAbilities[this.ability].name,

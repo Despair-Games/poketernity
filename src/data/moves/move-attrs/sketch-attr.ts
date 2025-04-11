@@ -41,7 +41,7 @@ export class SketchAttr extends MoveEffectAttr {
 
     user.setMove(sketchIndex, sketchedMove.id);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:sketchedMove", {
         pokemonName: getPokemonNameWithAffix(user),
         moveName: sketchedMove.name,

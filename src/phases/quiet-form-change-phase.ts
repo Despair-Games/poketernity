@@ -159,7 +159,7 @@ export class QuietFormChangePhase extends BattlePhase {
 
     if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon.isEnemy()) {
       globalScene.audioManager.playBgm();
-      globalScene.queuePokemonHeal(true, this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
+      globalScene.phaseManager.queuePokemonHealPhase(true, this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
         showFullHpMessage: false,
         healStatus: true,
       });
@@ -170,7 +170,7 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = globalScene.findPhase<MovePhase>(
+      const movePhase = globalScene.phaseManager.findPhase<MovePhase>(
         (p) => p.is<MovePhase>(PhaseId.MOVE) && p.pokemon === this.pokemon,
       );
       if (movePhase) {

@@ -94,6 +94,8 @@ export class NaturePowerAttr extends CallMoveAttr {
           return MoveId.CHARGE_BEAM;
         case BiomeId.END:
           return MoveId.ETERNABEAM;
+        case BiomeId.STEAM_VENT:
+          return MoveId.SCALD;
       }
     };
     switch (globalScene.arena.getTerrainType()) {

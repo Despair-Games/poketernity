@@ -27,7 +27,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
       if (heldItems.length) {
         const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
         if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("abilityTriggers:postDefendStealHeldItem", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               attackerName: attacker.name,

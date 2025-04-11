@@ -1,4 +1,4 @@
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { trainerTypeDialogue } from "#app/data/dialogue";
 import type { TrainerType } from "#enums/trainer-type";
 

@@ -1,4 +1,4 @@
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { TrainerType } from "#enums/trainer-type";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";

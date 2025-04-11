@@ -33,7 +33,7 @@ export class AverageStatsAttr extends MoveEffectAttr {
       target.setStat(s, avg, false);
     }
 
-    globalScene.queueMessage(i18next.t(this.msgKey, { pokemonName: getPokemonNameWithAffix(user) }));
+    globalScene.phaseManager.queueMessagePhase(i18next.t(this.msgKey, { pokemonName: getPokemonNameWithAffix(user) }));
 
     return true;
   }

@@ -1,7 +1,6 @@
 import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
-import { MoveCategory } from "#enums/move-category";
 
 /**
  * Condition used by the move {@link https://bulbapedia.bulbagarden.net/wiki/Upper_Hand_(move) | Upper Hand}.
@@ -15,11 +14,9 @@ export class UpperHandCondition extends MoveCondition {
       const targetCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
 
       return (
-        !!targetCommand
-        && targetCommand.command === BattleCommand.FIGHT
+        targetCommand?.command === BattleCommand.FIGHT
         && !target.turnData.acted
-        && !!targetCommand.turnMove
-        && targetCommand.turnMove.move.category !== MoveCategory.STATUS
+        && !!targetCommand.turnMove?.move.isAttackMove()
         && targetCommand.turnMove.move.getPriority(target) > 0
       );
     });

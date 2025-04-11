@@ -51,7 +51,7 @@ import { allMoves } from "#app/data/data-lists";
 import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
@@ -750,7 +750,6 @@ function doBugTypeMoveTutor(): Promise<void> {
       undefined,
       onHoverOverCancel,
     );
-    // let forceExit = !!result;
     if (!result) {
       moveInfoOverlay.active = false;
       moveInfoOverlay.setVisible(false);
@@ -760,7 +759,7 @@ function doBugTypeMoveTutor(): Promise<void> {
 
     // Option select complete, handle if they are learning a move
     if (result && result.selectedOptionIndex < moveOptions.length) {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new LearnMovePhase(result.selectedPokemonIndex, moveOptions[result.selectedOptionIndex].moveId),
       );
     }

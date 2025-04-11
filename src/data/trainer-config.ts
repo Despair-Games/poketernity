@@ -32,11 +32,11 @@ export class TrainerPartyTemplate {
   public sameSpecies: boolean;
   public balanced: boolean;
 
-  constructor(size: number, strength: PartyMemberStrength, sameSpecies?: boolean, balanced?: boolean) {
+  constructor(size: number, strength: PartyMemberStrength, sameSpecies: boolean = false, balanced: boolean = false) {
     this.size = size;
     this.strength = strength;
-    this.sameSpecies = !!sameSpecies;
-    this.balanced = !!balanced;
+    this.sameSpecies = sameSpecies;
+    this.balanced = balanced;
   }
 
   getStrength(_index: number): PartyMemberStrength {
@@ -169,6 +169,7 @@ export const trainerPartyTemplates = {
   SIX_WEAK_SAME: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, true),
   SIX_WEAK_BALANCED: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, false, true),
 
+  // TODO: adjust gym leader templates
   GYM_LEADER_1: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
@@ -313,7 +314,7 @@ export class TrainerConfig {
     return TrainerType[this.getDerivedType()].toString().toLowerCase();
   }
 
-  getSpriteKey(female?: boolean, isDouble: boolean = false): string {
+  getSpriteKey(female: boolean = false, isDouble: boolean = false): string {
     let ret = this.getKey();
     if (this.hasGenders) {
       ret += `_${female ? "f" : "m"}`;
@@ -1579,17 +1580,11 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
   const wavesToScale = 30;
   const offsetWave = 20;
 
-  const wave = Overrides.STARTING_WAVE_OVERRIDE || 1;
-  return templates[
-    Phaser.Math.Clamp(
-      Math.ceil(
-        (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - offsetWave)
-          / wavesToScale,
-      ),
-      0,
-      templates.length - 1,
-    )
-  ];
+  const wave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
+  const { currentBattle, gameMode } = globalScene;
+  const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? wave, true);
+  const targetTemplate = Math.ceil((adjustedWave - offsetWave) / wavesToScale);
+  return templates[Phaser.Math.Clamp(targetTemplate, 0, templates.length - 1)];
 }
 
 /**

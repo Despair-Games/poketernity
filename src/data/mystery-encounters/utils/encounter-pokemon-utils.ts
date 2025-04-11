@@ -1,4 +1,4 @@
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import {
   getEncounterText,
@@ -669,7 +669,7 @@ export async function catchPokemon(
         if (!globalScene.getEnemyParty().some((p) => p.id === pokemon.id)) {
           globalScene.getEnemyParty().push(pokemon);
         }
-        globalScene.unshiftPhase(new VictoryPhase(pokemon.id, true));
+        globalScene.phaseManager.unshiftPhase(new VictoryPhase(pokemon.id, true));
         globalScene.pokemonInfoContainer.hide();
         if (pokeball) {
           removePb(pokeball);

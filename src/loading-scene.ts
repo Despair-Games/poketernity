@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
-import { initEggMoves } from "#app/data/balance/egg-moves";
+import { initEggMoves } from "#app/data/egg-moves";
 import { initChallenges } from "#app/data/challenge";
 import { initAbilities } from "#app/data/init/init-abilities";
 import { initBiomes } from "#app/data/init/init-biomes";

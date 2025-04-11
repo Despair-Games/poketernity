@@ -28,7 +28,9 @@ export const crashDamageFunc = (user: Pokemon, _move: Move) => {
     result: HitResult.OTHER,
     ignoreSegments: true,
   });
-  globalScene.queueMessage(t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }));
+  globalScene.phaseManager.queueMessagePhase(
+    t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
+  );
 
   return true;
 };

@@ -27,7 +27,7 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
   ): boolean {
     if (this.condition(pokemon, statStagesChanged, stagesChanged) && !selfTarget) {
       if (!simulated) {
-        globalScene.unshiftPhase(
+        globalScene.phaseManager.unshiftPhase(
           new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.statsToChange, this.stages),
         );
       }

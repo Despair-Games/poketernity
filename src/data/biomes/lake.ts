@@ -117,4 +117,4 @@ const terrainPool: Partial<Record<TerrainType, number>> = {
   [TerrainType.MISTY]: 1,
 };
 
-export const lakeBiome = new Biome(BiomeId.LAKE, pokemonPool, trainerPool, 6, weatherPool, terrainPool, "town");
+export const lakeBiome = new Biome(BiomeId.LAKE, pokemonPool, trainerPool, 6, weatherPool, terrainPool, "lake", 5.35);

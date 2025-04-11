@@ -1,6 +1,6 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants";
-import { initEggMoves } from "#app/data/balance/egg-moves";
+import { initEggMoves } from "#app/data/egg-moves";
 import { allMoves } from "#app/data/data-lists";
 import { initAbilities } from "#app/data/init/init-abilities";
 import { initBiomes } from "#app/data/init/init-biomes";

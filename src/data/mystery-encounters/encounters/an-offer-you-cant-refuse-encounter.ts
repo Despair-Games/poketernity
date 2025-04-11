@@ -19,7 +19,7 @@ import {
 import { getHighestStatTotalPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { EXTORTION_ABILITIES, EXTORTION_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
@@ -136,7 +136,7 @@ export const AnOfferYouCantRefuseEncounter: MysteryEncounter = MysteryEncounterB
       })
       .withOptionPhase(async () => {
         // Give the player a Shiny Charm
-        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.SHINY_CHARM));
+        globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.SHINY_CHARM));
         leaveEncounterWithoutBattle(true);
       })
       .build(),

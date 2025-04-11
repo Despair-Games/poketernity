@@ -1,6 +1,6 @@
 import { loggedInUser } from "#app/account";
 import type { Ability } from "#app/data/abilities/ability";
-import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
+import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/starters";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";

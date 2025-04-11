@@ -1,4 +1,4 @@
-import { signatureSpecies } from "#app/data/balance/signatureSpecies";
+import { signatureSpecies } from "#app/data/signatureSpecies";
 import { TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerType } from "#enums/trainer-type";
 import { ElementalType } from "#enums/elemental-type";

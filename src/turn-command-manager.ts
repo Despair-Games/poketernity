@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Phase } from "#app/phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -432,15 +432,9 @@ export class TurnCommandManager {
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
 
-    globalScene.useMove({
-      pokemon,
-      targets: targets ?? turnMove.targets,
-      move,
-      ignorePp: cursor !== 1 && turnMove.ignorePP,
-      when: "after",
-      phaseId: PhaseId.POST_ACTION,
-    });
-
+    globalScene.phaseManager.unshiftPhase(
+      new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
+    );
     return true;
   }
 
@@ -459,7 +453,7 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.appendToPhase(new AttemptCapturePhase(targets[0] % 2, cursor), PhaseId.POST_ACTION);
+    globalScene.phaseManager.appendToPhase(new AttemptCapturePhase(targets[0] % 2, cursor), PhaseId.POST_ACTION);
     return true;
   }
 
@@ -478,7 +472,7 @@ export class TurnCommandManager {
     }
 
     const switchType = args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-    globalScene.appendToPhase(
+    globalScene.phaseManager.appendToPhase(
       new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
       PhaseId.POST_ACTION,
     );
@@ -503,7 +497,7 @@ export class TurnCommandManager {
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.appendToPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()), PhaseId.POST_ACTION);
+    globalScene.phaseManager.appendToPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()), PhaseId.POST_ACTION);
     return true;
   }
 
@@ -547,7 +541,7 @@ export class TurnCommandManager {
         pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id) ?? new PokemonMove(turnMove.move.id);
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
-        globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
+        globalScene.phaseManager.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
       }
     });
 

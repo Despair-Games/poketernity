@@ -50,22 +50,22 @@ import type { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight
 import type { Ability } from "#app/data/abilities/ability";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { speciesEggMoves } from "#app/data/egg-moves";
+import { starterPassiveAbilities } from "#app/data/passives";
+import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
+import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
   BASE_SHINY_CHANCE,
   SHINY_EPIC_CHANCE,
   SHINY_VARIANT_CHANCE,
-} from "#app/data/balance/rates";
+} from "#app/data/rates";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
   getCandyProgressRequirement,
   speciesStarterCosts,
-} from "#app/data/balance/starters";
-import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
+} from "#app/data/starters";
+import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/tms";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";
@@ -226,7 +226,7 @@ import {
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
-import type { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -336,7 +336,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.hp = dataSource.hp;
       this.stats = dataSource.stats;
       this.ivs = dataSource.ivs;
-      this.passive = !!dataSource.passive;
+      this.passive = dataSource.passive;
       if (this.variant === undefined) {
         this.variant = 0;
       }
@@ -352,7 +352,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         dataSource.metSpecies ?? (this.metBiome !== -1 ? this.species.speciesId : this.species.getRootSpeciesId(true));
       this.metWave = dataSource.metWave ?? (this.metBiome === -1 ? -1 : 0);
       this.pauseEvolutions = dataSource.pauseEvolutions;
-      this.pokerus = !!dataSource.pokerus;
+      this.pokerus = dataSource.pokerus;
       this.evoCounter = dataSource.evoCounter ?? 0;
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
@@ -450,7 +450,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.fieldUI.addAt(this.battleInfo, 0);
 
-    const getSprite = (hasShadow?: boolean) => {
+    const getSprite = (hasShadow: boolean = false) => {
       const ret = globalScene.addPokemonSprite(
         this,
         0,
@@ -462,7 +462,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ret.setOrigin(0.5, 1);
       ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
-        hasShadow: !!hasShadow,
+        hasShadow,
         teraColor: getTypeRgb(this.getTeraType()),
       });
       return ret;
@@ -852,7 +852,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
-      const currentPhase = globalScene.getCurrentPhase();
+      const currentPhase = globalScene.phaseManager.getCurrentPhase();
       if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getPokemon() === this) {
         return false;
       }
@@ -1990,7 +1990,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ) {
       multiplier /= 2;
       if (!simulated) {
-        globalScene.queueMessage(i18next.t("weather:strongWindsEffectMessage"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("weather:strongWindsEffectMessage"));
       }
     }
     return multiplier as TypeDamageMultiplier;
@@ -3302,7 +3302,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.turnData.damageTaken += amount;
     }
     if (this.isFainted() && !ignoreFaintPhase) {
-      globalScene.faintBattler(this.getBattlerIndex(), { preventEndure });
+      globalScene.phaseManager.queueBattlerFaintPhase(this.getBattlerIndex(), { preventEndure });
     }
     return amount;
   }
@@ -3331,7 +3331,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }: DamageFunctionOptions = {},
   ): number {
     const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
-    globalScene.unshiftPhase(damagePhase);
+    globalScene.phaseManager.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       amount = 0;
     }
@@ -3940,14 +3940,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * cancel the attack's subsequent hits.
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
-      const currentPhase = globalScene.getCurrentPhase();
+      const currentPhase = globalScene.phaseManager.getCurrentPhase();
       if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getUserPokemon() === this) {
         this.stopMultiHit();
       }
     }
 
     if (asPhase) {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new ObtainStatusEffectPhase(this.getBattlerIndex(), effect, turnsRemaining, sourceText, sourcePokemon),
       );
       return true;
@@ -4428,7 +4428,7 @@ export class PlayerPokemon extends Pokemon {
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            globalScene.prependToPhase(
+            globalScene.phaseManager.prependToPhase(
               new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
               PhaseId.POST_ACTION,
             );
@@ -4751,7 +4751,8 @@ export class EnemyPokemon extends Pokemon {
     );
 
     this.trainerSlot = trainerSlot;
-    this.isPopulatedFromDataSource = !!dataSource; // if a dataSource is provided, then it was populated from dataSource
+    // if a dataSource is provided, then it was populated from dataSource
+    this.isPopulatedFromDataSource = !!dataSource;
     if (boss) {
       this.setBoss(boss, dataSource?.bossSegments);
     }
@@ -5180,11 +5181,11 @@ export class EnemyPokemon extends Pokemon {
   }
 
   hasTrainer(): boolean {
-    return !!this.trainerSlot;
+    return this.trainerSlot !== TrainerSlot.NONE;
   }
 
   isBoss(): boolean {
-    return !!this.bossSegments;
+    return this.bossSegments > 0;
   }
 
   getBossSegments(): number {
@@ -5327,7 +5328,7 @@ export class EnemyPokemon extends Pokemon {
         stages++;
       }
 
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(this.getBattlerIndex(), this, [boostedStat!], stages, { ignoreAbilities: true }),
       );
       this.bossSegmentIndex--;

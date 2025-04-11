@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import {

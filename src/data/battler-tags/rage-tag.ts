@@ -29,7 +29,9 @@ export class RageTag extends BattlerTag {
       const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];
       const damageReceived = lastAttackReceived?.damage ?? 0;
       if (damageReceived > 0) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1));
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1),
+        );
       }
       pokemon.addTag(BattlerTagType.RAGE, undefined, MoveId.RAGE, pokemon.id);
       return true;

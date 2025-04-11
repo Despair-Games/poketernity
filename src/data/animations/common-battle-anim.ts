@@ -4,11 +4,19 @@ import { commonAnims } from "#app/data/animations/common-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import type { CommonAnim } from "#enums/common-anim";
 
+/**
+ * Animation for common battle effects that are (usually)
+ * tied to a specific {@linkcode Pokemon}.
+ * @extends BattleAnim
+ * @todo Make `user` optional, or add a new subclass for
+ * animations that don't require a "user" (e.g. weather animations)
+ */
 export class CommonBattleAnim extends BattleAnim {
-  public commonAnim: CommonAnim | null;
+  /** The {@linkcode CommonAnim} to play */
+  public commonAnim: CommonAnim;
 
-  constructor(commonAnim: CommonAnim | null, user: Pokemon, target?: Pokemon, playOnEmptyField: boolean = false) {
-    super(user, target || user, playOnEmptyField);
+  constructor(commonAnim: CommonAnim, user: Pokemon, target?: Pokemon, playOnEmptyField: boolean = false) {
+    super(user, target ?? user, playOnEmptyField);
 
     this.commonAnim = commonAnim;
   }

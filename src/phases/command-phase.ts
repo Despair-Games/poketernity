@@ -1,6 +1,6 @@
 import type { TurnMove } from "#app/@types/TurnMove";
 import { type FairyLockTag } from "#app/data/arena-tag";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#app/data/battler-tags/trapped-tag";
@@ -221,7 +221,7 @@ export class CommandPhase extends FieldPhase {
             (isFieldTargeted(moveTargets.targets) && double)
             || (moveTargets.targets.length > 1 && moveTargets.multiple)
           ) {
-            globalScene.selectTarget(this.fieldIndex);
+            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
           }
           if (turnCommand.turnMove && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.turnMove.targets = moveTargets.targets;
@@ -232,7 +232,7 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.selectTarget(this.fieldIndex);
+            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
           }
 
           turnManager.addCommand(turnCommand);
@@ -271,7 +271,7 @@ export class CommandPhase extends FieldPhase {
             .getEnemyField()
             .filter((p) => p.isActive(true))
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
-          && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
+          && gameData.getStarterCount((d) => d.caughtAttr > 0) < Object.keys(speciesStarterCosts).length - 1;
 
         if (arena.biomeId === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
           failCatchRun("battle:noPokeballForce");
@@ -399,8 +399,8 @@ export class CommandPhase extends FieldPhase {
 
   public cancel(): void {
     if (this.fieldIndex) {
-      globalScene.unshiftPhase(new CommandPhase(0));
-      globalScene.unshiftPhase(new CommandPhase(1));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(0));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(1));
       this.end();
     }
   }

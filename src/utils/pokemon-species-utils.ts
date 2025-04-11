@@ -3,7 +3,7 @@ import { SpeciesId } from "#enums/species-id";
 import { type PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { isNullOrUndefined, randSeedItem } from "#app/utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/balance/starters";
+import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { globalScene } from "#app/global-scene";
 
