@@ -1,4 +1,4 @@
-import { AnimConfig } from "#app/data/animations/anim-config";
+import { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import { MoveAnim } from "./move-anim";
 import { chargeAnims } from "#app/data/animations/charge-anims";
 import type { Pokemon } from "#app/field/pokemon";
@@ -22,9 +22,9 @@ export class MoveChargeAnim extends MoveAnim {
     return !this.user?.isPlayer() && Array.isArray(chargeAnims.get(this.chargeAnim));
   }
 
-  override getAnim(): AnimConfig {
-    return chargeAnims.get(this.chargeAnim) instanceof AnimConfig
-      ? (chargeAnims.get(this.chargeAnim) as AnimConfig)
-      : (chargeAnims.get(this.chargeAnim)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
+  override getAnim(): LegacyAnimConfig {
+    return chargeAnims.get(this.chargeAnim) instanceof LegacyAnimConfig
+      ? (chargeAnims.get(this.chargeAnim) as LegacyAnimConfig)
+      : (chargeAnims.get(this.chargeAnim)?.[this.user?.isPlayer() ? 0 : 1] as LegacyAnimConfig);
   }
 }

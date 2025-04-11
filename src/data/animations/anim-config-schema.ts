@@ -254,7 +254,11 @@ const animTimedEventSchema: Schema = {
       default: 0,
     },
   },
-  required: ["time", "resourceName"],
+  readOnly: true,
+  required: ["eventType", "time", "resourceName"],
+  if: { properties: { eventType: { const: "AnimTimedSoundEvent" } } },
+  then: { required: ["volume", "pitch"] },
+  else: { required: ["bgX", "bgY", "duration"] },
 };
 
 /**

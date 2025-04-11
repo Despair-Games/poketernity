@@ -1,4 +1,4 @@
-import { type AnimConfig, type AnimFrame } from "#app/data/animations/anim-config";
+import { type LegacyAnimConfig, type AnimFrame } from "#app/data/animations/anim-config";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -68,7 +68,7 @@ export abstract class BattleAnim {
     this.playRegardlessOfIssues = playRegardlessOfIssues;
   }
 
-  abstract getAnim(): AnimConfig | null;
+  abstract getAnim(): LegacyAnimConfig | null;
 
   abstract isOppAnim(): boolean;
 

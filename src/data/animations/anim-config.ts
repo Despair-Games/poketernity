@@ -6,17 +6,72 @@ import { AnimFrameTargets, type AnimFrameTarget } from "#enums/anim-frame-target
 import type Phaser from "phaser";
 import { type BattleAnim } from "./battle-anims";
 import { type MoveAnim } from "./move-anim";
+import type { MoveId } from "#enums/move-id";
 
-export class AnimConfig {
+export interface AnimConfig {
+  readonly id?: MoveId;
+  readonly graphic?: string;
+  readonly props: AnimProp[];
+  readonly timedEvents?: AnimTimedEvent[];
+}
+
+export interface AnimProp {
+  readonly focus: AnimFrameTarget;
+  readonly keyframes: AnimKeyFrame[];
+}
+
+export interface AnimKeyFrame {
+  readonly u?: number;
+  readonly x?:
+    | number
+    | {
+        value: number;
+        ease: string;
+      };
+  readonly y?:
+    | number
+    | {
+        value: number;
+        ease: string;
+      };
+  readonly scaleX?: number;
+  readonly scaleY?: number;
+  readonly angle?: number;
+  readonly mirror?: boolean;
+  readonly visible?: boolean;
+  readonly blendType?: AnimBlendType;
+  readonly graphicFrame?: number;
+  readonly alpha?: number;
+  readonly tone?: number[];
+  readonly priority?: 0 | 1 | 3 | 5;
+  readonly duration?: number;
+  readonly delay?: number;
+  readonly ease?: string;
+}
+
+export interface AnimTimedEvent {
+  readonly eventType: string;
+  readonly time: number;
+
+  readonly volume?: number;
+  readonly pitch?: number;
+
+  readonly bgX?: number;
+  readonly bgY?: number;
+  readonly duration?: number;
+}
+
+/** @deprecated */
+export class LegacyAnimConfig {
   public id: number;
   public graphic: string;
   public frames: AnimFrame[][];
-  public frameTimedEvents: Map<number, AnimTimedEvent[]>;
+  public frameTimedEvents: Map<number, LegacyAnimTimedEvent[]>;
   public position: number;
   public hue: number;
 
   constructor(source?: any) {
-    this.frameTimedEvents = new Map<number, AnimTimedEvent[]>();
+    this.frameTimedEvents = new Map<number, LegacyAnimTimedEvent[]>();
 
     if (source) {
       this.id = source.id;
@@ -31,9 +86,9 @@ export class AnimConfig {
 
       const frameTimedEvents = source.frameTimedEvents;
       for (const fte of Object.keys(frameTimedEvents)) {
-        const timedEvents: AnimTimedEvent[] = [];
+        const timedEvents: LegacyAnimTimedEvent[] = [];
         for (const te of frameTimedEvents[fte]) {
-          let timedEvent: AnimTimedEvent | undefined;
+          let timedEvent: LegacyAnimTimedEvent | undefined;
           switch (te.eventType) {
             case "AnimTimedSoundEvent":
               timedEvent = new AnimTimedSoundEvent(te.frameIndex, te.resourceName, te);
@@ -298,7 +353,7 @@ class ImportedAnimFrame extends AnimFrame {
     this.graphicFrame = source.graphicFrame;
   }
 }
-export abstract class AnimTimedEvent {
+export abstract class LegacyAnimTimedEvent {
   public frameIndex: number;
   public resourceName: string;
 
@@ -312,7 +367,7 @@ export abstract class AnimTimedEvent {
   abstract getEventType(): string;
 }
 
-export class AnimTimedSoundEvent extends AnimTimedEvent {
+export class AnimTimedSoundEvent extends LegacyAnimTimedEvent {
   public volume: number = 100;
   public pitch: number = 100;
 
@@ -346,7 +401,7 @@ export class AnimTimedSoundEvent extends AnimTimedEvent {
   }
 }
 
-abstract class AnimTimedBgEvent extends AnimTimedEvent {
+abstract class AnimTimedBgEvent extends LegacyAnimTimedEvent {
   public bgX: number = 0;
   public bgY: number = 0;
   public opacity: number = 0;

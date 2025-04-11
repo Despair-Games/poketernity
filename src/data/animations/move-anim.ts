@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { AnimConfig } from "#app/data/animations/anim-config";
+import { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import { BattleAnim } from "./battle-anims";
 import { moveAnims } from "#app/data/animations/move-anims";
 import type { Pokemon } from "#app/field/pokemon";
@@ -22,10 +22,10 @@ export class MoveAnim extends BattleAnim {
     this.moveId = move;
   }
 
-  getAnim(): AnimConfig {
-    return moveAnims.get(this.moveId) instanceof AnimConfig
-      ? (moveAnims.get(this.moveId) as AnimConfig)
-      : (moveAnims.get(this.moveId)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
+  getAnim(): LegacyAnimConfig {
+    return moveAnims.get(this.moveId) instanceof LegacyAnimConfig
+      ? (moveAnims.get(this.moveId) as LegacyAnimConfig)
+      : (moveAnims.get(this.moveId)?.[this.user?.isPlayer() ? 0 : 1] as LegacyAnimConfig);
   }
 
   isOppAnim(): boolean {

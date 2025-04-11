@@ -1,7 +1,7 @@
 import {
-  AnimConfig,
+  LegacyAnimConfig,
   AnimFrame,
-  type AnimTimedEvent,
+  type LegacyAnimTimedEvent,
   AnimTimedSoundEvent,
   AnimTimedAddBgEvent,
   AnimTimedUpdateBgEvent,
@@ -55,18 +55,20 @@ export async function populateAnims() {
     if (!moveNameToId.hasOwnProperty(animName) && !commonAnimId && !chargeAnimId) {
       continue;
     }
-    const anim = commonAnimId || chargeAnimId ? new AnimConfig() : new AnimConfig();
-    if (anim instanceof AnimConfig) {
-      (anim as AnimConfig).id = moveNameToId[animName];
+    const anim = commonAnimId || chargeAnimId ? new LegacyAnimConfig() : new LegacyAnimConfig();
+    if (anim instanceof LegacyAnimConfig) {
+      (anim as LegacyAnimConfig).id = moveNameToId[animName];
     }
     if (commonAnimId) {
       commonAnims.set(commonAnimId, anim);
     } else if (chargeAnimId) {
-      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [chargeAnims.get(chargeAnimId) as AnimConfig, anim]);
+      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [chargeAnims.get(chargeAnimId) as LegacyAnimConfig, anim]);
     } else {
       moveAnims.set(
         moveNameToId[animName],
-        !isOppMove ? (anim as AnimConfig) : [moveAnims.get(moveNameToId[animName]) as AnimConfig, anim as AnimConfig],
+        !isOppMove
+          ? (anim as LegacyAnimConfig)
+          : [moveAnims.get(moveNameToId[animName]) as LegacyAnimConfig, anim as LegacyAnimConfig],
       );
     }
     for (let f = 0; f < fields.length; f++) {
@@ -132,7 +134,7 @@ export async function populateAnims() {
             const frameIndex = parseInt(/frame: (\d+)/.exec(timingData)![1]); // TODO: is the bang correct?
             let resourceName = /name: "(.*?)"/.exec(timingData)![1].replace("''", ""); // TODO: is the bang correct?
             const timingType = parseInt(/timingType: (\d)/.exec(timingData)![1]); // TODO: is the bang correct?
-            let timedEvent: AnimTimedEvent | undefined;
+            let timedEvent: LegacyAnimTimedEvent | undefined;
             switch (timingType) {
               case 0:
                 if (resourceName && resourceName.indexOf(".") === -1) {
