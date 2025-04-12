@@ -12,7 +12,7 @@ import { type EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
+import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { achvs } from "#app/system/achievements";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
@@ -269,7 +269,7 @@ export class AttemptCapturePhase extends PokemonPhase {
       null,
       () => {
         const end = (): void => {
-          globalScene.phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
+          globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));
           pokemonInfoContainer.hide();
           this.removePb();
           this.end();

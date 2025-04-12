@@ -6,6 +6,7 @@ import { type MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
 import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
 import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
 import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
@@ -24,10 +25,10 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
+import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
@@ -38,7 +39,6 @@ import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
-import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -55,7 +55,7 @@ import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
  *   - If the player's last valid pokemon just fainted then unshift a {@linkcode GameOverPhase},
  *     otherwise push a {@linkcode SwitchPhase} or {@linkcode ToggleDoublePositionPhase} as needed.
  * - If the fainted pokemon was the AI's:
- *   - Unshift a {@linkcode VictoryPhase}, then if this is a trainer battle and the AI
+ *   - Unshift a {@linkcode PostKnockoutPhase}, then if this is a trainer battle and the AI
  *     has unfainted pokemon in reserve, push a {@linkcode SwitchSummonPhase}
  * - Redirect moves off of fainted targets in doubles (TODO: handle this in {@linkcode MovePhase}?)
  * - Play the pokemon's faint cry
@@ -216,7 +216,7 @@ export class FaintPhase extends PokemonPhase {
         globalScene.phaseManager.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
       }
     } else {
-      globalScene.phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
+      globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));
       if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
         const hasReservePartyMember: boolean = globalScene
           .getEnemyParty()
