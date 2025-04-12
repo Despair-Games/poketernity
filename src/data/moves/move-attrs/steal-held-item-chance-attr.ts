@@ -13,22 +13,15 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
  * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
 export class StealHeldItemChanceAttr extends MoveEffectAttr {
-  public readonly chance: number;
-
-  constructor(chance: number) {
+  constructor() {
     super(true);
-    this.chance = chance;
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (move.hitsSubstitute(user, target)) {
       return false;
     }
-
-    const rand = Phaser.Math.RND.realInRange(0, 1);
-    if (rand >= this.chance) {
-      return false;
-    }
+    // TODO: Refactor this mess after items are properly implemented
     const heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
     if (heldItems.length) {
       const poolType = target.isPlayer()
