@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
@@ -41,10 +40,6 @@ describe("Abilities - Sticky Hold", () => {
       name: MoveId[moveId],
     })),
   )("should prevent the user from losing a held item when hit by the move $name", async ({ moveId: move }) => {
-    // Force item removal RNG calls to succeed
-    if (move === MoveId.THIEF) {
-      vi.spyOn(allMoves.get(move).getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
-    }
     vi.spyOn(allMoves.get(move), "chance", "get").mockReturnValue(-1);
 
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
