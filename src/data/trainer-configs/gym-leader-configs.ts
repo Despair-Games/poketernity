@@ -219,6 +219,7 @@ export const gymLeaderTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_galar_gym"),
   [TrainerType.RAIHAN]: new TrainerConfig(++t)
     .setName("Raihan")
+    .setDoubleOnly()
     .initForGymLeader(signatureSpecies["RAIHAN"], true, ElementalType.DRAGON)
     .setBattleBgm("battle_galar_gym"),
   [TrainerType.KATY]: new TrainerConfig(++t).initForPaldeaGymLeader(signatureSpecies["KATY"], false, ElementalType.BUG),
@@ -240,11 +241,9 @@ export const gymLeaderTrainerConfigs: TrainerConfigs = {
   [TrainerType.LARRY]: new TrainerConfig(++t)
     .setName("Larry")
     .initForPaldeaGymLeader(signatureSpecies["LARRY"], true, ElementalType.NORMAL),
-  [TrainerType.RYME]: new TrainerConfig(++t).initForPaldeaGymLeader(
-    signatureSpecies["RYME"],
-    false,
-    ElementalType.GHOST,
-  ),
+  [TrainerType.RYME]: new TrainerConfig(++t)
+    .setDoubleOnly()
+    .initForPaldeaGymLeader(signatureSpecies["RYME"], false, ElementalType.GHOST),
   [TrainerType.TULIP]: new TrainerConfig(++t).initForPaldeaGymLeader(
     signatureSpecies["TULIP"],
     false,
