@@ -3369,7 +3369,7 @@ export function initMoves() {
       )
       .makesContact(),
     new SelfStatusMove(MoveId.SHED_TAIL, ElementalType.NORMAL, -1, 10, -1, 0, 9)
-      .attr(AddSubstituteAttr, 0.5)
+      .attr(AddSubstituteAttr, true)
       .attr(ForceSwitchOutAttr, true, SwitchType.SHED_TAIL)
       .snatchable() // Custom
       .condition(failIfLastInPartyCondition),
