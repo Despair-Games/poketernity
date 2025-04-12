@@ -30,34 +30,34 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
       return true;
     }
 
+    const { phaseManager } = globalScene;
+
     if (this.selfTarget) {
-      // we unshift the StatStageChangePhase to put it right after the showAbility and not at the end of the
-      // phase list (which could be after CommandPhase for example)
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),
-      );
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages));
       return true;
     }
+
     for (const opponent of pokemon.getOpponents()) {
       const cancelled = new BooleanHolder(false);
       if (this.intimidate) {
-        applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INITIMIDATE_IMMUNITY, opponent, simulated, cancelled);
-        applyAbAttrs<PostIntimidateStatStageChangeAbAttr>(
-          AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
-          opponent,
-          simulated,
-          cancelled,
-        );
-
         if (opponent.getTag(BattlerTagType.SUBSTITUTE)) {
-          cancelled.value = true;
+          return false;
         }
+
+        applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INTIMIDATE_IMMUNITY, opponent, simulated, cancelled);
       }
+
       if (!cancelled.value) {
-        globalScene.phaseManager.unshiftPhase(
+        phaseManager.unshiftPhase(
           new StatStageChangePhase(opponent.getBattlerIndex(), pokemon, this.stats, this.stages),
         );
       }
+
+      applyAbAttrs<PostIntimidateStatStageChangeAbAttr>(
+        AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
+        opponent,
+        simulated,
+      );
     }
     return true;
   }

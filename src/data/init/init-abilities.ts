@@ -1466,7 +1466,8 @@ export function initAbilities() {
       .attr(PostSummonStatStageChangeOnArenaAbAttr, ArenaTagType.TAILWIND)
       .ignorable(),
     new Ability(AbilityId.GUARD_DOG, 9)
-      .attr(PostIntimidateStatStageChangeAbAttr, [Stat.ATK], 1, true)
+      .attr(IntimidateImmunityAbAttr, false)
+      .attr(PostIntimidateStatStageChangeAbAttr, [Stat.ATK], 1)
       .attr(ForceSwitchOutImmunityAbAttr)
       .ignorable(),
     new Ability(AbilityId.ROCKY_PAYLOAD, 9)
