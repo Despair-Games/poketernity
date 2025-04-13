@@ -49,3 +49,59 @@ export interface BiomeTierTrainerPools {
 export interface BiomeTrainerPools {
   [key: number]: BiomeTierTrainerPools;
 }
+
+// #region Misc Data
+
+/**
+ * Whether or not a biome is indoors affects tinting
+ */
+export const indoorBiomes = [
+  BiomeId.SEABED,
+  BiomeId.CAVE,
+  BiomeId.CHARGESTONE_CAVE,
+  BiomeId.ICE_CAVE,
+  BiomeId.POWER_PLANT,
+  BiomeId.DOJO,
+  BiomeId.FACTORY,
+  BiomeId.ABYSS,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.TEMPLE,
+  BiomeId.LABORATORY,
+];
+
+/** The biome determines what form Alcremie will be when evolving */
+export const vanillaAlcremieBiomes = [
+  BiomeId.TOWN,
+  BiomeId.PLAINS,
+  BiomeId.GRASS,
+  BiomeId.TALL_GRASS,
+  BiomeId.METROPOLIS,
+];
+export const rubyAlcremieBiomes = [
+  BiomeId.BADLANDS,
+  BiomeId.VOLCANO,
+  BiomeId.STEAM_VENT,
+  BiomeId.GRAVEYARD,
+  BiomeId.FACTORY,
+  BiomeId.SLUM,
+];
+export const matchaAlcremieBiomes = [BiomeId.FOREST, BiomeId.SWAMP, BiomeId.MEADOW, BiomeId.JUNGLE];
+export const mintAlcremieBiomes = [BiomeId.SEA, BiomeId.BEACH, BiomeId.LAKE, BiomeId.SEABED];
+export const lemonAlcremieBiomes = [
+  BiomeId.DESERT,
+  BiomeId.POWER_PLANT,
+  BiomeId.CHARGESTONE_CAVE,
+  BiomeId.DOJO,
+  BiomeId.RUINS,
+  BiomeId.CONSTRUCTION_SITE,
+];
+export const saltedCreamAlcremieBiomes = [
+  BiomeId.MOUNTAIN,
+  BiomeId.CAVE,
+  BiomeId.ICE_CAVE,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.SNOWY_FOREST,
+];
+export const rubySwirlAlcremieBiomes = [BiomeId.WASTELAND, BiomeId.LABORATORY];
+export const caramelSwirlAlcremieBiomes = [BiomeId.TEMPLE, BiomeId.ISLAND];
+export const rainbowSwirlAlcremieBiomes = [BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END];
