@@ -4037,7 +4037,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.summonData = new PokemonSummonData();
     this.setSwitchOutStatus(false);
     if (!this.waveData) {
-      this.resetBattleData();
+      this.resetWaveData();
     }
     this.resetBattleSummonData();
     if (this.summonDataPrimer) {
@@ -4065,7 +4065,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.updateInfo();
   }
 
-  resetBattleData(): void {
+  resetWaveData(): void {
     this.waveData = deepCopy<PokemonWaveData>(defaultWaveData);
   }
 

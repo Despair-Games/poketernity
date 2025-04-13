@@ -1372,7 +1372,7 @@ export default class BattleScene extends SceneBase {
         });
 
         for (const pokemon of this.getPlayerParty()) {
-          pokemon.resetBattleData();
+          pokemon.resetWaveData();
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
         }
 
