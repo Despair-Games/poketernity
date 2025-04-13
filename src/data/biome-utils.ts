@@ -1,5 +1,6 @@
 import { allBiomes } from "#app/data/data-lists";
 import { BiomeId } from "#enums/biome-id";
+import { ElementalType } from "#enums/elemental-type";
 import type { SpeciesId } from "#enums/species-id";
 import type { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
@@ -270,3 +271,72 @@ export const TELEPORTING_HIJINKS_BIOME_CANDIDATES = [
   BiomeId.WASTELAND,
   BiomeId.DOJO,
 ];
+
+// #region Camoflage
+
+/**
+ * Retrieves a type from the current biome. Used for the move Camoflage
+ * @param biomeId {@linkcode BiomeId}
+ * @returns the {@linkcode ElementalType} corresponding to the biome
+ */
+export function getTypeForBiome(biomeId: BiomeId): ElementalType {
+  switch (biomeId) {
+    case BiomeId.TOWN:
+    case BiomeId.PLAINS:
+    case BiomeId.METROPOLIS:
+      return ElementalType.NORMAL;
+    case BiomeId.GRASS:
+    case BiomeId.TALL_GRASS:
+      return ElementalType.GRASS;
+    case BiomeId.FOREST:
+    case BiomeId.JUNGLE:
+      return ElementalType.BUG;
+    case BiomeId.SLUM:
+    case BiomeId.SWAMP:
+      return ElementalType.POISON;
+    case BiomeId.SEA:
+    case BiomeId.BEACH:
+    case BiomeId.LAKE:
+    case BiomeId.SEABED:
+      return ElementalType.WATER;
+    case BiomeId.MOUNTAIN:
+      return ElementalType.FLYING;
+    case BiomeId.BADLANDS:
+      return ElementalType.GROUND;
+    case BiomeId.CAVE:
+    case BiomeId.DESERT:
+      return ElementalType.ROCK;
+    case BiomeId.ICE_CAVE:
+    case BiomeId.SNOWY_FOREST:
+      return ElementalType.ICE;
+    case BiomeId.MEADOW:
+    case BiomeId.FAIRY_CAVE:
+    case BiomeId.ISLAND:
+      return ElementalType.FAIRY;
+    case BiomeId.POWER_PLANT:
+    case BiomeId.CHARGESTONE_CAVE:
+      return ElementalType.ELECTRIC;
+    case BiomeId.VOLCANO:
+    case BiomeId.STEAM_VENT:
+      return ElementalType.FIRE;
+    case BiomeId.GRAVEYARD:
+    case BiomeId.TEMPLE:
+      return ElementalType.GHOST;
+    case BiomeId.DOJO:
+    case BiomeId.CONSTRUCTION_SITE:
+      return ElementalType.FIGHTING;
+    case BiomeId.FACTORY:
+    case BiomeId.LABORATORY:
+      return ElementalType.STEEL;
+    case BiomeId.RUINS:
+    case BiomeId.SPACE:
+      return ElementalType.PSYCHIC;
+    case BiomeId.WASTELAND:
+    case BiomeId.END:
+      return ElementalType.DRAGON;
+    case BiomeId.ABYSS:
+      return ElementalType.DARK;
+    default:
+      return ElementalType.UNKNOWN;
+  }
+}
