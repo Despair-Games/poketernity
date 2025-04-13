@@ -46,9 +46,13 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly ignoreAbilities: boolean;
   protected readonly canBeCopied: boolean;
   protected readonly bypassReflect: boolean;
-  protected readonly isStickyWeb: boolean;
   protected readonly onChange?: StatStageChangeCallback;
   private readonly options: SSCPhaseOptions;
+
+  /**
+   * Sticky Web has an edge case where its source gets ignored by Defiant/Competitive, but not Mirror Armor.
+   */
+  protected readonly isStickyWeb: boolean;
 
   constructor(
     battlerIndex: BattlerIndex,

@@ -38,7 +38,7 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   ): boolean {
     // Ability does not activate if the stat change was caused by the ability holder or its ally.
     // The only known exception to this rule is Sticky Web.
-    const isSourceAllied = [pokemon, pokemon.getAlly()].includes(source as Pokemon);
+    const isSourceAllied = !!source && [pokemon, pokemon.getAlly()].includes(source);
     if (stagesChanged < 0 && (!isSourceAllied || isStickyWeb)) {
       if (!simulated) {
         globalScene.phaseManager.unshiftPhase(

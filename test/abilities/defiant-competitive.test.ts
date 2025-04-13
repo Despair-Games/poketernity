@@ -6,7 +6,10 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
 
-describe("Abilities - Competitive", () => {
+describe.each([
+  { name: "Defiant", isDefiant: true },
+  { name: "Competitive", isDefiant: false },
+])("Abilities - $name", ({ isDefiant }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -26,9 +29,9 @@ describe("Abilities - Competitive", () => {
     game.override
       .battleType("single")
       .enemySpecies(SpeciesId.BEEDRILL)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(1)
-      .moveset([MoveId.SPLASH, MoveId.CLOSE_COMBAT])
-      .ability(AbilityId.COMPETITIVE);
+      .ability(isDefiant ? AbilityId.DEFIANT : AbilityId.COMPETITIVE);
   });
 
   it("should activate multiple times in response to multiple simultaneous stat drops", async () => {
@@ -39,7 +42,11 @@ describe("Abilities - Competitive", () => {
     await game.move.forceEnemyMove(MoveId.TICKLE);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([-1, -1, 4, 0, 0, 0, 0]); // -1 Atk, -1 Def, 4 SpA
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([3, -1, 0, 0, 0, 0, 0]); // +3 Atk, -1 Def
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([-1, -1, 4, 0, 0, 0, 0]); // -1 Atk, -1 Def, 4 SpA
+    }
   });
 
   it("should activate exactly once in response to a single -2 stat drop", async () => {
@@ -50,7 +57,11 @@ describe("Abilities - Competitive", () => {
     await game.move.forceEnemyMove(MoveId.SWEET_SCENT);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, 0, 0, -2]); // +2 SpA, -2 Eva
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([2, 0, 0, 0, 0, 0, -2]); // +2 Atk, -2 Eva
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, 0, 0, -2]); // +2 SpA, -2 Eva
+    }
   });
 
   it("should not activate in response to a stat increase", async () => {
@@ -71,7 +82,7 @@ describe("Abilities - Competitive", () => {
     game.move.use(MoveId.CLOSE_COMBAT);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 0, -1, 0, 0, 0]); // 0 SpA, -1 Def, -1 SpD
+    expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 0, -1, 0, 0, 0]); // 0 Atk, -1 Def, -1 SpD
   });
 
   it("should not activate if the user's ally lowers the user's stats", async () => {
@@ -80,10 +91,10 @@ describe("Abilities - Competitive", () => {
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH, 0);
-    game.move.use(MoveId.SAND_ATTACK, 1, BattlerIndex.PLAYER);
+    game.move.use(MoveId.SMOKESCREEN, 1, BattlerIndex.PLAYER);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 0, 0, 0, -1, 0]); // 0 SpA, -1 Acc
+    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 0, 0, 0, -1, 0]); // 0 Atk, -1 Acc
   });
 
   it("should activate against an opponent's Octolock", async () => {
@@ -94,7 +105,11 @@ describe("Abilities - Competitive", () => {
     await game.move.forceEnemyMove(MoveId.OCTOLOCK);
     await game.toNextTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 4, -1, 0, 0, 0]); // +4 SpA, -1 Def, -1 SpD
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([4, -1, 0, -1, 0, 0, 0]); // +4 Atk, -1 Def, -1 SpD
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 4, -1, 0, 0, 0]); // +4 SpA, -1 Def, -1 SpD
+    }
   });
 
   it("should not activate against an ally's Octolock", async () => {
@@ -106,7 +121,7 @@ describe("Abilities - Competitive", () => {
     game.move.use(MoveId.OCTOLOCK, 1, BattlerIndex.PLAYER);
     await game.toNextTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 0, -1, 0, 0, 0]); // 0 SpA, -1 Def, -1 SpD
+    expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 0, -1, 0, 0, 0]); // 0 Atk, -1 Def, -1 SpD
   });
 
   it("should activate against an opponent's Mirror Armor", async () => {
@@ -114,10 +129,14 @@ describe("Abilities - Competitive", () => {
     await game.classicMode.startBattle([SpeciesId.FLYGON]);
 
     const playerPokemon = game.field.getPlayerPokemon();
-    game.move.use(MoveId.SAND_ATTACK);
+    game.move.use(MoveId.SMOKESCREEN);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, 0, -1, 0]); // +2 SpA, -1 Acc
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([2, 0, 0, 0, 0, -1, 0]); // +2 Atk, -1 Acc
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, 0, -1, 0]); // +2 SpA, -1 Acc
+    }
   });
 
   it("should not activate against an ally's Mirror Armor", async () => {
@@ -126,11 +145,11 @@ describe("Abilities - Competitive", () => {
     game.forceSpeciesSpecificAbility(SpeciesId.CORVIKNIGHT, AbilityId.MIRROR_ARMOR);
 
     const playerPokemon = game.field.getPlayerPokemon();
-    game.move.use(MoveId.SAND_ATTACK, 0, BattlerIndex.PLAYER_2);
+    game.move.use(MoveId.SMOKESCREEN, 0, BattlerIndex.PLAYER_2);
     game.move.use(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 0, 0, 0, -1, 0]); // 0 SpA, -1 Acc
+    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 0, 0, 0, -1, 0]); // 0 Atk, -1 Acc
   });
 
   it("should activate against a Sticky Web that swapped back to the user via Court Change", async () => {
@@ -153,8 +172,11 @@ describe("Abilities - Competitive", () => {
     game.doSwitchPokemon(1);
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, -1, 0, 0]); // +2 SpA, -1 Spe
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([2, 0, 0, 0, -1, 0, 0]); // +2 Atk, -1 Spe
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, -1, 0, 0]); // +2 SpA, -1 Spe
+    }
   });
 
   it("should activate before White Herb is allowed to activate", async () => {
@@ -163,10 +185,15 @@ describe("Abilities - Competitive", () => {
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
-    await game.move.forceEnemyMove(MoveId.CONFIDE);
+    // The stat decrease will be nullified by the ability's stat increase
+    await game.move.forceEnemyMove(isDefiant ? MoveId.GROWL : MoveId.CONFIDE);
     await game.toEndOfTurn();
 
-    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 1, 0, 0, 0, 0]); // +1 SpA
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([1, 0, 0, 0, 0, 0, 0]); // +1 Atk
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 1, 0, 0, 0, 0]); // +1 SpA
+    }
     expect(playerPokemon.getHeldItems()[0].type.id).toBe("WHITE_HERB");
   });
 });
