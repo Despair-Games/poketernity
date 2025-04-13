@@ -155,3 +155,12 @@ export const SENSU_STYLE_BIOMES = [
   BiomeId.LAKE,
   BiomeId.TEMPLE,
 ];
+
+export const TELEPORTING_HIJINKS_BIOME_CANDIDATES = [
+  BiomeId.SPACE,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.LABORATORY,
+  BiomeId.ISLAND,
+  BiomeId.WASTELAND,
+  BiomeId.DOJO,
+];
