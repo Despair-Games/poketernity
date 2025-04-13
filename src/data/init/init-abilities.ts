@@ -100,7 +100,7 @@ import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "#app/data/abilitie
 import { PostIntimidateStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-intimidate-stat-stage-change-ab-attr";
 import { PostItemLostApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-apply-battler-tag-ab-attr";
 import { PostKnockOutStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-stat-stage-change-ab-attr";
-import { PostStatStageChangeStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-stat-stage-change-stat-stage-change-ab-attr";
+import { DefiantCompetitiveAbAttr } from "#app/data/abilities/ab-attrs/defiant-competitive-ab-attr";
 import { PostSummonAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-summon-add-battler-tag-ab-attr";
 import { PostSummonAllyHealAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ally-heal-ab-attr";
 import { PostSummonClearAllyStatStagesAbAttr } from "#app/data/abilities/ab-attrs/post-summon-clear-ally-stat-stages-ab-attr";
@@ -691,7 +691,7 @@ export function initAbilities() {
     new Ability(AbilityId.UNNERVE, 5)
       .attr(PreventBerryUseAbAttr),
     new Ability(AbilityId.DEFIANT, 5)
-      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.ATK], 2),
+      .attr(DefiantCompetitiveAbAttr, [Stat.ATK], 2),
     new Ability(AbilityId.DEFEATIST, 5)
       .attr(StatMultiplierAbAttr, Stat.ATK, 0.5)
       .attr(StatMultiplierAbAttr, Stat.SPATK, 0.5)
@@ -873,7 +873,7 @@ export function initAbilities() {
       .attr(MoveFlagImmunityAbAttr, MoveFlags.BULLET_MOVE)
       .ignorable(),
     new Ability(AbilityId.COMPETITIVE, 6)
-      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2),
+      .attr(DefiantCompetitiveAbAttr, [Stat.SPATK], 2),
     new Ability(AbilityId.STRONG_JAW, 6)
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.BITING_MOVE, 1.5),
     new Ability(AbilityId.REFRIGERATE, 6)
