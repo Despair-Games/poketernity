@@ -59,6 +59,19 @@ describe("Abilities - Rattled", () => {
     expect(enemy.getStatStage(Stat.SPD)).toBe(0);
   });
 
+  it("should not increase the source's Speed from moves that have no effect", async () => {
+    game.override.enemySpecies(SpeciesId.SNORLAX);
+
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.ASTONISH);
+    await game.toEndOfTurn();
+
+    expect(enemy.getStatStage(Stat.SPD)).toBe(0);
+  });
+
   it("should increase the source's Speed by 1 stage for each hit of Beat Up", async () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS, SpeciesId.GOLDEEN]);
 
@@ -87,5 +100,23 @@ describe("Abilities - Rattled", () => {
 
     // Rattled should activate again after the player Feebas with Intimidate enters the field
     expect(enemy.getStatStage(Stat.SPD)).toBe(2);
+  });
+
+  it("should not increase the source's Speed if the source's substitute blocks Intimidate", async () => {
+    game.override.ability(AbilityId.INTIMIDATE).enemyMoveset(MoveId.SUBSTITUTE);
+
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy.getStatStage(Stat.SPD)).toBe(1);
+
+    game.move.use(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    game.doSwitchPokemon(1);
+
+    await game.toEndOfTurn();
+
+    expect(enemy.getStatStage(Stat.SPD)).toBe(1);
   });
 });
