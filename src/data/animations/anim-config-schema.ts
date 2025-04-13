@@ -43,7 +43,7 @@ const easeOption = {
 /**
  * Constructs a {@linkcode Schema} for an array of keyframes
  * with the provided specification for `value`
- * @param valueSpec An object containing the JSON Schema specification for a
+ * @param valueSpec - An object containing the JSON Schema specification for a
  * `value` property, e.g.
  * ```ts
  * {
@@ -51,7 +51,7 @@ const easeOption = {
  *   minimum: 0
  * }
  * ```
- * @param easeable Does this property have intermediate values that are interpolated
+ * @param easeable - Does this property have intermediate values that are interpolated
  * with an {@linkcode easeFunctions | ease function}? (default `true`)
  */
 function getKeyFrameSetSchema(valueSpec: Schema, easeable: boolean = true): Schema {
