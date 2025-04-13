@@ -124,6 +124,52 @@ describe.each([
     expect(playerPokemon.getStatStages()).toStrictEqual([0, -1, 0, -1, 0, 0, 0]); // 0 Atk, -1 Def, -1 SpD
   });
 
+  it("should activate against an opponent's Syrup Bomb", async () => {
+    game.override.startingLevel(100).passiveAbility(AbilityId.NO_GUARD);
+    await game.classicMode.startBattle([SpeciesId.DRAGONITE]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SYRUP_BOMB);
+    await game.toNextTurn();
+
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([2, 0, 0, 0, -1, 0, 0]); // +2 Atk, -1 Spe
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 2, 0, -1, 0, 0]); // +2 Atk, -1 Spe
+    }
+
+    // Allow Syrup Bomb's speed decrease to activate a second time
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    if (isDefiant) {
+      expect(playerPokemon.getStatStages()).toStrictEqual([4, 0, 0, 0, -2, 0, 0]); // +4 Atk, -2 Spe
+    } else {
+      expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 4, 0, -2, 0, 0]); // +4 Atk, -2 Spe
+    }
+  });
+
+  it("should not activate against an ally's Octolock", async () => {
+    game.override.startingLevel(100).passiveAbility(AbilityId.NO_GUARD).battleType("double");
+    await game.classicMode.startBattle([SpeciesId.DRAGONITE, SpeciesId.FEEBAS]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+    game.move.use(MoveId.SPLASH, 0);
+    game.move.use(MoveId.SYRUP_BOMB, 1, BattlerIndex.PLAYER);
+    await game.toNextTurn();
+
+    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 0, 0, -1, 0, 0]); // 0 Atk, -1 Spe
+
+    // Allow Syrup Bomb's speed decrease to activate a second time
+    game.move.use(MoveId.SPLASH, 0);
+    game.move.use(MoveId.SPLASH, 1);
+    await game.toNextTurn();
+
+    expect(playerPokemon.getStatStages()).toStrictEqual([0, 0, 0, 0, -2, 0, 0]); // 0 Atk, -2s Spe
+  });
+
   it("should activate against an opponent's Mirror Armor", async () => {
     game.override.enemyAbility(AbilityId.MIRROR_ARMOR);
     await game.classicMode.startBattle([SpeciesId.FLYGON]);
@@ -140,9 +186,8 @@ describe.each([
   });
 
   it("should not activate against an ally's Mirror Armor", async () => {
-    game.override.battleType("double");
+    game.override.battleType("double").passiveAbility(AbilityId.MIRROR_ARMOR);
     await game.classicMode.startBattle([SpeciesId.FLYGON, SpeciesId.CORVIKNIGHT]);
-    game.forceSpeciesSpecificAbility(SpeciesId.CORVIKNIGHT, AbilityId.MIRROR_ARMOR);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SMOKESCREEN, 0, BattlerIndex.PLAYER_2);

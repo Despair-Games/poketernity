@@ -51,6 +51,8 @@ export class StatStageChangePhase extends PokemonPhase {
 
   /**
    * Sticky Web has an edge case where its source gets ignored by Defiant/Competitive, but not Mirror Armor.
+   *
+   * TODO: Do other effects (Mist, Clear Body, etc.) also ignore the source of Sticky Web?
    */
   protected readonly isStickyWeb: boolean;
 
