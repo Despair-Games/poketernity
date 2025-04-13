@@ -24,9 +24,12 @@ export class IntimidateImmunityAbAttr extends AbAttr {
   }
 
   override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:intimidateImmunity", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
+    if (this.hasTriggerMessage) {
+      return i18next.t("abilityTriggers:intimidateImmunity", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        abilityName,
+      });
+    }
+    return "";
   }
 }

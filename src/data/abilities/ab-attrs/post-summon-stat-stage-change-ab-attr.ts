@@ -53,11 +53,13 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
         );
       }
 
-      applyAbAttrs<PostIntimidateStatStageChangeAbAttr>(
-        AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
-        opponent,
-        simulated,
-      );
+      if (this.intimidate) {
+        applyAbAttrs<PostIntimidateStatStageChangeAbAttr>(
+          AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
+          opponent,
+          simulated,
+        );
+      }
     }
     return true;
   }
