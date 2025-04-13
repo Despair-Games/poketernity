@@ -1,25 +1,25 @@
-import { globalScene } from "#app/global-scene";
+import { EntryHazardTag } from "#app/data/arena-tag";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { signatureSpecies } from "#app/data/signatureSpecies";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { signatureSpecies } from "#app/data/signatureSpecies";
-import type { EnemyPokemon } from "#app/field/pokemon";
-import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
-import type { PersistentModifier } from "#app/modifier/modifier";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { trainerNamePools } from "#app/data/trainer-names";
-import { EntryHazardTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { globalScene } from "#app/global-scene";
+import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import i18next from "i18next";
+import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerPoolTier } from "#enums/trainer-pool-tier";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { TrainerVariant } from "#enums/trainer-variant";
+import i18next from "i18next";
 
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;

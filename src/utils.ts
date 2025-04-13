@@ -537,8 +537,8 @@ export function truncateString(str: string, maxLength: number = 10): string {
  * @param values - The object to be deep copied.
  * @returns A new object that is a deep copy of the input.
  */
-export function deepCopy(values: object): object {
-  return Phaser.Utils.Objects.DeepCopy(values);
+export function deepCopy<T>(values: T): T {
+  return Phaser.Utils.Objects.DeepCopy(values as unknown as object) as T;
 }
 
 /**

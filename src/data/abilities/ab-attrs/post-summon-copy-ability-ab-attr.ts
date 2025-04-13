@@ -42,7 +42,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
       this.target = target;
       this.targetAbilityName = allAbilities[target.getAbility().id].name;
       pokemon.summonData.ability = target.getAbility().id;
-      target.battleData.abilitiesRevealed.push(target.getAbility().id);
+      target.waveData.abilitiesRevealed.push(target.getAbility().id);
       pokemon.updateInfo();
     }
 

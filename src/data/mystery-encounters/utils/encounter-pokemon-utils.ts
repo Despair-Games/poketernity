@@ -13,7 +13,9 @@ import {
 } from "#app/data/pokeball";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";

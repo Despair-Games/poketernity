@@ -1,5 +1,5 @@
 import { type BattlerIndex } from "#enums/battler-index";
-import { type DamageResult } from "#app/field/pokemon";
+import { type DamageResult } from "#app/@types/DamageResult";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";

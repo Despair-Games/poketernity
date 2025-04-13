@@ -1,5 +1,5 @@
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import { PlayerPokemon } from "#app/field/pokemon";
+import { PlayerPokemon } from "#app/field/player-pokemon";
 import type { GameData } from "#app/system/game-data";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Gender } from "#enums/gender";

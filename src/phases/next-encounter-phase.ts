@@ -20,7 +20,7 @@ export class NextEncounterPhase extends EncounterPhase {
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
-        pokemon.resetBattleData();
+        pokemon.resetWaveData();
         /**
          * TODO: Known bug where this gets called after the session has been saved so
          * reloading a session will cause this 1 friendship gain to be lost. See

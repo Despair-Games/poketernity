@@ -65,7 +65,7 @@ describe("Moves - U-turn", () => {
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;
     expect(playerPkm.hp).not.toEqual(playerPkm.getMaxHp());
-    expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(AbilityId.ROUGH_SKIN); // proxy for asserting ability activated
+    expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.ROUGH_SKIN); // proxy for asserting ability activated
     expect(playerPkm.species.speciesId).toEqual(SpeciesId.RAICHU);
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
   }, 20000);
@@ -84,7 +84,7 @@ describe("Moves - U-turn", () => {
     const playerPkm = game.scene.getPlayerPokemon()!;
     expect(playerPkm.getStatusEffect(true)).toEqual(StatusEffect.POISON);
     expect(playerPkm.species.speciesId).toEqual(SpeciesId.RAICHU);
-    expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(AbilityId.POISON_POINT); // proxy for asserting ability activated
+    expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.POISON_POINT); // proxy for asserting ability activated
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
   }, 20000);
 

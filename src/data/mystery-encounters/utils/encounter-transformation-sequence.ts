@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";

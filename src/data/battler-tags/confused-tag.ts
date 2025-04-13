@@ -69,7 +69,7 @@ export class ConfusedTag extends BattlerTag {
       if (damage > 0) {
         globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapseHurtItself"));
         pokemon.damageAndUpdate(damage);
-        pokemon.battleData.hitCount++;
+        pokemon.waveData.hitCount++;
         (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
       }
     }
