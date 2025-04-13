@@ -105,3 +105,53 @@ export const saltedCreamAlcremieBiomes = [
 export const rubySwirlAlcremieBiomes = [BiomeId.WASTELAND, BiomeId.LABORATORY];
 export const caramelSwirlAlcremieBiomes = [BiomeId.TEMPLE, BiomeId.ISLAND];
 export const rainbowSwirlAlcremieBiomes = [BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END];
+
+/**
+ * Used for dancing lessons ME
+ */
+
+// Fire form
+export const BAILE_STYLE_BIOMES = [
+  BiomeId.VOLCANO,
+  BiomeId.STEAM_VENT,
+  BiomeId.BEACH,
+  BiomeId.ISLAND,
+  BiomeId.WASTELAND,
+  BiomeId.MOUNTAIN,
+  BiomeId.BADLANDS,
+  BiomeId.DESERT,
+];
+
+// Electric form
+export const POM_POM_STYLE_BIOMES = [
+  BiomeId.CONSTRUCTION_SITE,
+  BiomeId.POWER_PLANT,
+  BiomeId.CHARGESTONE_CAVE,
+  BiomeId.FACTORY,
+  BiomeId.LABORATORY,
+  BiomeId.SLUM,
+  BiomeId.METROPOLIS,
+  BiomeId.DOJO,
+];
+
+// Psychic form
+export const PAU_STYLE_BIOMES = [
+  BiomeId.JUNGLE,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.MEADOW,
+  BiomeId.PLAINS,
+  BiomeId.GRASS,
+  BiomeId.TALL_GRASS,
+  BiomeId.FOREST,
+];
+
+// Ghost form
+export const SENSU_STYLE_BIOMES = [
+  BiomeId.RUINS,
+  BiomeId.SWAMP,
+  BiomeId.CAVE,
+  BiomeId.ABYSS,
+  BiomeId.GRAVEYARD,
+  BiomeId.LAKE,
+  BiomeId.TEMPLE,
+];

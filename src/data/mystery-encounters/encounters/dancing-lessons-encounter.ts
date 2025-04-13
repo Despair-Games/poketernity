@@ -32,7 +32,6 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BiomeId } from "#enums/biome-id";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -42,57 +41,10 @@ import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
+import { BAILE_STYLE_BIOMES, POM_POM_STYLE_BIOMES, PAU_STYLE_BIOMES, SENSU_STYLE_BIOMES } from "#app/data/biome-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/dancingLessons";
-
-// TODO: Move these consts somewhere like biome-utils
-
-// Fire form
-const BAILE_STYLE_BIOMES = [
-  BiomeId.VOLCANO,
-  BiomeId.STEAM_VENT,
-  BiomeId.BEACH,
-  BiomeId.ISLAND,
-  BiomeId.WASTELAND,
-  BiomeId.MOUNTAIN,
-  BiomeId.BADLANDS,
-  BiomeId.DESERT,
-];
-
-// Electric form
-const POM_POM_STYLE_BIOMES = [
-  BiomeId.CONSTRUCTION_SITE,
-  BiomeId.POWER_PLANT,
-  BiomeId.CHARGESTONE_CAVE,
-  BiomeId.FACTORY,
-  BiomeId.LABORATORY,
-  BiomeId.SLUM,
-  BiomeId.METROPOLIS,
-  BiomeId.DOJO,
-];
-
-// Psychic form
-const PAU_STYLE_BIOMES = [
-  BiomeId.JUNGLE,
-  BiomeId.FAIRY_CAVE,
-  BiomeId.MEADOW,
-  BiomeId.PLAINS,
-  BiomeId.GRASS,
-  BiomeId.TALL_GRASS,
-  BiomeId.FOREST,
-];
-
-// Ghost form
-const SENSU_STYLE_BIOMES = [
-  BiomeId.RUINS,
-  BiomeId.SWAMP,
-  BiomeId.CAVE,
-  BiomeId.ABYSS,
-  BiomeId.GRAVEYARD,
-  BiomeId.LAKE,
-  BiomeId.TEMPLE,
-];
 
 /**
  * Dancing Lessons encounter.
