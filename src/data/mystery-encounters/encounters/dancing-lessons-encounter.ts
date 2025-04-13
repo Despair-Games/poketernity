@@ -46,9 +46,12 @@ import i18next from "i18next";
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/dancingLessons";
 
+// TODO: Move these consts somewhere like biome-utils
+
 // Fire form
 const BAILE_STYLE_BIOMES = [
   BiomeId.VOLCANO,
+  BiomeId.STEAM_VENT,
   BiomeId.BEACH,
   BiomeId.ISLAND,
   BiomeId.WASTELAND,
@@ -61,6 +64,7 @@ const BAILE_STYLE_BIOMES = [
 const POM_POM_STYLE_BIOMES = [
   BiomeId.CONSTRUCTION_SITE,
   BiomeId.POWER_PLANT,
+  BiomeId.CHARGESTONE_CAVE,
   BiomeId.FACTORY,
   BiomeId.LABORATORY,
   BiomeId.SLUM,

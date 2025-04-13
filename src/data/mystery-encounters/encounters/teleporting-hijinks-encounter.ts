@@ -40,6 +40,7 @@ import {
 const namespace = "mysteryEncounters/teleportingHijinks";
 
 const MONEY_COST_MULTIPLIER = 1.75;
+// TODO: Move this somewhere like biome-utils
 const BIOME_CANDIDATES = [
   BiomeId.SPACE,
   BiomeId.FAIRY_CAVE,
