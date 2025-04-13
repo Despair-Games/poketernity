@@ -46,23 +46,21 @@ const easeOption = {
  * @param valueSpec An object containing the JSON Schema specification for a
  * `value` property, e.g.
  * ```ts
- *  {
- *    value: {
- *      type: "number",
- *      minimum: 0
- *    }
- *  }
+ * {
+ *   type: "number",
+ *   minimum: 0
+ * }
  * ```
  * @param easeable Does this property have intermediate values that are interpolated
  * with an {@linkcode easeFunctions | ease function}? (default `true`)
  */
-function getKeyFrameSetSchema(valueSpec: { value: Schema }, easeable: boolean = true): Schema {
+function getKeyFrameSetSchema(valueSpec: Schema, easeable: boolean = true): Schema {
   const ease = easeable ? easeOption : {};
   return {
     type: "array",
     items: {
       type: "object",
-      properties: { ...valueSpec, ...keyframeOptions, ...ease },
+      properties: { value: valueSpec, ...keyframeOptions, ...ease },
       required: ["value"],
     },
     nullable: true,
@@ -86,16 +84,14 @@ const animPropSchema: Schema = {
      * the source; if `u = 1`, then the origin point is the target.
      */
     u: getKeyFrameSetSchema({
-      value: {
-        type: "number",
-        minimum: 0,
-        maximum: 1,
-      },
+      type: "number",
+      minimum: 0,
+      maximum: 1,
     }),
 
     /** The horizontal coordinate relative to the keyframe's origin point. */
     x: getKeyFrameSetSchema({
-      value: { type: "number" },
+      type: "number",
     }),
 
     /**
@@ -103,24 +99,20 @@ const animPropSchema: Schema = {
      * An increase in `y` will move the sprite downward.
      */
     y: getKeyFrameSetSchema({
-      value: { type: "number" },
+      type: "number",
     }),
 
     /** Scale factor (%) */
     scale: getKeyFrameSetSchema({
-      value: {
-        type: "number",
-        minimum: 0,
-      },
+      type: "number",
+      minimum: 0,
     }),
 
     /** The alpha value for the animated sprite, in the range [0, 255] */
     alpha: getKeyFrameSetSchema({
-      value: {
-        type: "number",
-        minimum: 0,
-        maximum: 255,
-      },
+      type: "number",
+      minimum: 0,
+      maximum: 255,
     }),
 
     /**
@@ -130,28 +122,16 @@ const animPropSchema: Schema = {
      * [-180, 180].
      */
     angle: getKeyFrameSetSchema({
-      value: {
-        type: "number",
-        minimum: -180,
-        maximum: 180,
-      },
+      type: "number",
+      minimum: -180,
+      maximum: 180,
     }),
 
     /** If `true`, flips the sprite horizontally */
-    mirror: getKeyFrameSetSchema(
-      {
-        value: { type: "boolean" },
-      },
-      false,
-    ),
+    mirror: getKeyFrameSetSchema({ type: "boolean" }, false),
 
     /** If `false`, hides the sprite */
-    visible: getKeyFrameSetSchema(
-      {
-        value: { type: "boolean" },
-      },
-      false,
-    ),
+    visible: getKeyFrameSetSchema({ type: "boolean" }, false),
 
     /**
      * The blend mode to specify how the sprite is rendered on the canvas
@@ -160,38 +140,26 @@ const animPropSchema: Schema = {
      * - Is this still required?
      * - Should it be a keyframe property?
      */
-    blendType: getKeyFrameSetSchema(
-      {
-        value: { enum: Object.values(AnimBlendType) },
-      },
-      false,
-    ),
+    blendType: getKeyFrameSetSchema({ enum: Object.values(AnimBlendType) }, false),
 
     /**
      * If this keyframe is for a graphic, specifies the tile index used
      * for the graphic during the tween. This is only relevant for VFX
      * properties.
      */
-    graphicFrame: getKeyFrameSetSchema(
-      {
-        value: { type: "integer" },
-      },
-      false,
-    ),
+    graphicFrame: getKeyFrameSetSchema({ type: "integer" }, false),
 
     /** A tone to pipeline over the animated sprite (RGBA) */
     tone: getKeyFrameSetSchema(
       {
-        value: {
-          type: "array",
-          items: {
-            type: "number",
-            minimum: 0,
-            maximum: 255,
-          },
-          minItems: 3,
-          maxItems: 4,
+        type: "array",
+        items: {
+          type: "number",
+          minimum: 0,
+          maximum: 255,
         },
+        minItems: 3,
+        maxItems: 4,
       },
       false,
     ),
@@ -203,12 +171,7 @@ const animPropSchema: Schema = {
      * - 3 is on top of both fields
      * - 5 is on top of player sprite
      */
-    priority: getKeyFrameSetSchema(
-      {
-        value: { enum: [0, 1, 3, 5] },
-      },
-      false,
-    ),
+    priority: getKeyFrameSetSchema({ enum: [0, 1, 3, 5] }, false),
   },
 };
 
