@@ -11,7 +11,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
 import { PlayerPokemon } from "#app/field/player-pokemon";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/biome-utils";
 import {
   getSalesmanSpeciesOffer,
   ThePokemonSalesmanEncounter,

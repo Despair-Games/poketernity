@@ -50,7 +50,7 @@ export interface BiomeTrainerPools {
   [key: number]: BiomeTierTrainerPools;
 }
 
-// #region Misc Data
+// #region Indoor biomes
 
 /**
  * Whether or not a biome is indoors affects tinting
@@ -68,6 +68,8 @@ export const indoorBiomes = [
   BiomeId.TEMPLE,
   BiomeId.LABORATORY,
 ];
+
+// #region Alcremie Evolutions
 
 /** The biome determines what form Alcremie will be when evolving */
 export const vanillaAlcremieBiomes = [
@@ -106,9 +108,111 @@ export const rubySwirlAlcremieBiomes = [BiomeId.WASTELAND, BiomeId.LABORATORY];
 export const caramelSwirlAlcremieBiomes = [BiomeId.TEMPLE, BiomeId.ISLAND];
 export const rainbowSwirlAlcremieBiomes = [BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END];
 
+// #region ME biome mappings
+export const EXTREME_ENCOUNTER_BIOMES = [
+  BiomeId.SEA,
+  BiomeId.SEABED,
+  BiomeId.BADLANDS,
+  BiomeId.DESERT,
+  BiomeId.ICE_CAVE,
+  BiomeId.VOLCANO,
+  BiomeId.WASTELAND,
+  BiomeId.ABYSS,
+  BiomeId.SPACE,
+  BiomeId.END,
+];
+
+export const NON_EXTREME_ENCOUNTER_BIOMES = [
+  BiomeId.TOWN,
+  BiomeId.PLAINS,
+  BiomeId.GRASS,
+  BiomeId.TALL_GRASS,
+  BiomeId.METROPOLIS,
+  BiomeId.FOREST,
+  BiomeId.SWAMP,
+  BiomeId.BEACH,
+  BiomeId.LAKE,
+  BiomeId.MOUNTAIN,
+  BiomeId.CAVE,
+  BiomeId.MEADOW,
+  BiomeId.POWER_PLANT,
+  BiomeId.GRAVEYARD,
+  BiomeId.DOJO,
+  BiomeId.FACTORY,
+  BiomeId.RUINS,
+  BiomeId.CONSTRUCTION_SITE,
+  BiomeId.JUNGLE,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.TEMPLE,
+  BiomeId.SLUM,
+  BiomeId.SNOWY_FOREST,
+  BiomeId.ISLAND,
+  BiomeId.LABORATORY,
+];
 /**
- * Used for dancing lessons ME
+ * Places where you could very reasonably expect to encounter a single human
+ *
+ * Diff from NON_EXTREME_ENCOUNTER_BIOMES:
+ * + BADLANDS
+ * + DESERT
+ * + ICE_CAVE
  */
+
+export const HUMAN_TRANSITABLE_BIOMES = [
+  BiomeId.TOWN,
+  BiomeId.PLAINS,
+  BiomeId.GRASS,
+  BiomeId.TALL_GRASS,
+  BiomeId.METROPOLIS,
+  BiomeId.FOREST,
+  BiomeId.SWAMP,
+  BiomeId.BEACH,
+  BiomeId.LAKE,
+  BiomeId.MOUNTAIN,
+  BiomeId.BADLANDS,
+  BiomeId.CAVE,
+  BiomeId.CHARGESTONE_CAVE,
+  BiomeId.STEAM_VENT,
+  BiomeId.DESERT,
+  BiomeId.ICE_CAVE,
+  BiomeId.MEADOW,
+  BiomeId.POWER_PLANT,
+  BiomeId.GRAVEYARD,
+  BiomeId.DOJO,
+  BiomeId.FACTORY,
+  BiomeId.RUINS,
+  BiomeId.CONSTRUCTION_SITE,
+  BiomeId.JUNGLE,
+  BiomeId.FAIRY_CAVE,
+  BiomeId.TEMPLE,
+  BiomeId.SLUM,
+  BiomeId.SNOWY_FOREST,
+  BiomeId.ISLAND,
+  BiomeId.LABORATORY,
+];
+/**
+ * Places where you could expect a town or city, some form of large civilization
+ */
+
+export const CIVILIZATION_ENCOUNTER_BIOMES = [
+  BiomeId.TOWN,
+  BiomeId.PLAINS,
+  BiomeId.GRASS,
+  BiomeId.TALL_GRASS,
+  BiomeId.METROPOLIS,
+  BiomeId.BEACH,
+  BiomeId.LAKE,
+  BiomeId.MEADOW,
+  BiomeId.POWER_PLANT,
+  BiomeId.GRAVEYARD,
+  BiomeId.DOJO,
+  BiomeId.FACTORY,
+  BiomeId.CONSTRUCTION_SITE,
+  BiomeId.SLUM,
+  BiomeId.ISLAND,
+];
+
+// #region dancing-lesson ME
 
 // Fire form
 export const BAILE_STYLE_BIOMES = [
@@ -155,6 +259,8 @@ export const SENSU_STYLE_BIOMES = [
   BiomeId.LAKE,
   BiomeId.TEMPLE,
 ];
+
+// #region teleporting hijinks ME
 
 export const TELEPORTING_HIJINKS_BIOME_CANDIDATES = [
   BiomeId.SPACE,

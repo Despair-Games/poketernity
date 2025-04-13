@@ -10,7 +10,7 @@ import type BattleScene from "#app/battle-scene";
 import { UiMode } from "#enums/ui-mode";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { DepartmentStoreSaleEncounter } from "#app/data/mystery-encounters/encounters/department-store-sale-encounter";
-import { CIVILIZATION_ENCOUNTER_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { CIVILIZATION_ENCOUNTER_BIOMES } from "#app/data/biome-utils";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
