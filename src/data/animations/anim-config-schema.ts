@@ -15,31 +15,6 @@ import { AnimBlendType } from "#enums/anim-blend-type";
 import { MoveId } from "#enums/move-id";
 import type { Schema } from "ajv";
 
-const keyframeOptions = {
-  /** The duration (in frames) of the tween played for this keyframe */
-  duration: {
-    type: "integer",
-    minimum: 0,
-  },
-
-  /**
-   * The time (in frames) between when the previous keyframe's tween
-   * ends and this keyframe's tween begins
-   */
-  delay: {
-    type: "integer",
-    minimum: 0,
-  },
-};
-
-const easeOption = {
-  /**
-   * The easing function used to interpolate intermediate values during the tween.
-   * @see {@linkcode easeFunctions}
-   */
-  ease: { enum: easeFunctions },
-};
-
 /**
  * Constructs a {@linkcode Schema} for an array of keyframes
  * with the provided specification for `value`
@@ -55,7 +30,32 @@ const easeOption = {
  * with an {@linkcode easeFunctions | ease function}? (default `true`)
  */
 function getKeyFrameSetSchema(valueSpec: Schema, easeable: boolean = true): Schema {
+  const keyframeOptions = {
+    /** The duration (in frames) of the tween played for this keyframe */
+    duration: {
+      type: "integer",
+      minimum: 0,
+    },
+
+    /**
+     * The time (in frames) between when the previous keyframe's tween
+     * ends and this keyframe's tween begins
+     */
+    delay: {
+      type: "integer",
+      minimum: 0,
+    },
+  };
+
+  const easeOption = {
+    /**
+     * The easing function used to interpolate intermediate values during the tween.
+     * @see {@linkcode easeFunctions}
+     */
+    ease: { enum: easeFunctions },
+  };
   const ease = easeable ? easeOption : {};
+
   return {
     type: "array",
     items: {
@@ -102,8 +102,14 @@ const animPropSchema: Schema = {
       type: "number",
     }),
 
-    /** Scale factor (%) */
-    scale: getKeyFrameSetSchema({
+    /** Horizontal scale factor (%) */
+    scaleX: getKeyFrameSetSchema({
+      type: "number",
+      minimum: 0,
+    }),
+
+    /** Vertical scale factor (%) */
+    scaleY: getKeyFrameSetSchema({
       type: "number",
       minimum: 0,
     }),
@@ -238,11 +244,17 @@ const animTimedEventSchema: Schema = {
       /** @todo Should this default be kept? */
       default: 0,
     },
+
+    /** Scale factor (%) for the background image */
+    scale: {
+      type: "number",
+      default: 100,
+    },
   },
   required: ["time", "resourceName"],
-  if: { properties: { eventType: { enum: "AnimTimedSoundEvent" } } },
+  if: { properties: { eventType: { enum: ["AnimTimedSoundEvent"] } } },
   then: { required: ["volume", "pitch"] },
-  else: { required: ["bgX", "bgY", "duration"] },
+  else: { required: ["bgX", "bgY", "duration", "scale"] },
 };
 
 /**
