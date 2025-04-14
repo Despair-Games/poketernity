@@ -35,6 +35,7 @@ import type { Localizable } from "#app/interfaces/locales";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { TypeBoostTagTypes } from "#app/utils/battler-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -850,7 +851,9 @@ export abstract class Move implements Localizable {
 
     power.value *= typeChangeMovePowerMultiplier.value;
 
-    const typeBoost = source.findTag<TypeBoostTag>((t) => t.isTypeBoostTag() && t.boostedType === this.type);
+    const typeBoost = source.findTag<TypeBoostTag>(
+      (t) => t.isType<TypeBoostTag>(...TypeBoostTagTypes) && t.boostedType === this.type,
+    );
     if (typeBoost) {
       power.value *= typeBoost.boostValue;
     }

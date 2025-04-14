@@ -1,11 +1,9 @@
-import type { MysteryEncounterPostSummonTag } from "./mystery-encounter-post-summon-tag";
-import type { TypeBoostTag } from "./type-boost-tag";
 import { allMoves } from "#app/data/data-lists";
-import type { Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { MoveId } from "#enums/move-id";
+import { type BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { type BattlerTagType } from "#enums/battler-tag-type";
+import { type MoveId } from "#enums/move-id";
 
 /**
  * Represents an ongoing in-battle effect associated with a {@linkcode Pokemon}.
@@ -163,13 +161,12 @@ export class BattlerTag {
     return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
   }
 
-  /** @returns `true` if this tag is derived from an initial effect in a Mystery Encounter battle */
-  isMysteryEncounterPostSummonTag(): this is MysteryEncounterPostSummonTag {
-    return false;
-  }
-
-  /** @returns `true` if this tag is a {@linkcode TypeBoostTag} */
-  isTypeBoostTag(): this is TypeBoostTag {
-    return false;
+  /**
+   * Check if this tag is of the given type (and tell ts-compiler it is)
+   * @param types The {@linkcode BattlerTagType BattlerTagTypes} to check
+   * @returns `true` if this tag is of the given type
+   */
+  public isType<T extends BattlerTag>(...types: BattlerTagType[]): this is T {
+    return types.includes(this.tagType);
   }
 }
