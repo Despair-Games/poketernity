@@ -1,9 +1,14 @@
-import { defineConfig, loadEnv, Rollup, UserConfig } from "vite";
+import InlineEnum from "unplugin-inline-enum/vite";
+import { defineConfig, loadEnv, Rollup, type UserConfig } from "vite";
 import ViteTsconfigPaths from "vite-tsconfig-paths";
 import { minifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-public-json-files";
 
 export const defaultConfig: UserConfig = {
-  plugins: [ViteTsconfigPaths(), ViteMinifyPublicJsonFiles()],
+  plugins: [
+    ViteTsconfigPaths(),
+    ViteMinifyPublicJsonFiles(),
+    InlineEnum({ scanPattern: ["**/*.{cts,mts,ts,tsx}", "!**/*.d.ts"] }),
+  ],
   clearScreen: false,
   appType: "mpa",
   build: {
@@ -33,7 +38,7 @@ export default defineConfig(({ mode }) => {
       keepNames: true,
     },
     server: {
-      port: !isNaN(envPort) ? envPort : 8000,
+      port: !Number.isNaN(envPort) ? envPort : 8000,
     },
   };
 });
