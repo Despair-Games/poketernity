@@ -12,7 +12,7 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
  * - "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item."
  * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
-export class StealHeldItemChanceAttr extends MoveEffectAttr {
+export class StealHeldItemAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
