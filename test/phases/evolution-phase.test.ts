@@ -25,7 +25,7 @@ describe("Evolution Phase", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .startingWave(100) // Make sure level cap is high enough for evolution
+      .levelCap(-1)
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
