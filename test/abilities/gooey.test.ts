@@ -1,19 +1,19 @@
+import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
+import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import { MoveFlags } from "#enums/move-flags";
 
 const abilityCases = [
   { abilityName: "Gooey", ability: AbilityId.GOOEY },
   { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
 ];
 
-describe("Abilities - Gooey/Tangling Hair", () => {
+describe.each(abilityCases)("Abilities - Gooey/Tangling Hair", ({ ability }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -38,64 +38,64 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  it.each(abilityCases)(
-    "$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move",
-    async ({ ability }) => {
-      game.override.enemyAbility(ability);
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-      const pokemon = game.scene.getPlayerPokemon()!;
+  it("$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move", async () => {
+    game.override.enemyAbility(ability);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(MoveId.TACKLE);
-      await game.toEndOfTurn();
+    game.move.select(MoveId.TACKLE);
+    await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
-      expect(pokemon.getStatStage(Stat.SPD)).toBe(-1);
-    },
-  );
+    const tackleMove = allMoves.get(MoveId.TACKLE);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
+    expect(pokemon.getStatStage(Stat.SPD)).toBe(-1);
+  });
 
-  it.each(abilityCases)(
-    "$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move",
-    async ({ ability }) => {
-      game.override.ability(AbilityId.LONG_REACH).enemyAbility(ability);
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-      const pokemon = game.scene.getPlayerPokemon()!;
-      const enemy = game.scene.getEnemyPokemon()!;
+  it("$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move", async () => {
+    game.override.ability(AbilityId.LONG_REACH).enemyAbility(ability);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon()!;
+    const enemy = game.scene.getEnemyPokemon()!;
 
-      game.move.select(MoveId.TACKLE);
-      await game.toEndOfTurn();
+    game.move.select(MoveId.TACKLE);
+    await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, pokemon, enemy)).toBe(false);
-      expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
-    },
-  );
+    const tackleMove = allMoves.get(MoveId.TACKLE);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon, enemy)).toBe(false);
+    expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
+  });
 
-  it.each(abilityCases)(
-    "$abilityName should not affect the attacker's speed if the attacker does not use a contact move",
-    async ({ ability }) => {
-      game.override.enemyAbility(ability);
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-      const pokemon = game.scene.getPlayerPokemon()!;
+  it("$abilityName should not affect the attacker's speed if the attacker does not use a contact move", async () => {
+    game.override.enemyAbility(ability);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(MoveId.EMBER);
-      await game.toEndOfTurn();
+    game.move.select(MoveId.EMBER);
+    await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.EMBER).checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(false);
-      expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
-    },
-  );
+    const emberMove = allMoves.get(MoveId.EMBER);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(emberMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
+    expect(emberMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(false);
+    expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
+  });
 
-  it.each(abilityCases)(
-    "$abilityName should activate per hit of a contact-making multi-strike move",
-    async ({ ability }) => {
-      game.override.enemyAbility(ability);
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-      const pokemon = game.scene.getPlayerPokemon()!;
+  it("$abilityName should activate per hit of a contact-making multi-strike move", async () => {
+    game.override.enemyAbility(ability);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(MoveId.DOUBLE_IRON_BASH);
-      await game.toEndOfTurn();
+    game.move.select(MoveId.DOUBLE_IRON_BASH);
+    await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.DOUBLE_IRON_BASH).checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
-      expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);
-    },
-  );
+    const doubleIronBashMove = allMoves.get(MoveId.DOUBLE_IRON_BASH);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(doubleIronBashMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(doubleIronBashMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
+    expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);
+  });
 });

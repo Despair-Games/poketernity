@@ -123,6 +123,9 @@ describe("Moves - Metronome", () => {
 
     await game.rng.equalSample(NUM_ROLLS, () => {
       const moveId = randomMoveAttr.getRandomMove(user);
+      const move = allMoves.get(moveId);
+      //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+      expect(move.hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
       expect(allMoves.get(moveId).checkFlag(MoveFlags.G_MAX_MOVE, user)).toBe(false);
     });
   });

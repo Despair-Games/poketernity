@@ -46,6 +46,8 @@ describe("Abilities - Triage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(moveToUse.hasFlag(MoveFlags.TRIAGE_MOVE)).toBe(true);
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
   });
@@ -64,6 +66,8 @@ describe("Abilities - Triage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(moveToUse.hasFlag(MoveFlags.TRIAGE_MOVE)).toBe(false);
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
   });
@@ -84,7 +88,10 @@ describe("Abilities - Triage", () => {
     await game.toEndOfTurn();
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
-    expect(allMoves.get(MoveId.POLLEN_PUFF).checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
+    const pollenPuffMove = allMoves.get(MoveId.POLLEN_PUFF);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(pollenPuffMove.hasFlag(MoveFlags.TRIAGE_MOVE)).toBe(false);
+    expect(pollenPuffMove.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
     expect(playerPokemon.turnData.order).toBeGreaterThanOrEqual(2);
   });
 });

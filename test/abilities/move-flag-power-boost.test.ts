@@ -94,7 +94,8 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       game.move.select(move);
       await game.move.forceHit();
       await game.toEndOfTurn();
-
+      //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+      expect(moveUsed.hasFlag(moveFlag)).toBe(true);
       expect(moveUsed.checkFlag(moveFlag, playerPokemon)).toBe(true);
       expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);
     },

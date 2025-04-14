@@ -45,7 +45,10 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
+    const tackleMove = allMoves.get(MoveId.TACKLE);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(0.5);
   });
 
@@ -72,7 +75,10 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.FIRE_FANG).checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
+    const fireFangMove = allMoves.get(MoveId.FIRE_FANG);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(fireFangMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(fireFangMove.checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 
@@ -87,7 +93,10 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
+    const tackleMove = allMoves.get(MoveId.TACKLE);
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(false);
     expect(damageMultiplier).toBe(1);
   });
 });

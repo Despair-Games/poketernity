@@ -43,6 +43,8 @@ describe("Abilities - Mega Launcher", () => {
     game.move.select(MoveId.HEAL_PULSE);
     await game.toEndOfTurn();
 
+    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    expect(pulseMove.hasFlag(MoveFlags.PULSE_MOVE)).toBe(true);
     expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon)).toBe(true);
     expect(enemyPokemon.hp - 1).toBe(enemyHpRecovered);
   });
