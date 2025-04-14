@@ -54,6 +54,7 @@ If a biome is NOT an indoor biome, then it is affected by tinting in `field-spri
 
 ### Other code that needs updating
 * Don't forget to add connections to and from the biome in `biome-link.ts`
+* In order to enable MEs, the biome needs to be added to `mystery-encounter.mysteryEncountersByBiome` along with a list of MEs that are enabled. If the new biome falls under the categories of `EXTREME`, `NON_EXTREME`, `HUMAN_TRANSITABLE`, or `CIVILIZATION`, be sure to add the Biome to the corresponding lists in `biome-utils.ts` to enable MEs with those specific categories
 * For now, don't forget to update `biome-utils.indoorBiomes` and `arena.biomeWithProps` to account for tinting and prop display
 * For Pokemon with specific forms in certain biomes, `arena.getSpeciesFormIndex` can set specific forms for specific biomes
 * Alcremie requires a specific biome to determine its form and those biomes are defined in `biome-utils.ts`

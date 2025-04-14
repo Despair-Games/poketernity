@@ -109,6 +109,9 @@ export const caramelSwirlAlcremieBiomes = [BiomeId.TEMPLE, BiomeId.ISLAND];
 export const rainbowSwirlAlcremieBiomes = [BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END];
 
 // #region ME biome mappings
+/**
+ * Biomes in here get access to {@linkcode extremeBiomeEncounters} (nothing right now)
+ */
 export const EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.SEA,
   BiomeId.SEABED,
@@ -122,6 +125,11 @@ export const EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.END,
 ];
 
+/**
+ * Biomes in here get access to {@linkcode nonExtremeBiomeEncounters}
+ * - Field Trip
+ * - Dancing Lessons
+ */
 export const NON_EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.TOWN,
   BiomeId.PLAINS,
@@ -152,15 +160,14 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
 ];
 
 /**
- * Places where you could very reasonably expect to encounter a single human
- *
- * Diff from NON_EXTREME_ENCOUNTER_BIOMES:
- * + BADLANDS
- * + DESERT
- * + ICE_CAVE
- * + STEAM_VENT
+ * Biomes in here get access to {@linkcode humanTransitableBiomeEncounters}
+ * - Mysterious Challengers
+ * - Shady vitamin seller
+ * - Pokemon salesman
+ * - Offer you can't refuse
+ * - Winstrate challenge
+ * - Expert Breeder
  */
-
 export const HUMAN_TRANSITABLE_BIOMES = [
   BiomeId.TOWN,
   BiomeId.PLAINS,
@@ -194,6 +201,13 @@ export const HUMAN_TRANSITABLE_BIOMES = [
   BiomeId.LABORATORY,
 ];
 
+/**
+ * Biomes in here get access to {@linkcode civilizationBiomeEncounters}
+ * - Department store sale
+ * - Part timer
+ * - Fun and games
+ * - Global Trade System
+ */
 export const CIVILIZATION_ENCOUNTER_BIOMES = [
   BiomeId.TOWN,
   BiomeId.PLAINS,
@@ -220,7 +234,7 @@ export const CIVILIZATION_ENCOUNTER_BIOMES = [
  * @param biomeId The BiomeId
  * @returns a number representing the Oricorio's form index
  */
-export function getOricorioFormIndexForBiome(biomeId: BiomeId) {
+export function getOricorioFormIndexForBiome(biomeId: BiomeId): number {
   switch (biomeId) {
     case BiomeId.VOLCANO:
     case BiomeId.STEAM_VENT:
