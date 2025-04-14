@@ -27,7 +27,7 @@ export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
      * MoveFlags are not reset every turn so if this flag is set it needs to be reset if the move is a special attack
      * Need the if check for unit tests
      */
-    if (move.hasFlag(MoveFlags.MAKES_CONTACT)) {
+    if (move.checkFlag(MoveFlags.MAKES_CONTACT, user, target)) {
       move.makesContact(false);
     }
     return false;

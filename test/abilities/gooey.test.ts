@@ -8,6 +8,11 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { allMoves } from "#app/data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 
+const abilityCases = [
+  { abilityName: "Gooey", ability: AbilityId.GOOEY },
+  { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
+];
+
 describe("Abilities - Gooey/Tangling Hair", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -33,10 +38,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  it.each([
-    { abilityName: "Gooey", ability: AbilityId.GOOEY },
-    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
-  ])(
+  it.each(abilityCases)(
     "$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move",
     async ({ ability }) => {
       game.override.enemyAbility(ability);
@@ -46,33 +48,28 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       game.move.select(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+      expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(-1);
     },
   );
 
-  it.each([
-    { abilityName: "Gooey", ability: AbilityId.GOOEY },
-    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
-  ])(
+  it.each(abilityCases)(
     "$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move",
     async ({ ability }) => {
       game.override.ability(AbilityId.LONG_REACH).enemyAbility(ability);
       await game.classicMode.startBattle([SpeciesId.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
+      const enemy = game.scene.getEnemyPokemon()!;
 
       game.move.select(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+      expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, pokemon, enemy)).toBe(false);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
     },
   );
 
-  it.each([
-    { abilityName: "Gooey", ability: AbilityId.GOOEY },
-    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
-  ])(
+  it.each(abilityCases)(
     "$abilityName should not affect the attacker's speed if the attacker does not use a contact move",
     async ({ ability }) => {
       game.override.enemyAbility(ability);
@@ -82,23 +79,23 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       game.move.select(MoveId.EMBER);
       await game.toEndOfTurn();
 
-      expect(allMoves.get(MoveId.EMBER).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
+      expect(allMoves.get(MoveId.EMBER).checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(false);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
     },
   );
 
-  it.each([
-    { abilityName: "Gooey", ability: AbilityId.GOOEY },
-    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
-  ])("$abilityName should activate per hit of a contact-making multi-strike move", async ({ ability }) => {
-    game.override.enemyAbility(ability);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const pokemon = game.scene.getPlayerPokemon()!;
+  it.each(abilityCases)(
+    "$abilityName should activate per hit of a contact-making multi-strike move",
+    async ({ ability }) => {
+      game.override.enemyAbility(ability);
+      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+      const pokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(MoveId.DOUBLE_IRON_BASH);
-    await game.toEndOfTurn();
+      game.move.select(MoveId.DOUBLE_IRON_BASH);
+      await game.toEndOfTurn();
 
-    expect(allMoves.get(MoveId.DOUBLE_IRON_BASH).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
-    expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);
-  });
+      expect(allMoves.get(MoveId.DOUBLE_IRON_BASH).checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
+      expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);
+    },
+  );
 });

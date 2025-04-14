@@ -123,7 +123,7 @@ describe("Moves - Metronome", () => {
 
     await game.rng.equalSample(NUM_ROLLS, () => {
       const moveId = randomMoveAttr.getRandomMove(user);
-      expect(allMoves.get(moveId).hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
+      expect(allMoves.get(moveId).checkFlag(MoveFlags.G_MAX_MOVE, user)).toBe(false);
     });
   });
 });

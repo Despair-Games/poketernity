@@ -205,20 +205,8 @@ export abstract class Move implements Localizable {
    * Getter function that returns if this Move has a MoveFlag
    * @param flag - {@linkcode MoveFlags} to check
    * @returns `true` if the checked flag is on the move
-   * @deprecated **Use {@linkcode checkFlag} instead**. *Will be removed in the future*
    */
-  hasFlag(flag: MoveFlags): boolean {
-    // internally it is taking the bitwise AND (MoveFlags are represented as bit-shifts) and returning False if result is 0 and true otherwise
-    return (this.flags & flag) > 0;
-  }
-
-  /**
-   * Getter function that returns if this Move has a MoveFlag
-   * @param flag - {@linkcode MoveFlags} to check
-   * @returns `true` if the checked flag is on the move
-   * @todo Remove rename to `_hasFlag` but keep `private` scope as soon as {@linkcode hasFlag} is removed.
-   */
-  private _hasFlag(flag: MoveFlags): boolean {
+  private hasFlag(flag: MoveFlags): boolean {
     // internally it is taking the bitwise AND (MoveFlags are represented as bit-shifts) and returning False if result is 0 and true otherwise
     return (this.flags & flag) > 0;
   }
@@ -303,7 +291,7 @@ export abstract class Move implements Localizable {
 
     switch (type) {
       case ElementalType.GRASS:
-        if (this._hasFlag(MoveFlags.POWDER_MOVE)) {
+        if (this.hasFlag(MoveFlags.POWDER_MOVE)) {
           return true;
         }
         break;
@@ -338,7 +326,7 @@ export abstract class Move implements Localizable {
     // TODO: Allow this to be simulated
     applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, user, false, bypassed);
 
-    return !bypassed.value && !this._hasFlag(MoveFlags.SOUND_MOVE) && !this._hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
+    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
 
   /**
@@ -390,7 +378,7 @@ export abstract class Move implements Localizable {
     // bitwise OR and bitwise XOR respectively
     if (on) {
       this.flags |= flag;
-    } else if (this._hasFlag(flag)) {
+    } else if (this.hasFlag(flag)) {
       this.flags ^= flag;
     }
   }
@@ -665,7 +653,7 @@ export abstract class Move implements Localizable {
         break;
     }
 
-    return this._hasFlag(flag);
+    return this.hasFlag(flag);
   }
 
   /**

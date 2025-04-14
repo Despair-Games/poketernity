@@ -26,10 +26,16 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
   /**
    * Checks if a {@linkcode MoveId | move} is restricted by Throat Chop
    * @param moveId - The {@linkcode MoveId | move} to check for sound-based restriction
+   * @param user - The {@linkcode Pokemon} using the move
    * @returns `true` if the move is sound-based, `false` otherwise
+   * @override
    */
-  override isMoveRestricted(moveId: MoveId): boolean {
-    return allMoves.get(moveId).hasFlag(MoveFlags.SOUND_MOVE);
+  override isMoveRestricted(moveId: MoveId, user?: Pokemon): boolean {
+    if (user && allMoves.get(moveId).checkFlag(MoveFlags.SOUND_MOVE, user)) {
+      return true;
+    }
+
+    return false;
   }
 
   /**

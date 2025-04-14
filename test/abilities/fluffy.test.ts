@@ -37,6 +37,7 @@ describe("Abilities - Fluffy", () => {
 
   it("should reduce the damage of contact moves by half", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
@@ -44,7 +45,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(0.5);
   });
 
@@ -62,6 +63,7 @@ describe("Abilities - Fluffy", () => {
 
   it("should not alter the damage of a contact-making fire move", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
@@ -70,13 +72,14 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.FIRE_FANG).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.FIRE_FANG).checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 
   it("should not alter the damage of contact moves if the attacker has the ability Long Reach", async () => {
     game.override.ability(AbilityId.LONG_REACH);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
@@ -84,7 +87,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.TACKLE).checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 });

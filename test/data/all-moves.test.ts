@@ -100,6 +100,7 @@ describe("All Moves", async () => {
       ).toBe(move.effect_chance);
       if (Array.isArray(move.flags)) {
         for (const f of Object.keys(flagsToCheck)) {
+          //@ts-expect-error - This is fine for this technical test as `checkFlag()` is not an option (we have no user)
           const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
           const expectedHasFlag = move.flags.includes(Number(f));
           const errOutput = `${MoveId[pktyMove.id]}'s usage of flag ${MoveFlags[flagsToCheck[f]]} should be ${expectedHasFlag} but is ${actualHasFlag}!`;
