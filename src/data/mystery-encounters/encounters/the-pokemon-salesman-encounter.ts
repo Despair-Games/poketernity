@@ -19,8 +19,8 @@ import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-spe
 import { speciesStarterCosts } from "#app/data/starters";
 import { SpeciesId } from "#enums/species-id";
 import { PokeballType } from "#enums/pokeball-type";
-import type { EnemyPokemon } from "#app/field/pokemon";
-import { PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { PlayerPokemon } from "#app/field/player-pokemon";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import PokemonData from "#app/system/pokemon-data";

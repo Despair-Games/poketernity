@@ -102,6 +102,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
       case BiomeId.ISLAND:
         return ElementalType.FAIRY;
       case BiomeId.POWER_PLANT:
+      case BiomeId.CHARGESTONE_CAVE:
         return ElementalType.ELECTRIC;
       case BiomeId.VOLCANO:
       case BiomeId.STEAM_VENT:

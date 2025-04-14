@@ -1,13 +1,12 @@
-import { GameModes } from "#enums/game-modes";
 import { api } from "#app/plugins/api/api";
 import { BiomeId } from "#enums/biome-id";
+import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
+import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Button } from "#enums/buttons";
-import { UiMode } from "#enums/ui-mode";
-import { StatusEffect } from "#enums/status-effect";
 
 describe("Reload", () => {
   let phaserGame: Phaser.Game;
@@ -150,7 +149,7 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run wave 50 Boss fight", async () => {
     game.override.battleType("single").startingWave(50);
-    await game.runToFinalBossEncounter([SpeciesId.BULBASAUR], GameModes.DAILY);
+    await game.dailyMode.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
 

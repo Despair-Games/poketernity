@@ -42,7 +42,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
    * @returns whether a new berry was created
    */
   createEatenBerry(pokemon: Pokemon, simulated: boolean): boolean {
-    const berriesEaten = pokemon.battleData.berriesEaten;
+    const berriesEaten = pokemon.waveData.berriesEaten;
 
     if (!berriesEaten.length) {
       return false;

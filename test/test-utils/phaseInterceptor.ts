@@ -363,7 +363,6 @@ export class PhaseInterceptor {
 
   /**
    * Method to end a phase and log it.
-   * @param phase - The phase to start.
    */
   superEndPhase() {
     const instance = this.scene.phaseManager.getCurrentPhase();
