@@ -680,7 +680,7 @@ export function initAbilities() {
     new Ability(AbilityId.BAD_DREAMS, 4)
       .attr(PostTurnHurtIfSleepingAbAttr),
     new Ability(AbilityId.PICKPOCKET, 5)
-      .attr(PostDefendStealHeldItemAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT))
+      .attr(PostDefendStealHeldItemAbAttr, (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target))
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(AbilityId.SHEER_FORCE, 5)
       .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 1.3)
@@ -898,7 +898,7 @@ export function initAbilities() {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
       .attr(
         RecoveryBoostAbAttr,
-        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
+        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon),
         1.5,
       ),
     new Ability(AbilityId.GRASS_PELT, 6)
@@ -1041,9 +1041,9 @@ export function initAbilities() {
     new Ability(AbilityId.LONG_REACH, 7)
       .attr(IgnoreContactAbAttr),
     new Ability(AbilityId.LIQUID_VOICE, 7)
-      .attr(MoveTypeChangeAbAttr, ElementalType.WATER, 1, (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_MOVE)),
+      .attr(MoveTypeChangeAbAttr, ElementalType.WATER, 1, (user, target, move) => !!user && !!move?.checkFlag(MoveFlags.SOUND_MOVE, user, target)),
     new Ability(AbilityId.TRIAGE, 7)
-      .attr(ChangeMovePriorityAbAttr, (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon, null), 3),
+      .attr(ChangeMovePriorityAbAttr, (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon), 3),
     new Ability(AbilityId.GALVANIZE, 7)
       .attr(
         MoveTypeChangeAbAttr,
@@ -1289,7 +1289,7 @@ export function initAbilities() {
       ),
     new Ability(AbilityId.PUNK_ROCK, 8)
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_MOVE, 1.3)
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_MOVE), 0.5)
+      .attr(ReceivedMoveDamageMultiplierAbAttr, (target, user, move) => move.checkFlag(MoveFlags.SOUND_MOVE, user, target), 0.5)
       .ignorable(),
     new Ability(AbilityId.SAND_SPIT, 8)
       .bypassFaint()
@@ -1459,7 +1459,7 @@ export function initAbilities() {
       .attr(
         MoveImmunityStatStageChangeAbAttr,
         (pokemon, attacker, move) =>
-          pokemon !== attacker && move.hasFlag(MoveFlags.WIND_MOVE) && move.category !== MoveCategory.STATUS,
+          pokemon !== attacker && move.checkFlag(MoveFlags.WIND_MOVE, attacker, pokemon) && move.category !== MoveCategory.STATUS,
         Stat.ATK,
         1,
       )
@@ -1475,7 +1475,7 @@ export function initAbilities() {
     new Ability(AbilityId.WIND_POWER, 9)
       .attr(
         PostDefendApplyBattlerTagAbAttr,
-        (_target, _user, move) => move.hasFlag(MoveFlags.WIND_MOVE),
+        (target, user, move) => move.checkFlag(MoveFlags.WIND_MOVE, user, target),
         BattlerTagType.CHARGED,
       ),
     new Ability(AbilityId.ZERO_TO_HERO, 9)

@@ -205,20 +205,8 @@ export abstract class Move implements Localizable {
    * Getter function that returns if this Move has a MoveFlag
    * @param flag - {@linkcode MoveFlags} to check
    * @returns `true` if the checked flag is on the move
-   * @deprecated **Use {@linkcode checkFlag} instead**. *Will be removed in the future*
    */
-  hasFlag(flag: MoveFlags): boolean {
-    // internally it is taking the bitwise AND (MoveFlags are represented as bit-shifts) and returning False if result is 0 and true otherwise
-    return (this.flags & flag) > 0;
-  }
-
-  /**
-   * Getter function that returns if this Move has a MoveFlag
-   * @param flag - {@linkcode MoveFlags} to check
-   * @returns `true` if the checked flag is on the move
-   * @todo Remove rename to `_hasFlag` but keep `private` scope as soon as {@linkcode hasFlag} is removed.
-   */
-  private _hasFlag(flag: MoveFlags): boolean {
+  private hasFlag(flag: MoveFlags): boolean {
     // internally it is taking the bitwise AND (MoveFlags are represented as bit-shifts) and returning False if result is 0 and true otherwise
     return (this.flags & flag) > 0;
   }
@@ -303,7 +291,7 @@ export abstract class Move implements Localizable {
 
     switch (type) {
       case ElementalType.GRASS:
-        if (this._hasFlag(MoveFlags.POWDER_MOVE)) {
+        if (this.hasFlag(MoveFlags.POWDER_MOVE)) {
           return true;
         }
         break;
@@ -338,7 +326,7 @@ export abstract class Move implements Localizable {
     // TODO: Allow this to be simulated
     applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, user, false, bypassed);
 
-    return !bypassed.value && !this._hasFlag(MoveFlags.SOUND_MOVE) && !this._hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
+    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
 
   /**
@@ -390,7 +378,7 @@ export abstract class Move implements Localizable {
     // bitwise OR and bitwise XOR respectively
     if (on) {
       this.flags |= flag;
-    } else if (this._hasFlag(flag)) {
+    } else if (this.hasFlag(flag)) {
       this.flags ^= flag;
     }
   }
@@ -627,12 +615,12 @@ export abstract class Move implements Localizable {
 
   /**
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
-   * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
-   * @param user {@linkcode Pokemon} the Pokemon using the move
-   * @param target {@linkcode Pokemon} the Pokemon receiving the move
+   * @param flag - The {@linkcode MoveFlags} to check
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - (Optional) The {@linkcode Pokemon} targeted by the move
    * @returns boolean
    */
-  public checkFlag(flag: MoveFlags, user: Pokemon, target: Pokemon | null): boolean {
+  public checkFlag(flag: MoveFlags, user: Pokemon, target?: Pokemon): boolean {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
@@ -658,14 +646,14 @@ export abstract class Move implements Localizable {
       case MoveFlags.IGNORE_PROTECT:
         if (
           user.hasAbilityWithAttr(AbAttrFlag.IGNORE_PROTECT_ON_CONTACT)
-          && this.checkFlag(MoveFlags.MAKES_CONTACT, user, null)
+          && this.checkFlag(MoveFlags.MAKES_CONTACT, user)
         ) {
           return true;
         }
         break;
     }
 
-    return this._hasFlag(flag);
+    return this.hasFlag(flag);
   }
 
   /**

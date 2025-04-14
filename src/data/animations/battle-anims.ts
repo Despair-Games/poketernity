@@ -35,7 +35,7 @@ const targetFocusY = 84 - 32;
 
 export abstract class BattleAnim {
   /** The {@linkcode Pokemon} from which the effect of this animation originated */
-  public user?: Pokemon;
+  public user: Pokemon;
   /** The {@linkcode Pokemon} targeted by the effect of this animation */
   public target?: Pokemon;
   /** The background sprite to show during the animation */
@@ -62,7 +62,7 @@ export abstract class BattleAnim {
    */
   private dstLine: number[];
 
-  constructor(user?: Pokemon, target?: Pokemon, playRegardlessOfIssues: boolean = false) {
+  constructor(user: Pokemon, target?: Pokemon, playRegardlessOfIssues: boolean = false) {
     this.user = user;
     this.target = target;
     this.playRegardlessOfIssues = playRegardlessOfIssues;

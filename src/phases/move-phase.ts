@@ -178,7 +178,7 @@ export class MovePhase extends BattlePhase {
 
     // Check move to see if arena.ignoreAbilities should be true.
     if (!this.followUp) {
-      if (this.move.getMove().checkFlag(MoveFlags.IGNORE_ABILITIES, this.pokemon, null)) {
+      if (this.move.getMove().checkFlag(MoveFlags.IGNORE_ABILITIES, this.pokemon)) {
         globalScene.arena.setIgnoreAbilities(true, this.pokemon.getBattlerIndex());
       }
     }
@@ -359,7 +359,7 @@ export class MovePhase extends BattlePhase {
   protected trySnatchMove(): void {
     const move = this.move.getMove();
 
-    if (this.snatched || !move.checkFlag(MoveFlags.SNATCHABLE, this.pokemon, null)) {
+    if (this.snatched || !move.checkFlag(MoveFlags.SNATCHABLE, this.pokemon)) {
       return;
     }
 
@@ -417,7 +417,7 @@ export class MovePhase extends BattlePhase {
   protected tryReflectMove(): void {
     const move = this.move.getMove();
 
-    if (this.reflected || !move.checkFlag(MoveFlags.BOUNCEABLE, this.pokemon, null)) {
+    if (this.reflected || !move.checkFlag(MoveFlags.BOUNCEABLE, this.pokemon)) {
       return;
     }
 
@@ -601,7 +601,7 @@ export class MovePhase extends BattlePhase {
 
     // Handle Dancer, which triggers immediately after a move is used (rather than waiting on `this.end()`).
     // Note that the `!this.followUp` check here prevents an infinite Dancer loop.
-    if (this.move.getMove().hasFlag(MoveFlags.DANCE_MOVE) && !this.followUp) {
+    if (this.move.getMove().checkFlag(MoveFlags.DANCE_MOVE, this.pokemon, targets[0]) && !this.followUp) {
       globalScene.getField(true).forEach((pokemon) => {
         applyAbAttrs<PostMoveUsedAbAttr>(
           AbAttrFlag.POST_MOVE_USED,
@@ -761,11 +761,16 @@ export class MovePhase extends BattlePhase {
     if (this.targets.length === 1 && this.targets[0] === BattlerIndex.ATTACKER) {
       if (this.pokemon.turnData.attacksReceived.length) {
         this.targets[0] = this.pokemon.turnData.attacksReceived[0].sourceBattlerIndex;
+        const [target] = this.targets;
+        const targetPkm = globalScene.getFieldPokemonByBattlerIndex(target);
 
         // account for metal burst and comeuppance hitting remaining targets in double battles
         // counterattack will redirect to remaining ally if original attacker faints
-        if (globalScene.currentBattle.double && this.move.getMove().hasFlag(MoveFlags.REDIRECT_COUNTER)) {
-          if (!globalScene.getFieldPokemonByBattlerIndex(this.targets[0])?.hp) {
+        if (
+          globalScene.currentBattle.double
+          && this.move.getMove().checkFlag(MoveFlags.REDIRECT_COUNTER, this.pokemon, targetPkm)
+        ) {
+          if (!targetPkm?.hp) {
             const opposingField = this.pokemon.getOpposingField();
             this.targets[0] = opposingField.find((p) => p.hp > 0)?.getBattlerIndex() ?? BattlerIndex.ATTACKER;
           }

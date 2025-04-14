@@ -23,7 +23,7 @@ export class MirrorMoveAttr extends CallMoveAttr {
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     const lastMove = target.getLastXMoves()[0].move;
-    if (lastMove.hasFlag(MoveFlags.G_MAX_MOVE)) {
+    if (lastMove.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
       return false;
     }
     return super.apply(user, target, lastMove, overridden);
