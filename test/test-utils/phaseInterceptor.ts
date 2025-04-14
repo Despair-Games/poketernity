@@ -71,7 +71,7 @@ export interface PromptHandler {
 }
 
 /**
- * List of phases with their corresponding start methods.
+ * List of phases that may be intercepted.
  *
  * CAUTION: If a phase and its subclasses (if any) both appear in this list,
  * make sure that this list contains said phase AFTER all of its subclasses.
@@ -411,6 +411,7 @@ export class PhaseInterceptor {
           currentMode === actionForNextPrompt.mode
           && currentPhase === actionForNextPrompt.phaseTarget
           && currentHandler.active
+          && (!actionForNextPrompt.awaitingActionInput || currentHandler["awaitingActionInput"])
         ) {
           const prompt = this.prompts.shift();
           if (prompt?.callback) {
@@ -452,7 +453,9 @@ export class PhaseInterceptor {
    * function stored in `this.phases`. Additionally, it clears the `promptInterval` and `interval`.
    */
   restoreOg() {
-    PHASES.forEach((phase) => (phase.prototype.start = this.phases[phase.name].start));
+    for (const phase of PHASES) {
+      phase.prototype.start = this.phases[phase.name].start;
+    }
     UI.prototype.setMode = this.originalSetMode;
     Phase.prototype.end = this.originalSuperEnd;
     clearInterval(this.promptInterval);
