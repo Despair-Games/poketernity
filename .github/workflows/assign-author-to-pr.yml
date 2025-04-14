@@ -4,8 +4,9 @@ on:
   pull_request_target:
     types: [ opened, reopened ]
 
-permissions:
-  pull-requests: write
+permissions: write-all
+  # pull-requests: write
+  # permissions: write-all
 
 jobs:
   assign-author:
