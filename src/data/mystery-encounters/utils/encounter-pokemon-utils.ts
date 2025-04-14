@@ -1,4 +1,3 @@
-import { speciesStarterCosts } from "#app/data/starters";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import {
   getEncounterText,
@@ -12,6 +11,7 @@ import {
   getPokeballTintColor,
 } from "#app/data/pokeball";
 import type PokemonSpecies from "#app/data/pokemon-species";
+import { speciesStarterCosts } from "#app/data/starters";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
@@ -21,7 +21,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { VictoryPhase } from "#app/phases/victory-phase";
+import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
@@ -671,7 +671,7 @@ export async function catchPokemon(
         if (!globalScene.getEnemyParty().some((p) => p.id === pokemon.id)) {
           globalScene.getEnemyParty().push(pokemon);
         }
-        globalScene.phaseManager.unshiftPhase(new VictoryPhase(pokemon.id, true));
+        globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(pokemon.id, true));
         globalScene.pokemonInfoContainer.hide();
         if (pokeball) {
           removePb(pokeball);

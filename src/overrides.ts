@@ -80,6 +80,8 @@ class DefaultOverrides {
   readonly ARENA_TINT_OVERRIDE: TimeOfDay | null = null;
   /** Multiplies XP gained by this value including 0. Set to null to ignore the override */
   readonly XP_MULTIPLIER_OVERRIDE: number | null = null;
+  /** Overrides the level cap to the number specified if greater than `0`. Negative numbers will disable the cap entirely. */
+  readonly LEVEL_CAP_OVERRIDE: number = 0;
   readonly NEVER_CRIT_OVERRIDE: boolean = false;
   /** default 1000 */
   readonly STARTING_MONEY_OVERRIDE: number = 0;
