@@ -14,7 +14,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MoneyRequirement, WaveModulusRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import PokemonData from "#app/system/pokemon-data";
@@ -40,6 +40,7 @@ import {
 const namespace = "mysteryEncounters/teleportingHijinks";
 
 const MONEY_COST_MULTIPLIER = 1.75;
+// TODO: Move this somewhere like biome-utils
 const BIOME_CANDIDATES = [
   BiomeId.SPACE,
   BiomeId.FAIRY_CAVE,

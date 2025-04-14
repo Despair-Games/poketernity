@@ -3,7 +3,7 @@ import {
   handleMysteryEncounterTurnStartEffects,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TurnInitEvent } from "#app/events/battle-scene";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";

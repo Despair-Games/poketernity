@@ -25,7 +25,7 @@ import i18next from "i18next";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
-interface SSCPhaseOptions {
+export interface SSCPhaseOptions {
   showMessage?: boolean;
   ignoreAbilities?: boolean;
   canBeCopied?: boolean;

@@ -7,7 +7,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";

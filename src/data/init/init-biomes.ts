@@ -2,6 +2,7 @@ import { abyssBiome } from "#app/data/biomes/abyss";
 import { badlandsBiome } from "#app/data/biomes/badlands";
 import { beachBiome } from "#app/data/biomes/beach";
 import { caveBiome } from "#app/data/biomes/cave";
+import { chargestoneCaveBiome } from "#app/data/biomes/chargestone-cave";
 import { constructionSiteBiome } from "#app/data/biomes/construction-site";
 import { desertBiome } from "#app/data/biomes/desert";
 import { dojoBiome } from "#app/data/biomes/dojo";
@@ -71,6 +72,7 @@ export function initBiomes() {
     slumBiome,
     snowyForestBiome,
     steamVentBiome,
+    chargestoneCaveBiome,
     islandBiome,
     laboratoryBiome,
     endBiome,

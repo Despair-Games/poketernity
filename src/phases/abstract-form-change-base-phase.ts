@@ -1,5 +1,5 @@
 import { getTypeRgb } from "#app/data/type";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
