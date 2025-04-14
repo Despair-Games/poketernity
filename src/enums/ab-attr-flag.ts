@@ -178,7 +178,7 @@ export enum AbAttrFlag {
   /** @see {@linkcode FieldPreventExplosionLikeAbAttr} */
   FIELD_PREVENT_EXPLOSION_LIKE,
   /** @see {@linkcode IntimidateImmunityAbAttr} */
-  INITIMIDATE_IMMUNITY,
+  INTIMIDATE_IMMUNITY,
   /** @see {@linkcode PostIntimidateStatStageChangeAbAttr} */
   POST_INTIMIDATE_STAT_STAGE_CHANGE,
   /** @see {@linkcode InfiltratorAbAttr} */

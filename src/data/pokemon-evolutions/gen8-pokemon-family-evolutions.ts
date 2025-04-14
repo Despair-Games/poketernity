@@ -93,6 +93,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.IMPIDIMP]: [new SpeciesEvolution(SpeciesId.MORGREM, 32, null, null)],
   [SpeciesId.MORGREM]: [new SpeciesEvolution(SpeciesId.GRIMMSNARL, 42, null, null)],
   /** TODO: Will need to change these when biomes are changed */
+  /** TODO: Move all these constants to biome-utils */
   // Custom: None of these require time of day
   [SpeciesId.MILCERY]: [
     new SpeciesFormEvolution(
@@ -141,6 +142,8 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
         new BiomeEvoCondition([
           BiomeId.DESERT,
           BiomeId.POWER_PLANT,
+          BiomeId.STEAM_VENT,
+          BiomeId.CHARGESTONE_CAVE,
           BiomeId.DOJO,
           BiomeId.RUINS,
           BiomeId.CONSTRUCTION_SITE,

@@ -124,6 +124,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case BiomeId.FACTORY:
       case BiomeId.LABORATORY:
       case BiomeId.POWER_PLANT:
+      case BiomeId.CHARGESTONE_CAVE:
       default:
         return new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
     }

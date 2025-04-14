@@ -98,7 +98,7 @@ describe("Moves - Spectral Thief", () => {
 
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
-    expect(enemy.battleData.abilitiesApplied.includes(AbilityId.CLEAR_BODY)).toBeFalsy();
+    expect(enemy.waveData.abilitiesApplied.includes(AbilityId.CLEAR_BODY)).toBeFalsy();
   });
 
   it.each([
@@ -142,6 +142,6 @@ describe("Moves - Spectral Thief", () => {
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemy.battleData.abilitiesApplied.includes(AbilityId.DEFIANT)).toBeFalsy();
+    expect(enemy.waveData.abilitiesApplied.includes(AbilityId.DEFIANT)).toBeFalsy();
   });
 });

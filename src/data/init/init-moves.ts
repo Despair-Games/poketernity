@@ -2171,7 +2171,7 @@ export function initMoves() {
       .condition(new FirstMoveCondition())
       .condition(failIfLastCondition),
     new AttackMove(MoveId.BELCH, ElementalType.POISON, MoveCategory.SPECIAL, 120, 90, 10, -1, 0, 6)
-      .condition((user, _target, _move) => user.battleData.berriesEaten.length > 0),
+      .condition((user, _target, _move) => user.waveData.berriesEaten.length > 0),
     new StatusMove(MoveId.ROTOTILLER, ElementalType.GROUND, -1, 10, -1, 0, 6)
       .target(MoveTarget.ALL)
       .condition((_user, _target, _move) => {
@@ -3369,7 +3369,7 @@ export function initMoves() {
       )
       .makesContact(),
     new SelfStatusMove(MoveId.SHED_TAIL, ElementalType.NORMAL, -1, 10, -1, 0, 9)
-      .attr(AddSubstituteAttr, 0.5)
+      .attr(AddSubstituteAttr, true)
       .attr(ForceSwitchOutAttr, true, SwitchType.SHED_TAIL)
       .snatchable() // Custom
       .condition(failIfLastInPartyCondition),

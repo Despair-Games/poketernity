@@ -17,7 +17,6 @@ import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/doub
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
 import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
@@ -34,13 +33,16 @@ import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-tr
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import { resetStarterColors, starterColors } from "#app/data/starter-colors";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { getTypeRgb } from "#app/data/type";
 import { type Variant, variantData } from "#app/data/variant";
 import { eventBus } from "#app/event-bus";
 import { NewArenaEvent } from "#app/events/battle-scene";
 import { Arena, ArenaBase } from "#app/field/arena";
 import DamageNumberHandler from "#app/field/damage-number-handler";
-import { EnemyPokemon, PlayerPokemon, type Pokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
 import Trainer from "#app/field/trainer";
 import { type GameMode, getGameMode } from "#app/game-mode";
@@ -80,6 +82,7 @@ import {
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
 import { type Phase } from "#app/phase";
+import { PhaseManager } from "#app/phase-manager";
 import { ExpPhase } from "#app/phases/exp-phase";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
@@ -167,7 +170,6 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import { PhaseManager } from "./phase-manager";
 
 //#region Types
 
@@ -1370,7 +1372,7 @@ export default class BattleScene extends SceneBase {
         });
 
         for (const pokemon of this.getPlayerParty()) {
-          pokemon.resetBattleData();
+          pokemon.resetWaveData();
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
         }
 

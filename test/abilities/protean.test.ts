@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
 import { Weather } from "#app/data/weather";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";

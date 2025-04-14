@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { PokemonBattleData } from "#app/field/pokemon";
+import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
 // -- end tsdoc imports --
 
 export interface AbilityFilterOptions {
@@ -10,9 +10,8 @@ export interface AbilityFilterOptions {
    */
   baseOnly?: boolean;
   /**
-   * If `true`, filters out Abilities that have not been revealed
-   * to the field yet
-   * @see {@linkcode PokemonBattleData.abilitiesRevealed}
+   * If `true`, filters out Abilities that have not been revealed to the field yet
+   * @see {@linkcode PokemonWaveData.abilitiesRevealed}
    */
   revealedOnly?: boolean;
   /** If `true`, filters out Abilities that are suppressed or ignored */

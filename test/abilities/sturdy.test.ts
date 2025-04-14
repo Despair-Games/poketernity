@@ -1,4 +1,4 @@
-import type { EnemyPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { PostActionPhase } from "#app/phases/post-action-phase";
 import { AbilityId } from "#enums/ability-id";

@@ -53,22 +53,28 @@ describe("Moves - Type Effectiveness", () => {
     game.phaseInterceptor.restoreOg();
   });
 
-  it("Normal-type attacks are neutrally effective against Normal-type Pokemon", () =>
+  it("Normal-type attacks are neutrally effective against primary Normal-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.TACKLE, SpeciesId.SNORLAX, 1));
 
-  it("Normal-type attacks are not very effective against Steel-type Pokemon", () =>
+  it("Normal-type attacks are not very effective against primary Steel-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.TACKLE, SpeciesId.REGISTEEL, 0.5));
 
   it("Normal-type attacks are doubly resisted by Steel/Rock-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.TACKLE, SpeciesId.AGGRON, 0.25));
 
-  it("Normal-type attacks have no effect on Ghost-type Pokemon", () =>
+  it("Normal-type attacks have no effect on primary Ghost-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.TACKLE, SpeciesId.DUSCLOPS, 0));
 
   it("Normal-type status moves are not affected by type matchups", () =>
     testMoveEffectiveness(game, MoveId.GROWL, SpeciesId.DUSCLOPS, 1));
 
-  it("Electric-type attacks are super-effective against Water-type Pokemon", () =>
+  it("Ghost-type attacks have no effect on primary Normal-type Pokemon", () =>
+    testMoveEffectiveness(game, MoveId.SHADOW_BALL, SpeciesId.SNORLAX, 0));
+
+  it("Ghost-type attacks have no effect on secondary Normal-type Pokemon", () =>
+    testMoveEffectiveness(game, MoveId.SHADOW_BALL, SpeciesId.URSALUNA, 0));
+
+  it("Electric-type attacks are super-effective against primary Water-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.THUNDERBOLT, SpeciesId.BLASTOISE, 2));
 
   it("Electric-type attacks are doubly super-effective against Water/Flying-type Pokemon", () =>
@@ -80,13 +86,13 @@ describe("Moves - Type Effectiveness", () => {
   it("Electric-type attacks are super-effective against Tera-Water Pokemon", () =>
     testMoveEffectiveness(game, MoveId.THUNDERBOLT, SpeciesId.EXCADRILL, 2, AbilityId.BALL_FETCH, ElementalType.WATER));
 
-  it("Powder moves have no effect on Grass-type Pokemon", () =>
+  it("Powder moves have no effect on primary Grass-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.SLEEP_POWDER, SpeciesId.AMOONGUSS, 0));
 
   it("Powder moves have no effect on Tera-Grass Pokemon", () =>
     testMoveEffectiveness(game, MoveId.SLEEP_POWDER, SpeciesId.SNORLAX, 0, AbilityId.BALL_FETCH, ElementalType.GRASS));
 
-  it("Prankster-boosted status moves have no effect on Dark-type Pokemon", () => {
+  it("Prankster-boosted status moves have no effect on primary Dark-type Pokemon", () => {
     game.override.ability(AbilityId.PRANKSTER);
     testMoveEffectiveness(game, MoveId.BABY_DOLL_EYES, SpeciesId.MIGHTYENA, 0);
   });

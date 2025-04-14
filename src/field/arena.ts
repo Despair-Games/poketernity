@@ -640,6 +640,7 @@ export class Arena {
   private readonly indoorBiomes = [
     BiomeId.SEABED,
     BiomeId.CAVE,
+    BiomeId.CHARGESTONE_CAVE,
     BiomeId.ICE_CAVE,
     BiomeId.POWER_PLANT,
     BiomeId.DOJO,

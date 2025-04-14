@@ -34,6 +34,8 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 
+// TODO: Move these into biome-utils
+
 export const EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.SEA,
   BiomeId.SEABED,
@@ -96,6 +98,8 @@ export const HUMAN_TRANSITABLE_BIOMES = [
   BiomeId.MOUNTAIN,
   BiomeId.BADLANDS,
   BiomeId.CAVE,
+  BiomeId.CHARGESTONE_CAVE,
+  BiomeId.STEAM_VENT,
   BiomeId.DESERT,
   BiomeId.ICE_CAVE,
   BiomeId.MEADOW,
