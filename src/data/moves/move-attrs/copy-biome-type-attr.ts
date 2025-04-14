@@ -63,7 +63,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
   }
 
   /**
-   * Retrieves a type from the current biome. Used for the move Camoflage
+   * Retrieves a type from the current biome. Used for the move Camouflage
    * @param biomeId {@linkcode BiomeId}
    * @returns the {@linkcode ElementalType} corresponding to the biome
    */

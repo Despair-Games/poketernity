@@ -134,6 +134,7 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.LAKE,
   BiomeId.MOUNTAIN,
   BiomeId.CAVE,
+  BiomeId.CHARGESTONE_CAVE,
   BiomeId.MEADOW,
   BiomeId.POWER_PLANT,
   BiomeId.GRAVEYARD,
@@ -149,6 +150,7 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.ISLAND,
   BiomeId.LABORATORY,
 ];
+
 /**
  * Places where you could very reasonably expect to encounter a single human
  *
@@ -156,6 +158,7 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
  * + BADLANDS
  * + DESERT
  * + ICE_CAVE
+ * + STEAM_VENT
  */
 
 export const HUMAN_TRANSITABLE_BIOMES = [
@@ -190,9 +193,6 @@ export const HUMAN_TRANSITABLE_BIOMES = [
   BiomeId.ISLAND,
   BiomeId.LABORATORY,
 ];
-/**
- * Places where you could expect a town or city, some form of large civilization
- */
 
 export const CIVILIZATION_ENCOUNTER_BIOMES = [
   BiomeId.TOWN,
@@ -214,51 +214,57 @@ export const CIVILIZATION_ENCOUNTER_BIOMES = [
 
 // #region dancing-lesson ME
 
-// Fire form
-export const BAILE_STYLE_BIOMES = [
-  BiomeId.VOLCANO,
-  BiomeId.STEAM_VENT,
-  BiomeId.BEACH,
-  BiomeId.ISLAND,
-  BiomeId.WASTELAND,
-  BiomeId.MOUNTAIN,
-  BiomeId.BADLANDS,
-  BiomeId.DESERT,
-];
-
-// Electric form
-export const POM_POM_STYLE_BIOMES = [
-  BiomeId.CONSTRUCTION_SITE,
-  BiomeId.POWER_PLANT,
-  BiomeId.CHARGESTONE_CAVE,
-  BiomeId.FACTORY,
-  BiomeId.LABORATORY,
-  BiomeId.SLUM,
-  BiomeId.METROPOLIS,
-  BiomeId.DOJO,
-];
-
-// Psychic form
-export const PAU_STYLE_BIOMES = [
-  BiomeId.JUNGLE,
-  BiomeId.FAIRY_CAVE,
-  BiomeId.MEADOW,
-  BiomeId.PLAINS,
-  BiomeId.GRASS,
-  BiomeId.TALL_GRASS,
-  BiomeId.FOREST,
-];
-
-// Ghost form
-export const SENSU_STYLE_BIOMES = [
-  BiomeId.RUINS,
-  BiomeId.SWAMP,
-  BiomeId.CAVE,
-  BiomeId.ABYSS,
-  BiomeId.GRAVEYARD,
-  BiomeId.LAKE,
-  BiomeId.TEMPLE,
-];
+/**
+ * Helper function used in dancing-lessons-encounter to get the
+ * correct form for an Oricorio based on the biome the ME is encountered in
+ * @param biomeId The BiomeId
+ * @returns a number representing the Oricorio's form index
+ */
+export function getOricorioFormIndexForBiome(biomeId: BiomeId) {
+  switch (biomeId) {
+    case BiomeId.VOLCANO:
+    case BiomeId.STEAM_VENT:
+    case BiomeId.BEACH:
+    case BiomeId.ISLAND:
+    case BiomeId.WASTELAND:
+    case BiomeId.MOUNTAIN:
+    case BiomeId.BADLANDS:
+    case BiomeId.DESERT:
+      return 0; // Baille Style (Fire)
+    case BiomeId.TOWN:
+    case BiomeId.CONSTRUCTION_SITE:
+    case BiomeId.POWER_PLANT:
+    case BiomeId.CHARGESTONE_CAVE:
+    case BiomeId.FACTORY:
+    case BiomeId.LABORATORY:
+    case BiomeId.SLUM:
+    case BiomeId.METROPOLIS:
+    case BiomeId.DOJO:
+      return 1; // Pom Pom Style (Electric)
+    case BiomeId.JUNGLE:
+    case BiomeId.FAIRY_CAVE:
+    case BiomeId.MEADOW:
+    case BiomeId.PLAINS:
+    case BiomeId.GRASS:
+    case BiomeId.TALL_GRASS:
+    case BiomeId.FOREST:
+    case BiomeId.SPACE:
+    case BiomeId.END:
+      return 2; // Pau style (Psychic)
+    case BiomeId.RUINS:
+    case BiomeId.SWAMP:
+    case BiomeId.CAVE:
+    case BiomeId.ABYSS:
+    case BiomeId.GRAVEYARD:
+    case BiomeId.LAKE:
+    case BiomeId.TEMPLE:
+    case BiomeId.SEA:
+    case BiomeId.SEABED:
+    case BiomeId.ICE_CAVE:
+    case BiomeId.SNOWY_FOREST:
+      return 3; // Sensu style (Ghost)
+  }
+}
 
 // #region teleporting hijinks ME
 

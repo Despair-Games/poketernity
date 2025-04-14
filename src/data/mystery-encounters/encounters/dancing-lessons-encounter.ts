@@ -41,7 +41,7 @@ import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import { BAILE_STYLE_BIOMES, POM_POM_STYLE_BIOMES, PAU_STYLE_BIOMES, SENSU_STYLE_BIOMES } from "#app/data/biome-utils";
+import { getOricorioFormIndexForBiome } from "#app/data/biome-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/dancingLessons";
@@ -95,19 +95,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     }
 
     // Set the form index based on the biome
-    // Defaults to Baile style if somehow nothing matches
-    const currentBiome = globalScene.arena.biomeId;
-    if (BAILE_STYLE_BIOMES.includes(currentBiome)) {
-      enemyPokemon.formIndex = 0;
-    } else if (POM_POM_STYLE_BIOMES.includes(currentBiome)) {
-      enemyPokemon.formIndex = 1;
-    } else if (PAU_STYLE_BIOMES.includes(currentBiome)) {
-      enemyPokemon.formIndex = 2;
-    } else if (SENSU_STYLE_BIOMES.includes(currentBiome)) {
-      enemyPokemon.formIndex = 3;
-    } else {
-      enemyPokemon.formIndex = 0;
-    }
+    enemyPokemon.formIndex = getOricorioFormIndexForBiome(globalScene.arena.biomeId);
 
     const oricorioData = new PokemonData(enemyPokemon);
     const oricorio = globalScene.addEnemyPokemon(species, level, TrainerSlot.NONE, false, false, oricorioData);

@@ -58,6 +58,6 @@ If a biome is NOT an indoor biome, then it is affected by tinting in `field-spri
 * For Pokemon with specific forms in certain biomes, `arena.getSpeciesFormIndex` can set specific forms for specific biomes
 * Alcremie requires a specific biome to determine its form and those biomes are defined in `biome-utils.ts`
 * There are also a few arrays of biomes used to determine specific MEs that need to be updated in `biome-utils.ts`
-* The move Camoflage uses the [CopyBiomeTypeAttr](../moves/move-attrs/copy-biome-type-attr.ts) which changes the user's type based on the current biome
+* The move Camouflage uses the [CopyBiomeTypeAttr](../moves/move-attrs/copy-biome-type-attr.ts) which changes the user's type based on the current biome
 * The move Secret Power uses the [SecretPowerAttr](../moves/move-attrs/secret-power-attr.ts) which applies a secondary effect based on the current biome
 * The move Nature Power uses the [NaturePowerAttr](../moves/move-attrs/nature-power-attr.ts) which changes into a different attack depending on the current biome
