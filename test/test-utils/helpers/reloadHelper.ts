@@ -45,7 +45,7 @@ export class ReloadHelper extends GameManagerHelper {
       }),
     );
     scene.phaseManager.unshiftPhase(titlePhase);
-    this.game.endPhase(); // End the currently ongoing battle
+    this.game.phaseInterceptor.superEndPhase(); // End the currently ongoing battle
 
     titlePhase.loadSaveSlot(-1); // Load the desired session data
     this.game.phaseInterceptor.shift(); // Loading the save slot also ended TitlePhase, clean it up
