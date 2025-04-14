@@ -46,7 +46,9 @@ export class SyrupBombTag extends BattlerTag {
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
     globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase(pokemon.getBattlerIndex(), null, [Stat.SPD], -1, { bypassReflect: true }),
+      new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], -1, {
+        bypassReflect: true,
+      }),
     );
     return --this.turnCount > 0;
   }
