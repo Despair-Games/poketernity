@@ -43,7 +43,7 @@ describe("Abilities - Mega Launcher", () => {
     game.move.select(MoveId.HEAL_PULSE);
     await game.toEndOfTurn();
 
-    expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon, null)).toBe(true);
+    expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon)).toBe(true);
     expect(enemyPokemon.hp - 1).toBe(enemyHpRecovered);
   });
 });

@@ -45,6 +45,6 @@ describe("Abilities - Soundproof", () => {
     const lastMove = playerPokemon.getLastXMoves()[0];
 
     expect(lastMove.result).toBe(MoveResult.SUCCESS);
-    expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon, null)).toBe(true);
+    expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon)).toBe(true);
   });
 });

@@ -21,7 +21,7 @@ export class ContactBurnProtectedTag extends DamageProtectedTag {
       return false;
     }
 
-    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker)) {
       attacker.trySetStatus(StatusEffect.BURN, true);
     }
     return true;

@@ -95,7 +95,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       await game.move.forceHit();
       await game.toEndOfTurn();
 
-      expect(moveUsed.checkFlag(moveFlag, playerPokemon, null)).toBe(true);
+      expect(moveUsed.checkFlag(moveFlag, playerPokemon)).toBe(true);
       expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);
     },
   );

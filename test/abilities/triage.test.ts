@@ -46,7 +46,7 @@ describe("Abilities - Triage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
-    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(true);
+    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
   });
 
@@ -64,7 +64,7 @@ describe("Abilities - Triage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
-    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
+    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
   });
 
@@ -84,7 +84,7 @@ describe("Abilities - Triage", () => {
     await game.toEndOfTurn();
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
-    expect(allMoves.get(MoveId.POLLEN_PUFF).checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
+    expect(allMoves.get(MoveId.POLLEN_PUFF).checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
     expect(playerPokemon.turnData.order).toBeGreaterThanOrEqual(2);
   });
 });

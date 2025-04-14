@@ -898,7 +898,7 @@ export function initAbilities() {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
       .attr(
         RecoveryBoostAbAttr,
-        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
+        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon),
         1.5,
       ),
     new Ability(AbilityId.GRASS_PELT, 6)
@@ -1043,7 +1043,7 @@ export function initAbilities() {
     new Ability(AbilityId.LIQUID_VOICE, 7)
       .attr(MoveTypeChangeAbAttr, ElementalType.WATER, 1, (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_MOVE)),
     new Ability(AbilityId.TRIAGE, 7)
-      .attr(ChangeMovePriorityAbAttr, (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon, null), 3),
+      .attr(ChangeMovePriorityAbAttr, (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon), 3),
     new Ability(AbilityId.GALVANIZE, 7)
       .attr(
         MoveTypeChangeAbAttr,

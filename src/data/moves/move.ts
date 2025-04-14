@@ -629,10 +629,10 @@ export abstract class Move implements Localizable {
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
    * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
    * @param user {@linkcode Pokemon} the Pokemon using the move
-   * @param target {@linkcode Pokemon} the Pokemon receiving the move
+   * @param target {@linkcode Pokemon} the Pokemon receiving the move (Or `undefined`)
    * @returns boolean
    */
-  public checkFlag(flag: MoveFlags, user: Pokemon, target: Pokemon | null): boolean {
+  public checkFlag(flag: MoveFlags, user: Pokemon, target?: Pokemon): boolean {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
@@ -658,7 +658,7 @@ export abstract class Move implements Localizable {
       case MoveFlags.IGNORE_PROTECT:
         if (
           user.hasAbilityWithAttr(AbAttrFlag.IGNORE_PROTECT_ON_CONTACT)
-          && this.checkFlag(MoveFlags.MAKES_CONTACT, user, null)
+          && this.checkFlag(MoveFlags.MAKES_CONTACT, user)
         ) {
           return true;
         }

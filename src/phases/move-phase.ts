@@ -178,7 +178,7 @@ export class MovePhase extends BattlePhase {
 
     // Check move to see if arena.ignoreAbilities should be true.
     if (!this.followUp) {
-      if (this.move.getMove().checkFlag(MoveFlags.IGNORE_ABILITIES, this.pokemon, null)) {
+      if (this.move.getMove().checkFlag(MoveFlags.IGNORE_ABILITIES, this.pokemon)) {
         globalScene.arena.setIgnoreAbilities(true, this.pokemon.getBattlerIndex());
       }
     }
@@ -359,7 +359,7 @@ export class MovePhase extends BattlePhase {
   protected trySnatchMove(): void {
     const move = this.move.getMove();
 
-    if (this.snatched || !move.checkFlag(MoveFlags.SNATCHABLE, this.pokemon, null)) {
+    if (this.snatched || !move.checkFlag(MoveFlags.SNATCHABLE, this.pokemon)) {
       return;
     }
 
@@ -417,7 +417,7 @@ export class MovePhase extends BattlePhase {
   protected tryReflectMove(): void {
     const move = this.move.getMove();
 
-    if (this.reflected || !move.checkFlag(MoveFlags.BOUNCEABLE, this.pokemon, null)) {
+    if (this.reflected || !move.checkFlag(MoveFlags.BOUNCEABLE, this.pokemon)) {
       return;
     }
 
