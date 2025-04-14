@@ -13,7 +13,7 @@ const abilityCases = [
   { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
 ];
 
-describe.each(abilityCases)("Abilities - Gooey/Tangling Hair", ({ ability }) => {
+describe.each(abilityCases)("Abilities - $abilityName", ({ ability }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -38,47 +38,47 @@ describe.each(abilityCases)("Abilities - Gooey/Tangling Hair", ({ ability }) => 
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  it("$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move", async () => {
+  it("should decrease the attacker's speed by 1 stage if the attacker uses a contact move", async () => {
     game.override.enemyAbility(ability);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const pokemon = game.scene.getPlayerPokemon()!;
+    const pokemon = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     const tackleMove = allMoves.get(MoveId.TACKLE);
-    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
     expect(pokemon.getStatStage(Stat.SPD)).toBe(-1);
   });
 
-  it("$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move", async () => {
+  it("should not activate if the attacker has the ability Long Reach and uses a contact move", async () => {
     game.override.ability(AbilityId.LONG_REACH).enemyAbility(ability);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const pokemon = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    const pokemon = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     const tackleMove = allMoves.get(MoveId.TACKLE);
-    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon, enemy)).toBe(false);
     expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
   });
 
-  it("$abilityName should not affect the attacker's speed if the attacker does not use a contact move", async () => {
+  it("should not affect the attacker's speed if the attacker does not use a contact move", async () => {
     game.override.enemyAbility(ability);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const pokemon = game.scene.getPlayerPokemon()!;
+    const pokemon = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.EMBER);
     await game.toEndOfTurn();
 
     const emberMove = allMoves.get(MoveId.EMBER);
-    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(emberMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
     expect(emberMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(false);
     expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
@@ -87,13 +87,13 @@ describe.each(abilityCases)("Abilities - Gooey/Tangling Hair", ({ ability }) => 
   it("$abilityName should activate per hit of a contact-making multi-strike move", async () => {
     game.override.enemyAbility(ability);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const pokemon = game.scene.getPlayerPokemon()!;
+    const pokemon = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.DOUBLE_IRON_BASH);
     await game.toEndOfTurn();
 
     const doubleIronBashMove = allMoves.get(MoveId.DOUBLE_IRON_BASH);
-    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(doubleIronBashMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(doubleIronBashMove.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)).toBe(true);
     expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);

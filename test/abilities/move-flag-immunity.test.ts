@@ -1,12 +1,12 @@
+import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
+import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { MoveFlags } from "#enums/move-flags";
-import { MoveResult } from "#enums/move-result";
-import { allMoves } from "#app/data/data-lists";
 
 describe("Ability Attribute - Move Flag Immunity", () => {
   let phaserGame: Phaser.Game;
@@ -56,7 +56,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
     game.override.ability(ability).enemyMoveset(enemyMoveId);
 
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
@@ -65,7 +65,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
     const lastEnemyMove = enemyPokemon.getLastXMoves()[0];
     expect(lastEnemyMove.result).toBe(MoveResult.FAIL);
     const enemyMove = allMoves.get(enemyMoveId);
-    //@ts-expect-error `hasFlag()` is private but we want to validate the flag is set
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(enemyMove.hasFlag(moveFlag)).toBe(true);
     expect(enemyMove.checkFlag(moveFlag, enemyPokemon)).toBe(true);
   });
