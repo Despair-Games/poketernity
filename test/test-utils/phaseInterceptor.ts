@@ -141,7 +141,7 @@ const PHASES = [
 ] as const;
 
 type PhaseClass = (typeof PHASES)[number];
-/** @todo This just evaluates to `string`. Is there a way to narrow this down to a union? */
+/** This just evaluates to `string`, but is validated in {@linkcode PhaseInterceptor.getPhaseName} */
 type PhaseString = PhaseClass["name"];
 
 export type PhaseInterceptorPhase = PhaseClass | PhaseString;
