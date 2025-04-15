@@ -45,7 +45,7 @@ describe("Moves - Dig", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeDefined();
-    expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.DIG);
@@ -71,7 +71,7 @@ describe("Moves - Dig", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
-    expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {

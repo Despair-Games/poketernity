@@ -82,7 +82,7 @@ describe("Moves - Encore", () => {
       game.setTurnOrder(turnOrder);
 
       await game.toEndOfTurn();
-      expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+      expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
       expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeUndefined();
     });
   });
@@ -92,23 +92,22 @@ describe("Moves - Encore", () => {
     game.override.moveset([MoveId.ENCORE, MoveId.TORMENT, MoveId.SPLASH]);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     game.move.select(MoveId.ENCORE);
     game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
-    expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
+    expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.TORMENT);
     game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
-    expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
+    expect(enemyPokemon.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
-    const lastMove = enemyPokemon?.getLastXMoves()[0];
-    expect(lastMove?.move.id).toBe(MoveId.STRUGGLE);
+    expect(enemyPokemon).toHaveUsedMove(MoveId.STRUGGLE);
   });
 });

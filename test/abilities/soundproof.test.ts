@@ -42,9 +42,8 @@ describe("Abilities - Soundproof", () => {
     await game.toEndOfTurn();
 
     const soundMove = allMoves.get(MoveId.CLANGOROUS_SOUL);
-    const lastMove = playerPokemon.getLastXMoves()[0];
 
-    expect(lastMove.result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(soundMove.hasFlag(MoveFlags.SOUND_MOVE)).toBe(true);
     expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon)).toBe(true);

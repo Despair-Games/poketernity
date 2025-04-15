@@ -56,7 +56,7 @@ describe("Moves - Moongeist Beam", () => {
     game.move.select(MoveId.METRONOME);
     await game.toEndOfTurn();
 
-    expect(game.scene.getEnemyPokemon()!.isFainted()).toBe(false);
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].move.id).toBe(MoveId.MOONGEIST_BEAM);
+    expect(game.field.getEnemyPokemon().isFainted()).toBe(false);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove(MoveId.MOONGEIST_BEAM);
   });
 });
