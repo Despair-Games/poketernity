@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -36,7 +36,7 @@ describe("Abilities - Soundproof", () => {
   it("should not provide immunity to the ability holder's own sound moves", async () => {
     game.override.moveset(MoveId.CLANGOROUS_SOUL);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const playerPokemon = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.CLANGOROUS_SOUL);
     await game.toEndOfTurn();
@@ -45,6 +45,8 @@ describe("Abilities - Soundproof", () => {
     const lastMove = playerPokemon.getLastXMoves()[0];
 
     expect(lastMove.result).toBe(MoveResult.SUCCESS);
-    expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon, null)).toBe(true);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(soundMove.hasFlag(MoveFlags.SOUND_MOVE)).toBe(true);
+    expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon)).toBe(true);
   });
 });

@@ -1,11 +1,11 @@
 import { allSpecies } from "#app/data/data-lists";
-import { SpeciesId } from "#enums/species-id";
-import { type PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
+import { globalScene } from "#app/global-scene";
 import { isNullOrUndefined, randSeedItem } from "#app/utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { globalScene } from "#app/global-scene";
+import { SpeciesId } from "#enums/species-id";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given

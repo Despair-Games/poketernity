@@ -1,6 +1,6 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allMoves } from "#app/data/data-lists";
-import { type Move } from "#app/data/moves/move";
+import type { Move } from "#app/data/moves/move";
 import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

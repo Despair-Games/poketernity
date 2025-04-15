@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
 import { BiomeId } from "#enums/biome-id";

@@ -1,23 +1,23 @@
-import { globalScene } from "#app/global-scene";
 import { allAbilities } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
-import { EvolutionItem } from "#enums/evolution-item";
-import { Nature } from "#enums/nature";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import { SpeciesFormChangeItemTrigger } from "../species-form-change-triggers/species-form-change-item-trigger";
-import { FormChangeItem } from "#enums/form-change-item";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#app/field/pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { isNullOrUndefined } from "#app/utils";
 import type { AbilityId } from "#enums/ability-id";
+import { ElementalType } from "#enums/elemental-type";
+import { EvolutionItem } from "#enums/evolution-item";
+import { FormChangeItem } from "#enums/form-change-item";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species-id";
+import { Nature } from "#enums/nature";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
+import { WeatherType } from "#enums/weather-type";
+import { SpeciesFormChangeItemTrigger } from "../species-form-change-triggers/species-form-change-item-trigger";
 
 export interface EncounterRequirement {
   meetsRequirement(): boolean; // Boolean to see if a requirement is met

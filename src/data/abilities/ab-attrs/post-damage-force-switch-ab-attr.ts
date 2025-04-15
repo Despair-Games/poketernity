@@ -3,8 +3,8 @@ import { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-at
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
-import { type Pokemon } from "#app/field/pokemon";
-import { type EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchPhase } from "#app/phases/switch-phase";

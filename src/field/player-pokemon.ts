@@ -1,7 +1,7 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import {
@@ -10,7 +10,7 @@ import {
   speciesStarterCosts,
 } from "#app/data/starters";
 import { Status } from "#app/data/status-effect";
-import { tmSpecies, reverseCompatibleTms } from "#app/data/tms";
+import { reverseCompatibleTms, tmSpecies } from "#app/data/tms";
 import type { Variant } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { Pokemon } from "#app/field/pokemon";
@@ -18,8 +18,8 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
-  PokemonFriendshipBoosterModifier,
   EvoTrackerModifier,
+  PokemonFriendshipBoosterModifier,
   type PokemonHeldItemModifier,
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";

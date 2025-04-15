@@ -87,4 +87,5 @@ export enum PhaseId {
   ME_ENCOUNTER,
   ME_BATTLE_START_CLEANUP,
   ME_BATTLE,
+  POST_KNOCKOUT,
 }

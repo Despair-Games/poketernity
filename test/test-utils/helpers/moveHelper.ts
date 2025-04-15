@@ -1,10 +1,10 @@
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
-import { type CommandPhase } from "#app/phases/command-phase";
-import { type EnemyCommandPhase } from "#app/phases/enemy-command-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
+import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";

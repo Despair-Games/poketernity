@@ -1,13 +1,13 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type globalScene } from "#app/global-scene";
+import type { globalScene } from "#app/global-scene";
 // -- end tsdoc imports --
 
 import type { Ability } from "#app/data/abilities/ability";
 import { allAbilities } from "#app/data/data-lists";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
