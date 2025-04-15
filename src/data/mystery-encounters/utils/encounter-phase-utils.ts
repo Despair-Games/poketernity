@@ -390,7 +390,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       if (config.tera && config.tera !== ElementalType.UNKNOWN) {
         enemyPokemon.teraType = config.tera;
         if (battle.trainer) {
-          // battle.trainer.config.setInstantTera(e); // TODO: uncomment
+          battle.trainer.config.setInstantTera(e);
         }
       }
 
