@@ -1,13 +1,13 @@
+import type { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Flame Body/Poison Point/Static", () => {
   let phaserGame: Phaser.Game;

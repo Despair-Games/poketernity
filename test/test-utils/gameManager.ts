@@ -1,15 +1,15 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type CommandPhase } from "#app/phases/command-phase";
-import { type TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
+import type { TurnEndPhase } from "#app/phases/turn-end-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
 import BattleScene from "#app/battle-scene";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
@@ -23,6 +23,7 @@ import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
+import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
@@ -52,6 +53,7 @@ import { ModifierHelper } from "#test/test-utils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/test-utils/helpers/moveHelper";
 import { OverridesHelper } from "#test/test-utils/helpers/overridesHelper";
 import { ReloadHelper } from "#test/test-utils/helpers/reloadHelper";
+import { RngHelper } from "#test/test-utils/helpers/rngHelper";
 import { SettingsHelper } from "#test/test-utils/helpers/settingsHelper";
 import type { InputsHandler } from "#test/test-utils/inputsHandler";
 import { MockFetch } from "#test/test-utils/mocks/mockFetch";
@@ -60,8 +62,6 @@ import { TextInterceptor } from "#test/test-utils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import { RngHelper } from "#test/test-utils/helpers/rngHelper";
 
 /**
  * Class to manage the game state and transitions between phases.
