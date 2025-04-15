@@ -1,4 +1,5 @@
 import { toHaveMoveResult } from "#test/matchers/to-have-move-result";
+import { toHaveUsedMove } from "#test/matchers/to-have-used-move";
 import { expect } from "vitest";
 
 /**
@@ -8,4 +9,5 @@ import { expect } from "vitest";
 
 expect.extend({
   toHaveMoveResult,
+  toHaveUsedMove,
 });

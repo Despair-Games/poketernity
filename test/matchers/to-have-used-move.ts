@@ -1,7 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 
-export interface ToHaveMoveResultMatcherOptions {
+export interface ToHaveUsedMoveMatcherOptions {
   /** The index of the move to check (Default is `0`) */
   index?: number;
   /**
@@ -13,16 +14,16 @@ export interface ToHaveMoveResultMatcherOptions {
 }
 
 /**
- * Matcher to check if a pokemons move result is as expected
+ * Matcher to check if a pokemons move id is as expected
  * @param received The actual value received
  * @param expectedValue The expected value
  * @param index The index of the move to check
  * @returns Whether the matcher passed
  */
-export function toHaveMoveResult(
+export function toHaveUsedMove(
   received: unknown,
-  expectedResult: MoveResult,
-  { index = 0, moveCount = 1 }: ToHaveMoveResultMatcherOptions = {},
+  expectedResult: MoveId,
+  { index = 0, moveCount = 1 }: ToHaveUsedMoveMatcherOptions = {},
 ) {
   if (typeof received !== "object" || received === null || typeof (received as any).getLastXMoves !== "function") {
     return {
@@ -31,9 +32,9 @@ export function toHaveMoveResult(
     };
   }
 
-  const moves = (received as Pokemon).getLastXMoves(moveCount);
-  const move = moves?.[index];
-  const pass = move?.result === expectedResult;
+  const turnMove = (received as Pokemon).getLastXMoves(moveCount);
+  const move = turnMove?.[index];
+  const pass = move?.move.id === expectedResult;
 
   const moveIndexStr = index === 0 ? "latest move" : `move no. ${index}`;
 
@@ -41,9 +42,9 @@ export function toHaveMoveResult(
     pass,
     message: () =>
       pass
-        ? `Expected ${moveIndexStr} NOT to have result: ${MoveResult[expectedResult]} (=${expectedResult}), but it did.`
-        : `Expected ${moveIndexStr} to have result: ${MoveResult[expectedResult]} (=${expectedResult}), but got: ${
-            move?.result ? `${MoveResult[move.result]} (=${move.result})` : "undefined"
+        ? `Expected ${moveIndexStr} NOT to have id: ${MoveId[expectedResult]} (=${expectedResult}), but it did.`
+        : `Expected ${moveIndexStr} to have id: ${MoveResult[expectedResult]} (=${expectedResult}), but got: ${
+            move?.move.id ? `${MoveId[move.move.id]} (=${move.move.id})` : "undefined"
           }`,
   };
 }
