@@ -23,7 +23,9 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
-      globalScene.phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages));
+      globalScene.phaseManager.unshiftPhase(
+        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),
+      );
     }
 
     return true;

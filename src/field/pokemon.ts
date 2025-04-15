@@ -157,7 +157,7 @@ import {
   isNullOrUndefined,
   randSeedInt,
   toDmgValue,
-  type nil
+  type nil,
 } from "#app/utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {

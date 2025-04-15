@@ -113,7 +113,10 @@ export class CommandUiHandler extends UiHandler {
       if (button === Button.ACTION) {
         switch (cursor) {
           case BattleCommand.FIGHT:
-            ui.setMode<FightUiHandler>(UiMode.FIGHT, globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.getFieldIndex());
+            ui.setMode<FightUiHandler>(
+              UiMode.FIGHT,
+              globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.getFieldIndex(),
+            );
             success = true;
             break;
           case BattleCommand.BALL:

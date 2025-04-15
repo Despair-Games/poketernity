@@ -119,7 +119,7 @@ export class EnemyPokemon extends Pokemon {
       while ((preEvolution = pokemonPreEvolutions[speciesId])) {
         speciesId = preEvolution;
       }
-      
+
       this.teraType = randSeedItem(this.getTypes(false, false, true));
     }
 

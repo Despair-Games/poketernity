@@ -141,7 +141,8 @@ export class MoveHelper extends GameManagerHelper {
   public async selectEnemyMove(moveId: MoveId, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
-    const enemy = this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
+    const enemy =
+      this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
@@ -174,7 +175,8 @@ export class MoveHelper extends GameManagerHelper {
   public async forceEnemyMove(moveId: MoveId, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
-    const enemy = this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
+    const enemy =
+      this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
 
     const movesetOverride = Array.isArray(Overrides.ENEMY_MOVESET_OVERRIDE)
       ? Overrides.ENEMY_MOVESET_OVERRIDE
