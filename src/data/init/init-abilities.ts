@@ -1632,26 +1632,22 @@ export function initAbilities() {
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPD], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_WELLSPRING, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPDEF], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_HEARTHFLAME, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.ATK], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_CORNERSTONE, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.DEF], 1)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.TERA_SHIFT, 9)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.getFormKey() ? 0 : 1))
       .attr(UncopiableAbilityAbAttr)
