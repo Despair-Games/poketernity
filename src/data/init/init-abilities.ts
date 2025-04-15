@@ -1,4 +1,5 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
+import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
@@ -74,7 +75,6 @@ import { PostAttackApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/po
 import { PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import { PostAttackStealHeldItemAbAttr } from "#app/data/abilities/ab-attrs/post-attack-steal-held-item-ab-attr";
 import { PostBattleInitFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-form-change-ab-attr";
-import { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { PostBattleLootAbAttr } from "#app/data/abilities/ab-attrs/post-battle-loot-ab-attr";
 import { PostBiomeChangeTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-terrain-change-ab-attr";
 import { PostBiomeChangeWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-weather-change-ab-attr";
@@ -120,6 +120,7 @@ import { PostSummonUnnamedMessageAbAttr } from "#app/data/abilities/ab-attrs/pos
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-change-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-suppressed-form-change-ab-attr";
+import { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-turn-form-change-ab-attr";
 import { PostTurnHurtIfSleepingAbAttr } from "#app/data/abilities/ab-attrs/post-turn-hurt-if-sleeping-ab-attr";
@@ -201,6 +202,12 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+
+/** Used for Aerialate, Refrigerate, Pixilate, Galvanize */
+const basicMoveTypeChangeAbilityCondition: PokemonAttackCondition = (user, _target, move) =>
+  move?.type === ElementalType.NORMAL
+  && (!move.hasAttr(VariableMoveTypeAttr)
+    || ([MoveId.TERA_BLAST, MoveId.TERA_STARSTORM].includes(move.id) && !user?.isTerastallized));
 
 // prettier-ignore
 export function initAbilities() {
@@ -881,7 +888,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.ICE,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        basicMoveTypeChangeAbilityCondition,
       ),
     new Ability(AbilityId.SWEET_VEIL, 6)
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.SLEEP)
@@ -913,7 +920,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.FAIRY,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        basicMoveTypeChangeAbilityCondition,
       ),
     new Ability(AbilityId.GOOEY, 6)
       .attr(
@@ -928,7 +935,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.FLYING,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        basicMoveTypeChangeAbilityCondition,
       ),
     new Ability(AbilityId.PARENTAL_BOND, 6)
       .attr(AddSecondStrikeAbAttr, 0.25),
@@ -1049,7 +1056,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.ELECTRIC,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        basicMoveTypeChangeAbilityCondition,
       ),
     new Ability(AbilityId.SURGE_SURFER, 7)
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPD, 2),
