@@ -55,3 +55,5 @@ export const GulpMissileBattlerTagTypes = Object.freeze([
   BattlerTagType.GULP_MISSILE_ARROKUDA,
   BattlerTagType.GULP_MISSILE_PIKACHU,
 ]);
+
+export const TypeBoostTagTypes = Object.freeze([BattlerTagType.FIRE_BOOST, BattlerTagType.CHARGED]);

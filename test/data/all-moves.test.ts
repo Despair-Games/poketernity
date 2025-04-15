@@ -100,6 +100,7 @@ describe("All Moves", async () => {
       ).toBe(move.effect_chance);
       if (Array.isArray(move.flags)) {
         for (const f of Object.keys(flagsToCheck)) {
+          // @ts-expect-error - `hasFlag()` is private but we need to check for the existence of the flag
           const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
           const expectedHasFlag = move.flags.includes(Number(f));
           const errOutput = `${MoveId[pktyMove.id]}'s usage of flag ${MoveFlags[flagsToCheck[f]]} should be ${expectedHasFlag} but is ${actualHasFlag}!`;

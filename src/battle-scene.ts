@@ -81,7 +81,7 @@ import {
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
-import { type Phase } from "#app/phase";
+import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { ExpPhase } from "#app/phases/exp-phase";
 import { FormChangePhase } from "#app/phases/form-change-phase";
@@ -96,7 +96,7 @@ import { SelectBiomePhase } from "#app/phases/select-biome-phase";
 import { ShowPartyExpBarPhase } from "#app/phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { type SwitchPhase } from "#app/phases/switch-phase";
+import type { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import InvertPostFX from "#app/pipelines/invert";
@@ -1914,10 +1914,14 @@ export default class BattleScene extends SceneBase {
     this.currentBattle.battleScore += Math.ceil(scoreIncrease);
   }
 
-  getMaxExpLevel(ignoreLevelCap?: boolean): number {
-    if (ignoreLevelCap) {
+  getMaxExpLevel(ignoreLevelCap: boolean = false): number {
+    if (Overrides.LEVEL_CAP_OVERRIDE > 0) {
+      return Overrides.LEVEL_CAP_OVERRIDE;
+    }
+    if (ignoreLevelCap || Overrides.LEVEL_CAP_OVERRIDE < 0) {
       return Number.MAX_SAFE_INTEGER;
     }
+
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
     const baseLevel = (1 + difficultyWaveIndex / 2 + Math.pow(difficultyWaveIndex / 25, 2)) * 1.2;

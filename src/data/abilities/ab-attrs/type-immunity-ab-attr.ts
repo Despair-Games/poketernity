@@ -1,11 +1,11 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { type Move } from "#app/data/moves/move";
-import { MoveTarget } from "#enums/move-target";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { ElementalType } from "#enums/elemental-type";
-import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { ElementalType } from "#enums/elemental-type";
+import { MoveTarget } from "#enums/move-target";
+import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.

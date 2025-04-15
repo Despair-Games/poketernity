@@ -4,7 +4,7 @@ import type { PreWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/pre-we
 import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";

@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type AbilityId } from "#enums/ability-id";
+import type { AbilityId } from "#enums/ability-id";
 // -- end tsdoc imports
 
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";

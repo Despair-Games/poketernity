@@ -245,20 +245,33 @@ export class PhaseManager {
    * Find a specific {@linkcode Phase} in the phase queue.
    *
    * @param phaseFilter - Filter function to find the wanted phase
+   * @param checkPrepend - If `true`, also searches through {@linkcode phaseQueuePrepend} (i.e., unshifted phases). Default `false`.
    * @returns the found phase or `undefined` if none is found
    */
-  public findPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean): P | undefined {
-    return this.phaseQueue.find(phaseFilter) as P;
+  public findPhase<P extends Phase = Phase>(
+    phaseFilter: (phase: P) => boolean,
+    checkPrepend: boolean = false,
+  ): P | undefined {
+    if (checkPrepend) {
+      return (this.phaseQueuePrepend.find(phaseFilter) ?? this.phaseQueue.find(phaseFilter)) as P;
+    } else {
+      return this.phaseQueue.find(phaseFilter) as P;
+    }
   }
 
   /**
    * Checks if the phase queue contains a phase that matches the filter function
    *
    * @param phaseFilter - Filter function to find the wanted phase
+   * @param checkPrepend - If `true`, also searches through {@linkcode phaseQueuePrepend} (i.e., unshifted phases). Default `false`.
    * @returns `true` if the phase exists, `false` otherwise
    */
-  public hasPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean): boolean {
-    return this.phaseQueue.some(phaseFilter);
+  public hasPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean, checkPrepend: boolean = false): boolean {
+    if (checkPrepend) {
+      return this.phaseQueuePrepend.some(phaseFilter) || this.phaseQueue.some(phaseFilter);
+    } else {
+      return this.phaseQueue.some(phaseFilter);
+    }
   }
 
   /**

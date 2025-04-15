@@ -75,6 +75,21 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
+   * Override the player pokemon level cap
+   * @param value - The level to set the cap to. Negative numbers disable the cap entirely, and `0` resets to default behavior.
+   * @returns `this`
+   */
+  public levelCap(value: number): this {
+    vi.spyOn(Overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(value);
+    if (value === 0) {
+      this.log("Default level cap re-enabled!");
+    } else {
+      this.log(`Level Cap set to ${value < 0 ? Number.MAX_SAFE_INTEGER : value}!`);
+    }
+    return this;
+  }
+
+  /**
    * Override the player (pokemon) starting held items
    * @param items the items to hold
    * @returns `this`

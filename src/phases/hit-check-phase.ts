@@ -150,7 +150,10 @@ export abstract class HitCheckPhase extends PokemonPhase {
     // Strikes after the first in a multi-strike move are guaranteed to hit,
     // unless the move is flagged to check all hits and the user does not have Skill Link.
     if (user.turnData.hitsLeft < user.turnData.hitCount) {
-      if (!move.hasFlag(MoveFlags.CHECK_ALL_HITS) || user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT)) {
+      if (
+        !move.checkFlag(MoveFlags.CHECK_ALL_HITS, user, target)
+        || user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT)
+      ) {
         return [HitCheckResult.HIT, effectiveness];
       }
     }

@@ -1,3 +1,4 @@
+import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type BattleScene from "#app/battle-scene";
 import { BindTag } from "#app/data/battler-tags/bind-tag";
@@ -5,10 +6,9 @@ import { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { allMoves } from "#app/data/data-lists";
 import { AttackMove } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import * as messages from "#app/messages";
-import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";

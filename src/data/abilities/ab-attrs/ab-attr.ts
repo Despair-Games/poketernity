@@ -1,6 +1,6 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { type Pokemon } from "#app/field/pokemon";
 import type { Ability } from "#app/data/abilities/ability";
+import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export abstract class AbAttr {

@@ -1,15 +1,15 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
-import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { type MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { PhaseId } from "#enums/phase-id";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { PhaseId } from "#enums/phase-id";
 
 describe("Moves - Shell Trap", () => {
   let phaserGame: Phaser.Game;

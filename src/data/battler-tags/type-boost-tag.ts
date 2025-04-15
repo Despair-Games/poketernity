@@ -42,8 +42,4 @@ export class TypeBoostTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     return lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
   }
-
-  override isTypeBoostTag(): this is this {
-    return true;
-  }
 }

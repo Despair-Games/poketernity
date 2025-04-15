@@ -4,8 +4,8 @@ import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTargets, type AnimFrameTarget } from "#enums/anim-frame-target";
 import type Phaser from "phaser";
-import { type BattleAnim } from "./battle-anims";
-import { type MoveAnim } from "./move-anim";
+import type { BattleAnim } from "./battle-anims";
+import type { MoveAnim } from "./move-anim";
 
 export class AnimConfig {
   public id: number;
