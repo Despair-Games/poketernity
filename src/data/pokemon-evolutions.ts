@@ -351,8 +351,8 @@ export class GoodraEvoCondition extends SpeciesEvolutionCondition {
  * Only used for Alcremie forms
  */
 export class BiomeEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredBiomes: BiomeId[]) {
-    super(() => globalScene.arena.isInBiome(requiredBiomes));
+  constructor(requiredBiomes: readonly BiomeId[]) {
+    super(() => requiredBiomes.includes(globalScene.arena.biomeId));
     this.description = "Needs to be in certain biomes";
   }
 }
