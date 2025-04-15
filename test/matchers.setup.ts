@@ -1,0 +1,11 @@
+import { toHaveMoveResult } from "#test/matchers/to-have-move-result";
+import { expect } from "vitest";
+
+/**
+ * Setup for for custom matchers.
+ * Make sure to define the call signatures in {@linkcode file://./@types/vitest.d.ts} too!
+ */
+
+expect.extend({
+  toHaveMoveResult,
+});
