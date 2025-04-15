@@ -61,6 +61,7 @@ import { VictoryPhase } from "#app/phases/victory-phase";
 import { UI } from "#app/ui/ui";
 import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
+import { expect } from "vitest";
 
 export interface PromptHandler {
   phaseTarget?: string;
@@ -231,7 +232,7 @@ export class PhaseInterceptor {
         await this.run(this.phaseFrom).catch((e) => reject(e));
         this.phaseFrom = null;
       }
-      const targetName = typeof phaseTo === "string" ? phaseTo : phaseTo.name;
+      const targetName = this.getPhaseName(phaseTo);
       this.intervalRun = setInterval(async () => {
         const currentPhase = this.onHold?.length && this.onHold[0];
         if (currentPhase && currentPhase.name === targetName) {
@@ -262,7 +263,7 @@ export class PhaseInterceptor {
    * @returns A promise that resolves when the phase is run.
    */
   async run(phaseTarget: PhaseInterceptorPhase, skipFn?: (className: PhaseClass) => boolean): Promise<void> {
-    const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
+    const targetName = this.getPhaseName(phaseTarget);
     await new Promise<void>((resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       const interval = setInterval(async () => {
@@ -295,7 +296,7 @@ export class PhaseInterceptor {
   }
 
   whenAboutToRun(phaseTarget: PhaseInterceptorPhase, _skipFn?: (className: PhaseClass) => boolean): Promise<void> {
-    const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
+    const targetName = this.getPhaseName(phaseTarget);
     return new Promise(async (resolve, _reject) => {
       ErrorInterceptor.getInstance().add(this);
       const interval = setInterval(async () => {
@@ -460,5 +461,14 @@ export class PhaseInterceptor {
     clearInterval(this.promptInterval);
     clearInterval(this.interval);
     clearInterval(this.intervalRun);
+  }
+
+  private getPhaseName(phase: PhaseInterceptorPhase): string {
+    const phaseName = typeof phase === "string" ? phase : phase.name;
+    expect(
+      phaseName in this.phases,
+      `${phaseName} is not a recognized Phase. It may be missing from PHASES in test/test-utils/phaseInterceptor.ts.`,
+    ).toBeTruthy();
+    return phaseName;
   }
 }
