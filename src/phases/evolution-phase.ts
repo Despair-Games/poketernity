@@ -1,13 +1,13 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type FormChangePhase } from "#app/phases/form-change-phase";
+import type { FormChangePhase } from "#app/phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
-import { EVOLVE_MOVE } from "#app/data/pokemon-level-moves";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import type { Pokemon } from "#app/field/pokemon";
+import { EVOLVE_MOVE } from "#app/data/pokemon-level-moves";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";

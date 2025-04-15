@@ -1,4 +1,4 @@
-import { type PokemonEvolutions } from "#app/data/pokemon-evolutions";
+import type { PokemonEvolutions } from "#app/data/pokemon-evolutions";
 import { gen1pokemonFamilyEvolutions } from "#app/data/pokemon-evolutions/gen1-pokemon-family-evolutions";
 import { gen2pokemonFamilyEvolutions } from "#app/data/pokemon-evolutions/gen2-pokemon-family-evolutions";
 import { gen3pokemonFamilyEvolutions } from "#app/data/pokemon-evolutions/gen3-pokemon-family-evolutions";

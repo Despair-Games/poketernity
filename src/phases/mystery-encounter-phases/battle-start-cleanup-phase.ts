@@ -1,20 +1,20 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { type handleMysteryEncounterBattleStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { type TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { handleMysteryEncounterBattleStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { TurnEndPhase } from "#app/phases/turn-end-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { SwitchType } from "#enums/switch-type";
 import { PhaseId } from "#enums/phase-id";
+import { SwitchType } from "#enums/switch-type";
 
 /**
  * Runs at the beginning of an Encounter's battle.

@@ -1,10 +1,10 @@
-import type { MoveId } from "#enums/move-id";
-import { type Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
-import { globalScene } from "#app/global-scene";
-import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import type { NumberHolder } from "#app/utils";
+import type { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 
 /**
  * Attribute used for moves that double in power if the given move immediately

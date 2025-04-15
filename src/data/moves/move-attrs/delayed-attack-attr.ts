@@ -1,15 +1,15 @@
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { type Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { DelayedAttackTag } from "#app/data/arena-tag";
+import type { Move } from "#app/data/moves/move";
+import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { ChargeAnim } from "#enums/charge-anim";
+import { MoveResult } from "#enums/move-result";
 import i18next from "i18next";
-import { type ChargeAnim } from "#enums/charge-anim";
-import type { Move } from "#app/data/moves/move";
-import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
-import type { DelayedAttackTag } from "#app/data/arena-tag";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple uses on the same target.

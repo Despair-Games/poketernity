@@ -4,7 +4,7 @@ import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
-import { getBiomeBgm, indoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
+import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
@@ -635,7 +635,7 @@ export class Arena {
   }
 
   isOutside(): boolean {
-    return !indoorBiomes.includes(this.biomeId);
+    return !IndoorBiomes.includes(this.biomeId);
   }
 
   // @todo these tints feel like they belong in their own class somewhere

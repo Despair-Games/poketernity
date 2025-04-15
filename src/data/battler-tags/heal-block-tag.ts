@@ -36,10 +36,12 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
   /**
    * Checks if a move is disabled under Heal Block
    * @param moveId {@linkcode MoveId} the move ID
+   * @param user {@linkcode Pokemon} the move user
    * @returns `true` if the move has a TRIAGE_MOVE flag
+   * @override
    */
-  override isMoveRestricted(moveId: MoveId): boolean {
-    if (allMoves.get(moveId).hasFlag(MoveFlags.TRIAGE_MOVE)) {
+  override isMoveRestricted(moveId: MoveId, user?: Pokemon): boolean {
+    if (user && allMoves.get(moveId).checkFlag(MoveFlags.TRIAGE_MOVE, user)) {
       return true;
     }
     return false;

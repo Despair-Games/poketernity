@@ -55,7 +55,7 @@ export interface BiomeTrainerPools {
 /**
  * Whether or not a biome is indoors affects tinting
  */
-export const indoorBiomes = [
+export const IndoorBiomes = Object.freeze([
   BiomeId.SEABED,
   BiomeId.CAVE,
   BiomeId.CHARGESTONE_CAVE,
@@ -67,52 +67,52 @@ export const indoorBiomes = [
   BiomeId.FAIRY_CAVE,
   BiomeId.TEMPLE,
   BiomeId.LABORATORY,
-];
+]);
 
 // #region Alcremie Evolutions
 
 /** The biome determines what form Alcremie will be when evolving */
-export const vanillaAlcremieBiomes = [
+export const VanillaAlcremieBiomes = Object.freeze([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
   BiomeId.TALL_GRASS,
   BiomeId.METROPOLIS,
-];
-export const rubyAlcremieBiomes = [
+]);
+export const rubyAlcremieBiomes = Object.freeze([
   BiomeId.BADLANDS,
   BiomeId.VOLCANO,
   BiomeId.STEAM_VENT,
   BiomeId.GRAVEYARD,
   BiomeId.FACTORY,
   BiomeId.SLUM,
-];
-export const matchaAlcremieBiomes = [BiomeId.FOREST, BiomeId.SWAMP, BiomeId.MEADOW, BiomeId.JUNGLE];
-export const mintAlcremieBiomes = [BiomeId.SEA, BiomeId.BEACH, BiomeId.LAKE, BiomeId.SEABED];
-export const lemonAlcremieBiomes = [
+]);
+export const MatchaAlcremieBiomes = Object.freeze([BiomeId.FOREST, BiomeId.SWAMP, BiomeId.MEADOW, BiomeId.JUNGLE]);
+export const MintAlcremieBiomes = Object.freeze([BiomeId.SEA, BiomeId.BEACH, BiomeId.LAKE, BiomeId.SEABED]);
+export const LemonAlcremieBiomes = Object.freeze([
   BiomeId.DESERT,
   BiomeId.POWER_PLANT,
   BiomeId.CHARGESTONE_CAVE,
   BiomeId.DOJO,
   BiomeId.RUINS,
   BiomeId.CONSTRUCTION_SITE,
-];
-export const saltedCreamAlcremieBiomes = [
+]);
+export const SaltedCreamAlcremieBiomes = Object.freeze([
   BiomeId.MOUNTAIN,
   BiomeId.CAVE,
   BiomeId.ICE_CAVE,
   BiomeId.FAIRY_CAVE,
   BiomeId.SNOWY_FOREST,
-];
-export const rubySwirlAlcremieBiomes = [BiomeId.WASTELAND, BiomeId.LABORATORY];
-export const caramelSwirlAlcremieBiomes = [BiomeId.TEMPLE, BiomeId.ISLAND];
-export const rainbowSwirlAlcremieBiomes = [BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END];
+]);
+export const RubySwirlAlcremieBiomes = Object.freeze([BiomeId.WASTELAND, BiomeId.LABORATORY]);
+export const CaramelSwirlAlcremieBiomes = Object.freeze([BiomeId.TEMPLE, BiomeId.ISLAND]);
+export const RainbowSwirlAlcremieBiomes = Object.freeze([BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END]);
 
 // #region ME biome mappings
 /**
  * Biomes in here get access to {@linkcode extremeBiomeEncounters} (nothing right now)
  */
-export const EXTREME_ENCOUNTER_BIOMES = [
+export const ExtremeEncounterBiomes = Object.freeze([
   BiomeId.SEA,
   BiomeId.SEABED,
   BiomeId.BADLANDS,
@@ -123,14 +123,14 @@ export const EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.ABYSS,
   BiomeId.SPACE,
   BiomeId.END,
-];
+]);
 
 /**
  * Biomes in here get access to {@linkcode nonExtremeBiomeEncounters}
  * - Field Trip
  * - Dancing Lessons
  */
-export const NON_EXTREME_ENCOUNTER_BIOMES = [
+export const NonExtremeEncounterBiomes = Object.freeze([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
@@ -157,7 +157,7 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
   BiomeId.SNOWY_FOREST,
   BiomeId.ISLAND,
   BiomeId.LABORATORY,
-];
+]);
 
 /**
  * Biomes in here get access to {@linkcode humanTransitableBiomeEncounters}
@@ -168,7 +168,7 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
  * - Winstrate challenge
  * - Expert Breeder
  */
-export const HUMAN_TRANSITABLE_BIOMES = [
+export const HumanTransitableBiomes = Object.freeze([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
@@ -199,7 +199,7 @@ export const HUMAN_TRANSITABLE_BIOMES = [
   BiomeId.SNOWY_FOREST,
   BiomeId.ISLAND,
   BiomeId.LABORATORY,
-];
+]);
 
 /**
  * Biomes in here get access to {@linkcode civilizationBiomeEncounters}
@@ -208,7 +208,7 @@ export const HUMAN_TRANSITABLE_BIOMES = [
  * - Fun and games
  * - Global Trade System
  */
-export const CIVILIZATION_ENCOUNTER_BIOMES = [
+export const CivilizationEncounterBiomes = Object.freeze([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
@@ -224,7 +224,7 @@ export const CIVILIZATION_ENCOUNTER_BIOMES = [
   BiomeId.CONSTRUCTION_SITE,
   BiomeId.SLUM,
   BiomeId.ISLAND,
-];
+]);
 
 // #region dancing-lesson ME
 
@@ -282,11 +282,11 @@ export function getOricorioFormIndexForBiome(biomeId: BiomeId): number {
 
 // #region teleporting hijinks ME
 
-export const TELEPORTING_HIJINKS_BIOME_CANDIDATES = [
+export const TeleportingHijinksBiomeCandidates = Object.freeze([
   BiomeId.SPACE,
   BiomeId.FAIRY_CAVE,
   BiomeId.LABORATORY,
   BiomeId.ISLAND,
   BiomeId.WASTELAND,
   BiomeId.DOJO,
-];
+]);

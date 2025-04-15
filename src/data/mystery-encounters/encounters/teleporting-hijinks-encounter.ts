@@ -35,7 +35,7 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { TELEPORTING_HIJINKS_BIOME_CANDIDATES } from "#app/data/biome-utils";
+import { TeleportingHijinksBiomeCandidates } from "#app/data/biome-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/teleportingHijinks";
@@ -179,7 +179,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
 
   // Calculate new biome (cannot be current biome)
-  const filteredBiomes = TELEPORTING_HIJINKS_BIOME_CANDIDATES.filter((b) => globalScene.arena.biomeId !== b);
+  const filteredBiomes = TeleportingHijinksBiomeCandidates.filter((b) => globalScene.arena.biomeId !== b);
   const newBiome = filteredBiomes[randSeedInt(filteredBiomes.length)];
 
   // Show dialogue and transition biome

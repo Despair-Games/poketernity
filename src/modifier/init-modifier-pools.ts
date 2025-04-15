@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -7,14 +7,14 @@ import {
   ResetNegativeStatStageModifier,
   TurnStatusEffectModifier,
 } from "#app/modifier/modifier";
-import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
 import {
   dailyStarterModifierPool,
   enemyBuffModifierPool,
   modifierPool,
   trainerModifierPool,
   wildModifierPool,
-} from "./modifier-pools";
+} from "#app/modifier/modifier-pools";
+import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { isNullOrUndefined } from "#app/utils";
 import { AbilityId } from "#enums/ability-id";

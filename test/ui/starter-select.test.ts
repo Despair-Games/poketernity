@@ -1,23 +1,23 @@
-import { Gender } from "#enums/gender";
-import { Nature } from "#enums/nature";
 import { allSpecies } from "#app/data/data-lists";
-import { GameModes } from "#enums/game-modes";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { type TitlePhase } from "#app/phases/title-phase";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
+import type { TitlePhase } from "#app/phases/title-phase";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { UiMode } from "#enums/ui-mode";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
+import { GameModes } from "#enums/game-modes";
+import { Gender } from "#enums/gender";
+import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 
 describe("UI - Starter select", () => {
   let phaserGame: Phaser.Game;

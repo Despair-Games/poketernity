@@ -1,5 +1,5 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { type Move } from "#app/data/moves/move";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder, NumberHolder } from "#app/utils";

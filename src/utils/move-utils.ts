@@ -1,6 +1,6 @@
 import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type Move, type MoveAttrFilter } from "#app/data/moves/move";
+import type { Move, MoveAttrFilter } from "#app/data/moves/move";
 import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";

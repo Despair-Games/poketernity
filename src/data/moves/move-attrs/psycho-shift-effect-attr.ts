@@ -1,8 +1,8 @@
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
-import { type Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Psycho_Shift_(move) | Psycho Shift}'s effect.

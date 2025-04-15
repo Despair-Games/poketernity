@@ -23,15 +23,15 @@ import {
 } from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { MoveId } from "#enums/move-id";
 import {
-  caramelSwirlAlcremieBiomes,
-  lemonAlcremieBiomes,
-  matchaAlcremieBiomes,
-  mintAlcremieBiomes,
-  rainbowSwirlAlcremieBiomes,
+  CaramelSwirlAlcremieBiomes,
+  LemonAlcremieBiomes,
+  MatchaAlcremieBiomes,
+  MintAlcremieBiomes,
+  RainbowSwirlAlcremieBiomes,
   rubyAlcremieBiomes,
-  rubySwirlAlcremieBiomes,
-  saltedCreamAlcremieBiomes,
-  vanillaAlcremieBiomes,
+  RubySwirlAlcremieBiomes,
+  SaltedCreamAlcremieBiomes,
+  VanillaAlcremieBiomes,
 } from "#app/data/biome-utils";
 
 export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -112,7 +112,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "vanilla-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(vanillaAlcremieBiomes)],
+      [new BiomeEvoCondition(VanillaAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -130,7 +130,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "matcha-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(matchaAlcremieBiomes)],
+      [new BiomeEvoCondition(MatchaAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -139,7 +139,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "mint-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(mintAlcremieBiomes)],
+      [new BiomeEvoCondition(MintAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -148,7 +148,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "lemon-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(lemonAlcremieBiomes)],
+      [new BiomeEvoCondition(LemonAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -157,7 +157,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "salted-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(saltedCreamAlcremieBiomes)],
+      [new BiomeEvoCondition(SaltedCreamAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -166,7 +166,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(rubySwirlAlcremieBiomes)],
+      [new BiomeEvoCondition(RubySwirlAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -175,7 +175,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "caramel-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(caramelSwirlAlcremieBiomes)],
+      [new BiomeEvoCondition(CaramelSwirlAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -184,7 +184,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "rainbow-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(rainbowSwirlAlcremieBiomes)],
+      [new BiomeEvoCondition(RainbowSwirlAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

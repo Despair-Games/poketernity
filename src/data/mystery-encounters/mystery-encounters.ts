@@ -1,9 +1,9 @@
 import {
-  CIVILIZATION_ENCOUNTER_BIOMES,
-  EXTREME_ENCOUNTER_BIOMES,
+  CivilizationEncounterBiomes,
+  ExtremeEncounterBiomes,
   getBiomeName,
-  HUMAN_TRANSITABLE_BIOMES,
-  NON_EXTREME_ENCOUNTER_BIOMES,
+  HumanTransitableBiomes,
+  NonExtremeEncounterBiomes,
 } from "#app/data/biome-utils";
 import { ATrainersTestEncounter } from "#app/data/mystery-encounters/encounters/a-trainers-test-encounter";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
@@ -165,7 +165,7 @@ export function initMysteryEncounters() {
 
   // Add extreme encounters to biome map
   extremeBiomeEncounters.forEach((encounter) => {
-    EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
+    ExtremeEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -174,7 +174,7 @@ export function initMysteryEncounters() {
   });
   // Add non-extreme encounters to biome map
   nonExtremeBiomeEncounters.forEach((encounter) => {
-    NON_EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
+    NonExtremeEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -183,7 +183,7 @@ export function initMysteryEncounters() {
   });
   // Add human encounters to biome map
   humanTransitableBiomeEncounters.forEach((encounter) => {
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -192,7 +192,7 @@ export function initMysteryEncounters() {
   });
   // Add civilization encounters to biome map
   civilizationBiomeEncounters.forEach((encounter) => {
-    CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
+    CivilizationEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);

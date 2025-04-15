@@ -1,7 +1,7 @@
 import type { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ab-attrs/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type Move } from "#app/data/moves/move";
+import type { Move } from "#app/data/moves/move";
 import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
 import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";

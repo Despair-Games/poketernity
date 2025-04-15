@@ -1,7 +1,6 @@
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
-import { type CommandPhase } from "#app/phases/command-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
 import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -300,7 +299,6 @@ describe("Moves - Substitute", () => {
 
   it("should prevent the user's items from being stolen", async () => {
     game.override.enemyMoveset(MoveId.THIEF);
-    vi.spyOn(allMoves.get(MoveId.THIEF), "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]); // give Thief 100% steal rate
     game.override.startingHeldItems([{ name: "BERRY", type: BerryType.SITRUS }]);
 
     await game.classicMode.startBattle([SpeciesId.BLASTOISE]);

@@ -60,7 +60,7 @@ import { HighestStatBoostTag } from "#app/data/battler-tags/highest-stat-boost-t
 import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
 import { MoveRestrictionBattlerTag } from "#app/data/battler-tags/move-restriction-battler-tag";
 import { PowerTrickTag } from "#app/data/battler-tags/power-trick-tag";
-import { type RestrictingBattlerTag } from "#app/data/battler-tags/restricting-battler-tag";
+import type { RestrictingBattlerTag } from "#app/data/battler-tags/restricting-battler-tag";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { TypeImmuneTag } from "#app/data/battler-tags/type-immune-tag";
 import type { UproarTag } from "#app/data/battler-tags/uproar-tag";
@@ -72,6 +72,7 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { speciesEggMoves } from "#app/data/egg-moves";
 import { getLevelTotalExp } from "#app/data/exp";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { getMoveTargets, type Move } from "#app/data/moves/move";
 import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#app/data/moves/move-attrs/combined-pledge-stab-boost-attr";
@@ -98,8 +99,7 @@ import { VariableMoveTypeChartAttr } from "#app/data/moves/move-attrs/variable-m
 import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/variable-move-type-multiplier-attr";
 import { getNatureStatMultiplier } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
-import { type SpeciesEvolutionCondition, type SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
+import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
@@ -141,7 +141,7 @@ import {
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
