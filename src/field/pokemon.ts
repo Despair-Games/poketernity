@@ -3060,22 +3060,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     const randomMultiplier = simulated ? 1 : this.randSeedIntRange(85, 100) / 100;
 
-    const sourceTypes = source.getTypes();
-    const sourceTeraType = source.getTeraType();
-    const matchesSourceType = sourceTypes.includes(moveType);
-    /** A damage multiplier for when the attack is of the attacker's type and/or Tera type. */
-    const stabMultiplier = new NumberHolder(1);
-    if (matchesSourceType) {
-      stabMultiplier.value += 0.5;
-    }
-    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, stabMultiplier);
-    if (sourceTeraType !== ElementalType.UNKNOWN && sourceTeraType === moveType) {
-      stabMultiplier.value += 0.5;
-    }
-
-    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, stabMultiplier);
-
-    stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
+    /** A damage multiplier for when the attack is of the same type as the attacker type/teraType. */
+    const stabMultiplier = this.calcIncomingStabMultiplier(source, move, abilityApplyMode, simulated);
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
@@ -4284,6 +4270,41 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Calculates the STAB multiplier for a move hitting this {@linkcode Pokemon}
+   * @param source the attacking {@linkcode Pokemon}
+   * @param move the {@linkcode Move} used in the attack
+   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied.
+   * @param simulated If `true`, suppresses changes to game state during the calculation.
+   * @returns A {@linkcode NumberHolder} containing the STAB multiplier as value
+   */
+  public calcIncomingStabMultiplier(
+    source: Pokemon,
+    move: Move,
+    abilityApplyMode: AbilityApplyMode,
+    simulated: boolean,
+  ): NumberHolder {
+    const stabMultiplier = new NumberHolder(1);
+    const applyAbFunc = getAbApplyFunc(abilityApplyMode);
+    const sourceTypes = source.getTypes();
+    const sourceTeraType = source.getTeraType();
+    const sourceMoveType = source.getMoveType(move);
+    const matchesSourceType = sourceTypes.includes(sourceMoveType);
+    if (matchesSourceType) {
+      stabMultiplier.value += 0.5;
+    }
+    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, stabMultiplier);
+    if (sourceTeraType !== ElementalType.UNKNOWN && sourceTeraType === sourceMoveType) {
+      stabMultiplier.value += 0.5;
+    }
+
+    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, stabMultiplier);
+
+    stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
+
+    return stabMultiplier;
   }
 }
 
