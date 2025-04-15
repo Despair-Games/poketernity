@@ -1,6 +1,5 @@
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityId } from "#enums/ability-id";
