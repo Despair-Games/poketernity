@@ -21,7 +21,7 @@ export class StealHeldItemAttr extends MoveEffectAttr {
     if (move.hitsSubstitute(user, target)) {
       return false;
     }
-    // TODO: Refactor this mess after items are properly implemented
+    /** @todo Refactor this mess after items are properly implemented */
     const heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
     if (heldItems.length) {
       const poolType = target.isPlayer()
