@@ -877,7 +877,11 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
   } else if (
     !globalScene
       .getEnemyParty()
-      .find((p) => (encounter.encounterMode !== MysteryEncounterMode.TRAINER_BATTLE ? p.isOnField() : !p?.isFainted()))
+      .find((p) =>
+        encounter.encounterMode !== MysteryEncounterMode.TRAINER_BATTLE
+          ? p.isOnField()
+          : p.isOnField() || !p?.isFainted(),
+      )
   ) {
     globalScene.phaseManager.pushPhase(new BattleEndPhase(true));
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {

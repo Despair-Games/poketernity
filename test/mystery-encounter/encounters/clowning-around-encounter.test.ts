@@ -11,6 +11,7 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
 import { MoveId } from "#enums/move-id";
@@ -197,6 +198,18 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(movePhases.length).toBe(3);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.ROLE_PLAY).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
+    });
+
+    it.only("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
+      game.override.startingLevel(1000);
+
+      await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, [SpeciesId.FEEBAS]);
+      await runSelectMysteryEncounterOption(game, 1);
+
+      game.move.use(MoveId.DAZZLING_GLEAM);
+      await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
+
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.ME_REWARDS), true)).toBe(false);
     });
 
     it("should let the player gain the ability after battle completion", async () => {

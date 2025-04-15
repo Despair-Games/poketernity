@@ -20,6 +20,7 @@ import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { shiftCharCodes } from "#app/utils";
 import type { TimedEvent } from "#app/@types/TimedEvent";
 import { timedEventManager } from "#app/timed-event-manager";
+import { TrainerType } from "#enums/trainer-type";
 
 /**
  * Helper to handle overrides in tests
@@ -179,7 +180,7 @@ export class OverridesHelper extends GameManagerHelper {
   /**
    * Override the player (pokemon) {@linkcode StatusEffect | status-effect}
    * @param statusEffect the {@linkcode StatusEffect | status-effect} to set
-   * @returns
+   * @returns `this`
    */
   public statusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(Overrides, "STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
@@ -194,6 +195,17 @@ export class OverridesHelper extends GameManagerHelper {
   public disableTrainerWaves(): this {
     vi.spyOn(Overrides, "DISABLE_RANDOM_TRAINERS_OVERRIDE", "get").mockReturnValue(true);
     this.log("Random trainer waves are disabled!");
+    return this;
+  }
+
+  /**
+   * Override each random enemy trainer to be of a given type
+   * @param trainerType - The {@linkcode TrainerType} to set
+   * @returns `this`
+   */
+  public trainerType(trainerType: TrainerType): this {
+    vi.spyOn(Overrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
+    this.log(`Mystery encounter override set to ${TrainerType[trainerType]} (=${trainerType})!`);
     return this;
   }
 

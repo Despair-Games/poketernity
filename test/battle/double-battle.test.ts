@@ -9,6 +9,8 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { TrainerType } from "#enums/trainer-type";
+import { PhaseId } from "#enums/phase-id";
 
 describe("Double Battles", () => {
   const DOUBLE_CHANCE = 8; // Normal chance of double battle is 1/8
@@ -99,5 +101,42 @@ describe("Double Battles", () => {
     await game.toNextTurn();
 
     expect(milotic.isFullHp()).toBe(true);
+  });
+
+  describe("Trainer Double Battles", () => {
+    it("should advance exactly one wave if both opponents are defeated at the same time", async () => {
+      game.override.trainerType(TrainerType.TWINS).startingLevel(1000).startingWave(5);
+      await game.dailyMode.startBattle();
+
+      game.move.use(MoveId.DAZZLING_GLEAM, 0);
+      game.move.use(MoveId.DAZZLING_GLEAM, 1);
+      await game.phaseInterceptor.to("SelectModifierPhase");
+
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+    });
+
+    it("should advance exactly one wave if the left opponent is defeated first", async () => {
+      game.override.trainerType(TrainerType.TWINS).startingLevel(1000).startingWave(5);
+      await game.dailyMode.startBattle();
+
+      game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+      game.move.use(MoveId.MOONBLAST, 0, BattlerIndex.ENEMY);
+      game.move.use(MoveId.MOONBLAST, 1, BattlerIndex.ENEMY_2);
+      await game.phaseInterceptor.to("SelectModifierPhase");
+
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+    });
+
+    it("should advance exactly one wave if the right opponent is defeated first", async () => {
+      game.override.trainerType(TrainerType.TWINS).startingLevel(1000).startingWave(5);
+      await game.dailyMode.startBattle();
+
+      game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+      game.move.use(MoveId.MOONBLAST, 0, BattlerIndex.ENEMY_2);
+      game.move.use(MoveId.MOONBLAST, 1, BattlerIndex.ENEMY);
+      await game.phaseInterceptor.to("SelectModifierPhase");
+
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+    });
   });
 });
