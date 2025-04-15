@@ -1,12 +1,12 @@
-import { type CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
-import { type PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
+import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
+import type { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type MysteryEncounterPostSummonTag } from "#app/data/battler-tags/mystery-encounter-post-summon-tag";
+import type { MysteryEncounterPostSummonTag } from "#app/data/battler-tags/mystery-encounter-post-summon-tag";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { type BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
