@@ -76,13 +76,13 @@ import { FormChangeItem } from "#enums/form-change-item";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
-import { type Nature } from "#enums/nature";
-import { type PokeballType } from "#enums/pokeball-type";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
-import { type VoucherType } from "#enums/voucher-type";
+import type { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
 
 const outputModifierData = false;

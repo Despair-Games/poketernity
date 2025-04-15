@@ -1,11 +1,11 @@
-import { type EffectiveStat, Stat } from "#enums/stat";
+import type { CommandedTag } from "#app/data/battler-tags/commanded-tag";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { type CommandedTag } from "#app/data/battler-tags/commanded-tag";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { type EffectiveStat, Stat } from "#enums/stat";
 
 /**
  * Attribute implementing the stat boosting effect of {@link https://bulbapedia.bulbagarden.net/wiki/Order_Up_(move) | Order Up}.

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { type PokeballCounts } from "#app/battle-scene";
+import type { PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
-import { type ModifierOverride } from "#app/modifier/modifier-type";
+import type { ModifierOverride } from "#app/modifier/modifier-type";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";

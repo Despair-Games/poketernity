@@ -11,7 +11,7 @@ import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/varia
 import type { WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { MeFirstPowerBoostTag } from "#app/data/battler-tags/me-first-power-boost-tag";
-import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
+import type { TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
@@ -29,7 +29,7 @@ import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accura
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
 import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";

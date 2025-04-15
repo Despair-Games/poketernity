@@ -6,7 +6,7 @@ import type { GameOverPhase } from "#app/phases/game-over-phase";
 
 import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
 import { globalScene } from "#app/global-scene";
-import { type CustomModifierSettings } from "#app/modifier/modifier-type";
+import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -17,7 +17,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
-import { type BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 
 /**

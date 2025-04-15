@@ -20,7 +20,7 @@ import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-t
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

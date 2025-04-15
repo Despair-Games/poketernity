@@ -1,12 +1,12 @@
-import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#app/field/pokemon";
-import { ElementalType } from "#enums/elemental-type";
+import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { type SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
-import i18next from "i18next";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { WeatherType } from "#enums/weather-type";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ElementalType } from "#enums/elemental-type";
+import { WeatherType } from "#enums/weather-type";
+import i18next from "i18next";
 
 /**
  * Weather types that are associated with the primal forms of the Generation III cover legendaries

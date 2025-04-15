@@ -11,18 +11,18 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  type AttackTypeBoosterModifierType,
-  type DoubleBattleChanceBoosterModifierType,
-  type EvolutionItemModifierType,
-  type FormChangeItemModifierType,
-  type ModifierOverride,
-  type ModifierType,
-  type PokemonBaseStatTotalModifierType,
-  type PokemonExpBoosterModifierType,
-  type PokemonFriendshipBoosterModifierType,
-  type TerastallizeModifierType,
-  type TmModifierType,
+import type {
+  AttackTypeBoosterModifierType,
+  DoubleBattleChanceBoosterModifierType,
+  EvolutionItemModifierType,
+  FormChangeItemModifierType,
+  ModifierOverride,
+  ModifierType,
+  PokemonBaseStatTotalModifierType,
+  PokemonExpBoosterModifierType,
+  PokemonFriendshipBoosterModifierType,
+  TerastallizeModifierType,
+  TmModifierType,
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
@@ -37,7 +37,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
-import { type FormChangeItem } from "#enums/form-change-item";
+import type { FormChangeItem } from "#enums/form-change-item";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { Nature } from "#enums/nature";

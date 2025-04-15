@@ -17,6 +17,7 @@ import { BlockStatusDamageAbAttr } from "#app/data/abilities/ab-attrs/block-stat
 import { BlockWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/block-weather-damage-ab-attr";
 import { BonusCritAbAttr } from "#app/data/abilities/ab-attrs/bonus-crit-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-burn-damage-reduction-ab-attr";
+import { BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
 import { ChangeMovePriorityAbAttr } from "#app/data/abilities/ab-attrs/change-move-priority-ab-attr";
 import { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
@@ -24,6 +25,7 @@ import { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-
 import { ConfusionOnStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/confusion-on-status-effect-ab-attr";
 import { CopyFaintedAllyAbilityAbAttr } from "#app/data/abilities/ab-attrs/copy-fainted-ally-ability-ab-attr";
 import { DamageBoostAbAttr } from "#app/data/abilities/ab-attrs/damage-boost-ab-attr";
+import { DefiantCompetitiveAbAttr } from "#app/data/abilities/ab-attrs/defiant-competitive-ab-attr";
 import { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import { DoubleBerryEffectAbAttr } from "#app/data/abilities/ab-attrs/double-berry-effect-ab-attr";
 import { DownloadAbAttr } from "#app/data/abilities/ab-attrs/download-ab-attr";
@@ -52,6 +54,7 @@ import { InfiltratorAbAttr } from "#app/data/abilities/ab-attrs/infiltrator-ab-a
 import { IntimidateImmunityAbAttr } from "#app/data/abilities/ab-attrs/intimidate-immunity-ab-attr";
 import { LowHpMoveTypeAttackMultiplierAbAttr } from "#app/data/abilities/ab-attrs/low-hp-move-type-attack-multiplier-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/abilities/ab-attrs/max-multi-hit-ab-attr";
+import { MockStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/mock-status-effect-ab-attr";
 import { MoneyAbAttr } from "#app/data/abilities/ab-attrs/money-ab-attr";
 import { MoodyAbAttr } from "#app/data/abilities/ab-attrs/moody-ab-attr";
 import { MoveAbilityBypassAbAttr } from "#app/data/abilities/ab-attrs/move-ability-bypass-ab-attr";
@@ -79,8 +82,8 @@ import { PostDamageForceSwitchAbAttr } from "#app/data/abilities/ab-attrs/post-d
 import { PostDancingMoveAbAttr } from "#app/data/abilities/ab-attrs/post-dancing-move-ab-attr";
 import { PostDefendAbilityGiveAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ability-give-ab-attr";
 import { PostDefendAbilitySwapAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ability-swap-ab-attr";
-import { PostDefendApplyEntryHazardTagAbAttr } from "#app/data/abilities/ab-attrs/post-defend-apply-entry-hazard-tag-ab-attr";
 import { PostDefendApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-defend-apply-battler-tag-ab-attr";
+import { PostDefendApplyEntryHazardTagAbAttr } from "#app/data/abilities/ab-attrs/post-defend-apply-entry-hazard-tag-ab-attr";
 import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { PostDefendContactApplyTagChanceAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-tag-chance-ab-attr";
 import { PostDefendContactDamageAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-damage-ab-attr";
@@ -100,7 +103,6 @@ import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "#app/data/abilitie
 import { PostIntimidateStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-intimidate-stat-stage-change-ab-attr";
 import { PostItemLostApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-apply-battler-tag-ab-attr";
 import { PostKnockOutStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-stat-stage-change-ab-attr";
-import { DefiantCompetitiveAbAttr } from "#app/data/abilities/ab-attrs/defiant-competitive-ab-attr";
 import { PostSummonAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-summon-add-battler-tag-ab-attr";
 import { PostSummonAllyHealAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ally-heal-ab-attr";
 import { PostSummonClearAllyStatStagesAbAttr } from "#app/data/abilities/ab-attrs/post-summon-clear-ally-stat-stages-ab-attr";
@@ -145,6 +147,7 @@ import { RedirectTypeMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-ty
 import { ReduceBerryUseThresholdAbAttr } from "#app/data/abilities/ab-attrs/reduce-berry-use-threshold-ab-attr";
 import { ReduceBurnDamageAbAttr } from "#app/data/abilities/ab-attrs/reduce-burn-damage-ab-attr";
 import { ReduceSleepDurationAbAttr } from "#app/data/abilities/ab-attrs/reduce-sleep-duration-ab-attr";
+import { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 import { ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { ReverseDrainAbAttr } from "#app/data/abilities/ab-attrs/reverse-drain-ab-attr";
 import { RunSuccessAbAttr } from "#app/data/abilities/ab-attrs/run-success-ab-attr";
@@ -173,13 +176,13 @@ import { WeatherBasedSpeedDoublerAbAttr } from "#app/data/abilities/ab-attrs/wea
 import { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
 import { Ability } from "#app/data/abilities/ability";
-import { allMoves, allAbilities } from "#app/data/data-lists";
-import { type Move } from "#app/data/moves/move";
+import { allAbilities, allMoves } from "#app/data/data-lists";
+import type { Move } from "#app/data/moves/move";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder, toDmgValue } from "#app/utils";
@@ -198,9 +201,6 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
-import { MockStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/mock-status-effect-ab-attr";
-import { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 
 // prettier-ignore
 export function initAbilities() {

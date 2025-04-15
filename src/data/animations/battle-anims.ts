@@ -1,4 +1,4 @@
-import { type AnimConfig, type AnimFrame } from "#app/data/animations/anim-config";
+import type { AnimConfig, AnimFrame } from "#app/data/animations/anim-config";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

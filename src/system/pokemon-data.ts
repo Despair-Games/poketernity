@@ -1,21 +1,21 @@
-import { BattleType } from "#enums/battle-type";
+import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
+import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { Status } from "#app/data/status-effect";
+import type { Variant } from "#app/data/variant";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { BattleType } from "#enums/battle-type";
+import type { BiomeId } from "#enums/biome-id";
 import type { Gender } from "#enums/gender";
+import { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Status } from "../data/status-effect";
-import { type Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { TrainerSlot } from "#enums/trainer-slot";
-import type { Variant } from "#app/data/variant";
-import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
-import type { BiomeId } from "#enums/biome-id";
-import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 export default class PokemonData {
   public id: number;

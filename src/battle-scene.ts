@@ -81,7 +81,7 @@ import {
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
-import { type Phase } from "#app/phase";
+import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { ExpPhase } from "#app/phases/exp-phase";
 import { FormChangePhase } from "#app/phases/form-change-phase";
@@ -96,7 +96,7 @@ import { SelectBiomePhase } from "#app/phases/select-biome-phase";
 import { ShowPartyExpBarPhase } from "#app/phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { type SwitchPhase } from "#app/phases/switch-phase";
+import type { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import InvertPostFX from "#app/pipelines/invert";

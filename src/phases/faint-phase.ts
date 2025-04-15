@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { type GameOverPhase } from "#app/phases/game-over-phase";
-import { type MovePhase } from "#app/phases/move-phase";
+import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import type { GameOverPhase } from "#app/phases/game-over-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -13,13 +13,13 @@ import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victor
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
-import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
