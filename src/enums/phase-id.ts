@@ -54,6 +54,7 @@ import type { PokemonAnimPhase } from "#app/phases/pokemon-anim-phase";
 import type { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import type { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import type { PostGameOverPhase } from "#app/phases/post-game-over-phase";
+import type { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import type { PostSummonPhase } from "#app/phases/post-summon-phase";
 import type { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
 import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
@@ -199,6 +200,8 @@ export enum PhaseId {
   POKEMON_TRANSFORM,
   /** {@linkcode PostGameOverPhase} */
   POST_GAME_OVER,
+  /** {@linkcode PostKnockoutPhase} */
+  POST_KNOCKOUT,
   /** {@linkcode PostSummonPhase} */
   POST_SUMMON,
   /** {@linkcode PostTurnStatusEffectPhase} */
@@ -271,5 +274,4 @@ export enum PhaseId {
   VICTORY,
   /** {@linkcode WeatherEffectPhase} */
   WEATHER_EFFECT,
-  POST_KNOCKOUT,
 }

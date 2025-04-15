@@ -314,7 +314,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     this.species = species;
-    // TODO: this should be able to be type2 as well
+    // The `EnemyPokemon` constructor randomly picks from both types if applicable
     this.teraType = species.type1;
     this.pokeball = dataSource?.pokeball || PokeballType.POKEBALL;
     this.level = level;

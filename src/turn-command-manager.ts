@@ -62,7 +62,6 @@ export class TurnCommandManager {
    * of accessing this array directly.
    */
   public turnCommands: TurnCommand[] = [];
-  // public preTurnCommands: TurnCommand[] = [];
   private orderIndex: number = 0;
 
   // #region Public Methods

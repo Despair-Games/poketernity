@@ -85,7 +85,7 @@ export class FieldHelper extends GameManagerHelper {
    */
   public forceTera(pokemon: Pokemon, teraType?: ElementalType): void {
     vi.spyOn(pokemon, "isTerastallized", "get").mockReturnValue(true);
-    teraType = teraType !== undefined ? teraType : pokemon.getSpeciesForm(true).type1;
+    teraType ??= pokemon.getSpeciesForm(true).type1;
     vi.spyOn(pokemon, "teraType", "get").mockReturnValue(teraType);
   }
 }
