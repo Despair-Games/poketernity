@@ -72,6 +72,7 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { speciesEggMoves } from "#app/data/egg-moves";
 import { getLevelTotalExp } from "#app/data/exp";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { getMoveTargets, type Move } from "#app/data/moves/move";
 import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#app/data/moves/move-attrs/combined-pledge-stab-boost-attr";
@@ -99,7 +100,6 @@ import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/varia
 import { getNatureStatMultiplier } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";

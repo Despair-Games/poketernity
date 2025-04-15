@@ -1,7 +1,7 @@
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
-import type { PokemonPreEvolutions as PokemonPreEvolutions } from "#app/data/pokemon-evolutions";
-import type { SpeciesId } from "#enums/species-id";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
+import type { PokemonPreEvolutions } from "#app/data/pokemon-evolutions";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import type { SpeciesId } from "#enums/species-id";
 
 export const pokemonPreEvolutions: PokemonPreEvolutions = {};
 

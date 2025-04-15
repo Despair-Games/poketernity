@@ -5,8 +5,8 @@ import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilte
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { getVariantTint } from "#app/data/variant";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
