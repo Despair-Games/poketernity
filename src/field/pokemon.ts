@@ -4301,9 +4301,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       stabMultiplier.value += 0.5;
     }
 
+    // Apply STAB boost from Adaptability Ability
     applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
-
-    stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
 
     return stabMultiplier.value;
   }

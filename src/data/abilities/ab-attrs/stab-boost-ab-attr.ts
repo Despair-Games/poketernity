@@ -27,21 +27,24 @@ export class StabBoostAbAttr extends AbAttr {
   }
 
   override apply(pokemon: Pokemon, _simulated: boolean, move: Move, stabMultiplier: NumberHolder): boolean {
-    if (pokemon.getTypes().includes(move.type)) {
+    const initialStabMultiplier = stabMultiplier.value;
+    if (!pokemon.getTypes().includes(move.type)) {
       if (pokemon.isTerastallized()) {
         const moveType = move.type;
         const teraType = pokemon.getTeraType();
 
         if (moveType === teraType) {
-          stabMultiplier.value += 0.5; // Adaptability only applies if the move type is the same as the tera type (When the pokemon is terastallized)
-          return true;
+          if (stabMultiplier.value >= 2) {
+            stabMultiplier.value += 0.25; // The maximum STAB multiplier is 2.25
+          } else {
+            stabMultiplier.value += 0.5; // Adaptability only applies if the move type is the same as the tera type (When the pokemon is terastallized)
+          }
         }
       } else {
         stabMultiplier.value += 0.5;
-        return true;
       }
     }
 
-    return false;
+    return initialStabMultiplier !== stabMultiplier.value;
   }
 }
