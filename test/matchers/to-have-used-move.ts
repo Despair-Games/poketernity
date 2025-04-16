@@ -43,7 +43,7 @@ export function toHaveUsedMove(
     message: () =>
       pass
         ? `Expected ${moveIndexStr} NOT to have id: ${MoveId[expectedResult]} (=${expectedResult}), but it did.`
-        : `Expected ${moveIndexStr} to have id: ${MoveResult[expectedResult]} (=${expectedResult}), but got: ${
+        : `Expected ${moveIndexStr} to have id: ${MoveId[expectedResult]} (=${expectedResult}), but got: ${
             move?.move.id ? `${MoveId[move.move.id]} (=${move.move.id})` : "undefined"
           }`,
   };
