@@ -19,6 +19,15 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
  * @param move the {@linkcode Move} being used
  * @param stabMultiplier a {@linkcode NumberHolder} containing the move's STAB multiplier for the current attack
  * @returns `true` if the STAB multiplier was increased
+ * @see https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability)
+ *
+ * | User Type: | Tera Type | Move Type | Expected STAB w/ Adaptability |
+ * |--------|--------|--------|--------|
+ * | FIRE | - | WATER | 1.0 |
+ * | FIRE | - | FIRE | 2.0 |
+ * | FIRE | WATER | FIRE | 1.5 |
+ * | FIRE | WATER | WATER | 2.0 |
+ * | FIRE | FIRE | FIRE | 2.25 |
  */
 export class StabBoostAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
@@ -28,21 +37,18 @@ export class StabBoostAbAttr extends AbAttr {
 
   override apply(pokemon: Pokemon, _simulated: boolean, move: Move, stabMultiplier: NumberHolder): boolean {
     const initialStabMultiplier = stabMultiplier.value;
-    if (!pokemon.getTypes().includes(move.type)) {
-      if (pokemon.isTerastallized()) {
-        const moveType = move.type;
-        const teraType = pokemon.getTeraType();
 
-        if (moveType === teraType) {
-          if (stabMultiplier.value >= 2) {
-            stabMultiplier.value += 0.25; // The maximum STAB multiplier is 2.25
-          } else {
-            stabMultiplier.value += 0.5; // Adaptability only applies if the move type is the same as the tera type (When the pokemon is terastallized)
-          }
-        }
-      } else {
+    if (pokemon.isTerastallized()) {
+      if (pokemon.getTypes().includes(pokemon.getTeraType())) {
+        // If the tera type is one of the pokemon's original types then the STAB multiplier is increased by 0.25 (to 2.25)
+        stabMultiplier.value += 0.25;
+      } else if (pokemon.getTeraType() === move.type) {
+        // if the tera type is NOT one of the pokemon's original types but is the same as the move type then the STAB multiplier is increased by 0.5
         stabMultiplier.value += 0.5;
       }
+    } else if (pokemon.getTypes().includes(move.type)) {
+      // If the move type is one of the pokemon's original types then the STAB multiplier is increased by 0.5
+      stabMultiplier.value += 0.5;
     }
 
     return initialStabMultiplier !== stabMultiplier.value;

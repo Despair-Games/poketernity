@@ -31,21 +31,20 @@ describe("Abilities - Adaptability", () => {
       .disableCrits();
   });
 
-  it("should increase STAB to 2.0", async () => {
+  it("should increase STAB to 2.0 if move type matches one of the user's types", async () => {
     await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
 
     game.move.select(MoveId.EMBER);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
   });
 
   describe("Terastallized", () => {
-    it("should increase STAB to 1.5 if tera type is NOT one of the user's original types", async () => {
+    it("should increase STAB to 2.0 if tera type is NOT one of the user's original types", async () => {
       game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
 
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
@@ -59,10 +58,9 @@ describe("Abilities - Adaptability", () => {
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
 
       game.move.select(MoveId.WATER_GUN);
-      await game.move.selectEnemyMove(MoveId.SPLASH);
       await game.toEndOfTurn();
 
-      expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
+      expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
     });
 
     it("should increase STAB to 2.25 if tera type matches one of the user's original types", async () => {
@@ -79,7 +77,6 @@ describe("Abilities - Adaptability", () => {
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
 
       game.move.select(MoveId.EMBER);
-      await game.move.selectEnemyMove(MoveId.SPLASH);
       await game.toEndOfTurn();
 
       expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.25);
