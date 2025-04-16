@@ -30,7 +30,7 @@ describe.each([
     game.override
       .ability(AbilityId.BALL_FETCH)
       .moveset(moveId)
-      .starterSpecies(SpeciesId.INFERNAPE)
+      .starterSpecies(SpeciesId.CHARMANDER)
       .battleType("single")
       .disableCrits()
       .enemySpecies(SpeciesId.SHUCKLE)
@@ -66,7 +66,7 @@ describe.each([
   });
 
   it(`should NOT award money when player runs away`, async () => {
-    game.override.enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
+    game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
     await game.classicMode.startBattle();
 
     game.move.select(moveId);
@@ -80,6 +80,7 @@ describe.each([
   });
 
   it(`should NOT award money when forcing foe to flee`, async () => {
+    game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
     await game.classicMode.startBattle();
 
     vi.spyOn(game.scene, "addMoney");
@@ -94,7 +95,7 @@ describe.each([
   });
 
   it(`should NOT award money when foe flees`, async () => {
-    game.override.enemyMoveset(MoveId.TELEPORT);
+    game.override.enemyMoveset(MoveId.TELEPORT).enemyLevel(999).enemyAbility(AbilityId.STURDY);
     await game.classicMode.startBattle();
 
     vi.spyOn(game.scene, "addMoney");
