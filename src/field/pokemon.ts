@@ -417,6 +417,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
+  /**
+   * The pokemon's Tera type. Some pokemon are locked to limited tera types:
+   * - Terapagos is always Stellar
+   * - Ogerpon is based on its form (Grass, Water, Fire, Rock)
+   * - Shedinja is always Bug
+   */
   public get teraType(): ElementalType {
     switch (this.species.speciesId) {
       case SpeciesId.TERAPAGOS:
@@ -438,6 +444,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             return ElementalType.ROCK;
         }
 
+      // Custom
       case SpeciesId.SHEDINJA:
         return ElementalType.BUG;
     }
@@ -449,6 +456,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this._teraType = value;
   }
 
+  /**
+   * De-Terastallizes the pokemon and updates the shaders.
+   * Also changes Ogerpon back into its non-Tera form.
+   */
   public resetTera(): void {
     const wasTerastallized = this.isTerastallized;
     this.isTerastallized = false;
@@ -3412,13 +3423,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return maxForms.includes(this.getFormKey());
   }
 
-  isMega(): boolean {
-    const megaForms = [
+  /**
+   * @returns `true` if the pokemon is a mega form
+   */
+  public isMega(): boolean {
+    const megaForms: string[] = [
       SpeciesFormKey.MEGA,
       SpeciesFormKey.MEGA_X,
       SpeciesFormKey.MEGA_Y,
       SpeciesFormKey.PRIMAL,
-    ] as string[];
+    ];
     return megaForms.includes(this.getFormKey());
   }
 
