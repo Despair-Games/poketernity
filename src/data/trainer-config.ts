@@ -1369,9 +1369,6 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_gym");
-    // this.setGenModifiersFunc((party) =>
-    //   getRandomTeraModifiers(party, 1, specialtyTypes.length ? specialtyTypes : undefined),
-    // );
     this.setRandomTeraModifiers(() => 1); // TODO: is this what we want?
 
     return this;
