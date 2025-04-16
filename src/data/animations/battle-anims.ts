@@ -6,7 +6,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { getEnumValues, getFrameMs, isNullOrUndefined } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
-import { AnimFrameTargets, type AnimFrameTarget } from "#enums/anim-frame-target";
+import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import Phaser from "phaser";
 
@@ -41,7 +41,7 @@ export abstract class BattleAnim {
   /** The background sprite to show during the animation */
   public bgSprite: Phaser.GameObjects.TileSprite | Phaser.GameObjects.Rectangle;
   /**
-   * If `true`, allows the animation to show its {@linkcode AnimFrameTargets.IMAGE | graphic} components
+   * If `true`, allows the animation to show its {@linkcode AnimFrameTarget.IMAGE | graphic} components
    * without requiring a user or target to be defined. This also causes the animation to play regardless
    * of whether the player has "Move Animations" enabled or disabled in Settings.
    */
@@ -97,9 +97,9 @@ export abstract class BattleAnim {
     onSubstitute: boolean = false,
   ): Map<AnimFrameTarget, Map<number, GraphicFrameData>> {
     const ret: Map<AnimFrameTarget, Map<number, GraphicFrameData>> = new Map([
-      [AnimFrameTargets.IMAGE, new Map<number, GraphicFrameData>()],
-      [AnimFrameTargets.SOURCE, new Map<number, GraphicFrameData>()],
-      [AnimFrameTargets.TARGET, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.IMAGE, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.SOURCE, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.TARGET, new Map<number, GraphicFrameData>()],
     ]);
 
     const isOppAnim = this.isOppAnim();
@@ -156,7 +156,7 @@ export abstract class BattleAnim {
           x = point[0];
           y = point[1];
           if (
-            frame.target === AnimFrameTargets.IMAGE
+            frame.target === AnimFrameTarget.IMAGE
             && isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
           ) {
             zoomX = zoomX * -1;
@@ -164,7 +164,7 @@ export abstract class BattleAnim {
           break;
       }
       const angle = -frame.angle;
-      const key = frame.target === AnimFrameTargets.IMAGE ? g++ : frame.target === AnimFrameTargets.SOURCE ? u++ : t++;
+      const key = frame.target === AnimFrameTarget.IMAGE ? g++ : frame.target === AnimFrameTarget.SOURCE ? u++ : t++;
       ret.get(frame.target)!.set(key, { x, y, zoomX, zoomY, angle }); // TODO: is the bang correct?
     }
 
@@ -204,9 +204,9 @@ export abstract class BattleAnim {
     const targetSprite = targetSubstitute?.sprite ?? target.getSprite();
 
     const spriteCache: SpriteCache = {
-      [AnimFrameTargets.IMAGE]: [],
-      [AnimFrameTargets.SOURCE]: [],
-      [AnimFrameTargets.TARGET]: [],
+      [AnimFrameTarget.IMAGE]: [],
+      [AnimFrameTarget.SOURCE]: [],
+      [AnimFrameTarget.TARGET]: [],
     };
     const spritePriorities: number[] = [];
 
@@ -307,8 +307,8 @@ export abstract class BattleAnim {
           let t = 0;
           let g = 0;
           for (const frame of spriteFrames) {
-            if (frame.target !== AnimFrameTargets.IMAGE) {
-              const isUser = frame.target === AnimFrameTargets.SOURCE;
+            if (frame.target !== AnimFrameTarget.IMAGE) {
+              const isUser = frame.target === AnimFrameTarget.SOURCE;
               if (isUser && target === user) {
                 continue;
               } else if (
@@ -380,7 +380,7 @@ export abstract class BattleAnim {
                     : Phaser.BlendModes.DIFFERENCE,
               );
             } else {
-              const sprites = spriteCache[AnimFrameTargets.IMAGE];
+              const sprites = spriteCache[AnimFrameTarget.IMAGE];
               if (g === sprites.length) {
                 const newSprite: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1); // TODO: is the bang correct?
                 sprites.push(newSprite);
@@ -464,16 +464,16 @@ export abstract class BattleAnim {
               r = Math.max(anim.frames.length - f + event.execute(this), r);
             }
           }
-          const targets = Object.values(AnimFrameTargets);
+          const targets = Object.values(AnimFrameTarget);
           for (const i of targets) {
-            const count = i === AnimFrameTargets.IMAGE ? g : i === AnimFrameTargets.SOURCE ? u : t;
+            const count = i === AnimFrameTarget.IMAGE ? g : i === AnimFrameTarget.SOURCE ? u : t;
             if (count < spriteCache[i].length) {
               const spritesToRemove = spriteCache[i].slice(count, spriteCache[i].length);
               for (const rs of spritesToRemove) {
                 if (!rs.getData("locked") as boolean) {
                   const spriteCacheIndex = spriteCache[i].indexOf(rs);
                   spriteCache[i].splice(spriteCacheIndex, 1);
-                  if (i === AnimFrameTargets.IMAGE) {
+                  if (i === AnimFrameTarget.IMAGE) {
                     spritePriorities.splice(spriteCacheIndex, 1);
                   }
                   rs.destroy();
@@ -511,9 +511,9 @@ export abstract class BattleAnim {
     targetInitialY: number,
   ): Map<AnimFrameTarget, Map<number, GraphicFrameData>> {
     const ret: Map<AnimFrameTarget, Map<number, GraphicFrameData>> = new Map([
-      [AnimFrameTargets.IMAGE, new Map<number, GraphicFrameData>()],
-      [AnimFrameTargets.SOURCE, new Map<number, GraphicFrameData>()],
-      [AnimFrameTargets.TARGET, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.IMAGE, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.SOURCE, new Map<number, GraphicFrameData>()],
+      [AnimFrameTarget.TARGET, new Map<number, GraphicFrameData>()],
     ]);
 
     let g = 0;
@@ -528,7 +528,7 @@ export abstract class BattleAnim {
       x += targetInitialX;
       y += targetInitialY;
       const angle = -frame.angle;
-      const key = frame.target === AnimFrameTargets.IMAGE ? g++ : frame.target === AnimFrameTargets.SOURCE ? u++ : t++;
+      const key = frame.target === AnimFrameTarget.IMAGE ? g++ : frame.target === AnimFrameTarget.SOURCE ? u++ : t++;
       ret.get(frame.target)?.set(key, { x, y, zoomX, zoomY, angle });
     }
 
@@ -537,7 +537,7 @@ export abstract class BattleAnim {
 
   /**
    * Plays this animation ignoring frame data for "user" or
-   * "target" Pokemon. This only plays the {@linkcode AnimFrameTargets.IMAGE | graphic}
+   * "target" Pokemon. This only plays the {@linkcode AnimFrameTarget.IMAGE | graphic}
    * components of the animation.
    * @param targetInitialX - The x-coordinate of the animation's start point,
    * relative to {@linkcode userFocusX}
@@ -559,9 +559,9 @@ export abstract class BattleAnim {
     callback?: () => void,
   ) {
     const spriteCache: SpriteCache = {
-      [AnimFrameTargets.IMAGE]: [],
-      [AnimFrameTargets.SOURCE]: [],
-      [AnimFrameTargets.TARGET]: [],
+      [AnimFrameTarget.IMAGE]: [],
+      [AnimFrameTarget.SOURCE]: [],
+      [AnimFrameTarget.TARGET]: [],
     };
 
     const cleanUpAndComplete = () => {
@@ -605,12 +605,12 @@ export abstract class BattleAnim {
         );
         let graphicFrameCount = 0;
         for (const frame of spriteFrames) {
-          if (frame.target !== AnimFrameTargets.IMAGE) {
+          if (frame.target !== AnimFrameTarget.IMAGE) {
             console.log("Encounter animations do not support targets");
             continue;
           }
 
-          const sprites = spriteCache[AnimFrameTargets.IMAGE];
+          const sprites = spriteCache[AnimFrameTarget.IMAGE];
           if (graphicFrameCount === sprites.length) {
             const newSprite: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1);
             sprites.push(newSprite);
@@ -659,7 +659,7 @@ export abstract class BattleAnim {
             );
           }
         }
-        const targets = getEnumValues(AnimFrameTargets);
+        const targets = getEnumValues(AnimFrameTarget);
         for (const i of targets) {
           const count = graphicFrameCount;
           if (count < spriteCache[i].length) {

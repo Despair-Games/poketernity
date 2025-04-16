@@ -12,6 +12,7 @@ import type { MoveAnim } from "#app/data/animations/move-anim";
 // -- end tsdoc imports --
 
 import { AnimBlendType } from "#enums/anim-blend-type";
+import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { MoveId } from "#enums/move-id";
 import type { Schema } from "ajv";
 

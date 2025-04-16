@@ -1,5 +1,5 @@
 /** Specifies the type of sprite affected by an animation */
-export const AnimFrameTargets = {
+export const AnimFrameTarget = {
   /**
    * Affects the animation's source or start point, e.g.
    * a Pokemon using a move.
@@ -15,4 +15,4 @@ export const AnimFrameTargets = {
 } as const;
 
 /** The sprite types affected by an animation */
-export type AnimFrameTarget = (typeof AnimFrameTargets)[keyof typeof AnimFrameTargets];
+export type AnimFrameTarget = (typeof AnimFrameTarget)[keyof typeof AnimFrameTarget];
