@@ -315,6 +315,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const starter = party[0];
   //   return [
@@ -413,6 +414,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
         p.variant = 1;
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const starter = party[0];
   //   return [
@@ -519,6 +521,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
         p.generateName();
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const starter = party[0];
   //   return [

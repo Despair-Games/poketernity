@@ -1369,7 +1369,7 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_gym");
-    this.setRandomTeraModifiers(() => 1); // TODO: is this what we want?
+    this.setRandomTeraModifiers(() => 1);
 
     return this;
   }
@@ -1707,6 +1707,7 @@ export function getSpeciesFilterRandomPartyMemberFunc(
  * @param teraType the type that the Pokemon will be tera'd into
  * @returns a PersistentModifier
  */
+// TODO: remove this when trainer teras are reworked
 // function getSpecificTeraModifier(
 //   party: EnemyPokemon[],
 //   partySlot: number,
@@ -1730,6 +1731,7 @@ export function getSpeciesFilterRandomPartyMemberFunc(
  * @param types an array of possible ElementalTypes to apply the tera
  * @returns a PersistentModifier
  */
+// TODO: remove this when trainer teras are reworked
 // function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
 //   const ret: PersistentModifier[] = [];
 //   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);

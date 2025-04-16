@@ -656,6 +656,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
         p.generateName();
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const teraPokemon = party[4];
   //   return [
@@ -724,6 +725,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
         },
       ),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const teraPokemon = party[0];
   //   return [

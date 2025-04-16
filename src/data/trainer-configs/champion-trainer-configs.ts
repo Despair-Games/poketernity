@@ -230,6 +230,7 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const teraPokemon = party[4];
   //   return [
@@ -319,6 +320,7 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const teraPokemon = party[4];
   //   let teraType: ElementalType;
@@ -384,6 +386,7 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const teraPokemon = party[4];
   //   return [
@@ -427,6 +430,7 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
+  // TODO: remove this when trainer teras are reworked
   // .setGenModifiersFunc((party) => {
   //   const teraPokemon = party[4];
   //   let teraType: ElementalType;
