@@ -1376,12 +1376,10 @@ export default class BattleScene extends SceneBase {
 
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
 
-          // After being used once, the Tera Orb loses all its Terastal energy and has to be recharged by either touching crystals containing Terastal energy or by visiting a Pokémon Center.
-          // An exception to this can be found in Area Zero, where the Tera Orb will automatically recharge at the end of each battle after it is used.
-          // Upon capturing Terapagos at the end of The Indigo Disk, the Tera Orb will be infused with Terapagos' energy and will no longer require charging.
-          // - https://bulbapedia.bulbagarden.net/wiki/Terastal_phenomenon#Effects
           if (
+            // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
             pokemon.species.speciesId === SpeciesId.TERAPAGOS
+            // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
             || (this.gameMode.isClassic && this.currentBattle.waveIndex > 180)
           ) {
             this.arena.playerTerasUsed = 0;
