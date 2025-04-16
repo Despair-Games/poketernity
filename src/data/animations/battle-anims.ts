@@ -302,7 +302,7 @@ export abstract class BattleAnim {
 
           /** The properties of all assets for the current frame */
           const spriteFrames = anim!.frames[f]; // TODO: is the bang correct?
-          const frameData = this.getGraphicFrameData(anim!.frames[f], onSubstitute); // TODO: is the bang correct?
+          const frameData = this.getGraphicFrameData(spriteFrames, onSubstitute);
           let u = 0;
           let t = 0;
           let g = 0;
