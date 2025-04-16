@@ -37,6 +37,17 @@ export class BattleEndPhase extends BattlePhase {
       if (currentBattle.trainer) {
         gameData.gameStats.trainersDefeated++;
       }
+
+      /**
+       * Custom behavior that differs slightly from mainline
+       * Will award money on defeating foe
+       * Will award money on capturing foe
+       * Will NOT award money on forcing foe to flee
+       * Will NOT award money if foe flees
+       */
+      if (currentBattle.moneyScattered) {
+        currentBattle.pickUpScatteredMoney();
+      }
     }
 
     // Endless graceful end
@@ -52,10 +63,6 @@ export class BattleEndPhase extends BattlePhase {
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
       applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
-    }
-
-    if (currentBattle.moneyScattered) {
-      currentBattle.pickUpScatteredMoney();
     }
 
     globalScene.clearEnemyHeldItemModifiers();
