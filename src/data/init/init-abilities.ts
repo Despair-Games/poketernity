@@ -1,5 +1,6 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
+import { TERA_MOVES } from "#app/constants/move-constants";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
@@ -204,10 +205,9 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 
 /** Used for Aerialate, Refrigerate, Pixilate, Galvanize */
-const basicMoveTypeChangeAbilityCondition: PokemonAttackCondition = (user, _target, move) =>
+const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
   move?.type === ElementalType.NORMAL
-  && (!move.hasAttr(VariableMoveTypeAttr)
-    || ([MoveId.TERA_BLAST, MoveId.TERA_STARSTORM].includes(move.id) && !user?.isTerastallized));
+  && (!move.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized));
 
 // prettier-ignore
 export function initAbilities() {
@@ -888,7 +888,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.ICE,
         1.2,
-        basicMoveTypeChangeAbilityCondition,
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.SWEET_VEIL, 6)
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.SLEEP)
@@ -920,7 +920,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.FAIRY,
         1.2,
-        basicMoveTypeChangeAbilityCondition,
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.GOOEY, 6)
       .attr(
@@ -935,7 +935,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.FLYING,
         1.2,
-        basicMoveTypeChangeAbilityCondition,
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.PARENTAL_BOND, 6)
       .attr(AddSecondStrikeAbAttr, 0.25),
@@ -1056,7 +1056,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.ELECTRIC,
         1.2,
-        basicMoveTypeChangeAbilityCondition,
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.SURGE_SURFER, 7)
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPD, 2),
