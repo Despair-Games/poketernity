@@ -3259,7 +3259,7 @@ export function initMoves() {
       .attr(TeraBlastTypeAttr)
       .attr(TeraBlastPowerAttr)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1, true, {
-        condition: (user, _target, _move) => user.isTerastallized && user.isOfType(ElementalType.STELLAR),
+        condition: (user) => user.isTerastallized && user.isOfType(ElementalType.STELLAR),
       }),
     new SelfStatusMove(MoveId.SILK_TRAP, ElementalType.BUG, -1, 10, -1, 4, 9)
       .attr(ProtectAttr, BattlerTagType.SILK_TRAP)
@@ -3475,7 +3475,7 @@ export function initMoves() {
     new AttackMove(MoveId.TERA_STARSTORM, ElementalType.NORMAL, MoveCategory.SPECIAL, 120, 100, 5, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
       .attr(TeraStarstormTypeAttr)
-      .attr(VariableTargetAttr, (user, _target, _move) =>
+      .attr(VariableTargetAttr, (user) =>
         user.species.speciesId === SpeciesId.TERAPAGOS && user.isTerastallized
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
