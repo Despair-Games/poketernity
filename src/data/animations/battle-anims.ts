@@ -3,7 +3,7 @@ import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { getEnumValues, getFrameMs, isNullOrUndefined } from "#app/utils";
+import { getEnumValues, getFrameMs, isNullOrUndefined, type nil } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
@@ -388,59 +388,53 @@ export abstract class BattleAnim {
                 spritePriorities.push(1);
               }
 
-              const graphicIndex = g++;
-              const moveSprite = sprites[graphicIndex];
-              if (spritePriorities[graphicIndex] !== frame.priority) {
-                spritePriorities[graphicIndex] = frame.priority;
-                const setSpritePriority = (priority: number) => {
-                  switch (priority) {
-                    case 0:
-                      globalScene.field.moveBelow(
-                        moveSprite as Phaser.GameObjects.GameObject,
-                        globalScene.getEnemyPokemon(false) ?? globalScene.getPlayerPokemon(false)!,
-                      ); // TODO: is this bang correct?
-                      break;
-                    case 1:
-                      globalScene.field.moveTo(moveSprite, globalScene.field.getAll().length - 1);
-                      break;
-                    case 2:
-                      switch (frame.focus) {
-                        case AnimFocus.USER:
-                          if (this.bgSprite) {
-                            globalScene.field.moveAbove(moveSprite as Phaser.GameObjects.GameObject, this.bgSprite);
-                          } else {
-                            globalScene.field.moveBelow(moveSprite as Phaser.GameObjects.GameObject, this.user!); // TODO: is this bang correct?
-                          }
-                          break;
-                        case AnimFocus.TARGET:
-                          globalScene.field.moveBelow(moveSprite as Phaser.GameObjects.GameObject, this.target!); // TODO: is this bang correct?
-                          break;
-                        default:
-                          setSpritePriority(1);
-                          break;
-                      }
-                      break;
-                    case 3:
-                      switch (frame.focus) {
-                        case AnimFocus.USER:
-                          globalScene.field.moveAbove(moveSprite as Phaser.GameObjects.GameObject, this.user!); // TODO: is this bang correct?
-                          break;
-                        case AnimFocus.TARGET:
-                          globalScene.field.moveAbove(moveSprite as Phaser.GameObjects.GameObject, this.target!); // TODO: is this bang correct?
-                          break;
-                        default:
-                          setSpritePriority(1);
-                          break;
-                      }
-                      break;
-                    default:
-                      setSpritePriority(1);
+            const graphicIndex = g++;
+            const moveSprite = sprites[graphicIndex];
+            if (spritePriorities[graphicIndex] !== frame.priority) {
+              spritePriorities[graphicIndex] = frame.priority;
+              /** Move the position that the moveSprite is rendered in based on the priority.
+               * @param priority The priority level to draw the sprite.
+               * - 0: Draw the sprite in front of the pokemon on the field.
+               * - 1: Draw the sprite in front of the user pokemon.
+               * - 2: Draw the sprite in front of its `bgSprite` (if it has one), or its
+               * `AnimFocus` (if that is user/target), otherwise behind everything.
+               * - 3: Draw the sprite behind its `AnimFocus` (if that is user/target), otherwise in front of everything.
+               */
+              const setSpritePriority = (priority: number) => {
+                /** The sprite we are moving the moveSprite in relation to */
+                let targetSprite: Phaser.GameObjects.GameObject | nil;
+                /** The method that is being used to move the sprite.*/
+                let moveFunc:
+                  | ((sprite: Phaser.GameObjects.GameObject, target: Phaser.GameObjects.GameObject) => void)
+                  | ((sprite: Phaser.GameObjects.GameObject) => void) = globalScene.field.bringToTop;
+
+                if (priority === 0) {
+                  // Place the sprite in front of the pokemon on the field.
+                  targetSprite =
+                    globalScene.getEnemyField().find((p) => p) ?? globalScene.getPlayerField().find((p) => p);
+                  console.log(typeof targetSprite);
+                  moveFunc = globalScene.field.moveBelow;
+                } else if (priority === 2 && this.bgSprite) {
+                  moveFunc = globalScene.field.moveAbove;
+                  targetSprite = this.bgSprite;
+                } else if (priority === 2 || priority === 3) {
+                  moveFunc = priority === 2 ? globalScene.field.moveBelow : globalScene.field.moveAbove;
+                  if (frame.focus === AnimFocus.USER) {
+                    targetSprite = this.user;
+                  } else if (frame.focus === AnimFocus.TARGET) {
+                    targetSprite = this.target;
                   }
-                };
-                setSpritePriority(frame.priority);
-              }
-              moveSprite.setFrame(frame.graphicFrame);
-              //console.log(AnimFocus[frame.focus]);
+                }
+                // If target sprite is not undefined and exists in the field container, then move the sprite using the moveFunc.
+                // Otherwise, default to just bringing it to the top.
+                targetSprite && globalScene.field.exists(targetSprite)
+                  ? moveFunc.bind(globalScene.field)(moveSprite as Phaser.GameObjects.GameObject, targetSprite)
+                  : globalScene.field.bringToTop(moveSprite as Phaser.GameObjects.GameObject);
+              };
+              setSpritePriority(frame.priority);
+            }
+            moveSprite.setFrame(frame.graphicFrame);
+            //console.log(AnimFocus[frame.focus]);
 
               const graphicFrameData = frameData.get(frame.target)!.get(graphicIndex)!; // TODO: are those bangs correct?
               moveSprite.setPosition(graphicFrameData.x, graphicFrameData.y);
