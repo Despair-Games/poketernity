@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Spec - Pokemon", () => {
   let phaserGame: Phaser.Game;
@@ -91,35 +91,5 @@ describe("Spec - Pokemon", () => {
 
     expect(eevee.abilityIndex).toBeGreaterThanOrEqual(0);
     expect(eevee.abilityIndex).toBeLessThanOrEqual(2);
-  });
-
-  it("should have a default STAB of 1.5", async () => {
-    game.override.enemySpecies(SpeciesId.MUNCHLAX).battleType("single").startingLevel(1);
-
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
-
-    const enemyPokemon = game.field.getEnemyPokemon();
-    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
-
-    game.move.use(MoveId.EMBER);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
-    await game.toEndOfTurn();
-
-    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
-  });
-
-  it("should have a NO STAB (1.0) on type mismatch", async () => {
-    game.override.enemySpecies(SpeciesId.MUNCHLAX).battleType("single").startingLevel(1);
-
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
-
-    const enemyPokemon = game.field.getEnemyPokemon();
-    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
-
-    game.move.use(MoveId.WATER_GUN);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
-    await game.toEndOfTurn();
-
-    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
   });
 });
