@@ -1,6 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
 
+//#region Types
+
 export interface ToHaveUsedMoveMatcherOptions {
   /** The index of the move to check (Default is `0`) */
   index?: number;
@@ -12,6 +14,9 @@ export interface ToHaveUsedMoveMatcherOptions {
   moveCount?: number;
 }
 
+//#endregion
+//#region Exports
+
 /**
  * Matcher to check if a pokemons move id is as expected
  * @param received The actual value received
@@ -19,7 +24,7 @@ export interface ToHaveUsedMoveMatcherOptions {
  * @param index The index of the move to check
  * @returns Whether the matcher passed
  */
-export function toHaveUsedMove(
+export function toHaveUsedMoveMatcher(
   received: unknown,
   expectedResult: MoveId,
   { index = 0, moveCount = 1 }: ToHaveUsedMoveMatcherOptions = {},
@@ -47,3 +52,5 @@ export function toHaveUsedMove(
           }`,
   };
 }
+
+//#endregion

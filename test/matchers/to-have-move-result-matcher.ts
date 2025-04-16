@@ -1,6 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 
+//#region Types
+
 export interface ToHaveMoveResultMatcherOptions {
   /** The index of the move to check (Default is `0`) */
   index?: number;
@@ -12,6 +14,9 @@ export interface ToHaveMoveResultMatcherOptions {
   moveCount?: number;
 }
 
+//#endregion
+//#region Exports
+
 /**
  * Matcher to check if a pokemons move result is as expected
  * @param received The actual value received
@@ -19,7 +24,7 @@ export interface ToHaveMoveResultMatcherOptions {
  * @param index The index of the move to check
  * @returns Whether the matcher passed
  */
-export function toHaveMoveResult(
+export function toHaveMoveResultMatcher(
   received: unknown,
   expectedResult: MoveResult,
   { index = 0, moveCount = 1 }: ToHaveMoveResultMatcherOptions = {},
@@ -47,3 +52,5 @@ export function toHaveMoveResult(
           }`,
   };
 }
+
+//#endregion
