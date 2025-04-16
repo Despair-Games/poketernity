@@ -257,30 +257,27 @@ export interface PartyMemberFuncs {
 }
 
 class TrainerAI {
+  /** @see {@linkcode TeraAIMode} */
   public teraMode: TeraAIMode;
   public instantTeras: number[] = [];
 
-  /**
-   * @param canTerastallize Whether this trainer is allowed to tera
-   */
-  constructor(teraMode: TeraAIMode = TeraAIMode.NO_TERA) {
+  constructor(teraMode: TeraAIMode = TeraAIMode.NONE) {
     this.teraMode = teraMode;
   }
 
   /**
-   * Checks if a trainer can tera
-   * @returns Whether this trainer can currently tera
+   * @returns `true` if this trainer is allowed to use Terastallization
    */
   public canTerastallize(): boolean {
-    return this.teraMode !== TeraAIMode.NO_TERA;
+    return this.teraMode !== TeraAIMode.NONE;
   }
 
   /**
-   * Sets a pokemon on this AI to just instantly tera on first move used
+   * Sets a pokemon on this AI to instantly tera on first move used
    * @param index The index of the pokemon to instantly tera
    */
   public setInstantTera(index: number): void {
-    this.teraMode = TeraAIMode.INSTANT_TERA;
+    this.teraMode = TeraAIMode.INSTANT;
     this.instantTeras.push(index);
   }
 }
@@ -673,14 +670,15 @@ export class TrainerConfig {
   }
 
   /**
-   * Sets random pokemon from the trainers team to instant tera. Uses their specialty types is they have one.
+   * Sets random pokemon from the trainers team to instant tera. Uses their specialty types if they have one.
    * @param count The amount of pokemon to have instant tera
-   * @returns this
+   * @returns `this` ({@linkcode TrainerConfig})
    */
-  setRandomTeraModifiers(count: () => number): TrainerConfig {
+  public setRandomTeraModifiers(count: () => number): TrainerConfig {
     this.genAIFuncs.push((party: EnemyPokemon[]) => {
-      const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
-      for (let t = 0; t < Math.min(count(), party.length); t++) {
+      const { length } = party;
+      const partyMemberIndexes = Array.from({ length }).map((_, i) => i);
+      for (let t = 0; t < Math.min(count(), length); t++) {
         const randomIndex = randSeedItem(partyMemberIndexes);
         partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
         if (this.specialtyTypes?.length) {
@@ -695,9 +693,9 @@ export class TrainerConfig {
   /**
    * Sets a specific pokemon to instant tera
    * @param index The index within the team to have instant tera
-   * @returns this
+   * @returns `this` ({@linkcode TrainerConfig})
    */
-  setInstantTera(index: number): TrainerConfig {
+  public setInstantTera(index: number): TrainerConfig {
     this.trainerAI.setInstantTera(index);
     return this;
   }
