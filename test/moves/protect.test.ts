@@ -127,7 +127,7 @@ describe("Moves - Protect", () => {
 
     await game.toEndOfTurn();
 
-    expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
-    expect(leadPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(leadPokemon).toHaveMoveResult(MoveResult.FAIL);
   });
 });

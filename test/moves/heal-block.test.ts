@@ -48,8 +48,7 @@ describe("Moves - Heal Block", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    const lastPlayerMove = player.getLastXMoves(1)[0];
-    expect(lastPlayerMove.move.id).toBe(MoveId.NONE);
+    expect(player).toHaveUsedMove(MoveId.NONE);
   });
 
   it("should stop delayed heals, such as from Wish", async () => {

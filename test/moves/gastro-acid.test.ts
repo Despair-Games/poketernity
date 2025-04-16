@@ -75,6 +75,6 @@ describe("Moves - Gastro Acid", () => {
 
     await game.phaseInterceptor.to("TurnInitPhase");
 
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
   });
 });

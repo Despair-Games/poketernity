@@ -98,7 +98,7 @@ describe("Moves - Me First", () => {
 
     await game.toEndOfTurn();
 
-    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(2);
   });
@@ -115,7 +115,7 @@ describe("Moves - Me First", () => {
 
     await game.toEndOfTurn();
 
-    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
     expect(player.isFullHp()).toBeFalsy();
     expect(enemy.isFullHp()).toBeTruthy();
   });
@@ -157,6 +157,6 @@ describe("Moves - Me First", () => {
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
-    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
   });
 });
