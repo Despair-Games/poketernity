@@ -1,3 +1,8 @@
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { EnemyPartyConfig, EnemyPokemonConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   generateModifierType,
@@ -6,27 +11,22 @@ import {
   loadCustomMovesForEncounter,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { SpeciesId } from "#enums/species-id";
-import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import i18next from "#app/plugins/i18n";
-import { ModifierTier } from "#enums/modifier-tier";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BattlerIndex } from "#enums/battler-index";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/trashToTreasure";

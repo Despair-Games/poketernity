@@ -50,7 +50,7 @@ describe("Moves - Future Sight", () => {
   it("should hit 2 turns after use", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const enemy = game.scene.getEnemyPokemon()!;
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
@@ -74,7 +74,7 @@ describe("Moves - Future Sight", () => {
 
     await passTurns(1);
 
-    expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);
+    expect(game.field.getEnemyPokemon().isFullHp()).toBe(false);
   });
 
   it("should inflict damage as a Psychic-type move", async () => {
@@ -89,8 +89,8 @@ describe("Moves - Future Sight", () => {
 
     await passTurns(2);
 
-    expect(game.scene.getEnemyPokemon()!.isFullHp()).toBeTruthy();
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(game.field.getEnemyPokemon().isFullHp()).toBeTruthy();
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("should inflict damage as a Normal-type move if the user is active with Normalize", async () => {
@@ -105,8 +105,8 @@ describe("Moves - Future Sight", () => {
 
     await passTurns(2);
 
-    expect(game.scene.getEnemyPokemon()!.isFullHp()).toBeTruthy();
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(game.field.getEnemyPokemon().isFullHp()).toBeTruthy();
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("the target should endure inflicted damage from this move with Sturdy", async () => {
@@ -121,7 +121,7 @@ describe("Moves - Future Sight", () => {
 
     await passTurns(2);
 
-    const enemy = game.scene.getEnemyPokemon()!;
+    const enemy = game.field.getEnemyPokemon();
 
     expect(enemy.hp).toBe(1);
   });
@@ -158,7 +158,7 @@ describe("Moves - Future Sight", () => {
     await game.toEndOfTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
-    expect(playerPokemon[1].getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(playerPokemon[1]).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("can be used alongside Doom Desire against different targets", async () => {
@@ -224,7 +224,7 @@ describe("Moves - Future Sight", () => {
     await game.move.selectEnemyMove(MoveId.DESTINY_BOND);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
 
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(SpeciesId.MILOTIC);
+    expect(game.field.getPlayerPokemon().species.speciesId).toBe(SpeciesId.MILOTIC);
     expect(milotic.isFullHp()).toBe(true);
     expect(feebas.isFullHp()).toBe(true);
   });
@@ -244,7 +244,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
 
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(SpeciesId.MILOTIC);
+    expect(game.field.getPlayerPokemon().species.speciesId).toBe(SpeciesId.MILOTIC);
     expect(milotic.isFullHp()).toBe(true);
     expect(feebas.isFullHp()).toBe(true);
   });

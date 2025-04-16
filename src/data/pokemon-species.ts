@@ -1,20 +1,20 @@
+import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
+import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
+import type { PokemonForm } from "#app/data/pokemon-form";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
+import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import { variantData } from "#app/data/variant";
 import type { Localizable } from "#app/interfaces/locales";
+import { randSeedGauss, randSeedItem } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { AbilityId } from "#enums/ability-id";
+import type { ElementalType } from "#enums/elemental-type";
+import type { GrowthRate } from "#enums/growth-rates";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import i18next from "i18next";
-import { randSeedGauss, randSeedItem } from "#app/utils";
-import type { GrowthRate } from "#enums/growth-rates";
-import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type { ElementalType } from "#enums/elemental-type";
-import { variantData } from "#app/data/variant";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import type { PokemonForm } from "#app/data/pokemon-form";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 
 export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {
   public name: string;

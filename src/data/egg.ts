@@ -27,7 +27,7 @@ import { speciesEggTiers } from "#app/data/species-egg-tiers";
 import { speciesStarterCosts } from "#app/data/starters";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { getIvsFromId, randInt, randomString, randSeedInt } from "#app/utils";

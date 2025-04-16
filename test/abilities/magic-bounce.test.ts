@@ -228,7 +228,7 @@ describe("Abilities - Magic Bounce", () => {
     await game.toEndOfTurn();
     expect(enemy.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
     console.log(enemy.getMoveHistory().map((turnMove) => MoveId[turnMove.move.id]));
-    expect(enemy.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
+    expect(enemy).toHaveUsedMove(MoveId.TACKLE);
   });
 
   it("should not cause the bounced move to count for encore", async () => {
@@ -254,7 +254,7 @@ describe("Abilities - Magic Bounce", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemyPokemon.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
-    expect(enemyPokemon.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
+    expect(enemyPokemon).toHaveUsedMove(MoveId.TACKLE);
   });
 
   it("should cause stomping tantrum to double in power when the last move was bounced", async () => {
@@ -284,7 +284,7 @@ describe("Abilities - Magic Bounce", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
-    expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+    expect(enemy).toHaveMoveResult(MoveResult.FAIL);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);

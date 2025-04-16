@@ -8,7 +8,7 @@ import {
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getNatureName } from "#app/data/nature";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import PokemonData from "#app/system/pokemon-data";

@@ -1,11 +1,11 @@
+import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
+import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import { MoveFlags } from "#enums/move-flags";
 
 describe("Abilities - Move Flag Power Boost Ability Attr", () => {
   let phaserGame: Phaser.Game;
@@ -87,15 +87,16 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
     async ({ ability, moveId: move, moveFlag, factor }) => {
       game.override.moveset(move).ability(ability);
       await game.classicMode.startBattle([SpeciesId.FEEBAS]);
-      const playerPokemon = game.scene.getPlayerPokemon()!;
+      const playerPokemon = game.field.getPlayerPokemon();
       const moveUsed = allMoves.get(move);
       vi.spyOn(moveUsed, "calculateBattlePower");
 
       game.move.select(move);
       await game.move.forceHit();
       await game.toEndOfTurn();
-
-      expect(moveUsed.checkFlag(moveFlag, playerPokemon, null)).toBe(true);
+      // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+      expect(moveUsed.hasFlag(moveFlag)).toBe(true);
+      expect(moveUsed.checkFlag(moveFlag, playerPokemon)).toBe(true);
       expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);
     },
   );

@@ -1,4 +1,4 @@
-import { type BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
+import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -50,7 +50,7 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeLessThan(enemy.turnData.order);
-    expect(player.battleData.abilitiesApplied).toContain(AbilityId.QUICK_DRAW);
+    expect(player.waveData.abilitiesApplied).toContain(AbilityId.QUICK_DRAW);
   });
 
   test("should not apply when the source uses a status move", async () => {
@@ -63,7 +63,7 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
-    expect(player.battleData.abilitiesApplied).not.toContain(AbilityId.QUICK_DRAW);
+    expect(player.waveData.abilitiesApplied).not.toContain(AbilityId.QUICK_DRAW);
   });
 
   test("should not cause the source to move before higher-priority moves", async () => {
@@ -77,6 +77,6 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
-    expect(player.battleData.abilitiesApplied).contain(AbilityId.QUICK_DRAW);
+    expect(player.waveData.abilitiesApplied).contain(AbilityId.QUICK_DRAW);
   });
 });

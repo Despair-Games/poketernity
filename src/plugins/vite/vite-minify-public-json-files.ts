@@ -1,7 +1,7 @@
-import path from "path";
-import fs from "fs";
-import { type Logger, type Plugin as VitePlugin } from "vite";
 import chalk from "chalk";
+import fs from "fs";
+import path from "path";
+import type { Logger, Plugin as VitePlugin } from "vite";
 
 //#region Constants
 

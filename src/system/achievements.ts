@@ -1,13 +1,13 @@
-import i18next from "i18next";
-import { PlayerGender } from "#enums/player-gender";
-import type { Challenge } from "#app/data/challenge";
 import type { ConditionFn } from "#app/@types/common";
-import { Challenges } from "#enums/challenges";
+import type { Challenge } from "#app/data/challenge";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { ElementalType } from "#enums/elemental-type";
 import { AchvCategory } from "#enums/achv-category";
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
+import { Challenges } from "#enums/challenges";
+import { ElementalType } from "#enums/elemental-type";
+import { PlayerGender } from "#enums/player-gender";
+import i18next from "i18next";
 
 // Note: Refer to https://github.com/Despair-Games/poketernity/pull/775/files for removed achv code
 export class Achievement {

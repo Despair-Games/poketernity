@@ -1,8 +1,8 @@
-import { type Pokemon } from "#app/field/pokemon";
-import { type TurnMove } from "#app/@types/TurnMove";
-import { MoveResult } from "#enums/move-result";
+import type { TurnMove } from "#app/@types/TurnMove";
 import type { Move } from "#app/data/moves/move";
 import { MovePowerMultiplierAttr } from "#app/data/moves/move-attrs/move-power-multiplier-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 
 /**
  * Abstract attribute to multiply move power based on the

@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
@@ -8,7 +8,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon } from "#app/field/pokemon";
+import { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -48,7 +48,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);

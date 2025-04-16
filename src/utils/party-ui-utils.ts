@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { t } from "i18next";
 

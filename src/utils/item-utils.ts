@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";

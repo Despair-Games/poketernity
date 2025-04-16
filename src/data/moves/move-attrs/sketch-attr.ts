@@ -1,13 +1,13 @@
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { allMoves } from "#app/data/data-lists";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { targetMoveCopiableCondition } from "#app/data/moves/move-conditions/target-move-copiable-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
-import { type Move } from "../move";
-import { allMoves } from "#app/data/data-lists";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { targetMoveCopiableCondition } from "../move-conditions/target-move-copiable-condition";
-import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
  * Attribute for {@linkcode MoveId.SKETCH} that causes the user to copy the opponent's last used move.

@@ -1052,7 +1052,9 @@ class StickyWebTag extends EntryHazardTag {
         );
         const stages = new NumberHolder(-1);
         globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value),
+          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value, {
+            isStickyWeb: true,
+          }),
         );
         return true;
       }

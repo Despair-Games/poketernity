@@ -95,8 +95,8 @@ describe("Moves - Disable", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(playerMon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
-    expect(enemyMon.getLastXMoves()[0].move.id).toBe(MoveId.STRUGGLE);
+    expect(playerMon).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemyMon).toHaveUsedMove(MoveId.STRUGGLE);
     expect(enemyMon.isMoveRestricted(MoveId.STRUGGLE)).toBe(false);
   }, 20000);
 

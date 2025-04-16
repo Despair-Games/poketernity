@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
+import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -350,7 +350,7 @@ export class EncounterPhase extends BattlePhase {
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
-        pokemon.resetBattleData();
+        pokemon.resetWaveData();
       }
     }
 

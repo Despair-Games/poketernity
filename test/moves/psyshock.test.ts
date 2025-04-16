@@ -41,7 +41,7 @@ describe("Moves - Psyshock", () => {
     game.move.use(MoveId.PSYSHOCK);
     await game.toEndOfTurn();
 
-    expect(enemy.battleData.abilitiesApplied).toContain(AbilityId.FUR_COAT);
+    expect(enemy.waveData.abilitiesApplied).toContain(AbilityId.FUR_COAT);
   });
 
   it("should use the user's Sp. Atk stat stages during damage calculation", async () => {

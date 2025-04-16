@@ -12,23 +12,16 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
  * - "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item."
  * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
-export class StealHeldItemChanceAttr extends MoveEffectAttr {
-  public readonly chance: number;
-
-  constructor(chance: number) {
+export class StealHeldItemAttr extends MoveEffectAttr {
+  constructor() {
     super(true);
-    this.chance = chance;
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (move.hitsSubstitute(user, target)) {
       return false;
     }
-
-    const rand = Phaser.Math.RND.realInRange(0, 1);
-    if (rand >= this.chance) {
-      return false;
-    }
+    /** @todo Refactor this mess after items are properly implemented */
     const heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
     if (heldItems.length) {
       const poolType = target.isPlayer()

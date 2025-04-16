@@ -12,7 +12,7 @@ import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
 import { argbFromRgba } from "@material/material-color-utilities";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 
 /**

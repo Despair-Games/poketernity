@@ -12,7 +12,7 @@ import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
-import type { EnemyPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokeballType } from "#enums/pokeball-type";
 import { PlayerGender } from "#enums/player-gender";
 import { NumberHolder, randSeedInt } from "#app/utils";

@@ -1,4 +1,5 @@
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { getLevelRelExp } from "#app/data/exp";
 import { fixedNumber } from "#app/utils";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";

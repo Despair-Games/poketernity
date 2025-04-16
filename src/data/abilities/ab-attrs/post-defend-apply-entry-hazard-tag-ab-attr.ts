@@ -1,5 +1,5 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import { type EntryHazardTag } from "#app/data/arena-tag";
+import type { EntryHazardTag } from "#app/data/arena-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

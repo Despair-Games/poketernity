@@ -74,9 +74,9 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
         if (pokemon.summonData && !pokemon.summonData.abilitiesApplied.includes(ability.id)) {
           pokemon.summonData.abilitiesApplied.push(ability.id);
         }
-        if (pokemon.battleData && !pokemon.battleData.abilitiesApplied.includes(ability.id)) {
-          pokemon.battleData.abilitiesApplied.push(ability.id);
-          pokemon.battleData.abilitiesRevealed.push(ability.id);
+        if (pokemon.waveData && !pokemon.waveData.abilitiesApplied.includes(ability.id)) {
+          pokemon.waveData.abilitiesApplied.push(ability.id);
+          pokemon.waveData.abilitiesRevealed.push(ability.id);
         }
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {

@@ -1,7 +1,7 @@
 import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";

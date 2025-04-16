@@ -36,7 +36,7 @@ describe("Abilities - Anticipation", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
+    expect(playerPokemon.waveData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should activate when the opponent has a 1HKO move", async () => {
@@ -44,7 +44,7 @@ describe("Abilities - Anticipation", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
+    expect(playerPokemon.waveData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should not activate when the opponent does not have a super-effective or 1HKO move", async () => {
@@ -52,7 +52,7 @@ describe("Abilities - Anticipation", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
+    expect(playerPokemon.waveData.abilitiesApplied.length).toBe(0);
   });
 
   it("should not activate against status moves", async () => {
@@ -60,7 +60,7 @@ describe("Abilities - Anticipation", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
+    expect(playerPokemon.waveData.abilitiesApplied.length).toBe(0);
   });
 
   it("should work correctly in Inverse Battles", async () => {
@@ -69,7 +69,7 @@ describe("Abilities - Anticipation", () => {
     await game.challengeMode.startBattle([SpeciesId.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
+    expect(playerPokemon.waveData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should ignore Gravity when evaluating move effectiveness", async () => {
@@ -86,7 +86,7 @@ describe("Abilities - Anticipation", () => {
 
     // Should not have activated Anticipation despite taking super-effective damage
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(2);
-    expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
+    expect(playerPokemon.waveData.abilitiesApplied.length).toBe(0);
   });
 
   it("should consider Hidden Power's calculated type, not its default Normal type", async () => {
@@ -97,7 +97,7 @@ describe("Abilities - Anticipation", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     expect(enemyPokemon.getMoveType(enemyPokemon.getMoveset()[0].getMove())).toBe(ElementalType.ELECTRIC);
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
+    expect(playerPokemon.waveData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should not consider most variable-type moves' calculated type", async () => {
@@ -108,6 +108,6 @@ describe("Abilities - Anticipation", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     expect(enemyPokemon.getMoveType(enemyPokemon.getMoveset()[0].getMove())).toBe(ElementalType.ELECTRIC);
-    expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
+    expect(playerPokemon.waveData.abilitiesApplied.length).toBe(0);
   });
 });
