@@ -166,7 +166,7 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  * Used by Ogerpon and Terapagos.
  * @extends SpeciesFormChangeTrigger
  */
-export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
+export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeManualTrigger {
   // description = i18next.t("pokemonEvolutions:Forms.tera");
 }
 
@@ -175,7 +175,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  * Used by Ogerpon and Terapagos.
  * @extends SpeciesFormChangeTrigger
  */
-export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
+export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeManualTrigger {
   // description = i18next.t("pokemonEvolutions:Forms.teraLapse");
 }
 
