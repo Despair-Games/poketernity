@@ -620,6 +620,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return [];
   }
 
+  /** Applies stored functions to modify the AI's team */
   public genAI(party: EnemyPokemon[]): void {
     if (this.config.genAIFuncs) {
       this.config.genAIFuncs.forEach((f) => f(party));
