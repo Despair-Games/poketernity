@@ -61,7 +61,7 @@ describe("Clowning Around - Mystery Encounter", () => {
     game.override.mysteryEncounterChance(100);
     game.override.startingWave(defaultWave);
     game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.trainerChance(0);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<BiomeId, MysteryEncounterType[]>([[BiomeId.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
@@ -200,7 +200,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
     });
 
-    it.only("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
+    it("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
       game.override.startingLevel(1000);
 
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, [SpeciesId.FEEBAS]);

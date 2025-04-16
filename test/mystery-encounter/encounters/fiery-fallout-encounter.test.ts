@@ -55,7 +55,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.PAYBACK, MoveId.THUNDERBOLT]); // Required for attack type booster item generation
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(

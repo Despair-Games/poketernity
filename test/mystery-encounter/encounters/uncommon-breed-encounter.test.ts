@@ -52,7 +52,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       .mysteryEncounterTier(MysteryEncounterTier.COMMON)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
-      .disableTrainerWaves()
+      .trainerChance(0)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyPassiveAbility(AbilityId.BALL_FETCH);
 

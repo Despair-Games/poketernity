@@ -42,7 +42,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
-      .disableTrainerWaves()
+      .trainerChance(0)
       .ability(AbilityId.INTIMIDATE); // Extortion ability
 
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([

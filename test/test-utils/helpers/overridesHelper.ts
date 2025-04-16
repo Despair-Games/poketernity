@@ -189,12 +189,18 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override each wave to not have random trainer battles
+   * Override the chance of encountering a random enemy trainer
+   * @param trainerChance - `0` to disable enemy trainer spawns, `1` to guarantee an enemy trainer spawn
+   * @see {@linkcode Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE} for a more complete description of this override
    * @returns `this`
    */
-  public disableTrainerWaves(): this {
-    vi.spyOn(Overrides, "DISABLE_RANDOM_TRAINERS_OVERRIDE", "get").mockReturnValue(true);
-    this.log("Random trainer waves are disabled!");
+  public trainerChance(trainerChance: number): this {
+    vi.spyOn(Overrides, "RANDOM_TRAINER_CHANCE_OVERRIDE", "get").mockReturnValue(trainerChance);
+    if (trainerChance === 0 || trainerChance === 1) {
+      this.log(`Trainer chance override set to ${trainerChance}!`);
+    } else {
+      this.log(`Trainer chance override set to 1 / ${trainerChance}!`);
+    }
     return this;
   }
 
@@ -205,7 +211,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public trainerType(trainerType: TrainerType): this {
     vi.spyOn(Overrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
-    this.log(`Mystery encounter override set to ${TrainerType[trainerType]} (=${trainerType})!`);
+    this.log(`Trainer type override set to ${TrainerType[trainerType]} (=${trainerType})!`);
     return this;
   }
 

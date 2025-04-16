@@ -559,10 +559,10 @@ export class Arena {
 
   /**
    * Gets the denominator for the chance for a trainer spawn
-   * @returns n where 1/n is the chance of a trainer battle
+   * @returns `0` if the biome has no trainer battles; otherwise, `n` where 1/n is the chance of a trainer battle.
    */
   getTrainerChance(): number {
-    return allBiomes.get(this.biomeId).trainerChance;
+    return Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
   }
 
   /**
