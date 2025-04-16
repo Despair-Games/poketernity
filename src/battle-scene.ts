@@ -1372,7 +1372,7 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetWaveData();
-          pokemon.resetTera(); // TODO: put this in resetBattleData?
+          pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
 
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
 
