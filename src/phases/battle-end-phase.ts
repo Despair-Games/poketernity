@@ -31,6 +31,21 @@ export class BattleEndPhase extends BattlePhase {
       gameData.gameStats.highestEndlessWave = currentBattle.waveIndex + 1;
     }
 
+    // Endless graceful end
+    if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
+    }
+
+    for (const pokemon of globalScene.getField()) {
+      if (pokemon && pokemon.battleSummonData) {
+        pokemon.battleSummonData.waveTurnCount = 0;
+      }
+    }
+
+    for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
+      applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
+    }
+
     if (this.isVictory) {
       currentBattle.addBattleScore();
 
@@ -48,21 +63,6 @@ export class BattleEndPhase extends BattlePhase {
       if (currentBattle.moneyScattered) {
         currentBattle.pickUpScatteredMoney();
       }
-    }
-
-    // Endless graceful end
-    if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
-      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
-    }
-
-    for (const pokemon of globalScene.getField()) {
-      if (pokemon && pokemon.battleSummonData) {
-        pokemon.battleSummonData.waveTurnCount = 0;
-      }
-    }
-
-    for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
     }
 
     globalScene.clearEnemyHeldItemModifiers();
