@@ -70,7 +70,7 @@ export abstract class ApiBase {
     };
 
     if (import.meta.env.DEV && import.meta.env.MODE === "development") {
-      console.debug(`Sending ${config.method ?? "GET"} request to: `, this.base + path, config, import.meta.env);
+      console.debug(`Sending ${config.method ?? "GET"} request to: `, this.base + path, config);
     }
 
     return await fetch(this.base + path, config);
