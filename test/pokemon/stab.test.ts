@@ -90,4 +90,10 @@ describe("STAB", () => {
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
   });
+
+  it.todo("should have a 1.5 STAB on pledge moves");
+
+  it.todo("should have a 2.0 STAB on pledge moves if tera type DOES NOT match default type");
+
+  it.todo("should have a 2.25 STAB on pledge moves if tera type does match default type");
 });

@@ -88,6 +88,9 @@ export function getMaxMoveList(): MoveId[] {
   return ret;
 }
 
+/** Returns a (frozen) list of all Pledge Moves */
+export const PledgeMoves = Object.freeze([MoveId.GRASS_PLEDGE, MoveId.FIRE_PLEDGE, MoveId.WATER_PLEDGE]);
+
 //#endregion
 //#region Helpers
 
