@@ -153,3 +153,6 @@ export const FRIENDSHIP_GAIN_CUTOFF = 150;
 export const FRIENDSHIP_GAIN_FROM_CANDY = 5;
 /** Penalty for losing friendship on faint. Used in {@link FaintPhase} */
 export const FRIENDSHIP_LOST_FROM_FAINTING = 10;
+
+/** Default amount of money the player starts with. Same for all game modes. */
+export const DEFAULT_STARTING_MONEY = 1000;
