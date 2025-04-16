@@ -1,6 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
-import { MoveResult } from "#enums/move-result";
 
 export interface ToHaveUsedMoveMatcherOptions {
   /** The index of the move to check (Default is `0`) */
