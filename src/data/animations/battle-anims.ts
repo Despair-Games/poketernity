@@ -412,7 +412,6 @@ export abstract class BattleAnim {
                   // Place the sprite in front of the pokemon on the field.
                   targetSprite =
                     globalScene.getEnemyField().find((p) => p) ?? globalScene.getPlayerField().find((p) => p);
-                  console.log(typeof targetSprite);
                   moveFunc = globalScene.field.moveBelow;
                 } else if (priority === 2 && this.bgSprite) {
                   moveFunc = globalScene.field.moveAbove;
@@ -427,14 +426,15 @@ export abstract class BattleAnim {
                 }
                 // If target sprite is not undefined and exists in the field container, then move the sprite using the moveFunc.
                 // Otherwise, default to just bringing it to the top.
-                targetSprite && globalScene.field.exists(targetSprite)
-                  ? moveFunc.bind(globalScene.field)(moveSprite as Phaser.GameObjects.GameObject, targetSprite)
-                  : globalScene.field.bringToTop(moveSprite as Phaser.GameObjects.GameObject);
+                if (targetSprite && globalScene.field.exists(targetSprite)) {
+                  moveFunc.bind(globalScene.field)(moveSprite, targetSprite);
+                } else {
+                  globalScene.field.bringToTop(moveSprite);
+                }
               };
               setSpritePriority(frame.priority);
             }
             moveSprite.setFrame(frame.graphicFrame);
-            //console.log(AnimFocus[frame.focus]);
 
               const graphicFrameData = frameData.get(frame.target)!.get(graphicIndex)!; // TODO: are those bangs correct?
               moveSprite.setPosition(graphicFrameData.x, graphicFrameData.y);
