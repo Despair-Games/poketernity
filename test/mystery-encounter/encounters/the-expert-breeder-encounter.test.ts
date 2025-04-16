@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
@@ -48,7 +48,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);

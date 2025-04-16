@@ -124,7 +124,7 @@ describe("Moves - Spit Up", () => {
     game.move.select(MoveId.SPIT_UP);
     await game.phaseInterceptor.to(TurnInitPhase);
 
-    expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
+    expect(pokemon).toHaveMoveResult(MoveResult.FAIL);
     expect(spitUp.calculateBattlePower).not.toHaveBeenCalled();
   });
 
@@ -146,7 +146,7 @@ describe("Moves - Spit Up", () => {
 
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
+      expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
 
@@ -174,7 +174,7 @@ describe("Moves - Spit Up", () => {
       game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
+      expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
 

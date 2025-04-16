@@ -73,7 +73,7 @@ describe("Moves - Stockpile", () => {
           expect(user.getStatStage(Stat.SPDEF)).toBe(3);
           expect(stockpilingTag).toBeDefined();
           expect(stockpilingTag.stockpiledCount).toBe(3);
-          expect(user.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
+          expect(user).toHaveMoveResult(MoveResult.FAIL);
         }
       }
     });

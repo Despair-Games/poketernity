@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
@@ -48,7 +48,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);

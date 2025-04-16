@@ -11,7 +11,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
 import { PlayerPokemon } from "#app/field/player-pokemon";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import {
   getSalesmanSpeciesOffer,
   ThePokemonSalesmanEncounter,
@@ -48,7 +48,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.THE_POKEMON_SALESMAN]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);

@@ -1,4 +1,10 @@
-import { getBiomeName } from "#app/data/biome-utils";
+import {
+  CivilizationEncounterBiomes,
+  ExtremeEncounterBiomes,
+  getBiomeName,
+  HumanTransitableBiomes,
+  NonExtremeEncounterBiomes,
+} from "#app/data/biome-utils";
 import { ATrainersTestEncounter } from "#app/data/mystery-encounters/encounters/a-trainers-test-encounter";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
 import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
@@ -33,111 +39,6 @@ import { WeirdDreamEncounter } from "#app/data/mystery-encounters/encounters/wei
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-
-// TODO: Move these into biome-utils
-
-export const EXTREME_ENCOUNTER_BIOMES = [
-  BiomeId.SEA,
-  BiomeId.SEABED,
-  BiomeId.BADLANDS,
-  BiomeId.DESERT,
-  BiomeId.ICE_CAVE,
-  BiomeId.VOLCANO,
-  BiomeId.WASTELAND,
-  BiomeId.ABYSS,
-  BiomeId.SPACE,
-  BiomeId.END,
-];
-
-export const NON_EXTREME_ENCOUNTER_BIOMES = [
-  BiomeId.TOWN,
-  BiomeId.PLAINS,
-  BiomeId.GRASS,
-  BiomeId.TALL_GRASS,
-  BiomeId.METROPOLIS,
-  BiomeId.FOREST,
-  BiomeId.SWAMP,
-  BiomeId.BEACH,
-  BiomeId.LAKE,
-  BiomeId.MOUNTAIN,
-  BiomeId.CAVE,
-  BiomeId.MEADOW,
-  BiomeId.POWER_PLANT,
-  BiomeId.GRAVEYARD,
-  BiomeId.DOJO,
-  BiomeId.FACTORY,
-  BiomeId.RUINS,
-  BiomeId.CONSTRUCTION_SITE,
-  BiomeId.JUNGLE,
-  BiomeId.FAIRY_CAVE,
-  BiomeId.TEMPLE,
-  BiomeId.SLUM,
-  BiomeId.SNOWY_FOREST,
-  BiomeId.ISLAND,
-  BiomeId.LABORATORY,
-];
-
-/**
- * Places where you could very reasonably expect to encounter a single human
- *
- * Diff from NON_EXTREME_ENCOUNTER_BIOMES:
- * + BADLANDS
- * + DESERT
- * + ICE_CAVE
- */
-export const HUMAN_TRANSITABLE_BIOMES = [
-  BiomeId.TOWN,
-  BiomeId.PLAINS,
-  BiomeId.GRASS,
-  BiomeId.TALL_GRASS,
-  BiomeId.METROPOLIS,
-  BiomeId.FOREST,
-  BiomeId.SWAMP,
-  BiomeId.BEACH,
-  BiomeId.LAKE,
-  BiomeId.MOUNTAIN,
-  BiomeId.BADLANDS,
-  BiomeId.CAVE,
-  BiomeId.CHARGESTONE_CAVE,
-  BiomeId.STEAM_VENT,
-  BiomeId.DESERT,
-  BiomeId.ICE_CAVE,
-  BiomeId.MEADOW,
-  BiomeId.POWER_PLANT,
-  BiomeId.GRAVEYARD,
-  BiomeId.DOJO,
-  BiomeId.FACTORY,
-  BiomeId.RUINS,
-  BiomeId.CONSTRUCTION_SITE,
-  BiomeId.JUNGLE,
-  BiomeId.FAIRY_CAVE,
-  BiomeId.TEMPLE,
-  BiomeId.SLUM,
-  BiomeId.SNOWY_FOREST,
-  BiomeId.ISLAND,
-  BiomeId.LABORATORY,
-];
-
-/**
- * Places where you could expect a town or city, some form of large civilization
- */
-export const CIVILIZATION_ENCOUNTER_BIOMES = [
-  BiomeId.TOWN,
-  BiomeId.PLAINS,
-  BiomeId.GRASS,
-  BiomeId.TALL_GRASS,
-  BiomeId.METROPOLIS,
-  BiomeId.BEACH,
-  BiomeId.LAKE,
-  BiomeId.MEADOW,
-  BiomeId.POWER_PLANT,
-  BiomeId.GRAVEYARD,
-  BiomeId.DOJO,
-  BiomeId.FACTORY,
-  BiomeId.CONSTRUCTION_SITE,
-  BiomeId.SLUM,
-  BiomeId.ISLAND,
-];
 
 export const allMysteryEncounters: { [encounterType: number]: MysteryEncounter } = {};
 
@@ -225,6 +126,8 @@ export const mysteryEncountersByBiome = new Map<BiomeId, MysteryEncounterType[]>
   [BiomeId.SNOWY_FOREST, []],
   [BiomeId.ISLAND, []],
   [BiomeId.LABORATORY, []],
+  [BiomeId.STEAM_VENT, []],
+  [BiomeId.CHARGESTONE_CAVE, []],
 ]);
 
 export function initMysteryEncounters() {
@@ -262,7 +165,7 @@ export function initMysteryEncounters() {
 
   // Add extreme encounters to biome map
   extremeBiomeEncounters.forEach((encounter) => {
-    EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
+    ExtremeEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -271,7 +174,7 @@ export function initMysteryEncounters() {
   });
   // Add non-extreme encounters to biome map
   nonExtremeBiomeEncounters.forEach((encounter) => {
-    NON_EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
+    NonExtremeEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -280,7 +183,7 @@ export function initMysteryEncounters() {
   });
   // Add human encounters to biome map
   humanTransitableBiomeEncounters.forEach((encounter) => {
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -289,7 +192,7 @@ export function initMysteryEncounters() {
   });
   // Add civilization encounters to biome map
   civilizationBiomeEncounters.forEach((encounter) => {
-    CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
+    CivilizationEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);

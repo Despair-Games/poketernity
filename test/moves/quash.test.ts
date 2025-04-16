@@ -98,7 +98,7 @@ describe("Moves - Quash", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[1].getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
 
@@ -116,8 +116,8 @@ describe("Moves - Quash", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[0].getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
-    expect(game.scene.getPlayerField()[1].getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[0]).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
     // Both used Quash on the slowest enemy, so turn order should match speed order
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
