@@ -1,10 +1,10 @@
-import { SpeciesId } from "#enums/species-id";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
-import { PokeballType } from "#enums/pokeball-type";
 import type BattleScene from "#app/battle-scene";
-import { MoveId } from "#enums/move-id";
 import { AbilityId } from "#enums/ability-id";
+import { MoveId } from "#enums/move-id";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Spec - Pokemon", () => {
   let phaserGame: Phaser.Game;
@@ -91,5 +91,20 @@ describe("Spec - Pokemon", () => {
 
     expect(eevee.abilityIndex).toBeGreaterThanOrEqual(0);
     expect(eevee.abilityIndex).toBeLessThanOrEqual(2);
+  });
+
+  it("should have a default STAB of 1.5", async () => {
+    game.override.enemySpecies(SpeciesId.MUNCHLAX).battleType("single").startingLevel(1);
+
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+    game.move.use(MoveId.EMBER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
   });
 });
