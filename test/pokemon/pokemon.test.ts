@@ -107,4 +107,19 @@ describe("Spec - Pokemon", () => {
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
   });
+
+  it("should have a NO STAB (1.0) on type mismatch", async () => {
+    game.override.enemySpecies(SpeciesId.MUNCHLAX).battleType("single").startingLevel(1);
+
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+    game.move.use(MoveId.WATER_GUN);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
+  });
 });
