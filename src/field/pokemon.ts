@@ -3061,7 +3061,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const randomMultiplier = simulated ? 1 : this.randSeedIntRange(85, 100) / 100;
 
     /** A damage multiplier for when the attack is of the same type as the attacker type/teraType. */
-    const stabMultiplier = this.calcIncomingStabMultiplier(source, move, abilityApplyMode, simulated);
+    const stabMultiplier: number = this.calcStabMultiplierForTakingDamage(source, move, abilityApplyMode, simulated);
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
@@ -3156,7 +3156,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * glaiveRushMultiplier.value
       * criticalMultiplier.value
       * randomMultiplier
-      * stabMultiplier.value
+      * stabMultiplier
       * typeMultiplier
       * burnMultiplier.value
       * screenMultiplier.value
@@ -4280,12 +4280,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param simulated If `true`, suppresses changes to game state during the calculation.
    * @returns A {@linkcode NumberHolder} containing the STAB multiplier as value
    */
-  public calcIncomingStabMultiplier(
+  public calcStabMultiplierForTakingDamage(
     source: Pokemon,
     move: Move,
     abilityApplyMode: AbilityApplyMode,
     simulated: boolean,
-  ): NumberHolder {
+  ): number {
     const stabMultiplier = new NumberHolder(1);
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
     const sourceTypes = source.getTypes();
@@ -4304,7 +4304,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
 
-    return stabMultiplier;
+    return stabMultiplier.value;
   }
 }
 
