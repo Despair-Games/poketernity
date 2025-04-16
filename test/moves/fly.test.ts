@@ -48,7 +48,7 @@ describe("Moves - Fly", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeDefined();
-    expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.FLY);
@@ -74,7 +74,7 @@ describe("Moves - Fly", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
-    expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
@@ -111,7 +111,7 @@ describe("Moves - Fly", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
 
     const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.FLY);

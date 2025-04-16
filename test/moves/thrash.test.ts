@@ -128,7 +128,7 @@ describe("Moves - Thrash", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
     expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
     expect(player.getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });

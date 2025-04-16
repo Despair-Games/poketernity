@@ -42,23 +42,20 @@ describe("Moves - Torment", () => {
     game.move.select(MoveId.TACKLE);
     await game.move.selectEnemyMove(MoveId.TORMENT);
     await game.toNextTurn();
-    const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.move.id).toBe(MoveId.TACKLE);
-    expect(move1.result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveUsedMove(MoveId.TACKLE);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     expect(playerPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     // Second turn, Torment forces Struggle to occur
     game.move.select(MoveId.TACKLE);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-    const move2 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move2.move.id).toBe(MoveId.STRUGGLE);
+    expect(playerPokemon).toHaveUsedMove(MoveId.STRUGGLE);
 
     // Third turn, Tackle can be used.
     game.move.select(MoveId.TACKLE);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
-    const move3 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move3.move.id).toBe(MoveId.TACKLE);
+    expect(playerPokemon).toHaveUsedMove(MoveId.TACKLE);
   });
 });

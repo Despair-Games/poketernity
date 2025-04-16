@@ -39,16 +39,14 @@ describe("Moves - Taunt", () => {
     game.move.select(MoveId.GROWL);
     await game.move.selectEnemyMove(MoveId.TAUNT);
     await game.toNextTurn();
-    const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.move.id).toBe(MoveId.GROWL);
-    expect(move1.result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveUsedMove(MoveId.GROWL);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     expect(playerPokemon?.getTag(BattlerTagType.TAUNT)).toBeDefined();
 
     // Second turn, Taunt forces Struggle to occur
     game.move.select(MoveId.GROWL);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-    const move2 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move2.move.id).toBe(MoveId.STRUGGLE);
+    expect(playerPokemon).toHaveUsedMove(MoveId.STRUGGLE);
   });
 });
