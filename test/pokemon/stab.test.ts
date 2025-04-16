@@ -37,7 +37,6 @@ describe("STAB", () => {
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
 
     game.move.use(MoveId.WATER_GUN);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
@@ -50,7 +49,6 @@ describe("STAB", () => {
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
 
     game.move.use(MoveId.EMBER);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
@@ -69,7 +67,6 @@ describe("STAB", () => {
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
 
     game.move.use(MoveId.WATER_GUN);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
