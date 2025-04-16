@@ -46,7 +46,7 @@ describe("Moves - Aroma Veil", () => {
 
     playerPokemon.forEach((p) => {
       expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
-      expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
+      expect(p).toHaveMoveResult(MoveResult.SUCCESS);
     });
   });
 
@@ -62,6 +62,6 @@ describe("Moves - Aroma Veil", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.toNextTurn();
 
-    playerPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
+    playerPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.FAIL));
   });
 });
