@@ -748,6 +748,10 @@ export default class Trainer extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * Currently used by the {@linkcode TeraAIMode.INSTANT} logic
+   * @returns `true` if the AI should Terastallize their current pokemon
+   */
   public shouldTera(pokemon: EnemyPokemon): boolean {
     const isInstantTera: boolean = this.config.trainerAI.teraMode === TeraAIMode.INSTANT;
     const hasInstantTeraIndex: boolean = this.config.trainerAI.instantTeras.includes(pokemon.initialTeamIndex);
