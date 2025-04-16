@@ -121,7 +121,7 @@ export interface EnemyPokemonConfig {
   modifierConfigs?: HeldModifierConfig[];
   tags?: BattlerTagType[];
   dataSource?: PokemonData;
-  tera?: ElementalType;
+  teraType?: ElementalType;
   aiType?: AiType;
 }
 
@@ -387,8 +387,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Set tera
-      if (config.tera && config.tera !== ElementalType.UNKNOWN) {
-        enemyPokemon.teraType = config.tera;
+      if (!isNullOrUndefined(config.teraType) && config.teraType !== ElementalType.UNKNOWN) {
+        enemyPokemon.teraType = config.teraType;
         if (battle.trainer) {
           battle.trainer.config.setInstantTera(e);
         }

@@ -452,7 +452,7 @@ function getPartyConfig(): EnemyPartyConfig {
         nature: Nature.ADAMANT,
         moveSet: [MoveId.METEOR_MASH, MoveId.FIRE_PUNCH, MoveId.ICE_PUNCH, MoveId.THUNDER_PUNCH],
         ivs: [31, 31, 31, 31, 31, 31],
-        tera: ElementalType.STEEL,
+        teraType: ElementalType.STEEL,
           },
         ],
   };
