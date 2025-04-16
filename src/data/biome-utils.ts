@@ -79,7 +79,7 @@ export const VanillaAlcremieBiomes = Object.freeze([
   BiomeId.TALL_GRASS,
   BiomeId.METROPOLIS,
 ]);
-export const rubyAlcremieBiomes = Object.freeze([
+export const RubyAlcremieBiomes = Object.freeze([
   BiomeId.BADLANDS,
   BiomeId.VOLCANO,
   BiomeId.STEAM_VENT,

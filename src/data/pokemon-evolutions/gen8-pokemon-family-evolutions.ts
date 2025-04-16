@@ -28,7 +28,7 @@ import {
   MatchaAlcremieBiomes,
   MintAlcremieBiomes,
   RainbowSwirlAlcremieBiomes,
-  rubyAlcremieBiomes,
+  RubyAlcremieBiomes,
   RubySwirlAlcremieBiomes,
   SaltedCreamAlcremieBiomes,
   VanillaAlcremieBiomes,
@@ -121,7 +121,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition(rubyAlcremieBiomes)],
+      [new BiomeEvoCondition(RubyAlcremieBiomes)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
