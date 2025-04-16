@@ -4301,7 +4301,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       stabMultiplier.value += 0.5;
     }
 
-    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, stabMultiplier);
+    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
 
     stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
 
