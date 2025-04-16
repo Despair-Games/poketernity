@@ -1,3 +1,4 @@
+import type { FightCommand } from "#app/@types/FightCommand";
 import type { InfoToggle } from "#app/battle-scene";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
@@ -20,8 +21,6 @@ import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-
-type FightCommand = BattleCommand.FIGHT | BattleCommand.TERA;
 
 export class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";

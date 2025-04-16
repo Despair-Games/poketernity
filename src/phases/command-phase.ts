@@ -1,3 +1,4 @@
+import type { FightCommand } from "#app/@types/FightCommand";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { FairyLockTag } from "#app/data/arena-tag";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
@@ -151,12 +152,7 @@ export class CommandPhase extends FieldPhase {
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(
-    command: BattleCommand.FIGHT | BattleCommand.TERA,
-    cursor: number,
-    ignorePp?: boolean,
-    turnMove?: TurnMove,
-  ): boolean;
+  public handleCommand(command: FightCommand, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
   /**
    * @param command - {@linkcode BattleCommand.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon

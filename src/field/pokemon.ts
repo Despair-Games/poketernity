@@ -269,8 +269,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public switchOutStatus: boolean;
   public evoCounter: number;
   protected _teraType: ElementalType;
-  public isTerastallized: boolean = false; // TODO: put this in battle data?
-  public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle data?
+  public isTerastallized: boolean = false; // TODO: put this in battle (wave) data if arena reset behavior is changed
+  public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle (wave) data if arena reset behavior is changed
 
   private summonDataPrimer: PokemonSummonData | null;
 
