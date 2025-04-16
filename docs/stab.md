@@ -1,0 +1,13 @@
+## Stab Table
+
+| User Type | Tera Type | Move Type | Expected STAB | w/ Adaptability |
+|--------|--------|--------|--------|--------|
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | - | ![water](https://archives.bulbagarden.net/media/upload/thumb/7/7f/Water_icon.png/20px-Water_icon.png) WATER | 1.0 | 1.0 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | - | ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | 1.5 | 2 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | - | PLEDGE COMBO | 1.5 | 2 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![water](https://archives.bulbagarden.net/media/upload/thumb/7/7f/Water_icon.png/20px-Water_icon.png) WATER | ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | 1.5 | 1.5 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![water](https://archives.bulbagarden.net/media/upload/thumb/7/7f/Water_icon.png/20px-Water_icon.png) WATER | ![water](https://archives.bulbagarden.net/media/upload/thumb/7/7f/Water_icon.png/20px-Water_icon.png) WATER | 1.5 | 2.0 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![water](https://archives.bulbagarden.net/media/upload/thumb/7/7f/Water_icon.png/20px-Water_icon.png) WATER | PLEDGE COMBO | 1.5 | 2.0 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE |  ![water](https://archives.bulbagarden.net/media/upload/thumb/7/7f/Water_icon.png/20px-Water_icon.png) WATER | 1.0 | 1.0 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | 2.0 | 2.25 |
+| ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | ![fire](https://archives.bulbagarden.net/media/upload/thumb/5/5e/Fire_icon.png/20px-Fire_icon.png) FIRE | PLEDGE COMBO | 2.0 | 2.25 |
