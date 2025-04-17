@@ -183,7 +183,7 @@ import { StatusCategoryOnAllyAttr } from "#app/data/moves/move-attrs/status-cate
 import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
 import { StatusIfBoostedAttr } from "#app/data/moves/move-attrs/status-if-boosted-attr";
 import { StealEatBerryAttr } from "#app/data/moves/move-attrs/steal-eat-berry-attr";
-import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemAttr } from "#app/data/moves/move-attrs/steal-held-item-attr";
 import { StealPositiveStatsAttr } from "#app/data/moves/move-attrs/steal-positive-stats-attr";
 import { StormAccuracyAttr } from "#app/data/moves/move-attrs/storm-accuracy-attr";
 import { SuppressAbilitiesAttr } from "#app/data/moves/move-attrs/suppress-abilities-attr";
@@ -779,7 +779,7 @@ export function initMoves() {
       .attr(MultiHitPowerIncrementAttr, 3)
       .checkAllHits(),
     new AttackMove(MoveId.THIEF, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 25, -1, 0, 2)
-      .attr(StealHeldItemChanceAttr, 0.3),
+      .attr(StealHeldItemAttr),
     new StatusMove(MoveId.SPIDER_WEB, ElementalType.BUG, -1, 10, -1, 0, 2)
       .condition(failIfGhostTypeCondition)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true })
@@ -1406,7 +1406,7 @@ export function initMoves() {
       .attr(HighCritAttr)
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.COVET, ElementalType.NORMAL, MoveCategory.PHYSICAL, 60, 100, 25, -1, 0, 3)
-      .attr(StealHeldItemChanceAttr, 0.3),
+      .attr(StealHeldItemAttr),
     new AttackMove(MoveId.VOLT_TACKLE, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 120, 100, 15, 10, 0, 3)
       .attr(RecoilAttr, false, 0.33)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)

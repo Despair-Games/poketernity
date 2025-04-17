@@ -49,7 +49,7 @@ describe("Moves - Copycat", () => {
     game.move.select(MoveId.COPYCAT); // Last successful move should be Swords Dance
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getStatStage(Stat.ATK)).toBe(4);
+    expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(4);
   });
 
   it("should fail when the last move used is not a valid Copycat move", async () => {
@@ -62,7 +62,7 @@ describe("Moves - Copycat", () => {
     game.move.select(MoveId.COPYCAT);
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("should copy the called move when the last move successfully calls another", async () => {

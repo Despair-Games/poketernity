@@ -62,8 +62,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
     await game.move.forceHit();
     await game.toEndOfTurn();
 
-    const lastEnemyMove = enemyPokemon.getLastXMoves()[0];
-    expect(lastEnemyMove.result).toBe(MoveResult.FAIL);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.FAIL);
     const enemyMove = allMoves.get(enemyMoveId);
     // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
     expect(enemyMove.hasFlag(moveFlag)).toBe(true);

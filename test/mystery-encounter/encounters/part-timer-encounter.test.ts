@@ -10,7 +10,7 @@ import {
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { CIVILIZATION_ENCOUNTER_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { PartTimerEncounter } from "#app/data/mystery-encounters/encounters/part-timer-encounter";
@@ -44,7 +44,7 @@ describe("Part-Timer - Mystery Encounter", () => {
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
+    CivilizationEncounterBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.PART_TIMER]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);

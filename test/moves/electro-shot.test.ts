@@ -46,7 +46,7 @@ describe("Moves - Electro Shot", () => {
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeDefined();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.OTHER);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.OTHER);
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);
 
     await game.toEndOfTurn();
@@ -54,7 +54,7 @@ describe("Moves - Electro Shot", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerElectroShot = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.ELECTRO_SHOT);
     expect(playerElectroShot?.ppUsed).toBe(1);
@@ -80,7 +80,7 @@ describe("Moves - Electro Shot", () => {
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerElectroShot = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.ELECTRO_SHOT);
     expect(playerElectroShot?.ppUsed).toBe(1);
