@@ -1,5 +1,3 @@
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { PokeballType } from "#enums/pokeball-type";
@@ -40,19 +38,19 @@ describe.each([
       .enemyLevel(1);
   });
 
-  it(`should award money on KO victory`, async () => {
+  it("should award money on KO victory", async () => {
     await game.classicMode.startBattle();
 
     vi.spyOn(game.scene, "addMoney");
 
     game.move.select(moveId);
     await game.move.forceHit();
-    await game.phaseInterceptor.to(SelectModifierPhase, false);
+    await game.phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(game.scene.money).toBeGreaterThan(0);
   });
 
-  it(`should award money on catch "victory"`, async () => {
+  it("should award money on successful capture", async () => {
     game.override.enemyAbility(AbilityId.STURDY);
     await game.classicMode.startBattle();
 
@@ -60,12 +58,12 @@ describe.each([
     await game.move.forceHit();
     await game.toNextTurn();
     await game.throwPokeball(PokeballType.MASTER_BALL);
-    await game.phaseInterceptor.to(SelectModifierPhase, false);
+    await game.phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(game.scene.money).toBeGreaterThan(0);
   });
 
-  it(`should NOT award money when player runs away`, async () => {
+  it("should NOT award money when player runs away", async () => {
     game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
     await game.classicMode.startBattle();
 
@@ -79,7 +77,7 @@ describe.each([
     expect(game.scene.currentBattle.waveIndex).toBe(2);
   });
 
-  it(`should NOT award money when forcing foe to flee`, async () => {
+  it("should NOT award money when forcing foe to flee", async () => {
     game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
     await game.classicMode.startBattle();
 
@@ -89,12 +87,12 @@ describe.each([
     await game.move.forceHit();
     await game.toNextTurn();
     game.move.use(MoveId.ROAR);
-    await game.phaseInterceptor.to(NewBattlePhase, false);
+    await game.phaseInterceptor.to("NewBattlePhase", false);
 
     expect(game.scene.addMoney).not.toHaveBeenCalled();
   });
 
-  it(`should NOT award money when foe flees`, async () => {
+  it("should NOT award money when foe flees", async () => {
     game.override.enemyMoveset(MoveId.TELEPORT).enemyLevel(999).enemyAbility(AbilityId.STURDY);
     await game.classicMode.startBattle();
 
@@ -102,7 +100,7 @@ describe.each([
 
     game.move.select(moveId);
     await game.move.forceHit();
-    await game.phaseInterceptor.to(NewBattlePhase, false);
+    await game.phaseInterceptor.to("NewBattlePhase", false);
 
     expect(game.scene.addMoney).not.toHaveBeenCalled();
   });
