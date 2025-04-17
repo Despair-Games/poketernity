@@ -1,23 +1,79 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { AnimConfig, AnimTimedSoundEvent, AnimTimedAddBgEvent } from "#app/data/animations/anim-config";
+import {
+  type AnimConfig,
+  type AnimTimedSoundEvent,
+  type AnimTimedAddBgEvent,
+  AnimFrame,
+} from "#app/data/animations/anim-config";
 import { easeFunctions } from "#app/data/animations/ease-functions";
 import type { MoveAnim } from "#app/data/animations/move-anim";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { AnimBlendType } from "#enums/anim-blend-type";
-import { AnimFrameTargets } from "#enums/anim-frame-target";
 import { MoveId } from "#enums/move-id";
 import type { Schema } from "ajv";
 
 /**
- * Schema for a single keyframe of an animated object.
- * All properties in this schema are optional; if a property is
- * not included in a keyframe, the property is assumed to be the same as
- * the previous keyframe's matching property.
+ * Constructs a {@linkcode Schema} for an array of keyframes
+ * with the provided specification for `value`
+ * @param valueSpec - An object containing the JSON Schema specification for a
+ * `value` property, e.g.
+ * ```ts
+ * {
+ *   type: "number",
+ *   minimum: 0
+ * }
+ * ```
+ * @param easeable - Does this property have intermediate values that are interpolated
+ * with an {@linkcode easeFunctions | ease function}? (default `true`)
  */
-const keyFrameSchema: Schema = {
+function getKeyFrameSetSchema(valueSpec: Schema, easeable: boolean = true): Schema {
+  const keyframeOptions = {
+    /** The duration (in frames) of the tween played for this keyframe */
+    duration: {
+      type: "integer",
+      minimum: 0,
+    },
+
+    /**
+     * The time (in frames) between when the previous keyframe's tween
+     * ends and this keyframe's tween begins
+     */
+    delay: {
+      type: "integer",
+      minimum: 0,
+    },
+  };
+
+  const easeOption = {
+    /**
+     * The easing function used to interpolate intermediate values during the tween.
+     * @see {@linkcode easeFunctions}
+     */
+    ease: { enum: easeFunctions },
+  };
+  const ease = easeable ? easeOption : {};
+
+  return {
+    type: "array",
+    items: {
+      type: "object",
+      properties: { value: valueSpec, ...keyframeOptions, ...ease },
+      required: ["value"],
+    },
+    nullable: true,
+  };
+}
+
+/**
+ * Schema for a single property of an animated object.
+ * This specifies the property's {@linkcode AnimFrameTargets | focus}
+ * and contains the {@linkcode keyFrameSchema | keyframes} applied
+ * to the focus.
+ */
+const animPropSchema: Schema = {
   type: "object",
   properties: {
     /**
@@ -27,60 +83,43 @@ const keyFrameSchema: Schema = {
      * the origin point is away from the source. If `u = 0`, then the origin point is
      * the source; if `u = 1`, then the origin point is the target.
      */
-    u: {
+    u: getKeyFrameSetSchema({
       type: "number",
       minimum: 0,
       maximum: 1,
-    },
+    }),
 
-    /**
-     * The horizontal coordinate relative to the keyframe's origin point. An ease function can
-     * also be specified for horizontal movement, e.g.
-     * ```
-     * x: {
-     *  value: 100,
-     *  ease: "Sine.easeIn"
-     * }
-     * ```
-     */
-    x: {
-      type: ["number", "object"],
-      properties: {
-        value: { type: "number" },
-        ease: { enum: easeFunctions },
-      },
-    },
+    /** The horizontal coordinate relative to the keyframe's origin point. */
+    x: getKeyFrameSetSchema({
+      type: "number",
+    }),
 
     /**
      * The vertical coordinate relative to the keyframe's origin point.
      * An increase in `y` will move the sprite downward.
-     * An ease function can also be specified for vertical movement, e.g.
-     * ```
-     * y: {
-     *  value: 100,
-     *  ease: "Sine.easeIn"
-     * }
-     * ```
      */
-    y: {
-      type: ["number", "object"],
-      properties: {
-        value: { type: "number" },
-        ease: { enum: easeFunctions },
-      },
-    },
+    y: getKeyFrameSetSchema({
+      type: "number",
+    }),
 
     /** Horizontal scale factor (%) */
-    scaleX: {
+    scaleX: getKeyFrameSetSchema({
       type: "number",
       minimum: 0,
-    },
+    }),
 
     /** Vertical scale factor (%) */
-    scaleY: {
+    scaleY: getKeyFrameSetSchema({
       type: "number",
       minimum: 0,
-    },
+    }),
+
+    /** The alpha value for the animated sprite, in the range [0, 255] */
+    alpha: getKeyFrameSetSchema({
+      type: "number",
+      minimum: 0,
+      maximum: 255,
+    }),
 
     /**
      * The rotation angle of the sprite in degrees.
@@ -88,49 +127,48 @@ const keyFrameSchema: Schema = {
      * 90 is down, and -90 is up. The value of this should be in the interval
      * [-180, 180].
      */
-    angle: {
+    angle: getKeyFrameSetSchema({
       type: "number",
       minimum: -180,
       maximum: 180,
-    },
+    }),
 
     /** If `true`, flips the sprite horizontally */
-    mirror: { type: "boolean" },
+    mirror: getKeyFrameSetSchema({ type: "boolean" }, false),
 
     /** If `false`, hides the sprite */
-    visible: { type: "boolean" },
+    visible: getKeyFrameSetSchema({ type: "boolean" }, false),
 
     /**
      * The blend mode to specify how the sprite is rendered on the canvas
      * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
+     * @todo
+     * - Is this still required?
+     * - Should it be a keyframe property?
      */
-    blendType: { enum: Object.values(AnimBlendType) },
+    blendType: getKeyFrameSetSchema({ enum: Object.values(AnimBlendType) }, false),
 
     /**
      * If this keyframe is for a graphic, specifies the tile index used
-     * for the graphic during the tween
-     * @todo Should this be decoupled from keyframes?
+     * for the graphic during the tween. This is only relevant for VFX
+     * properties.
      */
-    graphicFrame: { type: "number" },
-
-    /** The alpha value for the animated sprite, in the range [0, 255] */
-    alpha: {
-      type: "number",
-      minimum: 0,
-      maximum: 255,
-    },
+    graphicFrame: getKeyFrameSetSchema({ type: "integer" }, false),
 
     /** A tone to pipeline over the animated sprite (RGBA) */
-    tone: {
-      type: "array",
-      items: {
-        type: "number",
-        minimum: 0,
-        maximum: 255,
+    tone: getKeyFrameSetSchema(
+      {
+        type: "array",
+        items: {
+          type: "number",
+          minimum: 0,
+          maximum: 255,
+        },
+        minItems: 3,
+        maxItems: 4,
       },
-      minItems: 3,
-      maxItems: 4,
-    },
+      false,
+    ),
 
     /**
      * The z-depth of the animated sprite during the tween
@@ -139,55 +177,8 @@ const keyFrameSchema: Schema = {
      * - 3 is on top of both fields
      * - 5 is on top of player sprite
      */
-    priority: {
-      enum: [0, 1, 3, 5],
-    },
-
-    /** The duration of the tween for this keyframe (ms) */
-    duration: { type: "number" },
-
-    /** The delay (ms) before playing the tween for this keyframe */
-    delay: { type: "number" },
-
-    /**
-     * The ease function applied to the tween for this keyframe.
-     * @see {@link https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ease-function/#get-ease-function-via-string | Ease Functions}
-     */
-    ease: {
-      enum: easeFunctions,
-      default: "Linear",
-    },
+    priority: getKeyFrameSetSchema({ enum: [0, 1, 3, 5] }, false),
   },
-};
-
-/**
- * Schema for the animation properties of an object.
- * This specifies the property's {@linkcode AnimFrameTargets | focus}
- * and contains the {@linkcode keyFrameSchema | keyframes} applied
- * to the focus.
- */
-const animPropSchema: Schema = {
-  type: "object",
-  properties: {
-    /**
-     * The type of sprite affected by the animation
-     * @see {@linkcode AnimFrameTargets}
-     */
-    focus: { enum: Object.values(AnimFrameTargets) },
-
-    /**
-     * The keyframes used to animate the sprite.
-     * The first keyframe is treated as the initial location
-     * for the affected sprite.
-     * @see {@linkcode keyFrameSchema}
-     */
-    keyFrames: {
-      type: "array",
-      items: keyFrameSchema,
-      minItems: 1,
-    },
-  },
-  required: ["focus", "keyframes"],
 };
 
 /**
@@ -253,8 +244,17 @@ const animTimedEventSchema: Schema = {
       /** @todo Should this default be kept? */
       default: 0,
     },
+
+    /** Scale factor (%) for the background image */
+    scale: {
+      type: "number",
+      default: 100,
+    },
   },
   required: ["time", "resourceName"],
+  if: { properties: { eventType: { enum: ["AnimTimedSoundEvent"] } } },
+  then: { required: ["volume", "pitch"] },
+  else: { required: ["bgX", "bgY", "duration", "scale"] },
 };
 
 /**
@@ -281,14 +281,24 @@ export const animConfigSchema: Schema = {
     graphic: { type: "string" },
 
     /**
-     * Contains all properties applied during the animation.
+     * Contains all properties applied to the sprite of the
+     * "source" object (e.g. the {@linkcode Pokemon} using a move)
      * @see {@linkcode animPropSchema}
      */
-    props: {
-      type: "array",
-      items: animPropSchema,
-      minItems: 1,
-    },
+    sourceProperties: animPropSchema,
+
+    /**
+     * Contains all properties applied to the sprite of the
+     * "target" object (e.g. the {@linkcode Pokemon} attacked by a move)
+     * @see {@linkcode animPropSchema}
+     */
+    targetProperties: animPropSchema,
+
+    /**
+     * Contains all properties applied to the animation's VFX
+     * @see {@linkcode animPropSchema}
+     */
+    vfxProperties: animPropSchema,
 
     /**
      * Contains all timed events played during the animation.
