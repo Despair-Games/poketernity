@@ -1,13 +1,15 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import { BattleCommand } from "#enums/battle-command";
+import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { FieldPhase } from "./abstract-field-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**

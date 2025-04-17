@@ -6,9 +6,9 @@ import {
   getStatusEffectObtainText,
   getStatusEffectOverlapText,
 } from "#app/data/status-effect";
-import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -334,8 +334,8 @@ describe("Status Effects", () => {
       await game.move.forceStatusActivation(true);
       await game.toNextTurn();
 
-      expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(true);
-      expect(game.scene.getPlayerPokemon()!.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+      expect(game.field.getEnemyPokemon().isFullHp()).toBe(true);
+      expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
     });
   });
 
@@ -385,13 +385,13 @@ describe("Status Effects", () => {
       await game.toNextTurn();
 
       expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
-      expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+      expect(player).toHaveMoveResult(MoveResult.FAIL);
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
       expect(player.getStatusEffect(true)).toBe(StatusEffect.NONE);
-      expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+      expect(player).toHaveMoveResult(MoveResult.SUCCESS);
     });
   });
 

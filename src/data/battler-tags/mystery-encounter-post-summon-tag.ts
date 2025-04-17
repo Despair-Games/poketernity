@@ -37,8 +37,4 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
   }
-
-  override isMysteryEncounterPostSummonTag(): this is this {
-    return true;
-  }
 }

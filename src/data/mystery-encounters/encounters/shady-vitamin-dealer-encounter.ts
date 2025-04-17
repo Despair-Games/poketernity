@@ -5,7 +5,7 @@ import {
   setEncounterExp,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils";

@@ -1,14 +1,14 @@
-import { pokemonEvolutions } from "#app/data/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
+import * as Utils from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import * as Utils from "#app/utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Gender } from "#enums/gender";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { BiomePoolTier } from "#enums/biome-pool-tier";
 
 describe("Evolution", () => {
   let phaserGame: Phaser.Game;

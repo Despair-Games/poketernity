@@ -1,9 +1,9 @@
-import { SpeciesId } from "#enums/species-id";
-import { ElementalType } from "#enums/elemental-type";
+import type { Move } from "#app/data/moves/move";
+import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { type Move } from "#app/data/moves/move";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import { ElementalType } from "#enums/elemental-type";
+import { SpeciesId } from "#enums/species-id";
 
 /**
  * Attribute used for Tera Starstorm that changes the move type to Stellar if the user is Terastallized.

@@ -15,7 +15,7 @@ export class FriskAbAttr extends PostSummonAbAttr {
             opponentAbilityName: opponent.getAbility().name,
           }),
         );
-        opponent.battleData.abilitiesRevealed.push(opponent.getAbility().id);
+        opponent.waveData.abilitiesRevealed.push(opponent.getAbility().id);
       }
     }
     return true;

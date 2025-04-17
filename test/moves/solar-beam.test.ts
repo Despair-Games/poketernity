@@ -46,13 +46,13 @@ describe("Moves - Solar Beam", () => {
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeDefined();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.OTHER);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.OTHER);
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerSolarBeam = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.SOLAR_BEAM);
     expect(playerSolarBeam?.ppUsed).toBe(1);
@@ -75,7 +75,7 @@ describe("Moves - Solar Beam", () => {
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
-    expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerSolarBeam = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.SOLAR_BEAM);
     expect(playerSolarBeam?.ppUsed).toBe(1);

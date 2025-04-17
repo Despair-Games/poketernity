@@ -1,9 +1,10 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type UiWindowStyle } from "#enums/ui-window-style";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
-import { initEggMoves } from "#app/data/egg-moves";
+
 import { initChallenges } from "#app/data/challenge";
+import { initEggMoves } from "#app/data/egg-moves";
 import { initAbilities } from "#app/data/init/init-abilities";
 import { initBiomes } from "#app/data/init/init-biomes";
 import { initMoves } from "#app/data/init/init-moves";
@@ -357,12 +358,6 @@ export class LoadingScene extends SceneBase {
     this.loadBgm("victory_champion", "bw/victory_champion.mp3");
     this.loadBgm("evolution", "bw/evolution.mp3");
     this.loadBgm("evolution_fanfare", "bw/evolution_fanfare.mp3");
-
-    this.load.plugin(
-      "rextexteditplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js",
-      true,
-    );
 
     this.loadLoadingScreen();
 

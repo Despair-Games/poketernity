@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type ModifierTier } from "#enums/modifier-tier";
-import { type Item } from "#app/@types/Item";
+import type { Item } from "#app/@types/Item";
+import type { ModifierTier } from "#enums/modifier-tier";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 

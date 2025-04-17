@@ -45,7 +45,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
-    expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
 
@@ -58,7 +58,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
-    expect(player.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
     expect(enemy.isFullHp()).toBeFalsy();
   });
 
@@ -72,7 +72,7 @@ describe("Abilities - Good As Gold", () => {
 
     await game.toEndOfTurn();
 
-    expect(enemy.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(enemy).toHaveMoveResult(MoveResult.SUCCESS);
     expect(enemy.getStatStage(Stat.ATK)).toBe(2);
   });
 
@@ -84,7 +84,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.STEALTH_ROCK);
 
     await game.toEndOfTurn();
-    expect(player.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY)).toBeDefined();
   });
 
@@ -100,7 +100,7 @@ describe("Abilities - Good As Gold", () => {
 
     await game.toEndOfTurn();
 
-    expect(player.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
 });

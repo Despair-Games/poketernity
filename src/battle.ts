@@ -1,27 +1,5 @@
-import { globalScene } from "#app/global-scene";
-import { randomString, NumberHolder, randSeedInt, shiftCharCodes, randSeedItem, randInt, isBetween } from "#app/utils";
-import { TrainerVariant } from "#enums/trainer-variant";
-import Trainer from "./field/trainer";
-import type { GameMode } from "./game-mode";
-import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
-import type { PokeballType } from "#enums/pokeball-type";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { PlayerGender } from "#enums/player-gender";
-import { SpeciesId } from "#enums/species-id";
-import { TrainerType } from "#enums/trainer-type";
-import i18next from "#app/plugins/i18n";
+import type { Move } from "#app/data/moves/move";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { ModifierTier } from "#enums/modifier-tier";
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import { TurnCommandManager } from "./turn-command-manager";
-import { settings } from "./system/settings/settings-manager";
-import { BattleType } from "#enums/battle-type";
 import {
   CHAMPION_WAVE,
   ELITE_FOUR_1_WAVE,
@@ -42,8 +20,31 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "./data/special-waves";
-import type { Move } from "#app/data/moves/move";
+} from "#app/data/special-waves";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import Trainer from "#app/field/trainer";
+import type { GameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
+import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { CustomModifierSettings } from "#app/modifier/modifier-type";
+import i18next from "#app/plugins/i18n";
+import { settings } from "#app/system/settings/settings-manager";
+import { TurnCommandManager } from "#app/turn-command-manager";
+import { isBetween, NumberHolder, randInt, randomString, randSeedInt, randSeedItem, shiftCharCodes } from "#app/utils";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattleType } from "#enums/battle-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PlayerGender } from "#enums/player-gender";
+import type { PokeballType } from "#enums/pokeball-type";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

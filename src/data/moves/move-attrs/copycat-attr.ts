@@ -1,7 +1,7 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { type Move } from "#app/data/moves/move";
+import type { Move } from "#app/data/moves/move";
 import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
 import { getMaxMoveList } from "#app/utils/move-utils";

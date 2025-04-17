@@ -14,8 +14,8 @@ describe("Moves - Instruct", () => {
   let game: GameManager;
 
   function instructSuccess(pokemon: Pokemon, moveId: MoveId): void {
-    expect(pokemon.getLastXMoves(-1)[0].move.id).toBe(moveId);
-    expect(pokemon.getLastXMoves(-1)[1].move.id).toBe(pokemon.getLastXMoves()[0].move.id);
+    expect(pokemon).toHaveUsedMove(moveId, { moveCount: -1, index: 0 });
+    expect(pokemon).toHaveUsedMove(moveId, { moveCount: -1, index: 1 });
     expect(pokemon.getMoveset().find((m) => m?.moveId === moveId)?.ppUsed).toBe(2);
   }
 
@@ -149,8 +149,7 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    const playerMove = game.scene.getPlayerPokemon()!.getLastXMoves()!;
-    expect(playerMove[0].result).toBe(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
     expect(enemyPokemon.getMoveHistory().length).toBe(1);
   });
 
@@ -163,7 +162,7 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("should attempt to call enemy's disabled move, but move use itself should fail", async () => {
@@ -181,9 +180,10 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[0].getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
-    const enemyMove = game.scene.getEnemyPokemon()!.getLastXMoves()[0];
-    expect(enemyMove.result).toBe(MoveResult.FAIL);
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.FAIL);
     expect(
       game.scene
         .getEnemyPokemon()!
@@ -203,8 +203,8 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(enemyPokemon.getLastXMoves(-1)[0].move.id).toBe(MoveId.PROTECT);
-    expect(enemyPokemon.getLastXMoves(-1)[1]).toBeUndefined(); // undefined because protect failed
+    expect(enemyPokemon).toHaveUsedMove(MoveId.PROTECT);
+    expect(enemyPokemon).not.toHaveUsedMove(MoveId.PROTECT, { moveCount: -1, index: 1 }); // not used because protect failed
     expect(enemyPokemon.getMoveset().find((m) => m?.moveId === MoveId.PROTECT)?.ppUsed).toBe(1);
   });
 
@@ -212,7 +212,7 @@ describe("Moves - Instruct", () => {
     game.override.enemyMoveset([MoveId.SONIC_BOOM, MoveId.HYPER_BEAM]).enemyLevel(5);
     await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
-    const player = game.scene.getPlayerPokemon()!;
+    const player = game.field.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.battleSummonData.moveHistory = [
       {
@@ -229,13 +229,13 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
 
     game.move.select(MoveId.INSTRUCT);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("should not repeat dance move not known by target", async () => {
@@ -253,14 +253,14 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[0].getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[0]).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("should cause multi-hit moves to hit the appropriate number of times in singles", async () => {
     game.override.enemyAbility(AbilityId.SKILL_LINK).enemyMoveset(MoveId.BULLET_SEED);
     await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
-    const player = game.scene.getPlayerPokemon()!;
+    const player = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();

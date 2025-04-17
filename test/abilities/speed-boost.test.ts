@@ -1,13 +1,13 @@
-import { Stat } from "#enums/stat";
+import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattleCommand } from "#enums/battle-command";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { type CommandPhase } from "#app/phases/command-phase";
-import { BattleCommand } from "#enums/battle-command";
-import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 
 describe("Abilities - Speed Boost", () => {
   let phaserGame: Phaser.Game;
