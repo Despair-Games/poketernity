@@ -1,7 +1,7 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { type Move } from "#app/data/moves/move";
+import type { Move } from "#app/data/moves/move";
 import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveFlags } from "#enums/move-flags";
@@ -23,7 +23,7 @@ export class MirrorMoveAttr extends CallMoveAttr {
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     const lastMove = target.getLastXMoves()[0].move;
-    if (lastMove.hasFlag(MoveFlags.G_MAX_MOVE)) {
+    if (lastMove.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
       return false;
     }
     return super.apply(user, target, lastMove, overridden);

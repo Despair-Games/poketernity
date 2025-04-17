@@ -49,7 +49,7 @@ describe("Moves - Imprison", () => {
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-    expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE);
+    expect(player).toHaveUsedMove(MoveId.STRUGGLE);
   });
 
   it("should not prevent allies from using moves shared by the user", async () => {
@@ -66,8 +66,8 @@ describe("Moves - Imprison", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.toNextTurn();
-    playerPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS));
-    enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
+    playerPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.SUCCESS));
+    enemyPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.FAIL));
   });
 
   it("should not interrupt moves invoked by Sleep Talk", async () => {
@@ -112,14 +112,14 @@ describe("Moves - Imprison", () => {
     await game.toNextTurn();
 
     [feebas, magikarp].forEach((p) => expect(p.getTag(BattlerTagType.IMPRISONING)).toBeDefined());
-    enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
+    enemyPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.FAIL));
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.CELEBRATE, 1);
 
     await game.toNextTurn();
 
-    enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE));
+    enemyPokemon.forEach((p) => expect(p).toHaveUsedMove(MoveId.STRUGGLE));
   });
 
   it("should disable matching moves for opponents that enter the field afterward", async () => {
@@ -141,6 +141,6 @@ describe("Moves - Imprison", () => {
 
     const player = game.field.getPlayerPokemon();
 
-    expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE);
+    expect(player).toHaveUsedMove(MoveId.STRUGGLE);
   });
 });

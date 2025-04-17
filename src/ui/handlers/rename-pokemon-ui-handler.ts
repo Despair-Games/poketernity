@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";

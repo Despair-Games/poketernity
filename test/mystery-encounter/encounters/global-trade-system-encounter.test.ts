@@ -13,7 +13,7 @@ import { PokemonNatureWeightModifier } from "#app/modifier/modifier";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { GlobalTradeSystemEncounter } from "#app/data/mystery-encounters/encounters/global-trade-system-encounter";
-import { CIVILIZATION_ENCOUNTER_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { UiMode } from "#enums/ui-mode";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
@@ -45,7 +45,7 @@ describe("Global Trade System - Mystery Encounter", () => {
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
+    CivilizationEncounterBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.GLOBAL_TRADE_SYSTEM]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);

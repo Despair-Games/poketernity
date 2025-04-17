@@ -1,12 +1,15 @@
-import { type Pokemon } from "#app/field/pokemon";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
+import {
+  ChanceBasedMoveEffectAttr,
+  type ChanceBasedMoveEffectAttrOptions,
+} from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveTarget } from "#enums/move-target";
-import type { Move } from "../move";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** The number of turns the tag is in effect */

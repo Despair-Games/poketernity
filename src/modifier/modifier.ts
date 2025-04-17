@@ -1,27 +1,28 @@
 import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants";
 import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import { SpeciesFormChangeLapseTeraTrigger, SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { type PlayerPokemon, type Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  type AttackTypeBoosterModifierType,
-  type DoubleBattleChanceBoosterModifierType,
-  type EvolutionItemModifierType,
-  type FormChangeItemModifierType,
-  type ModifierOverride,
-  type ModifierType,
-  type PokemonBaseStatTotalModifierType,
-  type PokemonExpBoosterModifierType,
-  type PokemonFriendshipBoosterModifierType,
-  type TerastallizeModifierType,
-  type TmModifierType,
+import type {
+  AttackTypeBoosterModifierType,
+  DoubleBattleChanceBoosterModifierType,
+  EvolutionItemModifierType,
+  FormChangeItemModifierType,
+  ModifierOverride,
+  ModifierType,
+  PokemonBaseStatTotalModifierType,
+  PokemonExpBoosterModifierType,
+  PokemonFriendshipBoosterModifierType,
+  TerastallizeModifierType,
+  TmModifierType,
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
@@ -36,7 +37,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
-import { type FormChangeItem } from "#enums/form-change-item";
+import type { FormChangeItem } from "#enums/form-change-item";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { Nature } from "#enums/nature";
@@ -876,12 +877,12 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
   }
 
   /**
-   * Lapse the {@linkcode battlesLeft} counter (reduce it by 1)
-   * @param _args arguments passed (not used here)
-   * @returns `true` if {@linkcode battlesLeft} is not null
+   * Reduce {@linkcode battlesLeft} by `1` and check if it's greater than `0`
+   * @param _args - used by subclasses
+   * @returns `true` if `battlesLeft > 0`
    */
   public lapse(..._args: unknown[]): boolean {
-    return !!--this.battlesLeft;
+    return --this.battlesLeft > 0;
   }
 
   /**
@@ -2181,14 +2182,14 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
     restorePoints: number,
     restorePercent: number,
     healStatus: boolean,
-    fainted?: boolean,
+    fainted: boolean = false,
   ) {
     super(type, pokemonId);
 
     this.restorePoints = restorePoints;
     this.restorePercent = restorePercent;
     this.healStatus = healStatus;
-    this.fainted = !!fainted;
+    this.fainted = fainted;
   }
 
   /**
@@ -3258,7 +3259,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
       globalScene.phaseManager.queueMessagePhase(this.getTransferMessage(pokemon, targetPokemon, mt));
     }
 
-    return !!transferredModifierTypes.length;
+    return transferredModifierTypes.length > 0;
   }
 
   abstract getTransferredItemCount(): number;

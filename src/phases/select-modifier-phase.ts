@@ -378,12 +378,12 @@ export class SelectModifierPhase extends BattlePhase {
     if (Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
       return baseValue;
     } else if (lockRarities) {
-      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be part of balance files
+      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be extracted to a const
       for (const opt of this.typeOptions) {
         baseValue += tierValues[opt.type.tier ?? 0];
       }
     } else {
-      baseValue = 250; // TODO: this should be part of balance files
+      baseValue = 250; // TODO: this should be extracted to a const
     }
 
     const baseMultiplier = Math.min(

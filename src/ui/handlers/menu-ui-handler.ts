@@ -1,7 +1,7 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
 import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
-import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";

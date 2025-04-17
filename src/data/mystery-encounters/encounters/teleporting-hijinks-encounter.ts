@@ -14,13 +14,13 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MoneyRequirement, WaveModulusRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import PokemonData from "#app/system/pokemon-data";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { BiomeId } from "#enums/biome-id";
+import type { BiomeId } from "#enums/biome-id";
 import { getBiomeKey } from "#app/field/arena";
 import { ElementalType } from "#enums/elemental-type";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
@@ -35,19 +35,13 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { TeleportingHijinksBiomeCandidates } from "#app/data/biome-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/teleportingHijinks";
 
 const MONEY_COST_MULTIPLIER = 1.75;
-const BIOME_CANDIDATES = [
-  BiomeId.SPACE,
-  BiomeId.FAIRY_CAVE,
-  BiomeId.LABORATORY,
-  BiomeId.ISLAND,
-  BiomeId.WASTELAND,
-  BiomeId.DOJO,
-];
+
 const MACHINE_INTERFACING_TYPES = [ElementalType.ELECTRIC, ElementalType.STEEL];
 
 /**
@@ -185,7 +179,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
 
   // Calculate new biome (cannot be current biome)
-  const filteredBiomes = BIOME_CANDIDATES.filter((b) => globalScene.arena.biomeId !== b);
+  const filteredBiomes = TeleportingHijinksBiomeCandidates.filter((b) => globalScene.arena.biomeId !== b);
   const newBiome = filteredBiomes[randSeedInt(filteredBiomes.length)];
 
   // Show dialogue and transition biome

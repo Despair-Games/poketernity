@@ -49,13 +49,13 @@ describe("Abilities - Early Bird", () => {
     await game.toNextTurn();
 
     expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(player.getStatusEffect(true)).toBe(StatusEffect.NONE);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
   });
 
   it("reduces 3-turn sleep to 1 turn", async () => {
@@ -81,6 +81,6 @@ describe("Abilities - Early Bird", () => {
     await game.toNextTurn();
 
     expect(player.getStatusEffect(true)).toBe(StatusEffect.NONE);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
   });
 });

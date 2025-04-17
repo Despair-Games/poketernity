@@ -1,20 +1,21 @@
-import { BattleType } from "#enums/battle-type";
+import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
+import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { Status } from "#app/data/status-effect";
+import type { Variant } from "#app/data/variant";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { BattleType } from "#enums/battle-type";
+import type { BiomeId } from "#enums/biome-id";
 import type { Gender } from "#enums/gender";
+import { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Status } from "../data/status-effect";
-import { type Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { TrainerSlot } from "#enums/trainer-slot";
-import type { Variant } from "#app/data/variant";
-import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
-import type { BiomeId } from "#enums/biome-id";
-import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 export default class PokemonData {
   public id: number;
@@ -56,6 +57,7 @@ export default class PokemonData {
   /** Data that can customize a Pokemon in non-standard ways from its Species */
   public customPokemonData: CustomPokemonData;
 
+  // TODO: this shouldn't be `| any`
   constructor(source: Pokemon | any, forHistory: boolean = false) {
     const sourcePokemon = source.type === "Pokemon" ? source : null;
     this.id = source.id;
@@ -97,7 +99,7 @@ export default class PokemonData {
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
     if (!forHistory) {
-      this.boss = (source instanceof EnemyPokemon && !!source.bossSegments) || (!this.player && !!source.boss);
+      this.boss = (source instanceof EnemyPokemon && source.bossSegments > 0) || (!this.player && !!source.boss);
       this.bossSegments = source.bossSegments;
     }
 

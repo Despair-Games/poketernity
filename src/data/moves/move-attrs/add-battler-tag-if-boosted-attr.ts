@@ -1,7 +1,7 @@
-import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { Move } from "#app/data/moves/move";
+import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { type Move } from "#app/data/moves/move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
+import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Attribute to apply a battler tag to the target if they have had their stats boosted this turn.

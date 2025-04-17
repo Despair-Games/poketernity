@@ -48,7 +48,7 @@ export class BeakBlastChargingTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.AFTER_HIT) {
       const phaseData = getMoveEffectPhaseData(pokemon);
-      if (phaseData?.move.hasFlag(MoveFlags.MAKES_CONTACT)) {
+      if (phaseData?.move.checkFlag(MoveFlags.MAKES_CONTACT, pokemon)) {
         phaseData.attacker.trySetStatus(StatusEffect.BURN, true, pokemon);
       }
       return true;

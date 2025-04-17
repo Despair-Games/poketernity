@@ -1,4 +1,4 @@
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import { DexAttr } from "#app/data/dex-attributes";
 import { globalScene } from "#app/global-scene";
 import type { GameData } from "#app/system/game-data";
@@ -35,28 +35,28 @@ const displayStats: DisplayStats = {
   startersUnlocked: {
     label_key: "starters",
     sourceFunc: (gameData) => {
-      const starterCount = gameData.getStarterCount((d) => !!d.caughtAttr);
+      const starterCount = gameData.getStarterCount((d) => d.caughtAttr > 0);
       return `${starterCount} (${Math.floor((starterCount / Object.keys(speciesStarterCosts).length) * 1000) / 10}%)`;
     },
   },
   shinyStartersUnlocked: {
     label_key: "shinyStarters",
     sourceFunc: (gameData) => {
-      const starterCount = gameData.getStarterCount((d) => !!(d.caughtAttr & DexAttr.SHINY));
+      const starterCount = gameData.getStarterCount((d) => (d.caughtAttr & DexAttr.SHINY) > 0);
       return `${starterCount} (${Math.floor((starterCount / Object.keys(speciesStarterCosts).length) * 1000) / 10}%)`;
     },
   },
   dexSeen: {
     label_key: "speciesSeen",
     sourceFunc: (gameData) => {
-      const seenCount = gameData.getSpeciesCount((d) => !!d.seenAttr);
+      const seenCount = gameData.getSpeciesCount((d) => d.seenAttr > 0);
       return `${seenCount} (${Math.floor((seenCount / Object.keys(gameData.dexData).length) * 1000) / 10}%)`;
     },
   },
   dexCaught: {
     label_key: "speciesCaught",
     sourceFunc: (gameData) => {
-      const caughtCount = gameData.getSpeciesCount((d) => !!d.caughtAttr);
+      const caughtCount = gameData.getSpeciesCount((d) => d.caughtAttr > 0);
       return `${caughtCount} (${Math.floor((caughtCount / Object.keys(gameData.dexData).length) * 1000) / 10}%)`;
     },
   },

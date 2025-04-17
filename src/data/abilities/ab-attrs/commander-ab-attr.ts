@@ -1,15 +1,15 @@
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { MovePhase } from "#app/phases/move-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import { AbAttr } from "./ab-attr";
-import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { MovePhase } from "#app/phases/move-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.

@@ -1,8 +1,8 @@
 import { G_MAX_FORM_KEYS } from "#app/constants";
-import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
-import { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import { FORM_CHANGE_MOVE } from "#app/data/pokemon-level-moves";
 import { allMoves } from "#app/data/data-lists";
 import { GMaxPowerAttr } from "#app/data/moves/move-attrs/gmax-power-attr";
+import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { MoveId } from "#enums/move-id";
 import { describe, expect, it } from "vitest";

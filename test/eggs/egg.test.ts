@@ -1,4 +1,4 @@
-import { speciesEggTiers } from "#app/data/balance/species-egg-tiers";
+import { speciesEggTiers } from "#app/data/species-egg-tiers";
 import { allSpecies } from "#app/data/data-lists";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import * as Utils from "#app/utils";

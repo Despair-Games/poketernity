@@ -22,7 +22,9 @@ export class OctolockTag extends TrappedTag {
 
     if (shouldLapse) {
       globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), null, [Stat.DEF, Stat.SPDEF], -1, { bypassReflect: true }),
+        new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.DEF, Stat.SPDEF], -1, {
+          bypassReflect: true,
+        }),
       );
       return true;
     }

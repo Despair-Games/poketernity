@@ -1,4 +1,4 @@
-import { type Ability } from "#app/data/abilities/ability";
+import type { Ability } from "#app/data/abilities/ability";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import {
   getEncounterText,

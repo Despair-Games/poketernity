@@ -69,7 +69,7 @@ export abstract class ArenaTag {
   public onOverlap(_arena: Arena): void {}
 
   public lapse(_arena: Arena): boolean {
-    return this.turnCount < 1 || !!--this.turnCount;
+    return this.turnCount < 1 || --this.turnCount !== 0;
   }
 
   public getMoveName(): string | null {
@@ -1052,7 +1052,9 @@ class StickyWebTag extends EntryHazardTag {
         );
         const stages = new NumberHolder(-1);
         globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value),
+          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value, {
+            isStickyWeb: true,
+          }),
         );
         return true;
       }

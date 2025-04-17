@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { type EvolutionPhase } from "#app/phases/evolution-phase";
+import type { EvolutionPhase } from "#app/phases/evolution-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { addTextObject } from "#app/ui/text/text-utils";

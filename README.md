@@ -14,7 +14,7 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 #### Prerequisites
 
-- node: 20.13.1
+- node: 22.14.0
 - npm: [how to install](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - git: [how to install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (needed to retrieve the translations)
 

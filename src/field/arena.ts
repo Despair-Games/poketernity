@@ -4,7 +4,7 @@ import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
-import { getBiomeBgm, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
+import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
@@ -154,8 +154,8 @@ export class Arena {
 
     // Boss pool is 0-63, non Boss pool is 0-512
     const isBossSpecies =
-      !!globalScene.getEncounterBossSegments(waveIndex, level)
-      && !!this.pokemonPool[BiomePoolTier.BOSS].length
+      globalScene.getEncounterBossSegments(waveIndex, level) > 0
+      && this.pokemonPool[BiomePoolTier.BOSS].length > 0
       && (this.biomeId !== BiomeId.END
         || globalScene.gameMode.isClassic
         || globalScene.gameMode.isWaveFinal(waveIndex));
@@ -286,14 +286,12 @@ export class Arena {
    */
   randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
-      !!this.trainerPool[BiomePoolTier.BOSS].length
-      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId, globalScene.offsetGym) || isBoss);
-    console.log(isBoss, this.trainerPool);
+      this.trainerPool[BiomePoolTier.BOSS].length > 0
+      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId) || isBoss);
 
     // @todo Right now there are no super/ultra or rare boss trainers
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
-    console.log(BiomePoolTier[tier]);
 
     while (tier && !this.trainerPool[tier].length) {
       console.log(`Downgraded trainer rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
@@ -532,7 +530,7 @@ export class Arena {
    * @returns whether the move was cancelled by terrain
    */
   public isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
-    return !!this.terrain && this.terrain.isMoveTerrainCancelled(user, targets, move);
+    return !!this.terrain?.isMoveTerrainCancelled(user, targets, move);
   }
 
   public getTerrainType(): TerrainType {
@@ -636,24 +634,8 @@ export class Arena {
     this.trySetTerrain(randomTerrain, false);
   }
 
-  /**
-   * Whether or not a biome is indoors affects tinting
-   */
-  private readonly indoorBiomes = [
-    BiomeId.SEABED,
-    BiomeId.CAVE,
-    BiomeId.ICE_CAVE,
-    BiomeId.POWER_PLANT,
-    BiomeId.DOJO,
-    BiomeId.FACTORY,
-    BiomeId.ABYSS,
-    BiomeId.FAIRY_CAVE,
-    BiomeId.TEMPLE,
-    BiomeId.LABORATORY,
-  ];
-
   isOutside(): boolean {
-    return !this.indoorBiomes.includes(this.biomeId);
+    return !IndoorBiomes.includes(this.biomeId);
   }
 
   // @todo these tints feel like they belong in their own class somewhere

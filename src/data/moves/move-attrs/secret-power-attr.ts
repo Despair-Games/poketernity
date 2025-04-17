@@ -1,7 +1,7 @@
 import type { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ab-attrs/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type Move } from "#app/data/moves/move";
+import type { Move } from "#app/data/moves/move";
 import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
 import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
@@ -95,6 +95,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case BiomeId.SNOWY_FOREST:
         return new StatusEffectAttr(StatusEffect.FREEZE, false, undefined, undefined, -1);
       case BiomeId.VOLCANO:
+      case BiomeId.STEAM_VENT:
         return new StatusEffectAttr(StatusEffect.BURN, false, undefined, undefined, -1);
       case BiomeId.FAIRY_CAVE:
         return new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });
@@ -123,6 +124,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case BiomeId.FACTORY:
       case BiomeId.LABORATORY:
       case BiomeId.POWER_PLANT:
+      case BiomeId.CHARGESTONE_CAVE:
       default:
         return new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
     }

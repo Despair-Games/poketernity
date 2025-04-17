@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
 import { BiomeId } from "#enums/biome-id";
@@ -47,7 +47,7 @@ export class NaturePowerAttr extends CallMoveAttr {
         case BiomeId.SWAMP:
           return MoveId.MUD_BOMB;
         case BiomeId.BEACH:
-          return MoveId.SCALD;
+          return MoveId.SURF;
         case BiomeId.LAKE:
           return MoveId.BUBBLE_BEAM;
         case BiomeId.SEABED:
@@ -94,6 +94,10 @@ export class NaturePowerAttr extends CallMoveAttr {
           return MoveId.CHARGE_BEAM;
         case BiomeId.END:
           return MoveId.ETERNABEAM;
+        case BiomeId.STEAM_VENT:
+          return MoveId.SCALD;
+        case BiomeId.CHARGESTONE_CAVE:
+          return MoveId.CHARGE_BEAM;
       }
     };
     switch (globalScene.arena.getTerrainType()) {
