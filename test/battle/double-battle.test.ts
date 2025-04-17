@@ -106,36 +106,41 @@ describe("Double Battles", () => {
   describe("Trainer Double Battles", () => {
     it("should advance exactly one wave if both opponents are defeated at the same time", async () => {
       game.override.trainerType(TrainerType.TWINS).trainerChance(1).startingLevel(1000).startingWave(12);
-      await game.dailyMode.startBattle();
+      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-      game.move.use(MoveId.DAZZLING_GLEAM, 0);
-      game.move.use(MoveId.DAZZLING_GLEAM, 1);
-      await game.phaseInterceptor.to("SelectModifierPhase");
+      game.move.use(MoveId.DAZZLING_GLEAM);
+      await game.toNextWave();
 
+      expect(game.scene.currentBattle.waveIndex).toBe(13);
+      expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
       expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
     });
 
     it("should advance exactly one wave if the left opponent is defeated first", async () => {
       game.override.trainerType(TrainerType.TWINS).trainerChance(1).startingLevel(1000).startingWave(12);
-      await game.dailyMode.startBattle();
+      await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       game.move.use(MoveId.MOONBLAST, 0, BattlerIndex.ENEMY);
       game.move.use(MoveId.MOONBLAST, 1, BattlerIndex.ENEMY_2);
-      await game.phaseInterceptor.to("SelectModifierPhase");
+      await game.toNextWave();
 
+      expect(game.scene.currentBattle.waveIndex).toBe(13);
+      expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
       expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
     });
 
     it("should advance exactly one wave if the right opponent is defeated first", async () => {
       game.override.trainerType(TrainerType.TWINS).trainerChance(1).startingLevel(1000).startingWave(12);
-      await game.dailyMode.startBattle();
+      await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       game.move.use(MoveId.MOONBLAST, 0, BattlerIndex.ENEMY_2);
       game.move.use(MoveId.MOONBLAST, 1, BattlerIndex.ENEMY);
-      await game.phaseInterceptor.to("SelectModifierPhase");
+      await game.toNextWave();
 
+      expect(game.scene.currentBattle.waveIndex).toBe(13);
+      expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
       expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
     });
   });
