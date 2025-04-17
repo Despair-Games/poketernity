@@ -30,6 +30,7 @@ export const EVIL_ADMIN_2_WAVE = 114;
 export const EVIL_BOSS_1_WAVE = 115;
 export const EVIL_BOSS_2_WAVE = 165;
 
+export const ELITE_FOUR_START_WAVE = 181;
 export const ELITE_FOUR_1_WAVE = 182;
 export const ELITE_FOUR_2_WAVE = 184;
 export const ELITE_FOUR_3_WAVE = 186;

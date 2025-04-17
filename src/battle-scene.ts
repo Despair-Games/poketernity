@@ -32,6 +32,7 @@ import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/myster
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
+import { ELITE_FOUR_START_WAVE } from "#app/data/special-waves";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
@@ -1380,7 +1381,7 @@ export default class BattleScene extends SceneBase {
             // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
             pokemon.species.speciesId === SpeciesId.TERAPAGOS
             // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
-            || (this.gameMode.isClassic && this.currentBattle.waveIndex > 180)
+            || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_START_WAVE)
           ) {
             this.arena.playerTerasUsed = 0;
           }
