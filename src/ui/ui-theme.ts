@@ -1,8 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { WindowVariant } from "#enums/window-variant";
 import { CANVAS_SCALE } from "#app/ui-constants";
-import type { UiWindowStyle } from "#enums/ui-window-style";
+import { UiTheme } from "#enums/ui-theme";
+import { UiWindowStyle } from "#enums/ui-window-style";
+import { WindowVariant } from "#enums/window-variant";
 
 /**
  * Texture keys of atlases that need to be updated when the {@linkcode UiWindowStyle} changes.
@@ -71,7 +72,14 @@ export function addWindow(
   return window;
 }
 
+export function setDocumentUiTheme() {
+  document.documentElement.dataset.uiTheme = UiTheme[settings.display.uiTheme];
+  document.documentElement.dataset.windowStyle = UiWindowStyle[settings.display.uiWindowStyle];
+}
+
 export function updateWindowStyle(windowStyle: UiWindowStyle): void {
+  document.documentElement.dataset.windowStyle = UiWindowStyle[settings.display.uiWindowStyle];
+
   const traverse = (object: any) => {
     if (object.hasOwnProperty("children") && object.children instanceof Phaser.GameObjects.DisplayList) {
       const children = object.children as Phaser.GameObjects.DisplayList;
