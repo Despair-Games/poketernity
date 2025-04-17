@@ -185,7 +185,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.player = player;
 
     const partyHasHeldItem =
-      this.player && !!globalScene.findModifiers((m) => m.isPokemonHeldItemModifier() && m.isTransferable).length;
+      this.player && globalScene.findModifiers((m) => m.isPokemonHeldItemModifier() && m.isTransferable).length > 0;
     const canLockRarities = !!globalScene.findModifier((m) => m instanceof LockModifierTiersModifier);
 
     this.transferButtonContainer.setVisible(false);

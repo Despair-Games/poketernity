@@ -26,7 +26,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     user.summonData.ability = target.getAbility().id;
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:copiedTargetAbility", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),
@@ -37,7 +37,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     const allyPokemon = user.getAlly();
     if (this.copyToPartner && globalScene.currentBattle?.double && allyPokemon?.isActive(true)) {
       allyPokemon.summonData.ability = target.getAbility().id;
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("moveTriggers:copiedTargetAbility", {
           pokemonName: getPokemonNameWithAffix(allyPokemon),
           targetName: getPokemonNameWithAffix(target),

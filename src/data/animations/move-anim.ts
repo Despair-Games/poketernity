@@ -8,6 +8,11 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 
+/**
+ * Animation for effects during the use of a move.
+ * @extends BattleAnim
+ * @todo Should "target" or "targetIndex" be used?
+ */
 export class MoveAnim extends BattleAnim {
   public moveId: MoveId;
 
@@ -28,10 +33,10 @@ export class MoveAnim extends BattleAnim {
   }
 
   protected override isHideUser(): boolean {
-    return allMoves.get(this.moveId).hasFlag(MoveFlags.HIDE_USER);
+    return allMoves.get(this.moveId).checkFlag(MoveFlags.HIDE_USER, this.user, this.target);
   }
 
   protected override isHideTarget(): boolean {
-    return allMoves.get(this.moveId).hasFlag(MoveFlags.HIDE_TARGET);
+    return allMoves.get(this.moveId).checkFlag(MoveFlags.HIDE_TARGET, this.user, this.target);
   }
 }

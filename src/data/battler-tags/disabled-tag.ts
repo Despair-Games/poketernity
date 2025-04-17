@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type AbilityId } from "#enums/ability-id";
+import type { AbilityId } from "#enums/ability-id";
 // -- end tsdoc imports
 
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
@@ -54,7 +54,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
 
     this.moveId = lastValidMove.id;
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:disabledOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: allMoves.get(this.moveId).name,
@@ -66,7 +66,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:disabledLapse", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: allMoves.get(this.moveId).name,

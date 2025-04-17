@@ -1,9 +1,11 @@
 import { Biome } from "#app/data/biome";
-import { townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
+import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
+import { WeatherType } from "#enums/weather-type";
 
 const pokemonPool = {
   [BiomePoolTier.COMMON]: {
@@ -71,11 +73,41 @@ const pokemonPool = {
   },
 };
 
+const trainerPool = {
+  [BiomePoolTier.COMMON]: [TrainerType.BREEDER, TrainerType.SCHOOL_KID],
+  [BiomePoolTier.UNCOMMON]: [TrainerType.ACE_TRAINER],
+  [BiomePoolTier.RARE]: [TrainerType.BLACK_BELT],
+  [BiomePoolTier.SUPER_RARE]: [],
+  [BiomePoolTier.ULTRA_RARE]: [],
+  [BiomePoolTier.BOSS]: [TrainerType.ERIKA],
+  [BiomePoolTier.BOSS_RARE]: [],
+  [BiomePoolTier.BOSS_SUPER_RARE]: [],
+  [BiomePoolTier.BOSS_ULTRA_RARE]: [],
+};
+
+/**
+ * 3/10 of sun during dawn/day
+ */
+const weatherPool = {
+  [WeatherType.NONE]: 7,
+  [WeatherType.SUNNY]: 3,
+};
+
+/**
+ * 1/2 of grassy
+ */
+const terrainPool: Partial<Record<TerrainType, number>> = {
+  [TerrainType.NONE]: 1,
+  [TerrainType.GRASSY]: 1,
+};
+
 export const grassBiome = new Biome(
   BiomeId.GRASS,
   pokemonPool,
-  townTrainerPool,
-  townWeatherPool,
-  townTerrainPool,
-  "town",
+  trainerPool,
+  6,
+  weatherPool,
+  terrainPool,
+  "grass",
+  1.995,
 );

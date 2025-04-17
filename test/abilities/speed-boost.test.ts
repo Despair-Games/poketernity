@@ -1,13 +1,13 @@
-import { Stat } from "#enums/stat";
+import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattleCommand } from "#enums/battle-command";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { type CommandPhase } from "#app/phases/command-phase";
-import { BattleCommand } from "#enums/battle-command";
-import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 
 describe("Abilities - Speed Boost", () => {
   let phaserGame: Phaser.Game;
@@ -98,9 +98,9 @@ describe("Abilities - Speed Boost", () => {
   it("should not trigger if pokemon fails to escape", async () => {
     await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
-    const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
+    const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
-    const runPhase = game.scene.getCurrentPhase() as AttemptRunPhase;
+    const runPhase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
     runPhase.forceFailEscape = true;
     await game.phaseInterceptor.to(AttemptRunPhase);
     await game.toNextTurn();

@@ -4,7 +4,7 @@ import type { PreWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/pre-we
 import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";
@@ -17,6 +17,11 @@ import { WeatherType } from "#enums/weather-type";
 
 export class WeatherEffectPhase extends CommonAnimPhase {
   override readonly id = PhaseId.WEATHER_EFFECT;
+
+  constructor() {
+    /** This is overwritten in {@linkcode start} */
+    super(CommonAnim.SUNNY);
+  }
 
   public override start(): void {
     // Get current weather state at end of turn
@@ -73,7 +78,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
 
       const damage = toDmgValue(pokemon.getMaxHp() / 16);
 
-      globalScene.queueMessage(getWeatherDamageMessage(weather.weatherType, pokemon) ?? "");
+      globalScene.phaseManager.queueMessagePhase(getWeatherDamageMessage(weather.weatherType, pokemon) ?? "");
       pokemon.damageAndUpdate(damage, { result: HitResult.EFFECTIVE, preventEndure: true });
     };
 

@@ -17,7 +17,7 @@ export class AbilityGiveAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.ability = user.getAbility().id;
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:acquiredAbility", {
         pokemonName: getPokemonNameWithAffix(target),
         abilityName: allAbilities[user.getAbility().id].name,

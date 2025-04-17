@@ -1,9 +1,11 @@
 import { Biome } from "#app/data/biome";
-import { townTrainerPool, townWeatherPool, townTerrainPool } from "#app/data/biomes/town";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";
+import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
+import { WeatherType } from "#enums/weather-type";
 
 const pokemonPool = {
   [BiomePoolTier.COMMON]: {
@@ -87,11 +89,39 @@ const pokemonPool = {
   },
 };
 
+const trainerPool = {
+  [BiomePoolTier.COMMON]: [TrainerType.FISHERMAN, TrainerType.PARASOL_LADY, TrainerType.SAILOR],
+  [BiomePoolTier.UNCOMMON]: [TrainerType.ACE_TRAINER, TrainerType.BREEDER],
+  [BiomePoolTier.RARE]: [TrainerType.BLACK_BELT],
+  [BiomePoolTier.SUPER_RARE]: [],
+  [BiomePoolTier.ULTRA_RARE]: [],
+  [BiomePoolTier.BOSS]: [TrainerType.MISTY, TrainerType.KOFU],
+  [BiomePoolTier.BOSS_RARE]: [],
+  [BiomePoolTier.BOSS_SUPER_RARE]: [],
+  [BiomePoolTier.BOSS_ULTRA_RARE]: [],
+};
+
+/**
+ * 5/16 sunny, 3/16 rain if dawn/day
+ * 3/11 rain during dusk/night
+ */
+const weatherPool = {
+  [WeatherType.NONE]: 8,
+  [WeatherType.SUNNY]: 5,
+  [WeatherType.RAIN]: 3,
+};
+
+const terrainPool: Partial<Record<TerrainType, number>> = {
+  [TerrainType.NONE]: 1,
+};
+
 export const beachBiome = new Biome(
   BiomeId.BEACH,
   pokemonPool,
-  townTrainerPool,
-  townWeatherPool,
-  townTerrainPool,
-  "town",
+  trainerPool,
+  4,
+  weatherPool,
+  terrainPool,
+  "beach",
+  3.462,
 );

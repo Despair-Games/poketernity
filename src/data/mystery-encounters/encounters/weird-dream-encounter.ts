@@ -14,7 +14,7 @@ import {
 } from "../utils/encounter-phase-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
@@ -42,7 +42,7 @@ import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { addPokemonDataToDexAndValidateAchievements } from "../utils/encounter-pokemon-utils";
@@ -730,7 +730,7 @@ async function addEggMoveToNewPokemonMoveset(
       if (
         !forBattle
         && !isNullOrUndefined(randomEggMoveIndex)
-        && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
+        && globalScene.gameData.dexData[speciesRootForm].caughtAttr > 0
       ) {
         await globalScene.gameData.setEggMoveUnlocked(
           getPokemonSpecies(speciesRootForm),

@@ -127,7 +127,7 @@ describe("Moves - Fake Out", () => {
     expect(enemy.hp).toBeLessThan(enemyStartingHp);
     expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
     expect(player.turnData.acted).toBeTruthy();
-    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
   });
 
   it("can be used after the user is sent out via Wimp Out", async () => {
@@ -151,6 +151,6 @@ describe("Moves - Fake Out", () => {
     expect(enemy.isFullHp()).toBeFalsy();
     expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
     expect(player.turnData.acted).toBeTruthy();
-    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
   });
 });

@@ -67,16 +67,16 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
     });
 
     matchingAttrs.forEach((attr) => {
-      globalScene.setPhaseQueueSplice();
+      globalScene.phaseManager.setPhaseQueueSplice();
 
       const result = attr.apply(pokemon, simulated, ...args);
       if (result && !simulated) {
         if (pokemon.summonData && !pokemon.summonData.abilitiesApplied.includes(ability.id)) {
           pokemon.summonData.abilitiesApplied.push(ability.id);
         }
-        if (pokemon.battleData && !pokemon.battleData.abilitiesApplied.includes(ability.id)) {
-          pokemon.battleData.abilitiesApplied.push(ability.id);
-          pokemon.battleData.abilitiesRevealed.push(ability.id);
+        if (pokemon.waveData && !pokemon.waveData.abilitiesApplied.includes(ability.id)) {
+          pokemon.waveData.abilitiesApplied.push(ability.id);
+          pokemon.waveData.abilitiesRevealed.push(ability.id);
         }
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {
@@ -90,13 +90,13 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
         const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
         if (message) {
           if (!simulated) {
-            globalScene.queueMessage(message);
+            globalScene.phaseManager.queueMessagePhase(message);
           }
           messages.push(message);
         }
       }
 
-      globalScene.clearPhaseQueueSplice();
+      globalScene.phaseManager.clearPhaseQueueSplice();
     });
   });
 

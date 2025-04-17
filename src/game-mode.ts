@@ -142,19 +142,18 @@ export class GameMode implements GameModeConfig {
    * @returns `true` if a trainer should be generated, `false` otherwise
    */
   isWaveTrainer(waveIndex: number, arena: Arena): boolean {
-    /**
-     * Daily spawns trainers on floors 5, 15, 20, 25, 30, 35, 40, and 45
-     */
+    // Daily spawns trainers on floors 5, 15, 20, 25, 30, 35, 40, and 45
     if (this.isDaily) {
       return waveIndex % 10 === 5 || (!(waveIndex % 10) && waveIndex > 10 && !this.isWaveFinal(waveIndex));
     }
-    if (waveIndex % 30 === (globalScene.offsetGym ? 0 : 20) && !this.isWaveFinal(waveIndex)) {
+
+    if (this.isGymWave(waveIndex) && !this.isWaveFinal(waveIndex)) {
       return true;
-    } else if (waveIndex % 10 !== 1 && waveIndex % 10) {
-      /**
-       * Do not check X1 floors since there's a bug that stops trainer sprites from appearing
-       * after a X0 full party heal
-       */
+    }
+
+    // Trainers must not appear on X1 waves due to a bug that prevents trainer sprites from appearing
+    // after the full party heal that happens between X0 and X1 waves
+    if (waveIndex % 10 > 1) {
       const trainerChance = arena.getTrainerChance();
       let allowTrainerBattle = true;
       if (trainerChance) {
@@ -164,10 +163,13 @@ export class GameMode implements GameModeConfig {
           if (w === waveIndex) {
             continue;
           }
-          if (w % 30 === (globalScene.offsetGym ? 0 : 20) || this.isFixedBattle(w)) {
+
+          if (this.isGymWave(w) || this.isFixedBattle(w)) {
             allowTrainerBattle = false;
             break;
-          } else if (w < waveIndex) {
+          }
+
+          if (w < waveIndex) {
             globalScene.executeWithSeedOffset(() => {
               const waveTrainerChance = arena.getTrainerChance();
               if (!randSeedInt(waveTrainerChance)) {
@@ -182,18 +184,25 @@ export class GameMode implements GameModeConfig {
       }
       return Boolean(allowTrainerBattle && trainerChance && !randSeedInt(trainerChance));
     }
+
     return false;
   }
 
-  isTrainerBoss(waveIndex: number, biomeId: BiomeId, offsetGym: boolean): boolean {
+  /** @returns `true` if the wave is a multiple of `20` between `20-160` in classic mode */
+  public isGymWave(waveIndex: number): boolean {
+    const gymWaves = [20, 40, 60, 80, 100, 120, 140, 160];
+    return this.isClassic && gymWaves.includes(waveIndex);
+  }
+
+  public isTrainerBoss(waveIndex: number, biomeId: BiomeId): boolean {
     switch (this.modeId) {
       case GameModes.DAILY:
         return waveIndex > 10 && waveIndex < 50 && !(waveIndex % 10);
-      default:
-        return (
-          waveIndex % 30 === (offsetGym ? 0 : 20)
-          && (biomeId !== BiomeId.END || this.isClassic || this.isWaveFinal(waveIndex))
-        );
+      case GameModes.CLASSIC:
+      case GameModes.CHALLENGE:
+        return this.isGymWave(waveIndex) && (biomeId !== BiomeId.END || this.isWaveFinal(waveIndex));
+      case GameModes.ENDLESS:
+        return false;
     }
   }
 

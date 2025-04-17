@@ -1,13 +1,15 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type CommandPhase } from "#app/phases/command-phase";
-import { type TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
+import type { TurnEndPhase } from "#app/phases/turn-end-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
 import BattleScene from "#app/battle-scene";
-import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
@@ -21,6 +23,7 @@ import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
+import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
@@ -50,6 +53,7 @@ import { ModifierHelper } from "#test/test-utils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/test-utils/helpers/moveHelper";
 import { OverridesHelper } from "#test/test-utils/helpers/overridesHelper";
 import { ReloadHelper } from "#test/test-utils/helpers/reloadHelper";
+import { RngHelper } from "#test/test-utils/helpers/rngHelper";
 import { SettingsHelper } from "#test/test-utils/helpers/settingsHelper";
 import type { InputsHandler } from "#test/test-utils/inputsHandler";
 import { MockFetch } from "#test/test-utils/mocks/mockFetch";
@@ -58,8 +62,6 @@ import { TextInterceptor } from "#test/test-utils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import { RngHelper } from "#test/test-utils/helpers/rngHelper";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -106,12 +108,12 @@ export class GameManager {
     if (!firstTimeScene) {
       this.scene.reset(false, true);
       (this.scene.ui.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
-      this.scene.clearAllPhases();
+      this.scene.phaseManager.clearAllPhases();
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
-      this.scene.pushPhase(new LoginPhase());
-      this.scene.toTitleScreen();
-      this.scene.shiftPhase();
+      this.scene.phaseManager.pushPhase(new LoginPhase());
+      this.scene.phaseManager.toTitleScreen();
+      this.scene.phaseManager.shiftPhase();
 
       this.gameWrapper.scene = this.scene;
     }
@@ -161,7 +163,7 @@ export class GameManager {
    * Ends the current phase.
    */
   endPhase() {
-    this.scene.getCurrentPhase()?.end();
+    this.scene.phaseManager.getCurrentPhase()?.end();
   }
 
   /**
@@ -217,18 +219,19 @@ export class GameManager {
       this.scene.gameMode = getGameMode(mode);
       const starters = generateStarter(this.scene, species);
       const selectStarterPhase = new SelectStarterPhase();
-      this.scene.pushPhase(new EncounterPhase(false));
+      this.scene.phaseManager.pushPhase(new EncounterPhase(false));
       selectStarterPhase.initBattle(starters);
     });
 
     // This will consider all battle entry dialog as seens and skip them
     vi.spyOn(this.scene.ui, "shouldSkipDialogue").mockReturnValue(true);
 
-    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0) {
+    await this.phaseInterceptor.to("EncounterPhase");
+
+    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.override.removeEnemyStartingItems) {
       this.removeEnemyHeldItems();
     }
 
-    await this.phaseInterceptor.to("EncounterPhase");
     console.log("===finished run to final boss encounter===");
   }
 
@@ -253,7 +256,7 @@ export class GameManager {
         this.scene.gameMode = getGameMode(GameModes.CLASSIC);
         const starters = generateStarter(this.scene, species);
         const selectStarterPhase = new SelectStarterPhase();
-        this.scene.pushPhase(new EncounterPhase(false));
+        this.scene.phaseManager.pushPhase(new EncounterPhase(false));
         selectStarterPhase.initBattle(starters);
       },
       () => this.isCurrentPhase("EncounterPhase"),
@@ -404,7 +407,7 @@ export class GameManager {
    */
   isCurrentPhase(phaseTarget: PhaseInterceptorPhase) {
     const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
-    return this.scene.getCurrentPhase()?.constructor.name === targetName;
+    return this.scene.phaseManager.getCurrentPhase()?.constructor.name === targetName;
   }
 
   /**
@@ -451,7 +454,7 @@ export class GameManager {
   async killPokemon(pokemon: PlayerPokemon | EnemyPokemon) {
     return new Promise<void>(async (resolve, reject) => {
       pokemon.hp = 0;
-      this.scene.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
+      this.scene.phaseManager.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
       await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
       resolve();
     });

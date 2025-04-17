@@ -44,12 +44,12 @@ describe("Moves - Geomancy", () => {
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(0));
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.OTHER);
+    expect(player).toHaveMoveResult(MoveResult.OTHER);
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(2));
     expect(player.getMoveHistory()).toHaveLength(2);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerGeomancy = player.getMoveset().find((mv) => mv && mv.moveId === MoveId.GEOMANCY);
     expect(playerGeomancy?.ppUsed).toBe(1);
@@ -71,7 +71,7 @@ describe("Moves - Geomancy", () => {
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(2));
     expect(player.getMoveHistory()).toHaveLength(2);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerGeomancy = player.getMoveset().find((mv) => mv && mv.moveId === MoveId.GEOMANCY);
     expect(playerGeomancy?.ppUsed).toBe(1);

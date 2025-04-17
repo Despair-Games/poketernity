@@ -20,10 +20,10 @@ export class TurnStartPhase extends FieldPhase {
   }
 
   public override end(): void {
-    globalScene.pushPhase(new WeatherEffectPhase());
-    globalScene.pushPhase(new BerryPhase());
-    globalScene.pushPhase(new CheckStatusEffectPhase());
-    globalScene.pushPhase(new TurnEndPhase());
+    globalScene.phaseManager.pushPhase(new WeatherEffectPhase());
+    globalScene.phaseManager.pushPhase(new BerryPhase());
+    globalScene.phaseManager.pushPhase(new CheckStatusEffectPhase());
+    globalScene.phaseManager.pushPhase(new TurnEndPhase());
 
     super.end();
   }

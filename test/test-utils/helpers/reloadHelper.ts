@@ -36,7 +36,7 @@ export class ReloadHelper extends GameManagerHelper {
     const scene = this.game.scene;
     const titlePhase = new TitlePhase();
 
-    scene.clearPhaseQueue();
+    scene.phaseManager.clearPhaseQueue();
 
     // Set the last saved session to the desired session data
     vi.spyOn(scene.gameData, "getSession").mockReturnValue(
@@ -44,8 +44,8 @@ export class ReloadHelper extends GameManagerHelper {
         resolve(this.sessionData);
       }),
     );
-    scene.unshiftPhase(titlePhase);
-    this.game.endPhase(); // End the currently ongoing battle
+    scene.phaseManager.unshiftPhase(titlePhase);
+    this.game.phaseInterceptor.superEndPhase(); // End the currently ongoing battle
 
     titlePhase.loadSaveSlot(-1); // Load the desired session data
     this.game.phaseInterceptor.shift(); // Loading the save slot also ended TitlePhase, clean it up

@@ -30,10 +30,15 @@ export class IVGraph extends Phaser.GameObjects.Container {
 
   private defaultTextStyle: TextStyle;
 
-  constructor(x: number, y: number, showDiff?: boolean, defaultTextStyle: TextStyle = TextStyle.TOOLTIP_CONTENT) {
+  constructor(
+    x: number,
+    y: number,
+    showDiff: boolean = false,
+    defaultTextStyle: TextStyle = TextStyle.TOOLTIP_CONTENT,
+  ) {
     super(globalScene, x, y);
 
-    this.showDiff = !!showDiff;
+    this.showDiff = showDiff;
     this.defaultTextStyle = defaultTextStyle;
 
     this.setup();

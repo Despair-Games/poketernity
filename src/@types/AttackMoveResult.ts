@@ -1,4 +1,4 @@
-import type { DamageResult } from "#app/field/pokemon";
+import type { DamageResult } from "#app/@types/DamageResult";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 

@@ -1,12 +1,12 @@
+import type { EvolutionPhase } from "#app/phases/evolution-phase";
 import { AbilityId } from "#enums/ability-id";
+import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Button } from "#enums/buttons";
-import { type EvolutionPhase } from "#app/phases/evolution-phase";
-import { UiMode } from "#enums/ui-mode";
 
 describe("Evolution Phase", () => {
   let phaserGame: Phaser.Game;
@@ -25,7 +25,7 @@ describe("Evolution Phase", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .startingWave(100) // Make sure level cap is high enough for evolution
+      .levelCap(-1)
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
@@ -98,7 +98,7 @@ describe("Evolution Phase", () => {
     await game.phaseInterceptor.to("EvolutionPhase", false);
 
     // Cancel the evolution
-    (game.scene.getCurrentPhase() as EvolutionPhase).cancelEvolution();
+    (game.scene.phaseManager.getCurrentPhase() as EvolutionPhase).cancelEvolution();
 
     // Say yes to pausing the evolution
     game.onNextPrompt("EvolutionPhase", UiMode.CONFIRM, () => game.scene.ui.processInput(Button.ACTION));

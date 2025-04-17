@@ -1,4 +1,3 @@
-import { BiomeId } from "#enums/biome-id";
 import { TerrainType } from "#enums/terrain-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,6 +6,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { BiomeId } from "#enums/biome-id";
 
 /**
  * Attribute to change the user's type based on the current biome.
@@ -31,7 +31,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     user.summonData.types = [typeChange];
     user.updateInfo();
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         typeName: i18next.t(`pokemonInfo:Type.${ElementalType[typeChange]}`),
@@ -63,7 +63,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
   }
 
   /**
-   * Retrieves a type from the current biome
+   * Retrieves a type from the current biome. Used for the move Camouflage
    * @param biomeId {@linkcode BiomeId}
    * @returns the {@linkcode ElementalType} corresponding to the biome
    */
@@ -102,8 +102,10 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
       case BiomeId.ISLAND:
         return ElementalType.FAIRY;
       case BiomeId.POWER_PLANT:
+      case BiomeId.CHARGESTONE_CAVE:
         return ElementalType.ELECTRIC;
       case BiomeId.VOLCANO:
+      case BiomeId.STEAM_VENT:
         return ElementalType.FIRE;
       case BiomeId.GRAVEYARD:
       case BiomeId.TEMPLE:

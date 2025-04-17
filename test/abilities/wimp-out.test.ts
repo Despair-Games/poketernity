@@ -560,6 +560,6 @@ describe("Abilities - Wimp Out", () => {
     expect(player1.getHpRatio()).toBeLessThanOrEqual(0.5);
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
     expect(enemy1.isActive(true)).toBeTruthy();
-    expect(enemy1.battleData.abilitiesApplied.includes(AbilityId.WIMP_OUT)).toBeFalsy();
+    expect(enemy1.waveData.abilitiesApplied.includes(AbilityId.WIMP_OUT)).toBeFalsy();
   });
 });

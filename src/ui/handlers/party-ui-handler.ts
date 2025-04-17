@@ -3,21 +3,26 @@ import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { getVariantTint } from "#app/data/variant";
-import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type PokemonFormChangeItemModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { type CommandPhase } from "#app/phases/command-phase";
-import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { CommandPhase } from "#app/phases/command-phase";
+import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { GAME_WIDTH } from "#app/ui-constants";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
+import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
@@ -43,10 +48,6 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type { CommandUiHandler } from "./command-ui-handler";
-import type { ConfirmUiHandler } from "./confirm-ui-handler";
-import type { RenamePokemonUiHandler } from "./rename-pokemon-ui-handler";
-import type { SummaryUiHandler } from "./summary-ui-handler";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -390,7 +391,7 @@ export class PartyUiHandler extends MessageUiHandler {
             } else {
               if (
                 option >= PartyOption.FORM_CHANGE_ITEM
-                && globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)
+                && globalScene.phaseManager.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)
               ) {
                 if (this.partyUiMode === PartyUiMode.CHECK) {
                   const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
@@ -399,7 +400,7 @@ export class PartyUiHandler extends MessageUiHandler {
                   globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
                 }
               } else if (this.cursor) {
-                (globalScene.getCurrentPhase() as CommandPhase).handleCommand(
+                (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
                   BattleCommand.POKEMON,
                   this.cursor,
                   option === PartyOption.PASS_BATON,
@@ -867,7 +868,7 @@ export class PartyUiHandler extends MessageUiHandler {
           this.options.push(PartyOption.RELEASE);
           break;
         case PartyUiMode.CHECK:
-          if (globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)) {
+          if (globalScene.phaseManager.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)) {
             formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
             for (let i = 0; i < formChangeItemModifiers.length; i++) {
               this.options.push(PartyOption.FORM_CHANGE_ITEM + i);

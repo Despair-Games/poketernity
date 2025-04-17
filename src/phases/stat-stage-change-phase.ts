@@ -25,11 +25,12 @@ import i18next from "i18next";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
-interface SSCPhaseOptions {
+export interface SSCPhaseOptions {
   showMessage?: boolean;
   ignoreAbilities?: boolean;
   canBeCopied?: boolean;
   bypassReflect?: boolean;
+  isStickyWeb?: boolean;
   onChange?: StatStageChangeCallback;
 }
 
@@ -48,6 +49,13 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly onChange?: StatStageChangeCallback;
   private readonly options: SSCPhaseOptions;
 
+  /**
+   * Sticky Web has an edge case where its source gets ignored by Defiant/Competitive, but not Mirror Armor.
+   *
+   * TODO: Do other effects (Mist, Clear Body, etc.) also ignore the source of Sticky Web?
+   */
+  protected readonly isStickyWeb: boolean;
+
   constructor(
     battlerIndex: BattlerIndex,
     source: Pokemon | null,
@@ -58,6 +66,7 @@ export class StatStageChangePhase extends PokemonPhase {
       ignoreAbilities = false,
       canBeCopied = true,
       bypassReflect = false,
+      isStickyWeb = false,
       onChange,
     }: SSCPhaseOptions = {},
   ) {
@@ -70,6 +79,7 @@ export class StatStageChangePhase extends PokemonPhase {
     this.ignoreAbilities = ignoreAbilities;
     this.canBeCopied = canBeCopied;
     this.bypassReflect = bypassReflect;
+    this.isStickyWeb = isStickyWeb;
     this.onChange = onChange;
     this.options = { showMessage, ignoreAbilities, canBeCopied, bypassReflect, onChange };
   }
@@ -104,7 +114,7 @@ export class StatStageChangePhase extends PokemonPhase {
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
-        globalScene.unshiftPhase(
+        globalScene.phaseManager.unshiftPhase(
           new StatStageChangePhase(this.battlerIndex, this.source, stat, this.stages, this.options),
         );
       }
@@ -161,7 +171,7 @@ export class StatStageChangePhase extends PokemonPhase {
           messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
         }
         for (const message of messages) {
-          globalScene.queueMessage(message);
+          globalScene.phaseManager.queueMessagePhase(message);
         }
       }
 
@@ -201,14 +211,16 @@ export class StatStageChangePhase extends PokemonPhase {
         false,
         filteredStats,
         this.stages,
-        selfTarget,
+        this.source,
+        this.isStickyWeb,
       );
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
-      const existingPhase = globalScene.findPhase(
+      const phaseExists = globalScene.phaseManager.hasPhase(
         (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
+        true,
       );
-      if (!existingPhase) {
+      if (!phaseExists) {
         // Apply White Herb if needed
         const whiteHerb = globalScene.applyModifier(
           ResetNegativeStatStageModifier,

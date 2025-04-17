@@ -1,32 +1,34 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { type GameOverPhase } from "#app/phases/game-over-phase";
-import { type MovePhase } from "#app/phases/move-phase";
+import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import type { GameOverPhase } from "#app/phases/game-over-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
 import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
 import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
 import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
-import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
+import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
@@ -37,7 +39,6 @@ import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
-import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -54,7 +55,7 @@ import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
  *   - If the player's last valid pokemon just fainted then unshift a {@linkcode GameOverPhase},
  *     otherwise push a {@linkcode SwitchPhase} or {@linkcode ToggleDoublePositionPhase} as needed.
  * - If the fainted pokemon was the AI's:
- *   - Unshift a {@linkcode VictoryPhase}, then if this is a trainer battle and the AI
+ *   - Unshift a {@linkcode PostKnockoutPhase}, then if this is a trainer battle and the AI
  *     has unfainted pokemon in reserve, push a {@linkcode SwitchSummonPhase}
  * - Redirect moves off of fainted targets in doubles (TODO: handle this in {@linkcode MovePhase}?)
  * - Play the pokemon's faint cry
@@ -156,7 +157,7 @@ export class FaintPhase extends PokemonPhase {
       enemyFaintsHistory.push({ pokemon: pokemon, turn: turn });
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       null,
       true,
@@ -200,29 +201,30 @@ export class FaintPhase extends PokemonPhase {
       /** The total number of legal player Pokemon that aren't currently on the field */
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
-        globalScene.gameOver({ clearPhaseQueue: false });
+        globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
       } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, push a phase that moves that Pokemon to center position.
          */
-        globalScene.pushPhase(new ToggleDoublePositionPhase(true));
+        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
       } else if (legalPlayerPartyPokemon.length > 0) {
         /**
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
          * push a phase that prompts the player to summon a Pokemon from their party.
          */
-        globalScene.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
+        globalScene.phaseManager.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
       }
     } else {
-      globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
+      globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));
       if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
-        const hasReservePartyMember = !!globalScene
+        const hasReservePartyMember: boolean = globalScene
           .getEnemyParty()
-          .filter((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot)
-          .length;
+          .some((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot);
         if (hasReservePartyMember) {
-          globalScene.pushPhase(new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false));
+          globalScene.phaseManager.pushPhase(
+            new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false),
+          );
         }
       }
     }
@@ -276,7 +278,7 @@ export class FaintPhase extends PokemonPhase {
     } else {
       // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
       enemy.hp++;
-      globalScene.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
+      globalScene.phaseManager.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
       this.end();
     }
   }

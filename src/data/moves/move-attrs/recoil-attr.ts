@@ -3,7 +3,7 @@ import type { BlockRecoilDamageAbAttr } from "#app/data/abilities/ab-attrs/block
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
@@ -55,7 +55,9 @@ export class RecoilAttr extends MoveEffectAttr {
       ignoreSegments: true,
       preventEndure: true,
     });
-    globalScene.queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
+    globalScene.phaseManager.queueMessagePhase(
+      i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }),
+    );
 
     return true;
   }

@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type PostSummonPhase } from "#app/phases/post-summon-phase";
+import type { PostSummonPhase } from "#app/phases/post-summon-phase";
 // -- end tsdoc imports --
 
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
@@ -15,9 +15,9 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { randSeedItem } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import i18next from "i18next";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { PhaseId } from "#enums/phase-id";
+import { TrainerSlot } from "#enums/trainer-slot";
+import i18next from "i18next";
 
 /**
  * Will handle (in order):
@@ -89,9 +89,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         globalScene.audioManager.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-      globalScene.unshiftPhase(new SummonPhase(0, false));
+      globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
       if (double && availablePartyMembers > 1) {
-        globalScene.unshiftPhase(new SummonPhase(1, false));
+        globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
       }
 
       if (!mysteryEncounter?.hideBattleIntroMessage) {
@@ -109,9 +109,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
           if (double && availablePartyMembers > 1) {
-            globalScene.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
           }
           this.endBattleSetup();
         };
@@ -170,7 +170,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.map((p) =>
-          globalScene.pushPhase(
+          globalScene.phaseManager.pushPhase(
             new ScanIvsPhase(p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
           ),
         );
@@ -180,30 +180,30 @@ export class MysteryEncounterBattlePhase extends Phase {
     const availablePartyMembers = globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle());
 
     if (!availablePartyMembers[0].isOnField()) {
-      globalScene.pushPhase(new SummonPhase(0));
+      globalScene.phaseManager.pushPhase(new SummonPhase(0));
     }
 
     if (double) {
       if (availablePartyMembers.length > 1) {
-        globalScene.pushPhase(new ToggleDoublePositionPhase(true));
+        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
         if (!availablePartyMembers[1].isOnField()) {
-          globalScene.pushPhase(new SummonPhase(1));
+          globalScene.phaseManager.pushPhase(new SummonPhase(1));
         }
       }
     } else {
       if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
         globalScene.getPlayerField().forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-        globalScene.pushPhase(new ReturnPhase(1));
+        globalScene.phaseManager.pushPhase(new ReturnPhase(1));
       }
-      globalScene.pushPhase(new ToggleDoublePositionPhase(false));
+      globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
     }
 
     if (encounterMode !== MysteryEncounterMode.TRAINER_BATTLE && !this.disableSwitch) {
       const minPartySize = double ? 2 : 1;
       if (availablePartyMembers.length > minPartySize) {
-        globalScene.pushPhase(new CheckSwitchPhase(0, double));
+        globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
         if (double) {
-          globalScene.pushPhase(new CheckSwitchPhase(1, double));
+          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
         }
       }
     }

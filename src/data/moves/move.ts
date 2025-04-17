@@ -11,7 +11,7 @@ import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/varia
 import type { WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { MeFirstPowerBoostTag } from "#app/data/battler-tags/me-first-power-boost-tag";
-import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
+import type { TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
@@ -29,12 +29,13 @@ import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accura
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
 import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { TypeBoostTagTypes } from "#app/utils/battler-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -146,8 +147,8 @@ export abstract class Move implements Localizable {
    * @param attrPredicate
    * @returns the first {@linkcode MoveAttr} element in attrs that makes the input function return true
    */
-  findAttr(attrPredicate: (attr: MoveAttr) => boolean): MoveAttr {
-    return this.attrs.find(attrPredicate)!; // TODO: is the bang correct?
+  findAttr(attrPredicate: (attr: MoveAttr) => boolean): MoveAttr | undefined {
+    return this.attrs.find(attrPredicate);
   }
 
   /**
@@ -203,12 +204,12 @@ export abstract class Move implements Localizable {
 
   /**
    * Getter function that returns if this Move has a MoveFlag
-   * @param flag {@linkcode MoveFlags} to check
-   * @returns boolean
+   * @param flag - {@linkcode MoveFlags} to check
+   * @returns `true` if the checked flag is on the move
    */
-  hasFlag(flag: MoveFlags): boolean {
+  private hasFlag(flag: MoveFlags): boolean {
     // internally it is taking the bitwise AND (MoveFlags are represented as bit-shifts) and returning False if result is 0 and true otherwise
-    return !!(this.flags & flag);
+    return (this.flags & flag) > 0;
   }
 
   /**
@@ -263,12 +264,12 @@ export abstract class Move implements Localizable {
   }
 
   isAttackMove(user?: Pokemon, target?: Pokemon): this is AttackMove {
-    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    const moveCategory = user && target ? user.getMoveCategory(target, this) : this.category;
     return moveCategory === MoveCategory.PHYSICAL || moveCategory === MoveCategory.SPECIAL;
   }
 
   isStatusMove(user?: Pokemon, target?: Pokemon): this is StatusMove {
-    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    const moveCategory = user && target ? user.getMoveCategory(target, this) : this.category;
     return moveCategory === MoveCategory.STATUS;
   }
 
@@ -615,12 +616,12 @@ export abstract class Move implements Localizable {
 
   /**
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
-   * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
-   * @param user {@linkcode Pokemon} the Pokemon using the move
-   * @param target {@linkcode Pokemon} the Pokemon receiving the move
+   * @param flag - The {@linkcode MoveFlags} to check
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - (Optional) The {@linkcode Pokemon} targeted by the move
    * @returns boolean
    */
-  checkFlag(flag: MoveFlags, user: Pokemon, target: Pokemon | null): boolean {
+  public checkFlag(flag: MoveFlags, user: Pokemon, target?: Pokemon): boolean {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
@@ -646,14 +647,14 @@ export abstract class Move implements Localizable {
       case MoveFlags.IGNORE_PROTECT:
         if (
           user.hasAbilityWithAttr(AbAttrFlag.IGNORE_PROTECT_ON_CONTACT)
-          && this.checkFlag(MoveFlags.MAKES_CONTACT, user, null)
+          && this.checkFlag(MoveFlags.MAKES_CONTACT, user)
         ) {
           return true;
         }
         break;
     }
 
-    return !!(this.flags & flag);
+    return this.hasFlag(flag);
   }
 
   /**
@@ -850,7 +851,9 @@ export abstract class Move implements Localizable {
 
     power.value *= typeChangeMovePowerMultiplier.value;
 
-    const typeBoost = source.findTag<TypeBoostTag>((t) => t.isTypeBoostTag() && t.boostedType === this.type);
+    const typeBoost = source.findTag<TypeBoostTag>(
+      (t) => t.isType<TypeBoostTag>(...TypeBoostTagTypes) && t.boostedType === this.type,
+    );
     if (typeBoost) {
       power.value *= typeBoost.boostValue;
     }

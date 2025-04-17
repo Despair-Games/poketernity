@@ -1,23 +1,13 @@
-import type { ModifierTier } from "#enums/modifier-tier";
+import type { Item } from "#app/@types/Item";
+import type { ItemRarity } from "#enums/item-rarity";
 
-interface SelectOption {
+export abstract class BaseItem implements Item {
   readonly price: number;
-  readonly rarity: ModifierTier; // TODO: Rename this
-
-  get name(): string;
-  get description(): string;
-}
-
-export abstract class BaseItem implements SelectOption {
-  readonly price: number;
-  readonly rarity: ModifierTier;
+  readonly rarity: ItemRarity;
   public readonly stackCount: number;
   public readonly maxStackCount: number;
 
-  get name(): string {
-    throw new Error("Method not implemented.");
-  }
-  get description(): string {
-    throw new Error("Method not implemented.");
-  }
+  abstract get name(): string;
+
+  abstract get description(): string;
 }

@@ -52,7 +52,7 @@ export class GameWrapper {
 
       const side = pokemon.isPlayer() ? "Player" : "Enemy";
       const lowHpMoves = [MoveId.FALSE_SWIPE, MoveId.HARD_PRESS];
-      const currentPhase = globalScene.getCurrentPhase();
+      const currentPhase = globalScene.phaseManager.getCurrentPhase();
       let moveName = "N/A";
       let moveId = MoveId.NONE;
       if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {

@@ -42,7 +42,7 @@ describe("Moves - After You", () => {
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     await game.phaseInterceptor.to(MovePhase, false);
-    const phase = game.scene.getCurrentPhase() as MovePhase;
+    const phase = game.scene.phaseManager.getCurrentPhase() as MovePhase;
     expect(phase.pokemon).toBe(game.scene.getPlayerField()[1]);
     await game.phaseInterceptor.to("MoveEndPhase");
   });
@@ -58,6 +58,6 @@ describe("Moves - After You", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to(MovePhase);
 
-    expect(game.scene.getPlayerField()[1].getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
   });
 });

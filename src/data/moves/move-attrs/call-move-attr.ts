@@ -9,7 +9,7 @@ import type { RandomMovesetMoveAttr } from "#app/data/moves/move-attrs/random-mo
 
 import { type Move, getMoveTargets } from "#app/data/moves/move";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import type { BooleanHolder } from "#app/utils";
@@ -50,8 +50,8 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
-    globalScene.unshiftPhase(new LoadMoveAnimPhase(move.id));
-    globalScene.useMove({
+    globalScene.phaseManager.unshiftPhase(new LoadMoveAnimPhase(move.id));
+    globalScene.phaseManager.queueMovePhase({
       pokemon: user,
       targets,
       move: move.id,

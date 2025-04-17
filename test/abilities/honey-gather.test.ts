@@ -1,6 +1,6 @@
-import { type CommandPhase } from "#app/phases/command-phase";
-import { BattleCommand } from "#enums/battle-command";
+import type { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattleCommand } from "#enums/battle-command";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -64,7 +64,7 @@ describe("Abilities - Honey Gather", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "scene", "get").mockReturnValue(game.scene);
 
-    const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
+    const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
     await game.toNextTurn();
 

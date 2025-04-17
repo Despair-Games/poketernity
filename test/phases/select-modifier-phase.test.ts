@@ -2,7 +2,7 @@ import type BattleScene from "#app/battle-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { settings } from "#app/system/settings/settings-manager";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
-import { PlayerPokemon } from "#app/field/pokemon";
+import { PlayerPokemon } from "#app/field/player-pokemon";
 import { ModifierTier } from "#enums/modifier-tier";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTypeOption } from "#app/modifier/modifier-type";
@@ -51,7 +51,7 @@ describe("SelectModifierPhase", () => {
   it("should start a select modifier phase", async () => {
     initSceneWithoutEncounterPhase(scene, [SpeciesId.ABRA, SpeciesId.VOLCARONA]);
     const selectModifierPhase = new SelectModifierPhase();
-    scene.unshiftPhase(selectModifierPhase);
+    scene.phaseManager.unshiftPhase(selectModifierPhase);
     await game.phaseInterceptor.to(SelectModifierPhase);
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -101,7 +101,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     // TODO: nagivate the ui to reroll somehow
-    //const smphase = scene.getCurrentPhase() as SelectModifierPhase;
+    //const smphase = scene.phaseManager.getCurrentPhase() as SelectModifierPhase;
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
     const modifierSelectHandler = scene.ui.handlers.find(
       (h) => h instanceof ModifierSelectUiHandler,
@@ -169,7 +169,7 @@ describe("SelectModifierPhase", () => {
       ],
     };
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
-    scene.unshiftPhase(selectModifierPhase);
+    scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
@@ -206,7 +206,7 @@ describe("SelectModifierPhase", () => {
     scene.getPlayerParty().push(pokemon, pokemon, pokemon, pokemon, pokemon, pokemon);
 
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
-    scene.unshiftPhase(selectModifierPhase);
+    scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
@@ -245,7 +245,7 @@ describe("SelectModifierPhase", () => {
       guaranteedModifierTiers: [ModifierTier.MASTER, ModifierTier.MASTER],
     };
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
-    scene.unshiftPhase(selectModifierPhase);
+    scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
@@ -269,7 +269,7 @@ describe("SelectModifierPhase", () => {
       fillRemaining: true,
     };
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
-    scene.unshiftPhase(selectModifierPhase);
+    scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 

@@ -40,8 +40,10 @@ export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
       return false;
     }
 
-    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
-      globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [this.stat], this.levels));
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker)) {
+      globalScene.phaseManager.unshiftPhase(
+        new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [this.stat], this.levels),
+      );
     }
     return true;
   }

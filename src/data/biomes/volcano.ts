@@ -63,7 +63,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [SpeciesId.ENTEI, SpeciesId.HEATRAN, SpeciesId.VOLCANION, SpeciesId.CHI_YU],
+    [TimeOfDay.ALL]: [SpeciesId.MOLTRES, SpeciesId.ENTEI, SpeciesId.HEATRAN],
   },
   [BiomePoolTier.BOSS]: {
     [TimeOfDay.DAWN]: [],
@@ -109,14 +109,7 @@ const pokemonPool = {
     [TimeOfDay.DAY]: [],
     [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [],
-    [TimeOfDay.ALL]: [
-      SpeciesId.MOLTRES,
-      SpeciesId.ENTEI,
-      SpeciesId.ROTOM,
-      SpeciesId.HEATRAN,
-      SpeciesId.VOLCANION,
-      SpeciesId.CHI_YU,
-    ],
+    [TimeOfDay.ALL]: [SpeciesId.MOLTRES, SpeciesId.ENTEI, SpeciesId.HEATRAN],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
     [TimeOfDay.DAWN]: [],
@@ -133,31 +126,31 @@ const trainerPool = {
   [BiomePoolTier.RARE]: [],
   [BiomePoolTier.SUPER_RARE]: [],
   [BiomePoolTier.ULTRA_RARE]: [],
-  [BiomePoolTier.BOSS]: [TrainerType.BLAINE, TrainerType.FLANNERY, TrainerType.KABU],
+  [BiomePoolTier.BOSS]: [TrainerType.BLAINE, TrainerType.KABU],
   [BiomePoolTier.BOSS_RARE]: [],
   [BiomePoolTier.BOSS_SUPER_RARE]: [],
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
+/**
+ * 9/10 of Sunny during dawn/day
+ */
 const weatherPool = {
   [WeatherType.NONE]: 1,
-  [WeatherType.SUNNY]: 1,
-  [WeatherType.RAIN]: 0,
-  [WeatherType.SANDSTORM]: 0,
-  [WeatherType.HAIL]: 0,
-  [WeatherType.SNOW]: 0,
-  [WeatherType.FOG]: 0,
-  [WeatherType.HEAVY_RAIN]: 0,
-  [WeatherType.HARSH_SUN]: 0,
-  [WeatherType.STRONG_WINDS]: 0,
+  [WeatherType.SUNNY]: 9,
 };
 
 const terrainPool = {
   [TerrainType.NONE]: 1,
-  [TerrainType.MISTY]: 0,
-  [TerrainType.ELECTRIC]: 0,
-  [TerrainType.GRASSY]: 0,
-  [TerrainType.PSYCHIC]: 0,
 };
 
-export const volcanoBiome = new Biome(BiomeId.VOLCANO, pokemonPool, trainerPool, weatherPool, terrainPool, "volcano");
+export const volcanoBiome = new Biome(
+  BiomeId.VOLCANO,
+  pokemonPool,
+  trainerPool,
+  12,
+  weatherPool,
+  terrainPool,
+  "volcano",
+  5.116,
+);

@@ -59,7 +59,7 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
         break;
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:highestStatBoostOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         statName: i18next.t(getStatKey(highestStat)),
@@ -74,7 +74,7 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:highestStatBoostOnRemove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         abilityName: allAbilities[this.ability].name,

@@ -19,11 +19,11 @@ export class HealAttr extends MoveEffectAttr {
   /** Should an animation be shown? */
   private showAnim: boolean;
 
-  constructor(healRatio?: number, showAnim?: boolean, selfTarget?: boolean) {
-    super(selfTarget === undefined || selfTarget);
+  constructor(healRatio: number = 1, showAnim: boolean = false, selfTarget: boolean = true) {
+    super(selfTarget);
 
-    this.healRatio = healRatio || 1;
-    this.showAnim = !!showAnim;
+    this.healRatio = healRatio;
+    this.showAnim = showAnim;
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
@@ -46,10 +46,15 @@ export class HealAttr extends MoveEffectAttr {
    * This heals the target and shows the appropriate message.
    */
   addHealPhase(target: Pokemon, healRatio: number) {
-    globalScene.queuePokemonHeal(true, target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
-      message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
-      skipAnim: !this.showAnim,
-    });
+    globalScene.phaseManager.queuePokemonHealPhase(
+      true,
+      target.getBattlerIndex(),
+      toDmgValue(target.getMaxHp() * healRatio),
+      {
+        message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
+        skipAnim: !this.showAnim,
+      },
+    );
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

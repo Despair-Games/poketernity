@@ -36,8 +36,8 @@ export class CallSourceLogger {
       const firefoxRegex = RegExp("(.*?(\\w+))(?:\\/<|)@.*\\/(.*\\.ts).*:(\\d*:\\d*)");
       const match = line.match(chromeRegex) ?? line.match(firefoxRegex);
       if (match) {
-        const fullFunctionName = match[1]; // e.g., "BattleScene.getGeneratedOffsetGym"
-        const rootFunctionName = match[2]; // e.g., "getGeneratedOffsetGym"
+        const fullFunctionName = match[1]; // e.g., "BattleScene.reset"
+        const rootFunctionName = match[2]; // e.g., "reset"
         const fileName = match[3]; // e.g., "battle-scene.ts"
         // const _lineNumbers = match[4]; // e.g., "1216:10". However, this is bugged due to the browser removing empty lines from TS files.
         if (!this.ignoredFnNames.includes(rootFunctionName)) {

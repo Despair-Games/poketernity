@@ -2,6 +2,7 @@ import { abyssBiome } from "#app/data/biomes/abyss";
 import { badlandsBiome } from "#app/data/biomes/badlands";
 import { beachBiome } from "#app/data/biomes/beach";
 import { caveBiome } from "#app/data/biomes/cave";
+import { chargestoneCaveBiome } from "#app/data/biomes/chargestone-cave";
 import { constructionSiteBiome } from "#app/data/biomes/construction-site";
 import { desertBiome } from "#app/data/biomes/desert";
 import { dojoBiome } from "#app/data/biomes/dojo";
@@ -27,6 +28,7 @@ import { seabedBiome } from "#app/data/biomes/seabed";
 import { slumBiome } from "#app/data/biomes/slum";
 import { snowyForestBiome } from "#app/data/biomes/snowy-forest";
 import { spaceBiome } from "#app/data/biomes/space";
+import { steamVentBiome } from "#app/data/biomes/steam-vent";
 import { swampBiome } from "#app/data/biomes/swamp";
 import { tallGrassBiome } from "#app/data/biomes/tall-grass";
 import { templeBiome } from "#app/data/biomes/temple";
@@ -69,6 +71,8 @@ export function initBiomes() {
     templeBiome,
     slumBiome,
     snowyForestBiome,
+    steamVentBiome,
+    chargestoneCaveBiome,
     islandBiome,
     laboratoryBiome,
     endBiome,

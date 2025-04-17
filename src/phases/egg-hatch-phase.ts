@@ -2,7 +2,7 @@ import type { AnySound } from "#app/audio-manager";
 import type { Egg } from "#app/data/egg";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
@@ -222,7 +222,7 @@ export class EggHatchPhase extends Phase {
   public override end(): void {
     // ????
     // TODO: destroy PlayerPokemon object from EggHatchData
-    if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
+    if (globalScene.phaseManager.findPhase((p) => p instanceof EggHatchPhase)) {
       this.eggHatchHandler.clear();
     } else {
       globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));

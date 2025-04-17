@@ -26,7 +26,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
           opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
             result: HitResult.OTHER,
           });
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
           );
         }

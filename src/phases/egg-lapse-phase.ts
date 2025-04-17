@@ -1,7 +1,7 @@
 import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
@@ -64,12 +64,12 @@ export class EggLapsePhase extends Phase {
         eggsToHatchCount >= this.minEggsToSkip
         && settings.general.eggSkipPreference === EggSkipPreference.ALWAYS
       ) {
-        globalScene.queueMessage(i18next.t("battle:eggHatching"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:eggHatching"));
         this.hatchEggsSkipped(eggsToHatch);
         this.showSummary();
       } else {
         // regular hatches, no summary
-        globalScene.queueMessage(i18next.t("battle:eggHatching"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:eggHatching"));
         this.hatchEggsRegular(eggsToHatch);
         this.end();
       }
@@ -85,7 +85,7 @@ export class EggLapsePhase extends Phase {
   protected hatchEggsRegular(eggsToHatch: Egg[]): void {
     let eggsToHatchCount: number = eggsToHatch.length;
     for (const egg of eggsToHatch) {
-      globalScene.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
+      globalScene.phaseManager.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
       eggsToHatchCount--;
     }
   }
@@ -101,7 +101,7 @@ export class EggLapsePhase extends Phase {
   }
 
   protected showSummary(): void {
-    globalScene.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
+    globalScene.phaseManager.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
     this.end();
   }
 
