@@ -169,7 +169,6 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
-import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 
 //#region Types
 
@@ -192,7 +191,6 @@ const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
 //#endregion
 
 export default class BattleScene extends SceneBase {
-  public rexUI: UIPlugin;
   public inputController: InputsController;
   public uiInputs: UiInputs;
 
