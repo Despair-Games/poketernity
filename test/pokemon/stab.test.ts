@@ -91,6 +91,25 @@ describe("STAB", () => {
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
   });
 
+  it("should have a 1.5 STAB on Stellar tera- & move-type", async () => {
+    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
+
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+    expect(playerPokemon.isTerastallized()).toBe(true);
+    expect(playerPokemon.getTeraType()).toBe(ElementalType.STELLAR);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+    game.move.use(MoveId.TERA_BLAST);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
+  });
+
   it.todo("should have a 1.5 STAB on pledge moves");
 
   it.todo("should have a 2.0 STAB on pledge moves if tera type DOES NOT match default type");
