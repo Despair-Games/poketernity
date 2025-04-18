@@ -31,17 +31,22 @@ export class StabBoostAbAttr extends AbAttr {
   }
 
   override apply(pokemon: Pokemon, _simulated: boolean, move: Move, stabMultiplier: NumberHolder): boolean {
+    // Adaptability does not apply to Stellar-type moves
+    if (pokemon.getMoveType(move) === ElementalType.STELLAR) {
+      return false;
+    }
+
     const initialStabMultiplier = stabMultiplier.value;
 
     if (pokemon.isTerastallized()) {
       if (pokemon.getTypes().includes(pokemon.getTeraType())) {
         // If the tera type is one of the pokemon's original types then the STAB multiplier is increased by 0.25 (to 2.25)
         stabMultiplier.value += 0.25;
-      } else if (pokemon.getTeraType() === move.type) {
+      } else if (pokemon.getTeraType() === pokemon.getMoveType(move)) {
         // if the tera type is NOT one of the pokemon's original types but is the same as the move type then the STAB multiplier is increased by 0.5
         stabMultiplier.value += 0.5;
       }
-    } else if (pokemon.getTypes().includes(move.type)) {
+    } else if (pokemon.getTypes().includes(pokemon.getMoveType(move))) {
       // If the move type is one of the pokemon's original types then the STAB multiplier is increased by 0.5
       stabMultiplier.value += 0.5;
     }

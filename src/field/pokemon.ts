@@ -3061,7 +3061,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const randomMultiplier = simulated ? 1 : this.randSeedIntRange(85, 100) / 100;
 
     /** A damage multiplier for when the attack is of the same type as the attacker type/teraType. */
-    const stabMultiplier: number = this.calcStabMultiplierForTakingDamage(source, move, abilityApplyMode, simulated);
+    const stabMultiplier = this.calcStabMultiplierForTakingDamage(source, move, abilityApplyMode, simulated);
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);

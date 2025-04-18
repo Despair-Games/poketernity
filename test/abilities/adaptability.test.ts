@@ -43,7 +43,52 @@ describe("Abilities - Adaptability", () => {
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
   });
 
+  it("should increase STAB to 2.0 if move type changes to a type that matches one of the user's types", async () => {
+    await game.classicMode.startBattle([SpeciesId.TYNAMO]);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.select(MoveId.EMBER);
+    await game.move.forceEnemyMove(MoveId.ELECTRIFY);
+    await game.toEndOfTurn();
+
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
+  });
+
+  it("should not apply STAB if move type does not match one of the user's types", async () => {
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+    game.move.select(MoveId.WATER_GUN);
+    await game.toEndOfTurn();
+
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
+  });
+
   describe("Terastallized", () => {
+    it("should keep STAB at 1.5 if move type, but not tera type, is one of the user's original types", async () => {
+      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
+
+      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+      const playerPokemon = game.field.getPlayerPokemon();
+
+      expect(playerPokemon.isTerastallized()).toBe(true);
+      expect(playerPokemon.getTeraType()).toBe(ElementalType.WATER);
+
+      const enemyPokemon = game.field.getEnemyPokemon();
+      vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+      game.move.select(MoveId.EMBER);
+      await game.toEndOfTurn();
+
+      expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
+    });
+
     it("should increase STAB to 2.0 if tera type is NOT one of the user's original types", async () => {
       game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
 
