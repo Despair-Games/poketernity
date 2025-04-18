@@ -565,7 +565,7 @@ export class UI extends Phaser.GameObjects.Container {
       }
       const doSetMode = () => {
         if (this.mode !== mode) {
-          if (clear) {
+          if (clear && this.getHandler().active) {
             this.getHandler().stop();
           }
           if (chainMode && this.mode && !clear) {
@@ -577,6 +577,8 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
+          this.getHandler().start(...params);
+        } else if (!this.getHandler().active) {
           this.getHandler().start(...params);
         }
         resolve();
