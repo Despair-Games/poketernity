@@ -559,10 +559,13 @@ export class Arena {
 
   /**
    * Gets the denominator for the chance for a trainer spawn
-   * @returns n where 1/n is the chance of a trainer battle
+   * @returns A number `n` such that the probability of a trainer battle is `1/n`.
+   * Returns `0` if the {@linkcode Biome} does not support trainers; this disables random trainer spawns.
+   *
+   * Returns the value of {@linkcode Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
    */
   getTrainerChance(): number {
-    return allBiomes.get(this.biomeId).trainerChance;
+    return Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
   }
 
   /**
