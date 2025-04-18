@@ -11,23 +11,18 @@ import type { NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
- * Applies a STAB multiplier boost of `0.5` if the move type is the same as one of the pokemon's types
- * unless the pokemon is terastallized. Then the STAB multiplier is only applied if the move type is the same as the tera type.
+ * Applies a STAB multiplier boost of `0.5` if the move type is the same as one of the pokemon's types.
+ * If the Pokemon is terastallized, then the STAB multiplier is only applied if the move type is the same as the tera type.
+ * The total STAB multiplier is capped at 2.25.
+ *
  * Used for the {@linkcode AbilityId.ADAPTABILITY Adaptability} ability.
  * @param pokemon The {@linkcode Pokemon} with this ability
  * @param _simulated n/a
  * @param move the {@linkcode Move} being used
  * @param stabMultiplier a {@linkcode NumberHolder} containing the move's STAB multiplier for the current attack
  * @returns `true` if the STAB multiplier was increased
- * @see https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability)
- *
- * | User Type: | Tera Type | Move Type | Expected STAB w/ Adaptability |
- * |--------|--------|--------|--------|
- * | FIRE | - | WATER | 1.0 |
- * | FIRE | - | FIRE | 2.0 |
- * | FIRE | WATER | FIRE | 1.5 |
- * | FIRE | WATER | WATER | 2.0 |
- * | FIRE | FIRE | FIRE | 2.25 |
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability) Adaptability (Ability) - Bulbapedia}
+ * @see {@link https://github.com/Despair-Games/poketernity/blob/61cb4baeae5be3c65969f6a428b0fb0757414267/docs/stab.md stab.md#stab-table}
  */
 export class StabBoostAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
