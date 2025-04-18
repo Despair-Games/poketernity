@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { BgmBar } from "#app/ui/components/bgm-bar";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";

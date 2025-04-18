@@ -109,7 +109,7 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { UiInputs } from "#app/ui-inputs";
 import { AbilityBar } from "#app/ui/components/ability-bar";
 import { ArenaFlyout } from "#app/ui/components/arena-flyout";

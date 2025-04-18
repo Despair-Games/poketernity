@@ -35,7 +35,7 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/s
 import { StarterPrefs } from "#app/system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
 import { FilterBar } from "#app/ui/components/filter-bar";
 import { IVGraph } from "#app/ui/components/iv-graph";
