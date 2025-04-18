@@ -46,7 +46,7 @@ describe("Reload", () => {
       .startingWave(10)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.dailyMode.startBattle();
@@ -76,7 +76,7 @@ describe("Reload", () => {
       .startingBiome(BiomeId.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.classicMode.startBattle(); // Apparently daily mode would override the biome

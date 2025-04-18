@@ -34,6 +34,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import {
   runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -57,10 +58,7 @@ describe("Clowning Around - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<BiomeId, MysteryEncounterType[]>([[BiomeId.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
@@ -197,6 +195,18 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(movePhases.length).toBe(3);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.ROLE_PLAY).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
+    });
+
+    it("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
+      game.override.startingLevel(1000);
+
+      await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, [SpeciesId.FEEBAS]);
+      await runSelectMysteryEncounterOption(game, 1);
+
+      game.move.use(MoveId.DAZZLING_GLEAM);
+      await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
+
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.ME_REWARDS), true)).toBe(false);
     });
 
     it("should let the player gain the ability after battle completion", async () => {

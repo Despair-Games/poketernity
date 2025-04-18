@@ -19,7 +19,7 @@ export interface ToHaveUsedMoveMatcherOptions {
  * @param index The index of the move to check
  * @returns Whether the matcher passed
  */
-export function toHaveUsedMove(
+export function toHaveUsedMoveMatcher(
   received: unknown,
   expectedResult: MoveId,
   { index = 0, moveCount = 1 }: ToHaveUsedMoveMatcherOptions = {},

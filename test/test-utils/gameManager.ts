@@ -30,6 +30,7 @@ import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-u
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import type { AbilityId } from "#enums/ability-id";
+import { BattleCommand } from "#enums/battle-command";
 import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
@@ -39,6 +40,7 @@ import { GameModes } from "#enums/game-modes";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
+import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
@@ -243,7 +245,7 @@ export class GameManager {
    */
   async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
     if (!isNullOrUndefined(encounterType)) {
-      this.override.disableTrainerWaves();
+      this.override.trainerChance(0);
       this.override.mysteryEncounter(encounterType);
     }
 
@@ -553,5 +555,29 @@ export class GameManager {
         this.field.mockAbility(p, abilityId);
       }
     }
+  }
+
+  /**
+   * Picks the {@linkcode BattleCommand.RUN} command and executes it.
+   * **Must** be called during the {@linkcode CommandPhase}.
+   */
+  async tryToRunAway() {
+    const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>()!;
+    expect(commandPhase).toBeDefined();
+
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
+  }
+
+  /**
+   * Picks the {@linkcode BattleCommand.BALL} command with the given {@linkcode ballType} and executes it.
+   * **Must** be called during the {@linkcode CommandPhase}.
+   * @param ballType The type of Pokeball to throw
+   * @see {@linkcode PokeballType}
+   */
+  async throwPokeball(ballType: PokeballType) {
+    const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>()!;
+    expect(commandPhase).toBeDefined();
+
+    commandPhase.handleCommand(BattleCommand.BALL, ballType);
   }
 }

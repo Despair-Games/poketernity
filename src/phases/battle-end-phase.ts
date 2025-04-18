@@ -31,14 +31,6 @@ export class BattleEndPhase extends BattlePhase {
       gameData.gameStats.highestEndlessWave = currentBattle.waveIndex + 1;
     }
 
-    if (this.isVictory) {
-      currentBattle.addBattleScore();
-
-      if (currentBattle.trainer) {
-        gameData.gameStats.trainersDefeated++;
-      }
-    }
-
     // Endless graceful end
     if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
       globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
@@ -54,8 +46,23 @@ export class BattleEndPhase extends BattlePhase {
       applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
     }
 
-    if (currentBattle.moneyScattered) {
-      currentBattle.pickUpScatteredMoney();
+    if (this.isVictory) {
+      currentBattle.addBattleScore();
+
+      if (currentBattle.trainer) {
+        gameData.gameStats.trainersDefeated++;
+      }
+
+      /**
+       * Custom behavior that differs slightly from mainline
+       * Will award money on defeating foe
+       * Will award money on capturing foe
+       * Will NOT award money on forcing foe to flee
+       * Will NOT award money if foe flees
+       */
+      if (currentBattle.moneyScattered) {
+        currentBattle.pickUpScatteredMoney();
+      }
     }
 
     globalScene.clearEnemyHeldItemModifiers();

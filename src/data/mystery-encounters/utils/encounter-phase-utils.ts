@@ -875,9 +875,14 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
     globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
     globalScene.phaseManager.pushPhase(new EggLapsePhase());
   } else if (
+    // If any enemy Pokemon are still alive on the field or waiting for its fainting animation, do not advance a wave.
+    // Also, if the enemy is a Trainer with other Pokemon alive in their party backline, do not advance a wave.
     !globalScene
       .getEnemyParty()
-      .find((p) => (encounter.encounterMode !== MysteryEncounterMode.TRAINER_BATTLE ? p.isOnField() : !p?.isFainted()))
+      .find(
+        (p) =>
+          p && (p.isOnField() || (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE && !p.isFainted())),
+      )
   ) {
     globalScene.phaseManager.pushPhase(new BattleEndPhase(true));
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {

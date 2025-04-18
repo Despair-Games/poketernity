@@ -120,7 +120,7 @@ import { PokeballTray } from "#app/ui/components/pokeball-tray";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
-import { updateWindowStyle } from "#app/ui/ui-theme";
+import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import {
   type AbstractConstructor,
   BooleanHolder,
@@ -169,7 +169,6 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
-import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 
 //#region Types
 
@@ -192,7 +191,6 @@ const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
 //#endregion
 
 export default class BattleScene extends SceneBase {
-  public rexUI: UIPlugin;
   public inputController: InputsController;
   public uiInputs: UiInputs;
 
@@ -410,6 +408,10 @@ export default class BattleScene extends SceneBase {
   create() {
     this.scene.remove(LoadingScene.KEY);
     initGameSpeed.apply(this);
+
+    // Set the uiTheme and windowType to use for elements that require css specifics
+    setDocumentUiTheme();
+
     this.inputController = new InputsController();
     this.uiInputs = new UiInputs(this.inputController);
 
@@ -1245,10 +1247,7 @@ export default class BattleScene extends SceneBase {
         this.field.add(newTrainer);
       }
     } else {
-      if (
-        !this.gameMode.hasTrainers
-        || (Overrides.DISABLE_RANDOM_TRAINERS_OVERRIDE && isNullOrUndefined(trainerData))
-      ) {
+      if (!this.gameMode.hasTrainers) {
         newBattleType = BattleType.WILD;
       } else if (battleType === undefined) {
         newBattleType = this.gameMode.isWaveTrainer(newWaveIndex, this.arena) ? BattleType.TRAINER : BattleType.WILD;
@@ -1257,7 +1256,7 @@ export default class BattleScene extends SceneBase {
       }
 
       if (newBattleType === BattleType.TRAINER) {
-        const trainerType = this.arena.randomTrainerType(newWaveIndex);
+        const trainerType = Overrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
         let doubleTrainer = false;
         if (allTrainerConfigs[trainerType].doubleOnly) {
           doubleTrainer = true;

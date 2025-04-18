@@ -46,7 +46,13 @@ export class PostKnockoutPhase extends PokemonPhase {
       return this.end();
     }
 
-    if (!globalScene.getEnemyParty().some((p) => (battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted()))) {
+    // If any enemy Pokemon are still alive on the field or waiting for its fainting animation, do not advance a wave.
+    // Also, if the enemy is a Trainer with other Pokemon alive in their party backline, do not advance a wave.
+    if (
+      !globalScene
+        .getEnemyParty()
+        .some((p) => p && (p.isOnField() || (battleType !== BattleType.WILD && !p.isFainted())))
+    ) {
       phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
     }
 

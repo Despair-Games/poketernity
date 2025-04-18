@@ -6,18 +6,18 @@ import type { Pokemon } from "#app/field/pokemon";
 
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
-import type { ToHaveMoveResultMatcherOptions } from "#test/matchers/to-have-move-result";
-import type { ToHaveUsedMoveMatcherOptions } from "#test/matchers/to-have-used-move";
+import type { ToHaveMoveResultMatcherOptions } from "#test/matchers/to-have-move-result-matcher";
+import type { ToHaveUsedMoveMatcherOptions } from "#test/matchers/to-have-used-move-matcher";
 import "vitest";
 
 declare module "vitest" {
   interface Assertion {
     /**
      * Matcher to check if a pokemon's {@linkcode MoveResult} is as expected.
-     * 
+     *
      * CAUTION: This only checks one move used by the Pokemon (by default, the most recent move).
      * It does not check the Pokemon's entire move history.
-     * 
+     *
      * @param expected The expected {@linkcode MoveResult}
      * @param options The {@linkcode ToHaveMoveResultMatcherOptions} (optional)
      * @see {@linkcode Pokemon.getLastXMoves}
@@ -26,7 +26,7 @@ declare module "vitest" {
 
     /**
      * Matcher to check if a pokemon used a move with a certain {@linkcode MoveId}.
-     * 
+     *
      * CAUTION: This only checks one move used by the Pokemon (by default, the most recent move).
      * It does not check the Pokemon's entire move history.
      *

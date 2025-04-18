@@ -181,9 +181,7 @@ export class InputsController {
     // Note: at the moment we don't need to remove this listener because only a single instance
     // Of InputController is ever created, during 'BattleScene.create'.
     eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
-      if (category === "display" && ["uiWindowStyle", "uiTheme"].includes(key)) {
-        this.touchControls.render();
-      } else if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
+      if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
         this.setGamepadSupport(value);
       }
     });

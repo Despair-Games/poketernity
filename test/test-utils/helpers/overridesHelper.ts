@@ -20,6 +20,7 @@ import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { shiftCharCodes } from "#app/utils";
 import type { TimedEvent } from "#app/@types/TimedEvent";
 import { timedEventManager } from "#app/timed-event-manager";
+import { TrainerType } from "#enums/trainer-type";
 
 /**
  * Helper to handle overrides in tests
@@ -194,7 +195,7 @@ export class OverridesHelper extends GameManagerHelper {
   /**
    * Override the player (pokemon) {@linkcode StatusEffect | status-effect}
    * @param statusEffect the {@linkcode StatusEffect | status-effect} to set
-   * @returns
+   * @returns `this`
    */
   public statusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(Overrides, "STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
@@ -203,12 +204,31 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override each wave to not have random trainer battles
+   * Override the chance of encountering a random enemy trainer
+   * @param trainerChance - `0` to disable enemy trainer spawns, `1` to guarantee an enemy trainer spawn
+   * @see {@linkcode Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE} for a more complete description of this override
    * @returns `this`
    */
-  public disableTrainerWaves(): this {
-    vi.spyOn(Overrides, "DISABLE_RANDOM_TRAINERS_OVERRIDE", "get").mockReturnValue(true);
-    this.log("Random trainer waves are disabled!");
+  public trainerChance(trainerChance: number): this {
+    vi.spyOn(Overrides, "RANDOM_TRAINER_CHANCE_OVERRIDE", "get").mockReturnValue(trainerChance);
+    if (trainerChance === 0) {
+      this.log("Random trainers disabled!");
+    } else if (trainerChance === 1) {
+      this.log("Random trainer guaranteed for one wave!");
+    } else {
+      this.log(`Trainer chance set to 1 / ${trainerChance}!`);
+    }
+    return this;
+  }
+
+  /**
+   * Override each random enemy trainer to be of a given type
+   * @param trainerType - The {@linkcode TrainerType} to set
+   * @returns `this`
+   */
+  public trainerType(trainerType: TrainerType): this {
+    vi.spyOn(Overrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
+    this.log(`Trainer type set to ${TrainerType[trainerType]} (=${trainerType})!`);
     return this;
   }
 

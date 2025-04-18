@@ -53,7 +53,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
-      .disableTrainerWaves()
+      .trainerChance(0)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyPassiveAbility(AbilityId.BALL_FETCH);
 

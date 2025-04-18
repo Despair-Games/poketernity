@@ -19,6 +19,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
@@ -260,8 +261,19 @@ class DefaultOverrides {
    */
   readonly ITEM_REWARD_OVERRIDE: ModifierOverride[] = [];
 
-  /** If `true`, disable all non-scripted enemy trainer encounters. */
-  readonly DISABLE_RANDOM_TRAINERS_OVERRIDE: boolean = false;
+  /**
+   * Possible values:
+   * - `null`: Ignore this override; each biome uses its normal trainer rate.
+   * - `0`: Disable all non-scripted enemy trainer encounters.
+   * - Positive number `n`: Sets the chance of a non-scripted enemy trainer encounter to be 1/n.
+   * 
+   * CAUTION: This function does not disable any rules that may prevent trainer spawns
+   * (e.g., The rule requiring trainers to be 3 waves apart, and the rule preventing trainer spawns on wave X1).
+   */
+  readonly RANDOM_TRAINER_CHANCE_OVERRIDE: number | null = null;
+
+  /** If not `null`, force all non-scripted enemy trainer encounters to be of this trainer type. */
+  readonly TRAINER_TYPE_OVERRIDE: TrainerType | null = null;
 }
 
 export const defaultOverrides = new DefaultOverrides();

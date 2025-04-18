@@ -59,7 +59,7 @@ describe("Shop modifications", async () => {
       .startingBiome(BiomeId.ICE_CAVE)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     game.modifiers.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
