@@ -1,0 +1,19 @@
+name: Assign PRs to "In Progress" column
+
+on:
+  pull_request:
+    types: 
+      - opened
+      - reopened
+      - converted_to_draft
+
+jobs:
+  automate-project-columns:
+    runs-on: ubuntu-latest
+    steps:
+      - if: github.event.pull_request.draft == true
+        uses: alex-page/github-project-automation-plus@303f24a24c67ce7adf565a07e96720faf126fe36
+        with:
+          project: Poketernity Board
+          column: In Progress
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

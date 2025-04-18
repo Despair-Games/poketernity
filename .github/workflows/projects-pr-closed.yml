@@ -1,0 +1,17 @@
+name: Archive closed PRs
+
+on:
+  pull_request:
+    types: 
+      - closed
+
+jobs:
+  automate-project-columns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@303f24a24c67ce7adf565a07e96720faf126fe36
+        with:
+          project: Poketernity Board
+          column: Backlog
+          action: archive
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
