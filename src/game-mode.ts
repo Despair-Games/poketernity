@@ -356,9 +356,9 @@ export class GameMode implements GameModeConfig {
       default:
         return [0, 0];
       case GameModes.CLASSIC:
-        return CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES;
+        return [...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES];
       case GameModes.CHALLENGE:
-        return CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES;
+        return [...CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES];
     }
   }
 
