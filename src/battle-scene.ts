@@ -4,14 +4,13 @@ import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Setting
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
+import { IV_MAX, IV_MIN } from "#app/constants/constants";
 import {
-  IV_MAX,
-  IV_MIN,
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
-} from "#app/constants/constants";
+} from "./constants/mystery-encounters";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
