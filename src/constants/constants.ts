@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { SystemSaveData } from "#app/@types/SystemData";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { SpeciesFormKey } from "#enums/species-form-key";
 
 /** Abbreviated name of the application/game. */
@@ -51,22 +57,23 @@ export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5] as const;
 /** The maximum number of runs stored in the run history. */
 export const RUN_HISTORY_LIMIT: number = 25;
 
-export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
-
 /**
  * IVs are between 0 and 31 since in the mainline games it is stored as 5 bits.
  * Each point of IV is worth level/100 extra stat points before the nature multiplier
  */
 export const IV_MIN = 0;
-
+/**
+ * IVs are between 0 and 31 since in the mainline games it is stored as 5 bits.
+ * Each point of IV is worth level/100 extra stat points before the nature multiplier
+ */
 export const IV_MAX = 31;
 
 /**
  * In the mainline games, dynamaxing increases HP from +50% to +100% in 5% intervals.
  * Below is a chart showing what an equivalent damage taken factor would be compared to
  * the increased HP.
- *
- * | hp increase | damage taken factor |
+ * ```
+ * | HP Increase | Damage Taken Factor |
  * |-------------|---------------------|
  * | +50%        | 2/3                 |
  * | +60%        | 5/8                 |
@@ -74,7 +81,7 @@ export const IV_MAX = 31;
  * | +80%        | ~0.556              |
  * | +90%        | ~0.526              |
  * | +100%       | 1/2                 |
- *
+ * ```
  * Tweak this value if necessary for balancing purposes
  */
 export const DYNAMAX_DAMAGE_TAKEN_FACTOR = 2 / 3;

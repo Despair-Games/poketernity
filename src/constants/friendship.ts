@@ -1,4 +1,4 @@
-// -- start stdoc imports --
+// -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { PokemonLevelIncrementModifier } from "#app/modifier/modifier";
