@@ -6,7 +6,10 @@ import type { Pokemon } from "#app/field/pokemon";
 
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
+import type { EffectiveStat, PermanentStat } from "#enums/stat";
+import type { ToHaveEffectiveStatMatcherOptions } from "#test/matchers/to-have-effective-stat-matcher";
 import type { ToHaveMoveResultMatcherOptions } from "#test/matchers/to-have-move-result";
+import type { ToHaveStatMatcherOptions } from "#test/matchers/to-have-stat-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/matchers/to-have-used-move";
 import "vitest";
 
@@ -14,10 +17,10 @@ declare module "vitest" {
   interface Assertion {
     /**
      * Matcher to check if a pokemon's {@linkcode MoveResult} is as expected.
-     * 
+     *
      * CAUTION: This only checks one move used by the Pokemon (by default, the most recent move).
      * It does not check the Pokemon's entire move history.
-     * 
+     *
      * @param expected The expected {@linkcode MoveResult}
      * @param options The {@linkcode ToHaveMoveResultMatcherOptions} (optional)
      * @see {@linkcode Pokemon.getLastXMoves}
@@ -26,7 +29,7 @@ declare module "vitest" {
 
     /**
      * Matcher to check if a pokemon used a move with a certain {@linkcode MoveId}.
-     * 
+     *
      * CAUTION: This only checks one move used by the Pokemon (by default, the most recent move).
      * It does not check the Pokemon's entire move history.
      *
@@ -35,5 +38,25 @@ declare module "vitest" {
      * @see {@linkcode Pokemon.getLastXMoves}
      */
     toHaveUsedMove(expected: MoveId, options?: ToHaveUsedMoveMatcherOptions): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} stat is as expected
+     *
+     * @param stat The {@linkcode PermanentStat} to check
+     * @param expectedValue The expected value of the {@linkcode stat}
+     * @param options The {@linkcode ToHaveStatMatcherOptions} (optional)
+     */
+    toHaveStat(stat: PermanentStat, expectedValue: number, options?: ToHaveStatMatcherOptions): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon Pokemons} effective stat is as expected
+     *
+     * *Effective stat means the stat after all the stat modifiers are applied.*
+     *
+     * @param stat The {@linkcode EffectiveStat} to check
+     * @param expectedValue The expected value of the {@linkcode stat}
+     * @param options The {@linkcode ToHaveStatMatcherOptions} (optiona)
+     */
+    toHaveEffectiveStat(stat: EffectiveStat, expectedValue: number, options?: ToHaveEffectiveStatMatcherOptions): void;
   }
 }
