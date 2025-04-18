@@ -2,7 +2,7 @@
  * Contains the query strings for Phaser"s built-in easing equations.
  * @see {@link https://phaser.io/examples/v3.85.0/tweens/eases/view/ease-equations}
  */
-export const easeFunctions: string[] = [
+export const easeFunctions = [
   "Linear",
   "Quad.easeIn",
   "Cubic.easeIn",
@@ -33,4 +33,4 @@ export const easeFunctions: string[] = [
   "Bounce.easeInOut",
   "Elastic",
   "Stepped",
-];
+] as const;

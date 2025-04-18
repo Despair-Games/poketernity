@@ -7,51 +7,68 @@ import type Phaser from "phaser";
 import type { BattleAnim } from "./battle-anims";
 import type { MoveAnim } from "./move-anim";
 import type { MoveId } from "#enums/move-id";
+import type { easeFunctions } from "#app/data/animations/ease-functions";
 
 export interface AnimConfig {
   readonly id?: MoveId;
   readonly graphic?: string;
-  readonly props: AnimProp[];
+  readonly sourceProperties?: AnimProp;
+  readonly targetProperties?: AnimProp;
+  readonly vfxProperties?: AnimProp;
   readonly timedEvents?: AnimTimedEvent[];
 }
 
 export interface AnimProp {
-  readonly focus: AnimFrameTarget;
-  readonly keyframes: AnimKeyFrame[];
+  /**
+   * For battle animations, the origin point for keyframes is defined
+   * along the line connecting the start point ("source") and end point ("target").
+   * The `u`-value is the fraction of the distance between the start and end point
+   * the origin point is away from the source. If `u = 0`, then the origin point is
+   * the source; if `u = 1`, then the origin point is the target.
+   */
+  readonly u?: AnimKeyFrame<number>[];
+
+  /** The horizontal coordinate relative to the keyframe's origin point. */
+  readonly x?: AnimKeyFrame<number>[];
+
+  /**
+   * The vertical coordinate relative to the keyframe's origin point.
+   * An increase in `y` will move the sprite downward.
+   */
+  readonly y?: AnimKeyFrame<number>[];
+
+  readonly scaleX?: AnimKeyFrame<number>[];
+
+  readonly scaleY?: AnimKeyFrame<number>[];
+
+  readonly alpha?: AnimKeyFrame<number>[];
+
+  readonly angle?: AnimKeyFrame<number>[];
+
+  readonly mirror?: AnimKeyFrame<boolean>[];
+
+  readonly visible?: AnimKeyFrame<boolean>[];
+
+  readonly blendType?: AnimKeyFrame<AnimBlendType>[];
+
+  readonly graphicFrame?: AnimKeyFrame<number>[];
+
+  readonly tone?: AnimKeyFrame<number[]>[];
+
+  readonly priority?: AnimKeyFrame<0 | 1 | 3 | 5>[];
 }
 
-export interface AnimKeyFrame {
-  readonly u?: number;
-  readonly x?:
-    | number
-    | {
-        value: number;
-        ease: string;
-      };
-  readonly y?:
-    | number
-    | {
-        value: number;
-        ease: string;
-      };
-  readonly scaleX?: number;
-  readonly scaleY?: number;
-  readonly angle?: number;
-  readonly mirror?: boolean;
-  readonly visible?: boolean;
-  readonly blendType?: AnimBlendType;
-  readonly graphicFrame?: number;
-  readonly alpha?: number;
-  readonly tone?: number[];
-  readonly priority?: 0 | 1 | 3 | 5;
+export interface AnimKeyFrame<ValueType> {
+  readonly value: ValueType;
   readonly duration?: number;
   readonly delay?: number;
-  readonly ease?: string;
+  readonly ease?: (typeof easeFunctions)[number];
 }
 
 export interface AnimTimedEvent {
   readonly eventType: string;
   readonly time: number;
+  readonly resourceName: string;
 
   readonly volume?: number;
   readonly pitch?: number;
