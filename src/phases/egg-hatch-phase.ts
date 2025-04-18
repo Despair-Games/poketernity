@@ -98,6 +98,8 @@ export class EggHatchPhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
+      // TODO: the hatch phase and ui handler should not be intertwined in this way;
+      // the phase also should not be the one creating the graphical objects
       this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
 
       this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
@@ -220,12 +222,16 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
-    // what is happening here?
     if (globalScene.phaseManager.findPhase((p) => p instanceof EggHatchPhase)) {
-      this.eggHatchHandler.stop();
+      // There are more eggs about to hatch, clear up the handler
+      this.eggHatchHandler.prepareForNextEgg();
     } else {
+      // There are no more hatching eggs, re enable the modifiers
       globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));
     }
+
+    this.pokemon?.destroy();
+
     super.end();
   }
 
@@ -437,7 +443,6 @@ export class EggHatchPhase extends Phase {
       } else {
         particle.destroy();
         particleTimer.remove();
-        // TODO destroy?
       }
     };
 

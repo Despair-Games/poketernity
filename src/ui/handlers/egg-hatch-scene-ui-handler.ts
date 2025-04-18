@@ -66,4 +66,11 @@ export class EggHatchSceneUiHandler extends UiHandler {
   public override setCursor(_cursor: number): boolean {
     return false;
   }
+
+  /**
+   * Prepare the handler to display another egg without changing ui mode.
+   */
+  public prepareForNextEgg() {
+    this.clear();
+  }
 }
