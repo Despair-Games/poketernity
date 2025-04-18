@@ -9,6 +9,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ElementalType } from "#enums/elemental-type";
 
 /**
  * Applies a STAB multiplier boost of `0.5` if the move type is the same as one of the pokemon's types.
