@@ -2,7 +2,7 @@ import { LS_PREFIX } from "#app/constants/constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import type { UI } from "#app/ui/ui";
 import { t } from "i18next";
 
