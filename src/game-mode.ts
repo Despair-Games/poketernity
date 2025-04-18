@@ -15,11 +15,11 @@ import { SpeciesId } from "#enums/species-id";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "#enums/game-modes";
-import { DEFAULT_STARTING_MONEY } from "./constants/game";
+import { DEFAULT_STARTING_MONEY } from "#app/constants/game";
 import {
   CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
   CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
-} from "./constants/mystery-encounters";
+} from "#app/constants/mystery-encounters";
 
 interface GameModeConfig {
   isClassic?: boolean;
