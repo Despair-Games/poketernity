@@ -1,5 +1,5 @@
-import { toHaveMoveResult } from "#test/matchers/to-have-move-result";
-import { toHaveUsedMove } from "#test/matchers/to-have-used-move";
+import { toHaveMoveResultMatcher } from "#test/matchers/to-have-move-result-matcher";
+import { toHaveUsedMoveMatcher } from "#test/matchers/to-have-used-move-matcher";
 import { expect } from "vitest";
 
 /**
@@ -8,6 +8,6 @@ import { expect } from "vitest";
  */
 
 expect.extend({
-  toHaveMoveResult,
-  toHaveUsedMove,
+  toHaveMoveResult: toHaveMoveResultMatcher,
+  toHaveUsedMove: toHaveUsedMoveMatcher,
 });
