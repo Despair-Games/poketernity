@@ -1,5 +1,5 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants/constants";
+import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants/app";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";

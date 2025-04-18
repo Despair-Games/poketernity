@@ -4,7 +4,7 @@ import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Setting
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
-import { IV_MAX, IV_MIN } from "#app/constants/constants";
+import { IV_MAX, IV_MIN } from "./constants/game";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
