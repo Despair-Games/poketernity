@@ -1,4 +1,4 @@
-import { getEnumKeys } from "#app/utils";
+import { capitalizeString, getEnumKeys } from "#app/utils";
 import { SUNNY_WEATHER_TYPES } from "#app/utils/weather-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
@@ -11,9 +11,9 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
-const allWeathers = getEnumKeys(WeatherType).map((weatherName) => ({
-  weatherName,
-  weatherType: WeatherType[weatherName],
+const allWeathers = getEnumKeys(WeatherType).map((key) => ({
+  weatherName: capitalizeString(key, " "),
+  weatherType: WeatherType[key],
 }));
 const affectedWeathers = allWeathers.filter(({ weatherType }) => SUNNY_WEATHER_TYPES.includes(weatherType));
 const unaffectedWeathers = allWeathers.filter(({ weatherType }) => !SUNNY_WEATHER_TYPES.includes(weatherType));
@@ -49,38 +49,50 @@ describe("Abilities - Solar Power", () => {
       .enemyLevel(100);
   });
 
-  it.each(affectedWeathers)("should have SPATK x1.5 in $weatherName weather", async ({ weatherType }) => {
-    game.override.weather(weatherType);
+  //#region Affected Weathers
 
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+  describe.each(affectedWeathers)("In affected $weatherName weather", ({ weatherType }) => {
+    it("should increase SPATK by x1.5 in $weatherName weather", async () => {
+      game.override.weather(weatherType);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const spAtk = player.getStat(Stat.SPATK);
+      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
-    game.move.select(MoveId.EMBER);
-    await game.toNextTurn();
+      const player = game.scene.getPlayerPokemon()!;
+      const spAtk = player.getStat(Stat.SPATK);
 
-    expect(player).toHaveEffectiveStat(Stat.SPATK, spAtk * 1.5);
+      game.move.select(MoveId.EMBER);
+      await game.toNextTurn();
+
+      expect(player).toHaveEffectiveStat(Stat.SPATK, spAtk * 1.5);
+    });
+
+    it.todo("should deal 1/8 of max-HP damage to the owner in $weatherName weather", async () => {});
+
+    it.todo(
+      "should NOT deal 1/8 of max-HP damage to the owner if $weatherName weather ends in the same turn",
+      async () => {},
+    );
   });
 
-  console.log("unaffectedWeathers", unaffectedWeathers);
+  //#endregion
+  //#region Unaffected Weathers
 
-  it.each(unaffectedWeathers)("should have no effect in $weatherName weather", async ({ weatherType }) => {
-    game.override.weather(weatherType);
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+  describe.each(unaffectedWeathers)("In unaffected $weatherName weather", ({ weatherType }) => {
+    it("should have no effect in $weatherName weather", async () => {
+      game.override.weather(weatherType);
+      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const spAtk = player.getStat(Stat.SPATK);
+      const player = game.scene.getPlayerPokemon()!;
+      const spAtk = player.getStat(Stat.SPATK);
 
-    game.move.select(MoveId.EMBER);
-    await game.toNextTurn();
+      game.move.select(MoveId.EMBER);
+      await game.toNextTurn();
 
-    expect(player).toHaveEffectiveStat(Stat.SPATK, spAtk);
+      expect(player).toHaveEffectiveStat(Stat.SPATK, spAtk);
+    });
+
+    it.todo("should NOT deal 1/8 of max-HP damage to the owner in non-sunny weather");
   });
 
-  it.todo("should deal 1/8 of HP damage to the owner in sunny weather");
-
-  it.todo("should NOT deal 1/8 of HP damage to the owner in non-sunny weather");
-
-  it.todo("should NOT deal 1/8 of HP damage to the owner if sunny weather ends in the same turn");
+  //#endregion
 });
