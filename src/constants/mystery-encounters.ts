@@ -1,8 +1,8 @@
 /** Min - Max waves for mystery encounter in classic mode. */
-export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];
+export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES = Object.freeze<[min: number, max: number]>([10, 180]);
 
 /** Min - Max waves for mystery encounter in challenge mode. */
-export const CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];
+export const CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES = Object.freeze<[min: number, max: number]>([10, 180]);
 
 /**
  * Spawn chance: ({@linkcode ME_BASE_SPAWN_WEIGHT} `+` {@linkcode ME_WEIGHT_INCREMENT_ON_SPAWN_MISS} `*` `<number of missed spawns>`) `/` {@linkcode ME_MAX_SPAWN_WEIGHT}

@@ -38,7 +38,7 @@ export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;
 export const LANGUAGE_MAX_OPTIONS = 7;
 
 /** All available game speeds. */
-export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5] as const;
+export const GAME_SPEEDS = Object.freeze([1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
 
 /** The maximum number of runs stored in the run history. */
 export const RUN_HISTORY_LIMIT: number = 25;

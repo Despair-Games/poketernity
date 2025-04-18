@@ -53,7 +53,7 @@ export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;
 /**
  * A list of all Gigantamax form keys, excluding Eternamax.
  */
-export const G_MAX_FORM_KEYS: readonly string[] = Object.freeze([
+export const G_MAX_FORM_KEYS = Object.freeze<string[]>([
   SpeciesFormKey.GIGANTAMAX,
   SpeciesFormKey.GIGANTAMAX_RAPID,
   SpeciesFormKey.GIGANTAMAX_SINGLE,
