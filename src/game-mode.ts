@@ -19,7 +19,7 @@ import {
   CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
   CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
   DEFAULT_STARTING_MONEY,
-} from "./constants";
+} from "./constants/constants";
 
 interface GameModeConfig {
   isClassic?: boolean;

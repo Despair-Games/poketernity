@@ -1,7 +1,7 @@
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/constants";
 import type { LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
 import {

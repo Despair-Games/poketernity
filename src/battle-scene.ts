@@ -11,7 +11,7 @@ import {
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
-} from "#app/constants";
+} from "#app/constants/constants";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
