@@ -5,6 +5,7 @@ import type { SystemSaveData } from "#app/@types/SystemData";
 // -- end tsdoc imports --
 
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { WeatherType } from "#enums/weather-type";
 
 /** Max value for an integer attribute in {@linkcode SystemSaveData} */
 export const MAX_INT_ATTR_VALUE = 0x80000000;
@@ -61,3 +62,9 @@ export const G_MAX_FORM_KEYS = Object.freeze<string[]>([
 
 /** Default amount of money the player starts with. Same for all game modes. */
 export const DEFAULT_STARTING_MONEY = 1000;
+
+/**
+ * Weather types that are associated with the primal forms of the Generation III cover legendaries
+ * and cannot be overwritten by weaker weather types.
+ */
+export const PRIMAL_WEATHER = Object.freeze([WeatherType.HARSH_SUN, WeatherType.HEAVY_RAIN, WeatherType.STRONG_WINDS]);
