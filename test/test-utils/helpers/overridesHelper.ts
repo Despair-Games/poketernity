@@ -196,10 +196,12 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public trainerChance(trainerChance: number): this {
     vi.spyOn(Overrides, "RANDOM_TRAINER_CHANCE_OVERRIDE", "get").mockReturnValue(trainerChance);
-    if (trainerChance === 0 || trainerChance === 1) {
-      this.log(`Trainer chance override set to ${trainerChance}!`);
+    if (trainerChance === 0) {
+      this.log("Random trainers disabled!");
+    } else if (trainerChance === 1) {
+      this.log("Random trainer guaranteed for one wave!");
     } else {
-      this.log(`Trainer chance override set to 1 / ${trainerChance}!`);
+      this.log(`Trainer chance set to 1 / ${trainerChance}!`);
     }
     return this;
   }
@@ -211,7 +213,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public trainerType(trainerType: TrainerType): this {
     vi.spyOn(Overrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
-    this.log(`Trainer type override set to ${TrainerType[trainerType]} (=${trainerType})!`);
+    this.log(`Trainer type set to ${TrainerType[trainerType]} (=${trainerType})!`);
     return this;
   }
 

@@ -104,8 +104,11 @@ describe("Double Battles", () => {
   });
 
   describe("Trainer Double Battles", () => {
-    it("should advance exactly one wave if both opponents are defeated at the same time", async () => {
+    beforeEach(() => {
       game.override.trainerType(TrainerType.TWINS).trainerChance(1).startingLevel(1000).startingWave(12);
+    });
+
+    it("should advance exactly one wave if both opponents are defeated at the same time", async () => {
       await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
       game.move.use(MoveId.DAZZLING_GLEAM);
@@ -117,7 +120,6 @@ describe("Double Battles", () => {
     });
 
     it("should advance exactly one wave if the left opponent is defeated first", async () => {
-      game.override.trainerType(TrainerType.TWINS).trainerChance(1).startingLevel(1000).startingWave(12);
       await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -131,7 +133,6 @@ describe("Double Battles", () => {
     });
 
     it("should advance exactly one wave if the right opponent is defeated first", async () => {
-      game.override.trainerType(TrainerType.TWINS).trainerChance(1).startingLevel(1000).startingWave(12);
       await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);

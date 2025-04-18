@@ -27,7 +27,7 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
  * {@linkcode BerryType}, {@linkcode ElementalType}, {@linkcode EvolutionItem}
- * {@linkcode FormChangeItem}, {@linkcode Stat}, {@linkcode TrainerType}
+ * {@linkcode FormChangeItem}, {@linkcode Stat}
  */
 /**
  * Overrides that are used to test different in game situations
