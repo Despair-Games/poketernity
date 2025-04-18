@@ -5,7 +5,7 @@ export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = 
 export const CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];
 
 /**
- * Spawn chance: ({@linkcode ME_BASE_SPAWN_WEIGHT} `+` {@linkcode ME_WEIGHT_INCREMENT_ON_SPAWN_MISS} `* <number of missed spawns>`) / {@linkcode ME_MAX_SPAWN_WEIGHT}
+ * Spawn chance: ({@linkcode ME_BASE_SPAWN_WEIGHT} `+` {@linkcode ME_WEIGHT_INCREMENT_ON_SPAWN_MISS} `*` `<number of missed spawns>`) `/` {@linkcode ME_MAX_SPAWN_WEIGHT}
  */
 export const ME_BASE_SPAWN_WEIGHT = 3;
 
@@ -25,6 +25,7 @@ export const ME_WEIGHT_INCREMENT_ON_SPAWN_MISS = 3;
 
 /**
  * Specifies the target average for total ME spawns in a single Classic run.
+ *
  * Used by anti-variance mechanic to check whether a run is above or below the target on a given wave.
  */
 export const ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET = 12;
