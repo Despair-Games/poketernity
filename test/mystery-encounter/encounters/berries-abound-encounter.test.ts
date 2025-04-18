@@ -44,7 +44,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       .mysteryEncounterTier(MysteryEncounterTier.COMMON)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
-      .disableTrainerWaves()
+      .trainerChance(0)
       .startingModifier([])
       .startingHeldItems([])
       .enemyAbility(AbilityId.BALL_FETCH)
