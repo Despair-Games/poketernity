@@ -8,9 +8,9 @@ import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
 import type { EffectiveStat, PermanentStat } from "#enums/stat";
 import type { ToHaveEffectiveStatMatcherOptions } from "#test/matchers/to-have-effective-stat-matcher";
-import type { ToHaveMoveResultMatcherOptions } from "#test/matchers/to-have-move-result";
+import type { ToHaveMoveResultMatcherOptions } from "#test/matchers/to-have-move-result-matcher";
 import type { ToHaveStatMatcherOptions } from "#test/matchers/to-have-stat-matcher";
-import type { ToHaveUsedMoveMatcherOptions } from "#test/matchers/to-have-used-move";
+import type { ToHaveUsedMoveMatcherOptions } from "#test/matchers/to-have-used-move-matcher";
 import "vitest";
 
 declare module "vitest" {

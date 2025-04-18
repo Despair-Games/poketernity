@@ -19,7 +19,7 @@ export interface ToHaveMoveResultMatcherOptions {
  * @param index The index of the move to check
  * @returns Whether the matcher passed
  */
-export function toHaveMoveResult(
+export function toHaveMoveResultMatcher(
   received: unknown,
   expectedResult: MoveResult,
   { index = 0, moveCount = 1 }: ToHaveMoveResultMatcherOptions = {},

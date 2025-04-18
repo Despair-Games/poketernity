@@ -1,7 +1,7 @@
 import { toHaveEffectiveStatMatcher } from "#test/matchers/to-have-effective-stat-matcher";
-import { toHaveMoveResult } from "#test/matchers/to-have-move-result";
+import { toHaveMoveResultMatcher } from "#test/matchers/to-have-move-result-matcher";
 import { toHaveStatMatcher } from "#test/matchers/to-have-stat-matcher";
-import { toHaveUsedMove } from "#test/matchers/to-have-used-move";
+import { toHaveUsedMoveMatcher } from "#test/matchers/to-have-used-move-matcher";
 import { expect } from "vitest";
 
 /**
@@ -10,8 +10,8 @@ import { expect } from "vitest";
  */
 
 expect.extend({
-  toHaveMoveResult,
-  toHaveUsedMove,
+  toHaveMoveResult: toHaveMoveResultMatcher,
+  toHaveUsedMove: toHaveUsedMoveMatcher,
   toHaveStat: toHaveStatMatcher,
   toHaveEffectiveStat: toHaveEffectiveStatMatcher,
 });
