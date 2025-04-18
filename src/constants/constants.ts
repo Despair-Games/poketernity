@@ -46,7 +46,7 @@ export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;
 export const LANGUAGE_MAX_OPTIONS = 7;
 
 /** All available game speeds. */
-export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
+export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5] as const;
 
 /** The maximum number of runs stored in the run history. */
 export const RUN_HISTORY_LIMIT: number = 25;
@@ -91,22 +91,11 @@ export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;
 /**
  * A list of all Gigantamax form keys, excluding Eternamax.
  */
-export const G_MAX_FORM_KEYS = Object.freeze([
+export const G_MAX_FORM_KEYS: readonly string[] = Object.freeze([
   SpeciesFormKey.GIGANTAMAX,
   SpeciesFormKey.GIGANTAMAX_RAPID,
   SpeciesFormKey.GIGANTAMAX_SINGLE,
-]) as readonly string[];
-
-/** Each wave, all unfainted Pokemon gain this much happiness. Used in {@link NextEncounterPhase} */
-export const FRIENDSHIP_GAIN_PER_WAVE = 1;
-/** Value for how much friendship a Pokemon gains on leveling up. Used in {@link LevelUpPhase} */
-export const FRIENDSHIP_GAIN_PER_LEVEL_UP = 10;
-/** After this point, friendship gain is halved (rounded down). Used in {@linkcode addFriendship} */
-export const FRIENDSHIP_GAIN_CUTOFF = 150;
-/** Additional friendship gained from rare candy. Used in {@link PokemonLevelIncrementModifier} */
-export const FRIENDSHIP_GAIN_FROM_CANDY = 5;
-/** Penalty for losing friendship on faint. Used in {@link FaintPhase} */
-export const FRIENDSHIP_LOST_FROM_FAINTING = 10;
+]);
 
 /** Default amount of money the player starts with. Same for all game modes. */
 export const DEFAULT_STARTING_MONEY = 1000;
