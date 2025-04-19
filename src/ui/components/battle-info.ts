@@ -834,15 +834,13 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
   /**
    * Updates the UI to display the Pokemon's HP numbers.
-   * @param hp - The Pokemon's current HP
-   * @param maxHp - The Pokemon's maximum HP
    */
-  setHpNumbers(hp: number, maxHp: number): void {
+  setHpNumbers(currentHp: number, maxHp: number): void {
     if (!this.player || !globalScene) {
       return;
     }
     this.hpNumbersContainer.removeAll(true);
-    const hpStr = hp.toString();
+    const hpStr = currentHp.toString();
     const maxHpStr = maxHp.toString();
     let offset = 0;
     for (let i = maxHpStr.length - 1; i >= 0; i--) {
@@ -853,7 +851,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       this.hpNumbersContainer.add(globalScene.add.image(offset++ * -8, 0, "numbers", hpStr[i]));
     }
 
-    this.lastHp = hp;
+    this.lastHp = currentHp;
   }
 
   updateStats(stats: number[]): void {
