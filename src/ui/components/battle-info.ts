@@ -663,9 +663,8 @@ export class BattleInfo extends Phaser.GameObjects.Container {
           duration: duration,
           onUpdate: () => {
             if (this.player && this.lastHp !== pokemon.hp) {
-              const tweenHp = Math.ceil(this.hpBar.scaleX * pokemon.getMaxHp());
-              this.setHpNumbers(tweenHp, pokemon.getMaxHp());
-              this.lastHp = tweenHp;
+              this.setHpNumbers(pokemon.hp, pokemon.getMaxHp());
+              this.lastHp = pokemon.hp;
             }
 
             updateHpFrame();
@@ -830,6 +829,11 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.levelContainer.setX((this.player ? -41 : -50) - 8 * Math.max(levelStr.length - 3, 0));
   }
 
+  /**
+   * Updates the hp / maxHp display
+   * @param hp the current HP
+   * @param maxHp the max HP
+   */
   setHpNumbers(hp: number, maxHp: number): void {
     if (!this.player || !globalScene) {
       return;
