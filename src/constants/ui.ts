@@ -36,3 +36,6 @@ export const TEMP_SCALE_ADJUSTMENT = CANVAS_SCALE / 6;
 export const TEXT_SCALE = 6;
 
 export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
+
+/** The maximum number of language options to display simultaneously. */
+export const LANGUAGE_MAX_OPTIONS = 7;

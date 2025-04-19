@@ -34,9 +34,6 @@ export const MAPPING_CONFIG_LS_KEY = `${LS_PREFIX}/mapping/configs`;
 /** The ratio at which PRSFX sound volumes are played is adjusted since they are sigificantly louder. */
 export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;
 
-/** The maximum number of language options to display simultaneously. */
-export const LANGUAGE_MAX_OPTIONS = 7;
-
 /** All available game speeds. */
 export const GAME_SPEEDS = Object.freeze([1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
 
