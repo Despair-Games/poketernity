@@ -67,4 +67,8 @@ export const DEFAULT_STARTING_MONEY = 1000;
  * Weather types that are associated with the primal forms of the Generation III cover legendaries
  * and cannot be overwritten by weaker weather types.
  */
-export const PRIMAL_WEATHER = Object.freeze([WeatherType.HARSH_SUN, WeatherType.HEAVY_RAIN, WeatherType.STRONG_WINDS]);
+export const PRIMAL_WEATHER_TYPES = Object.freeze([
+  WeatherType.HARSH_SUN,
+  WeatherType.HEAVY_RAIN,
+  WeatherType.STRONG_WINDS,
+]);

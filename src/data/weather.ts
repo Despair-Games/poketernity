@@ -1,4 +1,4 @@
-import { PRIMAL_WEATHER } from "#app/constants/game";
+import { PRIMAL_WEATHER_TYPES } from "#app/constants/game";
 import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
@@ -43,7 +43,7 @@ export class Weather {
    * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
   isPrimal(): boolean {
-    return PRIMAL_WEATHER.includes(this.weatherType);
+    return PRIMAL_WEATHER_TYPES.includes(this.weatherType);
   }
 
   /**
