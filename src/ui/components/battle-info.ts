@@ -423,7 +423,6 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     if (this.player) {
       this.setHpNumbers(pokemon.hp, pokemon.getMaxHp());
     }
-    this.lastHp = pokemon.hp;
     this.lastMaxHp = pokemon.getMaxHp();
 
     this.setLevel(pokemon.level);
@@ -642,6 +641,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         this.type3Icon.setFrame(ElementalType[types[2]].toLowerCase());
       }
 
+      // Updates the color of the HP bar (50-100% HP: Green, 25-50% HP: Yellow, 0-25% HP: Red)
       const updateHpFrame = () => {
         const hpFrame = this.hpBar.scaleX > 0.5 ? "high" : this.hpBar.scaleX > 0.25 ? "medium" : "low";
         if (hpFrame !== this.lastHpFrame) {
@@ -650,6 +650,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         }
       };
 
+      // Plays the animation of the Pokemon's HP bar increasing or decreasing.
       const updatePokemonHp = () => {
         let duration = !instant ? Phaser.Math.Clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
         const speed = settings.general.hpBarSpeed;
@@ -665,12 +666,13 @@ export class BattleInfo extends Phaser.GameObjects.Container {
             if (this.player && this.lastHp !== pokemon.hp) {
               const tweenHp = Math.ceil(this.hpBar.scaleX * pokemon.getMaxHp());
               this.setHpNumbers(tweenHp, pokemon.getMaxHp());
-              this.lastHp = tweenHp;
             }
 
             updateHpFrame();
           },
           onComplete: () => {
+            this.setHpNumbers(pokemon.hp, pokemon.getMaxHp());
+
             updateHpFrame();
             resolve();
           },
@@ -830,6 +832,11 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.levelContainer.setX((this.player ? -41 : -50) - 8 * Math.max(levelStr.length - 3, 0));
   }
 
+  /**
+   * Updates the UI to display the Pokemon's HP numbers.
+   * @param hp - The Pokemon's current HP
+   * @param maxHp - The Pokemon's maximum HP
+   */
   setHpNumbers(hp: number, maxHp: number): void {
     if (!this.player || !globalScene) {
       return;
@@ -845,6 +852,8 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     for (let i = hpStr.length - 1; i >= 0; i--) {
       this.hpNumbersContainer.add(globalScene.add.image(offset++ * -8, 0, "numbers", hpStr[i]));
     }
+
+    this.lastHp = hp;
   }
 
   updateStats(stats: number[]): void {
