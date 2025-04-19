@@ -1,6 +1,4 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import { TERA_MOVES } from "#app/constants/move-constants";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
@@ -181,14 +179,13 @@ import { Ability } from "#app/data/abilities/ability";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder, toDmgValue } from "#app/utils";
-import { getWeatherCondition } from "#app/utils/ability-utils";
+import { getWeatherCondition, normalTypeMoveConversionCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -203,11 +200,6 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-
-/** Used for Aerialate, Refrigerate, Pixilate, Galvanize */
-const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
-  move?.type === ElementalType.NORMAL
-  && (!move.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized));
 
 // prettier-ignore
 export function initAbilities() {
