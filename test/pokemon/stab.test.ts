@@ -30,7 +30,7 @@ describe("STAB", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  it("should have a NO STAB (1.0) on type mismatch", async () => {
+  it("should have NO STAB (1.0) on type mismatch", async () => {
     await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
