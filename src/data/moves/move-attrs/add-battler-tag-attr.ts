@@ -145,6 +145,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SKY_DROP:
       case BattlerTagType.MAGIC_COAT:
       case BattlerTagType.ME_FIRST_POWER_BOOST:
+      case BattlerTagType.BIDE:
         return 0;
       case BattlerTagType.INGRAIN:
       case BattlerTagType.IGNORE_ACCURACY:
