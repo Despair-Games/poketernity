@@ -166,6 +166,7 @@ export class CommandUiHandler extends UiHandler {
             success = this.setCursor(cursor - 1);
           } else if ([BattleCommand.FIGHT, BattleCommand.POKEMON].includes(cursor) && this.canTera()) {
             success = this.setCursor(BattleCommand.TERA);
+            this.toggleTeraButton();
           }
           break;
         case Button.RIGHT:
