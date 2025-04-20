@@ -22,7 +22,8 @@ export class BideEffectAttr extends OverrideMoveEffectAttr {
     const bideTag = user.getTag<BideTag>(BattlerTagType.BIDE);
 
     if (!bideTag || bideTag.turnCount > 1) {
-      // Add Bide's tag to the user if it doesn't exist yet
+      // Try to add Bide's tag to the user.
+      // If the tag already exists on the user, this does nothing.
       user.addTag(BattlerTagType.BIDE);
       // Play Bide's "charging" animation
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.BIDE, user.getBattlerIndex()));
