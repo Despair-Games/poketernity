@@ -1107,6 +1107,10 @@ export class GameData {
           v = [];
         }
         for (const pd of v) {
+          // TODO: remove this later
+          if (pd.hasOwnProperty("species")) {
+            pd.speciesId = pd.species;
+          }
           ret.push(new PokemonData(pd));
         }
         return ret;

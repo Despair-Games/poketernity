@@ -684,3 +684,7 @@ export function deepFreeze<T>(obj: T): Readonly<T> {
   }
   return obj;
 }
+
+export function isPokemon(data: any): data is Pokemon {
+  return data.hasOwnProperty("type") && data.type === "Pokemon";
+}
