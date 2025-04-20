@@ -69,6 +69,18 @@ describe("Abilities - Adaptability", () => {
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
   });
+  
+  it("should not apply STAB to Struggle", async () => {
+    await game.classicMode.startBattle([SpeciesId.RATTATA]);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+    vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+    game.move.use(MoveId.STRUGGLE);
+    await game.toEndOfTurn();
+
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
+  });
 
   describe("Terastallized", () => {
     it("should keep STAB at 1.5 if move type, but not tera type, is one of the user's original types", async () => {
