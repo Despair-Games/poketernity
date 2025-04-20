@@ -1,11 +1,12 @@
-import { GameManager } from "#test/test-utils/gameManager";
+import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveResult } from "#enums/move-result";
-import { AbilityId } from "#enums/ability-id";
 
 describe("Moves - Fake Out", () => {
   let phaserGame: Phaser.Game;
@@ -33,6 +34,20 @@ describe("Moves - Fake Out", () => {
       .disableCrits();
   });
 
+  it("flinches the opponent on hit", async () => {
+    game.override.battleType("double");
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+
+    const [enemy1, enemy2] = game.scene.getEnemyField();
+
+    game.move.select(MoveId.FAKE_OUT, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.FAKE_OUT, 1, BattlerIndex.ENEMY_2);
+    await game.toNextTurn();
+
+    expect(enemy1).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy2).toHaveMoveResult(MoveResult.FAIL);
+  });
+
   it("can only be used on the first turn a pokemon is sent out in a battle", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -48,7 +63,7 @@ describe("Moves - Fake Out", () => {
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(postTurnOneHp);
-  }, 20000);
+  });
 
   // This is a game-specific buff to Fake Out
   it("can be used at the start of every wave even if the pokemon wasn't recalled", async () => {
@@ -64,7 +79,7 @@ describe("Moves - Fake Out", () => {
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);
-  }, 20000);
+  });
 
   it("can be used again if recalled and sent back out", async () => {
     game.override.startingWave(4);
@@ -98,7 +113,7 @@ describe("Moves - Fake Out", () => {
     await game.toNextTurn();
 
     expect(enemy2.hp).toBeLessThan(enemy2.getMaxHp());
-  }, 20000);
+  });
 
   it.each([
     { moveId: MoveId.U_TURN, moveName: "U-turn" },
