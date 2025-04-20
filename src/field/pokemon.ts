@@ -4286,6 +4286,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     abilityApplyMode: AbilityApplyMode,
     simulated: boolean,
   ): number {
+    if (move.hasAttr(TypelessAttr)) {
+      return 1;
+    }
+
     const stabMultiplier = new NumberHolder(1);
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
     const sourceTypes = source.getTypes();
