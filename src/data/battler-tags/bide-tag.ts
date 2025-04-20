@@ -30,8 +30,8 @@ export class BideTag extends MoveLockTag {
 
   /**
    * Updates Bide's future target and records damage after receiving an attack.
-   * @param attacker the {@linkcode Pokemon} that attacked the tag owner
-   * @param damage the damage dealt to the tag owner
+   * @param attacker - The {@linkcode Pokemon} that attacked the tag owner
+   * @param damage - The damage dealt to the tag owner
    */
   public updateAttackData(attacker: Pokemon, damage: number): void {
     this.lastAttackerId = attacker.id;
@@ -41,9 +41,10 @@ export class BideTag extends MoveLockTag {
   /**
    * On the last turn of execution, Bide attacks the last Pokemon that attacked the user,
    * or a random near enemy if no such Pokemon exists.
-   * @param pokemon the {@linkcode Pokemon} with this tag
-   * @param move the {@linkcode Move} to be used (in this case, Bide)
-   * @returns an array containing the target's {@linkcode BattlerIndex}
+   * @param pokemon - The {@linkcode Pokemon} with this tag
+   * @param move - The {@linkcode Move} to be used (in this case, Bide)
+   * @returns An array containing the target's {@linkcode BattlerIndex}. While the user
+   * is storing energy, this returns the user's index.
    */
   protected override getNextTargets(pokemon: Pokemon, move: Move): BattlerIndex[] {
     if (this.turnCount > 1) {
