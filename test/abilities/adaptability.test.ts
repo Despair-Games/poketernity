@@ -128,6 +128,25 @@ describe("Abilities - Adaptability", () => {
       expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.25);
     });
 
+    it("should not apply STAB if move type does NOT match tera type or the user's original types", async () => {
+      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
+
+      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+      const playerPokemon = game.field.getPlayerPokemon();
+
+      expect(playerPokemon.isTerastallized()).toBe(true);
+      expect(playerPokemon.getTeraType()).toBe(ElementalType.FIRE);
+
+      const enemyPokemon = game.field.getEnemyPokemon();
+      vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
+
+      game.move.select(MoveId.WATER_GUN);
+      await game.toEndOfTurn();
+
+      expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
+    });
+
     it("should not apply to Stellar moves even if user is Stellar tera type", async () => {
       game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
 
