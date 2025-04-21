@@ -1917,13 +1917,13 @@ export default class BattleScene extends SceneBase {
    * Function to get the level cap
    *
    * The formula for getting the level cap is as follows:
-   * the waveIndex is retrieved by rounding up to the nearest 10 i.e. 34 -> 40
-   * the waveIndex is adjusted by {@linkcode getWaveForDifficulty} for daily mode
-   * the base level is 1.2 times the exp formula of {@linkcode getLevelForWaveFunc} (1 + x/2 + x^2/625)
-   * If the number is odd, it is incremented by 1
-   * The final result is then incremented by 2
+   * - the `waveIndex` is retrieved by rounding up to the nearest `10` i.e. `34 -> 40`
+   * - the `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
+   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
+   * - If the number is odd, it is incremented by `1`
+   * - The final result is then incremented by `2`
    *
-   * @param ignoreLevelCap boolean on whether or not to ignore the level cap
+   * @param ignoreLevelCap - (Default `false`) Whether or not to ignore the level cap
    * @returns the level cap
    */
   getMaxExpLevel(ignoreLevelCap: boolean = false): number {

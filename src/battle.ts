@@ -113,12 +113,12 @@ export default class Battle {
    * Function to get the level of wild Pokemon for a given wave
    *
    * This is the function to get the level for a wave:
-   * The waveIndex is adjusted by {@linkcode getWaveForDifficulty} for daily mode
-   * The base level uses {@linkcode getLevelForWaveFunc} (1 + x/2 + x^2/625)
-   * If the Pokemon is a boss, there is a 1.2 modifier
-   * If the boss is the final boss of classic mode or an endless boss, this level is rounded up
+   * - The `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
+   * - The base level uses {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
+   * - If the Pokemon is a boss, there is a `1.2` modifier
+   * - If the boss is the final boss of classic mode or an endless boss, this level is rounded up
    * to the next multiple of 25
-   * If it's not the final wave then bosses can also have a +/- level fluctuation
+   * - If it's not the final wave then bosses can also have a +/- level fluctuation
    * of one tenth the adjusted waveIndex
    *
    * @returns the level
