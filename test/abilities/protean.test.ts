@@ -73,9 +73,9 @@ describe("Abilities - Protean", () => {
     expect(leadPokemonType).not.toBe(moveType);
 
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     leadPokemon = game.scene.getPlayerPokemon()!;

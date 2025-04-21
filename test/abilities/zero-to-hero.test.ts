@@ -63,7 +63,7 @@ describe("Abilities - ZERO TO HERO", () => {
     const palafin = game.scene.getPlayerPokemon()!;
     expect(palafin.formIndex).toBe(baseForm);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.phaseInterceptor.to(QuietFormChangePhase);
     expect(palafin.formIndex).toBe(heroForm);
   });
@@ -97,7 +97,7 @@ describe("Abilities - ZERO TO HERO", () => {
     await game.toNextTurn();
 
     game.doRevivePokemon(1);
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(palafin.formIndex).toBe(heroForm);

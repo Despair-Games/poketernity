@@ -417,10 +417,10 @@ describe("Abilities - Parental Bond", () => {
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toNextTurn();
 
     // TODO: Update hit count to 1 once Future Sight is fixed to not activate abilities if user is off the field

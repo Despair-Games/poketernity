@@ -54,7 +54,7 @@ describe("Abilities - Intimidate", () => {
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.phaseInterceptor.run("CommandPhase");
     await game.phaseInterceptor.to("CommandPhase");
 

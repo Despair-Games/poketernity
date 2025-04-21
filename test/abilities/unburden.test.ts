@@ -252,7 +252,7 @@ describe("Abilities - Unburden", () => {
     // Turn 2: Switch Meowth to Weezing, activating Neutralizing Gas
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
@@ -261,7 +261,7 @@ describe("Abilities - Unburden", () => {
     // Turn 3: Switch Weezing to Meowth, deactivating Neutralizing Gas
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
@@ -346,7 +346,7 @@ describe("Abilities - Unburden", () => {
     await game.toNextTurn();
 
     game.doRevivePokemon(1);
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 

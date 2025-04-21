@@ -103,10 +103,10 @@ describe("Moves - Fake Out", () => {
     expect(enemy2.hp).toBeLessThan(enemy2.getMaxHp());
     enemy2.hp = enemy2.getMaxHp();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     game.move.select(MoveId.FAKE_OUT);

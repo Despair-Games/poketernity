@@ -472,9 +472,9 @@ export class GameManager {
 
   /**
    * Command an in-battle switch to another Pokemon via the main battle menu.
-   * @param pokemonIndex the index of the pokemon in your party to switch to
+   * @param pokemonIndex - The index of the pokemon in your party to switch to
    */
-  doSwitchPokemon(pokemonIndex: number) {
+  switchPokemon(pokemonIndex: number) {
     this.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       (this.scene.ui.getHandler() as CommandUiHandler).setCursor(2);
       (this.scene.ui.getHandler() as CommandUiHandler).processInput(Button.ACTION);

@@ -84,7 +84,7 @@ describe("Moves - SYRUP BOMB", () => {
     await game.move.forceHit();
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.SPD)).toBe(-1);

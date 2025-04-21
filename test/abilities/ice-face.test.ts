@@ -143,9 +143,9 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.isFullHp()).toBe(true);
 
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
 
     await game.phaseInterceptor.to(QuietFormChangePhase);
     eiscue = game.scene.getPlayerPokemon()!;
@@ -189,7 +189,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.isFullHp()).toBe(true);
 
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     eiscue = game.scene.getPlayerParty()[1];

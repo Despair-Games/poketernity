@@ -82,7 +82,7 @@ describe("Moves - Fairy Lock", () => {
     });
 
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();

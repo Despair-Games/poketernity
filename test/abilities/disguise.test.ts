@@ -123,7 +123,7 @@ describe("Abilities - Disguise", () => {
     expect(mimikyu.hp).equals(maxHp - disguiseDamage);
 
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
 
     await game.toEndOfTurn();
 

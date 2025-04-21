@@ -127,10 +127,10 @@ describe("Abilities - Flower Gift", () => {
 
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.phaseInterceptor.to("MovePhase");
 
     expect(cherrim.summonData.abilitySuppressed).toBe(false);
@@ -145,7 +145,7 @@ describe("Abilities - Flower Gift", () => {
 
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(cherrim.formIndex).toBe(OVERCAST_FORM);
@@ -178,7 +178,7 @@ describe("Abilities - Flower Gift", () => {
 
     // Switch out Primal Groudon to end weather
     game.move.use(MoveId.SPLASH, 0);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toNextTurn();
 
     expect(cherrim.formIndex).toBe(OVERCAST_FORM);

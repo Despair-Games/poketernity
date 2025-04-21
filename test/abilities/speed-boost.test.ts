@@ -85,7 +85,7 @@ describe("Abilities - Speed Boost", () => {
   it("should not trigger this turn if pokemon was switched into combat via normal switch, but the turn after", async () => {
     await game.classicMode.startBattle([SpeciesId.SHUCKLE, SpeciesId.NINJASK]);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
     const playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
