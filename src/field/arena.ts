@@ -44,7 +44,6 @@ export class Arena {
   public bgm: string;
   public ignoreAbilities: boolean;
   public ignoringEffectSource: BattlerIndex | null;
-  public playerTerasUsed: number = 0;
 
   /**
    * Used to keep track of the previous TimeOfDay.

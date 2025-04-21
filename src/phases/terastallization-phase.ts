@@ -39,7 +39,7 @@ export class TerastallizationPhase extends BattlePhase {
     this.pokemon.updateSpritePipelineData();
 
     if (this.pokemon.isPlayer()) {
-      globalScene.arena.playerTerasUsed += 1;
+      globalScene.playerTerasUsed += 1;
     }
 
     globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangeTeraTrigger);

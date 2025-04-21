@@ -792,6 +792,7 @@ export class GameData {
       challenges: globalScene.gameMode.challenges.map((c) => new ChallengeData(c)),
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,
+      playerTerasUsed: globalScene.playerTerasUsed,
     } as SessionSaveData;
   }
 
@@ -940,7 +941,7 @@ export class GameData {
             );
           }
 
-          globalScene.arena.playerTerasUsed = sessionData.arena.playerTerasUsed;
+          globalScene.playerTerasUsed = sessionData.playerTerasUsed;
 
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {

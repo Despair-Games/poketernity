@@ -228,6 +228,7 @@ export default class BattleScene extends SceneBase {
   public currentBattle: Battle;
   public pokeballCounts: PokeballCounts;
   public money: number;
+  public playerTerasUsed: number = 0;
   public pokemonInfoContainer: PokemonInfoContainer;
   private party: PlayerPokemon[];
   /** Session save data that pertains to Mystery Encounters */
@@ -1383,7 +1384,7 @@ export default class BattleScene extends SceneBase {
             // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
             || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
           ) {
-            this.arena.playerTerasUsed = 0;
+            this.playerTerasUsed = 0;
           }
         }
 

@@ -10,7 +10,6 @@ export default class ArenaData {
   public weather: Weather | null;
   public terrain: Terrain | null;
   public tags: ArenaTag[];
-  public playerTerasUsed: number;
 
   constructor(source: Arena | any) {
     const sourceArena = source instanceof Arena ? (source as Arena) : null;
@@ -26,7 +25,6 @@ export default class ArenaData {
         ? new Terrain(source.terrain.terrainType, source.terrain.turnsLeft)
         : null;
     this.tags = [];
-    this.playerTerasUsed = (sourceArena ? sourceArena.playerTerasUsed : source.playerTerasUsed) ?? 0;
 
     if (source.tags) {
       this.tags = source.tags.map((t) => loadArenaTag(t));

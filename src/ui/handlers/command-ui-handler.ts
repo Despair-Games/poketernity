@@ -205,7 +205,7 @@ export class CommandUiHandler extends UiHandler {
       activePokemon.species.speciesId === SpeciesId.NECROZMA && activePokemon.getFormKey() === "ultra";
     const isBlockedForm = activePokemon.isMega() || activePokemon.isMax() || isUltraNecrozma;
 
-    const { playerTerasUsed } = globalScene.arena;
+    const { playerTerasUsed } = globalScene;
 
     const ally = activePokemon.getAlly();
     const teraCommand = ally ? globalScene.currentBattle.turnManager.findCommandFromPokemon(ally) : undefined;

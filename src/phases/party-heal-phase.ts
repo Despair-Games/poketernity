@@ -36,7 +36,7 @@ export class PartyHealPhase extends BattlePhase {
         }
         pokemon.updateInfo(true);
       }
-      globalScene.arena.playerTerasUsed = 0;
+      globalScene.playerTerasUsed = 0;
 
       const healSong = globalScene.audioManager.playSoundWithoutBgm("heal");
       time.delayedCall(fixedNumber(healSong.totalDuration * 1000), () => {
