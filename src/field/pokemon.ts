@@ -4296,11 +4296,17 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const sourceTeraType = source.getTeraType();
     const sourceMoveType = source.getMoveType(move);
     const matchesSourceType = sourceTypes.includes(sourceMoveType);
-    if (matchesSourceType) {
+    /** Combined Pledge moves gain STAB regardless of the user's type */
+    const pledgeAppliesStab = new BooleanHolder(false);
+    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, pledgeAppliesStab);
+
+    if (matchesSourceType || pledgeAppliesStab.value) {
       stabMultiplier.value += 0.5;
     }
-    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, stabMultiplier);
-    if (sourceTeraType !== ElementalType.UNKNOWN && sourceTeraType === sourceMoveType) {
+    if (
+      sourceTeraType !== ElementalType.UNKNOWN
+      && (sourceTeraType === sourceMoveType || (pledgeAppliesStab.value && sourceTypes.includes(sourceTeraType)))
+    ) {
       stabMultiplier.value += 0.5;
     }
 

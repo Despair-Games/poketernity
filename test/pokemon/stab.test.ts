@@ -1,4 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -26,8 +27,10 @@ describe("STAB", () => {
       .disableCrits()
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
-      .enemySpecies(SpeciesId.MAGIKARP)
-      .enemyMoveset(MoveId.SPLASH);
+      .enemySpecies(SpeciesId.BLISSEY)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100);
   });
 
   it("should have NO STAB (1.0) on type mismatch", async () => {
@@ -110,9 +113,80 @@ describe("STAB", () => {
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
   });
 
-  it.todo("should have a 1.5 STAB on pledge moves");
+  it("should have a 1.5 STAB on pledge moves", async () => {
+    game.override.battleType("double");
 
-  it.todo("should have a 2.0 STAB on pledge moves if tera type DOES NOT match default type");
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
-  it.todo("should have a 2.25 STAB on pledge moves if tera type does match default type");
+    const enemyPokemon = game.scene.getEnemyField();
+    vi.spyOn(enemyPokemon[1], "calcStabMultiplierForTakingDamage");
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    // Charmander uses Water Pledge, then Squirtle uses Grass Pledge.
+    // The combined Pledge is Grass-type, but should still gain STAB.
+    game.move.use(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
+    game.move.use(MoveId.GRASS_PLEDGE, 1, BattlerIndex.ENEMY_2);
+
+    // Wait until both Pledges have been used
+    for (let i = 0; i < 2; i++) {
+      await game.phaseInterceptor.to("MoveEndPhase");
+    }
+
+    expect(enemyPokemon[1].calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
+  });
+
+  it("should have a 1.5 STAB on pledge moves if tera type DOES NOT match user's type", async () => {
+    game.override.battleType("double").startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
+
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
+
+    const playerPokemon = game.scene.getPlayerField();
+    expect(playerPokemon[0].isTerastallized()).toBeTruthy();
+    expect(playerPokemon[0].getTeraType()).toBe(ElementalType.WATER);
+
+    const enemyPokemon = game.scene.getEnemyField();
+    vi.spyOn(enemyPokemon[1], "calcStabMultiplierForTakingDamage");
+
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    // Squirtle uses Grass Pledge, then Charmander uses Water Pledge.
+    // The combined Pledge is Grass-type, but should still gain STAB.
+    game.move.use(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY_2);
+    game.move.use(MoveId.GRASS_PLEDGE, 1, BattlerIndex.ENEMY);
+
+    // Wait until both Pledges have been used
+    for (let i = 0; i < 2; i++) {
+      await game.phaseInterceptor.to("MoveEndPhase");
+    }
+
+    expect(enemyPokemon[1].calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
+  });
+
+  it("should have a 2.0 STAB on pledge moves if tera type matches user's type", async () => {
+    game.override.battleType("double").startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
+
+    await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
+
+    const playerPokemon = game.scene.getPlayerField();
+    expect(playerPokemon[0].isTerastallized()).toBeTruthy();
+    expect(playerPokemon[0].getTeraType()).toBe(ElementalType.FIRE);
+
+    const enemyPokemon = game.scene.getEnemyField();
+    vi.spyOn(enemyPokemon[1], "calcStabMultiplierForTakingDamage");
+
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    // Squirtle uses Fire Pledge, then Charmander uses Grass Pledge.
+    // The combined Pledge is Grass-type, but should still gain enhanced STAB from matching Tera type
+    game.move.use(MoveId.GRASS_PLEDGE, 0, BattlerIndex.ENEMY_2);
+    game.move.use(MoveId.WATER_PLEDGE, 1, BattlerIndex.ENEMY);
+
+    // Wait until both Pledges have been used
+    for (let i = 0; i < 2; i++) {
+      await game.phaseInterceptor.to("MoveEndPhase");
+    }
+
+    expect(enemyPokemon[1].calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(2.0);
+  });
 });
