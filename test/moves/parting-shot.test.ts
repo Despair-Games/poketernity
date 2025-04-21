@@ -170,7 +170,7 @@ describe("Moves - Parting Shot", () => {
       game.move.select(MoveId.SPLASH);
 
       // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
-      await game.killPokemon(game.scene.getPlayerParty()[0]);
+      await game.faintPokemon(game.scene.getPlayerParty()[0]);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       await game.phaseInterceptor.run(MessagePhase);
       game.doSelectPartyPokemon(1);

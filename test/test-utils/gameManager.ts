@@ -319,9 +319,9 @@ export class GameManager {
 
   /** Faint all opponents currently on the field */
   async doKillOpponents() {
-    await this.killPokemon(this.scene.currentBattle.enemyParty[0]);
+    await this.faintPokemon(this.scene.currentBattle.enemyParty[0]);
     if (this.scene.currentBattle.double) {
-      await this.killPokemon(this.scene.currentBattle.enemyParty[1]);
+      await this.faintPokemon(this.scene.currentBattle.enemyParty[1]);
     }
   }
 
@@ -453,7 +453,16 @@ export class GameManager {
     return updateUserInfo();
   }
 
-  async killPokemon(pokemon: PlayerPokemon | EnemyPokemon) {
+  /**
+   * Faints the given Pokemon.
+   * @param pokemon The {@linkcode Pokemon} to faint
+   * @returns A promise that resolves when the Pokemon is fainted
+   * @example
+   *    const enemyPkm = gameManager.field.getEnemyPokemon;
+   *    game.move.select(MoveId.SPLASH);
+   *    await gameManager.faintPokemon(enemyPkm);
+   */
+  async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon) {
     return new Promise<void>(async (resolve, reject) => {
       pokemon.hp = 0;
       this.scene.phaseManager.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));

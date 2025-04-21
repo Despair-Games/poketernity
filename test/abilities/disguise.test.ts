@@ -181,7 +181,7 @@ describe("Abilities - Disguise", () => {
     expect(mimikyu1.formIndex).toBe(bustedForm);
 
     game.move.select(MoveId.SPLASH);
-    await game.killPokemon(mimikyu1);
+    await game.faintPokemon(mimikyu1);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
