@@ -71,12 +71,11 @@ const expLevels = [
 const SMOOTHING_FACTOR = 0.675;
 
 /**
- * Function to calculate the amount of exp required for a given level based on growth rate
- * If a growth rate is not MEDIUM_FAST then it is smoothed with MEDIUM_FAST
- * (A growth rate only contributes 32.5% of the formula, the other 67.5% is MEDIUM_FAST)
- * @param level the level
- * @param growthRate the growth rate
- * @returns the amount of exp required
+ * Function to calculate the amount of EXP required for a given level based on growth rate.
+ *
+ * If the growth rate is not `MEDIUM_FAST` then it is smoothed with `MEDIUM_FAST`
+ * (The growth rate only contributes `32.5%` of the formula, the other `67.5%` is `MEDIUM_FAST`)
+ * @returns The total amount of EXP required to get from level `1` (`0` EXP) to the input level
  */
 export function getLevelTotalExp(level: number, growthRate: GrowthRate): number {
   if (level < 100) {
@@ -124,10 +123,7 @@ export function getLevelTotalExp(level: number, growthRate: GrowthRate): number 
 }
 
 /**
- * Function to get the difference of exp required to reach a level and the previous level
- * @param level the next level
- * @param growthRate a growth rate
- * @returns the difference in exp
+ * @returns The amount of EXP required to go from `level - 1` to `level`
  */
 export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
   return getLevelTotalExp(level, growthRate) - getLevelTotalExp(level - 1, growthRate);
@@ -135,8 +131,8 @@ export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
 
 /**
  * Gets the level for a wave based on the repeated formula
- * 1 + x/2 + x^2/625
- * @param wave the adjusted wave based on whether or not the game is daily mode
+ * `1 + x/2 + x^2/625`
+ * @param wave - The adjusted wave based on whether or not the game is daily mode
  * @returns the level for the wave
  */
 export function getLevelForWaveFunc(wave: number): number {
@@ -144,9 +140,7 @@ export function getLevelForWaveFunc(wave: number): number {
 }
 
 /**
- * Gets the color of a growth rate to display in the starter select ui
- * @param growthRate the given growth rate
- * @returns a color
+ * @returns The color to display in the starter select UI for each growth rate
  */
 export function getGrowthRateColor(growthRate: GrowthRate) {
   switch (growthRate) {
@@ -166,9 +160,7 @@ export function getGrowthRateColor(growthRate: GrowthRate) {
 }
 
 /**
- * Gets the color of a growth rate's shadow to display in the starter select ui
- * @param growthRate the given growth rate
- * @returns a color
+ * @returns The shadow color to display in the starter select UI for each growth rate
  */
 export function getGrowthRateShadowColor(growthRate: GrowthRate) {
   switch (growthRate) {
