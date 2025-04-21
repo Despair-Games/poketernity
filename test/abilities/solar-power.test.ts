@@ -85,17 +85,17 @@ describe("Abilities - Solar Power", () => {
     await classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const playerPkm = field.getPlayerPokemon();
-    const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
+    const expectedDamages = [toDmgValue(playerPkm.getMaxHp() / 8), toDmgValue(playerPkm.getMaxHp() / 4)];
 
     move.use(MoveId.SUNNY_DAY);
     await game.toNextTurn();
     expect(game).toHaveWeather(WeatherType.SUNNY);
-    expect(playerPkm).toHaveTakenDamage(expectedDamage);
+    expect(playerPkm).toHaveTakenDamage(expectedDamages[0]);
 
     move.use(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(playerPkm).not.toHaveTakenDamage(expectedDamage * 2);
+    expect(playerPkm).not.toHaveTakenDamage(expectedDamages[1]);
     expect(game).not.toHaveWeather(WeatherType.SUNNY);
   });
 
@@ -111,7 +111,7 @@ describe("Abilities - Solar Power", () => {
 
     expect(game).toHaveWeather(WeatherType.HARSH_SUN);
     move.use(MoveId.SPLASH);
-    await game.killPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
+    await game.faintPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
     await phaseInterceptor.to(SelectModifierPhase, false);
 
     expect(playerPkm).not.toHaveTakenDamage(expectedDamage);
