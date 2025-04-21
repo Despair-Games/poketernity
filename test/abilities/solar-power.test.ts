@@ -1,4 +1,6 @@
-import { capitalizeString, getEnumKeys } from "#app/utils";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { capitalizeString, getEnumKeys, toDmgValue } from "#app/utils";
 import { SUNNY_WEATHER_TYPES } from "#app/utils/weather-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
@@ -12,7 +14,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 //#region Test Constants
 
 const allWeathers = getEnumKeys(WeatherType).map((key) => ({
-  weatherName: capitalizeString(key, " "),
+  weatherName: key === "NONE" ? "no" : capitalizeString(key, "_", false, true),
   weatherType: WeatherType[key],
 }));
 const affectedWeathers = allWeathers.filter(({ weatherType }) => SUNNY_WEATHER_TYPES.includes(weatherType));
@@ -51,47 +53,101 @@ describe("Abilities - Solar Power", () => {
 
   //#region Affected Weathers
 
-  describe.each(affectedWeathers)("In affected $weatherName weather", ({ weatherType }) => {
-    it("should increase SPATK by x1.5 in $weatherName weather", async () => {
+  describe.each(affectedWeathers)("In affected $weatherName weather", ({ weatherName, weatherType }) => {
+    let playerPkm: PlayerPokemon;
+
+    beforeEach(async () => {
       game.override.weather(weatherType);
-
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
-
-      const player = game.scene.getPlayerPokemon()!;
-      const spAtk = player.getStat(Stat.SPATK);
-
-      game.move.select(MoveId.EMBER);
-      await game.toNextTurn();
-
-      expect(player).toHaveEffectiveStat(Stat.SPATK, spAtk * 1.5);
+      playerPkm = game.field.getPlayerPokemon();
+      expect(game).toHaveWeather(weatherType);
     });
 
-    it.todo("should deal 1/8 of max-HP damage to the owner in $weatherName weather", async () => {});
+    it(`should boost SPATK by x1.5 in ${weatherName} weather`, async () => {
+      const baseSpAtk = playerPkm.getStat(Stat.SPATK);
+      expect(playerPkm).toHaveEffectiveStat(Stat.SPATK, baseSpAtk * 1.5);
+    });
 
-    it.todo(
-      "should NOT deal 1/8 of max-HP damage to the owner if $weatherName weather ends in the same turn",
-      async () => {},
-    );
+    it(`should deal 1/8 of max-HP damage to the owner in ${weatherName} weather`, async () => {
+      const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
+
+      game.move.select(MoveId.SPLASH);
+      await game.toNextTurn();
+
+      expect(playerPkm).toHaveTakenDamage(expectedDamage);
+    });
+  });
+
+  it(`should NOT deal 1/8 of max-HP damage to the owner if Sunny weather ends in the same turn`, async () => {
+    const { override, classicMode, field, move } = game;
+    override.moveset([MoveId.SUNNY_DAY, MoveId.SPLASH]).newWeatherDuration(2);
+
+    await classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+    const playerPkm = field.getPlayerPokemon();
+    const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
+
+    move.use(MoveId.SUNNY_DAY);
+    await game.toNextTurn();
+    expect(game).toHaveWeather(WeatherType.SUNNY);
+    expect(playerPkm).toHaveTakenDamage(expectedDamage);
+
+    move.use(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(playerPkm).not.toHaveTakenDamage(expectedDamage * 2);
+    expect(game).not.toHaveWeather(WeatherType.SUNNY);
+  });
+
+  it(`should NOT deal 1/8 of max-HP damage to the owner if Harsh Sun ends in the same turn`, async () => {
+    const { override, classicMode, phaseInterceptor, field, move } = game;
+    override.enemyAbility(AbilityId.DESOLATE_LAND);
+    await classicMode.startBattle([SpeciesId.CHARMANDER]);
+
+    const playerPkm = field.getPlayerPokemon();
+    const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
+
+    const enemeyPokemon = field.getEnemyPokemon();
+
+    expect(game).toHaveWeather(WeatherType.HARSH_SUN);
+    move.use(MoveId.SPLASH);
+    await game.killPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
+    await phaseInterceptor.to(SelectModifierPhase, false);
+
+    expect(playerPkm).not.toHaveTakenDamage(expectedDamage);
+    expect(game).not.toHaveWeather(WeatherType.HARSH_SUN);
   });
 
   //#endregion
   //#region Unaffected Weathers
 
-  describe.each(unaffectedWeathers)("In unaffected $weatherName weather", ({ weatherType }) => {
-    it("should have no effect in $weatherName weather", async () => {
+  describe.each(unaffectedWeathers)("In unaffected $weatherName weather", ({ weatherName, weatherType }) => {
+    let playerPkm: PlayerPokemon;
+
+    beforeEach(async () => {
       game.override.weather(weatherType);
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      playerPkm = game.field.getPlayerPokemon();
+      expect(game).toHaveWeather(weatherType);
+    });
 
-      const player = game.scene.getPlayerPokemon()!;
-      const spAtk = player.getStat(Stat.SPATK);
+    it(`should NOT boost SPATK in ${weatherName} weather`, async () => {
+      const baseSpAtk = playerPkm.getStat(Stat.SPATK);
 
       game.move.select(MoveId.EMBER);
       await game.toNextTurn();
 
-      expect(player).toHaveEffectiveStat(Stat.SPATK, spAtk);
+      expect(playerPkm).toHaveEffectiveStat(Stat.SPATK, baseSpAtk);
     });
 
-    it.todo("should NOT deal 1/8 of max-HP damage to the owner in non-sunny weather");
+    it(`should NOT deal 1/8 of max-HP damage to the owner in ${weatherName} weather`, async () => {
+      const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
+
+      game.move.use(MoveId.SPLASH);
+      await game.toNextTurn();
+
+      expect(playerPkm).not.toHaveTakenDamage(expectedDamage);
+    });
   });
 
   //#endregion
