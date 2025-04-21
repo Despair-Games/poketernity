@@ -13,7 +13,7 @@ export class CombinedPledgeStabBoostAttr extends MoveAttr {
    * @param user the {@linkcode Pokemon} using the move
    * @param _target the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being used
-   * @param stabMultiplier a {@linkcode NumberHolder} containing the move's STAB multiplier for the current attack
+   * @param appliesStab a {@linkcode BooleanHolder} containing wheter the STAB boost, for the current attack should, be applied
    * @returns `true` if the STAB multiplier is modified
    */
   override apply(user: Pokemon, _target: Pokemon, move: Move, appliesStab: BooleanHolder): boolean {
