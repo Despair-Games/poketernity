@@ -101,7 +101,7 @@ describe("Moves - Jaw Lock", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    await game.doFaintOpponents();
+    await game.faintOpponents();
 
     expect(leadPokemon.getTag(BattlerTagType.TRAPPED)).toBeUndefined();
   });

@@ -57,7 +57,7 @@ describe("Items - Double Battle Chance Boosters", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.doFaintOpponents();
+    await game.faintOpponents();
 
     await game.phaseInterceptor.to("BattleEndPhase");
 

@@ -309,7 +309,7 @@ describe("Test Battle Phase", () => {
     game.move.select(moveToUse);
 
     vi.spyOn(game.scene.arena, "trySetWeather");
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.scene.arena.trySetWeather).not.toHaveBeenCalled();
     expect(game.scene.currentBattle.waveIndex).toBeGreaterThan(waveIndex);

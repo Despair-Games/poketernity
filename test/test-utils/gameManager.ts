@@ -318,7 +318,7 @@ export class GameManager {
   }
 
   /** Faint all opponents currently on the field */
-  async doFaintOpponents() {
+  async faintOpponents() {
     await this.faintPokemon(this.scene.currentBattle.enemyParty[0]);
     if (this.scene.currentBattle.double) {
       await this.faintPokemon(this.scene.currentBattle.enemyParty[1]);

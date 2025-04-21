@@ -69,7 +69,7 @@ describe("Moves - Relic Song", () => {
     const meloetta = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.SPLASH);
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(meloetta.formIndex).toBe(1);

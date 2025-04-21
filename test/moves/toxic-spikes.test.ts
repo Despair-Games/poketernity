@@ -125,7 +125,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     await game.reload.reloadSession();

@@ -57,7 +57,7 @@ describe("Reload", () => {
       // Input first option for Map
       game.scene.ui.getHandler().processInput(Button.ACTION);
     });
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 
@@ -83,7 +83,7 @@ describe("Reload", () => {
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.move.select(MoveId.SPLASH);
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 
@@ -167,7 +167,7 @@ describe("Reload", () => {
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();
     game.move.use(MoveId.SPLASH);
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.TOXIC);

@@ -47,7 +47,7 @@ describe("Abilities - SCHOOLING", () => {
     expect(wishiwashi.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);
-    await game.doFaintOpponents();
+    await game.faintOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();
     await game.phaseInterceptor.to(QuietFormChangePhase);
