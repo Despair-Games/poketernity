@@ -76,7 +76,7 @@ describe("Abilities - ZERO TO HERO", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.faintPokemon(palafin);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
     expect(palafin.formIndex).toBe(baseForm);
   });
@@ -93,7 +93,7 @@ describe("Abilities - ZERO TO HERO", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.faintPokemon(palafin);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     game.revivePokemon(1);

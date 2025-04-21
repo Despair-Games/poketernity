@@ -75,7 +75,7 @@ describe("Abilities - ZEN MODE", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.faintPokemon(darmanitan);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     expect(darmanitan.isFainted()).toBe(true);

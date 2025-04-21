@@ -108,7 +108,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.BATON_PASS);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     game.move.select(MoveId.G_MAX_CHI_STRIKE);

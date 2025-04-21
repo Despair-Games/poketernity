@@ -50,7 +50,7 @@ describe("Abilities - Speed Boost", () => {
     await game.classicMode.startBattle([SpeciesId.SHUCKLE, SpeciesId.NINJASK]);
 
     game.move.select(MoveId.U_TURN);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
     const playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
@@ -66,13 +66,13 @@ describe("Abilities - Speed Boost", () => {
     const [shuckle, ninjask] = game.scene.getPlayerParty();
 
     game.move.select(MoveId.U_TURN);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
     expect(game.scene.getPlayerPokemon()!).toBe(ninjask);
     expect(ninjask.getStatStage(Stat.SPD)).toBe(0);
 
     game.move.select(MoveId.U_TURN);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
     expect(game.scene.getPlayerPokemon()!).toBe(shuckle);
     expect(shuckle.getStatStage(Stat.SPD)).toBe(0);

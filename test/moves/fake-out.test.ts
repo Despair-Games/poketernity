@@ -126,7 +126,7 @@ describe("Moves - Fake Out", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     game.move.select(moveId);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toNextTurn();
 
@@ -151,7 +151,7 @@ describe("Moves - Fake Out", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toNextTurn();
 

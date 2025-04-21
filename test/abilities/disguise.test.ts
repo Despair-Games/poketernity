@@ -182,7 +182,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.faintPokemon(mimikyu1);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     await game.faintOpponents();

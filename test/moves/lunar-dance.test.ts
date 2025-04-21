@@ -55,7 +55,7 @@ describe("Moves - Lunar Dance", () => {
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.LUNAR_DANCE);
-    game.doSelectPartyPokemon(2);
+    game.selectPartyPokemon(2);
     await game.phaseInterceptor.to("SwitchPhase", false);
     await game.toNextTurn();
 

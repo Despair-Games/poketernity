@@ -474,20 +474,20 @@ export class GameManager {
    * Command an in-battle switch to another Pokemon via the main battle menu.
    * @param pokemonIndex - The index of the pokemon in your party to switch to
    */
-  switchPokemon(pokemonIndex: number) {
+  switchPokemon(pokemonIndex: number): void {
     this.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       (this.scene.ui.getHandler() as CommandUiHandler).setCursor(2);
       (this.scene.ui.getHandler() as CommandUiHandler).processInput(Button.ACTION);
     });
 
-    this.doSelectPartyPokemon(pokemonIndex, "CommandPhase");
+    this.selectPartyPokemon(pokemonIndex, "CommandPhase");
   }
 
   /**
    * Revive pokemon, currently players only.
    * @param pokemonIndex - The index of the pokemon in your party to revive
    */
-  revivePokemon(pokemonIndex: number) {
+  revivePokemon(pokemonIndex: number): void {
     const party = this.scene.getPlayerParty();
     const candidate = new ModifierTypeOption(modifierTypes.MAX_REVIVE(), 0);
     const modifier = candidate.type!.newModifier(party[pokemonIndex]);
@@ -499,11 +499,11 @@ export class GameManager {
    * of the party UI, where you just need to navigate to a party slot and press
    * Action twice - navigating any menus that come up after you select a party member
    * is not supported.
-   * @param slot the index of the pokemon in your party to switch to
-   * @param inPhase Which phase to expect the selection to occur in. Typically
-   * non-command switch actions happen in SwitchPhase.
+   * @param slot - The index of the pokemon in your party to switch to
+   * @param inPhase - (Default `"SwitchPhase"`) Which phase to expect the selection to occur in.
+   *   Typically non-command switch actions happen in `SwitchPhase`.
    */
-  doSelectPartyPokemon(slot: number, inPhase = "SwitchPhase") {
+  selectPartyPokemon(slot: number, inPhase = "SwitchPhase"): void {
     this.onNextPrompt(inPhase, UiMode.PARTY, () => {
       const partyHandler = this.scene.ui.getHandler() as PartyUiHandler;
 
