@@ -113,7 +113,7 @@ describe("STAB", () => {
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
   });
 
-  it("should have a 1.5 STAB on pledge moves", async () => {
+  it("combined Pledge moves should have a 1.5 STAB regardless of the user's type", async () => {
     game.override.battleType("double");
 
     await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
