@@ -214,7 +214,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).toBeUndefined();
 
     game.move.select(MoveId.ICE_BEAM);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();
     await game.phaseInterceptor.to(TurnInitPhase);

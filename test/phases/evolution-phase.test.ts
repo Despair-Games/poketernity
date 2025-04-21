@@ -45,7 +45,7 @@ describe("Evolution Phase", () => {
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toNextWave();
 
     expect(pokemon.level).toBeGreaterThan(32);
@@ -70,7 +70,7 @@ describe("Evolution Phase", () => {
     });
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
 
     // Repeatedly press "Cancel" to cancel evolution and say "No" to pausing evolutions
     const pressCancelInterval = setInterval(() => game.scene.ui.processInput(Button.CANCEL));
@@ -94,7 +94,7 @@ describe("Evolution Phase", () => {
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.phaseInterceptor.to("EvolutionPhase", false);
 
     // Cancel the evolution
@@ -111,7 +111,7 @@ describe("Evolution Phase", () => {
     expect(pokemon.calculateBaseStats()).toStrictEqual([45, 49, 49, 65, 65, 45]);
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toNextWave();
 
     // Should not have a second EvolutionPhase after pausing

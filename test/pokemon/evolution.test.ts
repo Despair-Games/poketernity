@@ -201,7 +201,7 @@ describe("Evolution", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
 
     // Mock the next wave's Pokemon pool
     vi.spyOn(game.scene.arena as any, "pokemonPool", "get").mockReturnValue({

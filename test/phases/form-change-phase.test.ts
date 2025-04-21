@@ -142,7 +142,7 @@ describe("Form Change Phase", () => {
     expect(rillaboom.getFormKey()).toBe("gigantamax");
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     // Navigate UI: Access "Check Party" menu from modifier selection

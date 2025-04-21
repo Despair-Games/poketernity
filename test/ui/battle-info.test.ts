@@ -46,7 +46,7 @@ describe("UI - Battle Info", () => {
       await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
       game.move.select(MoveId.SPLASH);
-      await game.doKillOpponents();
+      await game.doFaintOpponents();
       await game.phaseInterceptor.to(ExpPhase, true);
 
       expect(Math.pow).not.toHaveBeenCalledWith(2, expGainsSpeed);

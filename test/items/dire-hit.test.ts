@@ -60,7 +60,7 @@ describe("Items - Dire Hit", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
 
     await game.phaseInterceptor.to(BattleEndPhase);
 

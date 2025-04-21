@@ -98,7 +98,7 @@ describe("Abilities - ZEN MODE", () => {
     expect(darmanitan.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toNextWave();
 
     expect(darmanitan.formIndex).toBe(baseForm);

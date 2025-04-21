@@ -43,7 +43,7 @@ describe("Moves - Gigaton Hammer", () => {
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toNextWave();
 
     game.move.select(MoveId.GIGATON_HAMMER);
@@ -66,7 +66,7 @@ describe("Moves - Gigaton Hammer", () => {
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toNextWave();
 
     game.move.select(MoveId.GIGATON_HAMMER);

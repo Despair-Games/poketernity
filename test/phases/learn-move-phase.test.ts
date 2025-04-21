@@ -30,7 +30,7 @@ describe("Learn Move Phase", () => {
     const pokemon = game.scene.getPlayerPokemon()!;
     const newMovePos = pokemon?.getMoveset().length;
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.phaseInterceptor.to(LearnMovePhase);
     const levelMove = pokemon.getLevelMoves(5)[0];
     const levelReq = levelMove[0];

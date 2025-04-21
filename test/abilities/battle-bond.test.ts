@@ -48,7 +48,7 @@ describe("Abilities - BATTLE BOND", () => {
     expect(greninja.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toEndOfTurn();
     game.doSelectModifier();
     await game.phaseInterceptor.to("QuietFormChangePhase");
@@ -78,7 +78,7 @@ describe("Abilities - BATTLE BOND", () => {
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);
 
-    await game.doKillOpponents();
+    await game.doFaintOpponents();
     await game.toNextWave();
 
     // Wave 5: Use Water Shuriken in base form
