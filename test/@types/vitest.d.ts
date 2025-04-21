@@ -58,5 +58,11 @@ declare module "vitest" {
      * @param options The {@linkcode ToHaveStatMatcherOptions} (optiona)
      */
     toHaveEffectiveStat(stat: EffectiveStat, expectedValue: number, options?: ToHaveEffectiveStatMatcherOptions): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has taken a specific amount of damage
+     * @param expectedDamageTaken The expected amount of damage the {@linkcode Pokemon} has taken
+     */
+    toHaveTakenDamage(expectedDamageTaken: number): void;
   }
 }
