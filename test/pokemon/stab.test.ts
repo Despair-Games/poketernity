@@ -118,8 +118,8 @@ describe("STAB", () => {
 
     await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
-    const enemyPokemon = game.scene.getEnemyField();
-    vi.spyOn(enemyPokemon[1], "calcStabMultiplierForTakingDamage");
+    const [, enemyPkm2] = game.scene.getEnemyField();
+    vi.spyOn(enemyPkm2, "calcStabMultiplierForTakingDamage");
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -133,7 +133,7 @@ describe("STAB", () => {
       await game.phaseInterceptor.to("MoveEndPhase");
     }
 
-    expect(enemyPokemon[1].calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
+    expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
   });
 
   it("should have a 1.5 STAB on pledge moves if tera type DOES NOT match user's type", async () => {
@@ -141,12 +141,12 @@ describe("STAB", () => {
 
     await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
-    const playerPokemon = game.scene.getPlayerField();
-    expect(playerPokemon[0].isTerastallized()).toBeTruthy();
-    expect(playerPokemon[0].getTeraType()).toBe(ElementalType.WATER);
+    const playerPokemon = game.field.getPlayerPokemon();
+    expect(playerPokemon.isTerastallized()).toBeTruthy();
+    expect(playerPokemon.getTeraType()).toBe(ElementalType.WATER);
 
-    const enemyPokemon = game.scene.getEnemyField();
-    vi.spyOn(enemyPokemon[1], "calcStabMultiplierForTakingDamage");
+    const [, enemyPkm2] = game.scene.getEnemyField();
+    vi.spyOn(enemyPkm2, "calcStabMultiplierForTakingDamage");
 
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -160,7 +160,7 @@ describe("STAB", () => {
       await game.phaseInterceptor.to("MoveEndPhase");
     }
 
-    expect(enemyPokemon[1].calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
+    expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
   });
 
   it("should have a 2.0 STAB on pledge moves if tera type matches user's type", async () => {
@@ -168,12 +168,12 @@ describe("STAB", () => {
 
     await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
-    const playerPokemon = game.scene.getPlayerField();
-    expect(playerPokemon[0].isTerastallized()).toBeTruthy();
-    expect(playerPokemon[0].getTeraType()).toBe(ElementalType.FIRE);
+    const playerPkm = game.field.getPlayerPokemon();
+    expect(playerPkm.isTerastallized()).toBeTruthy();
+    expect(playerPkm.getTeraType()).toBe(ElementalType.FIRE);
 
-    const enemyPokemon = game.scene.getEnemyField();
-    vi.spyOn(enemyPokemon[1], "calcStabMultiplierForTakingDamage");
+    const [, enemyPkm2] = game.scene.getEnemyField();
+    vi.spyOn(enemyPkm2, "calcStabMultiplierForTakingDamage");
 
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -187,6 +187,6 @@ describe("STAB", () => {
       await game.phaseInterceptor.to("MoveEndPhase");
     }
 
-    expect(enemyPokemon[1].calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(2.0);
+    expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(2.0);
   });
 });
