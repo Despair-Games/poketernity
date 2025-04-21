@@ -16,7 +16,7 @@ import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
 import { speciesEggMoves } from "#app/data/egg-moves";
-import { getGrowthRateColor } from "#app/data/exp";
+import { getGrowthRateColor, getGrowthRateShadowColor } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getNatureName } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
@@ -3015,7 +3015,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonGrowthRateText.setText(growthReadable);
 
         this.pokemonGrowthRateText.setColor(getGrowthRateColor(species.growthRate));
-        this.pokemonGrowthRateText.setShadowColor(getGrowthRateColor(species.growthRate, true));
+        this.pokemonGrowthRateText.setShadowColor(getGrowthRateShadowColor(species.growthRate));
         this.pokemonGrowthRateLabelText.setVisible(true);
         this.pokemonUncaughtText.setVisible(false);
         this.pokemonAbilityLabelText.setVisible(true);

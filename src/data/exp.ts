@@ -1,6 +1,13 @@
 import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
 
+/**
+ * These are the hardcoded total exp values required for levels 1 to 100 ordered as
+ * Erratic, fast, medium fast, medium slow, slow, fluctuating
+ *
+ * Note that the first 100 values are here for optimization but this optimization
+ * is moot if there are any smoothing or past 100
+ */
 const expLevels = [
   [
     0, 15, 52, 122, 237, 406, 637, 942, 1326, 1800, 2369, 3041, 3822, 4719, 5737, 6881, 8155, 9564, 11111, 12800, 14632,
@@ -58,11 +65,29 @@ const expLevels = [
   ],
 ];
 
+/**
+ * Custom value derived by Sam so that Pokemon with slower leveling rates would be better.
+ *
+ * TODO: See if this needs tweaking (or is needed at all) and then update the above hardcoded
+ * arrays for more optimization
+ */
+const SMOOTHING_FACTOR = 0.675;
+
+/**
+ * Function to calculate the amount of exp required for a given level based on growth rate
+ * If a growth rate is not MEDIUM_FAST then it is smoothed with MEDIUM_FAST
+ * (A growth rate only contributes 32.5% of the formula, the other 67.5% is MEDIUM_FAST)
+ * @param level the level
+ * @param growthRate the growth rate
+ * @returns the amount of exp required
+ */
 export function getLevelTotalExp(level: number, growthRate: GrowthRate): number {
   if (level < 100) {
     const levelExp = expLevels[growthRate][level - 1];
     if (growthRate !== GrowthRate.MEDIUM_FAST) {
-      return Math.floor(levelExp * 0.325 + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * 0.675);
+      return Math.floor(
+        levelExp * (1 - SMOOTHING_FACTOR) + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * SMOOTHING_FACTOR,
+      );
     }
     return levelExp;
   }
@@ -71,6 +96,7 @@ export function getLevelTotalExp(level: number, growthRate: GrowthRate): number 
 
   switch (growthRate) {
     case GrowthRate.ERRATIC:
+      // Custom: There is no erratic formula past level 100 so this is totally custom
       ret = (Math.pow(level, 4) + Math.pow(level, 3) * 2000) / 3500;
       break;
     case GrowthRate.FAST:
@@ -86,34 +112,80 @@ export function getLevelTotalExp(level: number, growthRate: GrowthRate): number 
       ret = (Math.pow(level, 3) * 5) / 4;
       break;
     case GrowthRate.FLUCTUATING:
+      // Custom: There is no fluctuating formula past level 100 so this is totally custom
       ret = (Math.pow(level, 3) * (level / 2 + 8) * 4) / (100 + level);
       break;
   }
 
   if (growthRate !== GrowthRate.MEDIUM_FAST) {
-    return Math.floor(ret * 0.325 + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * 0.675);
+    return Math.floor(
+      ret * (1 - SMOOTHING_FACTOR) + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * SMOOTHING_FACTOR,
+    );
   }
 
   return Math.floor(ret);
 }
 
+/**
+ * Function to get the difference of exp required to reach a level and the previous level
+ * @param level the next level
+ * @param growthRate a growth rate
+ * @returns the difference in exp
+ */
 export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
   return getLevelTotalExp(level, growthRate) - getLevelTotalExp(level - 1, growthRate);
 }
 
-export function getGrowthRateColor(growthRate: GrowthRate, shadow?: boolean) {
+/**
+ * Gets the level for a wave based on the repeated formula
+ * 1 + x/2 + x^2/625
+ * @param wave the adjusted wave based on whether or not the game is daily mode
+ * @returns the level for the wave
+ */
+export function getLevelForWaveFunc(wave: number): number {
+  return 1 + wave / 2 + (wave * wave) / 625;
+}
+
+/**
+ * Gets the color of a growth rate to display in the starter select ui
+ * @param growthRate the given growth rate
+ * @returns a color
+ */
+export function getGrowthRateColor(growthRate: GrowthRate) {
   switch (growthRate) {
     case GrowthRate.ERRATIC:
-      return shadow ? ShadowColor.DUSTY_ROSE : CommonColor.BRIGHT_PINK;
+      return CommonColor.BRIGHT_PINK;
     case GrowthRate.FAST:
-      return shadow ? ShadowColor.MUTED_GOLD : CommonColor.GOLD_YELLOW;
+      return CommonColor.GOLD_YELLOW;
     case GrowthRate.MEDIUM_FAST:
-      return shadow ? ShadowColor.MUTED_GREEN : CommonColor.LIGHT_GREEN;
+      return CommonColor.LIGHT_GREEN;
     case GrowthRate.MEDIUM_SLOW:
-      return shadow ? ShadowColor.DARK_GREY : CommonColor.SOFT_BLUE;
+      return CommonColor.SOFT_BLUE;
     case GrowthRate.SLOW:
-      return shadow ? ShadowColor.DARK_RED : CommonColor.BRIGHT_ORANGE;
+      return CommonColor.BRIGHT_ORANGE;
     case GrowthRate.FLUCTUATING:
-      return shadow ? ShadowColor.DARK_PURPLE : CommonColor.VIBRANT_PURPLE;
+      return CommonColor.VIBRANT_PURPLE;
+  }
+}
+
+/**
+ * Gets the color of a growth rate's shadow to display in the starter select ui
+ * @param growthRate the given growth rate
+ * @returns a color
+ */
+export function getGrowthRateShadowColor(growthRate: GrowthRate) {
+  switch (growthRate) {
+    case GrowthRate.ERRATIC:
+      return ShadowColor.DUSTY_ROSE;
+    case GrowthRate.FAST:
+      return ShadowColor.MUTED_GOLD;
+    case GrowthRate.MEDIUM_FAST:
+      return ShadowColor.MUTED_GREEN;
+    case GrowthRate.MEDIUM_SLOW:
+      return ShadowColor.DARK_GREY;
+    case GrowthRate.SLOW:
+      return ShadowColor.DARK_RED;
+    case GrowthRate.FLUCTUATING:
+      return ShadowColor.DARK_PURPLE;
   }
 }
