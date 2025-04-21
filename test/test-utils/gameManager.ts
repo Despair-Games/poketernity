@@ -455,16 +455,15 @@ export class GameManager {
 
   /**
    * Faints the given Pokemon.
-   * @param pokemon The {@linkcode Pokemon} to faint
    * @returns A promise that resolves when the Pokemon is fainted
    * @example
-   *    const enemyPkm = gameManager.field.getEnemyPokemon;
-   *    game.move.select(MoveId.SPLASH);
-   *    await gameManager.faintPokemon(enemyPkm);
+   * const enemyPkmn = game.field.getEnemyPokemon();
+   * game.move.select(MoveId.SPLASH);
+   * await game.faintPokemon(enemyPkmn);
    */
-  async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon) {
+  async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
-      pokemon.hp = 0;
+      pokemon.faint();
       this.scene.phaseManager.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
       await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
       resolve();
