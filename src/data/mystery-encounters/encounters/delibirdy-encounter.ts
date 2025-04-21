@@ -18,7 +18,7 @@ import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/u
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import {
   type BerryModifier,

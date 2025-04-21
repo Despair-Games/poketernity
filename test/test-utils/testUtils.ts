@@ -2,7 +2,7 @@ import i18next, { type ParseKeys } from "i18next";
 import fs from "fs";
 import path from "path";
 import { vi } from "vitest";
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app";
 
 export const RESOURCES_FOLDER_PATH = `test/test-utils/resources`;
 export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;

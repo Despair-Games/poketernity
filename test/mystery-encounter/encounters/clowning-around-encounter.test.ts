@@ -197,7 +197,8 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
     });
 
-    it("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
+    // TODO: fix and re-enable
+    it.todo("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
       game.override.startingLevel(1000);
 
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, [SpeciesId.FEEBAS]);

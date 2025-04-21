@@ -1,5 +1,5 @@
 import type { UserFacingSettings, SettingsCategory, Settings } from "#app/@types/Settings";
-import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants";
+import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app";
 import { eventBus } from "#app/event-bus";
 import { version } from "../../../package.json";
 import { isNullOrUndefined } from "#app/utils";

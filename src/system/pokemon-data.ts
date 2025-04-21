@@ -58,7 +58,7 @@ export default class PokemonData {
   public customPokemonData: CustomPokemonData;
 
   // TODO: this shouldn't be `| any`
-  constructor(source: Pokemon | any, forHistory: boolean = false) {
+  constructor(source: Pokemon | any) {
     const sourcePokemon = source.type === "Pokemon" ? source : null;
     this.id = source.id;
     this.player = sourcePokemon ? sourcePokemon.isPlayer() : source.player;
@@ -72,13 +72,9 @@ export default class PokemonData {
     this.pokeball = source.pokeball;
     this.level = source.level;
     this.exp = source.exp;
-    if (!forHistory) {
-      this.levelExp = source.levelExp;
-    }
+    this.levelExp = source.levelExp;
     this.gender = source.gender;
-    if (!forHistory) {
-      this.hp = source.hp;
-    }
+    this.hp = source.hp;
     this.stats = source.stats;
     this.ivs = source.ivs;
     this.nature = source.nature !== undefined ? source.nature : (0 as Nature);
@@ -89,40 +85,32 @@ export default class PokemonData {
     this.metSpecies = source.metSpecies;
     this.metWave = source.metWave ?? (this.metBiome === -1 ? -1 : 0);
     this.luck = source.luck !== undefined ? source.luck : source.shiny ? source.variant + 1 : 0;
-    if (!forHistory) {
-      this.pauseEvolutions = !!source.pauseEvolutions;
-      this.evoCounter = source.evoCounter ?? 0;
-    }
+    this.pauseEvolutions = !!source.pauseEvolutions;
+    this.evoCounter = source.evoCounter ?? 0;
     this.pokerus = !!source.pokerus;
     this.usedTMs = source.usedTMs ?? [];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
-    if (!forHistory) {
-      this.boss = (source instanceof EnemyPokemon && source.bossSegments > 0) || (!this.player && !!source.boss);
-      this.bossSegments = source.bossSegments;
-    }
+    this.boss = (source instanceof EnemyPokemon && source.bossSegments > 0) || (!this.player && !!source.boss);
+    this.bossSegments = source.bossSegments;
 
     if (sourcePokemon) {
       this.moveset = sourcePokemon.moveset;
-      if (!forHistory) {
-        this.status = sourcePokemon.status;
-        if (this.player) {
-          this.summonData = sourcePokemon.summonData;
-        }
+      this.status = sourcePokemon.status;
+      if (this.player) {
+        this.summonData = sourcePokemon.summonData;
       }
     } else {
       this.moveset = (source.moveset || [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.GROWL)])
         .filter((m) => m)
         .map((m: any) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride));
-      if (!forHistory) {
-        this.status = source.status
-          ? new Status(source.status.effect, source.status.toxicTurnCount, source.status.sleepTurnsRemaining)
-          : null;
-      }
+      this.status = source.status
+        ? new Status(source.status.effect, source.status.toxicTurnCount, source.status.sleepTurnsRemaining)
+        : null;
 
       this.summonData = new PokemonSummonData();
-      if (!forHistory && source.summonData) {
+      if (source.summonData) {
         this.summonData.stats = source.summonData.stats;
         this.summonData.statStages = source.summonData.statStages;
         this.summonData.moveQueue = source.summonData.moveQueue;

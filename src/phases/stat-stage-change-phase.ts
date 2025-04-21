@@ -11,7 +11,7 @@ import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { CANVAS_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE } from "#app/constants/ui";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";

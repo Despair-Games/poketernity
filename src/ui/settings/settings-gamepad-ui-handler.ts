@@ -17,7 +17,7 @@ import { Device } from "#enums/devices";
 import { truncateString } from "#app/utils";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
-import { MAPPING_CONFIG_LS_KEY } from "#app/constants";
+import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app";
 
 /**
  * Class representing the settings UI handler for gamepads.

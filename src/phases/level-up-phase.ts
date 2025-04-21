@@ -8,7 +8,7 @@ import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
-import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship";
 
 /**
  * Handles the effects of a pokemon levelling up:
