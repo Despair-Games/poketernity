@@ -58,7 +58,7 @@ describe("Double Battles", () => {
     game.doSelectModifier();
 
     const charizard = game.scene.getPlayerParty().findIndex((p) => p.species.speciesId === SpeciesId.CHARIZARD);
-    game.doRevivePokemon(charizard);
+    game.revivePokemon(charizard);
 
     await game.phaseInterceptor.to(TurnInitPhase);
     expect(game.scene.getPlayerField().filter((p) => !p.isFainted())).toHaveLength(2);

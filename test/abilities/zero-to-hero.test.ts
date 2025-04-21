@@ -96,7 +96,7 @@ describe("Abilities - ZERO TO HERO", () => {
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
-    game.doRevivePokemon(1);
+    game.revivePokemon(1);
     game.switchPokemon(1);
     await game.toNextTurn();
 

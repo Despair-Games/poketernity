@@ -332,7 +332,7 @@ describe("Test Battle Phase", () => {
     game.move.select(moveToUse);
 
     await game.phaseInterceptor.to("BattleEndPhase");
-    game.doRevivePokemon(0); // pretend max revive was picked
+    game.revivePokemon(0); // pretend max revive was picked
     game.doSelectModifier();
 
     game.onNextPrompt(

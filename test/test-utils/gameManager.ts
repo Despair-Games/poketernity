@@ -485,9 +485,9 @@ export class GameManager {
 
   /**
    * Revive pokemon, currently players only.
-   * @param pokemonIndex the index of the pokemon in your party to revive
+   * @param pokemonIndex - The index of the pokemon in your party to revive
    */
-  doRevivePokemon(pokemonIndex: number) {
+  revivePokemon(pokemonIndex: number) {
     const party = this.scene.getPlayerParty();
     const candidate = new ModifierTypeOption(modifierTypes.MAX_REVIVE(), 0);
     const modifier = candidate.type!.newModifier(party[pokemonIndex]);
