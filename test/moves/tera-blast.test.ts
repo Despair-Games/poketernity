@@ -115,4 +115,33 @@ describe("Moves - Tera Blast", () => {
     expect(player.getStatStage(Stat.SPATK)).toBe(-1);
     expect(player.getStatStage(Stat.ATK)).toBe(-1);
   });
+
+  it("should be affected by type-changing abilities (e.g., Aerilate) if user is not Terastallized", async () => {
+    game.override.enemySpecies(SpeciesId.FURRET).ability(AbilityId.AERILATE);
+    await game.classicMode.startBattle();
+
+    const player = game.field.getPlayerPokemon();
+    vi.spyOn(player, "getMoveType");
+
+    game.move.use(MoveId.TERA_BLAST);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("MoveEffectPhase");
+
+    expect(player.getMoveType).toHaveLastReturnedWith(ElementalType.FLYING);
+  });
+
+  it("should NOT be affected by type-changing abilities (e.g., Aerilate) if user is Terastallized", async () => {
+    game.override.enemySpecies(SpeciesId.CHIKORITA).ability(AbilityId.AERILATE);
+    await game.classicMode.startBattle();
+
+    const player = game.field.getPlayerPokemon();
+    game.field.forceTera(player, ElementalType.NORMAL);
+    vi.spyOn(player, "getMoveType");
+
+    game.move.use(MoveId.TERA_BLAST);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("MoveEffectPhase");
+
+    expect(player.getMoveType).toHaveLastReturnedWith(ElementalType.NORMAL);
+  });
 });

@@ -1622,25 +1622,25 @@ export function initAbilities() {
       .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(AbilityId.EMBODY_ASPECT_TEAL, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPD], 1)
-      .attr(PostSummonStatStageChangeAbAttr, [Stat.SPD], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.SPD], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_WELLSPRING, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPDEF], 1)
-      .attr(PostSummonStatStageChangeAbAttr, [Stat.SPDEF], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.SPDEF], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_HEARTHFLAME, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.ATK], 1)
-      .attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_CORNERSTONE, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.DEF], 1)
-      .attr(PostSummonStatStageChangeAbAttr, [Stat.DEF], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.DEF], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr),

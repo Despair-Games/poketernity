@@ -207,8 +207,8 @@ export class CommandUiHandler extends UiHandler {
 
     const { playerTerasUsed } = globalScene.arena;
 
-    const commandPhase = this.getCommandPhase();
-    const teraCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(commandPhase.getPokemon());
+    const ally = activePokemon.getAlly();
+    const teraCommand = ally ? globalScene.currentBattle.turnManager.findCommandFromPokemon(ally) : undefined;
     const plannedTera = teraCommand?.command === BattleCommand.TERA && this.fieldIndex > 0 ? 1 : 0;
 
     return hasTeraOrb && !isBlockedForm && playerTerasUsed + plannedTera < 1;
