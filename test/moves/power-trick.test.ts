@@ -78,7 +78,7 @@ describe("Moves - Power Trick", () => {
     player.addTag(BattlerTagType.POWER_TRICK);
 
     game.move.select(MoveId.BATON_PASS);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

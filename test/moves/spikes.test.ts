@@ -39,10 +39,10 @@ describe("Moves - Spikes", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     const player = game.scene.getPlayerParty()[0];

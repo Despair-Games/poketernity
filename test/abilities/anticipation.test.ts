@@ -81,7 +81,7 @@ describe("Abilities - Anticipation", () => {
 
     game.move.use(MoveId.GRAVITY);
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     // Should not have activated Anticipation despite taking super-effective damage

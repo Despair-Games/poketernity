@@ -53,7 +53,7 @@ describe("Multi-target damage reduction", () => {
     const tackle1 = enemy1.getMaxHp() - enemy1.hp;
     enemy1.hp = enemy1.getMaxHp();
 
-    await game.killPokemon(enemy2);
+    await game.faintPokemon(enemy2);
     await game.toNextTurn();
 
     game.move.select(MoveId.DAZZLING_GLEAM);
@@ -93,7 +93,7 @@ describe("Multi-target damage reduction", () => {
     player2.hp = player2.getMaxHp();
     enemy1.hp = enemy1.getMaxHp();
 
-    await game.killPokemon(enemy2);
+    await game.faintPokemon(enemy2);
     await game.toNextTurn();
 
     game.move.select(MoveId.EARTHQUAKE);
@@ -112,7 +112,7 @@ describe("Multi-target damage reduction", () => {
     expect(damageEnemy1Turn1).toBe(damageEnemy1Turn2);
     expect(damagePlayer2Turn1).toBe(damagePlayer2Turn2);
 
-    await game.killPokemon(player2);
+    await game.faintPokemon(player2);
     await game.toNextTurn();
 
     game.move.select(MoveId.EARTHQUAKE);

@@ -38,7 +38,7 @@ describe("Moves - Shed Tail", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.SHED_TAIL);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toEndOfTurn();
 
