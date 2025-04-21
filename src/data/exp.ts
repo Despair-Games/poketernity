@@ -2,11 +2,8 @@ import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
 
 /**
- * These are the hardcoded total exp values required for levels 1 to 100 ordered as
+ * A look up table containing the total amount of EXP required to reach each level (for the first `100` levels), ordered by growth rate:
  * Erratic, fast, medium fast, medium slow, slow, fluctuating
- *
- * Note that the first 100 values are here for optimization but this optimization
- * is moot if there are any smoothing or past 100
  */
 const expLevels = [
   [
