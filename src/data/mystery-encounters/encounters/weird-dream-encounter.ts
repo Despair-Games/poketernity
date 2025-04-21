@@ -44,7 +44,7 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { addPokemonDataToDexAndValidateAchievements } from "../utils/encounter-pokemon-utils";
 
 /** i18n namespace for encounter */

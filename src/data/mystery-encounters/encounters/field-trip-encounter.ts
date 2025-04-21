@@ -19,7 +19,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 
 /** i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fieldTrip";

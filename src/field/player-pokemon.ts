@@ -1,5 +1,5 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants";
+import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants/friendship";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";

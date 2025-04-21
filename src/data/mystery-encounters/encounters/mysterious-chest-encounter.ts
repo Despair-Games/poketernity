@@ -15,7 +15,7 @@ import {
   koPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { ModifierTier } from "#enums/modifier-tier";
 import { randSeedInt } from "#app/utils";
 import { MoveId } from "#enums/move-id";

@@ -1,7 +1,7 @@
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
 import type { LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
 import {
@@ -35,7 +35,7 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/s
 import { StarterPrefs } from "#app/system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
 import { FilterBar } from "#app/ui/components/filter-bar";
 import { IVGraph } from "#app/ui/components/iv-graph";

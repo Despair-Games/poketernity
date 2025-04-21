@@ -20,7 +20,7 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "#app/data/special-waves";
+} from "#app/constants/special-waves";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";

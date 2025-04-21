@@ -1,4 +1,4 @@
-import { G_MAX_FORM_KEYS } from "#app/constants";
+import { G_MAX_FORM_KEYS } from "#app/constants/game";
 import { FORM_CHANGE_MOVE } from "#app/data/pokemon-level-moves";
 import { allMoves } from "#app/data/data-lists";
 import { GMaxPowerAttr } from "#app/data/moves/move-attrs/gmax-power-attr";

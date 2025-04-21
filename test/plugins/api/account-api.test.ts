@@ -1,5 +1,5 @@
 import type { AccountInfoResponse } from "#app/@types/AccountApi";
-import { SESSION_ID_COOKIE } from "#app/constants";
+import { SESSION_ID_COOKIE } from "#app/constants/app";
 import { AccountApi } from "#app/plugins/api/account-api";
 import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import * as Utils from "#app/utils";

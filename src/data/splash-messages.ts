@@ -1,4 +1,4 @@
-import { USE_SEASONAL_SPLASH_MESSAGES } from "#app/constants";
+import { USE_SEASONAL_SPLASH_MESSAGES } from "#app/constants/app";
 
 //#region Interfaces/Types
 

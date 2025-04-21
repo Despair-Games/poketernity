@@ -6,7 +6,7 @@ import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants";
+import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants/friendship";
 import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
 import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
 import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";

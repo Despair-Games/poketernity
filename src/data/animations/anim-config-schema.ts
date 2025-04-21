@@ -1,16 +1,11 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  type AnimConfig,
-  type AnimTimedSoundEvent,
-  type AnimTimedAddBgEvent,
-  AnimFrame,
-} from "#app/data/animations/anim-config";
-import { easeFunctions } from "#app/data/animations/ease-functions";
+import type { AnimConfig, AnimTimedAddBgEvent, AnimTimedSoundEvent } from "#app/data/animations/anim-config";
 import type { MoveAnim } from "#app/data/animations/move-anim";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { easeFunctions } from "#app/data/animations/ease-functions";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { MoveId } from "#enums/move-id";
 import type { Schema } from "ajv";

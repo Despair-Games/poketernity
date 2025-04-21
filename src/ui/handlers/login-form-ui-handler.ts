@@ -1,7 +1,7 @@
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants/app";
 import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
