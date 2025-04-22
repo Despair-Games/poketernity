@@ -3060,22 +3060,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     const randomMultiplier = simulated ? 1 : this.randSeedIntRange(85, 100) / 100;
 
-    const sourceTypes = source.getTypes();
-    const sourceTeraType = source.getTeraType();
-    const matchesSourceType = sourceTypes.includes(moveType);
-    /** A damage multiplier for when the attack is of the attacker's type and/or Tera type. */
-    const stabMultiplier = new NumberHolder(1);
-    if (matchesSourceType) {
-      stabMultiplier.value += 0.5;
-    }
-    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, stabMultiplier);
-    if (sourceTeraType !== ElementalType.UNKNOWN && sourceTeraType === moveType) {
-      stabMultiplier.value += 0.5;
-    }
-
-    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, stabMultiplier);
-
-    stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
+    /** A damage multiplier for when the attack is of the same type as the attacker type/teraType. */
+    const stabMultiplier = this.calcStabMultiplierForTakingDamage(source, move, abilityApplyMode, simulated);
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
@@ -3170,7 +3156,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * glaiveRushMultiplier.value
       * criticalMultiplier.value
       * randomMultiplier
-      * stabMultiplier.value
+      * stabMultiplier
       * typeMultiplier
       * burnMultiplier.value
       * screenMultiplier.value
@@ -4284,6 +4270,50 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Calculates the STAB multiplier for a move hitting this {@linkcode Pokemon}
+   * @param source the attacking {@linkcode Pokemon}
+   * @param move the {@linkcode Move} used in the attack
+   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied.
+   * @param simulated If `true`, suppresses changes to game state during the calculation.
+   * @returns A {@linkcode NumberHolder} containing the STAB multiplier as value
+   */
+  public calcStabMultiplierForTakingDamage(
+    source: Pokemon,
+    move: Move,
+    abilityApplyMode: AbilityApplyMode,
+    simulated: boolean,
+  ): number {
+    if (move.hasAttr(TypelessAttr)) {
+      return 1;
+    }
+
+    const stabMultiplier = new NumberHolder(1);
+    const applyAbFunc = getAbApplyFunc(abilityApplyMode);
+    const sourceTypes = source.getTypes();
+    const sourceTeraType = source.getTeraType();
+    const sourceMoveType = source.getMoveType(move);
+    const matchesSourceType = sourceTypes.includes(sourceMoveType);
+    /** Combined Pledge moves gain STAB regardless of the user's type */
+    const pledgeAppliesStab = new BooleanHolder(false);
+    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, pledgeAppliesStab);
+
+    if (matchesSourceType || pledgeAppliesStab.value) {
+      stabMultiplier.value += 0.5;
+    }
+    if (
+      sourceTeraType !== ElementalType.UNKNOWN
+      && (sourceTeraType === sourceMoveType || (pledgeAppliesStab.value && sourceTypes.includes(sourceTeraType)))
+    ) {
+      stabMultiplier.value += 0.5;
+    }
+
+    // Apply STAB boost from Adaptability Ability
+    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
+
+    return stabMultiplier.value;
   }
 }
 
