@@ -65,9 +65,9 @@ class DefaultOverrides {
   /**
    * Override the new weather duration. 
    * **Will NOT affect primal weathers!**
-   * - `0` disables for `infinite` duration
    * - `-1` to disable the override
-   * - `>= 0` to set the duration (of turns)
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the weather should last
    * @see {@linkcode Arena.trySetWeather}
    */
   readonly NEW_WEATHER_DURATION_OVERRIDE: number = -1;

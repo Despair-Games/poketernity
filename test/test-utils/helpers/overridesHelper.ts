@@ -259,16 +259,20 @@ export class OverridesHelper extends GameManagerHelper {
   /**
    * Override the new weather duration.
    * **Will NOT affect primal weathers!**
-   *  - `0` disables for `infinite` duration
-   *  - `-1` to disable the override
-   *  - `>= 0` to set the duration (of turns)
-   * @param newWeatherDuration The override duration of new weathers (Must be `>= 0`)
+   * @param newWeatherDuration -
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the weather should last
    * @returns `this`
    * @see {@linkcode Arena.trySetWeather}
    */
   public newWeatherDuration(newWeatherDuration: number): this {
     vi.spyOn(Overrides, "NEW_WEATHER_DURATION_OVERRIDE", "get").mockReturnValue(newWeatherDuration);
-    this.log(`New weather duration set to ${newWeatherDuration}!`);
+    if (newWeatherDuration < 0) {
+      this.log("Weather duration override disabled!");
+    } else {
+      this.log(`New weather duration set to ${newWeatherDuration === 0 ? "infinity" : newWeatherDuration}!`);
+    }
     return this;
   }
 

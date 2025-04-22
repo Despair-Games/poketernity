@@ -22,7 +22,7 @@ export interface ToHaveEffectiveStatMatcherOptions {
 }
 
 /**
- * Matcher to check if a {@linkcode Pokemon Pokemons} effective stat is as expected
+ * Matcher to check if a {@linkcode Pokemon}'s effective stat equals the expected value
  * @param received The object to check. Should be a {@linkcode Pokemon}.
  * @param stat The {@linkcode EffectiveStat} to check
  * @param expectedValue The expected value of the {@linkcode stat}

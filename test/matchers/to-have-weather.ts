@@ -48,9 +48,9 @@ export function toHaveWeatherMatcher(received: unknown, expectedWeatherType: Wea
 //#region Helpers
 
 /**
- * Get a readable string of the WeatherType
+ * Get a human readable string of the WeatherType
  * @param weatherType The {@linkcode WeatherType} to transform
- * @returns A readable string
+ * @returns A human readable string
  */
 function toWeatherStr(weatherType?: WeatherType) {
   if (!weatherType) {
@@ -61,21 +61,22 @@ function toWeatherStr(weatherType?: WeatherType) {
 }
 
 /**
- * Get a readable string of the received value
+ * Convert the input to a human readble string
  * @param received The received "unknown" to check
- * @returns A readable string
+ * @returns A human readable string
  */
-function toActualStr(received: unknown) {
-  let actual = "unknown";
+function toActualStr(received: unknown): string {
   if (received === null) {
-    actual = "null";
-  } else if ((received as any).constructor?.name) {
-    actual = (received as object).constructor.name ?? "Unknown";
-  } else if (typeof received) {
-    actual = typeof received;
+    return "null";
+  }
+  if ((received as any).constructor?.name) {
+    return (received as object).constructor.name;
+  }
+  if (typeof received) {
+    return typeof received;
   }
 
-  return actual;
+  return "unknown";
 }
 
 //#endregion

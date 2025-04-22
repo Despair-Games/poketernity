@@ -415,7 +415,6 @@ export class Arena {
 
     let newWeatherDuration = DEFAULT_NEW_WEATHER_DURATION;
 
-    // Check if there is a new weather duration override and set it, no matter the conditions
     if (Overrides.NEW_WEATHER_DURATION_OVERRIDE >= 0) {
       newWeatherDuration = Overrides.NEW_WEATHER_DURATION_OVERRIDE;
     } else if (!hasPokemonSource || PRIMAL_WEATHER_TYPES.includes(newWeatherType)) {

@@ -1,7 +1,7 @@
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { capitalizeString, getEnumKeys, toDmgValue } from "#app/utils";
-import { SUNNY_WEATHER_TYPES } from "#app/utils/weather-utils";
+import { SUNNY_WEATHER_TYPES } from "#app/constants/weather";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -39,7 +39,6 @@ describe("Abilities - Solar Power", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .startingLevel(100)
