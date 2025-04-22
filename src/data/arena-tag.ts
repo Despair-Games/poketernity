@@ -934,6 +934,7 @@ export class PendingHealTag extends ArenaTag {
 
   constructor() {
     super(ArenaTagType.PENDING_HEAL, 0);
+    this._pendingHeals = new Map<BattlerIndex, PendingHealEffect[]>();
   }
 
   /**
