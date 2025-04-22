@@ -78,9 +78,9 @@ export class CommandUiHandler extends UiHandler {
       this.teraButton.setFrame(ElementalType[globalScene.getField()[this.fieldIndex].teraType].toLowerCase());
     } else {
       this.teraButton.setVisible(false);
-      if (this.cursor === BattleCommand.TERA) {
+      if (this.getCursor() === BattleCommand.TERA) {
         this.setCursor(BattleCommand.FIGHT);
-    }
+      }
     }
     this.toggleTeraButton();
 
@@ -245,7 +245,7 @@ export class CommandUiHandler extends UiHandler {
     if (cursor === BattleCommand.TERA) {
       this.cursorObj.setVisible(false);
     } else {
-    this.cursorObj.setPosition(-5 + (cursor % 2 === 1 ? 56 : 0), 8 + (cursor >= 2 ? 16 : 0));
+      this.cursorObj.setPosition(-5 + (cursor % 2 === 1 ? 56 : 0), 8 + (cursor >= 2 ? 16 : 0));
       this.cursorObj.setVisible(true);
     }
 
