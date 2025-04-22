@@ -101,7 +101,7 @@ export abstract class UiHandler {
   public stop(): void {
     if (!this.active) {
       console.warn("Attempting to stop a non active handler. Aborting.");
-      //return; TODO: commenting for now or egg hatch ui handler does not get dismissed properly
+      return;
     }
 
     this.clear();

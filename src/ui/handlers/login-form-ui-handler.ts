@@ -66,9 +66,10 @@ export class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   protected override tearDown(): void {
-    // TODO: it seems like the password and username input remains in a detached state even after destruction
     this.infoContainer.destroy();
     this.externalPartyContainer.destroy();
+
+    // TODO: it seems like the password and username input remains in a detached state even after destruction
     super.tearDown();
   }
 

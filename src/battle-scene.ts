@@ -1073,7 +1073,6 @@ export default class BattleScene extends SceneBase {
 
   reset(clearScene: boolean = false, clearData: boolean = false, reloadI18n: boolean = false): void {
     if (clearData) {
-      // TODO seems like the old instance is not getting garbage collected
       this.gameData = new GameData();
     }
 
