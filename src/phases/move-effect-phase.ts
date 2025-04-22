@@ -260,7 +260,12 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
       this.updateSubstitutes();
       const moveType = user.getMoveType(move, true);
-      if (move.isAttackMove(user, targets[0]) && !user.stellarTypesBoosted.includes(moveType)) {
+      if (
+        this.lastHit
+        && user.isTerastallized
+        && move.isAttackMove(user, targets[0])
+        && !user.stellarTypesBoosted.includes(moveType)
+      ) {
         user.stellarTypesBoosted.push(moveType);
       }
       this.end();
