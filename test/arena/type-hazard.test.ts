@@ -36,10 +36,10 @@ describe("Arena - Type Hazards", () => {
     game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     const player = game.scene.getPlayerParty()[0];

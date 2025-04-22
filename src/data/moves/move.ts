@@ -1,5 +1,5 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game";
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
 import type { ChangeMovePriorityAbAttr } from "#app/data/abilities/ab-attrs/change-move-priority-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";

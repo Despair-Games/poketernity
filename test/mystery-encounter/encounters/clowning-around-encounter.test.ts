@@ -198,7 +198,8 @@ describe("Clowning Around - Mystery Encounter", () => {
     });
 
     it("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
-      game.override.startingLevel(1000);
+      // Prevent test from failing due to the clown randomly picking the ability Sturdy
+      game.override.startingLevel(1000).enemyAbility(AbilityId.BALL_FETCH);
 
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, [SpeciesId.FEEBAS]);
       await runSelectMysteryEncounterOption(game, 1);

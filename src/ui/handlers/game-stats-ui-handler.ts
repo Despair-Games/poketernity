@@ -2,7 +2,7 @@ import { speciesStarterCosts } from "#app/data/starters";
 import { DexAttr } from "#app/data/dex-attributes";
 import { globalScene } from "#app/global-scene";
 import type { GameData } from "#app/system/game-data";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { formatLargeNumberFixedDigits, getPlayTimeString } from "#app/utils";

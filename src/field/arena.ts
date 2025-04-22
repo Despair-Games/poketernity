@@ -10,7 +10,8 @@ import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
-import { getWeatherClearMessage, getWeatherStartMessage, PRIMAL_WEATHER, Weather } from "#app/data/weather";
+import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
+import { PRIMAL_WEATHER_TYPES } from "#app/constants/game";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -386,7 +387,7 @@ export class Arena {
       if (newWeather === this.weather.weatherType) {
         return false;
       }
-      if (this.weather.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER].includes(newWeather)) {
+      if (this.weather.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER_TYPES].includes(newWeather)) {
         return false;
       }
     } else if (newWeather === WeatherType.NONE) {
@@ -412,7 +413,7 @@ export class Arena {
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
+    const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER_TYPES.includes(newWeatherType) ? 5 : 0;
 
     if (newWeatherType !== WeatherType.NONE) {
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));

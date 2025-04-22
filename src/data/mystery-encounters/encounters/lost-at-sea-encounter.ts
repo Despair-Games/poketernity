@@ -10,7 +10,7 @@ import { leaveEncounterWithoutBattle, setEncounterExp } from "../utils/encounter
 import { applyDamageToPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { PokemonMove } from "#app/field/pokemon-move";
 
 const OPTION_1_REQUIRED_MOVE = MoveId.SURF;

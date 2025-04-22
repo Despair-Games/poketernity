@@ -4,14 +4,13 @@ import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Setting
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
+import { IV_MAX, IV_MIN } from "#app/constants/game";
 import {
-  IV_MAX,
-  IV_MIN,
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
-} from "#app/constants";
+} from "#app/constants/mystery-encounters";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
@@ -109,7 +108,7 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { UiInputs } from "#app/ui-inputs";
 import { AbilityBar } from "#app/ui/components/ability-bar";
 import { ArenaFlyout } from "#app/ui/components/arena-flyout";
@@ -169,6 +168,7 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
+import { getLevelForWaveFunc } from "#app/data/exp";
 
 //#region Types
 
@@ -1933,6 +1933,19 @@ export default class BattleScene extends SceneBase {
     this.currentBattle.battleScore += Math.ceil(scoreIncrease);
   }
 
+  /**
+   * Function to get the level cap
+   *
+   * The formula for getting the level cap is as follows:
+   * - the `waveIndex` is retrieved by rounding up to the nearest `10` i.e. `34 -> 40`
+   * - the `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
+   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
+   * - If the number is odd, it is incremented by `1`
+   * - The final result is then incremented by `2`
+   *
+   * @param ignoreLevelCap - (Default `false`) Whether or not to ignore the level cap
+   * @returns the level cap
+   */
   getMaxExpLevel(ignoreLevelCap: boolean = false): number {
     if (Overrides.LEVEL_CAP_OVERRIDE > 0) {
       return Overrides.LEVEL_CAP_OVERRIDE;
@@ -1943,7 +1956,7 @@ export default class BattleScene extends SceneBase {
 
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = (1 + difficultyWaveIndex / 2 + Math.pow(difficultyWaveIndex / 25, 2)) * 1.2;
+    const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * 1.2;
     return Math.ceil(baseLevel / 2) * 2 + 2;
   }
 

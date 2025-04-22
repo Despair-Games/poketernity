@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { Button } from "#enums/buttons";
 import type { UiMode } from "#enums/ui-mode";
 import { UiHandler } from "./abstract-ui-handler";

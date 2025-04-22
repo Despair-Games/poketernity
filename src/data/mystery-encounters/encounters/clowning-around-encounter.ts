@@ -1,4 +1,4 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { Ability } from "#app/data/abilities/ability";
 import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";

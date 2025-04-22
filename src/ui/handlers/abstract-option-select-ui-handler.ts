@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";

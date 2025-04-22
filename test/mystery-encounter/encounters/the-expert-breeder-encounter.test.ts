@@ -21,7 +21,7 @@ import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/e
 import { TrainerType } from "#enums/trainer-type";
 import { EggTier } from "#enums/egg-type";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];

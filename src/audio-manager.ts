@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#app/constants";
+import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#app/constants/app";
 import { bgmLoopPoint } from "#app/data/bgm-loop-point";
 import { settings } from "#app/system/settings/settings-manager";
 import { fixedNumber } from "#app/utils";

@@ -15,7 +15,7 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";

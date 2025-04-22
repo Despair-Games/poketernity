@@ -1,14 +1,14 @@
 import type { SupportedLanguage } from "#app/@types/Language";
-import { LANGUAGE_MAX_OPTIONS } from "#app/constants";
+import { LANGUAGE_MAX_OPTIONS } from "#app/constants/ui";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
-import type { OptionSelectItem } from "../interfaces/option-select-config";
 
 export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
   private onLanguageChange = () => this.showLanguageOptions();

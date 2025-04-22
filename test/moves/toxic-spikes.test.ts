@@ -45,7 +45,7 @@ describe("Moves - Toxic Spikes", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(enemy.getMaxHp());
@@ -92,9 +92,9 @@ describe("Moves - Toxic Spikes", () => {
     // that set them up is the one switching in
     game.move.select(MoveId.COURT_CHANGE);
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
@@ -125,7 +125,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     await game.reload.reloadSession();

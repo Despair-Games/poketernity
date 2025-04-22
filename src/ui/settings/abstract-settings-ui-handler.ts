@@ -2,7 +2,7 @@ import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { settings as settingsManager } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";

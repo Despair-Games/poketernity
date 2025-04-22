@@ -16,7 +16,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { GAME_WIDTH } from "#app/ui-constants";
+import { GAME_WIDTH } from "#app/constants/ui";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
