@@ -3259,6 +3259,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
+  // TODO: This function gets called with `species = null` when the cursor is on the filter bar at the top of the screen.
+  // So, the type of `species` should be `PokemonSpecies | null`
   setSpeciesDetails(species: PokemonSpecies, options: SpeciesDetails = {}): void {
     let { shiny, formIndex, female, variant, abilityIndex, natureIndex, teraType } = options;
     const forSeen: boolean = options.forSeen ?? false;
@@ -3267,6 +3269,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       this.abilityCursor > -1 ? this.abilityCursor : globalScene.gameData.getStarterSpeciesDefaultAbilityIndex(species);
     const oldNatureIndex =
       this.natureCursor > -1 ? this.natureCursor : globalScene.gameData.getSpeciesDefaultNature(species);
+    const oldTeraType =
+      this.teraCursor !== ElementalType.UNKNOWN ? this.teraCursor : (species?.type1 ?? ElementalType.UNKNOWN);
     this.dexAttrCursor = 0n;
     this.abilityCursor = -1;
     this.natureCursor = -1;
@@ -3314,7 +3318,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       );
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      this.teraCursor = !isNullOrUndefined(teraType) ? teraType : (teraType = species.type1);
+      this.teraCursor = !isNullOrUndefined(teraType) ? teraType : (teraType = oldTeraType);
       const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species);
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
