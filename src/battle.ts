@@ -159,7 +159,7 @@ export default class Battle {
    * TODO: Remove this and use a simpler way to generate deviation
    *
    * Helper function for determining the deviation to add onto a wild Pokemon's level
-   * @param value the adjusted level wave index
+   * @param value - The adjusted level wave index
    * @returns the deviation equal to `Phaser.Math.RND.realInRange(0, 1) * value / 10`
    */
   randSeedUniformForLevel(value: number): number {
