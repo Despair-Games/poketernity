@@ -57,6 +57,10 @@ export default class PokemonData {
   /** Data that can customize a Pokemon in non-standard ways from its Species */
   public customPokemonData: CustomPokemonData;
 
+  /**
+   * @param source - The typing of `source` as `PokemonData` (approximately?) matches the typing of
+   * the `json` object passed in to it in `GameData#parseSessionData`
+   */
   constructor(source: Pokemon | PokemonData) {
     this.id = source.id;
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
