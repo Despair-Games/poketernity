@@ -977,28 +977,29 @@ export class PendingHealTag extends ArenaTag {
    * Applies a pending healing effect on the given target index. If an effect is found for
    * the index, the Pokemon at that index is healed to full HP, is cured of any non-volatile status,
    * and has its PP fully restored (if the effect is from Lunar Dance).
-   * @param _arena - The {@linkcode Arena} containing this tag
+   * @param arena - The {@linkcode Arena} containing this tag
    * @param simulated - If `true`, suppresses changes to game state
    * @param pokemon - The {@linkcode Pokemon} receiving the healing effect
    * @returns `true` if the target Pokemon was healed by this effect
+   * @todo This should also be called when a Pokemon moves into a new position via Ally Switch
    */
-  override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
+  override apply(arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
     const targetIndex = pokemon.getBattlerIndex();
-    if (pokemon.isFullHp() || !this.pendingHeals.has(targetIndex)) {
-      return false;
-    }
+    const targetEffects = this.pendingHeals.get(targetIndex);
 
     if (simulated) {
-      return !!this.pendingHeals.get(targetIndex)?.length;
+      return !!targetEffects?.length;
     }
 
-    const healEffect = this.pendingHeals.get(targetIndex)?.shift();
-    if (healEffect) {
+    const healEffect = targetEffects?.find((effect) => this.canApply(effect, pokemon));
+    if (targetEffects && healEffect) {
       const { sourceId, moveId, restorePP, healMessageKey } = healEffect;
       const sourcePokemon = globalScene.getPokemonById(sourceId);
       if (!sourcePokemon) {
         console.warn(`Source of pending ${allMoves.get(moveId).name} effect is undefined!`);
-        return false;
+        targetEffects.splice(targetEffects.indexOf(healEffect), 1);
+        // Re-evaluate after the invalid heal effect is removed
+        return this.apply(arena, simulated, pokemon);
       }
 
       globalScene.phaseManager.queuePokemonHealPhase(true, targetIndex, pokemon.getMaxHp(), {
@@ -1006,13 +1007,30 @@ export class PendingHealTag extends ArenaTag {
         healStatus: true,
         fullRestorePP: restorePP,
       });
+
+      targetEffects.splice(targetEffects.indexOf(healEffect), 1);
     }
 
-    if (this.pendingHeals.get(targetIndex)?.length === 0) {
+    if (targetEffects?.length === 0) {
       this.pendingHeals.delete(targetIndex);
     }
 
     return !isNullOrUndefined(healEffect);
+  }
+
+  /**
+   * Determines if the given {@linkcode PendingHealEffect} can immediately heal
+   * the given target {@linkcode Pokemon}.
+   * @param healEffect the {@linkcode PendingHealEffect} to evaluate
+   * @param pokemon the {@linkcode Pokemon} to evaluate against
+   * @returns `true` if the Pokemon can be healed by the effect
+   */
+  private canApply(healEffect: PendingHealEffect, pokemon: Pokemon): boolean {
+    return (
+      !pokemon.isFullHp()
+      || pokemon.hasNonVolatileStatusEffect()
+      || (healEffect.restorePP && pokemon.getMoveset().some((mv) => mv.ppUsed > 0))
+    );
   }
 
   override loadTag(source: ArenaTag | any): void {
