@@ -13,6 +13,7 @@ import {
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants/mystery-encounters";
+import { ELITE_FOUR_1_WAVE } from "#app/constants/special-waves";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
@@ -32,7 +33,6 @@ import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/myster
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { ELITE_FOUR_1_WAVE } from "#app/data/special-waves";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
