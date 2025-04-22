@@ -6,6 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
@@ -36,6 +37,12 @@ export class PostSummonPhase extends PokemonPhase {
     ) {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
+
+    /**
+     * Apply pending heal effects from Healing Wish and Lunar Dance.
+     * @todo Is this placed correctly? (after hazards, before abilities)
+     */
+    globalScene.arena.applyTags(ArenaTagType.PENDING_HEAL, false, pokemon);
 
     applyAbAttrs<PostSummonAbAttr>(AbAttrFlag.POST_SUMMON, pokemon, false);
     const field = pokemon.getField();

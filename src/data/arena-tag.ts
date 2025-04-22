@@ -913,6 +913,113 @@ export class DelayedAttackTag extends ArenaTag {
   }
 }
 
+interface PendingHealEffect {
+  readonly sourceId: number;
+  readonly moveId: MoveId;
+  readonly restorePP: boolean;
+  readonly healMessageKey: string;
+}
+
+/**
+ * Arena tag to contain stored healing effects, namely from
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
+ * When a damaged Pokemon first enters the effect's {@linkcode BattlerIndex | field position},
+ * their HP is fully restored, and they are cured of any non-volatile status condition.
+ * If the effect is from Lunar Dance, their PP is also restored.
+ * @extends ArenaTag
+ */
+export class PendingHealTag extends ArenaTag {
+  private _pendingHeals: Map<BattlerIndex, PendingHealEffect[]>;
+
+  constructor() {
+    super(ArenaTagType.PENDING_HEAL, 0);
+  }
+
+  /**
+   * All pending healing effects on the field.
+   * The effects of Healing Wish and Lunar Dance can stack under a single index,
+   * but only one "charge" of either move's effect can be active in any given
+   * field position. If both moves' effects are present, they apply one at a time,
+   * in order of when they were added to the field.
+   */
+  public get pendingHeals() {
+    return this._pendingHeals;
+  }
+
+  /**
+   * Adds a pending healing effect to the field. Effects under the same move *and*
+   * target index as an existing effect are ignored.
+   * @param targetIndex - The {@linkcode BattlerIndex} under which the effect applies
+   * @param healEffect - The {@linkcode PendingHealEffect | data} for the pending heal effect
+   */
+  public addHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
+    if (this.pendingHeals.has(targetIndex)) {
+      const existingHealEffects = this.pendingHeals.get(targetIndex);
+      if (existingHealEffects?.every((he) => he.moveId !== healEffect.moveId)) {
+        existingHealEffects.push(healEffect);
+      }
+    } else {
+      this.pendingHeals.set(targetIndex, [healEffect]);
+    }
+  }
+
+  /** Removes default on-remove message */
+  override onRemove(_arena: Arena): void {}
+
+  /** This arena tag is removed at the end of the turn if no pending healing effects are on the field */
+  override lapse(_arena: Arena): boolean {
+    return this.pendingHeals.size > 0;
+  }
+
+  /**
+   * Applies a pending healing effect on the given target index. If an effect is found for
+   * the index, the Pokemon at that index is healed to full HP, is cured of any non-volatile status,
+   * and has its PP fully restored (if the effect is from Lunar Dance).
+   * @param _arena - The {@linkcode Arena} containing this tag
+   * @param simulated - If `true`, suppresses changes to game state
+   * @param pokemon - The {@linkcode Pokemon} receiving the healing effect
+   * @returns `true` if the target Pokemon was healed by this effect
+   */
+  override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
+    const targetIndex = pokemon.getBattlerIndex();
+    if (pokemon.isFullHp() || !this.pendingHeals.has(targetIndex)) {
+      return false;
+    }
+
+    if (simulated) {
+      return !!this.pendingHeals.get(targetIndex)?.length;
+    }
+
+    const healEffect = this.pendingHeals.get(targetIndex)?.shift();
+    if (healEffect) {
+      const { sourceId, moveId, restorePP, healMessageKey } = healEffect;
+      const sourcePokemon = globalScene.getPokemonById(sourceId);
+      if (!sourcePokemon) {
+        console.warn(`Source of pending ${allMoves.get(moveId).name} effect is undefined!`);
+        return false;
+      }
+
+      globalScene.phaseManager.queuePokemonHealPhase(true, targetIndex, pokemon.getMaxHp(), {
+        message: i18next.t(healMessageKey, { pokemonNameWithAffix: getPokemonNameWithAffix(sourcePokemon) }),
+        healStatus: true,
+        fullRestorePP: restorePP,
+      });
+    }
+
+    if (this.pendingHeals.get(targetIndex)?.length === 0) {
+      this.pendingHeals.delete(targetIndex);
+    }
+
+    return !isNullOrUndefined(healEffect);
+  }
+
+  override loadTag(source: ArenaTag | any): void {
+    super.loadTag(source);
+    this._pendingHeals = source.pendingHeals;
+  }
+}
+
 /**
  * Class used for hazards that damage based on type. The two existing ones are
  * Stealth rock (produced by stealth rock and stone axe) and
@@ -1430,6 +1537,8 @@ export function getArenaTag(
       return new ToxicSpikesTag(sourceId, side);
     case ArenaTagType.DELAYED_ATTACK:
       return new DelayedAttackTag();
+    case ArenaTagType.PENDING_HEAL:
+      return new PendingHealTag();
     case ArenaTagType.WISH:
       return new WishTag(turnCount, sourceId, side);
     case ArenaTagType.STEALTH_ROCK:

@@ -1475,8 +1475,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.HEALING_WISH, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
       .triageMove()
-      .snatchable()
-      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already healthy
+      .snatchable(),
     new AttackMove(MoveId.BRINE, ElementalType.WATER, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 4)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.getHpRatio() < 0.5 ? 2 : 1)),
     new AttackMove(MoveId.NATURAL_GIFT, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 100, 15, -1, 0, 4)
@@ -1789,8 +1788,7 @@ export function initMoves() {
       .attr(SacrificialFullRestoreAttr, true, "moveTriggers:lunarDanceRestore")
       .danceMove()
       .triageMove()
-      .snatchable()
-      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already perfectly healthy
+      .snatchable(),
     new AttackMove(MoveId.CRUSH_GRIP, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 100, 5, -1, 0, 4)
       .attr(OpponentHighHpPowerAttr, 120),
     new AttackMove(MoveId.MAGMA_STORM, ElementalType.FIRE, MoveCategory.SPECIAL, 100, 75, 5, -1, 0, 4)
