@@ -130,13 +130,26 @@ export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
 }
 
 /**
- * Gets the level for a wave based on the repeated formula
- * `1 + x/2 + x^2/625`
+ * Gets the level for a wave based on the repeated formula (see PR for more details)
  * @param wave - The adjusted wave based on whether or not the game is daily mode
  * @returns the level for the wave
  */
 export function getLevelForWaveFunc(wave: number): number {
-  return 1 + wave / 2 + (wave * wave) / 625;
+  if (wave < 10) {
+    return wave; // Maybe have a lower bound clamp?
+  } else if (wave < 51) {
+    return 0.5 * wave + 5;
+  } else if (wave < 91) {
+    return 0.2 * wave + 20;
+  } else if (wave < 171) {
+    return 0.2 * wave + 21;
+  } else if (wave < 181) {
+    return 1.7 * wave - 248;
+  } else if (wave < 201) {
+    return 0.8 * wave - 77;
+  } else {
+    return wave;
+  }
 }
 
 /**
