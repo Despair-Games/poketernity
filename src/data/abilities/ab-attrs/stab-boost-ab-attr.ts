@@ -12,7 +12,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 
 /**
- * Applies a STAB multiplier boost of `0.5` if the move type is the same as one of the pokemon's types.
+ * Increases the STAB multiplier by `+0.5` if the move type is the same as one of the pokemon's types.
  * If the Pokemon is terastallized, then the STAB multiplier is only applied if the move type is the same as the tera type.
  * The total STAB multiplier is capped at 2.25.
  *
