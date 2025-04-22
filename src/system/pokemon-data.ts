@@ -90,9 +90,9 @@ export default class PokemonData {
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
     if (source.hasOwnProperty("bossSegments")) {
-      // @ts-expect-error
+      // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
       this.boss = source.bossSegments > 0;
-      // @ts-expect-error
+      // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
       this.bossSegments = source.bossSegments;
     }
 
