@@ -4,8 +4,8 @@ import type { GameManager } from "#test/test-utils/gameManager";
 
 /**
  * Matcher to check if the {@linkcode WeatherType} is as expected
- * @param received The object to check. Expects an instance of {@linkcode GameManager}.
- * @param expectedWeatherType The expected {@linkcode WeatherType}
+ * @param received - The object to check. Expects an instance of {@linkcode GameManager}.
+ * @param expectedWeatherType - The expected {@linkcode WeatherType}
  * @returns Whether the matcher passed
  */
 export function toHaveWeatherMatcher(received: unknown, expectedWeatherType: WeatherType) {
@@ -49,7 +49,7 @@ export function toHaveWeatherMatcher(received: unknown, expectedWeatherType: Wea
 
 /**
  * Get a human readable string of the WeatherType
- * @param weatherType The {@linkcode WeatherType} to transform
+ * @param weatherType - The {@linkcode WeatherType} to transform
  * @returns A human readable string
  */
 function toWeatherStr(weatherType?: WeatherType) {
@@ -62,7 +62,7 @@ function toWeatherStr(weatherType?: WeatherType) {
 
 /**
  * Convert the input to a human readble string
- * @param received The received "unknown" to check
+ * @param received - The received "unknown" to check
  * @returns A human readable string
  */
 function toActualStr(received: unknown): string {

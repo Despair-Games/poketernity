@@ -22,8 +22,8 @@ declare module "vitest" {
      * CAUTION: This only checks one move used by the Pokemon (by default, the most recent move).
      * It does not check the Pokemon's entire move history.
      *
-     * @param expected The expected {@linkcode MoveResult}
-     * @param options The {@linkcode ToHaveMoveResultMatcherOptions} (optional)
+     * @param expected - The expected {@linkcode MoveResult}
+     * @param options - The {@linkcode ToHaveMoveResultMatcherOptions} (optional)
      * @see {@linkcode Pokemon.getLastXMoves}
      */
     toHaveMoveResult(expected: MoveResult, options?: ToHaveMoveResultMatcherOptions): void;
@@ -34,8 +34,8 @@ declare module "vitest" {
      * CAUTION: This only checks one move used by the Pokemon (by default, the most recent move).
      * It does not check the Pokemon's entire move history.
      *
-     * @param expected The expected {@linkcode MoveId}
-     * @param options The {@linkcode ToHaveUsedMoveMatcherOptions} (optional)
+     * @param expected - The expected {@linkcode MoveId}
+     * @param options - The {@linkcode ToHaveUsedMoveMatcherOptions} (optional)
      * @see {@linkcode Pokemon.getLastXMoves}
      */
     toHaveUsedMove(expected: MoveId, options?: ToHaveUsedMoveMatcherOptions): void;
@@ -43,9 +43,9 @@ declare module "vitest" {
     /**
      * Matcher to check if a {@linkcode Pokemon} stat is as expected
      *
-     * @param stat The {@linkcode PermanentStat} to check
-     * @param expectedValue The expected value of the {@linkcode stat}
-     * @param options The {@linkcode ToHaveStatMatcherOptions} (optional)
+     * @param stat - The {@linkcode PermanentStat} to check
+     * @param expectedValue - The expected value of the {@linkcode stat}
+     * @param options - The {@linkcode ToHaveStatMatcherOptions} (optional)
      */
     toHaveStat(stat: PermanentStat, expectedValue: number, options?: ToHaveStatMatcherOptions): void;
 
@@ -54,9 +54,9 @@ declare module "vitest" {
      *
      * *Effective stat means the stat after all the stat modifiers are applied.*
      *
-     * @param stat The {@linkcode EffectiveStat} to check
-     * @param expectedValue The expected value of the {@linkcode stat}
-     * @param options The {@linkcode ToHaveStatMatcherOptions} (optiona)
+     * @param stat - The {@linkcode EffectiveStat} to check
+     * @param expectedValue - The expected value of the {@linkcode stat}
+     * @param options - The {@linkcode ToHaveStatMatcherOptions} (optional)
      */
     toHaveEffectiveStat(stat: EffectiveStat, expectedValue: number, options?: ToHaveEffectiveStatMatcherOptions): void;
 
@@ -68,7 +68,7 @@ declare module "vitest" {
 
     /**
      * Matcher to check if the {@linkcode WeatherType} is as expected
-     * @param expectedWeatherType The expected {@linkcode WeatherType}
+     * @param expectedWeatherType - The expected {@linkcode WeatherType}
      */
     toHaveWeather(expectedWeatherType: WeatherType): void;
   }

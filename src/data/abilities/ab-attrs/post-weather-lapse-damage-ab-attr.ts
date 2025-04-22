@@ -12,10 +12,10 @@ import i18next from "i18next";
 /**
  * These abilities inflict damage on the ability holder under specific weather conditions.
  *
- * | Ability     | Weather Condition     | Effect                                      | Notes                                             |
- * |-------------|-----------------------|---------------------------------------------|---------------------------------------------------|
- * | Solar Power | (Extremely) Harsh Sun | Inflicts 1/8 of the user's max HP as damage | No damage if sunny weather fades on the same turn |
- * | Dry Skin    | (Extremely) Harsh Sun | Inflicts 1/8 of the user's max HP as damage | —                                                 |
+ * | Ability     | Weather Condition           | Effect                                            | Notes                                                   |
+ * |-------------|-----------------------------|---------------------------------------------------|---------------------------------------------------------|
+ * | Solar Power |**\|** (Extremely) Harsh Sun |**\|** Inflicts 1/8 of the user's max HP as damage |**\|** No damage if sunny weather fades on the same turn |
+ * | Dry Skin    |**\|** (Extremely) Harsh Sun |**\|** Inflicts 1/8 of the user's max HP as damage |**\|** -                                                 |
  *
  * @see {@linkcode WeatherType.SUNNY} and {@linkcode WeatherType.HARSH_SUN}
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Power_(Ability) Solar Power (Ability) - Bulbapedia}

@@ -10,11 +10,11 @@ export interface ToHaveStatMatcherOptions {
 }
 
 /**
- * Matcher to check if a Pokemon stat is as expected
- * @param received The object to check. Should be a {@linkcode Pokemon}.
- * @param stat The {@linkcode PermanentStat} to check
- * @param expectedValue The expected value of the {@linkcode stat}
- * @param options The {@linkcode ToHaveStatMatcherOptions}
+ * Matcher to check if a Pokemon's stat equals the expected value
+ * @param received - The object to check. Should be a {@linkcode Pokemon}.
+ * @param stat - The {@linkcode PermanentStat} to check
+ * @param expectedValue - The expected value of the {@linkcode stat}
+ * @param options - The {@linkcode ToHaveStatMatcherOptions} (optional)
  * @returns Whether the matcher passed
  */
 export function toHaveStatMatcher(
