@@ -1,6 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
 
+//#region Types
+
 export interface ToHaveUsedMoveMatcherOptions {
   /** The index of the move to check (Default is `0`) */
   index?: number;
@@ -11,6 +13,9 @@ export interface ToHaveUsedMoveMatcherOptions {
    */
   moveCount?: number;
 }
+
+//#endregion
+//#region Exports
 
 /**
  * Matcher to check if a pokemons move id is as expected
@@ -47,3 +52,5 @@ export function toHaveUsedMoveMatcher(
           }`,
   };
 }
+
+//#endregion
