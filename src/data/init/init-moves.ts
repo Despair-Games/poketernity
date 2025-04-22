@@ -631,7 +631,7 @@ export function initMoves() {
        * - Does not preserve original priority throughout execution
        * - Is cancelled completely when interrupted by any effect (not just Sleep)
        */
-      .edgeCase(),
+      .partial(),
     new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1)
       .attr(MetronomeAttr),
     new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1)
