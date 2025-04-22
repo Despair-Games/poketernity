@@ -39,7 +39,7 @@ describe("Abilities - Mimicry", () => {
     await game.toNextTurn();
     expect(playerPokemon1.getTypes().includes(ElementalType.FAIRY)).toBe(true);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(playerPokemon2.getTypes().includes(ElementalType.FAIRY)).toBe(true);

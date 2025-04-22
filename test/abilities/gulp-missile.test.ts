@@ -84,7 +84,7 @@ describe("Abilities - Gulp Missile", () => {
     game.move.select(MoveId.SURF);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn(); // form change is delayed until after end of turn
 
     expect(cramorant.formIndex).toBe(NORMAL_FORM);

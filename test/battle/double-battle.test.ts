@@ -52,13 +52,13 @@ describe("Double Battles", () => {
       expect(pokemon.isFainted()).toBe(true);
     }
 
-    await game.doKillOpponents();
+    await game.faintOpponents();
 
     await game.phaseInterceptor.to(BattleEndPhase);
     game.doSelectModifier();
 
     const charizard = game.scene.getPlayerParty().findIndex((p) => p.species.speciesId === SpeciesId.CHARIZARD);
-    game.doRevivePokemon(charizard);
+    game.revivePokemon(charizard);
 
     await game.phaseInterceptor.to(TurnInitPhase);
     expect(game.scene.getPlayerField().filter((p) => !p.isFainted())).toHaveLength(2);
@@ -76,7 +76,7 @@ describe("Double Battles", () => {
     // Play through endless, waves 1 to 9, counting number of double battles from waves 2 to 9
     await game.rng.equalSample(DOUBLE_CHANCE, async () => {
       game.move.select(MoveId.SPLASH);
-      await game.doKillOpponents();
+      await game.faintOpponents();
       await game.toNextWave();
 
       if (game.scene.getEnemyParty().length === 1) {

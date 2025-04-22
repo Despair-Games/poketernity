@@ -39,7 +39,7 @@ describe("Moves - Retaliate", () => {
     game.move.select(MoveId.RETALIATE);
     await game.toEndOfTurn();
     expect(retaliate.calculateBattlePower).toHaveLastReturnedWith(70);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toNextTurn();
     game.move.select(MoveId.RETALIATE);

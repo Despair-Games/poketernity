@@ -76,7 +76,7 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toEndOfTurn();
 
     expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.POISON);

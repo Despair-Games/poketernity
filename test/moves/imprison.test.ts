@@ -131,7 +131,7 @@ describe("Moves - Imprison", () => {
     await game.move.selectEnemyMove(MoveId.IMPRISON);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
