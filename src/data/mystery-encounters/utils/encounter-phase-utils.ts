@@ -386,7 +386,6 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
         tags.forEach((tag) => enemyPokemon.addTag(tag));
       }
 
-      // Set tera
       if (!isNullOrUndefined(config.teraType) && config.teraType !== ElementalType.UNKNOWN) {
         enemyPokemon.teraType = config.teraType;
         if (battle.trainer) {

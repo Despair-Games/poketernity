@@ -12,7 +12,7 @@
 | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/d/de/WaterIC_SV.png" height="18"> | PLEDGE COMBO | 1.5 | 2.0 |
 | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/d/de/WaterIC_SV.png" height="18"> | 1.0 | 1.0 |
 | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | 2.0 | 2.25 |
-| <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | PLEDGE COMBO | 2.0 | 2.25 |
+| <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | PLEDGE COMBO | 1.5 | 2.0 |
 | <img src="https://archives.bulbagarden.net/media/upload/a/a2/FireIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/c/c0/StellarIC_SV.png" height="18"> | <img src="https://archives.bulbagarden.net/media/upload/c/c0/StellarIC_SV.png" height="18"> | 1.5 | 1.5 |
 
 <sup>Images &copy; Bulbapedia</sup>

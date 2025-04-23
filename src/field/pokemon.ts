@@ -2996,7 +2996,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       stabMultiplier.value += 0.5;
     }
 
-    if (source.isTerastallized) {
+    if (source.isTerastallized && !pledgeAppliesStab.value) {
       if (sourceTeraType === sourceMoveType && sourceMoveType !== ElementalType.STELLAR) {
         stabMultiplier.value += 0.5;
       }

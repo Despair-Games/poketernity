@@ -1726,7 +1726,7 @@ export default class BattleScene extends SceneBase {
       hasShadow: hasShadow,
       ignoreOverride: ignoreOverride,
       teraColor: pokemon ? getTypeRgb(pokemon.teraType) : undefined,
-      isTerastallized: pokemon ? pokemon.isTerastallized : false,
+      isTerastallized: pokemon?.isTerastallized ?? false,
     });
     this.spriteTeraSparkleHandler.add(sprite);
     return sprite;

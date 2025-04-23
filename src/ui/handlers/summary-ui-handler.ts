@@ -805,8 +805,8 @@ export class SummaryUiHandler extends UiHandler {
         }
 
         if (
-          /* globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
-            && */ !isNullOrUndefined(this.pokemon)
+          !isNullOrUndefined(this.pokemon) /*
+          && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id) */
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
           teraIcon.setName("terrastallize-icon");
