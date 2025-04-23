@@ -930,22 +930,11 @@ interface PendingHealEffect {
  * @extends ArenaTag
  */
 export class PendingHealTag extends ArenaTag {
-  private _pendingHeals: Map<BattlerIndex, PendingHealEffect[]>;
+  private pendingHeals: Map<BattlerIndex, PendingHealEffect[]>;
 
   constructor() {
     super(ArenaTagType.PENDING_HEAL, 0);
-    this._pendingHeals = new Map<BattlerIndex, PendingHealEffect[]>();
-  }
-
-  /**
-   * All pending healing effects on the field.
-   * The effects of Healing Wish and Lunar Dance can stack under a single index,
-   * but only one "charge" of either move's effect can be active in any given
-   * field position. If both moves' effects are present, they apply one at a time,
-   * in order of when they were added to the field.
-   */
-  public get pendingHeals() {
-    return this._pendingHeals;
+    this.pendingHeals = new Map<BattlerIndex, PendingHealEffect[]>();
   }
 
   /**
@@ -1003,7 +992,7 @@ export class PendingHealTag extends ArenaTag {
       }
 
       globalScene.phaseManager.queuePokemonHealPhase(true, targetIndex, pokemon.getMaxHp(), {
-        message: i18next.t(healMessageKey, { pokemonNameWithAffix: getPokemonNameWithAffix(sourcePokemon) }),
+        message: i18next.t(healMessageKey, { pokemonName: getPokemonNameWithAffix(sourcePokemon) }),
         healStatus: true,
         fullRestorePP: restorePP,
       });
@@ -1035,7 +1024,7 @@ export class PendingHealTag extends ArenaTag {
 
   override loadTag(source: ArenaTag | any): void {
     super.loadTag(source);
-    this._pendingHeals = source.pendingHeals;
+    this.pendingHeals = source.pendingHeals;
   }
 }
 

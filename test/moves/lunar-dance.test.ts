@@ -8,6 +8,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
+import { ArenaTagType } from "#enums/arena-tag-type";
 
 describe("Moves - Lunar Dance", () => {
   let phaserGame: Phaser.Game;
@@ -88,5 +89,122 @@ describe("Moves - Lunar Dance", () => {
     await game.toNextTurn();
 
     expect(raticate.isFullHp()).toBe(true);
+  });
+
+  it("should store its effect if the switched-in Pokemon is perfectly healthy", async () => {
+    game.override.battleType("single");
+
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
+
+    const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
+    squirtle.hp = 1;
+
+    game.move.use(MoveId.LUNAR_DANCE);
+    game.selectPartyPokemon(1);
+
+    await game.toEndOfTurn();
+
+    expect(bulbasaur.isFainted()).toBeTruthy();
+    expect(charmander.isFullHp()).toBeTruthy();
+    expect(game.phaseInterceptor.log).not.toContain("PokemonHealPhase");
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeDefined();
+
+    await game.toNextTurn();
+
+    // Switch to damaged Squirtle. Lunar Dance's effect should activate
+    game.switchPokemon(2);
+
+    await game.toEndOfTurn();
+
+    expect(squirtle.isFullHp()).toBeTruthy();
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeUndefined();
+
+    // Set Charmander's HP to 1, then switch back to Charmander.
+    // Lunar Dance shouldn't activate again
+    charmander.hp = 1;
+    game.switchPokemon(2);
+
+    await game.toEndOfTurn();
+    expect(charmander.hp).toBe(1);
+  });
+
+  it("should only store one charge of the effect at a time", async () => {
+    game.override.battleType("single");
+
+    await game.classicMode.startBattle([
+      SpeciesId.BULBASAUR,
+      SpeciesId.CHARMANDER,
+      SpeciesId.SQUIRTLE,
+      SpeciesId.PIKACHU,
+    ]);
+
+    const [bulbasaur, charmander, squirtle, pikachu] = game.scene.getPlayerParty();
+    [squirtle, pikachu].forEach((p) => (p.hp = 1));
+
+    // Use Lunar Dance and send in Charmander. Lunar Dance's effect should be stored
+    game.move.use(MoveId.LUNAR_DANCE);
+    game.selectPartyPokemon(1);
+
+    await game.toNextTurn();
+    expect(bulbasaur.isFainted()).toBeTruthy();
+    expect(charmander.isFullHp()).toBeTruthy();
+    expect(game.phaseInterceptor.log).not.toContain("PokemonHealPhase");
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeDefined();
+
+    // Switch to Squirtle. Lunar Dance should activate
+    game.switchPokemon(2);
+
+    await game.toEndOfTurn();
+    expect(squirtle.isFullHp()).toBeTruthy();
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeUndefined();
+
+    // Switch again to Pikachu. Lunar Dance's effect shouldn't be present
+    game.switchPokemon(3);
+
+    await game.toEndOfTurn();
+    expect(pikachu.isFullHp()).toBeFalsy();
+  });
+
+  it("should stack with Healing Wish", async () => {
+    game.override.battleType("single");
+
+    await game.classicMode.startBattle([
+      SpeciesId.BULBASAUR,
+      SpeciesId.CHARMANDER,
+      SpeciesId.SQUIRTLE,
+      SpeciesId.PIKACHU,
+    ]);
+
+    const [bulbasaur, charmander, squirtle, pikachu] = game.scene.getPlayerParty();
+    [squirtle, pikachu].forEach((p) => {
+      p.hp = 1;
+      p.getMoveset().forEach((mv) => (mv.ppUsed = 1));
+    });
+
+    game.move.use(MoveId.LUNAR_DANCE);
+    game.selectPartyPokemon(1);
+
+    await game.toNextTurn();
+    expect(bulbasaur.isFainted()).toBeTruthy();
+    expect(charmander.isFullHp()).toBeTruthy();
+    expect(game.phaseInterceptor.log).not.toContain("PokemonHealPhase");
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeDefined();
+
+    game.move.use(MoveId.HEALING_WISH);
+    game.selectPartyPokemon(2);
+
+    // Lunar Dance should apply first since it was used first, restoring Squirtle's HP and PP
+    await game.toNextTurn();
+    expect(squirtle.isFullHp()).toBeTruthy();
+    squirtle.getMoveset().forEach((mv) => expect(mv.ppUsed).toBe(0));
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeDefined();
+
+    game.switchPokemon(3);
+
+    // Healing Wish should apply on the next switch, restoring Pikachu's HP
+    await game.toEndOfTurn();
+    expect(pikachu.isFullHp()).toBeTruthy();
+    pikachu.getMoveset().forEach((mv) => expect(mv.ppUsed).toBe(1));
+    expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeUndefined();
   });
 });
