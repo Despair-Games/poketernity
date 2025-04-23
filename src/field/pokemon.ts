@@ -578,6 +578,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public faint(): void {
     this.hp = 0;
     this.resetStatus(true);
+    this.resetTera();
   }
 
   /**
@@ -2961,6 +2962,60 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Calculates the STAB multiplier for a move hitting this {@linkcode Pokemon}
+   * @param source - The attacking {@linkcode Pokemon}
+   * @param move - The {@linkcode Move} used in the attack
+   * @param abilityApplyMode - The {@linkcode AbilityApplyMode} determining how abilities are applied.
+   * @param simulated - If `true`, suppresses changes to game state during the calculation.
+   * @returns The STAB multiplier (between `1` and `2.25` inclusive)
+   */
+  public calcStabMultiplierForTakingDamage(
+    source: Pokemon,
+    move: Move,
+    abilityApplyMode: AbilityApplyMode,
+    simulated: boolean,
+  ): number {
+    if (move.hasAttr(TypelessAttr)) {
+      return 1;
+    }
+
+    const stabMultiplier = new NumberHolder(1);
+    const applyAbFunc = getAbApplyFunc(abilityApplyMode);
+    const sourceTypes = source.getTypes();
+    const sourceTeraType = source.teraType;
+    const sourceMoveType = source.getMoveType(move);
+    if (sourceMoveType === ElementalType.UNKNOWN) {
+      return 1;
+    }
+    const matchesSourceType = sourceTypes.includes(sourceMoveType);
+    /** Combined Pledge moves gain STAB regardless of the user's type */
+    const pledgeAppliesStab = new BooleanHolder(false);
+    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, pledgeAppliesStab);
+
+    if ((matchesSourceType && sourceMoveType !== ElementalType.STELLAR) || pledgeAppliesStab.value) {
+      stabMultiplier.value += 0.5;
+    }
+
+    if (source.isTerastallized) {
+      if (sourceTeraType === sourceMoveType && sourceMoveType !== ElementalType.STELLAR) {
+        stabMultiplier.value += 0.5;
+      }
+
+      if (
+        sourceTeraType === ElementalType.STELLAR
+        && (!source.stellarTypesBoosted.includes(sourceMoveType) || source.species.speciesId === SpeciesId.TERAPAGOS)
+      ) {
+        stabMultiplier.value += matchesSourceType ? 0.5 : 0.2;
+      }
+    }
+
+    // Apply STAB boost from Adaptability Ability
+    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
+
+    return stabMultiplier.value;
+  }
+
+  /**
    * Calculates the damage of an attack made by another Pokemon against this Pokemon
    * @param source the attacking {@linkcode Pokemon}
    * @param move the {@linkcode Move} used in the attack
@@ -4327,50 +4382,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       return false;
     }
-  }
-
-  /**
-   * Calculates the STAB multiplier for a move hitting this {@linkcode Pokemon}
-   * @param source the attacking {@linkcode Pokemon}
-   * @param move the {@linkcode Move} used in the attack
-   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied.
-   * @param simulated If `true`, suppresses changes to game state during the calculation.
-   * @returns A {@linkcode NumberHolder} containing the STAB multiplier as value
-   */
-  public calcStabMultiplierForTakingDamage(
-    source: Pokemon,
-    move: Move,
-    abilityApplyMode: AbilityApplyMode,
-    simulated: boolean,
-  ): number {
-    if (move.hasAttr(TypelessAttr)) {
-      return 1;
-    }
-
-    const stabMultiplier = new NumberHolder(1);
-    const applyAbFunc = getAbApplyFunc(abilityApplyMode);
-    const sourceTypes = source.getTypes();
-    const sourceTeraType = source.getTeraType();
-    const sourceMoveType = source.getMoveType(move);
-    const matchesSourceType = sourceTypes.includes(sourceMoveType);
-    /** Combined Pledge moves gain STAB regardless of the user's type */
-    const pledgeAppliesStab = new BooleanHolder(false);
-    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, pledgeAppliesStab);
-
-    if (matchesSourceType || pledgeAppliesStab.value) {
-      stabMultiplier.value += 0.5;
-    }
-    if (
-      sourceTeraType !== ElementalType.UNKNOWN
-      && (sourceTeraType === sourceMoveType || (pledgeAppliesStab.value && sourceTypes.includes(sourceTeraType)))
-    ) {
-      stabMultiplier.value += 0.5;
-    }
-
-    // Apply STAB boost from Adaptability Ability
-    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
-
-    return stabMultiplier.value;
   }
 }
 

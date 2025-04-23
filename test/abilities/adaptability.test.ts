@@ -69,7 +69,7 @@ describe("Abilities - Adaptability", () => {
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
   });
-  
+
   it("should not apply STAB to Struggle", async () => {
     await game.classicMode.startBattle([SpeciesId.RATTATA]);
 
@@ -84,14 +84,10 @@ describe("Abilities - Adaptability", () => {
 
   describe("Terastallized", () => {
     it("should keep STAB at 1.5 if move type, but not tera type, is one of the user's original types", async () => {
-      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
-
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
       const playerPokemon = game.field.getPlayerPokemon();
-
-      expect(playerPokemon.isTerastallized()).toBe(true);
-      expect(playerPokemon.getTeraType()).toBe(ElementalType.WATER);
+      game.field.forceTera(playerPokemon, ElementalType.WATER);
 
       const enemyPokemon = game.field.getEnemyPokemon();
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -103,14 +99,10 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should increase STAB to 2.0 if tera type is NOT one of the user's original types", async () => {
-      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
-
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
       const playerPokemon = game.field.getPlayerPokemon();
-
-      expect(playerPokemon.isTerastallized()).toBe(true);
-      expect(playerPokemon.getTeraType()).toBe(ElementalType.WATER);
+      game.field.forceTera(playerPokemon, ElementalType.WATER);
 
       const enemyPokemon = game.field.getEnemyPokemon();
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -122,14 +114,10 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should increase STAB to 2.25 if tera type matches one of the user's original types", async () => {
-      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
-
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
       const playerPokemon = game.field.getPlayerPokemon();
-
-      expect(playerPokemon.isTerastallized()).toBe(true);
-      expect(playerPokemon.getTeraType()).toBe(ElementalType.FIRE);
+      game.field.forceTera(playerPokemon, ElementalType.FIRE);
 
       const enemyPokemon = game.field.getEnemyPokemon();
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -141,14 +129,10 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should not apply STAB if move type does NOT match tera type or the user's original types", async () => {
-      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
-
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
       const playerPokemon = game.field.getPlayerPokemon();
-
-      expect(playerPokemon.isTerastallized()).toBe(true);
-      expect(playerPokemon.getTeraType()).toBe(ElementalType.FIRE);
+      game.field.forceTera(playerPokemon, ElementalType.FIRE);
 
       const enemyPokemon = game.field.getEnemyPokemon();
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -160,14 +144,10 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should not apply to Stellar moves even if user is Stellar tera type", async () => {
-      game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
-
       await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
       const playerPokemon = game.field.getPlayerPokemon();
-
-      expect(playerPokemon.isTerastallized()).toBe(true);
-      expect(playerPokemon.getTeraType()).toBe(ElementalType.STELLAR);
+      game.field.forceTera(playerPokemon, ElementalType.STELLAR);
 
       const enemyPokemon = game.field.getEnemyPokemon();
       vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -175,7 +155,7 @@ describe("Abilities - Adaptability", () => {
       game.move.use(MoveId.TERA_BLAST);
       await game.toEndOfTurn();
 
-      expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
+      expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.2);
     });
   });
 });

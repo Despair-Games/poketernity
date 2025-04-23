@@ -163,7 +163,6 @@ export class FaintPhase extends PokemonPhase {
       true,
     );
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
-    pokemon.resetTera();
 
     if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
