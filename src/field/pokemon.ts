@@ -6,7 +6,7 @@ import type { FaintPhase } from "#app/phases/faint-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
+import type { AbilityFilterOptions } from "#app/@types/AbilityFilterOptions";
 import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
 import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
