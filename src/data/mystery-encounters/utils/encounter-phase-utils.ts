@@ -1,3 +1,4 @@
+import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
 import {
@@ -22,7 +23,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ModifierTypeGenerator,
