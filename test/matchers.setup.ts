@@ -1,4 +1,5 @@
 import { toHaveEffectiveStatMatcher } from "#test/matchers/to-have-effective-stat-matcher";
+import { toHaveFullHpMatcher } from "#test/matchers/to-have-full-hp";
 import { toHaveMoveResultMatcher } from "#test/matchers/to-have-move-result-matcher";
 import { toHaveStatMatcher } from "#test/matchers/to-have-stat-matcher";
 import { toHaveTakenDamageMatcher } from "#test/matchers/to-have-taken-damage-matcher";
@@ -18,4 +19,5 @@ expect.extend({
   toHaveEffectiveStat: toHaveEffectiveStatMatcher,
   toHaveTakenDamage: toHaveTakenDamageMatcher,
   toHaveWeather: toHaveWeatherMatcher,
+  toHaveFullHp: toHaveFullHpMatcher,
 });

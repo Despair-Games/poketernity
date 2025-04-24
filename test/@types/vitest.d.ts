@@ -71,5 +71,10 @@ declare module "vitest" {
      * @param expectedWeatherType - The expected {@linkcode WeatherType}
      */
     toHaveWeather(expectedWeatherType: WeatherType): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has full HP
+     */
+    toHaveFullHp(): void;
   }
 }
