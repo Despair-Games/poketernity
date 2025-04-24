@@ -72,6 +72,3 @@ export const PRIMAL_WEATHER_TYPES = Object.freeze([
   WeatherType.HEAVY_RAIN,
   WeatherType.STRONG_WINDS,
 ]);
-
-/** The defualt duration of a freshly applied weather in turns. */
-export const DEFAULT_NEW_WEATHER_DURATION = 5;
