@@ -1,6 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
-
+import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
 //#region Types
 
 export interface ToHaveUsedMoveMatcherOptions {
@@ -29,14 +28,14 @@ export function toHaveUsedMoveMatcher(
   expectedResult: MoveId,
   { index = 0, moveCount = 1 }: ToHaveUsedMoveMatcherOptions = {},
 ) {
-  if (typeof received !== "object" || received === null || typeof (received as any).getLastXMoves !== "function") {
+  if (!isPokemonInstance(received)) {
     return {
       pass: false,
-      message: () => `Expected object with method 'getLastXMoves()', but got: ${typeof received}`,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const turnMove = (received as Pokemon).getLastXMoves(moveCount);
+  const turnMove = received.getLastXMoves(moveCount);
   const move = turnMove?.[index];
   const pass = move?.move.id === expectedResult;
 

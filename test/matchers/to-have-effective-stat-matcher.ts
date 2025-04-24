@@ -2,6 +2,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { Stat, type EffectiveStat } from "#enums/stat";
+import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
 
 export interface ToHaveEffectiveStatMatcherOptions {
   /**
@@ -35,22 +36,21 @@ export function toHaveEffectiveStatMatcher(
   expectedValue: number,
   { enemy, move, isCritical = false }: ToHaveEffectiveStatMatcherOptions = {},
 ) {
-  if (typeof received !== "object" || received === null || (received as Pokemon).type !== "Pokemon") {
+  if (!isPokemonInstance(received)) {
     return {
       pass: false,
-      message: () => `Expected Pokemon object!`,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const pokemon = received as Pokemon;
-  const actualValue = pokemon.getEffectiveStat(stat, enemy, move, AbilityApplyMode.DEFAULT, isCritical);
+  const actualValue = received.getEffectiveStat(stat, enemy, move, AbilityApplyMode.DEFAULT, isCritical);
   const pass = actualValue === expectedValue;
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${pokemon.name} to NOT have EFFECTIVE ${Stat[stat]}=${expectedValue}, but it did.`
-        : `Expected ${pokemon.name} to have EFFECTIVE ${Stat[stat]}=${expectedValue}, but got ${actualValue}.`,
+        ? `Expected ${received.name} to NOT have EFFECTIVE ${Stat[stat]}=${expectedValue}, but it did.`
+        : `Expected ${received.name} to have EFFECTIVE ${Stat[stat]}=${expectedValue}, but got ${actualValue}.`,
   };
 }

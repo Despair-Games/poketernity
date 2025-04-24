@@ -1,4 +1,4 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
 
 /**
  * Matcher to check if a Pokemon has taken a specific amount of damage
@@ -7,22 +7,21 @@ import type { Pokemon } from "#app/field/pokemon";
  * @returns Whether the matcher passed
  */
 export function toHaveTakenDamageMatcher(received: unknown, expectedDamageTaken: number) {
-  if (typeof received !== "object" || received === null || (received as Pokemon).type !== "Pokemon") {
+  if (!isPokemonInstance(received)) {
     return {
       pass: false,
-      message: () => `Expected Pokemon object!`,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const pokemon = received as Pokemon;
-  const actualDamageTaken = pokemon.getInverseHp();
+  const actualDamageTaken = received.getInverseHp();
   const pass = actualDamageTaken === expectedDamageTaken;
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${pokemon.name} to NOT have taken ${expectedDamageTaken} damage, but it did!`
-        : `Expected ${pokemon.name} to have taken ${expectedDamageTaken} damage, but got ${actualDamageTaken}.`,
+        ? `Expected ${received.name} to NOT have taken ${expectedDamageTaken} damage, but it did!`
+        : `Expected ${received.name} to have taken ${expectedDamageTaken} damage, but got ${actualDamageTaken}.`,
   };
 }
