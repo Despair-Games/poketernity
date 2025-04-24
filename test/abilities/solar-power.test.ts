@@ -1,7 +1,7 @@
+import { SUNNY_WEATHER_TYPES } from "#app/constants/weather";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { capitalizeString, getEnumKeys, toDmgValue } from "#app/utils";
-import { SUNNY_WEATHER_TYPES } from "#app/constants/weather";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -43,6 +43,7 @@ describe("Abilities - Solar Power", () => {
       .disableCrits()
       .startingLevel(100)
       .ability(AbilityId.SOLAR_POWER)
+      .passiveAbility(AbilityId.OVERCOAT) // so hail/sandstorm doesn't damage it. This does not cancel the solar-power damage side-effect
       .enemySpecies(SpeciesId.SHUCKLE)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
@@ -84,7 +85,7 @@ describe("Abilities - Solar Power", () => {
       game.move.use(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(playerPkm.isFullHp()).toBe(true);
+      expect(playerPkm).toHaveFullHp();
     });
   });
 
@@ -123,7 +124,7 @@ describe("Abilities - Solar Power", () => {
     await game.faintPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
     await phaseInterceptor.to(SelectModifierPhase, false);
 
-    expect(playerPkm.isFullHp()).toBe(true);
+    expect(playerPkm).toHaveFullHp();
     expect(game).not.toHaveWeather(WeatherType.HARSH_SUN);
   });
 
@@ -150,10 +151,11 @@ describe("Abilities - Solar Power", () => {
     });
 
     it(`should NOT deal 1/8 of max-HP damage to the owner in ${weatherName} weather`, async () => {
+      // game.override.passiveAbility(AbilityId.OVERCOAT);
       game.move.use(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(playerPkm.isFullHp()).toBe(true);
+      expect(playerPkm).toHaveFullHp();
     });
   });
 
