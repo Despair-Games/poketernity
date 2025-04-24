@@ -3,7 +3,7 @@ import { Button } from "#enums/buttons";
 import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
 export class AutoCompleteUiHandler extends OptionSelectUiHandler {
-  private modalContainer: Phaser.GameObjects.Container | null;
+  private modalContainer?: Phaser.GameObjects.Container;
 
   public override show(config: OptionSelectModeConfig, container: Phaser.GameObjects.Container): boolean {
     this.modalContainer = container;
@@ -12,7 +12,7 @@ export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   }
 
   protected override clear(): void {
-    this.modalContainer = null;
+    this.modalContainer = undefined;
   }
 
   protected override updateSizeForOptions(options: any): void {

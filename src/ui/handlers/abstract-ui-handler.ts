@@ -18,7 +18,15 @@ export abstract class UiHandler {
   protected mode: number | null;
   protected cursor: number = 0;
 
+  /**
+   * Whether the handler is setup and ready to be displayed through calling {@linkcode start}.
+   * note: unused for now since all handlers are ready at all times.
+   */
   private _ready: boolean = false;
+
+  /**
+   * Whether the handler is currently active. Can be made inactive by calling {@linkcode stop}.
+   */
   private _active: boolean = false;
 
   /**
@@ -28,17 +36,10 @@ export abstract class UiHandler {
     this.mode = mode;
   }
 
-  /**
-   * Whether the handler is currently active. Can be made inactive by calling {@linkcode stop}.
-   */
   public get active(): boolean {
     return this._active;
   }
 
-  /**
-   * Whether the handler is setup and ready to be displayed through calling {@linkcode start}.
-   * note: unused for now since all handlers are ready at all times.
-   */
   public get ready(): boolean {
     return this._ready;
   }

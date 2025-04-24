@@ -894,6 +894,12 @@ export default class BattleScene extends SceneBase {
     this.infoToggles.push(infoToggle);
   }
 
+  /**
+   * Removes a specified {@linkcode InfoToggle} from the {@linkcode infoToggles} array.
+   *
+   * @param infoToggle - The {@linkcode InfoToggle} instance to be removed. If the toggle
+   *                     is not found in the array, no action is taken.
+   */
   removeInfoToggle(infoToggle: InfoToggle): void {
     const infoToggleIndex = this.infoToggles.indexOf(infoToggle);
     if (infoToggleIndex !== -1) {
