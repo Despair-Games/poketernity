@@ -1,4 +1,3 @@
-import type { TypeOfResult } from "#app/@types/TypeOfResult";
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameManager } from "#test/test-utils/gameManager";
@@ -7,8 +6,17 @@ import i18next, { type ParseKeys } from "i18next";
 import path from "path";
 import { vi } from "vitest";
 
+//#region Types
+
+type TypeOfResult = "undefined" | "object" | "boolean" | "number" | "bigint" | "string" | "symbol" | "function";
+
+//#endregion
+//#region Constants
+
 export const RESOURCES_FOLDER_PATH = `test/test-utils/resources`;
 export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
+
+//#endregion
 
 /**
  * Sets up the i18next mock.
