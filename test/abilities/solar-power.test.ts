@@ -42,7 +42,6 @@ describe("Abilities - Solar Power", () => {
       .battleType("single")
       .disableCrits()
       .startingLevel(100)
-      .moveset(MoveId.EMBER)
       .ability(AbilityId.SOLAR_POWER)
       .enemySpecies(SpeciesId.SHUCKLE)
       .enemyAbility(AbilityId.BALL_FETCH)
@@ -70,16 +69,28 @@ describe("Abilities - Solar Power", () => {
     it(`should deal 1/8 of max-HP damage to the owner in ${weatherName} weather`, async () => {
       const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
 
-      game.move.select(MoveId.SPLASH);
+      game.move.use(MoveId.SPLASH);
       await game.toNextTurn();
 
       expect(playerPkm).toHaveTakenDamage(expectedDamage);
+    });
+
+    it(`should do nothing in ${weatherName} weather if Cloud Nine is active`, async () => {
+      game.override.enemyAbility(AbilityId.CLOUD_NINE);
+
+      const baseSpAtk = playerPkm.getStat(Stat.SPATK);
+      expect(playerPkm).toHaveEffectiveStat(Stat.SPATK, baseSpAtk);
+
+      game.move.use(MoveId.SPLASH);
+      await game.toNextTurn();
+
+      expect(playerPkm.isFullHp()).toBe(true);
     });
   });
 
   it(`should NOT deal 1/8 of max-HP damage to the owner if Sunny weather ends in the same turn`, async () => {
     const { override, classicMode, field, move } = game;
-    override.moveset([MoveId.SUNNY_DAY, MoveId.SPLASH]).newWeatherDuration(2);
+    override.newWeatherDuration(2);
 
     await classicMode.startBattle([SpeciesId.CHARMANDER]);
 
@@ -104,7 +115,6 @@ describe("Abilities - Solar Power", () => {
     await classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const playerPkm = field.getPlayerPokemon();
-    const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
 
     const enemeyPokemon = field.getEnemyPokemon();
 
@@ -113,7 +123,7 @@ describe("Abilities - Solar Power", () => {
     await game.faintPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
     await phaseInterceptor.to(SelectModifierPhase, false);
 
-    expect(playerPkm).not.toHaveTakenDamage(expectedDamage);
+    expect(playerPkm.isFullHp()).toBe(true);
     expect(game).not.toHaveWeather(WeatherType.HARSH_SUN);
   });
 
@@ -133,19 +143,17 @@ describe("Abilities - Solar Power", () => {
     it(`should NOT boost SPATK in ${weatherName} weather`, async () => {
       const baseSpAtk = playerPkm.getStat(Stat.SPATK);
 
-      game.move.select(MoveId.EMBER);
+      game.move.use(MoveId.EMBER);
       await game.toNextTurn();
 
       expect(playerPkm).toHaveEffectiveStat(Stat.SPATK, baseSpAtk);
     });
 
     it(`should NOT deal 1/8 of max-HP damage to the owner in ${weatherName} weather`, async () => {
-      const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
-
       game.move.use(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(playerPkm).not.toHaveTakenDamage(expectedDamage);
+      expect(playerPkm.isFullHp()).toBe(true);
     });
   });
 
