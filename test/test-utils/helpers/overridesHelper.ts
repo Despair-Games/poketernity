@@ -258,7 +258,8 @@ export class OverridesHelper extends GameManagerHelper {
 
   /**
    * Override the new weather duration.
-   * **Will NOT affect primal weathers!**
+   * **Will ALSO affect primal weathers!**
+   * **Can NOT be combined with {@linkcode weather}!**
    * @param newWeatherDuration -
    * - `-1` to disable the override
    * - `0` for "infinite" duration
