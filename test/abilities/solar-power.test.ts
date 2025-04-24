@@ -1,6 +1,5 @@
 import { SUNNY_WEATHER_TYPES } from "#app/constants/weather";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { capitalizeString, getEnumKeys, toDmgValue } from "#app/utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
@@ -116,13 +115,12 @@ describe("Abilities - Solar Power", () => {
     await classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const playerPkm = field.getPlayerPokemon();
-
     const enemeyPokemon = field.getEnemyPokemon();
 
     expect(game).toHaveWeather(WeatherType.HARSH_SUN);
     move.use(MoveId.SPLASH);
     await game.faintPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
-    await phaseInterceptor.to(SelectModifierPhase, false);
+    await phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(playerPkm).toHaveFullHp();
     expect(game).not.toHaveWeather(WeatherType.HARSH_SUN);

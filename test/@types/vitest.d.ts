@@ -50,7 +50,7 @@ declare module "vitest" {
     toHaveStat(stat: PermanentStat, expectedValue: number, options?: ToHaveStatMatcherOptions): void;
 
     /**
-     * Matcher to check if a {@linkcode Pokemon Pokemons} effective stat is as expected
+     * Matcher to check if a {@linkcode Pokemon Pokemon's} effective stat is as expected
      *
      * *Effective stat means the stat after all the stat modifiers are applied.*
      *
