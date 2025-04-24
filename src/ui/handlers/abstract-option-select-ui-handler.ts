@@ -372,9 +372,9 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
       }
       if (success) {
         // handle hover code if the option has a handler for it
-        const optionIndex = this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0));
-        if (!isNullOrUndefined(this.config?.options[optionIndex].onHover)) {
-          this.config.options[optionIndex].onHover();
+        const newOption = this.getCurrentOption();
+        if (!isNullOrUndefined(newOption.onHover)) {
+          newOption.onHover();
         }
       }
     }
