@@ -89,7 +89,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     const brutalConfig = allTrainerConfigs[brutalTrainerType].clone();
     brutalConfig.title = allTrainerConfigs[brutalTrainerType].title;
     brutalConfig.setPartyTemplates(e4Template);
-    // @ts-ignore
+    // @ts-expect-error - TODO: change the type of `partyTemplateFunc` or change this `null` assignment
     brutalConfig.partyTemplateFunc = null; // Overrides gym leader party template func
     female = false;
     if (brutalConfig.hasGenders) {

@@ -17,9 +17,9 @@ export class MockSprite implements MockGameObject {
   constructor(textureManager, x, y, texture) {
     this.textureManager = textureManager;
     this.scene = textureManager.scene;
-    // @ts-ignore
+    // @ts-expect-error - the test framework mocks out most UI elements
     Phaser.GameObjects.Sprite.prototype.setInteractive = this.setInteractive;
-    // @ts-ignore
+    // @ts-expect-error - the test framework mocks out most UI elements
     Phaser.GameObjects.Sprite.prototype.setTexture = this.setTexture;
     Phaser.GameObjects.Sprite.prototype.setSizeToFrame = this.setSizeToFrame;
     Phaser.GameObjects.Sprite.prototype.setFrame = this.setFrame;
