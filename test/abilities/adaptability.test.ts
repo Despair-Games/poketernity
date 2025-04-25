@@ -69,7 +69,7 @@ describe("Abilities - Adaptability", () => {
 
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.0);
   });
-  
+
   it("should not apply STAB to Struggle", async () => {
     await game.classicMode.startBattle([SpeciesId.RATTATA]);
 
