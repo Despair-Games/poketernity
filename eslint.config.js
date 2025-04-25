@@ -44,6 +44,7 @@ const eslintRules = {
   "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }], // Disallows multiple empty lines
   "@typescript-eslint/consistent-type-imports": "error", // Enforces type-only imports wherever possible
   "@typescript-eslint/no-import-type-side-effects": "error", // Typescript turns `import { type X } from Y` into `import {} from Y` but completely removes `import type { X } from Y`
+  "@typescript-eslint/ban-ts-comment": ["error", { "ts-check": false, "ts-expect-error": "allow-with-description" }], // Disallow usage of `@ts-ignore`
 };
 
 export default [
