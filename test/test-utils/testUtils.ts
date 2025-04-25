@@ -66,15 +66,18 @@ export function getAppRootDir() {
 export function receivedStr(received: unknown, expectedType: TypeOfResult = "object"): string {
   if (received === null) {
     return "null";
-  } else if (received === undefined) {
-    return "undefined";
-  } else if (typeof received !== expectedType) {
-    return typeof received;
-  } else if (expectedType === "object") {
-    return received.constructor.name;
-  } else {
-    return "unknown";
   }
+  if (received === undefined) {
+    return "undefined";
+  }
+  if (typeof received !== expectedType) {
+    return typeof received;
+  }
+  if (expectedType === "object") {
+    return received.constructor.name;
+  }
+
+  return "unknown";
 }
 
 /**
