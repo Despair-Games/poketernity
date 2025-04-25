@@ -1107,6 +1107,11 @@ export class GameData {
           v = [];
         }
         for (const pd of v) {
+          // TODO: remove later, temporary to prevent devs from needing to wipe their local storage
+          // due to the field in `PokemonData` being renamed from `species` to `speciesId`
+          if (pd.hasOwnProperty("species")) {
+            pd.speciesId = pd.species;
+          }
           ret.push(new PokemonData(pd));
         }
         return ret;

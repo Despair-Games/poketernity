@@ -51,6 +51,9 @@ export const SCREEN_SINGLES_DMG_FACTOR = 0.5;
 /** The damage multiplier applied by Reflect, Light Screen, and Aurora Veil in double battles.*/
 export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;
 
+/** The scaling factor by how much higher the level cap is compared to the average Pokemon of a wave */
+export const LEVEL_CAP_SCALE_FACTOR = 1.2;
+
 /**
  * A list of all Gigantamax form keys, excluding Eternamax.
  */

@@ -1,11 +1,22 @@
-import i18next, { type ParseKeys } from "i18next";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app";
+import type { Pokemon } from "#app/field/pokemon";
+import type { GameManager } from "#test/test-utils/gameManager";
 import fs from "fs";
+import i18next, { type ParseKeys } from "i18next";
 import path from "path";
 import { vi } from "vitest";
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app";
+
+//#region Types
+
+type TypeOfResult = "undefined" | "object" | "boolean" | "number" | "bigint" | "string" | "symbol" | "function";
+
+//#endregion
+//#region Constants
 
 export const RESOURCES_FOLDER_PATH = `test/test-utils/resources`;
 export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
+
+//#endregion
 
 /**
  * Sets up the i18next mock.
@@ -45,4 +56,52 @@ export function getAppRootDir() {
     currentDir = path.join(currentDir, "..");
   }
   return currentDir;
+}
+
+/**
+ * Helper to determine the actual type of the received object as human readable string
+ * @param received The received object
+ * @returns A human readable string of the received object (type)
+ */
+export function receivedStr(received: unknown, expectedType: TypeOfResult = "object"): string {
+  let what = "unknown";
+
+  if (received === null) {
+    what = "null";
+  } else if (received === undefined) {
+    what = "undefined";
+  } else if (typeof received !== expectedType) {
+    what = typeof received;
+  } else if (expectedType === "object") {
+    what = received.constructor.name;
+  }
+
+  return `but got ${what}!`;
+}
+
+/**
+ * Checks if the received object is an {@linkcode Object}
+ * @param received - The object to check
+ * @returns Whether the object is an {@linkcode Object}
+ */
+export function isObject(received: unknown): received is object {
+  return !!received && typeof received === "object";
+}
+
+/**
+ * Checks if an object is a {@linkcode Pokemon} instance
+ * @param received - The object to check
+ * @returns Whether the object is a {@linkcode Pokemon} instance
+ */
+export function isPokemonInstance(received: unknown): received is Pokemon {
+  return isObject(received) && (received as Phaser.GameObjects.GameObject).type === "Pokemon";
+}
+
+/**
+ * Checks if an object is a {@linkcode GameManager} instance
+ * @param received - The object to check
+ * @returns Whether the object is a Pokemon instance
+ */
+export function isGameManagerInstance(received: unknown): received is GameManager {
+  return isObject(received) && (received as GameManager).constructor.name === "GameManager";
 }

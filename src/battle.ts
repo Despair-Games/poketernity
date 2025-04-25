@@ -141,27 +141,28 @@ export default class Battle {
     }
 
     /**
-     * TODO: This levelOffset part stops being a factor after wave 10...
-     * and its only effect is potentially adding 1 to the level. Should be
-     * much cleaner and simpler to remove
+     * TODO: Simplify this. Also look into smaller deviations if total level is intended to be lower
+     * for the same number of waves
+     *
+     * Absolute value is not needed since the value is always >= 0
+     * Deviation is a uniform deviation equal ranging from 0 to one tenth the levelWaveIndex
      */
     let levelOffset = 0;
 
     const deviation = 10 / levelWaveIndex;
-    levelOffset = Math.abs(this.randSeedGaussForLevel(deviation));
+    levelOffset = Math.abs(this.randSeedUniformForLevel(deviation));
 
     return Math.max(Math.round(baseLevel + levelOffset), 1);
   }
 
   /**
-   * TODO: Delete this because generating a random gaussian, absolute valuing it, then rounding it
-   * just for a difference of 1 is insane. It also becomes useless after wave 10
+   * TODO: Remove this and use a simpler way to generate deviation
    *
-   * Helper function for whether or not to add 1 to a wild Pokemon's level
-   * @param value the number of tries
-   * @returns a number between 0 and 1
+   * Helper function for determining the deviation to add onto a wild Pokemon's level
+   * @param value - The adjusted level wave index
+   * @returns the deviation equal to `Phaser.Math.RND.realInRange(0, 1) * value / 10`
    */
-  randSeedGaussForLevel(value: number): number {
+  randSeedUniformForLevel(value: number): number {
     let rand = 0;
     for (let i = value; i > 0; i--) {
       rand += Phaser.Math.RND.realInRange(0, 1);

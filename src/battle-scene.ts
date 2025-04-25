@@ -1,16 +1,19 @@
+import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
+import type { Localizable } from "#app/@types/locales";
 import type { ModifierPredicate } from "#app/@types/ModifierPredicate";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Settings";
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
-import { IV_MAX, IV_MIN } from "#app/constants/game";
+import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants/mystery-encounters";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
@@ -19,6 +22,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
+import { getLevelForWaveFunc } from "#app/data/exp";
 import { populateAnims } from "#app/data/init/init-anims";
 import { initCommonAnims } from "#app/data/init/init-common-anims";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
@@ -47,8 +51,6 @@ import Trainer from "#app/field/trainer";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
 import { InputsController } from "#app/inputs-controller";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import type { Localizable } from "#app/interfaces/locales";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger } from "#app/loggers";
 import {
@@ -108,7 +110,6 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { UiInputs } from "#app/ui-inputs";
 import { AbilityBar } from "#app/ui/components/ability-bar";
 import { ArenaFlyout } from "#app/ui/components/arena-flyout";
@@ -168,7 +169,6 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
-import { getLevelForWaveFunc } from "#app/data/exp";
 
 //#region Types
 
@@ -469,7 +469,7 @@ export default class BattleScene extends SceneBase {
       true,
     );
 
-    //@ts-ignore (the defined types in the package are incromplete...)
+    // @ts-expect-error - the defined types in the package are incomplete (TODO: fix this?)
     transition.transit({
       mode: "blinds",
       ease: "Cubic.easeInOut",
@@ -1101,8 +1101,8 @@ export default class BattleScene extends SceneBase {
       this.field.remove(this.currentBattle.mysteryEncounter?.introVisuals, true);
     }
 
-    //@ts-ignore  - allowing `null` for currentBattle causes a lot of trouble
-    this.currentBattle = null; // TODO: resolve ts-ignore
+    // @ts-expect-error - allowing `null` for currentBattle causes a lot of trouble
+    this.currentBattle = null; // TODO: refactor so this is gone
 
     // Reset RNG after end of game or save & quit.
     // This needs to happen after clearing this.currentBattle or the seed will be affected by the last wave played
@@ -1936,7 +1936,7 @@ export default class BattleScene extends SceneBase {
 
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * 1.2;
+    const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * LEVEL_CAP_SCALE_FACTOR;
     return Math.ceil(baseLevel / 2) * 2 + 2;
   }
 

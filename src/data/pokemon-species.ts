@@ -1,3 +1,4 @@
+import type { Localizable } from "#app/@types/locales";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
@@ -5,7 +6,6 @@ import type { PokemonForm } from "#app/data/pokemon-form";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { variantData } from "#app/data/variant";
-import type { Localizable } from "#app/interfaces/locales";
 import { randSeedGauss, randSeedItem } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { AbilityId } from "#enums/ability-id";

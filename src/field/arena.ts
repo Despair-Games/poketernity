@@ -12,6 +12,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
 import { PRIMAL_WEATHER_TYPES } from "#app/constants/game";
+import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -413,7 +414,13 @@ export class Arena {
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER_TYPES.includes(newWeatherType) ? 5 : 0;
+    let newWeatherDuration = DEFAULT_NEW_WEATHER_DURATION;
+
+    if (Overrides.NEW_WEATHER_DURATION_OVERRIDE >= 0) {
+      newWeatherDuration = Overrides.NEW_WEATHER_DURATION_OVERRIDE;
+    } else if (!hasPokemonSource || PRIMAL_WEATHER_TYPES.includes(newWeatherType)) {
+      newWeatherDuration = 0;
+    }
 
     if (newWeatherType !== WeatherType.NONE) {
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
