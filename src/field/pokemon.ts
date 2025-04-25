@@ -1516,6 +1516,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Sets the temporary types of a pokemon
+   * (such as due to {@linkcode AbilityId.PROTEAN | Protean} or {@linkcode MoveId.CONVERSION | Conversion})
+   * @param types - The type or types to set
+   */
+  public setTemporaryTypes(types: ElementalType | ElementalType[]): void {
+    if (this.isTerastallized) {
+      return;
+    }
+    if (!Array.isArray(types)) {
+      types = [types];
+    }
+    this.summonData.types = types;
+  }
+
+  /**
    * Gets the non-passive ability of the pokemon. This accounts for ability changing effects.
    * This should rarely be called, most of the time {@linkcode hasAbility} or {@linkcode hasAbilityWithAttr} are better used as
    * those check both the passive and non-passive abilities and account for ability suppression.
