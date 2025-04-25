@@ -278,7 +278,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       ease: "Sine.easeIn",
       duration: 1250,
       onUpdate: (t) => {
-        const value = t.getValue();
+        const value = t.getValue() ?? 1;
         const index = Math.floor(value * typeOptions.length);
         if (index > i && index <= typeOptions.length) {
           const option = this.options[i];
@@ -788,7 +788,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
           if (!globalScene) {
             return;
           }
-          const value = t.getValue();
+          const value = t.getValue() ?? 1;
           if (!bounce && value > lastValue) {
             globalScene.audioManager.playSound("se/pb_bounce_1", { volume: 1 / ++bounceCount });
             bounce = true;

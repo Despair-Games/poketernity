@@ -89,4 +89,10 @@ declare module "phaser" {
       }
     }
   }
+
+  namespace Tweens {
+    interface Tween {
+      getValue(index?: number): number | null;
+    }
+  }
 }
