@@ -30,7 +30,7 @@ export abstract class UiHandler {
   private _active: boolean = false;
 
   /**
-   * @param mode The mode of the UI element. These should be unique.
+   * @param mode - The mode of the UI element. These should be unique.
    */
   constructor(mode: UiMode | null = null) {
     this.mode = mode;
@@ -81,7 +81,7 @@ export abstract class UiHandler {
    * Displays the handler.
    * Should not be overridden. Calls {@linkcode show}, which subclasses should override.
    *
-   * @param args the arguments needed by this handler for display.
+   * @param args - The arguments needed by this handler for display.
    * @returns `true` if the handler was setup successfully, `false` otherwise.
    */
   public start(...args: unknown[]): boolean {
@@ -132,7 +132,7 @@ export abstract class UiHandler {
    *
    * Elements (containers, gameObjects, listeners, ...) created here should be destroyed in {@linkcode clear}.
    *
-   * @param _args the arguments needed by this handler for display.
+   * @param _args - The arguments needed by this handler for display.
    * @returns `true` if the handler was setup successfully, `false` otherwise.
    */
   public abstract show(..._args: unknown[]): boolean;
@@ -174,7 +174,7 @@ export abstract class UiHandler {
   /**
    * Changes the style of the mouse cursor.
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/cursor}
-   * @param cursorStyle cursor style to apply
+   * @param cursorStyle - The cursor style to apply
    */
   protected setMouseCursorStyle(cursorStyle: "pointer" | "default") {
     globalScene.input.manager.canvas.style.cursor = cursorStyle;

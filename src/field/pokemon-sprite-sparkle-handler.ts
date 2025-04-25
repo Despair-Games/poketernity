@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { fixedNumber, randInt } from "#app/utils";
+import Phaser from "phaser";
 
 export default class PokemonSpriteSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
