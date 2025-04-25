@@ -43,13 +43,16 @@ describe("Abilities - Steadfast", () => {
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
+
     expect(playerPkm).not.toHaveFlinched();
+
     await phaseInterceptor.to("MoveEndPhase", true);
 
     expect(playerPkm).toHaveFlinched();
-    expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
 
     await game.toEndOfTurn();
+
+    expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
   });
 
   it(`should NOT boost SPD after NOT flinching`, async () => {
