@@ -55,4 +55,5 @@ function getByType<T extends Phaser.GameObjects.GameObject>(
 ): T | null {
   return (Phaser.Utils.Array.GetFirst(this.list, "type", type) as T) ?? null;
 }
+
 //#endregion
