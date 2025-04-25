@@ -84,4 +84,56 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).not.toHaveFlinched();
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
+
+  it(`should NOT boost SPD if flinching is prevented by "Inner Focus"`, async () => {
+    const { classicMode, field, move } = game;
+    game.override.passiveAbility(AbilityId.INNER_FOCUS);
+    await classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const playerPkm = field.getPlayerPokemon();
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    move.use(MoveId.SPLASH);
+    await move.selectEnemyMove(MoveId.FAKE_OUT);
+    await game.toEndOfTurn();
+
+    expect(playerPkm).not.toHaveFlinched();
+    expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
+  });
+
+  it.each([
+    {
+      abilityName: "Mold Breaker",
+      abilityId: AbilityId.MOLD_BREAKER,
+    },
+    {
+      abilityName: "Teravolt",
+      abilityId: AbilityId.TERAVOLT,
+    },
+    {
+      abilityName: "Turboblaze",
+      abilityId: AbilityId.TURBOBLAZE,
+    },
+  ])(`should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability`, async ({ abilityId }) => {
+    const { classicMode, field, move, phaseInterceptor } = game;
+    game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
+    await classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const playerPkm = field.getPlayerPokemon();
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    move.use(MoveId.SPLASH);
+    await move.selectEnemyMove(MoveId.FAKE_OUT);
+    await phaseInterceptor.to("MessagePhase", false);
+
+    expect(playerPkm).not.toHaveFlinched();
+
+    await phaseInterceptor.to("MoveEndPhase", true);
+
+    expect(playerPkm).toHaveFlinched();
+
+    await game.toEndOfTurn();
+
+    expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
+  });
 });
