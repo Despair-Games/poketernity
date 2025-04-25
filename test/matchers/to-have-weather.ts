@@ -11,14 +11,14 @@ import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
 export function toHaveWeatherMatcher(received: unknown, expectedWeatherType: WeatherType) {
   if (!isGameManagerInstance(received)) {
     return {
-      pass: false,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      pass: this.isNot,
+      message: () => `Expected GameManager, but got ${receivedStr(received)}!`,
     };
   }
 
   if (!received.scene?.arena) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected GameManager.${received.scene ? "scene" : "scene.arena"} to be defined!`,
     };
   }

@@ -32,7 +32,7 @@ export function toHaveMoveResultMatcher(
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }

@@ -9,7 +9,7 @@ import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
 export function toHaveTakenDamageMatcher(received: unknown, expectedDamageTaken: number) {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }

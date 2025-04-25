@@ -76,7 +76,7 @@ export function receivedStr(received: unknown, expectedType: TypeOfResult = "obj
     what = received.constructor.name;
   }
 
-  return `but got ${what}!`;
+  return `${what}`;
 }
 
 /**
