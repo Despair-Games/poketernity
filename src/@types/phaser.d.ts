@@ -3,17 +3,13 @@ import "phaser";
 declare module "phaser" {
   namespace GameObjects {
     interface GameObject {
-      width: number;
-
-      height: number;
-
-      originX: number;
-
-      originY: number;
-
-      x: number;
-
-      y: number;
+      /**
+       * Searches for the first instance of a child with its `type` property matching the given argument.
+       * Should more than one child have the same type only the first is returned.
+       * @param type - The type to search for
+       * @returns The first instance with the given type (as {@linkcode T}), or `null`
+       */
+      getByType<T extends Phaser.GameObjects.GameObject>(type: string): T | null;
     }
 
     interface Container {
