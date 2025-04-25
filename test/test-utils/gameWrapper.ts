@@ -97,7 +97,7 @@ export class GameWrapper {
   }
 
   injectMandatory() {
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.game.config = {
       seed: ["test"],
       gameVersion: version,
@@ -120,7 +120,7 @@ export class GameWrapper {
 
     this.scene.sound = {
       play: () => null as any,
-      // @ts-ignore
+      // @ts-expect-error - the test framework intentionally mocks out functionality
       pause: () => null,
       setRate: () => null as any,
       add: () => this.scene.sound as any,
@@ -172,15 +172,15 @@ export class GameWrapper {
     this.scene.scale = this.game.scale;
     this.scene.textures = this.game.textures;
     this.scene.events = this.game.events;
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.manager = new InputManager(this.game, {});
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.manager.keyboard = new KeyboardManager(this.scene);
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.pluginEvents = new EventEmitter();
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.domContainer = {} as HTMLDivElement;
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.spritePipeline = {};
     this.scene.fieldSpritePipeline = {} as any;
     this.scene.load = new MockLoader(this.scene) as any;
@@ -194,7 +194,6 @@ export class GameWrapper {
             // this.frame in Text.js
             source: {} as any,
             setSize: () => null as any,
-            // @ts-ignore
             glTexture: () => ({
               spectorMetadata: {},
             }),
@@ -218,10 +217,10 @@ export class GameWrapper {
     const mockTextureManager = new MockTextureManager(this.scene);
     this.scene.add = mockTextureManager.add;
     this.scene.textures = mockTextureManager as any;
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.sys.displayList = this.scene.add.displayList;
     this.scene.sys.updateList = new UpdateList(this.scene);
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.systems = this.scene.sys;
     this.scene.input = this.game.input as any;
     this.scene.scene = this.scene as any;
@@ -245,7 +244,7 @@ export class GameWrapper {
     };
     this.scene.make = new MockGameObjectCreator(mockTextureManager) as any;
     this.scene.time = new MockClock(this.scene);
-    // @ts-ignore
+    // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.remove = vi.fn();
 
     Pokemon.prototype.updateInfo = async () => {};

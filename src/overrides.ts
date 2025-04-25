@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
+import type { Arena } from "#app/field/arena";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
@@ -27,7 +28,7 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
  * {@linkcode BerryType}, {@linkcode ElementalType}, {@linkcode EvolutionItem}
- * {@linkcode FormChangeItem}, {@linkcode Stat}
+ * {@linkcode FormChangeItem}, {@linkcode Stat}, {@linkcode Arena}
  */
 /**
  * Overrides that are used to test different in game situations
@@ -61,6 +62,16 @@ class DefaultOverrides {
   /** a specific seed (default: a random string of 24 characters) */
   readonly SEED_OVERRIDE: string = "";
   readonly WEATHER_OVERRIDE: WeatherType = WeatherType.NONE;
+  /**
+   * Override the new weather duration. 
+   * **Will ALSO affect primal weathers!**
+   * **Can NOT be combined with {@linkcode WEATHER_OVERRIDE}!**
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the weather should last
+   * @see {@linkcode Arena.trySetWeather}
+   */
+  readonly NEW_WEATHER_DURATION_OVERRIDE: number = -1;
   /**
    * Determines the override for battle types.
    *
@@ -246,15 +257,15 @@ class DefaultOverrides {
    * If more entries are listed than rolled, only the first X entries will be used, where X is the number of items rolled.
    *
    * Note that, for all items in the array, `count` is not used.
-   * 
+   *
    * @example
    * ```
    * // Attempts to make the first item reward a rarer candy, the second one a dynamax band, and the third a rare evolution item
    * ITEM_REWARD_OVERRIDE: [{ name: "RARER_CANDY" }, { name: "DYNAMAX_BAND" }, { name: "RARE_EVOLUTION_ITEM" }]
-   * 
+   *
    * // Example of a vitamin that boosts def (Iron)
    * ITEM_REWARD_OVERRIDE: [{ name: "BASE_STAT_BOOSTER", type: Stat.DEF }]
-   * 
+   *
    * // Example of a type boosting item (Charcoal)
    * { name: "ATTACK_TYPE_BOOSTER", type: ElementalType.FIRE }
    * ```
@@ -266,7 +277,7 @@ class DefaultOverrides {
    * - `null`: Ignore this override; each biome uses its normal trainer rate.
    * - `0`: Disable all non-scripted enemy trainer encounters.
    * - Positive number `n`: Sets the chance of a non-scripted enemy trainer encounter to be 1/n.
-   * 
+   *
    * CAUTION: This function does not disable any rules that may prevent trainer spawns
    * (e.g., The rule requiring trainers to be 3 waves apart, and the rule preventing trainer spawns on wave X1).
    */

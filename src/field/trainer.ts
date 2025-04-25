@@ -1,4 +1,5 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
+import { getLevelForWaveFunc } from "#app/data/exp";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { signatureSpecies } from "#app/data/signatureSpecies";
@@ -259,7 +260,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     const partyTemplate = this.getPartyTemplate();
 
     const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = 1 + scaledWaveIndex / 2 + Math.pow(scaledWaveIndex / 25, 2);
+    const baseLevel = getLevelForWaveFunc(scaledWaveIndex);
 
     if (this.isDouble() && partyTemplate.size < 2) {
       partyTemplate.size = 2;
@@ -270,6 +271,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
       const strength = partyTemplate.getStrength(i);
 
+      /**
+       * TODO: Tweak these values, the 1.2 value is the {@linkcode LEVEL_CAP_SCALE_FACTOR}
+       */
       switch (strength) {
         case PartyMemberStrength.WEAKER:
           multiplier = 0.95;
