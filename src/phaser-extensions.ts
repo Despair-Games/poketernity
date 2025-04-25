@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 //#region Extensions
 
 Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.Container>;
@@ -30,5 +32,3 @@ function setPositionRelative<T extends Phaser.GameObjects.GameObject>(
 }
 
 //#endregion
-
-export default {};
