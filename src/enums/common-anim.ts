@@ -48,4 +48,5 @@ export enum CommonAnim {
   GRASSY_TERRAIN,
   PSYCHIC_TERRAIN,
   LOCK_ON = 2120,
+  TERASTALLIZE,
 }

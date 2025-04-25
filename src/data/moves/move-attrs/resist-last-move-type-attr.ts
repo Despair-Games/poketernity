@@ -33,12 +33,12 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     const userTypes = user.getTypes();
     const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t));
 
-    const type = validTypes[user.randSeedInt(validTypes.length)];
-    user.summonData.types = [type];
+    const modifiedType = validTypes[user.randSeedInt(validTypes.length)];
+    user.setTemporaryTypes(modifiedType);
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`),
+        type: i18next.t(`pokemonInfo:Type.${ElementalType[modifiedType]}`),
       }),
     );
     user.updateInfo();

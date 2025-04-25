@@ -1,38 +1,36 @@
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
+import type { EggOptions } from "#app/data/egg";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
-  generateModifierType,
   handleMysteryEncounterBattleFailed,
   initBattleWithEnemyConfig,
   setEncounterRewards,
+  type EnemyPartyConfig,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import { randSeedShuffle } from "#app/utils";
-import type MysteryEncounter from "../mystery-encounter";
-import { MysteryEncounterBuilder } from "../mystery-encounter";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
-import { BiomeId } from "#enums/biome-id";
-import { TrainerType } from "#enums/trainer-type";
-import i18next from "i18next";
-import { SpeciesId } from "#enums/species-id";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokeballTintColor } from "#app/data/pokeball";
 import { speciesStarterCosts } from "#app/data/starters";
-import { Nature } from "#enums/nature";
-import { MoveId } from "#enums/move-id";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { EggOptions } from "#app/data/egg";
+import { globalScene } from "#app/global-scene";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { randSeedShuffle } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { ElementalType } from "#enums/elemental-type";
-import { getPokeballTintColor } from "#app/data/pokeball";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
+import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
@@ -454,15 +452,9 @@ function getPartyConfig(): EnemyPartyConfig {
         nature: Nature.ADAMANT,
         moveSet: [MoveId.METEOR_MASH, MoveId.FIRE_PUNCH, MoveId.ICE_PUNCH, MoveId.THUNDER_PUNCH],
         ivs: [31, 31, 31, 31, 31, 31],
-        modifierConfigs: [
-          {
-            modifier: generateModifierType(modifierTypes.TERA_SHARD, [
-              ElementalType.STEEL,
-            ]) as PokemonHeldItemModifierType,
+        teraType: ElementalType.STEEL,
           },
         ],
-      },
-    ],
   };
 
   if (globalScene.arena.isInBiome(BiomeId.SPACE)) {

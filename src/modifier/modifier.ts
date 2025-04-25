@@ -5,7 +5,6 @@ import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import { SpeciesFormChangeLapseTeraTrigger, SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -21,7 +20,6 @@ import type {
   PokemonBaseStatTotalModifierType,
   PokemonExpBoosterModifierType,
   PokemonFriendshipBoosterModifierType,
-  TerastallizeModifierType,
   TmModifierType,
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -29,14 +27,13 @@ import Overrides from "#app/overrides";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achievements";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
-import { ElementalType } from "#enums/elemental-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { FormChangeItem } from "#enums/form-change-item";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -189,10 +186,6 @@ export abstract class Modifier {
   }
 
   isPersistentModifier(): this is PersistentModifier {
-    return false;
-  }
-
-  isTerastallizeModifier(): this is TerastallizeModifier {
     return false;
   }
 
@@ -912,82 +905,6 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
   }
 
   override isLapsingPokemonHeldItemModifier(): this is this {
-    return true;
-  }
-}
-
-export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
-  public override type: TerastallizeModifierType;
-  public teraType: ElementalType;
-  public override isTransferable: boolean = false;
-
-  constructor(
-    type: TerastallizeModifierType,
-    pokemonId: number,
-    teraType: ElementalType,
-    battlesLeft?: number,
-    stackCount?: number,
-  ) {
-    super(type, pokemonId, battlesLeft || 10, stackCount);
-
-    this.teraType = teraType;
-  }
-
-  matchType(modifier: Modifier): boolean {
-    if (modifier.isTerastallizeModifier() && modifier.teraType === this.teraType) {
-      return true;
-    }
-    return false;
-  }
-
-  clone(): TerastallizeModifier {
-    return new TerastallizeModifier(this.type, this.pokemonId, this.teraType, this.battlesLeft, this.stackCount);
-  }
-
-  override getArgs(): any[] {
-    return [this.pokemonId, this.teraType, this.battlesLeft];
-  }
-
-  /**
-   * Applies the {@linkcode TerastallizeModifier} to the specified {@linkcode Pokemon}.
-   * @param pokemon the {@linkcode Pokemon} to be terastallized
-   * @returns always `true`
-   */
-  override apply(pokemon: Pokemon): boolean {
-    if (pokemon.isPlayer()) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeTeraTrigger);
-      globalScene.validateAchv(achvs.TERASTALLIZE);
-      if (this.teraType === ElementalType.STELLAR) {
-        globalScene.validateAchv(achvs.STELLAR_TERASTALLIZE);
-      }
-    }
-    pokemon.updateSpritePipelineData();
-    return true;
-  }
-
-  /**
-   * Triggers {@linkcode LapsingPokemonHeldItemModifier.lapse} and if it returns `0` a form change is triggered.
-   * @param pokemon THe {@linkcode Pokemon} to be terastallized
-   * @returns the result of {@linkcode LapsingPokemonHeldItemModifier.lapse}
-   */
-  public override lapse(pokemon: Pokemon): boolean {
-    const ret = super.lapse(pokemon);
-    if (!ret) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeLapseTeraTrigger);
-      pokemon.updateSpritePipelineData();
-    }
-    return ret;
-  }
-
-  override getScoreMultiplier(): number {
-    return 1.25;
-  }
-
-  getMaxHeldItemCount(_pokemon: Pokemon): number {
-    return 1;
-  }
-
-  override isTerastallizeModifier(): this is this {
     return true;
   }
 }

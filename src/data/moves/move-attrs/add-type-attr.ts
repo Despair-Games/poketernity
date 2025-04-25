@@ -39,6 +39,6 @@ export class AddTypeAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) => !target.isTerastallized() && !target.getTypes().includes(this.type);
+    return (_user, target, _move) => !target.isTerastallized && !target.getTypes().includes(this.type);
   }
 }

@@ -10,9 +10,9 @@ import { MenuManip } from "#test/settings/helpers/menuManip";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("Test Rebinding", () => {
-  let config;
-  let inGame;
-  let inTheSettingMenu;
+  let config: any;
+  let inGame: InGameManip;
+  let inTheSettingMenu: MenuManip;
   const configs: Map<string, InterfaceConfig> = new Map();
   const selectedDevice = {
     [Device.GAMEPAD]: null,
@@ -566,19 +566,19 @@ describe("Test Rebinding", () => {
   });
 
   it("check to delete all the binds of an action", () => {
-    inGame.whenWePressOnKeyboard("V").weShouldTriggerTheButton("Button_Cycle_Variant");
+    inGame.whenWePressOnKeyboard("V").weShouldTriggerTheButton("Button_Cycle_Tera");
     inTheSettingMenu
-      .whenCursorIsOnSetting("Alt_Button_Cycle_Variant")
+      .whenCursorIsOnSetting("Alt_Button_Cycle_Tera")
       .thereShouldBeNoIcon()
       .weWantThisBindInstead("K")
       .confirm();
     inTheSettingMenu
-      .whenCursorIsOnSetting("Alt_Button_Cycle_Variant")
+      .whenCursorIsOnSetting("Alt_Button_Cycle_Tera")
       .iconDisplayedIs("KEY_K")
       .whenWeDelete()
       .thereShouldBeNoIconAnymore();
     inTheSettingMenu
-      .whenCursorIsOnSetting("Button_Cycle_Variant")
+      .whenCursorIsOnSetting("Button_Cycle_Tera")
       .iconDisplayedIs("KEY_V")
       .whenWeDelete()
       .thereShouldBeNoIconAnymore();

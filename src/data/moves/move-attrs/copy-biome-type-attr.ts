@@ -28,7 +28,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
       typeChange = this.getTypeForBiome(globalScene.arena.biomeId);
     }
 
-    user.summonData.types = [typeChange];
+    user.setTemporaryTypes(typeChange);
     user.updateInfo();
 
     globalScene.phaseManager.queueMessagePhase(

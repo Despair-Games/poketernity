@@ -41,7 +41,7 @@ export class Arena {
   public biomeId: BiomeId;
   public weather: Weather | null;
   public terrain: Terrain | null;
-  public tags: ArenaTag[];
+  public tags: ArenaTag[] = [];
   public bgm: string;
   public ignoreAbilities: boolean;
   public ignoringEffectSource: BattlerIndex | null;
@@ -59,7 +59,6 @@ export class Arena {
 
   constructor(biomeId: BiomeId) {
     this.biomeId = biomeId;
-    this.tags = [];
     this.bgm = getBiomeBgm(biomeId);
     this.trainerPool = allBiomes.get(biomeId).trainerPool;
     this.updatePoolsForTimeOfDay();
