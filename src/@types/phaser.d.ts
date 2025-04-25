@@ -18,37 +18,61 @@ declare module "phaser" {
 
     interface Container {
       /**
-       * Sets this object's position relative to another object with a given offset
+       * Positions this object relative to the {@linkcode guideObject}.
+       * @param guideObject - The object to base the position off of
+       * @param x - The relative x position
+       * @param y - The relative y position
+       * @returns The positioned instance of {@linkcode T}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
     interface Sprite {
       /**
-       * Sets this object's position relative to another object with a given offset
+       * Positions this object relative to the {@linkcode guideObject}.
+       * @param guideObject - The object to base the position off of
+       * @param x - The relative x position
+       * @param y - The relative y position
+       * @returns The positioned instance of {@linkcode T}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
     interface Image {
       /**
-       * Sets this object's position relative to another object with a given offset
+       * Positions this object relative to the {@linkcode guideObject}.
+       * @param guideObject - The object to base the position off of
+       * @param x - The relative x position
+       * @param y - The relative y position
+       * @returns The positioned instance of {@linkcode T}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
     interface NineSlice {
       /**
-       * Sets this object's position relative to another object with a given offset
+       * Positions this object relative to the {@linkcode guideObject}.
+       * @param guideObject - The object to base the position off of
+       * @param x - The relative x position
+       * @param y - The relative y position
+       * @returns The positioned instance of {@linkcode T}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
     interface Text {
       /**
-       * Sets this object's position relative to another object with a given offset
+       * Positions this object relative to the {@linkcode guideObject}.
+       * @param guideObject - The object to base the position off of
+       * @param x - The relative x position
+       * @param y - The relative y position
+       * @returns The positioned instance of {@linkcode T}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
     interface Rectangle {
       /**
-       * Sets this object's position relative to another object with a given offset
+       * Positions this object relative to the {@linkcode guideObject}.
+       * @param guideObject - The object to base the position off of
+       * @param x - The relative x position
+       * @param y - The relative y position
+       * @returns The positioned instance of {@linkcode T}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
