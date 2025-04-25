@@ -2,10 +2,11 @@ import Phaser from "phaser";
 
 //#region Types
 
-type GuideObject = Phaser.GameObjects.Components.Origin &
-  Phaser.GameObjects.Components.Origin &
-  Phaser.GameObjects.Components.Size &
-  Phaser.GameObjects.Components.Transform;
+// prettier-ignore
+type GuideObject =
+  & Phaser.GameObjects.Components.Origin
+  & Phaser.GameObjects.Components.Size
+  & Phaser.GameObjects.Components.Transform;
 
 //#endregion
 //#region Extensions
