@@ -18,57 +18,62 @@ declare module "phaser" {
        * @param guideObject - The object to base the position off of
        * @param x - The relative x position
        * @param y - The relative y position
-       * @returns The positioned instance of {@linkcode T}
+       * @returns The positioned instance of {@linkcode Phaser.GameObjects.Container}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
+
     interface Sprite {
       /**
        * Positions this object relative to the {@linkcode guideObject}.
        * @param guideObject - The object to base the position off of
        * @param x - The relative x position
        * @param y - The relative y position
-       * @returns The positioned instance of {@linkcode T}
+       * @returns The positioned instance of {@linkcode Phaser.GameObjects.Sprite}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
+
     interface Image {
       /**
        * Positions this object relative to the {@linkcode guideObject}.
        * @param guideObject - The object to base the position off of
        * @param x - The relative x position
        * @param y - The relative y position
-       * @returns The positioned instance of {@linkcode T}
+       * @returns The positioned instance of {@linkcode Phaser.GameObjects.Image}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
+
     interface NineSlice {
       /**
        * Positions this object relative to the {@linkcode guideObject}.
        * @param guideObject - The object to base the position off of
        * @param x - The relative x position
        * @param y - The relative y position
-       * @returns The positioned instance of {@linkcode T}
+       * @returns The positioned instance of {@linkcode Phaser.GameObjects.NineSlice}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
+
     interface Text {
       /**
        * Positions this object relative to the {@linkcode guideObject}.
        * @param guideObject - The object to base the position off of
        * @param x - The relative x position
        * @param y - The relative y position
-       * @returns The positioned instance of {@linkcode T}
+       * @returns The positioned instance of {@linkcode Phaser.GameObjects.Text}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
+
     interface Rectangle {
       /**
        * Positions this object relative to the {@linkcode guideObject}.
        * @param guideObject - The object to base the position off of
        * @param x - The relative x position
        * @param y - The relative y position
-       * @returns The positioned instance of {@linkcode T}
+       * @returns The positioned instance of {@linkcode Phaser.GameObjects.Rectangle}
        */
       setPositionRelative(guideObject: any, x: number, y: number): this;
     }
