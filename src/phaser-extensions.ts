@@ -2,6 +2,7 @@ import Phaser from "phaser";
 
 //#region Types
 
+// TODO: The current prettier (fork) version has a bug that prevent this from working. Remove when fixed.
 // prettier-ignore
 type GuideObject =
   & Phaser.GameObjects.Components.Origin
