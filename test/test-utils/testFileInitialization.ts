@@ -80,7 +80,6 @@ export function initTestFile() {
       matches: false,
     }) as any;
 
-  // await import("#app/phaser-extensions");
 
   HTMLCanvasElement.prototype.getContext = () => mockContext;
 
