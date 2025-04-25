@@ -55,7 +55,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
   });
 
-  it(`should NOT boost SPD after NOT flinching`, async () => {
+  it(`should NOT boost SPD when Pokemon does NOT flinch`, async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
