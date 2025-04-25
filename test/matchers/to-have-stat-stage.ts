@@ -1,0 +1,36 @@
+import { Stat, type BattleStat } from "#enums/stat";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
+
+/**
+ * Matcher to check if a Pokemon has a specific {@linkcode Stat} stage
+ * @param received - The object to check. Should be a {@linkcode Pokemon}.
+ * @param stat - The {@linkcode Stat} to check
+ * @param expectedStage - The expected stage of the {@linkcode stat}
+ * @returns Whether the matcher passed
+ */
+export function toHaveStatStageMatcher(
+  this: MatcherState,
+  received: unknown,
+  stat: BattleStat,
+  expectedStage: number,
+): SyncExpectationResult {
+  if (!isPokemonInstance(received)) {
+    return {
+      pass: this.isNot,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+    };
+  }
+
+  const actualStage = received.getStatStage(stat);
+  const pass = actualStage === expectedStage;
+  const statStr = Stat[stat];
+
+  return {
+    pass,
+    message: () =>
+      pass
+        ? `Expected ${received.name} ${statStr} stage to NOT be ${statStr}, but it is!`
+        : `Expected ${received.name} ${statStr} stage to be ${expectedStage}, but got ${actualStage}.`,
+  };
+}
