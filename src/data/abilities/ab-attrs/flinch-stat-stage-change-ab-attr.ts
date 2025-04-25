@@ -24,14 +24,12 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    const hasActed = pokemon.turnData.acted;
-
-    if (!simulated && !hasActed) {
+    if (!simulated) {
       globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),
       );
     }
 
-    return !hasActed;
+    return true;
   }
 }
