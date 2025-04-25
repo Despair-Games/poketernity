@@ -13,6 +13,7 @@ import {
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants/mystery-encounters";
+import { ELITE_FOUR_1_WAVE } from "#app/constants/special-waves";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
@@ -46,7 +47,7 @@ import DamageNumberHandler from "#app/field/damage-number-handler";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
+import PokemonSpriteTeraSparkleHandler from "#app/field/pokemon-sprite-tera-sparkle-handler";
 import Trainer from "#app/field/trainer";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
@@ -227,6 +228,7 @@ export default class BattleScene extends SceneBase {
   public currentBattle: Battle;
   public pokeballCounts: PokeballCounts;
   public money: number;
+  public playerTerasUsed: number = 0;
   public pokemonInfoContainer: PokemonInfoContainer;
   private party: PlayerPokemon[];
   /** Session save data that pertains to Mystery Encounters */
@@ -258,7 +260,7 @@ export default class BattleScene extends SceneBase {
   public waveCycleOffset: number;
 
   public damageNumberHandler: DamageNumberHandler;
-  private spriteSparkleHandler: PokemonSpriteSparkleHandler;
+  private spriteTeraSparkleHandler: PokemonSpriteTeraSparkleHandler;
 
   public fieldSpritePipeline: FieldSpritePipeline;
   public spritePipeline: SpritePipeline;
@@ -582,8 +584,8 @@ export default class BattleScene extends SceneBase {
 
     this.damageNumberHandler = new DamageNumberHandler();
 
-    this.spriteSparkleHandler = new PokemonSpriteSparkleHandler();
-    this.spriteSparkleHandler.setup();
+    this.spriteTeraSparkleHandler = new PokemonSpriteTeraSparkleHandler();
+    this.spriteTeraSparkleHandler.setup();
 
     this.pokemonInfoContainer = new PokemonInfoContainer(GAME_WIDTH + 52, -GAME_HEIGHT + 66);
     this.pokemonInfoContainer.setup();
@@ -1070,6 +1072,7 @@ export default class BattleScene extends SceneBase {
 
     this.score = 0;
     this.money = 0;
+    this.playerTerasUsed = 0;
 
     this.lockModifierTiers = false;
 
@@ -1372,7 +1375,18 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetWaveData();
+          pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
+
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+
+          if (
+            // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
+            (pokemon.species.speciesId === SpeciesId.TERAPAGOS && pokemon.isAllowedInChallenge())
+            // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
+            || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
+          ) {
+            this.playerTerasUsed = 0;
+          }
         }
 
         if (!this.trainer.visible) {
@@ -1711,9 +1725,10 @@ export default class BattleScene extends SceneBase {
       tone: [0.0, 0.0, 0.0, 0.0],
       hasShadow: hasShadow,
       ignoreOverride: ignoreOverride,
-      teraColor: pokemon ? getTypeRgb(pokemon.getTeraType()) : undefined,
+      teraColor: pokemon ? getTypeRgb(pokemon.teraType) : undefined,
+      isTerastallized: pokemon?.isTerastallized ?? false,
     });
-    this.spriteSparkleHandler.add(sprite);
+    this.spriteTeraSparkleHandler.add(sprite);
     return sprite;
   }
 
@@ -2029,13 +2044,8 @@ export default class BattleScene extends SceneBase {
     const soundName = modifier.type.soundName;
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
-      if (modifier.isTerastallizeModifier()) {
-        modifiersToRemove.push(
-          ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId),
-        );
-      }
       if ((modifier as PersistentModifier).add(this.modifiers, virtual)) {
-        if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+        if (modifier.isPokemonFormChangeItemModifier()) {
           const pokemon = this.getPokemonById(modifier.pokemonId);
           if (pokemon) {
             success = modifier.apply(pokemon, true);
@@ -2103,13 +2113,8 @@ export default class BattleScene extends SceneBase {
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): void {
     const modifiersToRemove: PersistentModifier[] = [];
-    if (modifier.isTerastallizeModifier()) {
-      modifiersToRemove.push(
-        ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId, false),
-      );
-    }
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
-      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
@@ -2383,7 +2388,7 @@ export default class BattleScene extends SceneBase {
     const modifierIndex = modifiers.indexOf(modifier);
     if (modifierIndex > -1) {
       modifiers.splice(modifierIndex, 1);
-      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, false);
@@ -2632,7 +2637,8 @@ export default class BattleScene extends SceneBase {
               name: p.name,
               form: p.getFormKey(),
               types: p.getTypes().map((type) => ElementalType[type]),
-              teraType: p.getTeraType() !== ElementalType.UNKNOWN ? ElementalType[p.getTeraType()] : "",
+              teraType: ElementalType[p.teraType],
+              isTerastallized: p.isTerastallized,
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),

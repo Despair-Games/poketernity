@@ -54,6 +54,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { ElementalType } from "#enums/elemental-type";
 import { FieldPosition } from "#enums/field-position";
 import type { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -120,6 +121,7 @@ export interface EnemyPokemonConfig {
   modifierConfigs?: HeldModifierConfig[];
   tags?: BattlerTagType[];
   dataSource?: PokemonData;
+  teraType?: ElementalType;
   aiType?: AiType;
 }
 
@@ -382,6 +384,13 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       if (config.tags && config.tags.length > 0) {
         const tags = config.tags;
         tags.forEach((tag) => enemyPokemon.addTag(tag));
+      }
+
+      if (!isNullOrUndefined(config.teraType) && config.teraType !== ElementalType.UNKNOWN) {
+        enemyPokemon.teraType = config.teraType;
+        if (battle.trainer) {
+          battle.trainer.config.setInstantTera(e);
+        }
       }
 
       // mysteryEncounterBattleEffects will only be used IFF MYSTERY_ENCOUNTER_POST_SUMMON tag is applied

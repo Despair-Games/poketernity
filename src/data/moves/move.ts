@@ -797,9 +797,9 @@ export abstract class Move implements Localizable {
 
     applyAbAttrs<VariableMovePowerAbAttr>(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
 
-    const sourceTeraType = source.getTeraType();
+    const sourceTeraType = source.teraType;
     if (
-      sourceTeraType !== ElementalType.UNKNOWN
+      source.isTerastallized
       && sourceTeraType === this.type
       && power.value < 60
       && this.priority <= 0
