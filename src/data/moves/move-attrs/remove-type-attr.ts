@@ -33,7 +33,7 @@ export class RemoveTypeAttr extends MoveEffectAttr {
     if (modifiedTypes.length === 0) {
       modifiedTypes.push(ElementalType.UNKNOWN);
     }
-    user.summonData.types = modifiedTypes;
+    user.setTemporaryTypes(modifiedTypes);
     user.updateInfo();
 
     if (this.messageCallback) {

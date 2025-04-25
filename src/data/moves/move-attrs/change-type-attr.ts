@@ -24,7 +24,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
   }
 
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
-    target.summonData.types = [this.type];
+    target.setTemporaryTypes(this.type);
     target.updateInfo();
 
     globalScene.phaseManager.queueMessagePhase(

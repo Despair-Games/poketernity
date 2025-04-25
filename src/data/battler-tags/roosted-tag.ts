@@ -41,7 +41,7 @@ export class RoostedTag extends BattlerTag {
         modifiedTypes = [...currentTypes];
         modifiedTypes.push(ElementalType.FLYING);
       }
-      pokemon.summonData.types = modifiedTypes;
+      pokemon.setTemporaryTypes(modifiedTypes);
       pokemon.updateInfo();
     }
   }
@@ -66,7 +66,7 @@ export class RoostedTag extends BattlerTag {
           modifiedTypes = currentTypes.filter((type) => type !== ElementalType.FLYING);
         }
       }
-      pokemon.summonData.types = modifiedTypes;
+      pokemon.setTemporaryTypes(modifiedTypes);
       pokemon.updateInfo();
     }
   }

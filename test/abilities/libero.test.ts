@@ -183,6 +183,17 @@ describe.each([
   });
 
   it("is not applied if pokemon's type is the same as the move's type", async () => {
+    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
+
+    const leadPokemon = game.field.getPlayerPokemon();
+
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+  });
+
+  it("is not applied if pokemon's modified type is the same as the move's type", async () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.field.getPlayerPokemon();

@@ -22,7 +22,7 @@ export class CopyTypeAttr extends MoveEffectAttr {
     if (targetTypes.includes(ElementalType.UNKNOWN) && targetTypes.indexOf(ElementalType.UNKNOWN) > -1) {
       targetTypes[targetTypes.indexOf(ElementalType.UNKNOWN)] = ElementalType.NORMAL;
     }
-    user.summonData.types = targetTypes;
+    user.setTemporaryTypes(targetTypes);
     user.updateInfo();
 
     globalScene.phaseManager.queueMessagePhase(

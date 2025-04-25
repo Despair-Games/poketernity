@@ -34,7 +34,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
       if (pokemon.getTypes().some((t) => t !== moveType)) {
         if (!simulated) {
           this.moveType = moveType;
-          pokemon.summonData.types = [moveType];
+          pokemon.setTemporaryTypes(moveType);
           pokemon.updateInfo();
         }
 
