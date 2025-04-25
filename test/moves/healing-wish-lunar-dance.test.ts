@@ -30,9 +30,9 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
   });
 
   describe.each([
-    { moveName: "Healing Wish", moveId: MoveId.HEALING_WISH, restorePP: false },
-    { moveName: "Lunar Dance", moveId: MoveId.LUNAR_DANCE, restorePP: true },
-  ])("$moveName", ({ moveId, restorePP }) => {
+    { moveName: "Healing Wish", moveId: MoveId.HEALING_WISH },
+    { moveName: "Lunar Dance", moveId: MoveId.LUNAR_DANCE },
+  ])("$moveName", ({ moveId }) => {
     it("should sacrifice the user to restore the switched in Pokemon's HP", async () => {
       await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
@@ -66,29 +66,6 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
       expect(charmander.isFainted()).toBeTruthy();
       expect(squirtle).toHaveStatusEffect(StatusEffect.NONE);
     });
-
-    if (restorePP) {
-      it("should sacrifice the user to restore the switched in Pokemon's PP", async () => {
-        game.override.battleType("single");
-
-        await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARMANDER]);
-        const [bulbasaur, charmander] = game.scene.getPlayerParty();
-        [bulbasaur, charmander].forEach((p) => game.move.changeMoveset(p, [moveId, MoveId.SPLASH]));
-
-        game.move.select(MoveId.SPLASH);
-        await game.toNextTurn();
-
-        game.switchPokemon(1);
-        await game.toNextTurn();
-
-        game.move.select(moveId);
-        game.selectPartyPokemon(1);
-
-        await game.toNextTurn();
-        expect(charmander.isFainted()).toBeTruthy();
-        bulbasaur.getMoveset().forEach((mv) => expect(mv.ppUsed).toBe(0));
-      });
-    }
 
     it("should fail if the user has no non-fainted allies in their party", async () => {
       game.override.battleType("single");
@@ -200,6 +177,27 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
       await game.toEndOfTurn();
       expect(pikachu).not.toHaveFullHp();
     });
+  });
+
+  it("Lunar Dance should sacrifice the user to restore the switched in Pokemon's PP", async () => {
+    game.override.battleType("single");
+
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARMANDER]);
+    const [bulbasaur, charmander] = game.scene.getPlayerParty();
+    [bulbasaur, charmander].forEach((p) => game.move.changeMoveset(p, [MoveId.LUNAR_DANCE, MoveId.SPLASH]));
+
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    game.switchPokemon(1);
+    await game.toNextTurn();
+
+    game.move.select(MoveId.LUNAR_DANCE);
+    game.selectPartyPokemon(1);
+
+    await game.toNextTurn();
+    expect(charmander.isFainted()).toBeTruthy();
+    bulbasaur.getMoveset().forEach((mv) => expect(mv.ppUsed).toBe(0));
   });
 
   it("should stack with each other", async () => {

@@ -5,7 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 
 import { StatusEffect } from "#enums/status-effect";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
-import type { SyncExpectationResult } from "@vitest/expect";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 //#region Types
 
@@ -27,13 +27,14 @@ export interface ToHaveStatusEffectMatcherOptions {
  * @returns the results of the matcher's assertion
  */
 export function toHaveStatusEffectMatcher(
+  this: MatcherState,
   received: unknown,
   expectedStatusEffect: StatusEffect,
   { ignoreMockAbility = false }: ToHaveStatusEffectMatcherOptions = {},
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
