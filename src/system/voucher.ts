@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import type { ConditionFn } from "#app/@types/common";
+import type { ConditionFn } from "#app/@types/ConditionFn";
 import { AchvTier } from "#enums/achv-tier";
 import { VoucherType } from "#enums/voucher-type";
 
