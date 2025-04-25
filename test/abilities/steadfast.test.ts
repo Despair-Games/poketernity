@@ -70,7 +70,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
-  it(`should NOT boost SPD if flinchinging occured after owner acted`, async () => {
+  it(`should NOT boost SPD if flinching occured after owner acted`, async () => {
     const { classicMode, field, move } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
