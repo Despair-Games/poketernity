@@ -30,7 +30,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
 
     const tag = globalScene.arena.getTag(ArenaTagType.PENDING_HEAL) as PendingHealTag;
     if (tag) {
-      tag.addHeal(user.getBattlerIndex(), {
+      tag.queueHeal(user.getBattlerIndex(), {
         sourceId: user.id,
         moveId: move.id,
         restorePP: this.restorePP,

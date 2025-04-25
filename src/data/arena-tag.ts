@@ -943,10 +943,10 @@ export class PendingHealTag extends ArenaTag {
    * @param targetIndex - The {@linkcode BattlerIndex} under which the effect applies
    * @param healEffect - The {@linkcode PendingHealEffect | data} for the pending heal effect
    */
-  public addHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
+  public queueHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
     if (this.pendingHeals.has(targetIndex)) {
       const existingHealEffects = this.pendingHeals.get(targetIndex);
-      if (existingHealEffects?.every((he) => he.moveId !== healEffect.moveId)) {
+      if (existingHealEffects && !existingHealEffects?.some((he) => he.moveId === healEffect.moveId)) {
         existingHealEffects.push(healEffect);
       }
     } else {
@@ -1010,8 +1010,8 @@ export class PendingHealTag extends ArenaTag {
   /**
    * Determines if the given {@linkcode PendingHealEffect} can immediately heal
    * the given target {@linkcode Pokemon}.
-   * @param healEffect the {@linkcode PendingHealEffect} to evaluate
-   * @param pokemon the {@linkcode Pokemon} to evaluate against
+   * @param healEffect - The {@linkcode PendingHealEffect} to evaluate
+   * @param pokemon - The {@linkcode Pokemon} to evaluate against
    * @returns `true` if the Pokemon can be healed by the effect
    */
   private canApply(healEffect: PendingHealEffect, pokemon: Pokemon): boolean {
