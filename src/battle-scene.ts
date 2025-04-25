@@ -6,7 +6,7 @@ import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Setting
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
-import { IV_MAX, IV_MIN } from "#app/constants/game";
+import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
@@ -1936,7 +1936,7 @@ export default class BattleScene extends SceneBase {
 
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * 1.2;
+    const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * LEVEL_CAP_SCALE_FACTOR;
     return Math.ceil(baseLevel / 2) * 2 + 2;
   }
 
