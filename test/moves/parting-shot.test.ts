@@ -74,19 +74,19 @@ describe("Moves - Parting Shot", () => {
       game.move.select(MoveId.MEMENTO);
       await game.phaseInterceptor.to(FaintPhase);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-      game.doSelectPartyPokemon(1);
+      game.selectPartyPokemon(1);
 
       await game.phaseInterceptor.to(TurnInitPhase, false);
       game.move.select(MoveId.MEMENTO);
       await game.phaseInterceptor.to(FaintPhase);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-      game.doSelectPartyPokemon(2);
+      game.selectPartyPokemon(2);
 
       await game.phaseInterceptor.to(TurnInitPhase, false);
       game.move.select(MoveId.MEMENTO);
       await game.phaseInterceptor.to(FaintPhase);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-      game.doSelectPartyPokemon(3);
+      game.selectPartyPokemon(3);
 
       // set up done
       await game.phaseInterceptor.to(TurnInitPhase, false);
@@ -170,10 +170,10 @@ describe("Moves - Parting Shot", () => {
       game.move.select(MoveId.SPLASH);
 
       // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
-      await game.killPokemon(game.scene.getPlayerParty()[0]);
+      await game.faintPokemon(game.scene.getPlayerParty()[0]);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       await game.phaseInterceptor.run(MessagePhase);
-      game.doSelectPartyPokemon(1);
+      game.selectPartyPokemon(1);
 
       await game.phaseInterceptor.to(TurnInitPhase, false);
       game.move.select(MoveId.PARTING_SHOT);

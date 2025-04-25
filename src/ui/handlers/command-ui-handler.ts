@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommandPhase } from "#app/phases/command-phase";
-import { TEXT_SCALE } from "#app/ui-constants";
+import { TEXT_SCALE } from "#app/constants/ui";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { BattleCommand } from "#enums/battle-command";

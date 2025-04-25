@@ -1,5 +1,6 @@
+import type { Localizable } from "#app/@types/locales";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game";
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
 import type { ChangeMovePriorityAbAttr } from "#app/data/abilities/ab-attrs/change-move-priority-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
@@ -31,7 +32,6 @@ import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-a
 import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Localizable } from "#app/interfaces/locales";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";

@@ -69,7 +69,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     await passTurns(1);
@@ -216,7 +216,7 @@ describe("Moves - Future Sight", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
@@ -238,7 +238,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);

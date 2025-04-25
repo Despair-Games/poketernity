@@ -151,7 +151,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.U_TURN);
     await game.move.forceEnemyMove(MoveId.U_TURN);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    game.doSelectPartyPokemon(1, "SwitchPhase");
+    game.selectPartyPokemon(1, "SwitchPhase");
 
     await game.toEndOfTurn();
 

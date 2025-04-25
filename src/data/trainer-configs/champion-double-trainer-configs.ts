@@ -18,7 +18,7 @@ import {
   GEETA_CHAMPION_THEME,
   NEMONA_CHAMPION_THEME,
   KIERAN_CHAMPION_THEME,
-} from "#app/data/music-constants";
+} from "#app/constants/music";
 
 let t = TrainerType.BLUE_RED;
 export const championDoubleTrainerConfigs: TrainerConfigs = {

@@ -82,7 +82,7 @@ describe("Moves - Fairy Lock", () => {
     });
 
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
@@ -108,9 +108,9 @@ describe("Moves - Fairy Lock", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.WHIRLWIND, 0);
-    game.doSelectPartyPokemon(2);
+    game.selectPartyPokemon(2);
     await game.move.selectEnemyMove(MoveId.WHIRLWIND, 1);
-    game.doSelectPartyPokemon(2);
+    game.selectPartyPokemon(2);
     await game.toEndOfTurn();
     await game.toNextTurn();
 
@@ -124,7 +124,7 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.MEMENTO, 1);
-    game.doSelectPartyPokemon(2);
+    game.selectPartyPokemon(2);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
@@ -151,7 +151,7 @@ describe("Moves - Fairy Lock", () => {
     game.move.use(MoveId.MEMENTO, 1, BattlerIndex.PLAYER);
     await game.move.selectEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
     await game.move.selectEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
-    game.doSelectPartyPokemon(2);
+    game.selectPartyPokemon(2);
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 
     // Allow all 3 targets to use Memento

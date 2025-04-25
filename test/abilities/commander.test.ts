@@ -77,7 +77,7 @@ describe("Abilities - Commander", () => {
     const tatsugiri = game.scene.getPlayerField()[0];
 
     game.move.select(MoveId.LIQUIDATION, 0, BattlerIndex.ENEMY);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
 
     await game.phaseInterceptor.to("MovePhase", false);
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
@@ -220,7 +220,7 @@ describe("Abilities - Commander", () => {
     await game.toNextTurn();
 
     expect(tatsugiri.getTag(BattlerTagType.UNDERWATER)).toBeDefined();
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
 
     await game.phaseInterceptor.to("MovePhase", false);
     const dondozo = game.scene.getPlayerField()[1];

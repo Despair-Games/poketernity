@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getFrameMs, isNullOrUndefined } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
-import { AnimFrameTargets, type AnimFrameTarget } from "#enums/anim-frame-target";
+import { AnimFrameTarget } from "#enums/anim-frame-target";
 import type Phaser from "phaser";
 import type { BattleAnim } from "./battle-anims";
 import type { MoveAnim } from "./move-anim";
@@ -216,13 +216,13 @@ export class AnimFrame {
       this.blendType = AnimBlendType.NORMAL;
     }
     if (!init) {
-      let target: AnimFrameTarget = AnimFrameTargets.IMAGE;
+      let target: AnimFrameTarget = AnimFrameTarget.IMAGE;
       switch (pattern) {
         case -2:
-          target = AnimFrameTargets.TARGET;
+          target = AnimFrameTarget.TARGET;
           break;
         case -1:
-          target = AnimFrameTargets.SOURCE;
+          target = AnimFrameTarget.SOURCE;
           break;
       }
       this.target = target;

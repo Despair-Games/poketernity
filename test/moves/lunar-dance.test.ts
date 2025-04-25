@@ -48,14 +48,14 @@ describe("Moves - Lunar Dance", () => {
     expect(bulbasaur.hp).toBeLessThan(bulbasaur.getMaxHp());
 
     // Switch out Bulbasaur for Rattata so we can swtich bulbasaur back in with lunar dance
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to(CommandPhase);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.LUNAR_DANCE);
-    game.doSelectPartyPokemon(2);
+    game.selectPartyPokemon(2);
     await game.phaseInterceptor.to("SwitchPhase", false);
     await game.toNextTurn();
 

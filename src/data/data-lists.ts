@@ -14,5 +14,5 @@ export const allSpecies: PokemonSpecies[] = [];
 // @ts-expect-error - this forcibly overrides `Map`'s `get` function to not type hint a return of `undefined`
 export const allMoves: DataMap<MoveId, Move> = new Map<MoveId, Move>();
 export const allAbilities: Ability[] = [];
-// @ts-expect-error
+// @ts-expect-error - this forcibly overrides `Map`'s `get` function to not type hint a return of `undefined`
 export const allBiomes: DataMap<BiomeId, Biome> = new Map<BiomeId, Biome>();

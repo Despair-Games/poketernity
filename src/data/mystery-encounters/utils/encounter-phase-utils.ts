@@ -1,6 +1,10 @@
+import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
-import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
+import {
+  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
+} from "#app/constants/mystery-encounters";
 import { biomeLinks } from "#app/data/biome-links";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#app/data/egg";
@@ -19,7 +23,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ModifierTypeGenerator,

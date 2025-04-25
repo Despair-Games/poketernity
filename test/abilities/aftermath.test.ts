@@ -89,7 +89,7 @@ describe("Abilities - Aftermath", () => {
     const [feebas, milotic] = game.scene.getPlayerParty();
 
     game.move.use(MoveId.U_TURN);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(feebas.isOnField()).toBe(false);
@@ -106,7 +106,7 @@ describe("Abilities - Aftermath", () => {
     feebas.hp = 1;
 
     game.move.use(MoveId.GRASS_KNOT);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(feebas.getHeldItems()[0]?.type.id).toBe("REVIVER_SEED");

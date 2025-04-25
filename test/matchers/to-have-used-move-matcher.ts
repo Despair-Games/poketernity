@@ -1,5 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
+import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
+//#region Types
 
 export interface ToHaveUsedMoveMatcherOptions {
   /** The index of the move to check (Default is `0`) */
@@ -11,6 +12,9 @@ export interface ToHaveUsedMoveMatcherOptions {
    */
   moveCount?: number;
 }
+
+//#endregion
+//#region Exports
 
 /**
  * Matcher to check if a pokemons move id is as expected
@@ -24,14 +28,14 @@ export function toHaveUsedMoveMatcher(
   expectedResult: MoveId,
   { index = 0, moveCount = 1 }: ToHaveUsedMoveMatcherOptions = {},
 ) {
-  if (typeof received !== "object" || received === null || typeof (received as any).getLastXMoves !== "function") {
+  if (!isPokemonInstance(received)) {
     return {
       pass: false,
-      message: () => `Expected object with method 'getLastXMoves()', but got: ${typeof received}`,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const turnMove = (received as Pokemon).getLastXMoves(moveCount);
+  const turnMove = received.getLastXMoves(moveCount);
   const move = turnMove?.[index];
   const pass = move?.move.id === expectedResult;
 
@@ -47,3 +51,5 @@ export function toHaveUsedMoveMatcher(
           }`,
   };
 }
+
+//#endregion

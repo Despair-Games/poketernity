@@ -11,7 +11,7 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
   bypassLogin,
-} from "#app/constants";
+} from "#app/constants/app";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { defaultStarterSpecies } from "#app/data/default-starters";
 import { speciesEggMoves } from "#app/data/egg-moves";
@@ -1107,6 +1107,11 @@ export class GameData {
           v = [];
         }
         for (const pd of v) {
+          // TODO: remove later, temporary to prevent devs from needing to wipe their local storage
+          // due to the field in `PokemonData` being renamed from `species` to `speciesId`
+          if (pd.hasOwnProperty("species")) {
+            pd.speciesId = pd.species;
+          }
           ret.push(new PokemonData(pd));
         }
         return ret;

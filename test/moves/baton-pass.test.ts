@@ -48,7 +48,7 @@ describe("Moves - Baton Pass", () => {
 
     // round 2 - baton pass
     game.move.select(MoveId.BATON_PASS);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     // assert
@@ -99,7 +99,7 @@ describe("Moves - Baton Pass", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(player1.findTag((t) => t.tagType === BattlerTagType.SALT_CURED)).toBeTruthy();
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     expect(player2.findTag((t) => t.tagType === BattlerTagType.SALT_CURED)).toBeUndefined();
@@ -123,7 +123,7 @@ describe("Moves - Baton Pass", () => {
     game.move.select(MoveId.BATON_PASS);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     expect(enemy.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();

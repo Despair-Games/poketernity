@@ -93,7 +93,7 @@ describe("Abilities - Flash Fire", () => {
     game.move.select(MoveId.BATON_PASS);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     const chansey = game.scene.getPlayerPokemon()!;

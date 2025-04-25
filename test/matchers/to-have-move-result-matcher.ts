@@ -1,5 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
+import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
+import type { SyncExpectationResult } from "@vitest/expect";
+
+//#region Types
 
 export interface ToHaveMoveResultMatcherOptions {
   /** The index of the move to check (Default is `0`) */
@@ -12,6 +15,9 @@ export interface ToHaveMoveResultMatcherOptions {
   moveCount?: number;
 }
 
+//#endregion
+//#region Exports
+
 /**
  * Matcher to check if a pokemons move result is as expected
  * @param received The actual value received
@@ -23,15 +29,15 @@ export function toHaveMoveResultMatcher(
   received: unknown,
   expectedResult: MoveResult,
   { index = 0, moveCount = 1 }: ToHaveMoveResultMatcherOptions = {},
-) {
-  if (typeof received !== "object" || received === null || typeof (received as any).getLastXMoves !== "function") {
+): SyncExpectationResult {
+  if (!isPokemonInstance(received)) {
     return {
       pass: false,
-      message: () => `Expected object with method 'getLastXMoves()', but got: ${typeof received}`,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const moves = (received as Pokemon).getLastXMoves(moveCount);
+  const moves = received.getLastXMoves(moveCount);
   const move = moves?.[index];
   const pass = move?.result === expectedResult;
 
@@ -47,3 +53,5 @@ export function toHaveMoveResultMatcher(
           }`,
   };
 }
+
+//#endregion

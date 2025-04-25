@@ -73,7 +73,7 @@ describe("Abilities - Wimp Out", () => {
     const wimpod = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(wimpod.hp).toEqual(Math.floor(wimpod.getMaxHp() * 0.33 + 1));
@@ -112,7 +112,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([SpeciesId.WIMPOD, SpeciesId.TYRUNT]);
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toEndOfTurn();
 
@@ -127,7 +127,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([SpeciesId.WIMPOD, SpeciesId.TYRUNT]);
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -153,7 +153,7 @@ describe("Abilities - Wimp Out", () => {
     wimpod.hp *= 0.51;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.phaseInterceptor.to("SwitchSummonPhase", false);
 
     expect(wimpod.summonData.abilitiesApplied).not.toContain(AbilityId.WIMP_OUT);
@@ -168,7 +168,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([SpeciesId.WIMPOD, SpeciesId.TYRUNT]);
 
     game.move.select(MoveId.HEAD_SMASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     confirmSwitch();
@@ -214,7 +214,7 @@ describe("Abilities - Wimp Out", () => {
       wimpod.damageAndUpdate(toDmgValue(wimpod.getMaxHp() * 0.4));
 
       game.move.select(MoveId.DOUBLE_EDGE);
-      game.doSelectPartyPokemon(1);
+      game.selectPartyPokemon(1);
       await game.toEndOfTurn();
 
       expect(game.scene.getPlayerParty()[1].hp).toBeGreaterThan(
@@ -232,7 +232,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     confirmSwitch();
@@ -257,7 +257,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -270,7 +270,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -282,7 +282,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -294,7 +294,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -306,7 +306,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.7;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -318,7 +318,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.55;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -374,7 +374,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.move.select(MoveId.THUNDER_PUNCH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     confirmSwitch();
@@ -396,7 +396,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.65;
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     confirmSwitch();
@@ -408,7 +408,7 @@ describe("Abilities - Wimp Out", () => {
     vi.spyOn(allMoves.get(MoveId.SLUDGE_BOMB), "chance", "get").mockReturnValue(100);
 
     game.move.select(MoveId.SPLASH);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(game.scene.getPlayerParty()[1].getStatusEffect(true)).toEqual(StatusEffect.POISON);
@@ -422,7 +422,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.move.select(MoveId.ENDURE);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -438,7 +438,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.move.select(MoveId.ENDURE);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -454,7 +454,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.move.select(MoveId.ENDURE);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;

@@ -1,4 +1,4 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { Ability } from "#app/data/abilities/ability";
 import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
@@ -132,7 +132,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     );
     clownConfig.setPartyTemplates(clownPartyTemplate);
     clownConfig.setDoubleOnly();
-    // @ts-ignore
+    // @ts-expect-error - TODO: change the type of `partyTemplateFunc` or change this `null` assignment
     clownConfig.partyTemplateFunc = null; // Overrides party template func if it exists
 
     // Generate random ability for Blacephalon from pool

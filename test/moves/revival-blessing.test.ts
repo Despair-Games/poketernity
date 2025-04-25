@@ -39,7 +39,7 @@ describe("Moves - Revival Blessing", () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.MEMENTO);
-    game.doSelectPartyPokemon(1, "SwitchPhase");
+    game.selectPartyPokemon(1, "SwitchPhase");
     await game.toNextTurn();
 
     const player = game.scene.getPlayerPokemon()!;
@@ -48,7 +48,7 @@ describe("Moves - Revival Blessing", () => {
     game.move.select(MoveId.REVIVAL_BLESSING);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    game.doSelectPartyPokemon(1, "RevivalBlessingPhase");
+    game.selectPartyPokemon(1, "RevivalBlessingPhase");
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -109,7 +109,7 @@ describe("Moves - Revival Blessing", () => {
 
     expect(feebas.isFainted()).toBe(true);
 
-    game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
+    game.selectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();
 
     expect(feebas.isFainted()).toBe(false);
