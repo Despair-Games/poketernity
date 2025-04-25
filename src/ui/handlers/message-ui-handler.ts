@@ -40,11 +40,10 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
    * Displays a dialogue message on the UI with optional delay and speaker name.
    *
    * @param text - The dialogue message to display.
-   * @param _name - (Optional) The name of the speaker for the dialogue. Defaults to an empty string if not provided.
    * @param delay - (Optional) The delay in milliseconds before the dialogue is displayed. Defaults to `null` for no delay.
    * @param callback - (Optional) A callback function to execute after the dialogue is displayed. Defaults to `null` for no callback.
    * @param callbackDelay - (Optional) The delay in milliseconds before executing the callback. Defaults to `null` for no delay.
-   * @param prompt - (Optional) Whether to show the prompt after displaying the dialogue.
+   * @param prompt - (Optional) Whether to display the prompt icon at the end of the textbox.
    * @param promptDelay - (Optional) The delay in milliseconds before showing the prompt. Defaults to `null` for no delay.
    */
   public showText(
@@ -69,7 +68,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
    * @param delay - (Optional) The delay in milliseconds before the dialogue is displayed.
    * @param callback - (Optional) A function to execute after the dialogue is displayed.
    * @param callbackDelay - (Optional) The delay in milliseconds before the callback is executed.
-   * @param prompt - (Optional) Whether to display a prompt at the end of the dialogue.
+   * @param prompt - (Optional) Whether to display the prompt icon at the end of the textbox.
    * @param promptDelay - (Optional) The delay in milliseconds before the prompt is displayed.
    */
   public showDialogue(
