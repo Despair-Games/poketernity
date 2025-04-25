@@ -64,14 +64,21 @@ describe("Abilities - Steadfast", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.SPLASH);
+    await phaseInterceptor.to("MessagePhase", false);
+
+    expect(playerPkm).not.toHaveFlinched();
+
     await phaseInterceptor.to("MoveEndPhase", true);
 
     expect(playerPkm).not.toHaveFlinched();
+
+    await game.toEndOfTurn();
+
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
   it(`should NOT boost SPD if flinching occured after owner acted`, async () => {
-    const { classicMode, field, move } = game;
+    const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPkm = field.getPlayerPokemon();
@@ -79,14 +86,22 @@ describe("Abilities - Steadfast", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.FAKE_OUT);
-    await game.toEndOfTurn();
+    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("MessagePhase", false);
 
     expect(playerPkm).not.toHaveFlinched();
+
+    await phaseInterceptor.to("MoveEndPhase", true);
+
+    expect(playerPkm).toHaveFlinched();
+
+    await game.toEndOfTurn();
+
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
   it(`should NOT boost SPD if flinching is prevented by "Inner Focus"`, async () => {
-    const { classicMode, field, move } = game;
+    const { classicMode, field, move, phaseInterceptor } = game;
     game.override.passiveAbility(AbilityId.INNER_FOCUS);
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -95,9 +110,16 @@ describe("Abilities - Steadfast", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.FAKE_OUT);
-    await game.toEndOfTurn();
+    await phaseInterceptor.to("MessagePhase", false);
 
     expect(playerPkm).not.toHaveFlinched();
+
+    await phaseInterceptor.to("MoveEndPhase", true);
+
+    expect(playerPkm).not.toHaveFlinched(); // inner focus prevents flinching
+
+    await game.toEndOfTurn();
+
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
