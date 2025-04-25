@@ -66,7 +66,7 @@ describe("Moves - Bide", () => {
     await game.toEndOfTurn();
 
     expect(player.getTag(BattlerTagType.BIDE)).toBeUndefined();
-    expect(enemy.getInverseHp()).toBe(receivedDamage * 2);
+    expect(enemy).toHaveTakenDamage(receivedDamage * 2);
   });
 
   it("should fail on the last turn if the user was not attacked", async () => {
@@ -118,13 +118,11 @@ describe("Moves - Bide", () => {
     game.move.use(MoveId.BIDE);
 
     for (let i = 0; i < 3; i++) {
-      // Attacking more than once can cause the player to nearly faint
-      await game.move.forceEnemyMove(i === 0 ? MoveId.TACKLE : MoveId.SPLASH);
       await game.toEndOfTurn();
     }
 
     expect(player).toHaveMoveResult(MoveResult.FAIL);
-    expect(enemy.isFullHp()).toBeTruthy();
+    expect(enemy).toHaveFullHp();
   });
 
   it("should target the last Pokemon that attacked the user", async () => {
@@ -148,7 +146,7 @@ describe("Moves - Bide", () => {
 
     await game.toEndOfTurn();
 
-    expect(enemyPokemon[0].isFullHp()).toBeTruthy();
-    expect(enemyPokemon[1].isFullHp()).toBeFalsy();
+    expect(enemyPokemon[0]).toHaveFullHp();
+    expect(enemyPokemon[1]).not.toHaveFullHp();
   });
 });
