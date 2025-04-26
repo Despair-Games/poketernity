@@ -50,7 +50,6 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/ab
 import type { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight-multiplier-ab-attr";
 import type { Ability } from "#app/data/abilities/ability";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
-import { NoCritTag } from "#app/data/arena-tag";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";
@@ -3325,7 +3324,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
-    const noCritTag = globalScene.arena.findTag(NoCritTag, defendingSide);
+    const noCritTag = globalScene.arena.hasTag(ArenaTagType.NO_CRIT, defendingSide);
     if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
     }

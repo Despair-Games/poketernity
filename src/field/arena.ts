@@ -1,3 +1,5 @@
+import { DEFAULT_NEW_TERRAIN_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/game";
+import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/terrain-event-type-change-ab-attr";
@@ -11,17 +13,15 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { DEFAULT_NEW_TERRAIN_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/game";
-import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type AbstractConstructor, getEnumValues } from "#app/utils/common-utils";
-import { randSeedInt, weightedPick } from "#app/utils/random-utils";
+import { getEnumValues } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedInt, weightedPick } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -800,7 +800,7 @@ export class Arena {
       existingTag.onOverlap(this);
 
       if (existingTag instanceof EntryHazardTag) {
-        const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
+        const { tagType, side, turnCount, layers, maxLayers } = existingTag;
         this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
       }
 
@@ -839,25 +839,14 @@ export class Arena {
    * Attempts to get a tag from the Arena from a specific side (the tag passed in has to either apply to both sides, or the specific side only)
    *
    * eg: `MIST` only applies to the user's side, while `MUD_SPORT` applies to both user and enemy side
-   * @param tagType - The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
+   * @param tagType - The {@linkcode ArenaTagType} to get
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  findTag<T extends ArenaTag = ArenaTag>(
-    tagType: ArenaTagType | AbstractConstructor<T>,
-    side: ArenaTagSide = ArenaTagSide.BOTH,
-  ): T | undefined {
-    const ret =
-      typeof tagType === "number"
-        ? this.tags.find(
-            (t) =>
-              t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-          )
-        : this.tags.find(
-            (t) =>
-              t instanceof tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-          );
-    return ret as T;
+  findTag<T extends ArenaTag = ArenaTag>(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): T | undefined {
+    return this.tags.find(
+      (t) => tagType === t.tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
+    ) as T;
   }
 
   /**
