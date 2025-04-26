@@ -1191,10 +1191,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case Stat.SPD:
         const side = this.getArenaTagSide();
-        if (globalScene.arena.findTag(ArenaTagType.TAILWIND, side)) {
+        if (globalScene.arena.hasTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
-        if (globalScene.arena.findTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
+        if (globalScene.arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
           ret >>= 2;
         }
 
@@ -1834,7 +1834,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return (
       trappedByAbility.value
       || this.hasTag(...TrappedBattlerTagTypes)
-      || !!globalScene.arena.findTag(ArenaTagType.FAIRY_LOCK, side)
+      || globalScene.arena.hasTag(ArenaTagType.FAIRY_LOCK, side)
     );
   }
 
@@ -4124,7 +4124,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   isSafeguarded(attacker: Pokemon): boolean {
     const defendingSide = this.getArenaTagSide();
-    if (globalScene.arena.findTag(ArenaTagType.SAFEGUARD, defendingSide)) {
+    if (globalScene.arena.hasTag(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
         applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, false, bypassed);

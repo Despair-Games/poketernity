@@ -823,8 +823,16 @@ export class Arena {
     return true;
   }
 
-  hasTag(tagType: ArenaTagType): boolean {
-    return !!this.findTag(tagType);
+  /**
+   * Checks if an {@linkcode ArenaTag} exists on the specified side of the Arena.
+   * @param tagType - The {@linkcode ArenaTagType} to check for
+   * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
+   * @returns Whether the `ArenaTag` exists
+   */
+  hasTag(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): boolean {
+    return this.tags.some(
+      (t) => t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
+    );
   }
 
   /**

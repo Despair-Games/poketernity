@@ -279,6 +279,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           return;
         }
 
+        // TODO: fix this
         const isEntryHazardTag = globalScene.arena.findTag(tagAddedEvent.arenaTagType) instanceof EntryHazardTag;
         let arenaEffectType: ArenaEffectType;
 

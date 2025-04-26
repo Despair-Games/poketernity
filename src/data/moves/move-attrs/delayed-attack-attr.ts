@@ -29,7 +29,8 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   }
 
   /**
-   * If used virtually, this queues a message and proceeds normally.
+   * If used virtually, this queues a message and proceeds normally. (TODO: change this)
+   *
    * Otherwise, this adds a delayed attack to the field and cancels other move effects
    * for the current attack.
    */
@@ -56,10 +57,9 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       // Add a Delayed Attack tag to the arena if it doesn't already exist
       globalScene.arena.addTag(ArenaTagType.DELAYED_ATTACK, user.id);
       // Queue an attack on the added (or existing) tag
-      const tag = globalScene.arena.findTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
-      if (tag) {
-        tag.addAttack(user, move.id, target.getBattlerIndex());
-      }
+      const tag = globalScene.arena.findTag<DelayedAttackTag>(ArenaTagType.DELAYED_ATTACK);
+      tag?.addAttack(user, move.id, target.getBattlerIndex());
+
       return true;
     } else {
       globalScene.phaseManager.queueMessagePhase(
@@ -75,7 +75,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   /** Delayed attacks fail if another delayed attack is already queued against the target */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
-      const delayedAttackTag = globalScene.arena.findTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      const delayedAttackTag = globalScene.arena.findTag<DelayedAttackTag>(ArenaTagType.DELAYED_ATTACK);
       return !delayedAttackTag?.delayedAttacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
     };
   }
