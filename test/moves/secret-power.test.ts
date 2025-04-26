@@ -75,7 +75,7 @@ describe("Moves - Secret Power", () => {
     const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
     vi.spyOn(sereneGraceAttr, "apply");
 
-    let rainbowEffect = game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);
+    let rainbowEffect = game.scene.arena.getTag(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);
     expect(rainbowEffect).toBeDefined();
 
     rainbowEffect = rainbowEffect!;

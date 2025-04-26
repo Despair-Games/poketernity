@@ -190,7 +190,7 @@ describe("Moves - Substitute", () => {
     await game.toNextTurn();
 
     expect(leadPokemon.getMoveEffectiveness).not.toHaveReturnedWith(0);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.PLAYER)).toBeDefined();
   });
 
   it("shouldn't block the opponent from setting hazards", async () => {
@@ -206,7 +206,7 @@ describe("Moves - Substitute", () => {
     await game.toNextTurn();
 
     expect(leadPokemon.getMoveEffectiveness).not.toHaveReturnedWith(0);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.STEALTH_ROCK, ArenaTagSide.PLAYER)).toBeDefined();
   });
 
   it("shouldn't block moves that target both sides of the field", async () => {

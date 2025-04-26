@@ -795,7 +795,7 @@ export class Arena {
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
   ): boolean {
-    const existingTag = this.getTagOnSide(tagType, side);
+    const existingTag = this.getTag(tagType, side);
     if (existingTag) {
       existingTag.onOverlap(this);
 
@@ -823,15 +823,6 @@ export class Arena {
     return true;
   }
 
-  /**
-   * Attempts to get a tag from the Arena via {@linkcode getTagOnSide} that applies to both sides
-   * @param tagType The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
-   * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
-   */
-  getTag(tagType: ArenaTagType | AbstractConstructor<ArenaTag>): ArenaTag | undefined {
-    return this.getTagOnSide(tagType, ArenaTagSide.BOTH);
-  }
-
   hasTag(tagType: ArenaTagType): boolean {
     return !!this.getTag(tagType);
   }
@@ -840,41 +831,40 @@ export class Arena {
    * Attempts to get a tag from the Arena from a specific side (the tag passed in has to either apply to both sides, or the specific side only)
    *
    * eg: `MIST` only applies to the user's side, while `MUD_SPORT` applies to both user and enemy side
-   * @param tagType The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
-   * @param side The {@linkcode ArenaTagSide} to look at
+   * @param tagType - The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
+   * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTagOnSide(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
-    return typeof tagType === "number"
-      ? this.tags.find(
-          (t) =>
-            t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-        )
-      : this.tags.find(
-          (t) =>
-            t instanceof tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-        );
-  }
-
-  /**
-   * Uses {@linkcode findTagsOnSide} to filter (using the parameter function) for specific tags that apply to both sides
-   * @param tagPredicate a function mapping {@linkcode ArenaTag}s to `boolean`s
-   * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return true and apply to both sides
-   */
-  findTags(tagPredicate: (t: ArenaTag) => boolean): ArenaTag[] {
-    return this.findTagsOnSide(tagPredicate, ArenaTagSide.BOTH);
+  getTag<T extends ArenaTag = ArenaTag>(
+    tagType: ArenaTagType | AbstractConstructor<T>,
+    side: ArenaTagSide = ArenaTagSide.BOTH,
+  ): T | undefined {
+    const ret =
+      typeof tagType === "number"
+        ? this.tags.find(
+            (t) =>
+              t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
+          )
+        : this.tags.find(
+            (t) =>
+              t instanceof tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
+          );
+    return ret as T;
   }
 
   /**
    * Returns specific tags from the arena that pass the `tagPredicate` function passed in as a parameter, and apply to the given side
-   * @param tagPredicate a function mapping {@linkcode ArenaTag}s to `boolean`s
-   * @param side The {@linkcode ArenaTagSide} to look at
+   * @param tagPredicate - A function mapping {@linkcode ArenaTag}s to `boolean`s
+   * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return `true` and apply to the given side
    */
-  findTagsOnSide(tagPredicate: (t: ArenaTag) => boolean, side: ArenaTagSide): ArenaTag[] {
+  findTags<T extends ArenaTag = ArenaTag>(
+    tagPredicate: (t: ArenaTag) => boolean,
+    side: ArenaTagSide = ArenaTagSide.BOTH,
+  ): T[] {
     return this.tags.filter(
       (t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-    );
+    ) as T[];
   }
 
   lapseTags(): void {
@@ -901,7 +891,7 @@ export class Arena {
   }
 
   removeTagOnSide(tagType: ArenaTagType, side: ArenaTagSide, quiet: boolean = false): boolean {
-    const tag = this.getTagOnSide(tagType, side);
+    const tag = this.getTag(tagType, side);
     if (tag) {
       tag.onRemove(this, quiet);
       this.tags.splice(this.tags.indexOf(tag), 1);

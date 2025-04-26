@@ -52,8 +52,8 @@ describe("Moves - Brick Break", () => {
     game.move.select(MoveId.BRICK_BREAK);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.getTag(tagType, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.getTag(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
   });
 
   it("Reflect should not reduce Brick Break's damage when removed", async () => {
@@ -86,6 +86,6 @@ describe("Moves - Brick Break", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeDefined();
   });
 });

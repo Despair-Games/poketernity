@@ -1191,10 +1191,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case Stat.SPD:
         const side = this.getArenaTagSide();
-        if (globalScene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
+        if (globalScene.arena.getTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
-        if (globalScene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
+        if (globalScene.arena.getTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
           ret >>= 2;
         }
 
@@ -1834,7 +1834,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return (
       trappedByAbility.value
       || this.hasTag(...TrappedBattlerTagTypes)
-      || !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
+      || !!globalScene.arena.getTag(ArenaTagType.FAIRY_LOCK, side)
     );
   }
 
@@ -3325,7 +3325,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
-    const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
+    const noCritTag = globalScene.arena.getTag(NoCritTag, defendingSide);
     if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
     }
@@ -4124,7 +4124,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   isSafeguarded(attacker: Pokemon): boolean {
     const defendingSide = this.getArenaTagSide();
-    if (globalScene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
+    if (globalScene.arena.getTag(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
         applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, false, bypassed);

@@ -132,7 +132,7 @@ describe("Moves - Pledge Moves", () => {
     const baseDmg = baseDmgMock.mock.results[baseDmgMock.mock.results.length - 1].value;
     expect(enemyPokemon[0].getMaxHp() - enemyPokemon[0].hp).toBe(toDmgValue(baseDmg * 1.5));
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp()); // PLAYER should not have attacked
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FIRE_GRASS_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.FIRE_GRASS_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
     await game.toNextTurn();
@@ -155,7 +155,7 @@ describe("Moves - Pledge Moves", () => {
     }
 
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp()); // PLAYER should not have attacked
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FIRE_GRASS_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.FIRE_GRASS_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
     await game.toNextTurn();
@@ -187,7 +187,7 @@ describe("Moves - Pledge Moves", () => {
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.WATER);
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(150);
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp()); // PLAYER should not have attacked
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)).toBeDefined();
 
     await game.toNextTurn();
 
@@ -228,7 +228,7 @@ describe("Moves - Pledge Moves", () => {
     expect(waterPledge.calculateBattlePower).toHaveLastReturnedWith(150);
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp());
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
     enemyPokemon.forEach((p, i) => expect(p.getEffectiveStat(Stat.SPD)).toBe(Math.floor(enemyStartingSpd[i] / 4)));
   });
 
@@ -265,7 +265,7 @@ describe("Moves - Pledge Moves", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.getTag(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)).toBeDefined();
 
     game.move.select(MoveId.IRON_HEAD, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);

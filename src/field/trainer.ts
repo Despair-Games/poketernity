@@ -551,8 +551,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
         score /= playerField.length;
         if (forSwitch && !p.isOnField()) {
           globalScene.arena
-            .findTagsOnSide((t) => t instanceof EntryHazardTag, ArenaTagSide.ENEMY)
-            .map((t) => (score *= (t as EntryHazardTag).getMatchupScoreMultiplier(p)));
+            .findTags<EntryHazardTag>((t) => t instanceof EntryHazardTag, ArenaTagSide.ENEMY)
+            .map((t) => (score *= t.getMatchupScoreMultiplier(p)));
         }
       }
 
