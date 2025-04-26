@@ -58,13 +58,10 @@ describe("STAB", () => {
   });
 
   it("should have a 1.5 STAB on tera type not matching default type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
-
     await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const playerPokemon = game.field.getPlayerPokemon();
-    expect(playerPokemon.isTerastallized()).toBe(true);
-    expect(playerPokemon.getTeraType()).toBe(ElementalType.WATER);
+    game.field.forceTera(playerPokemon, ElementalType.WATER);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -76,13 +73,10 @@ describe("STAB", () => {
   });
 
   it("should have a 2.0 STAB on tera type MATCHING default type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
-
     await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const playerPokemon = game.field.getPlayerPokemon();
-    expect(playerPokemon.isTerastallized()).toBe(true);
-    expect(playerPokemon.getTeraType()).toBe(ElementalType.FIRE);
+    game.field.forceTera(playerPokemon, ElementalType.FIRE);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -94,14 +88,11 @@ describe("STAB", () => {
     expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(2.0);
   });
 
-  it("should have a 1.5 STAB on Stellar tera- & move-type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
-
+  it("should have a 1.2 STAB on Stellar tera- & move-type", async () => {
     await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
 
     const playerPokemon = game.field.getPlayerPokemon();
-    expect(playerPokemon.isTerastallized()).toBe(true);
-    expect(playerPokemon.getTeraType()).toBe(ElementalType.STELLAR);
+    game.field.forceTera(playerPokemon, ElementalType.STELLAR);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -110,7 +101,7 @@ describe("STAB", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.5);
+    expect(enemyPokemon.calcStabMultiplierForTakingDamage).toHaveReturnedWith(1.2);
   });
 
   it("combined Pledge moves should have a 1.5 STAB regardless of the user's type", async () => {
@@ -137,13 +128,12 @@ describe("STAB", () => {
   });
 
   it("should have a 1.5 STAB on pledge moves if tera type DOES NOT match user's type", async () => {
-    game.override.battleType("double").startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
+    game.override.battleType("double");
 
     await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
     const playerPokemon = game.field.getPlayerPokemon();
-    expect(playerPokemon.isTerastallized()).toBeTruthy();
-    expect(playerPokemon.getTeraType()).toBe(ElementalType.WATER);
+    game.field.forceTera(playerPokemon, ElementalType.WATER);
 
     const [, enemyPkm2] = game.scene.getEnemyField();
     vi.spyOn(enemyPkm2, "calcStabMultiplierForTakingDamage");
@@ -163,14 +153,15 @@ describe("STAB", () => {
     expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
   });
 
-  it("should have a 2.0 STAB on pledge moves if tera type matches user's type", async () => {
-    game.override.battleType("double").startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
+  // combined pledge moves don't get double STAB
+  // https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/page-23#post-9433539
+  it("should have normal 1.5 STAB on combined pledge moves if tera type matches user's type", async () => {
+    game.override.battleType("double");
 
     await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
 
     const playerPkm = game.field.getPlayerPokemon();
-    expect(playerPkm.isTerastallized()).toBeTruthy();
-    expect(playerPkm.getTeraType()).toBe(ElementalType.FIRE);
+    game.field.forceTera(playerPkm, ElementalType.FIRE);
 
     const [, enemyPkm2] = game.scene.getEnemyField();
     vi.spyOn(enemyPkm2, "calcStabMultiplierForTakingDamage");
@@ -178,7 +169,7 @@ describe("STAB", () => {
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // Squirtle uses Fire Pledge, then Charmander uses Grass Pledge.
-    // The combined Pledge is Grass-type, but should still gain enhanced STAB from matching Tera type
+    // The combined Pledge is Grass-type
     game.move.use(MoveId.GRASS_PLEDGE, 0, BattlerIndex.ENEMY_2);
     game.move.use(MoveId.WATER_PLEDGE, 1, BattlerIndex.ENEMY);
 
@@ -187,6 +178,6 @@ describe("STAB", () => {
       await game.phaseInterceptor.to("MoveEndPhase");
     }
 
-    expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(2.0);
+    expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
   });
 });

@@ -1,3 +1,4 @@
+import { TerastallizationPhase } from "#app/phases/terastallization-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -176,6 +177,7 @@ export class TurnCommandManager {
     }
 
     switch (nextCommand.command) {
+      case BattleCommand.TERA:
       case BattleCommand.FIGHT:
         return this.handleFightCommand(nextCommand);
       case BattleCommand.BALL:
@@ -360,9 +362,9 @@ export class TurnCommandManager {
   }
 
   private handleFightCommand(turnCommand: TurnCommand): boolean {
-    const { pokemon, cursor, turnMove, targets } = turnCommand;
+    const { pokemon, cursor, turnMove, targets, command } = turnCommand;
     if (!pokemon.isActive(true) || !turnMove) {
-      console.warn(`FIGHT command from ${pokemon?.name} is invalid`);
+      console.warn(`${BattleCommand[command]} command from ${pokemon?.name} is invalid`);
       return false;
     }
 
@@ -371,6 +373,10 @@ export class TurnCommandManager {
     const move =
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
+
+    if (command === BattleCommand.TERA) {
+      globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
+    }
 
     globalScene.phaseManager.unshiftPhase(
       new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),

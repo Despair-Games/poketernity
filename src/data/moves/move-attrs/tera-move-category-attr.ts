@@ -13,7 +13,7 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
 export class TeraMoveCategoryAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     if (
-      user.isTerastallized()
+      user.isTerastallized
       && user.getEffectiveStat(Stat.ATK, target, move, AbilityApplyMode.IGNORE)
         > user.getEffectiveStat(Stat.SPATK, target, move, AbilityApplyMode.IGNORE)
     ) {

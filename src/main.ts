@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import "#app/phaser-extensions";
 
 // Catch global errors and display them in an alert so users can report the issue.
 window.onerror = function (_message, _source, _lineno, _colno, error) {
@@ -15,22 +15,6 @@ window.addEventListener("unhandledrejection", (event) => {
   console.error(event.reason);
   //alert(errorString);
 });
-
-/**
- * Sets this object's position relative to another object with a given offset
- */
-const setPositionRelative = function (guideObject: Phaser.GameObjects.GameObject, x: number, y: number) {
-  const offsetX = guideObject.width * (-0.5 + (0.5 - guideObject.originX));
-  const offsetY = guideObject.height * (-0.5 + (0.5 - guideObject.originY));
-  this.setPosition(guideObject.x + offsetX + x, guideObject.y + offsetY + y);
-};
-
-Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
 
 document.fonts.load("16px emerald").then(() => document.fonts.load("10px pkmnems"));
 

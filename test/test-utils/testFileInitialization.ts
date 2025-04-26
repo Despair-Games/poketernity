@@ -1,7 +1,7 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants/app";
-import { initEggMoves } from "#app/data/egg-moves";
 import { allMoves } from "#app/data/data-lists";
+import { initEggMoves } from "#app/data/egg-moves";
 import { initAbilities } from "#app/data/init/init-abilities";
 import { initBiomes } from "#app/data/init/init-biomes";
 import { initMoves } from "#app/data/init/init-moves";
@@ -11,6 +11,7 @@ import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import "#app/phaser-extensions";
 import { initAchievements } from "#app/system/achievements";
 import { initVouchers } from "#app/system/init-vouchers";
 import { setCookie } from "#app/utils";
@@ -79,24 +80,7 @@ export function initTestFile() {
       matches: false,
     }) as any;
 
-  /**
-   * Sets this object's position relative to another object with a given offset
-   * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
-   * @param x The relative x position
-   * @param y The relative y position
-   */
-  const setPositionRelative = function (guideObject: any, x: number, y: number) {
-    const offsetX = guideObject.width * (-0.5 + (0.5 - guideObject.originX));
-    const offsetY = guideObject.height * (-0.5 + (0.5 - guideObject.originY));
-    this.setPosition(guideObject.x + offsetX + x, guideObject.y + offsetY + y);
-  };
 
-  Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
-  Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
-  Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-  Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative;
-  Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
-  Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
   HTMLCanvasElement.prototype.getContext = () => mockContext;
 
   manageListeners();

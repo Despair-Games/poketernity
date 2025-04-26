@@ -103,6 +103,12 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
+      if (!isNullOrUndefined(starter.teraType)) {
+        starterPokemon.teraType = starter.teraType;
+      } else {
+        starterPokemon.teraType = starterPokemon.species.type1;
+      }
+
       starterPokemon.setVisible(false);
       applyChallenges(gameMode, ChallengeType.STARTER_MODIFY, starterPokemon);
       party.push(starterPokemon);

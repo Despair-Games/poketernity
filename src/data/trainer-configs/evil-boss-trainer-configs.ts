@@ -1,7 +1,5 @@
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
-import type { PersistentModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball-type";
@@ -657,17 +655,18 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.ULTRA_BALL;
         p.generateName();
       }),
-    )
-    .setGenModifiersFunc((party) => {
-      const teraPokemon = party[4];
-      return [
-        modifierTypes
-          .TERA_SHARD()
-          .generateType([], [teraPokemon.species.type1])!
-          .withIdFromFunc(modifierTypes.TERA_SHARD)
-          .newModifier(teraPokemon) as PersistentModifier,
-      ]; //TODO: is the bang correct?
-    }),
+    ),
+  // TODO: remove this when trainer teras are reworked
+  // .setGenModifiersFunc((party) => {
+  //   const teraPokemon = party[4];
+  //   return [
+  //     modifierTypes
+  //       .TERA_SHARD()
+  //       .generateType([], [teraPokemon.species.type1])!
+  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
+  //       .newModifier(teraPokemon) as PersistentModifier,
+  //   ]; //TODO: is the bang correct?
+  // }),
   [TrainerType.PENNY_2]: new TrainerConfig(++t)
     .initForEvilTeamLeader(STAR_BOSS_TITLE, PENNY, true, STAR_MUSIC)
     .setPartyMemberFunc(
@@ -725,15 +724,16 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
           p.pokeball = PokeballType.ULTRA_BALL;
         },
       ),
-    )
-    .setGenModifiersFunc((party) => {
-      const teraPokemon = party[0];
-      return [
-        modifierTypes
-          .TERA_SHARD()
-          .generateType([], [teraPokemon.species.type1])!
-          .withIdFromFunc(modifierTypes.TERA_SHARD)
-          .newModifier(teraPokemon) as PersistentModifier,
-      ]; //TODO: is the bang correct?
-    }),
+    ),
+  // TODO: remove this when trainer teras are reworked
+  // .setGenModifiersFunc((party) => {
+  //   const teraPokemon = party[0];
+  //   return [
+  //     modifierTypes
+  //       .TERA_SHARD()
+  //       .generateType([], [teraPokemon.species.type1])!
+  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
+  //       .newModifier(teraPokemon) as PersistentModifier,
+  //   ]; //TODO: is the bang correct?
+  // }),
 };

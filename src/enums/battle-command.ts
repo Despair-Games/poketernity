@@ -3,4 +3,5 @@ export enum BattleCommand {
   BALL,
   POKEMON,
   RUN,
+  TERA,
 }

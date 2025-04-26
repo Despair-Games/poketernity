@@ -308,6 +308,10 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
+      if (battleType === BattleType.TRAINER) {
+        trainer?.genAI(globalScene.getEnemyParty());
+      }
+
       ui.setMessageMode().then(() => {
         if (!this.loaded) {
           // Set weather and terrain before session gets saved to ensure it's properly added to session data

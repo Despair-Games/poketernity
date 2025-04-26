@@ -1,4 +1,5 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
+import { getLevelForWaveFunc } from "#app/data/exp";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { signatureSpecies } from "#app/data/signatureSpecies";
@@ -19,6 +20,7 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { TeraAIMode } from "#enums/tera-ai-mode";
 import i18next from "i18next";
 
 export default class Trainer extends Phaser.GameObjects.Container {
@@ -27,6 +29,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   public partyTemplateIndex: number;
   public override name: string;
   public partnerName: string;
+  public originalIndexes: { [key: number]: number } = {};
 
   constructor(
     trainerType: TrainerType,
@@ -259,7 +262,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     const partyTemplate = this.getPartyTemplate();
 
     const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = 1 + scaledWaveIndex / 2 + Math.pow(scaledWaveIndex / 25, 2);
+    const baseLevel = getLevelForWaveFunc(scaledWaveIndex);
 
     if (this.isDouble() && partyTemplate.size < 2) {
       partyTemplate.size = 2;
@@ -270,6 +273,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
       const strength = partyTemplate.getStrength(i);
 
+      /**
+       * TODO: Tweak these values, the 1.2 value is the {@linkcode LEVEL_CAP_SCALE_FACTOR}
+       */
       switch (strength) {
         case PartyMemberStrength.WEAKER:
           multiplier = 0.95;
@@ -618,6 +624,13 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return [];
   }
 
+  /** Applies stored functions to modify the AI's team */
+  public genAI(party: EnemyPokemon[]): void {
+    if (this.config.genAIFuncs) {
+      this.config.genAIFuncs.forEach((f) => f(party));
+    }
+  }
+
   loadAssets(): Promise<void> {
     return this.config.loadAssets(this.variant);
   }
@@ -738,5 +751,18 @@ export default class Trainer extends Phaser.GameObjects.Container {
         tintSprite.setAlpha(1);
       }
     });
+  }
+
+  /**
+   * Currently used by the {@linkcode TeraAIMode.INSTANT} logic
+   * @returns `true` if the AI should Terastallize their current pokemon
+   */
+  public shouldTera(pokemon: EnemyPokemon): boolean {
+    const isInstantTera: boolean = this.config.trainerAI.teraMode === TeraAIMode.INSTANT;
+    const hasInstantTeraIndex: boolean = this.config.trainerAI.instantTeras.includes(pokemon.initialTeamIndex);
+    if (isInstantTera && !pokemon.isTerastallized && hasInstantTeraIndex) {
+      return true;
+    }
+    return false;
   }
 }

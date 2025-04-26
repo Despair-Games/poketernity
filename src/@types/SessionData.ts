@@ -34,4 +34,5 @@ export interface SessionSaveData {
   /** Only defined when the current wave is a ME */
   mysteryEncounterType: MysteryEncounterType | -1;
   mysteryEncounterSaveData: MysteryEncounterSaveData;
+  playerTerasUsed: number;
 }

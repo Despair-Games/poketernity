@@ -487,17 +487,11 @@ export class RunInfoUiHandler extends UiHandler {
   private parseTrainerDefeat(enemyContainer: Phaser.GameObjects.Container) {
     // Loads and adds trainer sprites to the UI
     this.showTrainerSprites(enemyContainer);
-    // Determining which Terastallize Modifier belongs to which Pokemon
+    // Old behavior: Determining which Terastallize Modifier belongs to which Pokemon
     // Creates a dictionary {PokemonId: TeraShardType}
+
+    // TODO: get tera'd pokemon
     const teraPokemon = {};
-    this.runInfo.enemyModifiers.forEach((m) => {
-      const modifier = m.toModifier(this.modifiersModule[m.className]);
-      if (modifier instanceof Modifier.TerastallizeModifier) {
-        const teraDetails = modifier?.getArgs();
-        const pkmnId = teraDetails[0];
-        teraPokemon[pkmnId] = teraDetails[1];
-      }
-    });
 
     // Creates the Pokemon icons + level information and adds it to enemyContainer
     // 2 Rows x 3 Columns
@@ -511,13 +505,16 @@ export class RunInfoUiHandler extends UiHandler {
       enemyData["player"] = true;
       const enemy = enemyData.toPokemon();
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
+
       // Applying Terastallizing Type tint to Pokemon icon
+      // TODO: update this
       const enemySprite1 = enemyIcon.list[0] as Phaser.GameObjects.Sprite;
       if (teraPokemon[enemyData.id]) {
         const teraTint = getTypeRgb(teraPokemon[enemyData.id]);
         const teraColor = new Phaser.Display.Color(teraTint[0], teraTint[1], teraTint[2]);
         enemySprite1.setTint(teraColor.color);
       }
+
       enemyIcon.setPosition(39 * (e % 3) + 5, 35 * pokemonRowHeight);
       const enemyLevel = addTextObject(
         43 * (e % 3),

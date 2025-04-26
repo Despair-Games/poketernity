@@ -11,7 +11,7 @@ import { SpeciesId } from "#enums/species-id";
  */
 export class TeraStarstormTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (user.isTerastallized() && user.species.speciesId === SpeciesId.TERAPAGOS) {
+    if (user.isTerastallized && user.species.speciesId === SpeciesId.TERAPAGOS) {
       moveType.value = ElementalType.STELLAR;
       return true;
     }
