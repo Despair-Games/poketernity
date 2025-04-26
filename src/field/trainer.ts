@@ -247,8 +247,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
   /**
    * Function to get levels for a given wave and the {@linkcode TrainerPartyTemplate}
    *
-   * First the waveIndex is scaled according to {@linkcode getWaveForDifficulty} which I will call `x` here
-   * This is then plugged into the {@linkcode getWaveForDifficulty} function
+   * First the waveIndex is scaled according to {@linkcode getWaveForDifficulty}
+   * and then plugged into the {@linkcode getWaveForDifficulty} function
    *
    * If the party member strength is below STRONG, the multiplier is scaled and a negative level offset is applied
    *
