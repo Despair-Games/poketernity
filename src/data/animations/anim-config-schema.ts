@@ -49,11 +49,11 @@ function getKeyFrameSetSchema<ValueType>(
       ? {
           type: "string",
           enum: easeFunctions,
+          nullable: true,
         }
       : {
           type: "null",
         },
-    nullable: true,
   } as const;
 
   return {
@@ -230,6 +230,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     volume: {
       type: "number",
       default: 100,
+      nullable: true,
     },
 
     /**
@@ -239,6 +240,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     pitch: {
       type: "number",
       default: 100,
+      nullable: true,
     },
 
     // Background Image Event fields
@@ -247,12 +249,14 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     bgX: {
       type: "number",
       default: 0,
+      nullable: true,
     },
 
     /** The y-coordinate of the background image */
     bgY: {
       type: "number",
       default: 0,
+      nullable: true,
     },
 
     /** The amount of time the image is displayed (in frames) */
@@ -260,12 +264,14 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
       type: "number",
       /** @todo Should this default be kept? */
       default: 0,
+      nullable: true,
     },
 
     /** Scale factor (%) for the background image */
     scale: {
       type: "number",
       default: 100,
+      nullable: true,
     },
   },
   readonly: true,
