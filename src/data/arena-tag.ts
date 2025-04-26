@@ -955,7 +955,7 @@ export class PendingHealTag extends ArenaTag {
   public queueHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
     if (this.pendingHeals.has(targetIndex)) {
       const existingHealEffects = this.pendingHeals.get(targetIndex);
-      if (existingHealEffects && !existingHealEffects?.some((he) => he.moveId === healEffect.moveId)) {
+      if (existingHealEffects && !existingHealEffects.some((he) => he.moveId === healEffect.moveId)) {
         existingHealEffects.push(healEffect);
       }
     } else {
