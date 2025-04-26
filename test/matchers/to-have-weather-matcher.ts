@@ -1,6 +1,7 @@
 import { capitalizeString } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
  * Matcher to check if the {@linkcode WeatherType} is as expected
@@ -8,7 +9,11 @@ import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
  * @param expectedWeatherType - The expected {@linkcode WeatherType}
  * @returns Whether the matcher passed
  */
-export function toHaveWeatherMatcher(received: unknown, expectedWeatherType: WeatherType) {
+export function toHaveWeatherMatcher(
+  this: MatcherState,
+  received: unknown,
+  expectedWeatherType: WeatherType,
+): SyncExpectationResult {
   if (!isGameManagerInstance(received)) {
     return {
       pass: this.isNot,

@@ -1,5 +1,7 @@
 import { MoveId } from "#enums/move-id";
-import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
+
 //#region Types
 
 export interface ToHaveUsedMoveMatcherOptions {
@@ -24,10 +26,11 @@ export interface ToHaveUsedMoveMatcherOptions {
  * @returns Whether the matcher passed
  */
 export function toHaveUsedMoveMatcher(
+  this: MatcherState,
   received: unknown,
   expectedResult: MoveId,
   { index = 0, moveCount = 1 }: ToHaveUsedMoveMatcherOptions = {},
-) {
+): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
