@@ -1,3 +1,4 @@
+import type { PostTeraClearWeatherAndTerrainAbAttr } from "#app/data/abilities/ab-attrs/post-tera-clear-weather-and-terrain-ab-attr";
 import type { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import {
@@ -190,6 +191,11 @@ export class QuietFormChangePhase extends BattlePhase {
       // TODO: add simulated support?
       applyAbAttrs<PostTeraFormChangeStatChangeAbAttr>(
         AbAttrFlag.POST_TERA_FORM_CHANGE_STAT_CHANGE,
+        this.pokemon,
+        false,
+      );
+      applyAbAttrs<PostTeraClearWeatherAndTerrainAbAttr>(
+        AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN,
         this.pokemon,
         false,
       );

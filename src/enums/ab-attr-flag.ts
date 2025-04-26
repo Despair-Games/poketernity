@@ -332,4 +332,6 @@ export enum AbAttrFlag {
   REFLECT_MOVES,
   /** @see {@linkcode PostTeraFormChangeStatChangeAbAttr} */
   POST_TERA_FORM_CHANGE_STAT_CHANGE,
+  /** @see {@linkcode PostTeraClearWeatherAndTerrainAbAttr} */
+  POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN,
 }
