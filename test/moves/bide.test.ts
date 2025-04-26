@@ -107,6 +107,12 @@ describe("Moves - Bide", () => {
     expect(player.getMoveQueue()).toHaveLength(0);
   });
 
+  // Unimplemented, full Paralysis cancels the move entirely
+  it.todo("should pause execution if the user is fully paralyzed");
+
+  // Unimplemented, flinching cancels the move entirely
+  it.todo("should pause execution if the user flinches");
+
   it("should not affect Ghost-type Pokemon", async () => {
     game.override.enemySpecies(SpeciesId.DRIFLOON);
 
@@ -149,4 +155,7 @@ describe("Moves - Bide", () => {
     expect(enemyPokemon[0]).toHaveFullHp();
     expect(enemyPokemon[1]).not.toHaveFullHp();
   });
+
+  // Unimplemented, priority is statically calculated each turn
+  it.todo("should execute all phases of the move with the same priority");
 });
