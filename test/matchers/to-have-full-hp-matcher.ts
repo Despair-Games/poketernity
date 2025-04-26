@@ -1,15 +1,15 @@
-import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
-import type { SyncExpectationResult } from "@vitest/expect";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
  * Matcher to check if a Pokemon is full hp.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
  * @returns Whether the matcher passed
  */
-export function toHaveFullHpMatcher(received: unknown): SyncExpectationResult {
+export function toHaveFullHpMatcher(this: MatcherState, received: unknown): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
