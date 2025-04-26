@@ -28,9 +28,10 @@ describe("Moves - Fly", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset(MoveId.FLY)
+      .ability(AbilityId.STURDY)
       .battleType("single")
       .startingLevel(100)
-      .enemySpecies(SpeciesId.SNORLAX)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .enemyLevel(100)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);

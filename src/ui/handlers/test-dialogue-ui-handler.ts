@@ -139,7 +139,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     }
 
     this.inputs[0].resize(1150, 116);
-    this.inputContainers[0].list[0].width = 200;
+    this.inputContainers[0].getAt<Phaser.GameObjects.Container>(0).width = 200;
     this.inputs[0].text = prefilledText;
     this.submitAction = (_) => {
       if (ui.getMode() === UiMode.TEST_DIALOGUE) {

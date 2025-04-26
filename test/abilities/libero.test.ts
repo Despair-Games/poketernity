@@ -1,19 +1,21 @@
 import { allMoves } from "#app/data/data-lists";
-import { ElementalType } from "#enums/elemental-type";
 import { Weather } from "#app/data/weather";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Abilities - Libero", () => {
+describe.each([
+  { ability: AbilityId.LIBERO, abilityName: "Libero" },
+  { ability: AbilityId.PROTEAN, abilityName: "Protean" },
+])("Abilities - $abilityName", ({ ability }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -29,45 +31,41 @@ describe("Abilities - Libero", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.ability(AbilityId.LIBERO);
-    game.override.startingLevel(100);
-    game.override.enemySpecies(SpeciesId.RATTATA);
-    game.override.enemyMoveset([MoveId.ENDURE, MoveId.ENDURE, MoveId.ENDURE, MoveId.ENDURE]);
+    game.override
+      .battleType("single")
+      .ability(ability)
+      .startingLevel(100)
+      .enemySpecies(SpeciesId.RATTATA)
+      .enemyMoveset(MoveId.ENDURE)
+      .disableCrits();
   });
 
-  test("ability applies and changes a pokemon's type", async () => {
-    game.override.moveset([MoveId.SPLASH]);
+  it("applies and changes a pokemon's type", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
-
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.SPLASH);
   });
 
-  // Test for Gen9+ functionality, we are using previous funcionality
-  test.skip("ability applies only once per switch in", async () => {
-    game.override.moveset([MoveId.SPLASH, MoveId.AGILITY]);
+  // Test for Gen9+ functionality, disabled because we are using previous funcionality
+  it.skip("applies only once per switch in", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.BULBASAUR]);
 
-    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.BULBASAUR]);
+    let leadPokemon = game.field.getPlayerPokemon();
 
-    let leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
-
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.SPLASH);
 
-    game.move.select(MoveId.AGILITY);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.AGILITY);
+    await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === AbilityId.LIBERO)).toHaveLength(1);
+    expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === ability)).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]];
     const moveType = ElementalType[allMoves.get(MoveId.AGILITY).type];
     expect(leadPokemonType).not.toBe(moveType);
@@ -78,224 +76,199 @@ describe("Abilities - Libero", () => {
     game.switchPokemon(1);
     await game.toNextTurn();
 
-    leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    leadPokemon = game.field.getPlayerPokemon();
 
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.SPLASH);
   });
 
-  test("ability applies correctly even if the pokemon's move has a variable type", async () => {
-    game.override.moveset([MoveId.WEATHER_BALL]);
+  it("applies correctly even if the pokemon's move has a variable type", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
-
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
     game.scene.arena.weather = new Weather(WeatherType.SUNNY);
-    game.move.select(MoveId.WEATHER_BALL);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.WEATHER_BALL);
+    await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).toContain(AbilityId.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
       moveType = ElementalType[ElementalType.FIRE];
     expect(leadPokemonType).toBe(moveType);
   });
 
-  test("ability applies correctly even if the type has changed by another ability", async () => {
-    game.override.moveset([MoveId.TACKLE]);
+  it("applies correctly even if the type has changed by another ability", async () => {
     game.override.passiveAbility(AbilityId.REFRIGERATE);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.TACKLE);
+    await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).toContain(AbilityId.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
       moveType = ElementalType[ElementalType.ICE];
     expect(leadPokemonType).toBe(moveType);
   });
 
-  test("ability applies correctly even if the pokemon's move calls another move", async () => {
-    game.override.moveset([MoveId.NATURE_POWER]);
+  it("applies correctly even if the pokemon's move calls another move", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
-
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
     game.scene.arena.biomeId = BiomeId.MOUNTAIN;
-    game.move.select(MoveId.NATURE_POWER);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.NATURE_POWER);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.AIR_SLASH);
   });
 
-  test("ability applies correctly even if the pokemon's move is delayed / charging", async () => {
-    game.override.moveset([MoveId.DIG]);
+  it("applies correctly even if the pokemon's move is delayed / charging", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
-
-    game.move.select(MoveId.DIG);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.DIG);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.DIG);
   });
 
-  test("ability applies correctly even if the pokemon's move misses", async () => {
-    game.override.moveset([MoveId.TACKLE]);
+  it("applies correctly even if the pokemon's move misses", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    game.move.select(MoveId.TACKLE);
+    game.move.use(MoveId.TACKLE);
     await game.move.forceMiss();
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon.isFullHp()).toBe(true);
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.TACKLE);
   });
 
-  test("ability applies correctly even if the pokemon's move is protected against", async () => {
-    game.override.moveset([MoveId.TACKLE]);
-    game.override.enemyMoveset([MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT]);
+  it("applies correctly even if the pokemon's move is protected against", async () => {
+    game.override.enemyMoveset(MoveId.PROTECT);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.TACKLE);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.TACKLE);
   });
 
-  test("ability applies correctly even if the pokemon's move fails because of type immunity", async () => {
-    game.override.moveset([MoveId.TACKLE]);
+  it("applies correctly even if the pokemon's move fails because of type immunity", async () => {
     game.override.enemySpecies(SpeciesId.GASTLY);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.TACKLE);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.TACKLE);
   });
 
-  test("ability is not applied if pokemon's type is the same as the move's type", async () => {
-    game.override.moveset([MoveId.SPLASH]);
+  it("is not applied if pokemon's type is the same as the move's type", async () => {
+    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+  });
+
+  it("is not applied if pokemon's modified type is the same as the move's type", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+
+    const leadPokemon = game.field.getPlayerPokemon();
 
     leadPokemon.summonData.types = [allMoves.get(MoveId.SPLASH).type];
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
   });
 
-  test("ability is not applied if pokemon is terastallized", async () => {
-    game.override.moveset([MoveId.SPLASH]);
+  it("is not applied if pokemon is terastallized", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
+    game.field.forceTera(leadPokemon);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
-    vi.spyOn(leadPokemon, "isTerastallized").mockReturnValue(true);
-
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
-
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
   });
 
-  test("ability is not applied if pokemon uses struggle", async () => {
-    game.override.moveset([MoveId.STRUGGLE]);
+  it("is not applied if pokemon uses struggle", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    game.move.use(MoveId.STRUGGLE);
+    await game.toEndOfTurn();
 
-    game.move.select(MoveId.STRUGGLE);
-    await game.phaseInterceptor.to(TurnEndPhase);
-
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
   });
 
-  test("ability is not applied if the pokemon's move fails", async () => {
-    game.override.moveset([MoveId.BURN_UP]);
+  it("is not applied if the pokemon's move fails", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    game.move.use(MoveId.BURN_UP);
+    await game.toEndOfTurn();
 
-    game.move.select(MoveId.BURN_UP);
-    await game.phaseInterceptor.to(TurnEndPhase);
-
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
   });
 
-  test("ability applies correctly even if the pokemon's Trick-or-Treat fails", async () => {
-    game.override.moveset([MoveId.TRICK_OR_TREAT]);
+  it("applies correctly even if the pokemon's Trick-or-Treat fails", async () => {
     game.override.enemySpecies(SpeciesId.GASTLY);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    game.move.select(MoveId.TRICK_OR_TREAT);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.TRICK_OR_TREAT);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.TRICK_OR_TREAT);
   });
 
-  test("ability applies correctly and the pokemon curses itself", async () => {
-    game.override.moveset([MoveId.CURSE]);
+  it("applies correctly and the pokemon curses itself", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    const leadPokemon = game.field.getPlayerPokemon();
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    expect(leadPokemon).not.toBe(undefined);
-
-    game.move.select(MoveId.CURSE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    game.move.use(MoveId.CURSE);
+    await game.toEndOfTurn();
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, MoveId.CURSE);
     expect(leadPokemon.getTag(BattlerTagType.CURSED)).not.toBe(undefined);
   });
-});
 
-function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
-  expect(pokemon.summonData.abilitiesApplied).toContain(AbilityId.LIBERO);
-  expect(pokemon.getTypes()).toHaveLength(1);
-  const pokemonType = ElementalType[pokemon.getTypes()[0]],
-    moveType = ElementalType[allMoves.get(moveId).type];
-  expect(pokemonType).toBe(moveType);
-}
+  function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
+    expect(pokemon.summonData.abilitiesApplied).toContain(ability);
+    expect(pokemon.getTypes()).toHaveLength(1);
+    const pokemonType = ElementalType[pokemon.getTypes()[0]],
+      moveType = ElementalType[allMoves.get(moveId).type];
+    expect(pokemonType).toBe(moveType);
+  }
+});

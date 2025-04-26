@@ -49,6 +49,10 @@ import PersistentModifierData from "#app/system/modifier-data";
 import PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
+import {
+  applySessionVersionMigration,
+  applySystemVersionMigration,
+} from "#app/system/version_migration/version_converter";
 import { vouchers } from "#app/system/voucher";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -66,6 +70,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";
+import type { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -81,7 +86,6 @@ import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
-import { applySessionVersionMigration, applySystemVersionMigration } from "./version_migration/version_converter";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -146,6 +150,7 @@ export interface StarterAttributes {
   shiny?: boolean;
   favorite?: boolean;
   nickname?: string;
+  teraType?: ElementalType;
 }
 
 export interface StarterPreferences {
@@ -787,6 +792,7 @@ export class GameData {
       challenges: globalScene.gameMode.challenges.map((c) => new ChallengeData(c)),
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,
+      playerTerasUsed: globalScene.playerTerasUsed,
     } as SessionSaveData;
   }
 
@@ -934,6 +940,8 @@ export class GameData {
               ),
             );
           }
+
+          globalScene.playerTerasUsed = sessionData.playerTerasUsed;
 
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {

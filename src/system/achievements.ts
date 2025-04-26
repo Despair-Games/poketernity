@@ -1,4 +1,4 @@
-import type { ConditionFn } from "#app/@types/common";
+import type { ConditionFn } from "#app/@types/ConditionFn";
 import type { Challenge } from "#app/data/challenge";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { globalScene } from "#app/global-scene";

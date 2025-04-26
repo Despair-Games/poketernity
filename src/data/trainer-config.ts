@@ -1,23 +1,23 @@
-import { globalScene } from "#app/global-scene";
-import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { toReadableString, randSeedItem, randItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { globalScene } from "#app/global-scene";
+import type { PersistentModifier } from "#app/modifier/modifier";
+import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
+import Overrides from "#app/overrides";
+import { getIsInitialized, initI18n } from "#app/plugins/i18n";
+import { randItem, randSeedItem, toReadableString } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { ElementalType } from "#enums/elemental-type";
-import type { PersistentModifier } from "#app/modifier/modifier";
-import { TrainerVariant } from "#enums/trainer-variant";
-import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import i18next from "i18next";
+import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
-import { TrainerType } from "#enums/trainer-type";
-import Overrides from "#app/overrides";
+import { TeraAIMode } from "#enums/tera-ai-mode";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { ImagesFolder } from "#enums/images-folders";
+import { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
+import i18next from "i18next";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -250,9 +250,36 @@ export const trainerPartyTemplates = {
 type PartyTemplateFunc = () => TrainerPartyTemplate;
 type PartyMemberFunc = (level: number, strength: PartyMemberStrength) => EnemyPokemon;
 type GenModifiersFunc = (party: EnemyPokemon[]) => PersistentModifier[];
+type GenAIFunc = (party: EnemyPokemon[]) => void;
 
 export interface PartyMemberFuncs {
   [key: number]: PartyMemberFunc;
+}
+
+class TrainerAI {
+  /** @see {@linkcode TeraAIMode} */
+  public teraMode: TeraAIMode;
+  public instantTeras: number[] = [];
+
+  constructor(teraMode: TeraAIMode = TeraAIMode.NONE) {
+    this.teraMode = teraMode;
+  }
+
+  /**
+   * @returns `true` if this trainer is allowed to use Terastallization
+   */
+  public canTerastallize(): boolean {
+    return this.teraMode !== TeraAIMode.NONE;
+  }
+
+  /**
+   * Sets a pokemon on this AI to instantly tera on first move used
+   * @param index The index of the pokemon to instantly tera
+   */
+  public setInstantTera(index: number): void {
+    this.teraMode = TeraAIMode.INSTANT;
+    this.instantTeras.push(index);
+  }
 }
 
 export class TrainerConfig {
@@ -279,6 +306,7 @@ export class TrainerConfig {
   public doubleEncounterBgm: string;
   public victoryBgm: string;
   public genModifiersFunc: GenModifiersFunc;
+  public genAIFuncs: GenAIFunc[] = [];
   public modifierRewardFuncs: ModifierTypeFunc[] = [];
   public partyTemplates: TrainerPartyTemplate[];
   public partyTemplateFunc: PartyTemplateFunc;
@@ -288,6 +316,7 @@ export class TrainerConfig {
   public speciesFilter: PokemonSpeciesFilter;
   public specialtyTypes: ElementalType[] = [];
   public hasVoucher: boolean = false;
+  public trainerAI: TrainerAI = new TrainerAI();
 
   public encounterMessages: string[] = [];
   public victoryMessages: string[] = [];
@@ -637,6 +666,37 @@ export class TrainerConfig {
 
   setGenModifiersFunc(genModifiersFunc: GenModifiersFunc): TrainerConfig {
     this.genModifiersFunc = genModifiersFunc;
+    return this;
+  }
+
+  /**
+   * Sets random pokemon from the trainers team to instant tera. Uses their specialty types if they have one.
+   * @param count The amount of pokemon to have instant tera
+   * @returns `this` ({@linkcode TrainerConfig})
+   */
+  public setRandomTeraModifiers(count: () => number): TrainerConfig {
+    this.genAIFuncs.push((party: EnemyPokemon[]) => {
+      const { length } = party;
+      const partyMemberIndexes = Array.from({ length }).map((_, i) => i);
+      for (let t = 0; t < Math.min(count(), length); t++) {
+        const randomIndex = randSeedItem(partyMemberIndexes);
+        partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
+        if (this.specialtyTypes?.length) {
+          party[randomIndex].teraType = randSeedItem(this.specialtyTypes);
+        }
+        this.trainerAI.setInstantTera(randomIndex);
+      }
+    });
+    return this;
+  }
+
+  /**
+   * Sets a specific pokemon to instant tera
+   * @param index The index within the team to have instant tera
+   * @returns `this` ({@linkcode TrainerConfig})
+   */
+  public setInstantTera(index: number): TrainerConfig {
+    this.trainerAI.setInstantTera(index);
     return this;
   }
 
@@ -1247,9 +1307,10 @@ export class TrainerConfig {
   ): TrainerConfig {
     this.initForGymLeader(signatureSpecies, isMale, ...specialtyTypes);
     this.setBattleBgm("battle_paldea_gym");
-    this.setGenModifiersFunc((party) => {
-      return getSpecificTeraModifier(party, party.length - 1, specialtyTypes[0]);
-    });
+    // TODO: tera
+    // this.setGenModifiersFunc((party) => {
+    //   return getSpecificTeraModifier(party, party.length - 1, specialtyTypes[0]);
+    // });
 
     return this;
   }
@@ -1308,9 +1369,7 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_gym");
-    this.setGenModifiersFunc((party) =>
-      getRandomTeraModifiers(party, 1, specialtyTypes.length ? specialtyTypes : undefined),
-    );
+    this.setRandomTeraModifiers(() => 1);
 
     return this;
   }
@@ -1648,21 +1707,22 @@ export function getSpeciesFilterRandomPartyMemberFunc(
  * @param teraType the type that the Pokemon will be tera'd into
  * @returns a PersistentModifier
  */
-function getSpecificTeraModifier(
-  party: EnemyPokemon[],
-  partySlot: number,
-  teraType: ElementalType,
-): PersistentModifier[] {
-  const ret: PersistentModifier[] = [];
-  ret.push(
-    modifierTypes
-      .TERA_SHARD()
-      .generateType([], [teraType])!
-      .withIdFromFunc(modifierTypes.TERA_SHARD)
-      .newModifier(party[partySlot]) as PersistentModifier,
-  );
-  return ret;
-}
+// TODO: remove this when trainer teras are reworked
+// function getSpecificTeraModifier(
+//   party: EnemyPokemon[],
+//   partySlot: number,
+//   teraType: ElementalType,
+// ): PersistentModifier[] {
+//   const ret: PersistentModifier[] = [];
+//   ret.push(
+//     modifierTypes
+//       .TERA_SHARD()
+//       .generateType([], [teraType])!
+//       .withIdFromFunc(modifierTypes.TERA_SHARD)
+//       .newModifier(party[partySlot]) as PersistentModifier,
+//   );
+//   return ret;
+// }
 
 /**
  * Function to create a {@linkcode PersistentModifier} of applying random tera types to a trainer's team
@@ -1671,19 +1731,20 @@ function getSpecificTeraModifier(
  * @param types an array of possible ElementalTypes to apply the tera
  * @returns a PersistentModifier
  */
-function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
-  const ret: PersistentModifier[] = [];
-  const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
-  for (let t = 0; t < Math.min(count, party.length); t++) {
-    const randomIndex = randSeedItem(partyMemberIndexes);
-    partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
-    ret.push(
-      modifierTypes
-        .TERA_SHARD()
-        .generateType([], [randSeedItem(types ? types : party[randomIndex].getTypes())])!
-        .withIdFromFunc(modifierTypes.TERA_SHARD)
-        .newModifier(party[randomIndex]) as PersistentModifier,
-    ); // TODO: is the bang correct?
-  }
-  return ret;
-}
+// TODO: remove this when trainer teras are reworked
+// function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
+//   const ret: PersistentModifier[] = [];
+//   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
+//   for (let t = 0; t < Math.min(count, party.length); t++) {
+//     const randomIndex = randSeedItem(partyMemberIndexes);
+//     partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
+//     ret.push(
+//       modifierTypes
+//         .TERA_SHARD()
+//         .generateType([], [randSeedItem(types ? types : party[randomIndex].getTypes())])!
+//         .withIdFromFunc(modifierTypes.TERA_SHARD)
+//         .newModifier(party[randomIndex]) as PersistentModifier,
+//     ); // TODO: is the bang correct?
+//   }
+//   return ret;
+// }

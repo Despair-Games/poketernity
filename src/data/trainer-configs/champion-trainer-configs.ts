@@ -1,27 +1,24 @@
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { SpeciesId } from "#enums/species-id";
-import { TrainerType } from "#enums/trainer-type";
-import { PokeballType } from "#enums/pokeball-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import type { PersistentModifier } from "#app/modifier/modifier";
-import { ElementalType } from "#enums/elemental-type";
-import { TrainerVariant } from "#enums/trainer-variant";
 import {
-  KANTO_CHAMPION_THEME,
-  JOHTO_CHAMPION_THEME,
-  HOENN5_CHAMPION_THEME,
-  HOENN6_CHAMPION_THEME,
-  SINNOH_CHAMPION_THEME,
-  DEFAULT_CHAMPION_THEME,
-  IRIS_CHAMPION_THEME,
-  KALOS_CHAMPION_THEME,
   ALOLA_CHAMPION_THEME,
+  DEFAULT_CHAMPION_THEME,
   GALAR_CHAMPION_THEME,
   GEETA_CHAMPION_THEME,
-  NEMONA_CHAMPION_THEME,
+  HOENN5_CHAMPION_THEME,
+  HOENN6_CHAMPION_THEME,
+  IRIS_CHAMPION_THEME,
+  JOHTO_CHAMPION_THEME,
+  KALOS_CHAMPION_THEME,
+  KANTO_CHAMPION_THEME,
   KIERAN_CHAMPION_THEME,
+  NEMONA_CHAMPION_THEME,
+  SINNOH_CHAMPION_THEME,
 } from "#app/constants/music";
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 let t = TrainerType.BLUE;
 export const championTrainerConfigs: TrainerConfigs = {
@@ -232,17 +229,18 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    )
-    .setGenModifiersFunc((party) => {
-      const teraPokemon = party[4];
-      return [
-        modifierTypes
-          .TERA_SHARD()
-          .generateType([], [ElementalType.FIRE])!
-          .withIdFromFunc(modifierTypes.TERA_SHARD)
-          .newModifier(teraPokemon) as PersistentModifier,
-      ]; //TODO: is the bang correct?
-    }),
+    ),
+  // TODO: remove this when trainer teras are reworked
+  // .setGenModifiersFunc((party) => {
+  //   const teraPokemon = party[4];
+  //   return [
+  //     modifierTypes
+  //       .TERA_SHARD()
+  //       .generateType([], [ElementalType.FIRE])!
+  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
+  //       .newModifier(teraPokemon) as PersistentModifier,
+  //   ]; //TODO: is the bang correct?
+  // }),
   [TrainerType.IRIS]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.FEMALE, [IRIS_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.HYDREIGON]))
@@ -321,28 +319,29 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    )
-    .setGenModifiersFunc((party) => {
-      const teraPokemon = party[4];
-      let teraType: ElementalType;
-      switch (teraPokemon.species.speciesId) {
-        case SpeciesId.DECIDUEYE:
-          teraType = ElementalType.GHOST;
-          break;
-        case SpeciesId.INCINEROAR:
-          teraType = ElementalType.DARK;
-          break;
-        default:
-          teraType = ElementalType.WATER;
-      }
-      return [
-        modifierTypes
-          .TERA_SHARD()
-          .generateType([], [teraType])!
-          .withIdFromFunc(modifierTypes.TERA_SHARD)
-          .newModifier(teraPokemon) as PersistentModifier,
-      ]; //TODO: is the bang correct?
-    }),
+    ),
+  // TODO: remove this when trainer teras are reworked
+  // .setGenModifiersFunc((party) => {
+  //   const teraPokemon = party[4];
+  //   let teraType: ElementalType;
+  //   switch (teraPokemon.species.speciesId) {
+  //     case SpeciesId.DECIDUEYE:
+  //       teraType = ElementalType.GHOST;
+  //       break;
+  //     case SpeciesId.INCINEROAR:
+  //       teraType = ElementalType.DARK;
+  //       break;
+  //     default:
+  //       teraType = ElementalType.WATER;
+  //   }
+  //   return [
+  //     modifierTypes
+  //       .TERA_SHARD()
+  //       .generateType([], [teraType])!
+  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
+  //       .newModifier(teraPokemon) as PersistentModifier,
+  //   ]; //TODO: is the bang correct?
+  // }),
   [TrainerType.LEON]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [GALAR_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.RILLABOOM, SpeciesId.CINDERACE, SpeciesId.INTELEON]))
@@ -386,17 +385,18 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    )
-    .setGenModifiersFunc((party) => {
-      const teraPokemon = party[4];
-      return [
-        modifierTypes
-          .TERA_SHARD()
-          .generateType([], [ElementalType.FLYING])!
-          .withIdFromFunc(modifierTypes.TERA_SHARD)
-          .newModifier(teraPokemon) as PersistentModifier,
-      ]; //TODO: is the bang correct?
-    }),
+    ),
+  // TODO: remove this when trainer teras are reworked
+  // .setGenModifiersFunc((party) => {
+  //   const teraPokemon = party[4];
+  //   return [
+  //     modifierTypes
+  //       .TERA_SHARD()
+  //       .generateType([], [ElementalType.FLYING])!
+  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
+  //       .newModifier(teraPokemon) as PersistentModifier,
+  //   ]; //TODO: is the bang correct?
+  // }),
   [TrainerType.NEMONA]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.FEMALE, [NEMONA_CHAMPION_THEME])
     .setPartyMemberFunc(
@@ -429,28 +429,29 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    )
-    .setGenModifiersFunc((party) => {
-      const teraPokemon = party[4];
-      let teraType: ElementalType;
-      switch (teraPokemon.species.speciesId) {
-        case SpeciesId.MEOWSCARADA:
-          teraType = ElementalType.GRASS;
-          break;
-        case SpeciesId.SKELEDIRGE:
-          teraType = ElementalType.FIRE;
-          break;
-        default:
-          teraType = ElementalType.WATER;
-      }
-      return [
-        modifierTypes
-          .TERA_SHARD()
-          .generateType([], [teraType])!
-          .withIdFromFunc(modifierTypes.TERA_SHARD)
-          .newModifier(teraPokemon) as PersistentModifier,
-      ]; //TODO: is the bang correct?
-    }),
+    ),
+  // TODO: remove this when trainer teras are reworked
+  // .setGenModifiersFunc((party) => {
+  //   const teraPokemon = party[4];
+  //   let teraType: ElementalType;
+  //   switch (teraPokemon.species.speciesId) {
+  //     case SpeciesId.MEOWSCARADA:
+  //       teraType = ElementalType.GRASS;
+  //       break;
+  //     case SpeciesId.SKELEDIRGE:
+  //       teraType = ElementalType.FIRE;
+  //       break;
+  //     default:
+  //       teraType = ElementalType.WATER;
+  //   }
+  //   return [
+  //     modifierTypes
+  //       .TERA_SHARD()
+  //       .generateType([], [teraType])!
+  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
+  //       .newModifier(teraPokemon) as PersistentModifier,
+  //   ]; //TODO: is the bang correct?
+  // }),
   [TrainerType.KIERAN]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [KIERAN_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED]))

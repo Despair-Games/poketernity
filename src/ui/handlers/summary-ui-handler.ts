@@ -334,7 +334,8 @@ export class SummaryUiHandler extends UiHandler {
     } catch (err: unknown) {
       console.error(`Failed to play animation for ${spriteKey}`, err);
     }
-    this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.getTeraType()));
+    this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.teraType));
+    this.pokemonSprite.setPipelineData("isTerastallized", this.pokemon.isTerastallized);
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
     let key = "spriteColors";
@@ -786,9 +787,6 @@ export class SummaryUiHandler extends UiHandler {
         if (types.length > 1) {
           profileContainer.add(getTypeIcon(1, types[1]));
         }
-        if (this.pokemon?.isTerastallized()) {
-          profileContainer.add(getTypeIcon(types.length, this.pokemon.getTeraType(), true));
-        }
 
         if (this.pokemon?.getLuck()) {
           const luckLabelText = addTextObject(141, 28, i18next.t("common:luckIndicator"), TextStyle.SUMMARY_ALT);
@@ -804,6 +802,16 @@ export class SummaryUiHandler extends UiHandler {
           luckText.setOrigin(0, 0);
           luckText.setTint(getVariantTint(Math.min(this.pokemon.getLuck() - 1, 2) as Variant));
           profileContainer.add(luckText);
+        }
+
+        if (
+          !isNullOrUndefined(this.pokemon) /*
+          && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id) */
+        ) {
+          const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
+          teraIcon.setName("terrastallize-icon");
+          teraIcon.setFrame(ElementalType[this.pokemon.teraType].toLowerCase());
+          profileContainer.add(teraIcon);
         }
 
         this.abilityContainer = {

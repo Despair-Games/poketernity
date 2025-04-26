@@ -100,7 +100,7 @@ import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/varia
 import { getNatureStatMultiplier } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -137,7 +137,6 @@ import {
   TempCritBoosterModifier,
   TempStatStageBoosterModifier,
   type PokemonHeldItemModifier,
-  type TerastallizeModifier,
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
@@ -269,6 +268,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public pokerus: boolean;
   public switchOutStatus: boolean;
   public evoCounter: number;
+  protected _teraType: ElementalType;
+  public isTerastallized: boolean = false; // TODO: put this in battle (wave) data if arena reset behavior is changed
+  public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle (wave) data if arena reset behavior is changed
 
   private summonDataPrimer: PokemonSummonData | null;
 
@@ -312,6 +314,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     this.species = species;
+    // The `EnemyPokemon` constructor randomly picks from both types if applicable
+    this.teraType = species.type1;
     this.pokeball = dataSource?.pokeball || PokeballType.POKEBALL;
     this.level = level;
     this.switchOutStatus = false;
@@ -362,6 +366,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.evoCounter = dataSource.evoCounter ?? 0;
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
+      this.teraType = dataSource.teraType;
+      this.isTerastallized = dataSource.isTerastallized;
+      this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
       this.generateId();
       this.ivs = ivs || getIvsFromId(this.id);
@@ -407,6 +414,59 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (!dataSource) {
       this.calculateStats();
+    }
+  }
+
+  /**
+   * The pokemon's Tera type. Some pokemon are locked to limited tera types:
+   * - Terapagos is always Stellar
+   * - Ogerpon is based on its form (Grass, Water, Fire, Rock)
+   * - Shedinja is always Bug
+   */
+  public get teraType(): ElementalType {
+    switch (this.species.speciesId) {
+      case SpeciesId.TERAPAGOS:
+        return ElementalType.STELLAR;
+
+      case SpeciesId.OGERPON:
+        switch (this.formIndex) {
+          case 0:
+          case 4:
+            return ElementalType.GRASS;
+          case 1:
+          case 5:
+            return ElementalType.WATER;
+          case 2:
+          case 6:
+            return ElementalType.FIRE;
+          case 3:
+          case 7:
+            return ElementalType.ROCK;
+        }
+
+      // Custom
+      case SpeciesId.SHEDINJA:
+        return ElementalType.BUG;
+    }
+
+    return this._teraType;
+  }
+
+  public set teraType(value: ElementalType) {
+    this._teraType = value;
+  }
+
+  /**
+   * De-Terastallizes the pokemon and updates the shaders.
+   * Also changes Ogerpon back into its non-Tera form.
+   */
+  public resetTera(): void {
+    const wasTerastallized = this.isTerastallized;
+    this.isTerastallized = false;
+    this.stellarTypesBoosted = [];
+    if (wasTerastallized) {
+      this.updateSpritePipelineData();
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeLapseTeraTrigger);
     }
   }
 
@@ -469,7 +529,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow,
-        teraColor: getTypeRgb(this.getTeraType()),
+        teraColor: getTypeRgb(this.teraType),
+        isTerastallized: this.isTerastallized,
       });
       return ret;
     };
@@ -517,6 +578,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public faint(): void {
     this.hp = 0;
     this.resetStatus(true);
+    this.resetTera();
   }
 
   /**
@@ -785,7 +847,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   updateSpritePipelineData(): void {
     [this.getSprite(), this.getTintSprite()]
       .filter((s) => !!s)
-      .map((s) => (s.pipelineData["teraColor"] = getTypeRgb(this.getTeraType())));
+      .map((s) => {
+        s.pipelineData["teraColor"] = getTypeRgb(this.teraType);
+        s.pipelineData["isTerastallized"] = this.isTerastallized;
+      });
     this.updateInfo(true);
   }
 
@@ -1376,9 +1441,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): ElementalType[] {
     const types: ElementalType[] = [];
 
-    if (includeTeraType) {
-      const teraType = this.getTeraType();
-      if (teraType !== ElementalType.UNKNOWN) {
+    if (includeTeraType && this.isTerastallized) {
+      const teraType = this.teraType;
+      if (!(forDefend && teraType === ElementalType.STELLAR)) {
         types.push(teraType);
         if (forDefend) {
           return types;
@@ -1448,6 +1513,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     baseOnly: boolean = false,
   ): boolean {
     return this.getTypes(includeTeraType, forDefend, baseOnly).some((t) => t === type);
+  }
+
+  /**
+   * Sets the temporary types of a pokemon
+   * (such as due to {@linkcode AbilityId.PROTEAN | Protean} or {@linkcode MoveId.CONVERSION | Conversion})
+   * @param types - The type or types to set
+   */
+  public setTemporaryTypes(types: ElementalType | ElementalType[]): void {
+    if (this.isTerastallized) {
+      return;
+    }
+    if (!Array.isArray(types)) {
+      types = [types];
+    }
+    this.summonData.types = types;
   }
 
   /**
@@ -1698,26 +1778,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return Math.max(minWeight, weight.value);
   }
 
-  /**
-   * @returns the pokemon's current tera {@linkcode ElementalType}, or `Type.UNKNOWN` if the pokemon is not terastallized
-   */
-  public getTeraType(): ElementalType {
-    // I don't think this should be possible anymore, please report if you encounter this. --NightKev
-    if (globalScene === undefined) {
-      console.warn("Pokemon.getTeraType(): Global scene is not defined!");
-      return ElementalType.UNKNOWN;
-    }
-    const teraModifier = globalScene.findModifier(
-      (m) => m.isTerastallizeModifier() && m.pokemonId === this.id && m.getBattlesLeft() > 0,
-      this.isPlayer(),
-    ) as TerastallizeModifier;
-    return teraModifier?.teraType ?? ElementalType.UNKNOWN;
-  }
-
-  public isTerastallized(): boolean {
-    return this.getTeraType() !== ElementalType.UNKNOWN;
-  }
-
   public isGrounded(): boolean {
     // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
     // was grounded before receiving the `GroundedTag`.
@@ -1931,7 +1991,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     move?: Move,
   ): TypeDamageMultiplier {
     if (moveType === ElementalType.STELLAR) {
-      return this.isTerastallized() ? 2 : 1;
+      return this.isTerastallized ? 2 : 1;
     }
     const types = this.getTypes(true, true);
     const arena = globalScene.arena;
@@ -2917,6 +2977,60 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Calculates the STAB multiplier for a move hitting this {@linkcode Pokemon}
+   * @param source - The attacking {@linkcode Pokemon}
+   * @param move - The {@linkcode Move} used in the attack
+   * @param abilityApplyMode - The {@linkcode AbilityApplyMode} determining how abilities are applied.
+   * @param simulated - If `true`, suppresses changes to game state during the calculation.
+   * @returns The STAB multiplier (between `1` and `2.25` inclusive)
+   */
+  public calcStabMultiplierForTakingDamage(
+    source: Pokemon,
+    move: Move,
+    abilityApplyMode: AbilityApplyMode,
+    simulated: boolean,
+  ): number {
+    if (move.hasAttr(TypelessAttr)) {
+      return 1;
+    }
+
+    const stabMultiplier = new NumberHolder(1);
+    const applyAbFunc = getAbApplyFunc(abilityApplyMode);
+    const sourceTypes = source.getTypes();
+    const sourceTeraType = source.teraType;
+    const sourceMoveType = source.getMoveType(move);
+    if (sourceMoveType === ElementalType.UNKNOWN) {
+      return 1;
+    }
+    const matchesSourceType = sourceTypes.includes(sourceMoveType);
+    /** Combined Pledge moves gain STAB regardless of the user's type */
+    const pledgeAppliesStab = new BooleanHolder(false);
+    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, pledgeAppliesStab);
+
+    if ((matchesSourceType && sourceMoveType !== ElementalType.STELLAR) || pledgeAppliesStab.value) {
+      stabMultiplier.value += 0.5;
+    }
+
+    if (source.isTerastallized && !pledgeAppliesStab.value) {
+      if (sourceTeraType === sourceMoveType && sourceMoveType !== ElementalType.STELLAR) {
+        stabMultiplier.value += 0.5;
+      }
+
+      if (
+        sourceTeraType === ElementalType.STELLAR
+        && (!source.stellarTypesBoosted.includes(sourceMoveType) || source.species.speciesId === SpeciesId.TERAPAGOS)
+      ) {
+        stabMultiplier.value += matchesSourceType ? 0.5 : 0.2;
+      }
+    }
+
+    // Apply STAB boost from Adaptability Ability
+    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
+
+    return stabMultiplier.value;
+  }
+
+  /**
    * Calculates the damage of an attack made by another Pokemon against this Pokemon
    * @param source the attacking {@linkcode Pokemon}
    * @param move the {@linkcode Move} used in the attack
@@ -3377,6 +3491,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ...(includeEternamax ? [SpeciesFormKey.ETERNAMAX] : []),
     ] as string[];
     return maxForms.includes(this.getFormKey());
+  }
+
+  /**
+   * @returns `true` if the pokemon is a mega form
+   */
+  public isMega(): boolean {
+    const megaForms: string[] = [
+      SpeciesFormKey.MEGA,
+      SpeciesFormKey.MEGA_X,
+      SpeciesFormKey.MEGA_Y,
+      SpeciesFormKey.PRIMAL,
+    ];
+    return megaForms.includes(this.getFormKey());
   }
 
   canAddTag(tagType: BattlerTagType): boolean {
@@ -4270,50 +4397,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       return false;
     }
-  }
-
-  /**
-   * Calculates the STAB multiplier for a move hitting this {@linkcode Pokemon}
-   * @param source the attacking {@linkcode Pokemon}
-   * @param move the {@linkcode Move} used in the attack
-   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied.
-   * @param simulated If `true`, suppresses changes to game state during the calculation.
-   * @returns A {@linkcode NumberHolder} containing the STAB multiplier as value
-   */
-  public calcStabMultiplierForTakingDamage(
-    source: Pokemon,
-    move: Move,
-    abilityApplyMode: AbilityApplyMode,
-    simulated: boolean,
-  ): number {
-    if (move.hasAttr(TypelessAttr)) {
-      return 1;
-    }
-
-    const stabMultiplier = new NumberHolder(1);
-    const applyAbFunc = getAbApplyFunc(abilityApplyMode);
-    const sourceTypes = source.getTypes();
-    const sourceTeraType = source.getTeraType();
-    const sourceMoveType = source.getMoveType(move);
-    const matchesSourceType = sourceTypes.includes(sourceMoveType);
-    /** Combined Pledge moves gain STAB regardless of the user's type */
-    const pledgeAppliesStab = new BooleanHolder(false);
-    applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, pledgeAppliesStab);
-
-    if (matchesSourceType || pledgeAppliesStab.value) {
-      stabMultiplier.value += 0.5;
-    }
-    if (
-      sourceTeraType !== ElementalType.UNKNOWN
-      && (sourceTeraType === sourceMoveType || (pledgeAppliesStab.value && sourceTypes.includes(sourceTeraType)))
-    ) {
-      stabMultiplier.value += 0.5;
-    }
-
-    // Apply STAB boost from Adaptability Ability
-    applyAbFunc<StabBoostAbAttr>(AbAttrFlag.STAB_BOOST, source, simulated, move, stabMultiplier);
-
-    return stabMultiplier.value;
   }
 }
 
