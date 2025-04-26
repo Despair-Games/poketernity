@@ -124,7 +124,7 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
 
       await game.toNextTurn();
 
-      // Switch to damaged Squirtle. Lunar Dance's effect should activate
+      // Switch to damaged Squirtle. HW/LD's effect should activate
       game.switchPokemon(2);
 
       await game.toEndOfTurn();
@@ -133,7 +133,7 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
       expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeUndefined();
 
       // Set Charmander's HP to 1, then switch back to Charmander.
-      // Lunar Dance shouldn't activate again
+      // HW/LD shouldn't activate again
       charmander.hp = 1;
       game.switchPokemon(2);
 
@@ -154,7 +154,7 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
       const [bulbasaur, charmander, squirtle, pikachu] = game.scene.getPlayerParty();
       [squirtle, pikachu].forEach((p) => (p.hp = 1));
 
-      // Use Lunar Dance and send in Charmander. Lunar Dance's effect should be stored
+      // Use HW/LD and send in Charmander. HW/LD's effect should be stored
       game.move.use(moveId);
       game.selectPartyPokemon(1);
 
@@ -164,14 +164,15 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
       expect(game.phaseInterceptor.log).not.toContain("PokemonHealPhase");
       expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeDefined();
 
-      // Switch to Squirtle. Lunar Dance should activate
-      game.switchPokemon(2);
+      // Use HW/LD again, sending in Squirtle. HW/LD should activate and heal Squirtle
+      game.move.use(moveId);
+      game.selectPartyPokemon(2);
 
-      await game.toEndOfTurn();
+      await game.toNextTurn();
+      expect(charmander.isFainted()).toBeTruthy();
       expect(squirtle).toHaveFullHp();
-      expect(game.scene.arena.getTag(ArenaTagType.PENDING_HEAL)).toBeUndefined();
 
-      // Switch again to Pikachu. Lunar Dance's effect shouldn't be present
+      // Switch again to Pikachu. HW/LD's effect shouldn't be present
       game.switchPokemon(3);
 
       await game.toEndOfTurn();
