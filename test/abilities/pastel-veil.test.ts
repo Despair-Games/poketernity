@@ -65,7 +65,7 @@ describe("Abilities - Pastel Veil", () => {
 
     await game.phaseInterceptor.to(CommandPhase);
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(magikarp.getStatusEffect(true)).toBe(StatusEffect.NONE);

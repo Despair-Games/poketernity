@@ -25,7 +25,7 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";

@@ -46,7 +46,7 @@ describe("Reload", () => {
       .startingWave(10)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.dailyMode.startBattle();
@@ -57,7 +57,7 @@ describe("Reload", () => {
       // Input first option for Map
       game.scene.ui.getHandler().processInput(Button.ACTION);
     });
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 
@@ -76,14 +76,14 @@ describe("Reload", () => {
       .startingBiome(BiomeId.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.classicMode.startBattle(); // Apparently daily mode would override the biome
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 
@@ -167,7 +167,7 @@ describe("Reload", () => {
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.TOXIC);

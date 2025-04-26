@@ -259,6 +259,15 @@ export class MoveEffectPhase extends HitCheckPhase {
         this.triggerMoveEffects(MoveEffectTrigger.POST_TARGET, user, null);
       }
       this.updateSubstitutes();
+      const moveType = user.getMoveType(move, true);
+      if (
+        this.lastHit
+        && user.isTerastallized
+        && move.isAttackMove(user, targets[0])
+        && !user.stellarTypesBoosted.includes(moveType)
+      ) {
+        user.stellarTypesBoosted.push(moveType);
+      }
       this.end();
     });
   }

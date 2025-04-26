@@ -1,17 +1,20 @@
+import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
+import type { Localizable } from "#app/@types/locales";
 import type { ModifierPredicate } from "#app/@types/ModifierPredicate";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Settings";
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
+import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game";
 import {
-  IV_MAX,
-  IV_MIN,
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
-} from "#app/constants";
+} from "#app/constants/mystery-encounters";
+import { ELITE_FOUR_1_WAVE } from "#app/constants/special-waves";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
@@ -20,6 +23,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
+import { getLevelForWaveFunc } from "#app/data/exp";
 import { populateAnims } from "#app/data/init/init-anims";
 import { initCommonAnims } from "#app/data/init/init-common-anims";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
@@ -43,13 +47,11 @@ import DamageNumberHandler from "#app/field/damage-number-handler";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
+import PokemonSpriteTeraSparkleHandler from "#app/field/pokemon-sprite-tera-sparkle-handler";
 import Trainer from "#app/field/trainer";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
 import { InputsController } from "#app/inputs-controller";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import type { Localizable } from "#app/interfaces/locales";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger } from "#app/loggers";
 import {
@@ -109,7 +111,6 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { UiInputs } from "#app/ui-inputs";
 import { AbilityBar } from "#app/ui/components/ability-bar";
 import { ArenaFlyout } from "#app/ui/components/arena-flyout";
@@ -120,7 +121,7 @@ import { PokeballTray } from "#app/ui/components/pokeball-tray";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
-import { updateWindowStyle } from "#app/ui/ui-theme";
+import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import {
   type AbstractConstructor,
   BooleanHolder,
@@ -227,6 +228,7 @@ export default class BattleScene extends SceneBase {
   public currentBattle: Battle;
   public pokeballCounts: PokeballCounts;
   public money: number;
+  public playerTerasUsed: number = 0;
   public pokemonInfoContainer: PokemonInfoContainer;
   private party: PlayerPokemon[];
   /** Session save data that pertains to Mystery Encounters */
@@ -258,7 +260,7 @@ export default class BattleScene extends SceneBase {
   public waveCycleOffset: number;
 
   public damageNumberHandler: DamageNumberHandler;
-  private spriteSparkleHandler: PokemonSpriteSparkleHandler;
+  private spriteTeraSparkleHandler: PokemonSpriteTeraSparkleHandler;
 
   public fieldSpritePipeline: FieldSpritePipeline;
   public spritePipeline: SpritePipeline;
@@ -408,6 +410,10 @@ export default class BattleScene extends SceneBase {
   create() {
     this.scene.remove(LoadingScene.KEY);
     initGameSpeed.apply(this);
+
+    // Set the uiTheme and windowType to use for elements that require css specifics
+    setDocumentUiTheme();
+
     this.inputController = new InputsController();
     this.uiInputs = new UiInputs(this.inputController);
 
@@ -465,7 +471,7 @@ export default class BattleScene extends SceneBase {
       true,
     );
 
-    //@ts-ignore (the defined types in the package are incromplete...)
+    // @ts-expect-error - the defined types in the package are incomplete (TODO: fix this?)
     transition.transit({
       mode: "blinds",
       ease: "Cubic.easeInOut",
@@ -578,8 +584,8 @@ export default class BattleScene extends SceneBase {
 
     this.damageNumberHandler = new DamageNumberHandler();
 
-    this.spriteSparkleHandler = new PokemonSpriteSparkleHandler();
-    this.spriteSparkleHandler.setup();
+    this.spriteTeraSparkleHandler = new PokemonSpriteTeraSparkleHandler();
+    this.spriteTeraSparkleHandler.setup();
 
     this.pokemonInfoContainer = new PokemonInfoContainer(GAME_WIDTH + 52, -GAME_HEIGHT + 66);
     this.pokemonInfoContainer.setup();
@@ -1066,6 +1072,7 @@ export default class BattleScene extends SceneBase {
 
     this.score = 0;
     this.money = 0;
+    this.playerTerasUsed = 0;
 
     this.lockModifierTiers = false;
 
@@ -1097,8 +1104,8 @@ export default class BattleScene extends SceneBase {
       this.field.remove(this.currentBattle.mysteryEncounter?.introVisuals, true);
     }
 
-    //@ts-ignore  - allowing `null` for currentBattle causes a lot of trouble
-    this.currentBattle = null; // TODO: resolve ts-ignore
+    // @ts-expect-error - allowing `null` for currentBattle causes a lot of trouble
+    this.currentBattle = null; // TODO: refactor so this is gone
 
     // Reset RNG after end of game or save & quit.
     // This needs to happen after clearing this.currentBattle or the seed will be affected by the last wave played
@@ -1223,10 +1230,7 @@ export default class BattleScene extends SceneBase {
         this.field.add(newTrainer);
       }
     } else {
-      if (
-        !this.gameMode.hasTrainers
-        || (Overrides.DISABLE_RANDOM_TRAINERS_OVERRIDE && isNullOrUndefined(trainerData))
-      ) {
+      if (!this.gameMode.hasTrainers) {
         newBattleType = BattleType.WILD;
       } else if (battleType === undefined) {
         newBattleType = this.gameMode.isWaveTrainer(newWaveIndex, this.arena) ? BattleType.TRAINER : BattleType.WILD;
@@ -1235,7 +1239,7 @@ export default class BattleScene extends SceneBase {
       }
 
       if (newBattleType === BattleType.TRAINER) {
-        const trainerType = this.arena.randomTrainerType(newWaveIndex);
+        const trainerType = Overrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
         let doubleTrainer = false;
         if (allTrainerConfigs[trainerType].doubleOnly) {
           doubleTrainer = true;
@@ -1371,7 +1375,18 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetWaveData();
+          pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
+
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+
+          if (
+            // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
+            (pokemon.species.speciesId === SpeciesId.TERAPAGOS && pokemon.isAllowedInChallenge())
+            // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
+            || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
+          ) {
+            this.playerTerasUsed = 0;
+          }
         }
 
         if (!this.trainer.visible) {
@@ -1710,9 +1725,10 @@ export default class BattleScene extends SceneBase {
       tone: [0.0, 0.0, 0.0, 0.0],
       hasShadow: hasShadow,
       ignoreOverride: ignoreOverride,
-      teraColor: pokemon ? getTypeRgb(pokemon.getTeraType()) : undefined,
+      teraColor: pokemon ? getTypeRgb(pokemon.teraType) : undefined,
+      isTerastallized: pokemon?.isTerastallized ?? false,
     });
-    this.spriteSparkleHandler.add(sprite);
+    this.spriteTeraSparkleHandler.add(sprite);
     return sprite;
   }
 
@@ -1912,6 +1928,19 @@ export default class BattleScene extends SceneBase {
     this.currentBattle.battleScore += Math.ceil(scoreIncrease);
   }
 
+  /**
+   * Function to get the level cap
+   *
+   * The formula for getting the level cap is as follows:
+   * - the `waveIndex` is retrieved by rounding up to the nearest `10` i.e. `34 -> 40`
+   * - the `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
+   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
+   * - If the number is odd, it is incremented by `1`
+   * - The final result is then incremented by `2`
+   *
+   * @param ignoreLevelCap - (Default `false`) Whether or not to ignore the level cap
+   * @returns the level cap
+   */
   getMaxExpLevel(ignoreLevelCap: boolean = false): number {
     if (Overrides.LEVEL_CAP_OVERRIDE > 0) {
       return Overrides.LEVEL_CAP_OVERRIDE;
@@ -1922,7 +1951,7 @@ export default class BattleScene extends SceneBase {
 
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = (1 + difficultyWaveIndex / 2 + Math.pow(difficultyWaveIndex / 25, 2)) * 1.2;
+    const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * LEVEL_CAP_SCALE_FACTOR;
     return Math.ceil(baseLevel / 2) * 2 + 2;
   }
 
@@ -2015,13 +2044,8 @@ export default class BattleScene extends SceneBase {
     const soundName = modifier.type.soundName;
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
-      if (modifier.isTerastallizeModifier()) {
-        modifiersToRemove.push(
-          ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId),
-        );
-      }
       if ((modifier as PersistentModifier).add(this.modifiers, virtual)) {
-        if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+        if (modifier.isPokemonFormChangeItemModifier()) {
           const pokemon = this.getPokemonById(modifier.pokemonId);
           if (pokemon) {
             success = modifier.apply(pokemon, true);
@@ -2089,13 +2113,8 @@ export default class BattleScene extends SceneBase {
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): void {
     const modifiersToRemove: PersistentModifier[] = [];
-    if (modifier.isTerastallizeModifier()) {
-      modifiersToRemove.push(
-        ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId, false),
-      );
-    }
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
-      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
@@ -2369,7 +2388,7 @@ export default class BattleScene extends SceneBase {
     const modifierIndex = modifiers.indexOf(modifier);
     if (modifierIndex > -1) {
       modifiers.splice(modifierIndex, 1);
-      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, false);
@@ -2618,7 +2637,8 @@ export default class BattleScene extends SceneBase {
               name: p.name,
               form: p.getFormKey(),
               types: p.getTypes().map((type) => ElementalType[type]),
-              teraType: p.getTeraType() !== ElementalType.UNKNOWN ? ElementalType[p.getTeraType()] : "",
+              teraType: ElementalType[p.teraType],
+              isTerastallized: p.isTerastallized,
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),

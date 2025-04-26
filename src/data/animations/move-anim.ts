@@ -23,9 +23,9 @@ export class MoveAnim extends BattleAnim {
   }
 
   getAnim(): LegacyAnimConfig {
-    return moveAnims.get(this.moveId) instanceof LegacyAnimConfig
-      ? (moveAnims.get(this.moveId) as LegacyAnimConfig)
-      : (moveAnims.get(this.moveId)?.[this.user?.isPlayer() ? 0 : 1] as LegacyAnimConfig);
+    const anim = moveAnims.get(this.moveId);
+    const animSource = this.user?.isPlayer() ? 0 : 1;
+    return anim instanceof LegacyAnimConfig ? anim : anim?.[animSource]!; // TODO: resolve bang
   }
 
   isOppAnim(): boolean {

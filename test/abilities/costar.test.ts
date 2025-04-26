@@ -47,7 +47,7 @@ describe("Abilities - COSTAR", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.phaseInterceptor.to(MessagePhase);
 
     [leftPokemon, rightPokemon] = game.scene.getPlayerField();
@@ -67,7 +67,7 @@ describe("Abilities - COSTAR", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.phaseInterceptor.to(MessagePhase);
 
     [leftPokemon, rightPokemon] = game.scene.getPlayerField();

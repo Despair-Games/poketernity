@@ -1,5 +1,5 @@
 import type { UserInfo } from "#app/@types/UserInfo";
-import { bypassLogin } from "#app/constants";
+import { bypassLogin } from "#app/constants/app";
 import { api } from "#app/plugins/api/api";
 import { randomString } from "#app/utils";
 

@@ -1,25 +1,29 @@
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Arena } from "#app/field/arena";
 import { GameManager } from "#test/test-utils/gameManager";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
 
+import type { TimedEvent } from "#app/@types/TimedEvent";
 import type { Variant } from "#app/data/variant";
-import { AbilityId } from "#enums/ability-id";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
-import type { Unlockables } from "#enums/unlockables";
+import { timedEventManager } from "#app/timed-event-manager";
+import { shiftCharCodes } from "#app/utils";
+import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import { TrainerType } from "#enums/trainer-type";
+import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
-import { expect, vi } from "vitest";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
-import { shiftCharCodes } from "#app/utils";
-import type { TimedEvent } from "#app/@types/TimedEvent";
-import { timedEventManager } from "#app/timed-event-manager";
+import { expect, vi } from "vitest";
 
 /**
  * Helper to handle overrides in tests
@@ -194,7 +198,7 @@ export class OverridesHelper extends GameManagerHelper {
   /**
    * Override the player (pokemon) {@linkcode StatusEffect | status-effect}
    * @param statusEffect the {@linkcode StatusEffect | status-effect} to set
-   * @returns
+   * @returns `this`
    */
   public statusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(Overrides, "STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
@@ -203,12 +207,31 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override each wave to not have random trainer battles
+   * Override the chance of encountering a random enemy trainer
+   * @param trainerChance - `0` to disable enemy trainer spawns, `1` to guarantee an enemy trainer spawn
+   * @see {@linkcode Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE} for a more complete description of this override
    * @returns `this`
    */
-  public disableTrainerWaves(): this {
-    vi.spyOn(Overrides, "DISABLE_RANDOM_TRAINERS_OVERRIDE", "get").mockReturnValue(true);
-    this.log("Random trainer waves are disabled!");
+  public trainerChance(trainerChance: number): this {
+    vi.spyOn(Overrides, "RANDOM_TRAINER_CHANCE_OVERRIDE", "get").mockReturnValue(trainerChance);
+    if (trainerChance === 0) {
+      this.log("Random trainers disabled!");
+    } else if (trainerChance === 1) {
+      this.log("Random trainer guaranteed for one wave!");
+    } else {
+      this.log(`Trainer chance set to 1 / ${trainerChance}!`);
+    }
+    return this;
+  }
+
+  /**
+   * Override each random enemy trainer to be of a given type
+   * @param trainerType - The {@linkcode TrainerType} to set
+   * @returns `this`
+   */
+  public trainerType(trainerType: TrainerType): this {
+    vi.spyOn(Overrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
+    this.log(`Trainer type set to ${TrainerType[trainerType]} (=${trainerType})!`);
     return this;
   }
 
@@ -230,6 +253,27 @@ export class OverridesHelper extends GameManagerHelper {
   public weather(type: WeatherType): this {
     vi.spyOn(Overrides, "WEATHER_OVERRIDE", "get").mockReturnValue(type);
     this.log(`Weather set to ${WeatherType[type]} (=${type})!`);
+    return this;
+  }
+
+  /**
+   * Override the new weather duration.
+   * **Will ALSO affect primal weathers!**
+   * **Can NOT be combined with {@linkcode weather}!**
+   * @param newWeatherDuration -
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the weather should last
+   * @returns `this`
+   * @see {@linkcode Arena.trySetWeather}
+   */
+  public newWeatherDuration(newWeatherDuration: number): this {
+    vi.spyOn(Overrides, "NEW_WEATHER_DURATION_OVERRIDE", "get").mockReturnValue(newWeatherDuration);
+    if (newWeatherDuration < 0) {
+      this.log("Weather duration override disabled!");
+    } else {
+      this.log(`New weather duration set to ${newWeatherDuration === 0 ? "infinity" : newWeatherDuration}!`);
+    }
     return this;
   }
 

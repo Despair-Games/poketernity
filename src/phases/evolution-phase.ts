@@ -113,7 +113,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   to: 1,
                   duration: 2000,
                   onUpdate: (t) => {
-                    this.pokemonTintSprite.setAlpha(t.getValue());
+                    this.pokemonTintSprite.setAlpha(t.getValue() ?? 1);
                   },
                   onComplete: () => {
                     this.pokemonSprite.setVisible(false);

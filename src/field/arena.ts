@@ -10,7 +10,9 @@ import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
-import { getWeatherClearMessage, getWeatherStartMessage, PRIMAL_WEATHER, Weather } from "#app/data/weather";
+import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
+import { PRIMAL_WEATHER_TYPES } from "#app/constants/game";
+import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -39,7 +41,7 @@ export class Arena {
   public biomeId: BiomeId;
   public weather: Weather | null;
   public terrain: Terrain | null;
-  public tags: ArenaTag[];
+  public tags: ArenaTag[] = [];
   public bgm: string;
   public ignoreAbilities: boolean;
   public ignoringEffectSource: BattlerIndex | null;
@@ -57,7 +59,6 @@ export class Arena {
 
   constructor(biomeId: BiomeId) {
     this.biomeId = biomeId;
-    this.tags = [];
     this.bgm = getBiomeBgm(biomeId);
     this.trainerPool = allBiomes.get(biomeId).trainerPool;
     this.updatePoolsForTimeOfDay();
@@ -386,7 +387,7 @@ export class Arena {
       if (newWeather === this.weather.weatherType) {
         return false;
       }
-      if (this.weather.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER].includes(newWeather)) {
+      if (this.weather.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER_TYPES].includes(newWeather)) {
         return false;
       }
     } else if (newWeather === WeatherType.NONE) {
@@ -412,7 +413,13 @@ export class Arena {
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
+    let newWeatherDuration = DEFAULT_NEW_WEATHER_DURATION;
+
+    if (Overrides.NEW_WEATHER_DURATION_OVERRIDE >= 0) {
+      newWeatherDuration = Overrides.NEW_WEATHER_DURATION_OVERRIDE;
+    } else if (!hasPokemonSource || PRIMAL_WEATHER_TYPES.includes(newWeatherType)) {
+      newWeatherDuration = 0;
+    }
 
     if (newWeatherType !== WeatherType.NONE) {
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
@@ -559,10 +566,13 @@ export class Arena {
 
   /**
    * Gets the denominator for the chance for a trainer spawn
-   * @returns n where 1/n is the chance of a trainer battle
+   * @returns A number `n` such that the probability of a trainer battle is `1/n`.
+   * Returns `0` if the {@linkcode Biome} does not support trainers; this disables random trainer spawns.
+   *
+   * Returns the value of {@linkcode Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
    */
   getTrainerChance(): number {
-    return allBiomes.get(this.biomeId).trainerChance;
+    return Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
   }
 
   /**

@@ -1,3 +1,4 @@
+import { PRIMAL_WEATHER_TYPES } from "#app/constants/game";
 import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,12 +8,6 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-
-/**
- * Weather types that are associated with the primal forms of the Generation III cover legendaries
- * and cannot be overwritten by weaker weather types.
- */
-export const PRIMAL_WEATHER = Object.freeze([WeatherType.HARSH_SUN, WeatherType.HEAVY_RAIN, WeatherType.STRONG_WINDS]);
 
 /**
  * Class representing Weather effects
@@ -48,7 +43,7 @@ export class Weather {
    * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
   isPrimal(): boolean {
-    return PRIMAL_WEATHER.includes(this.weatherType);
+    return PRIMAL_WEATHER_TYPES.includes(this.weatherType);
   }
 
   /**

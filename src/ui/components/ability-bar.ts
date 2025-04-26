@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
-import { TEXT_SCALE } from "#app/ui-constants";
+import { TEXT_SCALE } from "#app/constants/ui";
 
 const hiddenX = -118;
 const shownX = 0;

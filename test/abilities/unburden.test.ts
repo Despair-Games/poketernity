@@ -252,7 +252,7 @@ describe("Abilities - Unburden", () => {
     // Turn 2: Switch Meowth to Weezing, activating Neutralizing Gas
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
@@ -261,7 +261,7 @@ describe("Abilities - Unburden", () => {
     // Turn 3: Switch Weezing to Meowth, deactivating Neutralizing Gas
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
@@ -280,7 +280,7 @@ describe("Abilities - Unburden", () => {
 
     // Player uses Baton Pass, which also passes the Baton item
     game.move.select(MoveId.BATON_PASS);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
     expect(getHeldItemCount(treecko)).toBe(0);
@@ -342,11 +342,11 @@ describe("Abilities - Unburden", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.THIEF);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
 
-    game.doRevivePokemon(1);
-    game.doSwitchPokemon(1);
+    game.revivePokemon(1);
+    game.switchPokemon(1);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
@@ -373,7 +373,7 @@ describe("Abilities - Unburden", () => {
     await game.move.selectEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
-    game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
+    game.selectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();
 
     expect(game.scene.getPlayerField()[0]).toBe(treecko);

@@ -49,7 +49,7 @@ describe("Abilities - Suction Cups", () => {
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(feebas.isOnField()).toBe(false);

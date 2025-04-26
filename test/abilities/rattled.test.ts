@@ -93,7 +93,7 @@ describe("Abilities - Rattled", () => {
     // Rattled should have activated before the turn starts due to the player Magikarp's Intimidate
     expect(enemy.getStatStage(Stat.SPD)).toBe(1);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
 
     // advance to before the enemy makes a move
     await game.phaseInterceptor.to("MovePhase", false);
@@ -113,7 +113,7 @@ describe("Abilities - Rattled", () => {
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
 
     await game.toEndOfTurn();
 

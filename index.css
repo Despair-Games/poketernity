@@ -19,33 +19,43 @@ html {
   touch-action: none;
 }
 
+/** colors used for auto filled input texts */
+html[data-ui-theme="DARK"] {
+  --color-autofill: #f8f8f8;
+}
+
+html[data-ui-theme="LIGHT"] {
+  --color-autofill: #484848;
+}
+
+/** colors used for the touch buttons look, based on the window style */
 html[data-window-style="RED_ORANGE"] {
   --color-base: #6b5a73;
-  --color-light: #DD5748;
-  --color-dark: #7E4955;
+  --color-light: #dd5748;
+  --color-dark: #7e4955;
 }
 
 html[data-window-style="TEAL"] {
   --color-base: #6b5a73;
-  --color-light: #48DDAA;
-  --color-dark: #4D7574;
+  --color-light: #48ddaa;
+  --color-dark: #4d7574;
 }
 
 html[data-window-style="LIGHT_GRAY"] {
   --color-base: #6b5a73;
-  --color-light: #C5C5C5;
-  --color-dark: #766D7E;
+  --color-light: #c5c5c5;
+  --color-dark: #766d7e;
 }
 
 html[data-window-style="GOLDENROD"] {
   --color-base: #6b5a73;
-  --color-light: #EBC07C;
-  --color-dark: #836C66;
+  --color-light: #ebc07c;
+  --color-dark: #836c66;
 }
 
 html[data-window-style="MEDIUM_GRAY"] {
   --color-base: #686868;
-  --color-light: #E8E8E8;
+  --color-light: #e8e8e8;
   --color-dark: #919191;
 }
 
@@ -106,6 +116,12 @@ body {
 input:-internal-autofill-selected {
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+/* autofill text and cursor appears in a color that depends on the ui theme */
+input:is(:-webkit-autofill, :autofill) {
+  -webkit-text-fill-color: var(--color-autofill);
+  caret-color: var(--color-autofill);
 }
 
 /* Need adjust input font-size */
@@ -218,9 +234,10 @@ input:-internal-autofill-selected {
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleForm,
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleShiny,
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleNature,
-#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleAbility,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"])
+  #apadCycleAbility,
 #touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleGender,
-#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleVariant {
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleTera {
   display: none;
 }
 

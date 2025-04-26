@@ -157,8 +157,11 @@ describe("Base Power Calculation", () => {
   });
 
   it("calculates Tera power boost after Technician boost", async () => {
-    game.override.ability(AbilityId.TECHNICIAN).startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.NORMAL }]);
+    game.override.ability(AbilityId.TECHNICIAN);
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    game.field.forceTera(player, ElementalType.NORMAL);
 
     const tackle = allMoves.get(MoveId.TACKLE);
     vi.spyOn(tackle, "calculateBattlePower");

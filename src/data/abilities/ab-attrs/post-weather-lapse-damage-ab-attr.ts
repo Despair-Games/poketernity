@@ -10,8 +10,16 @@ import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 
 /**
- * Ability attribute that inflicts damage on the ability holder in certain weather conditions
- * Used by the abilities Dry Skin and Solar Power, which both inflict 1/8 of the ability holder's HP in sun or harsh sun
+ * These abilities inflict damage on the ability holder under specific weather conditions.
+ *
+ * | Ability     | Weather Condition           | Effect                                            | Notes                                                   |
+ * |-------------|-----------------------------|---------------------------------------------------|---------------------------------------------------------|
+ * | Solar Power |**\|** (Extremely) Harsh Sun |**\|** Inflicts 1/8 of the user's max HP as damage |**\|** No damage if sunny weather fades on the same turn |
+ * | Dry Skin    |**\|** (Extremely) Harsh Sun |**\|** Inflicts 1/8 of the user's max HP as damage |**\|** -                                                 |
+ *
+ * @see {@linkcode WeatherType.SUNNY} and {@linkcode WeatherType.HARSH_SUN}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Power_(Ability) Solar Power (Ability) - Bulbapedia}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Dry_Skin_(Ability) Dry Skin (Ability) - Bulbapedia}
  */
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;

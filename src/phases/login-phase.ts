@@ -1,5 +1,5 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants";
+import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants/app";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { settings } from "#app/system/settings/settings-manager";

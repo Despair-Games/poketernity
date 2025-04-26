@@ -1,5 +1,5 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
@@ -11,7 +11,7 @@ import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -487,17 +487,11 @@ export class RunInfoUiHandler extends UiHandler {
   private parseTrainerDefeat(enemyContainer: Phaser.GameObjects.Container) {
     // Loads and adds trainer sprites to the UI
     this.showTrainerSprites(enemyContainer);
-    // Determining which Terastallize Modifier belongs to which Pokemon
+    // Old behavior: Determining which Terastallize Modifier belongs to which Pokemon
     // Creates a dictionary {PokemonId: TeraShardType}
+
+    // TODO: get tera'd pokemon
     const teraPokemon = {};
-    this.runInfo.enemyModifiers.forEach((m) => {
-      const modifier = m.toModifier(this.modifiersModule[m.className]);
-      if (modifier instanceof Modifier.TerastallizeModifier) {
-        const teraDetails = modifier?.getArgs();
-        const pkmnId = teraDetails[0];
-        teraPokemon[pkmnId] = teraDetails[1];
-      }
-    });
 
     // Creates the Pokemon icons + level information and adds it to enemyContainer
     // 2 Rows x 3 Columns
@@ -511,13 +505,16 @@ export class RunInfoUiHandler extends UiHandler {
       enemyData["player"] = true;
       const enemy = enemyData.toPokemon();
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
+
       // Applying Terastallizing Type tint to Pokemon icon
+      // TODO: update this
       const enemySprite1 = enemyIcon.list[0] as Phaser.GameObjects.Sprite;
       if (teraPokemon[enemyData.id]) {
         const teraTint = getTypeRgb(teraPokemon[enemyData.id]);
         const teraColor = new Phaser.Display.Color(teraTint[0], teraTint[1], teraTint[2]);
         enemySprite1.setTint(teraColor.color);
       }
+
       enemyIcon.setPosition(39 * (e % 3) + 5, 35 * pokemonRowHeight);
       const enemyLevel = addTextObject(
         43 * (e % 3),

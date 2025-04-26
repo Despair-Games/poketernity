@@ -1,6 +1,10 @@
+import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
-import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
+import {
+  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
+} from "#app/constants/mystery-encounters";
 import { biomeLinks } from "#app/data/biome-links";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#app/data/egg";
@@ -19,7 +23,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ModifierTypeGenerator,
@@ -51,6 +54,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { ElementalType } from "#enums/elemental-type";
 import { FieldPosition } from "#enums/field-position";
 import type { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -117,6 +121,7 @@ export interface EnemyPokemonConfig {
   modifierConfigs?: HeldModifierConfig[];
   tags?: BattlerTagType[];
   dataSource?: PokemonData;
+  teraType?: ElementalType;
   aiType?: AiType;
 }
 
@@ -379,6 +384,13 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       if (config.tags && config.tags.length > 0) {
         const tags = config.tags;
         tags.forEach((tag) => enemyPokemon.addTag(tag));
+      }
+
+      if (!isNullOrUndefined(config.teraType) && config.teraType !== ElementalType.UNKNOWN) {
+        enemyPokemon.teraType = config.teraType;
+        if (battle.trainer) {
+          battle.trainer.config.setInstantTera(e);
+        }
       }
 
       // mysteryEncounterBattleEffects will only be used IFF MYSTERY_ENCOUNTER_POST_SUMMON tag is applied
@@ -875,9 +887,14 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
     globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
     globalScene.phaseManager.pushPhase(new EggLapsePhase());
   } else if (
+    // If any enemy Pokemon are still alive on the field or waiting for its fainting animation, do not advance a wave.
+    // Also, if the enemy is a Trainer with other Pokemon alive in their party backline, do not advance a wave.
     !globalScene
       .getEnemyParty()
-      .find((p) => (encounter.encounterMode !== MysteryEncounterMode.TRAINER_BATTLE ? p.isOnField() : !p?.isFainted()))
+      .find(
+        (p) =>
+          p && (p.isOnField() || (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE && !p.isFainted())),
+      )
   ) {
     globalScene.phaseManager.pushPhase(new BattleEndPhase(true));
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
