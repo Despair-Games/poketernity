@@ -795,7 +795,7 @@ export class Arena {
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
   ): boolean {
-    const existingTag = this.getTag(tagType, side);
+    const existingTag = this.findTag(tagType, side);
     if (existingTag) {
       existingTag.onOverlap(this);
 
@@ -824,7 +824,7 @@ export class Arena {
   }
 
   hasTag(tagType: ArenaTagType): boolean {
-    return !!this.getTag(tagType);
+    return !!this.findTag(tagType);
   }
 
   /**
@@ -835,7 +835,7 @@ export class Arena {
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTag<T extends ArenaTag = ArenaTag>(
+  findTag<T extends ArenaTag = ArenaTag>(
     tagType: ArenaTagType | AbstractConstructor<T>,
     side: ArenaTagSide = ArenaTagSide.BOTH,
   ): T | undefined {
@@ -858,7 +858,7 @@ export class Arena {
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return `true` and apply to the given side
    */
-  findTags<T extends ArenaTag = ArenaTag>(
+  getTags<T extends ArenaTag = ArenaTag>(
     tagPredicate: (t: ArenaTag) => boolean,
     side: ArenaTagSide = ArenaTagSide.BOTH,
   ): T[] {
@@ -891,7 +891,7 @@ export class Arena {
   }
 
   removeTagOnSide(tagType: ArenaTagType, side: ArenaTagSide, quiet: boolean = false): boolean {
-    const tag = this.getTag(tagType, side);
+    const tag = this.findTag(tagType, side);
     if (tag) {
       tag.onRemove(this, quiet);
       this.tags.splice(this.tags.indexOf(tag), 1);

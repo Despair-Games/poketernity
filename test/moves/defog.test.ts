@@ -62,7 +62,7 @@ describe("Moves - Defog", () => {
     await game.toEndOfTurn();
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      expect(game.scene.arena.getTag(tagType, side)).toBeUndefined(),
+      expect(game.scene.arena.findTag(tagType, side)).toBeUndefined(),
     );
   });
 
@@ -83,7 +83,7 @@ describe("Moves - Defog", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(tagType, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTag(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.findTag(tagType, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.findTag(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
   });
 });

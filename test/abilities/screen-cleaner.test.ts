@@ -36,13 +36,13 @@ describe("Abilities - Screen Cleaner", () => {
     game.move.select(MoveId.HAIL);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.AURORA_VEIL)).toBeDefined();
 
     await game.toNextTurn();
     game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.AURORA_VEIL)).toBeUndefined();
   });
 
   it("removes Light Screen", async () => {
@@ -53,13 +53,13 @@ describe("Abilities - Screen Cleaner", () => {
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.LIGHT_SCREEN)).toBeDefined();
 
     await game.toNextTurn();
     game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.LIGHT_SCREEN)).toBeUndefined();
   });
 
   it("removes Reflect", async () => {
@@ -70,12 +70,12 @@ describe("Abilities - Screen Cleaner", () => {
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.REFLECT)).toBeDefined();
 
     await game.toNextTurn();
     game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.REFLECT)).toBeUndefined();
   });
 });

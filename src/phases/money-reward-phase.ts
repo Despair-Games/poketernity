@@ -26,7 +26,7 @@ export class MoneyRewardPhase extends BattlePhase {
 
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
 
-    if (globalScene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
+    if (globalScene.arena.findTag(ArenaTagType.HAPPY_HOUR)) {
       moneyAmount.value *= 2;
     }
 

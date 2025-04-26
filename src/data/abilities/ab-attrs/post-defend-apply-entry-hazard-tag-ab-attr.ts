@@ -19,8 +19,8 @@ export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (this.condition(pokemon, attacker, move)) {
-      const tag = globalScene.arena.getTag(this.tagType) as EntryHazardTag;
-      if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
+      const tag = globalScene.arena.findTag(this.tagType) as EntryHazardTag;
+      if (!globalScene.arena.findTag(this.tagType) || tag.layers < tag.maxLayers) {
         if (!simulated) {
           globalScene.arena.addTag(this.tagType, pokemon.id, undefined, undefined, pokemon.getOpposingArenaTagSide());
         }

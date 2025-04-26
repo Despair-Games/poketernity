@@ -170,8 +170,8 @@ describe("Moves - Magic Coat", () => {
     game.move.use(MoveId.SPIKES);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.SPIKES, ArenaTagSide.PLAYER)?.["layers"]).toBe(1);
-    expect(game.scene.arena.getTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.SPIKES, ArenaTagSide.PLAYER)?.["layers"]).toBe(1);
+    expect(game.scene.arena.findTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)).toBeUndefined();
   });
 
   it("should not bounce back curse", async () => {
@@ -332,7 +332,7 @@ describe("Moves - Magic Coat", () => {
     await game.toEndOfTurn();
 
     expect(
-      game.scene.arena.getTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER)?.getSourcePokemon()?.getBattlerIndex(),
+      game.scene.arena.findTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER)?.getSourcePokemon()?.getBattlerIndex(),
     ).toBe(BattlerIndex.ENEMY);
     game.scene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER, true);
 
@@ -341,7 +341,7 @@ describe("Moves - Magic Coat", () => {
     game.move.use(MoveId.TRICK_ROOM, 1);
     await game.toEndOfTurn();
     expect(
-      game.scene.arena.getTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER)?.getSourcePokemon()?.getBattlerIndex(),
+      game.scene.arena.findTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER)?.getSourcePokemon()?.getBattlerIndex(),
     ).toBe(BattlerIndex.ENEMY);
   });
 });

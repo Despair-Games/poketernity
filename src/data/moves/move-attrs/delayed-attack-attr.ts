@@ -56,7 +56,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       // Add a Delayed Attack tag to the arena if it doesn't already exist
       globalScene.arena.addTag(ArenaTagType.DELAYED_ATTACK, user.id);
       // Queue an attack on the added (or existing) tag
-      const tag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      const tag = globalScene.arena.findTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
       if (tag) {
         tag.addAttack(user, move.id, target.getBattlerIndex());
       }
@@ -75,7 +75,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   /** Delayed attacks fail if another delayed attack is already queued against the target */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
-      const delayedAttackTag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      const delayedAttackTag = globalScene.arena.findTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
       return !delayedAttackTag?.delayedAttacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
     };
   }

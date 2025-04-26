@@ -61,8 +61,8 @@ describe("Moves - Heal Block", () => {
     game.move.select(MoveId.WISH);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeDefined();
-    while (game.scene.arena.getTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
+    expect(game.scene.arena.findTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeDefined();
+    while (game.scene.arena.findTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
       game.move.select(MoveId.SPLASH);
       await game.toEndOfTurn();
     }

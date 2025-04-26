@@ -195,7 +195,7 @@ describe("Moves - Destiny Bond", () => {
     expect(playerPokemon?.isFainted()).toBe(true);
 
     // Ceaseless Edge spikes effect should still activate
-    const tagAfter = game.scene.arena.getTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
+    const tagAfter = game.scene.arena.findTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(tagAfter.tagType).toBe(ArenaTagType.SPIKES);
     expect(tagAfter.layers).toBe(1);
   });
@@ -220,7 +220,7 @@ describe("Moves - Destiny Bond", () => {
     expect(playerPokemon1?.isFainted()).toBe(true);
 
     // Pledge secondary effect should still activate
-    const tagAfter = game.scene.arena.getTag(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY);
+    const tagAfter = game.scene.arena.findTag(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY);
     expect(tagAfter?.tagType).toBe(ArenaTagType.GRASS_WATER_PLEDGE);
   });
 

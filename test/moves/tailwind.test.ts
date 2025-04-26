@@ -52,7 +52,7 @@ describe("Moves - Tailwind", () => {
 
     expect(magikarp.getEffectiveStat(Stat.SPD)).toBe(magikarpSpd * 2);
     expect(meowth.getEffectiveStat(Stat.SPD)).toBe(meowthSpd * 2);
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
   });
 
   it("lasts for 4 turns", async () => {
@@ -62,20 +62,20 @@ describe("Moves - Tailwind", () => {
 
     game.move.select(MoveId.TAILWIND);
     await game.toNextTurn();
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
   });
 
   it("does not affect the opposing side", async () => {
@@ -91,8 +91,8 @@ describe("Moves - Tailwind", () => {
 
     expect(ally.getEffectiveStat(Stat.SPD)).equal(allySpd);
     expect(enemy.getEffectiveStat(Stat.SPD)).equal(enemySpd);
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
 
     game.move.select(MoveId.TAILWIND);
 
@@ -100,8 +100,8 @@ describe("Moves - Tailwind", () => {
 
     expect(ally.getEffectiveStat(Stat.SPD)).toBe(allySpd * 2);
     expect(enemy.getEffectiveStat(Stat.SPD)).equal(enemySpd);
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTag(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
   });
 
   it("modifies turn order on the turn it is set", async () => {

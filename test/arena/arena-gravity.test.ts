@@ -47,7 +47,7 @@ describe("Arena - Gravity", () => {
     game.move.select(MoveId.GRAVITY);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.GRAVITY)).toBeDefined();
 
     // Use non-OHKO move on second turn
     await game.toNextTurn();
@@ -68,7 +68,7 @@ describe("Arena - Gravity", () => {
     game.move.select(MoveId.GRAVITY);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.GRAVITY)).toBeDefined();
 
     // Use OHKO move on second turn
     await game.toNextTurn();
@@ -98,7 +98,7 @@ describe("Arena - Gravity", () => {
       game.move.select(MoveId.GRAVITY);
       await game.toEndOfTurn();
 
-      expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+      expect(game.scene.arena.findTag(ArenaTagType.GRAVITY)).toBeDefined();
 
       // Use ground move on 3rd turn
       await game.toNextTurn();
@@ -120,7 +120,7 @@ describe("Arena - Gravity", () => {
       game.move.select(MoveId.GRAVITY);
       await game.toEndOfTurn();
 
-      expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+      expect(game.scene.arena.findTag(ArenaTagType.GRAVITY)).toBeDefined();
 
       // Use electric move on 2nd turn
       await game.toNextTurn();

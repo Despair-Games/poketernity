@@ -303,7 +303,7 @@ export function initAbilities() {
         AttackTypeImmunityAbAttr,
         ElementalType.GROUND,
         (pokemon: Pokemon) =>
-          !pokemon.getTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.getTag(ArenaTagType.GRAVITY),
+          !pokemon.getTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.findTag(ArenaTagType.GRAVITY),
       )
       .ignorable(),
     new Ability(AbilityId.EFFECT_SPORE, 3)

@@ -56,7 +56,7 @@ describe("Moves - Future Sight", () => {
     await game.toNextTurn();
 
     expect(enemy.isFullHp()).toBeTruthy();
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(2);
 
@@ -85,7 +85,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(2);
 
@@ -101,7 +101,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(2);
 
@@ -117,7 +117,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(2);
 
@@ -137,7 +137,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
 
     await passTurns(2, true);
@@ -157,7 +157,7 @@ describe("Moves - Future Sight", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
     expect(playerPokemon[1]).toHaveMoveResult(MoveResult.FAIL);
   });
 
@@ -173,7 +173,7 @@ describe("Moves - Future Sight", () => {
     await game.toEndOfTurn();
 
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(2, true);
 
@@ -191,7 +191,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
+    expect(game.scene.arena.findTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(1, true);
 

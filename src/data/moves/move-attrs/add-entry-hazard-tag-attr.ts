@@ -11,7 +11,7 @@ export class AddEntryHazardTagAttr extends AddArenaTagAttr {
   override getCondition(): MoveConditionFunc {
     return (user, _target, move) => {
       const side = this.getTagSide(user, move);
-      const tag = globalScene.arena.getTag(this.tagType, side) as EntryHazardTag;
+      const tag = globalScene.arena.findTag(this.tagType, side) as EntryHazardTag;
       if (!tag) {
         return true;
       }

@@ -78,7 +78,7 @@ describe("Moves - Rapid Spin", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(tagType, ArenaTagSide.PLAYER)).toBeUndefined();
-    expect(game.scene.arena.getTag(tagType, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.findTag(tagType, ArenaTagSide.PLAYER)).toBeUndefined();
+    expect(game.scene.arena.findTag(tagType, ArenaTagSide.ENEMY)).toBeDefined();
   });
 });

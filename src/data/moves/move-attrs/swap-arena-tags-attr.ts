@@ -42,11 +42,8 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const tagPlayerTemp = globalScene.arena.findTags(
-      (t) => this.swappableTags.includes(t.tagType),
-      ArenaTagSide.PLAYER,
-    );
-    const tagEnemyTemp = globalScene.arena.findTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.ENEMY);
+    const tagPlayerTemp = globalScene.arena.getTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.PLAYER);
+    const tagEnemyTemp = globalScene.arena.getTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.ENEMY);
 
     if (tagPlayerTemp) {
       for (const swapTagsType of tagPlayerTemp) {
