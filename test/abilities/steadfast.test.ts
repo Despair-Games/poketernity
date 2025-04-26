@@ -100,9 +100,18 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
-  it(`should NOT boost SPD if flinching is prevented by "Inner Focus"`, async () => {
+  it.each([
+    {
+      abilityName: "Inner Focus",
+      abilityId: AbilityId.INNER_FOCUS,
+    },
+    {
+      abilityName: "Shield Dust",
+      abilityId: AbilityId.SHIELD_DUST,
+    },
+  ])(`should NOT boost SPD if flinching is prevented by "$abilityName" ability`, async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    game.override.passiveAbility(AbilityId.INNER_FOCUS);
+    game.override.passiveAbility(abilityId);
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPkm = field.getPlayerPokemon();
@@ -116,11 +125,15 @@ describe("Abilities - Steadfast", () => {
 
     await phaseInterceptor.to("MoveEndPhase", true);
 
-    expect(playerPkm).not.toHaveFlinched(); // inner focus prevents flinching
+    expect(playerPkm).not.toHaveFlinched();
 
     await game.toEndOfTurn();
 
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
+  });
+
+  it.todo(`should NOT boost SPD if flinching is prevented by "Covert Cloak" Item `, async () => {
+    // Item not yet implemented
   });
 
   it.each([
