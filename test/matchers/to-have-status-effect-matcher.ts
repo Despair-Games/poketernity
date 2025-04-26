@@ -47,7 +47,7 @@ export function toHaveStatusEffectMatcher(
     message: () =>
       pass
         ? `Expected ${received.name} NOT to have status effect: ${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect}), but it did.`
-        : `Expected ${received.name} to have status effect: ${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect}), but got: ${`${StatusEffect[statusEffect]} (=${statusEffect})`}`,
+        : `Expected ${received.name} to have status effect: ${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect}), but got: ${StatusEffect[statusEffect]} (=${statusEffect})`,
   };
 }
 

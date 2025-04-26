@@ -939,11 +939,11 @@ interface PendingHealEffect {
  * @extends ArenaTag
  */
 export class PendingHealTag extends ArenaTag {
-  private pendingHeals: Map<BattlerIndex, PendingHealEffect[]>;
+  /** All pending healing effects, organized by {@linkcode BattlerIndex} */
+  private pendingHeals: Partial<Record<BattlerIndex, PendingHealEffect[]>> = {};
 
   constructor() {
     super(ArenaTagType.PENDING_HEAL, 0);
-    this.pendingHeals = new Map<BattlerIndex, PendingHealEffect[]>();
   }
 
   /**
@@ -953,13 +953,13 @@ export class PendingHealTag extends ArenaTag {
    * @param healEffect - The {@linkcode PendingHealEffect | data} for the pending heal effect
    */
   public queueHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
-    if (this.pendingHeals.has(targetIndex)) {
-      const existingHealEffects = this.pendingHeals.get(targetIndex);
-      if (existingHealEffects && !existingHealEffects.some((he) => he.moveId === healEffect.moveId)) {
+    const existingHealEffects = this.pendingHeals[targetIndex];
+    if (existingHealEffects) {
+      if (!existingHealEffects.some((he) => he.moveId === healEffect.moveId)) {
         existingHealEffects.push(healEffect);
       }
     } else {
-      this.pendingHeals.set(targetIndex, [healEffect]);
+      this.pendingHeals[targetIndex] = [healEffect];
     }
   }
 
@@ -968,7 +968,12 @@ export class PendingHealTag extends ArenaTag {
 
   /** This arena tag is removed at the end of the turn if no pending healing effects are on the field */
   override lapse(_arena: Arena): boolean {
-    return this.pendingHeals.size > 0;
+    for (const key in this.pendingHeals) {
+      if (this.pendingHeals[key].length > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -983,7 +988,7 @@ export class PendingHealTag extends ArenaTag {
    */
   override apply(arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
     const targetIndex = pokemon.getBattlerIndex();
-    const targetEffects = this.pendingHeals.get(targetIndex);
+    const targetEffects = this.pendingHeals[targetIndex];
 
     if (simulated) {
       return !!targetEffects?.length;
@@ -1007,10 +1012,6 @@ export class PendingHealTag extends ArenaTag {
       });
 
       targetEffects.splice(targetEffects.indexOf(healEffect), 1);
-    }
-
-    if (targetEffects?.length === 0) {
-      this.pendingHeals.delete(targetIndex);
     }
 
     return !isNullOrUndefined(healEffect);

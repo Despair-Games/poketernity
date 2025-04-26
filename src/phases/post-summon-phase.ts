@@ -27,6 +27,10 @@ export class PostSummonPhase extends PokemonPhase {
     if (pokemon.hasStatusEffect(StatusEffect.TOXIC)) {
       pokemon.status!.toxicTurnCount = 0;
     }
+
+    // Apply pending heal effects from Healing Wish and Lunar Dance.
+    globalScene.arena.applyTags(ArenaTagType.PENDING_HEAL, false, pokemon);
+
     globalScene.arena.applyTags([...EntryHazardArenaTagTypes], false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
@@ -37,12 +41,6 @@ export class PostSummonPhase extends PokemonPhase {
     ) {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
-
-    /**
-     * Apply pending heal effects from Healing Wish and Lunar Dance.
-     * @todo Is this placed correctly? (after hazards, before abilities)
-     */
-    globalScene.arena.applyTags(ArenaTagType.PENDING_HEAL, false, pokemon);
 
     applyAbAttrs<PostSummonAbAttr>(AbAttrFlag.POST_SUMMON, pokemon, false);
     const field = pokemon.getField();
