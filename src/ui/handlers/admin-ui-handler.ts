@@ -204,7 +204,7 @@ export class AdminUiHandler extends FormModalUiHandler {
           this.inputs[i].setText(adminResult[aR]);
           if (aR === "discordId" || aR === "googleId") {
             // this is here to add the icons for linking/unlinking of google/discord IDs
-            const nineSlice = this.inputContainers[i].list.find((iC) => iC.type === "NineSlice");
+            const nineSlice = this.inputContainers[i].getByType<Phaser.GameObjects.NineSlice>("NineSlice");
             const img = globalScene.add.image(
               this.inputContainers[i].x + nineSlice!.width + this.buttonGap,
               this.inputContainers[i].y + Math.floor(nineSlice!.height / 2),

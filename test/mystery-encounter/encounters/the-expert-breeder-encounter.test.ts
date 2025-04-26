@@ -21,7 +21,7 @@ import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/e
 import { TrainerType } from "#enums/trainer-type";
 import { EggTier } from "#enums/egg-type";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
@@ -40,10 +40,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
     const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
       [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],

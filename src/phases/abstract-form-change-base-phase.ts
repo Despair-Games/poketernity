@@ -2,7 +2,7 @@ import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 
@@ -108,7 +108,8 @@ export abstract class FormChangeBasePhase extends Phase {
           sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],
             hasShadow: false,
-            teraColor: getTypeRgb(this.pokemon.getTeraType()),
+            teraColor: getTypeRgb(this.pokemon.teraType),
+            isTerastallized: this.pokemon.isTerastallized,
           });
           sprite.setPipelineData("ignoreTimeTint", true);
           sprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());

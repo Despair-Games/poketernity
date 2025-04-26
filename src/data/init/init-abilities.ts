@@ -74,7 +74,6 @@ import { PostAttackApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/po
 import { PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import { PostAttackStealHeldItemAbAttr } from "#app/data/abilities/ab-attrs/post-attack-steal-held-item-ab-attr";
 import { PostBattleInitFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-form-change-ab-attr";
-import { PostBattleInitStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-stat-stage-change-ab-attr";
 import { PostBattleLootAbAttr } from "#app/data/abilities/ab-attrs/post-battle-loot-ab-attr";
 import { PostBiomeChangeTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-terrain-change-ab-attr";
 import { PostBiomeChangeWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-weather-change-ab-attr";
@@ -120,6 +119,7 @@ import { PostSummonUnnamedMessageAbAttr } from "#app/data/abilities/ab-attrs/pos
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-change-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-suppressed-form-change-ab-attr";
+import { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-turn-form-change-ab-attr";
 import { PostTurnHurtIfSleepingAbAttr } from "#app/data/abilities/ab-attrs/post-turn-hurt-if-sleeping-ab-attr";
@@ -179,14 +179,13 @@ import { Ability } from "#app/data/abilities/ability";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder, toDmgValue } from "#app/utils";
-import { getWeatherCondition } from "#app/utils/ability-utils";
+import { getWeatherCondition, normalTypeMoveConversionCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -881,7 +880,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.ICE,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.SWEET_VEIL, 6)
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.SLEEP)
@@ -913,7 +912,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.FAIRY,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.GOOEY, 6)
       .attr(
@@ -928,7 +927,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.FLYING,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.PARENTAL_BOND, 6)
       .attr(AddSecondStrikeAbAttr, 0.25),
@@ -1049,7 +1048,7 @@ export function initAbilities() {
         MoveTypeChangeAbAttr,
         ElementalType.ELECTRIC,
         1.2,
-        (_user, _target, move) => move?.type === ElementalType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+        normalTypeMoveConversionCondition,
       ),
     new Ability(AbilityId.SURGE_SURFER, 7)
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPD, 2),
@@ -1380,7 +1379,7 @@ export function initAbilities() {
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
-      .condition((pokemon) => !pokemon.isTerastallized()),
+      .condition((pokemon) => !pokemon.isTerastallized),
     new Ability(AbilityId.QUICK_DRAW, 8)
       .attr(BypassSpeedChanceAbAttr, 30),
     new Ability(AbilityId.UNSEEN_FIST, 8)
@@ -1622,29 +1621,29 @@ export function initAbilities() {
       .attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC)
       .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(AbilityId.EMBODY_ASPECT_TEAL, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPD], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPD], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.SPD], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_WELLSPRING, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPDEF], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPDEF], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.SPDEF], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_HEARTHFLAME, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.ATK], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.ATK], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.EMBODY_ASPECT_CORNERSTONE, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.DEF], 1, true)
+      .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.DEF], 1)
+      .attr(PostSummonStatStageChangeAbAttr, [Stat.DEF], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // Ogerpon tera interactions
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.TERA_SHIFT, 9)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.getFormKey() ? 0 : 1))
       .attr(UncopiableAbilityAbAttr)

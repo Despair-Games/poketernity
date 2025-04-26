@@ -7,7 +7,7 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game";
 
 describe("Weather - Fog", () => {
   let phaserGame: Phaser.Game;

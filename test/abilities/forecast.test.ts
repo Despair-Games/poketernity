@@ -123,25 +123,25 @@ describe("Abilities - Forecast", () => {
       expect(castform.formIndex).toBe(SNOWY_FORM);
 
       game.move.select(MoveId.SPLASH);
-      game.doSwitchPokemon(2); // Feebas now 2, Kyogre 1
+      game.switchPokemon(2); // Feebas now 2, Kyogre 1
       await game.toNextTurn();
 
       expect(castform.formIndex).toBe(RAINY_FORM);
 
       game.move.select(MoveId.SPLASH);
-      game.doSwitchPokemon(3); // Kyogre now 3, Groudon 1
+      game.switchPokemon(3); // Kyogre now 3, Groudon 1
       await game.toNextTurn();
 
       expect(castform.formIndex).toBe(SUNNY_FORM);
 
       game.move.select(MoveId.SPLASH);
-      game.doSwitchPokemon(4); // Groudon now 4, Rayquaza 1
+      game.switchPokemon(4); // Groudon now 4, Rayquaza 1
       await game.toNextTurn();
 
       expect(castform.formIndex).toBe(NORMAL_FORM);
 
       game.move.select(MoveId.SPLASH);
-      game.doSwitchPokemon(2); // Rayquaza now 2, Feebas 1
+      game.switchPokemon(2); // Rayquaza now 2, Feebas 1
       await game.toNextTurn();
 
       expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -153,13 +153,13 @@ describe("Abilities - Forecast", () => {
       expect(castform.formIndex).toBe(SNOWY_FORM);
 
       game.move.select(MoveId.SPLASH);
-      game.doSwitchPokemon(5); // Feebas now 5, Altaria 1
+      game.switchPokemon(5); // Feebas now 5, Altaria 1
       await game.toNextTurn();
 
       expect(castform.formIndex).toBe(NORMAL_FORM);
 
       game.move.select(MoveId.SPLASH);
-      game.doSwitchPokemon(5); // Altaria now 5, Feebas 1
+      game.switchPokemon(5); // Altaria now 5, Feebas 1
       await game.toNextTurn();
 
       expect(castform.formIndex).toBe(SNOWY_FORM);
@@ -244,11 +244,11 @@ describe("Abilities - Forecast", () => {
     await game.toNextTurn();
 
     // Second turn - switch out Castform, regains Forecast
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     // Third turn - switch in Castform
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.phaseInterceptor.to("MovePhase");
 
     expect(castform.summonData.abilitySuppressed).toBe(false);
@@ -264,7 +264,7 @@ describe("Abilities - Forecast", () => {
     await game.toNextTurn();
 
     // Second turn - switch in Castform, regains Forecast
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
     const castform = game.field.getPlayerPokemon();
@@ -286,7 +286,7 @@ describe("Abilities - Forecast", () => {
 
     expect(castform.formIndex).toBe(RAINY_FORM);
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -302,7 +302,7 @@ describe("Abilities - Forecast", () => {
 
     // Switch out Primal Groudon to end weather
     game.move.use(MoveId.SPLASH, 0);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
     await game.toNextTurn();
 
     expect(castform.formIndex).toBe(NORMAL_FORM);

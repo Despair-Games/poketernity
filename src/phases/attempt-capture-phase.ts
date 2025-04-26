@@ -1,4 +1,4 @@
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import {
   doPokeballBounceAnim,
@@ -137,7 +137,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 repeatDelay: 500,
                 onUpdate: (t) => {
                   if (shakeCount && shakeCount < (isCritical ? 2 : 4)) {
-                    const value = t.getValue();
+                    const value = t.getValue() ?? 0;
                     const directionMultiplier = shakeCount % 2 === 1 ? 1 : -1;
                     this.pokeball.setX(pbX + value * 4 * directionMultiplier);
                     this.pokeball.setAngle(value * 27.5 * directionMultiplier);

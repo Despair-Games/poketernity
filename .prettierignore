@@ -7,6 +7,8 @@ package-lock.json
 build
 coverage
 dist
+typedoc
+typedoc-externals
 package-lock.json
 .vs-code
 public

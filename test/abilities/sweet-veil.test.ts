@@ -85,7 +85,7 @@ describe("Abilities - Sweet Veil", () => {
 
     // Turn 2: Switch into Swirlix with Sweet Veil
     game.move.use(MoveId.SPLASH);
-    game.doSwitchPokemon(2);
+    game.switchPokemon(2);
 
     await game.toEndOfTurn();
 

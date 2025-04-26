@@ -1,7 +1,7 @@
 import { api } from "#app/plugins/api/api";
 import { describe, expect, it, vi } from "vitest";
 import { initLoggedInUser, loggedInUser, updateUserInfo } from "#app/account";
-import * as constants from "#app/constants";
+import * as constants from "#app/constants/app";
 
 describe("account", () => {
   describe("initLoggedInUser", () => {

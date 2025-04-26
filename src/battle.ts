@@ -20,7 +20,7 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "#app/data/special-waves";
+} from "#app/constants/special-waves";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
@@ -45,6 +45,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { getLevelForWaveFunc } from "#app/data/exp";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;
@@ -108,9 +109,23 @@ export default class Battle {
     this.turnManager = new TurnCommandManager();
   }
 
+  /**
+   * Function to get the level of wild Pokemon for a given wave
+   *
+   * This is the function to get the level for a wave:
+   * - The `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
+   * - The base level uses {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
+   * - If the Pokemon is a boss, there is a `1.2` modifier
+   * - If the boss is the final boss of classic mode or an endless boss, this level is rounded up
+   * to the next multiple of 25
+   * - If it's not the final wave then bosses can also have a +/- level fluctuation
+   * of one tenth the adjusted waveIndex
+   *
+   * @returns the level
+   */
   public getLevelForWave(): number {
     const levelWaveIndex = this.gameMode.getWaveForDifficulty(this.waveIndex);
-    const baseLevel = 1 + levelWaveIndex / 2 + Math.pow(levelWaveIndex / 25, 2);
+    const baseLevel = getLevelForWaveFunc(levelWaveIndex);
     const bossMultiplier = 1.2;
 
     if (this.gameMode.isBoss(this.waveIndex)) {
@@ -125,15 +140,29 @@ export default class Battle {
       return ret + levelOffset;
     }
 
+    /**
+     * TODO: Simplify this. Also look into smaller deviations if total level is intended to be lower
+     * for the same number of waves
+     *
+     * Absolute value is not needed since the value is always >= 0
+     * Deviation is a uniform deviation equal ranging from 0 to one tenth the levelWaveIndex
+     */
     let levelOffset = 0;
 
     const deviation = 10 / levelWaveIndex;
-    levelOffset = Math.abs(this.randSeedGaussForLevel(deviation));
+    levelOffset = Math.abs(this.randSeedUniformForLevel(deviation));
 
     return Math.max(Math.round(baseLevel + levelOffset), 1);
   }
 
-  randSeedGaussForLevel(value: number): number {
+  /**
+   * TODO: Remove this and use a simpler way to generate deviation
+   *
+   * Helper function for determining the deviation to add onto a wild Pokemon's level
+   * @param value - The adjusted level wave index
+   * @returns the deviation equal to `Phaser.Math.RND.realInRange(0, 1) * value / 10`
+   */
+  randSeedUniformForLevel(value: number): number {
     let rand = 0;
     for (let i = value; i > 0; i--) {
       rand += Phaser.Math.RND.realInRange(0, 1);

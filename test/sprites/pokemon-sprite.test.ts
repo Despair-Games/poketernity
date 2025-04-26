@@ -23,10 +23,10 @@ describe("check if every variant's sprite are correctly set", () => {
     masterlist = deepCopy(_masterlist);
     femaleVariant = masterlist.female;
     backVariant = masterlist.back;
-    //@ts-ignore
-    delete masterlist.female; //TODO: resolve ts-ignore
-    //@ts-ignore
-    delete masterlist.back; //TODO: resolve ts-ignore
+    // @ts-expect-error - TODO: remove this?
+    delete masterlist.female;
+    // @ts-expect-error - TODO: remove this?
+    delete masterlist.back;
   });
 
   it("data should not be undefined", () => {

@@ -9,8 +9,8 @@ import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-t
  */
 export class TeraBlastTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (user.isTerastallized()) {
-      moveType.value = user.getTeraType();
+    if (user.isTerastallized) {
+      moveType.value = user.teraType;
       return true;
     }
 

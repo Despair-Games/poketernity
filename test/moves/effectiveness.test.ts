@@ -6,7 +6,6 @@ import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import * as Messages from "#app/messages";
-import { TerastallizeModifier, overrideHeldItems } from "#app/modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -21,13 +20,13 @@ function testMoveEffectiveness(
 ): void {
   // Suppress getPokemonNameWithAffix because it calls on a null battle spec
   vi.spyOn(Messages, "getPokemonNameWithAffix").mockReturnValue("");
-  game.override.enemyAbility(targetAbility).enemyHeldItems([{ name: "TERA_SHARD", type: teraType }]);
+  game.override.enemyAbility(targetAbility);
 
   const user = game.scene.addPlayerPokemon(getPokemonSpecies(SpeciesId.SNORLAX), 5);
   const target = game.scene.addEnemyPokemon(getPokemonSpecies(targetSpecies), 5, TrainerSlot.NONE);
 
   if (teraType !== undefined) {
-    overrideHeldItems(target, false);
+    game.field.forceTera(target, teraType);
   }
 
   expect(target.getMoveEffectiveness(user, allMoves.get(moveId))).toBe(expected);
@@ -44,7 +43,6 @@ describe("Moves - Type Effectiveness", () => {
       type: Phaser.HEADLESS,
     });
     game = new GameManager(phaserGame);
-    TerastallizeModifier.prototype.apply = (_args) => true;
 
     game.override.ability(AbilityId.BALL_FETCH);
   });

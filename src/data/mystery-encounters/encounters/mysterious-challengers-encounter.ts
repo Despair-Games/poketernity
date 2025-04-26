@@ -13,7 +13,7 @@ import { randSeedInt } from "#app/utils";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
@@ -89,7 +89,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     const brutalConfig = allTrainerConfigs[brutalTrainerType].clone();
     brutalConfig.title = allTrainerConfigs[brutalTrainerType].title;
     brutalConfig.setPartyTemplates(e4Template);
-    // @ts-ignore
+    // @ts-expect-error - TODO: change the type of `partyTemplateFunc` or change this `null` assignment
     brutalConfig.partyTemplateFunc = null; // Overrides gym leader party template func
     female = false;
     if (brutalConfig.hasGenders) {

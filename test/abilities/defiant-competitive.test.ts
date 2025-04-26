@@ -209,12 +209,12 @@ describe.each([
     await game.toNextTurn();
 
     // Turn 2: Switch out
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     // Turn 3: Switch back into original Sticky Web user
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     if (isDefiant) {

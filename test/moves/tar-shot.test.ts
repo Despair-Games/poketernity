@@ -83,14 +83,12 @@ describe("Moves - Tar Shot", () => {
   });
 
   it("does not double the effectiveness of Fire-type moves against a Pokémon that is Terastallized", async () => {
-    game.override
-      .enemyHeldItems([{ name: "TERA_SHARD", type: ElementalType.GRASS }])
-      .enemySpecies(SpeciesId.SPRIGATITO);
+    game.override.enemySpecies(SpeciesId.SPRIGATITO);
     await game.classicMode.startBattle([SpeciesId.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
-
     vi.spyOn(enemy, "getMoveEffectiveness");
+    game.field.forceTera(enemy, ElementalType.GRASS);
 
     game.move.select(MoveId.TAR_SHOT);
 
@@ -121,7 +119,7 @@ describe("Moves - Tar Shot", () => {
 
     await game.toNextTurn();
 
-    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: ElementalType.GRASS }]);
+    game.field.forceTera(enemy, ElementalType.GRASS);
 
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { RunEntry } from "#app/system/game-data";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";

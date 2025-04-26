@@ -48,7 +48,7 @@ describe("Moves - Chilly Reception", () => {
 
     await game.phaseInterceptor.to("TurnInitPhase", false);
     game.move.select(MoveId.CHILLY_RECEPTION);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toEndOfTurn();
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
@@ -59,7 +59,7 @@ describe("Moves - Chilly Reception", () => {
     await game.classicMode.startBattle([SpeciesId.SLOWKING, SpeciesId.MEOWTH]);
 
     game.move.select(MoveId.CHILLY_RECEPTION);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
 
     await game.toEndOfTurn();
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);

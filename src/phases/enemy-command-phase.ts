@@ -27,7 +27,7 @@ import { PhaseId } from "#enums/phase-id";
 export class EnemyCommandPhase extends FieldPhase {
   override readonly id = PhaseId.ENEMY_COMMAND;
 
-  protected readonly fieldIndex: number;
+  public readonly fieldIndex: number;
 
   constructor(fieldIndex: number) {
     super();
@@ -42,7 +42,7 @@ export class EnemyCommandPhase extends FieldPhase {
       return this.end();
     }
 
-    const enemyPokemon = globalScene.getEnemyField()[this.fieldIndex];
+    const pokemon = globalScene.getEnemyField()[this.fieldIndex];
 
     const battle = globalScene.currentBattle;
 
@@ -50,8 +50,8 @@ export class EnemyCommandPhase extends FieldPhase {
 
     if (
       battle.double
-      && enemyPokemon.hasAbility(AbilityId.COMMANDER)
-      && enemyPokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)
+      && pokemon.hasAbility(AbilityId.COMMANDER)
+      && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)
     ) {
       return this.end();
     }
@@ -65,14 +65,14 @@ export class EnemyCommandPhase extends FieldPhase {
      * member's matchup score is 3x the active enemy's score (or 2x for "boss" trainers),
      * the enemy will switch to that Pokemon.
      */
-    if (trainer && !enemyPokemon.getMoveQueue().length) {
-      const opponents = enemyPokemon.getOpponents();
+    if (trainer && !pokemon.getMoveQueue().length) {
+      const opponents = pokemon.getOpponents();
 
-      if (!enemyPokemon.isTrapped()) {
-        const partyMemberScores = trainer.getPartyMemberMatchupScores(enemyPokemon.trainerSlot, true);
+      if (!pokemon.isTrapped()) {
+        const partyMemberScores = trainer.getPartyMemberMatchupScores(pokemon.trainerSlot, true);
 
         if (partyMemberScores.length) {
-          const matchupScores = opponents.map((opp) => enemyPokemon.getMatchupScore(opp));
+          const matchupScores = opponents.map((opp) => pokemon.getMatchupScore(opp));
           const matchupScore = matchupScores.reduce((total, score) => (total += score), 0) / matchupScores.length;
 
           const sortedPartyMemberScores = trainer.getSortedPartyMemberMatchupScores(partyMemberScores);
@@ -80,10 +80,10 @@ export class EnemyCommandPhase extends FieldPhase {
           const switchMultiplier = 1 - (battle.enemySwitchCounter ? Math.pow(0.1, 1 / battle.enemySwitchCounter) : 0);
 
           if (sortedPartyMemberScores[0][1] * switchMultiplier >= matchupScore * (trainer.config.isBoss ? 2 : 3)) {
-            const index = trainer.getNextSummonIndex(enemyPokemon.trainerSlot, partyMemberScores);
+            const index = trainer.getNextSummonIndex(pokemon.trainerSlot, partyMemberScores);
 
             battle.turnManager.addCommand({
-              pokemon: enemyPokemon,
+              pokemon,
               command: BattleCommand.POKEMON,
               cursor: index,
               args: [false],
@@ -97,21 +97,16 @@ export class EnemyCommandPhase extends FieldPhase {
       }
     }
 
-    /** Select a move to use (and a target to use it against, if applicable) */
-    const nextMove = enemyPokemon.getNextMove();
+    const command = trainer?.shouldTera(pokemon) ? BattleCommand.TERA : BattleCommand.FIGHT;
 
     battle.turnManager.addCommand({
-      pokemon: enemyPokemon,
-      command: BattleCommand.FIGHT,
-      turnMove: nextMove,
+      pokemon,
+      command,
+      turnMove: pokemon.getNextMove(),
     });
 
     battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);
 
     this.end();
-  }
-
-  public getFieldIndex(): number {
-    return this.fieldIndex;
   }
 }

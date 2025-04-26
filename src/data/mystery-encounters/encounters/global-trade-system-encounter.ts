@@ -40,10 +40,10 @@ import { getNatureName } from "#app/data/nature";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { trainerNamePools } from "#app/data/trainer-names";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball-type";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { timedEventManager } from "#app/timed-event-manager";
 import { EventModifierType } from "#enums/event-modifier-type";
 
@@ -618,7 +618,8 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
-        teraColor: getTypeRgb(tradedPokemon.getTeraType()),
+        teraColor: getTypeRgb(tradedPokemon.teraType),
+        isTerastallized: tradedPokemon.isTerastallized,
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
@@ -640,7 +641,8 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
-        teraColor: getTypeRgb(tradedPokemon.getTeraType()),
+        teraColor: getTypeRgb(tradedPokemon.teraType),
+        isTerastallized: tradedPokemon.isTerastallized,
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());

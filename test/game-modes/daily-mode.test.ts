@@ -59,7 +59,7 @@ describe("Shop modifications", async () => {
       .startingBiome(BiomeId.ICE_CAVE)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     game.modifiers.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
@@ -74,7 +74,7 @@ describe("Shop modifications", async () => {
   it("should not have Eviolite and Mini Black Hole available in Classic if not unlocked", async () => {
     await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
@@ -85,7 +85,7 @@ describe("Shop modifications", async () => {
   it("should have Eviolite and Mini Black Hole available in Daily", async () => {
     await game.dailyMode.startBattle();
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);

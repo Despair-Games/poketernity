@@ -1,5 +1,5 @@
 import type { TurnMove } from "#app/@types/TurnMove";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
@@ -17,7 +17,7 @@ import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import { EnemyBattleInfo } from "#app/ui/components/battle-info";
-import { isBetween, isNullOrUndefined, randSeedInt, toDmgValue } from "#app/utils";
+import { isBetween, isNullOrUndefined, randSeedInt, randSeedItem, toDmgValue } from "#app/utils";
 import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
@@ -38,6 +38,7 @@ export class EnemyPokemon extends Pokemon {
   public aiType: AiType;
   public bossSegments: number;
   public bossSegmentIndex: number;
+  public initialTeamIndex: number;
   /** To indicate if the instance was populated with a dataSource -> e.g. loaded & populated from session data */
   public readonly isPopulatedFromDataSource: boolean;
 
@@ -65,6 +66,7 @@ export class EnemyPokemon extends Pokemon {
     );
 
     this.trainerSlot = trainerSlot;
+    this.initialTeamIndex = globalScene.currentBattle?.enemyParty.length ?? 0;
     // if a dataSource is provided, then it was populated from dataSource
     this.isPopulatedFromDataSource = !!dataSource;
     if (boss) {
@@ -117,6 +119,8 @@ export class EnemyPokemon extends Pokemon {
       while ((preEvolution = pokemonPreEvolutions[speciesId])) {
         speciesId = preEvolution;
       }
+
+      this.teraType = randSeedItem(this.getTypes(false, false, true));
     }
 
     this.aiType = boss || this.hasTrainer() ? AiType.SMART : AiType.SMART_RANDOM;

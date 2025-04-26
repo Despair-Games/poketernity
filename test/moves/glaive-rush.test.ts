@@ -123,9 +123,9 @@ describe("Moves - Glaive Rush", () => {
     await game.toEndOfTurn();
     expect(player.hp).toBe(player.getMaxHp());
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toEndOfTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toEndOfTurn();
     expect(player.hp).toBe(player.getMaxHp());
   });

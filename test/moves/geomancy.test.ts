@@ -64,7 +64,7 @@ describe("Moves - Geomancy", () => {
     game.move.select(MoveId.GEOMANCY);
 
     await game.phaseInterceptor.to("PostActionPhase", false);
-    await game.doKillOpponents();
+    await game.faintOpponents();
 
     await game.toNextWave();
 

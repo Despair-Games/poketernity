@@ -22,7 +22,7 @@ import { initVouchers } from "#app/system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/constants/ui";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { getEnumKeys, getEnumValues } from "#app/utils";
 import { BiomeId } from "#enums/biome-id";
@@ -80,6 +80,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("select_cursor_pokerus", ImagesFolder.UI_CURSORS);
     this.loadImage("select_gen_cursor", ImagesFolder.UI_CURSORS); // same as select_cursor, could be removed by using it as a nineslice
     this.loadAtlas("summary_moves_cursor", ImagesFolder.UI_CURSORS);
+    this.loadImage("cursor_tera", ImagesFolder.UI_CURSORS, { uiThemeDependant: true });
 
     this.loadImage("ability_bar_left", ImagesFolder.UI_NOTIFICATION_BARS);
     this.loadImage("bgm_bar", ImagesFolder.UI_NOTIFICATION_BARS); // same as abilitity_bar_left, could be removed by using it as a nineslice
@@ -110,6 +111,8 @@ export class LoadingScene extends SceneBase {
     this.loadImage("icon_ha_capsule", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_champion_ribbon", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_tera", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("type_tera", ImagesFolder.UI); // not sure where to put this yet
+    this.loadAtlas("button_tera", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_owned", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_egg_move", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("candy", ImagesFolder.UI_GAME_ICONS);
@@ -358,12 +361,6 @@ export class LoadingScene extends SceneBase {
     this.loadBgm("victory_champion", "bw/victory_champion.mp3");
     this.loadBgm("evolution", "bw/evolution.mp3");
     this.loadBgm("evolution_fanfare", "bw/evolution_fanfare.mp3");
-
-    this.load.plugin(
-      "rextexteditplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js",
-      true,
-    );
 
     this.loadLoadingScreen();
 

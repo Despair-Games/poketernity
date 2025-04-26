@@ -15,7 +15,11 @@ import { SpeciesId } from "#enums/species-id";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "#enums/game-modes";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES, CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES } from "./constants";
+import { DEFAULT_STARTING_MONEY } from "#app/constants/game";
+import {
+  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
+  CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
+} from "#app/constants/mystery-encounters";
 
 interface GameModeConfig {
   isClassic?: boolean;
@@ -98,7 +102,7 @@ export class GameMode implements GameModeConfig {
    * - 1000
    */
   getStartingMoney(): number {
-    return Overrides.STARTING_MONEY_OVERRIDE || 1000;
+    return Overrides.STARTING_MONEY_OVERRIDE || DEFAULT_STARTING_MONEY;
   }
 
   /**
@@ -352,9 +356,9 @@ export class GameMode implements GameModeConfig {
       default:
         return [0, 0];
       case GameModes.CLASSIC:
-        return CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES;
+        return [...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES];
       case GameModes.CHALLENGE:
-        return CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES;
+        return [...CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES];
     }
   }
 

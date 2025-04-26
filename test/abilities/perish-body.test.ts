@@ -43,7 +43,7 @@ describe("Abilities - Perish Body", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     expect(milotic.getTag(BattlerTagType.PERISH_SONG)).toBeUndefined();
@@ -60,7 +60,7 @@ describe("Abilities - Perish Body", () => {
     game.move.select(MoveId.PECK);
     await game.toNextTurn();
 
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
     await game.toNextTurn();
 
     game.move.select(MoveId.PECK);

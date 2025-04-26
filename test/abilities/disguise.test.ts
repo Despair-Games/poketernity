@@ -123,7 +123,7 @@ describe("Abilities - Disguise", () => {
     expect(mimikyu.hp).equals(maxHp - disguiseDamage);
 
     await game.toNextTurn();
-    game.doSwitchPokemon(1);
+    game.switchPokemon(1);
 
     await game.toEndOfTurn();
 
@@ -141,7 +141,7 @@ describe("Abilities - Disguise", () => {
     expect(mimikyu.formIndex).toBe(bustedForm);
 
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(mimikyu.formIndex).toBe(bustedForm);
@@ -161,7 +161,7 @@ describe("Abilities - Disguise", () => {
     expect(mimikyu.formIndex).toBe(bustedForm);
 
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
@@ -181,11 +181,11 @@ describe("Abilities - Disguise", () => {
     expect(mimikyu1.formIndex).toBe(bustedForm);
 
     game.move.select(MoveId.SPLASH);
-    await game.killPokemon(mimikyu1);
-    game.doSelectPartyPokemon(1);
+    await game.faintPokemon(mimikyu1);
+    game.selectPartyPokemon(1);
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.phaseInterceptor.to("PartyHealPhase");
 
     expect(mimikyu1.formIndex).toBe(disguisedForm);

@@ -1,0 +1,46 @@
+import type { Pokemon } from "#app/field/pokemon";
+import { Stat, type PermanentStat } from "#enums/stat";
+import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
+import type { SyncExpectationResult } from "@vitest/expect";
+
+export interface ToHaveStatMatcherOptions {
+  /**
+   * Prefer actual stats (`true`) or "in-battle" stats (`false`). Default is `true`.
+   * @see {@linkcode Pokemon.getStat}
+   */
+  bypassSummonData?: boolean;
+}
+
+/**
+ * Matcher to check if a Pokemon's stat equals the expected value
+ * @param received - The object to check. Should be a {@linkcode Pokemon}.
+ * @param stat - The {@linkcode PermanentStat} to check
+ * @param expectedValue - The expected value of the {@linkcode stat}
+ * @param options - The {@linkcode ToHaveStatMatcherOptions} (optional)
+ * @returns Whether the matcher passed
+ */
+export function toHaveStatMatcher(
+  received: unknown,
+  stat: PermanentStat,
+  expectedValue: number,
+  { bypassSummonData = true }: ToHaveStatMatcherOptions = {},
+): SyncExpectationResult {
+  if (!isPokemonInstance(received)) {
+    return {
+      pass: false,
+      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+    };
+  }
+
+  const pokemon = received as Pokemon;
+  const actualValue = pokemon.getStat(stat, bypassSummonData);
+  const pass = actualValue === expectedValue;
+
+  return {
+    pass,
+    message: () =>
+      pass
+        ? `Expected ${pokemon.name} to NOT have ${Stat[stat]}=${expectedValue}, but it did.`
+        : `Expected ${pokemon.name} to have ${Stat[stat]}=${expectedValue}, but got ${actualValue}.`,
+  };
+}

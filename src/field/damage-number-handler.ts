@@ -8,7 +8,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
-import { GAME_HEIGHT } from "#app/ui-constants";
+import { GAME_HEIGHT } from "#app/constants/ui";
 import { CommonColor, ShadowColor } from "#enums/color";
 
 type TextAndShadowArr = [string | null, string | null];

@@ -29,27 +29,44 @@ describe("Moves - Tera Starstorm", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(30)
-      .enemySpecies(SpeciesId.MAGIKARP)
-      .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
+      .enemySpecies(SpeciesId.MAGIKARP);
   });
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
     game.override.battleType("single");
     await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
 
-    const terapagos = game.scene.getPlayerPokemon()!;
-
+    const terapagos = game.field.getPlayerPokemon();
     vi.spyOn(terapagos, "getMoveType");
+    game.field.forceTera(terapagos);
 
     game.move.select(MoveId.TERA_STARSTORM);
     await game.toEndOfTurn();
 
-    expect(terapagos.isTerastallized()).toBe(true);
+    expect(terapagos.isTerastallized).toBe(true);
     expect(terapagos.getMoveType).toHaveReturnedWith(ElementalType.STELLAR);
+  });
+
+  it("should be affected by type-changing abilities (e.g., Aerilate) if user is not Terastallized", async () => {
+    game.override.ability(AbilityId.AERILATE);
+    game.override.battleType("single");
+    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+
+    const player = game.field.getPlayerPokemon();
+    vi.spyOn(player, "getMoveType");
+
+    game.move.use(MoveId.TERA_STARSTORM);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("MoveEffectPhase");
+
+    expect(player.getMoveType).toHaveLastReturnedWith(ElementalType.FLYING);
   });
 
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.TERAPAGOS]);
+
+    const terapagos = game.field.getPlayerPokemon();
+    game.field.forceTera(terapagos);
 
     game.move.select(MoveId.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.TERA_STARSTORM, 1);

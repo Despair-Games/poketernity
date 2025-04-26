@@ -10,6 +10,7 @@ import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
 import { PostActionPhase } from "#app/phases/post-action-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { WeatherEffectPhase } from "#app/phases/weather-effect-phase";
+import { TerastallizationPhase } from "#app/phases/terastallization-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -370,6 +371,7 @@ export class TurnCommandManager {
   private handleCommand(turnCommand: TurnCommand): boolean {
     let success: boolean = false;
     switch (turnCommand.command) {
+      case BattleCommand.TERA:
       case BattleCommand.FIGHT:
         success = this.handleFightCommand(turnCommand);
         break;
@@ -405,6 +407,7 @@ export class TurnCommandManager {
    */
   private getNextTurnCommandPhaseId(turnCommand: TurnCommand): PhaseId {
     switch (turnCommand.command) {
+      case BattleCommand.TERA:
       case BattleCommand.FIGHT:
         return PhaseId.MOVE;
       case BattleCommand.BALL:
@@ -423,7 +426,7 @@ export class TurnCommandManager {
    * @returns `true` if the turn command is scheduled successfully
    */
   private handleFightCommand(turnCommand: TurnCommand): boolean {
-    const { pokemon, cursor, turnMove, targets } = turnCommand;
+    const { pokemon, cursor, turnMove, targets, command } = turnCommand;
     if (!pokemon.isActive(true) || !turnMove) {
       return false;
     }
@@ -431,6 +434,10 @@ export class TurnCommandManager {
     const move =
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
+
+    if (command === BattleCommand.TERA) {
+      globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
+    }
 
     globalScene.phaseManager.queueMovePhase({
       pokemon,
