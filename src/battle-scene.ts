@@ -1582,6 +1582,18 @@ export default class BattleScene extends SceneBase {
     return ret;
   }
 
+  /**
+   * Formula for getting boss segments
+   * Daily mode or final boss -> 5
+   * Legends, sublegends, mythics are automatically bosses
+   *
+   * Start with 2 segments
+   * +1 if level is over 100
+   * +1 if bst is >= 670
+   * +1 for every 250 floors
+   *
+   * @returns the number of hp segments
+   */
   getEncounterBossSegments(
     waveIndex: number,
     level: number,
