@@ -79,7 +79,8 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     this.titleContainer.destroy();
 
     if (this.splashTextTween) {
-      this.splashTextTween.remove();
+      //this.splashTextTween.remove();
+      this.splashTextTween.destroy();
       this.splashTextTween = null;
     }
 

@@ -11,8 +11,6 @@ import i18next from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
 export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
-  private onLanguageChange = () => this.showLanguageOptions();
-
   constructor() {
     super("display", displaySettingUiItems);
   }
@@ -20,11 +18,11 @@ export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
   protected override setup(): void {
     super.setup();
 
-    eventBus.on("language/change", this.onLanguageChange);
+    eventBus.on("language/change", this.showLanguageOptions, this);
   }
 
   protected override tearDown(): void {
-    eventBus.off("language/change", this.onLanguageChange);
+    eventBus.off("language/change", this.showLanguageOptions, this);
 
     super.tearDown();
   }
