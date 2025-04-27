@@ -182,9 +182,6 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
     /**
      * The blend mode to specify how the sprite is rendered on the canvas
      * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
-     * @todo
-     * - Is this still required?
-     * - Should it be a keyframe property?
      */
     blendType: {
       ...getNumberKeyFrameSetSchema({
@@ -305,8 +302,6 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     /** The amount of time the image is displayed (in frames) */
     duration: {
       type: "number",
-      /** @todo Should this default be kept? */
-      default: 0,
       nullable: true,
     },
 

@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Pokemon } from "#app/field/pokemon";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { globalScene } from "#app/global-scene";
 import { getFrameMs, isNullOrUndefined } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
@@ -10,11 +16,37 @@ import type { MoveId } from "#enums/move-id";
 import type { easeFunctions } from "#app/data/animations/ease-functions";
 
 export interface AnimConfig {
+  /**
+   * If this is for a {@linkcode MoveAnim}, this specifies the {@linkcode MoveId}
+   * associated with the animation.
+   */
   readonly id?: MoveId;
+
+  /** The file name for VFX assets used in this animation */
   readonly graphic?: string;
+
+  /**
+   * Contains all {@linkcode AnimProp | properties} applied to the sprite
+   * of the "source" object (e.g. the {@linkcode Pokemon} using the move)
+   */
   readonly sourceProperties?: AnimProp;
+
+  /**
+   * Contains all {@linkcode AnimProp | properties} applied to the sprite
+   * of the "target" object (e.g. the {@linkcode Pokemon} targeted by a move)
+   */
   readonly targetProperties?: AnimProp;
+
+  /**
+   * Contains all {@linkcode AnimProp | properties} applied to the
+   * animation's VFX element
+   */
   readonly vfxProperties?: AnimProp;
+
+  /**
+   * Contains all {@linkcode AnimTimedEvent | timed events} played
+   * during the animation
+   */
   readonly timedEvents?: AnimTimedEvent[];
 }
 
@@ -37,45 +69,116 @@ export interface AnimProp {
    */
   readonly y: AnimKeyFrame<number>[];
 
+  /** Horizontal scale factor (%) */
   readonly scaleX?: AnimKeyFrame<number>[];
 
+  /** Vertical scale factor (%) */
   readonly scaleY?: AnimKeyFrame<number>[];
 
+  /** The alpha value for the sprite, in the range [0, 255] */
   readonly alpha?: AnimKeyFrame<number>[];
 
+  /**
+   * The rotation angle of the sprite in degrees.
+   * Phaser uses a right-hand clockwise rotation system, where 0 is right,
+   * 90 is down, and -90 is up. The value of this should be in the interval
+   * [-180, 180].
+   */
   readonly angle?: AnimKeyFrame<number>[];
 
+  /** When `true`, the sprite is flipped horizontally */
   readonly mirror?: AnimKeyFrame<boolean>[];
 
+  /** When `false`, the sprite is hidden */
   readonly visible?: AnimKeyFrame<boolean>[];
 
+  /**
+   * The blend mode to specify how the sprite is rendered on the canvas
+   * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
+   */
   readonly blendType?: AnimKeyFrame<AnimBlendType>[];
 
+  /** If this is a VFX property, specifies the graphic's tile index */
   readonly graphicFrame?: AnimKeyFrame<number>[];
 
+  /** A tone to pipeline over the animated sprite (RGBA, A is optional) */
   readonly tone?: AnimKeyFrame<number[]>[];
 
+  /**
+   * The z-depth of the animated sprite during the tween
+   * - 0 is behind all other sprites (except BG)
+   * - 1 is on top of player field
+   * - 3 is on top of both fields
+   * - 5 is on top of player sprite
+   */
   readonly priority?: AnimKeyFrame<0 | 1 | 3 | 5>[];
 }
 
 export interface AnimKeyFrame<ValueType> {
+  /** The end value for the keyframe */
   readonly value: ValueType;
+  /**
+   * The duration (in frames) of the tween played for this keyframe.
+   * This is ignored if the keyframe's `ValueType` is `boolean`.
+   */
   readonly duration?: number;
+  /**
+   * The time (in frames) between the start of this keyframe and the
+   * end of the last keyframe (or t=0)
+   */
   readonly delay?: number;
+  /**
+   * The easing function used to interpolate intermediate values.
+   * This is ignored if the keyframe's `ValueType` is `boolean`.
+   */
   readonly ease?: (typeof easeFunctions)[number];
 }
 
 export interface AnimTimedEvent {
+  /**
+   * The type of timed event. Currently supported events include:
+   * - "AnimTimedSoundEvent": for SFX
+   * - "AnimTimedAddBgEvent": for initializing a background image
+   * - "AnimTimedUpdateBgEvent": for updating the background image
+   */
   readonly eventType: string;
+
+  /** The start time for the event */
   readonly time: number;
+
+  /** The name of the file containing assets used in the event */
   readonly resourceName: string;
 
+  // Timed Sound Event fields
+
+  /**
+   * The volume of the played sound effect (%).
+   * @default 100
+   */
   readonly volume?: number;
+
+  /**
+   * The pitch of the played sound effect (%).
+   * @default 100
+   */
   readonly pitch?: number;
 
+  // Background Image Event fields
+
+  /** The x-coordinate of the background image */
   readonly bgX?: number;
+
+  /** The y-coordinate of the background image */
   readonly bgY?: number;
+
+  /** The amount of time the image is displayed (in frames) */
   readonly duration?: number;
+
+  /**
+   * Scale factor (%) for the background image.
+   * @default 100
+   */
+  readonly scale?: number;
 }
 
 /** @deprecated */
