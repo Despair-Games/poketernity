@@ -108,7 +108,8 @@ export abstract class FormChangeBasePhase extends Phase {
           sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],
             hasShadow: false,
-            teraColor: getTypeRgb(this.pokemon.getTeraType()),
+            teraColor: getTypeRgb(this.pokemon.teraType),
+            isTerastallized: this.pokemon.isTerastallized,
           });
           sprite.setPipelineData("ignoreTimeTint", true);
           sprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());

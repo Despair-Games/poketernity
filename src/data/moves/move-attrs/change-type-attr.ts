@@ -24,7 +24,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
   }
 
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
-    target.summonData.types = [this.type];
+    target.setTemporaryTypes(this.type);
     target.updateInfo();
 
     globalScene.phaseManager.queueMessagePhase(
@@ -39,7 +39,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) =>
-      !target.isTerastallized()
+      !target.isTerastallized
       && !target.hasAbility(AbilityId.MULTITYPE)
       && !target.hasAbility(AbilityId.RKS_SYSTEM)
       && !(target.getTypes().length === 1 && target.getTypes()[0] === this.type);

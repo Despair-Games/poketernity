@@ -1,8 +1,9 @@
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { fixedNumber, randInt } from "#app/utils";
 import type Phaser from "phaser";
 
-export default class PokemonSpriteSparkleHandler {
+export default class PokemonSpriteTeraSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
 
   private counterTween?: Phaser.Tweens.Tween;
@@ -31,6 +32,9 @@ export default class PokemonSpriteSparkleHandler {
         continue;
       }
       if (!s.visible || (s.parentContainer.type === "Pokemon" && !s.parentContainer.parentContainer)) {
+        continue;
+      }
+      if (!(s.parentContainer.type === "Pokemon") || !(s.parentContainer as Pokemon).isTerastallized) {
         continue;
       }
       const pokemon = s.parentContainer.type === "Pokemon" ? s.parentContainer : null;

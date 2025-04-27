@@ -2,6 +2,7 @@ import { AquaRingTag } from "#app/data/battler-tags/aqua-ring-tag";
 import { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { BeakBlastChargingTag } from "#app/data/battler-tags/beak-blast-charging-tag";
+import { BideTag } from "#app/data/battler-tags/bide-tag";
 import { BindTag } from "#app/data/battler-tags/bind-tag";
 import { BypassSpeedTag } from "#app/data/battler-tags/bypass-speed-tag";
 import { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
@@ -319,6 +320,8 @@ export function getBattlerTag(
       return new SnatchingTag();
     case BattlerTagType.ME_FIRST_POWER_BOOST:
       return new MeFirstPowerBoostTag();
+    case BattlerTagType.BIDE:
+      return new BideTag();
     case BattlerTagType.NONE:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
   }

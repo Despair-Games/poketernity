@@ -336,12 +336,13 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.genderText.setPositionRelative(this.nameText, nameTextWidth, 0);
     setTextColor(this.genderText, getGenderTextStyle(pokemon.gender));
 
-    this.lastTeraType = pokemon.getTeraType();
+    this.lastTeraType = pokemon.isTerastallized ? pokemon.teraType : ElementalType.UNKNOWN;
 
     this.teraIcon.setPositionRelative(this.nameText, nameTextWidth + this.genderText.displayWidth + 1, 2);
-    this.teraIcon.setVisible(this.lastTeraType !== ElementalType.UNKNOWN);
+    this.teraIcon.setVisible(pokemon.isTerastallized);
+    this.teraIcon.setTintFill(Phaser.Display.Color.GetColor(...getTypeRgb(this.lastTeraType)));
     this.teraIcon.on("pointerover", () => {
-      if (this.lastTeraType !== ElementalType.UNKNOWN) {
+      if (pokemon.isTerastallized) {
         globalScene.ui.showTooltip(
           "",
           i18next.t("fightUiHandler:teraHover", {
@@ -587,11 +588,11 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         this.genderText.setPositionRelative(this.nameText, this.nameText.displayWidth, 0);
       }
 
-      const teraType = pokemon.getTeraType();
+      const teraType = pokemon.isTerastallized ? pokemon.teraType : ElementalType.UNKNOWN;
       const teraTypeUpdated = this.lastTeraType !== teraType;
 
       if (teraTypeUpdated) {
-        this.teraIcon.setVisible(teraType !== ElementalType.UNKNOWN);
+        this.teraIcon.setVisible(pokemon.isTerastallized);
         this.teraIcon.setPositionRelative(
           this.nameText,
           this.nameText.displayWidth + this.genderText.displayWidth + 1,

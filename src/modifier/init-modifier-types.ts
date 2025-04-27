@@ -1,5 +1,4 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import {
   BoostBugSpawnModifier,
   BypassSpeedChanceModifier,
@@ -70,14 +69,12 @@ import {
   RememberMoveModifierType,
   SpeciesStatBoosterModifierTypeGenerator,
   TempStatStageBoosterModifierTypeGenerator,
-  TerastallizeModifierType,
   TmModifierTypeGenerator,
   TurnHeldItemTransferModifierType,
 } from "#app/modifier/modifier-type";
-import { modifierTypes } from "./modifier-types";
-import { getEnumValues, randSeedInt, randSeedItem } from "#app/utils";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { getEnumValues, randSeedInt } from "#app/utils";
 import { BerryType } from "#enums/berry-type";
-import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball-type";
@@ -209,24 +206,6 @@ export function initModifierTypes() {
         return new PokemonNatureChangeModifierType(pregenArgs[0] as Nature);
       }
       return new PokemonNatureChangeModifierType(randSeedInt(getEnumValues(Nature).length) as Nature);
-    });
-
-  modifierTypes.TERA_SHARD = () =>
-    new ModifierTypeGenerator((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementalType) {
-        return new TerastallizeModifierType(pregenArgs[0] as ElementalType);
-      }
-      if (!globalScene.getModifiers(TerastallizeAccessModifier).length) {
-        return null;
-      }
-      let type: ElementalType;
-      if (!randSeedInt(3)) {
-        const partyMemberTypes = party.map((p) => p.getTypes(false, false, true)).flat();
-        type = randSeedItem(partyMemberTypes);
-      } else {
-        type = randSeedInt(64) ? (randSeedInt(18) as ElementalType) : ElementalType.STELLAR;
-      }
-      return new TerastallizeModifierType(type);
     });
 
   modifierTypes.BERRY = () =>

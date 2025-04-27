@@ -1,3 +1,4 @@
+import type { FightCommand } from "#app/@types/FightCommand";
 import type { InfoToggle } from "#app/battle-scene";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,6 +8,8 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_WIDTH } from "#app/constants/ui";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { fixedNumber, leftPad } from "#app/utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -18,8 +21,6 @@ import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { UiHandler } from "./abstract-ui-handler";
-import type { CommandUiHandler } from "./command-ui-handler";
 
 export class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
@@ -38,6 +39,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   private moveInfoOverlay: MoveInfoOverlay;
 
   protected fieldIndex: number = 0;
+  protected fromCommand: FightCommand = BattleCommand.FIGHT;
   protected cursor2: number = 0;
 
   constructor() {
@@ -126,8 +128,9 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoOverlay.destroy();
   }
 
-  public override show(fieldIndex: number = 0): boolean {
+  public override show(fieldIndex: number = 0, command: FightCommand = BattleCommand.FIGHT): boolean {
     this.fieldIndex = fieldIndex;
+    this.fromCommand = command;
 
     const messageHandler = this.getUi().getMessageHandler();
     messageHandler.bg.setVisible(false);
@@ -148,27 +151,21 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
 
   public override processInput(button: Button): boolean {
     const ui = this.getUi();
-
+    const cursor = this.getCursor();
     let success = false;
 
-    const cursor = this.getCursor();
-
-    if (button === Button.CANCEL || button === Button.ACTION) {
-      if (button === Button.ACTION) {
-        if (
-          (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, cursor, false)
-        ) {
-          success = true;
-        } else {
-          ui.playError();
-        }
+    if (button === Button.ACTION) {
+      if (globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.handleCommand(this.fromCommand, cursor, false)) {
+        success = true;
       } else {
-        // Cannot back out of fight menu if skipToFightInput is enabled
-        const { battleType, mysteryEncounter } = globalScene.currentBattle;
-        if (battleType !== BattleType.MYSTERY_ENCOUNTER || !mysteryEncounter?.skipToFightInput) {
-          ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
-          success = true;
-        }
+        ui.playError();
+      }
+    } else if (button === Button.CANCEL) {
+      // Cannot back out of fight menu if skipToFightInput is enabled
+      const { battleType, mysteryEncounter } = globalScene.currentBattle;
+      if (battleType !== BattleType.MYSTERY_ENCOUNTER || !mysteryEncounter?.skipToFightInput) {
+        ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
+        success = true;
       }
     } else {
       switch (button) {
@@ -242,7 +239,9 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     }
 
     if (!this.cursorObj) {
-      this.cursorObj = globalScene.add.image(0, 0, "cursor");
+      const isTera = this.fromCommand === BattleCommand.TERA;
+      this.cursorObj = globalScene.add.image(0, 0, isTera ? "cursor_tera" : "cursor");
+      this.cursorObj.setScale(isTera ? 0.7 : 1);
       ui.add(this.cursorObj);
     }
 

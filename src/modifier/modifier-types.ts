@@ -47,7 +47,6 @@ interface ModifierTypes {
   BASE_STAT_BOOSTER: () => ModifierType;
   ATTACK_TYPE_BOOSTER: () => ModifierType;
   MINT: () => ModifierType;
-  TERA_SHARD: () => ModifierTypeGenerator;
   BERRY: () => ModifierType;
   TM_COMMON: () => ModifierType;
   TM_GREAT: () => ModifierType;

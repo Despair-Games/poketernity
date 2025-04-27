@@ -216,6 +216,7 @@ export class EncounterPhase extends BattlePhase {
       console.log(
         `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
         `| Species ID: ${enemyPokemon.species.speciesId}`,
+        `| Level: ${enemyPokemon.level}`,
         `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
       );
       console.log(`Stats (IVs): ${stats}`);
@@ -306,6 +307,10 @@ export class EncounterPhase extends BattlePhase {
         globalScene.getEnemyField().forEach((enemy) => {
           overrideHeldItems(enemy, false);
         });
+      }
+
+      if (battleType === BattleType.TRAINER) {
+        trainer?.genAI(globalScene.getEnemyParty());
       }
 
       ui.setMessageMode().then(() => {

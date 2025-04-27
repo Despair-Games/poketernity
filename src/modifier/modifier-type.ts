@@ -1,8 +1,8 @@
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants/ui";
-import { allMoves } from "#app/data/data-lists";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
+import { allMoves } from "#app/data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
 import { pokemonFormChanges, SpeciesFormChangeCondition } from "#app/data/pokemon-forms";
@@ -44,7 +44,6 @@ import {
   RememberMoveModifier,
   SpeciesStatBoosterModifier,
   TempStatStageBoosterModifier,
-  TerastallizeModifier,
   TmModifier,
   TurnHeldItemTransferModifier,
   type Modifier,
@@ -1500,37 +1499,6 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
   }
 }
 
-export class TerastallizeModifierType extends PokemonHeldItemModifierType implements GeneratedPersistentModifierType {
-  private teraType: ElementalType;
-
-  constructor(teraType: ElementalType) {
-    super(
-      "",
-      `${ElementalType[teraType].toLowerCase()}_tera_shard`,
-      (type, args) => new TerastallizeModifier(type as TerastallizeModifierType, (args[0] as Pokemon).id, teraType),
-      "tera_shard",
-    );
-
-    this.teraType = teraType;
-  }
-
-  override get name(): string {
-    return i18next.t("modifierType:ModifierType.TerastallizeModifierType.name", {
-      teraType: i18next.t(`pokemonInfo:Type.${ElementalType[this.teraType]}`),
-    });
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.TerastallizeModifierType.description", {
-      teraType: i18next.t(`pokemonInfo:Type.${ElementalType[this.teraType]}`),
-    });
-  }
-
-  getPregenArgs(): any[] {
-    return [this.teraType];
-  }
-}
-
 export class ContactHeldItemTransferChanceModifierType extends PokemonHeldItemModifierType {
   private chancePercent: number;
 
@@ -1619,7 +1587,7 @@ export type GeneratorModifierOverride = {
       type?: Nature;
     }
   | {
-      name: keyof Pick<typeof modifierTypes, "ATTACK_TYPE_BOOSTER" | "TERA_SHARD">;
+      name: keyof Pick<typeof modifierTypes, "ATTACK_TYPE_BOOSTER">;
       type?: ElementalType;
     }
   | {

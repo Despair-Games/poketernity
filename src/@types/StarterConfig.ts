@@ -1,6 +1,7 @@
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { Nature } from "#enums/nature";
 import type { StarterMoveset } from "#app/@types/StarterData";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import type { ElementalType } from "#enums/elemental-type";
+import type { Nature } from "#enums/nature";
 
 export interface StarterConfig {
   species: PokemonSpecies;
@@ -11,4 +12,5 @@ export interface StarterConfig {
   moveset?: StarterMoveset;
   pokerus: boolean;
   nickname?: string;
+  teraType?: ElementalType;
 }

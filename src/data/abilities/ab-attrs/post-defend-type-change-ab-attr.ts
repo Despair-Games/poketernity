@@ -12,10 +12,10 @@ export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
       if (simulated) {
         return true;
       }
-      const type = attacker.getMoveType(move);
+      const moveType = attacker.getMoveType(move);
       const pokemonTypes = pokemon.getTypes(true);
-      if (pokemonTypes.length !== 1 || pokemonTypes[0] !== type) {
-        pokemon.summonData.types = [type];
+      if (pokemonTypes.length !== 1 || pokemonTypes[0] !== moveType) {
+        pokemon.setTemporaryTypes(moveType);
         return true;
       }
     }

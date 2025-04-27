@@ -14,7 +14,7 @@ export enum SettingGamepad {
   Button_Cycle_Gender = "BUTTON_CYCLE_GENDER",
   Button_Cycle_Ability = "BUTTON_CYCLE_ABILITY",
   Button_Cycle_Nature = "BUTTON_CYCLE_NATURE",
-  Button_Cycle_Variant = "BUTTON_CYCLE_VARIANT",
+  Button_Cycle_Tera = "BUTTON_CYCLE_TERA",
   Button_Speed_Up = "BUTTON_SPEED_UP",
   Button_Slow_Down = "BUTTON_SLOW_DOWN",
   Button_Submit = "BUTTON_SUBMIT",

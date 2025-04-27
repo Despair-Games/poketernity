@@ -26,6 +26,9 @@ import { AverageStatsAttr } from "#app/data/moves/move-attrs/average-stats-attr"
 import { AwaitCombinedPledgeAttr } from "#app/data/moves/move-attrs/await-combined-pledge-attr";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";
 import { BeatUpAttr } from "#app/data/moves/move-attrs/beat-up-attr";
+import { BideDamageAttr } from "#app/data/moves/move-attrs/bide-damage-attr";
+import { BideEffectAttr } from "#app/data/moves/move-attrs/bide-effect-attr";
+import { BideMessageAttr } from "#app/data/moves/move-attrs/bide-message-attr";
 import { BlizzardAccuracyAttr } from "#app/data/moves/move-attrs/blizzard-accuracy-attr";
 import { BoostHealAttr } from "#app/data/moves/move-attrs/boost-heal-attr";
 import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
@@ -621,7 +624,14 @@ export function initMoves() {
       .snatchable(),
     new AttackMove(MoveId.BIDE, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, -1, 10, -1, 1, 1)
       .target(MoveTarget.USER)
-      .unimplemented(),
+      .attr(BideEffectAttr)
+      .attr(BideDamageAttr)
+      .attr(BideMessageAttr)
+      /**
+       * - Does not preserve original priority throughout execution
+       * - Is cancelled completely when interrupted by any effect (not just Sleep)
+       */
+      .partial(),
     new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1)
       .attr(MetronomeAttr),
     new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1)
@@ -3259,7 +3269,7 @@ export function initMoves() {
       .attr(TeraBlastTypeAttr)
       .attr(TeraBlastPowerAttr)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1, true, {
-        condition: (user, _target, _move) => user.isTerastallized() && user.isOfType(ElementalType.STELLAR),
+        condition: (user, _target, _move) => user.isTerastallized && user.isOfType(ElementalType.STELLAR),
       }),
     new SelfStatusMove(MoveId.SILK_TRAP, ElementalType.BUG, -1, 10, -1, 4, 9)
       .attr(ProtectAttr, BattlerTagType.SILK_TRAP)
@@ -3476,7 +3486,7 @@ export function initMoves() {
       .attr(TeraMoveCategoryAttr)
       .attr(TeraStarstormTypeAttr)
       .attr(VariableTargetAttr, (user, _target, _move) =>
-        user.species.speciesId === SpeciesId.TERAPAGOS && user.isTerastallized()
+        user.species.speciesId === SpeciesId.TERAPAGOS && user.isTerastallized
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       ),
