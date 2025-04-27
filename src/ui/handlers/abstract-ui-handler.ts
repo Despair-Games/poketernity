@@ -7,12 +7,12 @@ import type { UiMode } from "#enums/ui-mode";
  * A basic abstract class to act as a holder and processor for UI elements.
  *
  * Subclasses should override the following functions of a handler's lifecycle:
- *  - {@linkcode setup}, called once to initiliaze basic elements of the handler. Will mark it as `ready`.
- *  - {@linkcode show}, called whenever the handler is to be shown. Will mark it as `active`.
- *  - {@linkcode clear}, called when the handler should no longer be shown. Will mark it as no longer `active`
- *     Elements created in `show` should get destroyed here.
- *  - {@linkcode destroy}, called when the handler will never be of use again. Will mark it as no longer `ready`.
- *     Any remaining element should get destroyed here.
+ *  - {@linkcode setup}, called once to initiliaze basic elements of the handler. Will be marked as `ready` once done.
+ *  - {@linkcode show}, called whenever the handler is to be shown. Will be marked as `active` once done.
+ *  - {@linkcode clear}, called when the handler should no longer be shown.
+ *     Will be marked as no longer `active` once done. Elements created in `show` should get destroyed here.
+ *  - {@linkcode tearDown}, called when the handler will never be of use again.
+ *     Will be marked as no longer `ready` once done. Any remaining element should get destroyed here.
  */
 export abstract class UiHandler {
   protected mode: number | null;
@@ -20,7 +20,7 @@ export abstract class UiHandler {
 
   /**
    * Whether the handler is setup and ready to be displayed through calling {@linkcode start}.
-   * note: unused for now since all handlers are ready at all times.
+   * note: not relevant for now since all handlers are ready at all times.
    */
   private _ready: boolean = false;
 
@@ -49,7 +49,7 @@ export abstract class UiHandler {
    * Should not be overridden. Calls {@linkcode setup}, which subclasses should override.
    */
   public initialize(): void {
-    if (this._ready) {
+    if (this.ready) {
       console.warn("Attempting to initialize an already ready handler. Aborting.");
       return;
     }

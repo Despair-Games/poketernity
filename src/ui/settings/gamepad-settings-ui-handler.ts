@@ -17,6 +17,7 @@ import { truncateString } from "#app/utils";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app";
+import { UiMode } from "#enums/ui-mode";
 
 /**
  * Class representing the settings UI handler for gamepads.
@@ -24,13 +25,8 @@ import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app";
  * @extends AbstractControlSettingsUiHandler
  */
 export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
-  /**
-   * Creates an instance of GamepadSettingsUiHandler.
-   *
-   * @param mode - The UI mode, optional.
-   */
   constructor() {
-    super();
+    super(UiMode.SETTINGS_GAMEPAD);
     this.titleSelected = "Gamepad";
     this.setting = SettingGamepad;
     this.settingDeviceDefaults = settingGamepadDefaults;

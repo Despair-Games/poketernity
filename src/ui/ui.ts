@@ -223,7 +223,7 @@ export class UI extends Phaser.GameObjects.Container {
     globalScene.updateGameInfo();
   }
 
-  override destroy(fromScene?: boolean): void {
+  public override destroy(fromScene?: boolean): void {
     // Clear references to current handlers in the NavigationManager
     NavigationManager.getInstance().clearMenus();
 

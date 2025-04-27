@@ -6,11 +6,6 @@ import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
   private onWindowResizeEvent = () => this.updateMoveTouchControlsSettingsLabel();
 
-  /**
-   * Creates an instance of SettingsGamepadUiHandler.
-   *
-   * @param mode - The UI mode, optional.
-   */
   constructor() {
     super("general", generalSettingsUiItems);
   }

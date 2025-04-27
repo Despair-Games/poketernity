@@ -892,7 +892,7 @@ export default class BattleScene extends SceneBase {
   }
 
   // store info toggles to be accessible by the ui
-  addInfoToggle(infoToggle: InfoToggle): void {
+  public addInfoToggle(infoToggle: InfoToggle): void {
     this.infoToggles.push(infoToggle);
   }
 
@@ -902,7 +902,7 @@ export default class BattleScene extends SceneBase {
    * @param infoToggle - The {@linkcode InfoToggle} instance to be removed. If the toggle
    *                     is not found in the array, no action is taken.
    */
-  removeInfoToggle(infoToggle: InfoToggle): void {
+  public removeInfoToggle(infoToggle: InfoToggle): void {
     const infoToggleIndex = this.infoToggles.indexOf(infoToggle);
     if (infoToggleIndex !== -1) {
       this.infoToggles.splice(infoToggleIndex, 1);
@@ -910,7 +910,7 @@ export default class BattleScene extends SceneBase {
   }
 
   // return the stored info toggles; used by ui-inputs
-  getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
+  public getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
     return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
   }
 
@@ -1194,7 +1194,7 @@ export default class BattleScene extends SceneBase {
           this.phaseManager.clearPhaseQueue();
 
           // stop the tera sparkle handler
-          this.spriteSparkleHandler.destroy();
+          this.spriteTeraSparkleHandler.destroy();
 
           // destroy elements placed directly on the scene
           this.arenaBg.destroy();

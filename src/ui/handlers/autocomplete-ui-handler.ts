@@ -12,6 +12,7 @@ export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   }
 
   protected override clear(): void {
+    super.clear();
     this.modalContainer = undefined;
   }
 

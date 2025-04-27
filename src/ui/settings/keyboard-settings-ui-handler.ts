@@ -26,13 +26,9 @@ import { UiMode } from "#enums/ui-mode";
 export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;
   private homeKey: Phaser.Input.Keyboard.Key | undefined;
-  /**
-   * Creates an instance of KeyboardSettingsUiHandler.
-   *
-   * @param mode - The UI mode, optional.
-   */
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+
+  constructor() {
+    super(UiMode.SETTINGS_KEYBOARD);
     this.titleSelected = "Keyboard";
     this.setting = SettingKeyboard;
     this.settingDeviceDefaults = settingKeyboardDefaults;
