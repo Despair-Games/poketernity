@@ -5,68 +5,90 @@ import { AnimBlendType } from "#enums/anim-blend-type";
 import { MoveId } from "#enums/move-id";
 import type { JSONSchemaType } from "ajv";
 
+const keyframeOptions = {
+  /** The duration (in frames) of the tween played for this keyframe */
+  duration: {
+    type: "integer",
+    minimum: 0,
+    nullable: true,
+  },
+
+  /**
+   * The time (in frames) between when the previous keyframe's tween
+   * ends and this keyframe's tween begins
+   */
+  delay: {
+    type: "integer",
+    minimum: 0,
+    nullable: true,
+  },
+} as const;
+
+const easeOption = {
+  /**
+   * The easing function used to interpolate intermediate values during the tween.
+   * @see {@linkcode easeFunctions}
+   */
+  ease: {
+    type: "string",
+    enum: easeFunctions,
+    nullable: true,
+  },
+} as const;
+
 /**
- * Constructs a {@linkcode JSONSchemaType | Schema} for an array of keyframes
- * with the provided specification for `value`
- * @param valueSpec - An object containing the JSON Schema specification for a
- * `value` property, e.g.
- * ```ts
+ * Generates a JSON Schema for an array of keyframes with number values.
+ * @param valueSpec The JSON Schema specification for the "value" property, e.g.
+ * ```
  * {
  *   type: "number",
- *   minimum: 0
+ *   minimum: 0,
  * }
  * ```
- * @param easeable - Does this property have intermediate values that are interpolated
- * with an {@linkcode easeFunctions | ease function}? (default `true`)
+ * @returns the {@linkcode JSONSchemaType | Schema} object for the keyframe set
  */
-function getKeyFrameSetSchema<ValueType>(
-  valueSpec: JSONSchemaType<ValueType>,
-  easeable: boolean = true,
-): JSONSchemaType<AnimKeyFrame<ValueType>[]> {
-  const keyframeOptions = {
-    /** The duration (in frames) of the tween played for this keyframe */
-    duration: {
-      type: "integer",
-      minimum: 0,
-      nullable: true,
-    },
-
-    /**
-     * The time (in frames) between when the previous keyframe's tween
-     * ends and this keyframe's tween begins
-     */
-    delay: {
-      type: "integer",
-      minimum: 0,
-      nullable: true,
-    },
-
-    /**
-     * The easing function used to interpolate intermediate values during the tween.
-     * @see {@linkcode easeFunctions}
-     */
-    ease: easeable
-      ? {
-          type: "string",
-          enum: easeFunctions,
-          nullable: true,
-        }
-      : {
-          type: "null",
-        },
-  } as const;
-
+function getNumberKeyFrameSetSchema(valueSpec: JSONSchemaType<number>): JSONSchemaType<AnimKeyFrame<number>[]> {
   return {
     type: "array",
     items: {
       type: "object",
-      properties: { value: valueSpec, ...keyframeOptions },
+      properties: { value: valueSpec, ...keyframeOptions, ...easeOption },
       additionalProperties: false,
       required: ["value"],
     },
     minItems: 1,
-    nullable: true,
+    readonly: true,
   } as const;
+}
+
+function getBooleanKeyFrameSetSchema(valueSpec: JSONSchemaType<boolean>): JSONSchemaType<AnimKeyFrame<boolean>[]> {
+  return {
+    type: "array",
+    items: {
+      type: "object",
+      /** @todo Remove `easeOption` from this */
+      properties: { value: valueSpec, ...keyframeOptions, ...easeOption },
+      additionalProperties: false,
+      required: ["value"],
+    },
+    minItems: 1,
+    readonly: true,
+  } as const;
+}
+
+function getNumberArrayKeyFrameSetSchema(
+  valueSpec: JSONSchemaType<number[]>,
+): JSONSchemaType<AnimKeyFrame<number[]>[]> {
+  return {
+    type: "array",
+    items: {
+      type: "object",
+      properties: { value: valueSpec, ...keyframeOptions, ...easeOption },
+      additionalProperties: false,
+      required: ["value"],
+    },
+    readonly: true,
+  };
 }
 
 /**
@@ -83,14 +105,14 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
      * the origin point is away from the source. If `u = 0`, then the origin point is
      * the source; if `u = 1`, then the origin point is the target.
      */
-    u: getKeyFrameSetSchema<number>({
+    u: getNumberKeyFrameSetSchema({
       type: "number",
       minimum: 0,
       maximum: 1,
     }),
 
     /** The horizontal coordinate relative to the keyframe's origin point. */
-    x: getKeyFrameSetSchema<number>({
+    x: getNumberKeyFrameSetSchema({
       type: "number",
     }),
 
@@ -98,28 +120,37 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
      * The vertical coordinate relative to the keyframe's origin point.
      * An increase in `y` will move the sprite downward.
      */
-    y: getKeyFrameSetSchema<number>({
+    y: getNumberKeyFrameSetSchema({
       type: "number",
     }),
 
     /** Horizontal scale factor (%) */
-    scaleX: getKeyFrameSetSchema<number>({
-      type: "number",
-      minimum: 0,
-    }),
+    scaleX: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: 0,
+      }),
+      nullable: true,
+    },
 
     /** Vertical scale factor (%) */
-    scaleY: getKeyFrameSetSchema<number>({
-      type: "number",
-      minimum: 0,
-    }),
+    scaleY: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: 0,
+      }),
+      nullable: true,
+    },
 
     /** The alpha value for the animated sprite, in the range [0, 255] */
-    alpha: getKeyFrameSetSchema<number>({
-      type: "number",
-      minimum: 0,
-      maximum: 255,
-    }),
+    alpha: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: 0,
+        maximum: 255,
+      }),
+      nullable: true,
+    },
 
     /**
      * The rotation angle of the sprite in degrees.
@@ -127,17 +158,26 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
      * 90 is down, and -90 is up. The value of this should be in the interval
      * [-180, 180].
      */
-    angle: getKeyFrameSetSchema<number>({
-      type: "number",
-      minimum: -180,
-      maximum: 180,
-    }),
+    angle: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: -180,
+        maximum: 180,
+      }),
+      nullable: true,
+    },
 
     /** If `true`, flips the sprite horizontally */
-    mirror: getKeyFrameSetSchema<boolean>({ type: "boolean" }, false),
+    mirror: {
+      ...getBooleanKeyFrameSetSchema({ type: "boolean" }),
+      nullable: true,
+    },
 
     /** If `false`, hides the sprite */
-    visible: getKeyFrameSetSchema<boolean>({ type: "boolean" }, false),
+    visible: {
+      ...getBooleanKeyFrameSetSchema({ type: "boolean" }),
+      nullable: true,
+    },
 
     /**
      * The blend mode to specify how the sprite is rendered on the canvas
@@ -146,24 +186,27 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
      * - Is this still required?
      * - Should it be a keyframe property?
      */
-    blendType: getKeyFrameSetSchema<number>(
-      {
+    blendType: {
+      ...getNumberKeyFrameSetSchema({
         type: "integer",
         enum: getEnumValues(AnimBlendType),
-      },
-      false,
-    ),
+      }),
+      nullable: true,
+    },
 
     /**
      * If this keyframe is for a graphic, specifies the tile index used
      * for the graphic during the tween. This is only relevant for VFX
      * properties.
      */
-    graphicFrame: getKeyFrameSetSchema<number>({ type: "integer" }, false),
+    graphicFrame: {
+      ...getNumberKeyFrameSetSchema({ type: "integer" }),
+      nullable: true,
+    },
 
     /** A tone to pipeline over the animated sprite (RGBA) */
-    tone: getKeyFrameSetSchema<number[]>(
-      {
+    tone: {
+      ...getNumberArrayKeyFrameSetSchema({
         type: "array",
         items: {
           type: "integer",
@@ -172,9 +215,9 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
         },
         minItems: 3,
         maxItems: 4,
-      },
-      false,
-    ),
+      }),
+      nullable: true,
+    },
 
     /**
      * The z-depth of the animated sprite during the tween
@@ -183,15 +226,15 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
      * - 3 is on top of both fields
      * - 5 is on top of player sprite
      */
-    priority: getKeyFrameSetSchema<number>(
-      {
+    priority: {
+      ...getNumberKeyFrameSetSchema({
         type: "integer",
         enum: [0, 1, 3, 5],
-      },
-      false,
-    ),
+      }),
+      nullable: true,
+    },
   },
-  required: [],
+  required: ["u", "x", "y"],
   additionalProperties: false,
   readonly: true,
   nullable: true,
@@ -312,20 +355,20 @@ export const animConfigSchema: JSONSchemaType<AnimConfig> = {
      * "source" object (e.g. the {@linkcode Pokemon} using a move)
      * @see {@linkcode animPropSchema}
      */
-    sourceProperties: animPropSchema,
+    sourceProperties: { ...animPropSchema, nullable: true },
 
     /**
      * Contains all properties applied to the sprite of the
      * "target" object (e.g. the {@linkcode Pokemon} attacked by a move)
      * @see {@linkcode animPropSchema}
      */
-    targetProperties: animPropSchema,
+    targetProperties: { ...animPropSchema, nullable: true },
 
     /**
      * Contains all properties applied to the animation's VFX
      * @see {@linkcode animPropSchema}
      */
-    vfxProperties: animPropSchema,
+    vfxProperties: { ...animPropSchema, nullable: true },
 
     /**
      * Contains all timed events played during the animation.

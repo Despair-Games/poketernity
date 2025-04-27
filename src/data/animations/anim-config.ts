@@ -26,16 +26,16 @@ export interface AnimProp {
    * the origin point is away from the source. If `u = 0`, then the origin point is
    * the source; if `u = 1`, then the origin point is the target.
    */
-  readonly u?: AnimKeyFrame<number>[];
+  readonly u: AnimKeyFrame<number>[];
 
   /** The horizontal coordinate relative to the keyframe's origin point. */
-  readonly x?: AnimKeyFrame<number>[];
+  readonly x: AnimKeyFrame<number>[];
 
   /**
    * The vertical coordinate relative to the keyframe's origin point.
    * An increase in `y` will move the sprite downward.
    */
-  readonly y?: AnimKeyFrame<number>[];
+  readonly y: AnimKeyFrame<number>[];
 
   readonly scaleX?: AnimKeyFrame<number>[];
 
