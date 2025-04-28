@@ -63,7 +63,7 @@ describe("Abilities - Steadfast", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     move.use(MoveId.SPLASH);
-    await move.selectEnemyMove(MoveId.SPLASH);
+    await move.forceEnemyMove(MoveId.QUICK_ATTACK);
     await phaseInterceptor.to("MessagePhase", false);
 
     expect(playerPkm).not.toHaveFlinched();
