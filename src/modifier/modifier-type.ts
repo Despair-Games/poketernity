@@ -55,15 +55,8 @@ import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { getModifierTierTextTint } from "#app/ui/text/text-utils";
-import {
-  formatMoney,
-  getEnumKeys,
-  getEnumValues,
-  isNullOrUndefined,
-  leftPad,
-  NumberHolder,
-  randSeedInt,
-} from "#app/utils/utils";
+import { formatMoney, getEnumKeys, getEnumValues, isNullOrUndefined, leftPad, NumberHolder } from "#app/utils/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";

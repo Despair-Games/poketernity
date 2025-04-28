@@ -73,7 +73,8 @@ import {
   TurnHeldItemTransferModifierType,
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { getEnumValues, randSeedInt } from "#app/utils/utils";
+import { getEnumValues } from "#app/utils/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { Nature } from "#enums/nature";

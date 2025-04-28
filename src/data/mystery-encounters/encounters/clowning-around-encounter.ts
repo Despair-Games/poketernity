@@ -29,7 +29,7 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { randSeedInt, randSeedShuffle } from "#app/utils/utils";
+import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";

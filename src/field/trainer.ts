@@ -11,7 +11,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/utils";
+import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";

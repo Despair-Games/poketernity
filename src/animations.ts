@@ -2,7 +2,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { BattleAnim } from "./data/animations/battle-anims";
 // -- end tsdoc imports --
-import { getFrameMs, randGauss, randInt, type BooleanHolder } from "#app/utils/utils";
+import { getFrameMs, type BooleanHolder } from "#app/utils/utils";
+import { randInt } from "./utils/random-utils";
+import { randGauss } from "./utils/random-utils";
 import { PokeballType } from "#enums/pokeball-type";
 import type { Variant } from "./data/variant";
 import type BattleScene from "./battle-scene";

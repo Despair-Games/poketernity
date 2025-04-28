@@ -155,10 +155,10 @@ import {
   getEnumValues,
   getIvsFromId,
   isNullOrUndefined,
-  randSeedInt,
   toDmgValue,
   type nil,
 } from "#app/utils/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,

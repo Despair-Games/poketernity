@@ -22,7 +22,8 @@ import { AttemptRunPhase } from "./phases/attempt-run-phase";
 import { MoveHeaderPhase } from "./phases/move-header-phase";
 import { MovePhase } from "./phases/move-phase";
 import { SwitchSummonPhase } from "./phases/switch-summon-phase";
-import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "./utils/utils";
+import { BooleanHolder, isNullOrUndefined } from "./utils/utils";
+import { randSeedShuffle } from "./utils/random-utils";
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.

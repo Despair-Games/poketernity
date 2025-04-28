@@ -131,12 +131,10 @@ import {
   getIvsFromId,
   isNullOrUndefined,
   NumberHolder,
-  randItem,
-  randomString,
-  randSeedInt,
-  randSeedItem,
   shiftCharCodes,
 } from "#app/utils/utils";
+import { randItem, randSeedInt, randSeedItem } from "./utils/random-utils";
+import { randomString } from "./utils/random-utils";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
