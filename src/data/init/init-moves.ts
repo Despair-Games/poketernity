@@ -26,6 +26,9 @@ import { AverageStatsAttr } from "#app/data/moves/move-attrs/average-stats-attr"
 import { AwaitCombinedPledgeAttr } from "#app/data/moves/move-attrs/await-combined-pledge-attr";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";
 import { BeatUpAttr } from "#app/data/moves/move-attrs/beat-up-attr";
+import { BideDamageAttr } from "#app/data/moves/move-attrs/bide-damage-attr";
+import { BideEffectAttr } from "#app/data/moves/move-attrs/bide-effect-attr";
+import { BideMessageAttr } from "#app/data/moves/move-attrs/bide-message-attr";
 import { BlizzardAccuracyAttr } from "#app/data/moves/move-attrs/blizzard-accuracy-attr";
 import { BoostHealAttr } from "#app/data/moves/move-attrs/boost-heal-attr";
 import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
@@ -621,7 +624,14 @@ export function initMoves() {
       .snatchable(),
     new AttackMove(MoveId.BIDE, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, -1, 10, -1, 1, 1)
       .target(MoveTarget.USER)
-      .unimplemented(),
+      .attr(BideEffectAttr)
+      .attr(BideDamageAttr)
+      .attr(BideMessageAttr)
+      /**
+       * - Does not preserve original priority throughout execution
+       * - Is cancelled completely when interrupted by any effect (not just Sleep)
+       */
+      .partial(),
     new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1)
       .attr(MetronomeAttr),
     new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1)
@@ -1476,7 +1486,7 @@ export function initMoves() {
       .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
       .triageMove()
       .snatchable()
-      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already healthy
+      .edgeCase(), // Arena tag should also activate upon Ally Switch being used (currently unimplemented)
     new AttackMove(MoveId.BRINE, ElementalType.WATER, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 4)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.getHpRatio() < 0.5 ? 2 : 1)),
     new AttackMove(MoveId.NATURAL_GIFT, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 100, 15, -1, 0, 4)
@@ -1790,7 +1800,7 @@ export function initMoves() {
       .danceMove()
       .triageMove()
       .snatchable()
-      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already perfectly healthy
+      .edgeCase(), // Arena tag should also activate upon Ally Switch being used (currently unimplemented)
     new AttackMove(MoveId.CRUSH_GRIP, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 100, 5, -1, 0, 4)
       .attr(OpponentHighHpPowerAttr, 120),
     new AttackMove(MoveId.MAGMA_STORM, ElementalType.FIRE, MoveCategory.SPECIAL, 100, 75, 5, -1, 0, 4)

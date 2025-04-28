@@ -7,10 +7,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
 import type { EffectiveStat, PermanentStat } from "#enums/stat";
+import type { StatusEffect } from "#enums/status-effect";
 import type { WeatherType } from "#enums/weather-type";
 import type { ToHaveEffectiveStatMatcherOptions } from "#test/matchers/to-have-effective-stat-matcher";
 import type { ToHaveMoveResultMatcherOptions } from "#test/matchers/to-have-move-result-matcher";
 import type { ToHaveStatMatcherOptions } from "#test/matchers/to-have-stat-matcher";
+import type { ToHaveStatusEffectMatcherOptions } from "#test/matchers/to-have-status-effect-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/matchers/to-have-used-move-matcher";
 import "vitest";
 
@@ -65,6 +67,13 @@ declare module "vitest" {
      * @param expectedDamageTaken The expected amount of damage the {@linkcode Pokemon} has taken
      */
     toHaveTakenDamage(expectedDamageTaken: number): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has a specific non-volatile status effect
+     * @param expectedStatusEffect - The expected {@linkcode StatusEffect}
+     * @param options - The {@linkcode ToHaveStatusEffectMatcherOptions} (optional)
+     */
+    toHaveStatusEffect(expectedStatusEffect: StatusEffect, options?: ToHaveStatusEffectMatcherOptions): void;
 
     /**
      * Matcher to check if the {@linkcode WeatherType} is as expected

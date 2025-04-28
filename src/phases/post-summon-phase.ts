@@ -6,6 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
@@ -26,6 +27,10 @@ export class PostSummonPhase extends PokemonPhase {
     if (pokemon.hasStatusEffect(StatusEffect.TOXIC)) {
       pokemon.status!.toxicTurnCount = 0;
     }
+
+    // Apply pending heal effects from Healing Wish and Lunar Dance.
+    globalScene.arena.applyTags(ArenaTagType.PENDING_HEAL, false, pokemon);
+
     globalScene.arena.applyTags([...EntryHazardArenaTagTypes], false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects

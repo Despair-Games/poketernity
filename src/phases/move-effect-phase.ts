@@ -1,4 +1,5 @@
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { DamageResult } from "#app/@types/DamageResult";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { PostAttackAbAttr } from "#app/data/abilities/ab-attrs/post-attack-ab-attr";
@@ -6,6 +7,7 @@ import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-
 import type { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveAnim } from "#app/data/animations/move-anim";
+import type { BideTag } from "#app/data/battler-tags/bide-tag";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
@@ -19,7 +21,6 @@ import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
-import type { DamageResult } from "#app/@types/DamageResult";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -527,6 +528,9 @@ export class MoveEffectPhase extends HitCheckPhase {
           globalScene.applyModifiers(DamageMoneyRewardModifier, true, user, new NumberHolder(damage));
         }
 
+        const targetBideTag = target.getTag<BideTag>(BattlerTagType.BIDE);
+        targetBideTag?.updateAttackData(user, damage);
+
         if (isCritical) {
           globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultCriticalHit"));
         }
@@ -608,6 +612,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         this.targets = [allyPokemon.getBattlerIndex()];
       }
     }
+
     /**
      * If this phase isn't for the invoked move's last strike,
      * unshift another MoveEffectPhase for the next strike.
