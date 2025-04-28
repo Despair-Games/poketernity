@@ -5,6 +5,7 @@ import { AnimBlendType } from "#enums/anim-blend-type";
 import { MoveId } from "#enums/move-id";
 import type { JSONSchemaType } from "ajv";
 
+/** JSON Schema properties applicable to keyframes for any animation property. */
 const keyframeOptions = {
   /** The duration (in frames) of the tween played for this keyframe */
   duration: {
@@ -24,6 +25,10 @@ const keyframeOptions = {
   },
 } as const;
 
+/**
+ * JSON Schema property for the easing specification available for most
+ * number-based animation properties.
+ */
 const easeOption = {
   /**
    * The easing function used to interpolate intermediate values during the tween.
@@ -61,6 +66,16 @@ function getNumberKeyFrameSetSchema(valueSpec: JSONSchemaType<number>): JSONSche
   } as const;
 }
 
+/**
+ * Generates a JSON Schema for an array of keyframes with boolean values.
+ * @param valueSpec The JSON Schema specification for the "value" property, e.g.
+ * ```
+ * {
+ *   type: "boolean",
+ * }
+ * ```
+ * @returns the {@linkcode JSONSchemaType | Schema} object for the keyframe set
+ */
 function getBooleanKeyFrameSetSchema(valueSpec: JSONSchemaType<boolean>): JSONSchemaType<AnimKeyFrame<boolean>[]> {
   return {
     type: "array",
@@ -76,6 +91,18 @@ function getBooleanKeyFrameSetSchema(valueSpec: JSONSchemaType<boolean>): JSONSc
   } as const;
 }
 
+/**
+ * Generates a JSON Schema for an array of keyframes with number array values.
+ * @param valueSpec The JSON Schema specification for the "value" property, e.g.
+ * ```
+ * {
+ *   type: "array",
+ *   items: { type: "number" },
+ *   minItems: 1,
+ * }
+ * ```
+ * @returns the {@linkcode JSONSchemaType | Schema} object for the keyframe set
+ */
 function getNumberArrayKeyFrameSetSchema(
   valueSpec: JSONSchemaType<number[]>,
 ): JSONSchemaType<AnimKeyFrame<number[]>[]> {
