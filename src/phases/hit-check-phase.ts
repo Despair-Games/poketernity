@@ -19,6 +19,7 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { BideEffectAttr } from "#app/data/moves/move-attrs/bide-effect-attr";
 
 //#region Types
 
@@ -61,8 +62,10 @@ export abstract class HitCheckPhase extends PokemonPhase {
       return [HitCheckResult.ERROR, 0];
     }
 
+    const isBideAttack = move.hasAttr(BideEffectAttr) && user.getTag(BattlerTagType.BIDE)?.turnCount === 1;
+
     // Moves targeting the user or field bypass accuracy and effectiveness checks
-    if (move.moveTarget === MoveTarget.USER || move.isFieldTarget()) {
+    if ((move.moveTarget === MoveTarget.USER && !isBideAttack) || move.isFieldTarget()) {
       return [HitCheckResult.HIT, 1];
     }
 

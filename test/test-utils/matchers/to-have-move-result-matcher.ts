@@ -1,6 +1,6 @@
 import { MoveResult } from "#enums/move-result";
-import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
-import type { SyncExpectationResult } from "@vitest/expect";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 //#region Types
 
@@ -26,13 +26,14 @@ export interface ToHaveMoveResultMatcherOptions {
  * @returns Whether the matcher passed
  */
 export function toHaveMoveResultMatcher(
+  this: MatcherState,
   received: unknown,
   expectedResult: MoveResult,
   { index = 0, moveCount = 1 }: ToHaveMoveResultMatcherOptions = {},
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }

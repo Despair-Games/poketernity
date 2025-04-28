@@ -16,6 +16,7 @@ import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
 import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
 import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
+import { VariableMoveMessageAttr } from "#app/data/moves/move-attrs/variable-move-message-attr";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -822,8 +823,9 @@ export class MovePhase extends BattlePhase {
   }
 
   /**
-   * Displays the move's usage text to the player, unless it's a charge turn (ie: {@link MoveId.SOLAR_BEAM Solar Beam}),
-   * the pokemon is on a recharge turn (ie: {@link MoveId.HYPER_BEAM Hyper Beam}), or a 2-turn move was interrupted (ie: {@link MoveId.FLY Fly}).
+   * Displays the move's usage text to the player, unless the Pokemon
+   * is on a recharge turn (ie: {@link MoveId.HYPER_BEAM Hyper Beam}),
+   * or a 2-turn move was interrupted (ie: {@link MoveId.FLY Fly}).
    */
   public showMoveText(): void {
     if (this.reflected || this.snatched || this.move.moveId === MoveId.NONE) {
@@ -834,12 +836,25 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
-      i18next.t("battle:useMove", {
+    globalScene.phaseManager.queueMessagePhase(this.getMoveText(), 500);
+  }
+
+  /**
+   * Obtains the move's usage text, accounting for changes from the used move's
+   * {@link VariableMoveMessageAttr} attribute.
+   * @returns the final move message text to display.
+   */
+  private getMoveText(): string {
+    const move = this.move.getMove();
+    /** @todo This call doesn't have a proper "target"; it just reuses the user Pokemon */
+    const variableMessage = move.getAttrs(VariableMoveMessageAttr)[0]?.getMoveMessage(this.pokemon, this.pokemon, move);
+
+    return (
+      variableMessage
+      ?? i18next.t("battle:useMove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
         moveName: this.move.getName(),
-      }),
-      500,
+      })
     );
   }
 

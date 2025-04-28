@@ -1,4 +1,6 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 
 /**
@@ -20,6 +22,13 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
     return false;
   }
 
-  // TODO: Add last turn of Bide
+  /**
+   * Bide can only be copied after it fully executes
+   * @todo Verify this interaction (on Showdown?)
+   */
+  if (copiableMove.move.id === MoveId.BIDE && target.getTag(BattlerTagType.BIDE)) {
+    return false;
+  }
+
   return true;
 };
