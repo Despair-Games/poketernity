@@ -6,11 +6,11 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * Used by Terapagos's Terraform Zero ability.
- * Clears weather and terrain after terastallization
+ * Used by Terapagos's Teraform Zero ability.
+ * Clears weather (including Primal weather) and terrain after terastallization
  * @extends AbAttr
  */
-export class PostTeraClearWeatherAndTerrainAbAttr extends AbAttr {
+export class PostTeraFormChangeClearWeatherTerrainAbAttr extends AbAttr {
   constructor() {
     super(true, true);
 

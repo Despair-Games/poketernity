@@ -54,8 +54,14 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveId - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
+   * @param useTera - If `true`, the Pokemon also chooses to Terastallize. This does not require a Tera Orb. Default: `false`.
    */
-  public select(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+  public select(
+    moveId: MoveId,
+    pkmIndex: 0 | 1 = 0,
+    targetIndex?: BattlerIndex | null,
+    useTera: boolean = false,
+  ): void {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, moveId);
 
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
@@ -66,7 +72,7 @@ export class MoveHelper extends GameManagerHelper {
     });
     this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       (this.game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
-        BattleCommand.FIGHT,
+        useTera ? BattleCommand.TERA : BattleCommand.FIGHT,
         movePosition,
         false,
       );
@@ -88,8 +94,9 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveId - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
+   * @param useTera - If `true`, the Pokemon also chooses to Terastallize. This does not require a Tera Orb. Default: `false`.
    */
-  public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+  public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null, useTera: boolean = false): void {
     const movesetOverride = Array.isArray(Overrides.MOVESET_OVERRIDE)
       ? Overrides.MOVESET_OVERRIDE
       : [Overrides.MOVESET_OVERRIDE];
@@ -101,7 +108,7 @@ export class MoveHelper extends GameManagerHelper {
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
     pokemon.moveset = [new PokemonMove(moveId)];
 
-    this.select(moveId, pkmIndex, targetIndex);
+    this.select(moveId, pkmIndex, targetIndex, useTera);
   }
 
   /**

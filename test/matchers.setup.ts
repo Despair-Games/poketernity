@@ -4,6 +4,7 @@ import { toHaveMoveResultMatcher } from "#test/matchers/to-have-move-result-matc
 import { toHaveStatMatcher } from "#test/matchers/to-have-stat-matcher";
 import { toHaveStatusEffectMatcher } from "#test/matchers/to-have-status-effect-matcher";
 import { toHaveTakenDamageMatcher } from "#test/matchers/to-have-taken-damage-matcher";
+import { toHaveTerrainMatcher } from "#test/matchers/to-have-terrain-matcher";
 import { toHaveUsedMoveMatcher } from "#test/matchers/to-have-used-move-matcher";
 import { toHaveWeatherMatcher } from "#test/matchers/to-have-weather-matcher";
 import { expect } from "vitest";
@@ -20,6 +21,7 @@ expect.extend({
   toHaveEffectiveStat: toHaveEffectiveStatMatcher,
   toHaveTakenDamage: toHaveTakenDamageMatcher,
   toHaveWeather: toHaveWeatherMatcher,
+  toHaveTerrain: toHaveTerrainMatcher,
   toHaveFullHp: toHaveFullHpMatcher,
   toHaveStatusEffect: toHaveStatusEffectMatcher,
 });

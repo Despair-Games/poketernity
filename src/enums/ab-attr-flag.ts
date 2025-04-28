@@ -64,6 +64,7 @@ import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock
 import type { PostMoveUsedAbAttr } from "#app/data/abilities/ab-attrs/post-move-used-ab-attr";
 import type { PostStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-stat-stage-change-ab-attr";
 import type { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
+import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-clear-weather-terrain-ab-attr";
 import type { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
 import type { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
