@@ -11,7 +11,7 @@ import type { GameMode } from "#app/game-mode";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
 import type { BooleanHolder, NumberHolder } from "#app/utils/utils";
 import { randSeedItem } from "#app/utils/random-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
 import { BattleType } from "#enums/battle-type";
 import { Challenges } from "#enums/challenges";
 import { TypeColor, TypeShadowColor } from "#enums/color";

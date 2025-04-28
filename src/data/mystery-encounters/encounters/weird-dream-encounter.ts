@@ -33,7 +33,7 @@ import PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { NumberHolder, isNullOrUndefined } from "#app/utils/utils";
 import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { Challenges } from "#enums/challenges";
 import type { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";

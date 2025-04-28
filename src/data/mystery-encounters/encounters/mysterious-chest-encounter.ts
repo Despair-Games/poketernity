@@ -14,7 +14,7 @@ import {
   getHighestLevelPlayerPokemon,
   koPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
 import { ModifierTier } from "#enums/modifier-tier";
 import { randSeedInt } from "#app/utils/random-utils";

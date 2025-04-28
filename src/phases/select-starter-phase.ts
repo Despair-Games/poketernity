@@ -8,7 +8,7 @@ import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { Gender } from "#enums/gender";
 import { PhaseId } from "#enums/phase-id";

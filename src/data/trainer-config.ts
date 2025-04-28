@@ -8,7 +8,7 @@ import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import { toReadableString } from "#app/utils/string-utils";
 import { randItem, randSeedItem } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";

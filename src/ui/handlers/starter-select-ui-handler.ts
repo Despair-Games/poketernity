@@ -57,7 +57,7 @@ import { rgbHexToRgba } from "#app/utils/color-utils";
 import { capitalizeString } from "#app/utils/string-utils";
 import { leftPad, toReadableString } from "#app/utils/string-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
-import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";

@@ -27,7 +27,7 @@ import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifi
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { randInt } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";

@@ -1,6 +1,6 @@
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import * as RandomUtils from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { Gender } from "#enums/gender";

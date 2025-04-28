@@ -31,7 +31,7 @@ import { PlayerBattleInfo } from "#app/ui/components/battle-info";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { NumberHolder, isNullOrUndefined } from "#app/utils/utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";

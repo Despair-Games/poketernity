@@ -10,7 +10,7 @@ import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getEnumKeys, getEnumValues } from "#app/utils/utils";
 import { randSeedShuffle } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { Button } from "#enums/buttons";
 import { EggTier } from "#enums/egg-type";
 import { GachaType } from "#enums/gacha-types";

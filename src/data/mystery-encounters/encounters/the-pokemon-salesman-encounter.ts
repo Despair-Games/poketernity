@@ -16,7 +16,7 @@ import {
   getSpriteKeysFromPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { speciesStarterCosts } from "#app/data/starters";
 import { SpeciesId } from "#enums/species-id";
 import { PokeballType } from "#enums/pokeball-type";

@@ -8,7 +8,7 @@ import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { variantData } from "#app/data/variant";
 import { randSeedItem } from "#app/utils/random-utils";
 import { randSeedGauss } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { GrowthRate } from "#enums/growth-rates";

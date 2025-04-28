@@ -168,7 +168,7 @@ import {
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";

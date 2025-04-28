@@ -33,7 +33,7 @@ import Overrides from "#app/overrides";
 import { getIvsFromId } from "#app/utils/utils";
 import { randInt, randSeedInt } from "#app/utils/random-utils";
 import { randomString } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
