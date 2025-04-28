@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { setTextColor } from "#app/ui/text/text-utils";
-import { formatText } from "#app/utils/utils";
+import { formatText } from "#app/utils/string-utils";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";

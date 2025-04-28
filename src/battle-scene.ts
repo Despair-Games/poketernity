@@ -126,13 +126,13 @@ import {
   type AbstractConstructor,
   BooleanHolder,
   fixedNumber,
-  formatMoney,
   getEnumValues,
   getIvsFromId,
   isNullOrUndefined,
   NumberHolder,
-  shiftCharCodes,
 } from "#app/utils/utils";
+import { formatMoney } from "./utils/string-utils";
+import { shiftCharCodes } from "./utils/string-utils";
 import { randItem, randSeedInt, randSeedItem } from "./utils/random-utils";
 import { randomString } from "./utils/random-utils";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";

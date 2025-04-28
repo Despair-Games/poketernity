@@ -1,5 +1,5 @@
 import { expect, describe, it, beforeAll } from "vitest";
-import { leftPad } from "#app/utils/utils";
+import { leftPad } from "#app/utils/string-utils";
 import { randomString } from "#app/utils/random-utils";
 
 import Phaser from "phaser";

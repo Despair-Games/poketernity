@@ -52,16 +52,9 @@ import type {
 } from "#app/ui/interfaces/option-select-config";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import {
-  BooleanHolder,
-  NumberHolder,
-  capitalizeString,
-  fixedNumber,
-  isNullOrUndefined,
-  leftPad,
-  rgbHexToRgba,
-  toReadableString,
-} from "#app/utils/utils";
+import { BooleanHolder, NumberHolder, fixedNumber, isNullOrUndefined, rgbHexToRgba } from "#app/utils/utils";
+import { capitalizeString } from "#app/utils/string-utils";
+import { leftPad, toReadableString } from "#app/utils/string-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";

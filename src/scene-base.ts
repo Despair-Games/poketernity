@@ -5,7 +5,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { getLocalizedFilename } from "#app/utils/utils";
+import { getLocalizedFilename } from "./utils/string-utils";
 import { settings } from "#app/system/settings/settings-manager";
 import { ImagesFolder } from "#enums/images-folders";
 import { windowStyleDependantAtlases } from "#app/ui/ui-theme";

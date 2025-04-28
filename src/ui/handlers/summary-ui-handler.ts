@@ -19,15 +19,9 @@ import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
-import {
-  fixedNumber,
-  formatStat,
-  getEnumValues,
-  isNullOrUndefined,
-  leftPad,
-  rgbHexToRgba,
-  toReadableString,
-} from "#app/utils/utils";
+import { fixedNumber, getEnumValues, isNullOrUndefined, rgbHexToRgba } from "#app/utils/utils";
+import { formatStat } from "#app/utils/string-utils";
+import { leftPad, toReadableString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";

@@ -1,7 +1,8 @@
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
-import { rgbHexToRgba, leftPad } from "#app/utils/utils";
+import { rgbHexToRgba } from "#app/utils/utils";
+import { leftPad } from "#app/utils/string-utils";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { speciesEggMoves } from "#app/data/egg-moves";
