@@ -5,7 +5,6 @@ import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
 
 import type { Pokemon } from "#app/field/pokemon";
-import { randSeedInt } from "#app/utils/random-utils";
 
 export type nil = null | undefined;
 
@@ -18,26 +17,6 @@ export function getFrameMs(frameCount: number): number {
 export function getCurrentTime(): number {
   const date = new Date();
   return ((date.getHours() * 60 + date.getMinutes()) / 1440 + 0.675) % 1;
-}
-
-/**
- * Generates IVs from a given {@linkcode id} by extracting 5 bits at a time
- * starting from the least significant bit up to the 30th most significant bit.
- * @param id 32-bit number
- * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
- */
-export function getIvsFromId(id?: number): number[] {
-  if (isNullOrUndefined(id)) {
-    id = randSeedInt(4294967296);
-  }
-  return [
-    (id & 0x3e000000) >>> 25,
-    (id & 0x01f00000) >>> 20,
-    (id & 0x000f8000) >>> 15,
-    (id & 0x00007c00) >>> 10,
-    (id & 0x000003e0) >>> 5,
-    id & 0x0000001f,
-  ];
 }
 
 export function getEnumKeys(enumType: any): string[] {

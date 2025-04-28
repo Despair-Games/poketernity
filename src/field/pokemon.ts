@@ -153,11 +153,11 @@ import {
   deepFreeze,
   fixedNumber,
   getEnumValues,
-  getIvsFromId,
   isNullOrUndefined,
   toDmgValue,
   type nil,
 } from "#app/utils/utils";
+import { getIvsFromId } from "#app/utils/pokemon-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {

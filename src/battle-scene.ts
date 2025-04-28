@@ -127,10 +127,10 @@ import {
   BooleanHolder,
   fixedNumber,
   getEnumValues,
-  getIvsFromId,
   isNullOrUndefined,
   NumberHolder,
 } from "#app/utils/utils";
+import { getIvsFromId } from "./utils/pokemon-utils";
 import { formatMoney } from "./utils/string-utils";
 import { shiftCharCodes } from "./utils/string-utils";
 import { randItem, randSeedInt, randSeedItem } from "./utils/random-utils";

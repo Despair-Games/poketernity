@@ -3,7 +3,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
-import { randSeedItem } from "#app/utils/random-utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { isNullOrUndefined } from "#app/utils/utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
@@ -80,4 +80,24 @@ export function getPokerusStarters(): PokemonSpecies[] {
     date.getTime().toString(),
   );
   return pokerusStarters;
+}
+
+/**
+ * Generates IVs from a given {@linkcode id} by extracting 5 bits at a time
+ * starting from the least significant bit up to the 30th most significant bit.
+ * @param id 32-bit number
+ * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
+ */
+export function getIvsFromId(id?: number): number[] {
+  if (isNullOrUndefined(id)) {
+    id = randSeedInt(4294967296);
+  }
+  return [
+    (id & 0x3e000000) >>> 25,
+    (id & 0x01f00000) >>> 20,
+    (id & 0x000f8000) >>> 15,
+    (id & 0x00007c00) >>> 10,
+    (id & 0x000003e0) >>> 5,
+    id & 0x0000001f,
+  ];
 }

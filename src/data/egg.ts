@@ -30,7 +30,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { getIvsFromId } from "#app/utils/utils";
+import { getIvsFromId } from "#app/utils/pokemon-utils";
 import { randInt, randSeedInt } from "#app/utils/random-utils";
 import { randomString } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
