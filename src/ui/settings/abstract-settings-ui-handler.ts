@@ -11,7 +11,8 @@ import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-
 import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { hasTouchscreen, isNullOrUndefined } from "#app/utils/utils";
+import { isNullOrUndefined } from "#app/utils/utils";
+import { hasTouchscreen } from "#app/utils/app-utils";
 import { capitalizeFirstLetter } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
