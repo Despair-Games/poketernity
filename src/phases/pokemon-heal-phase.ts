@@ -88,7 +88,8 @@ export class PokemonHealPhase extends CommonAnimPhase {
     // TODO: This seems weird, why are we storing the message check way before we use it
     // (at which point it could be outdated)
     const hasMessage = !!this.message;
-    const healOrDamage = !pokemon.isFullHp() || this.hpHealed < 0;
+    const canRestorePP = this.fullRestorePP && pokemon.getMoveset().some((mv) => mv.ppUsed > 0);
+    const healOrDamage = !pokemon.isFullHp() || this.hpHealed < 0 || canRestorePP;
     const healBlock = pokemon.getTag<HealBlockTag>(BattlerTagType.HEAL_BLOCK);
     let lastStatusEffect = StatusEffect.NONE;
 
