@@ -42,7 +42,7 @@ export function getCookie(cName: string): string {
 
 /**
  * Check if a language is supported
- * @param key The key of the language to check
+ * @param key - The language key (e.g. "en") to check
  * @returns `true` if the language is supported
  */
 export function isSupportedLanguage(key: string): boolean {
@@ -50,8 +50,6 @@ export function isSupportedLanguage(key: string): boolean {
 }
 
 /**
- * Check if the device has a touchscreen.
- *
  * @returns `true` if the device has a touchscreen, otherwise `false`.
  */
 export function hasTouchscreen(): boolean {
@@ -59,8 +57,7 @@ export function hasTouchscreen(): boolean {
 }
 
 /**
- * Check if the device is in landscape mode.
- * @returns `true` if the device is in landscape mode, otherwise `false` which means it is in portrait mode.
+ * @returns `true` if the device window's `width > height`, and `false` otherwise
  */
 export function isLandscapeMode(): boolean {
   const { width, height } = window.screen;

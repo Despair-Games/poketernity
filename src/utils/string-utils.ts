@@ -50,9 +50,10 @@ export const AbbreviationsLargeNumber: string[] = ["", "K", "M", "B", "t", "q", 
 
 /**
  * Return an abbreviated representation of the given number, with up to 2 digits past the decimal point.
- * @example `formatLargeNumber(2300)` will return `2.3K`
- * @param number the number to format
- * @param fractionDigits the threshold under which not to abbreviate the number. Default: 1000
+ * @example
+ * formatLargeNumber(2300); // Output "2.3K"
+ * @param number - The number to format
+ * @param fractionDigits - (Default `1000`) The threshold under which not to abbreviate the number.
  * @returns the formatted string
  */
 export function formatLargeNumber(count: number, threshold: number = 1000): string {
@@ -73,9 +74,10 @@ export function formatLargeNumber(count: number, threshold: number = 1000): stri
 
 /**
  * Return an abbreviated representation of the given number, with a fixed number of digits past the decimal point.
- * @example `formatLargeNumberFixedDigits(2300, 2)` will return `2.30K`
- * @param number the number to format
- * @param fractionDigits the number of digits to show after the decimal point. Default: 3
+ * @example
+ * formatLargeNumberFixedDigits(2300, 2); // Output "2.30K"
+ * @param number - The number to format
+ * @param fractionDigits - (Default `3`) The number of digits to show after the decimal point.
  * @returns the formatted string
  */
 export function formatLargeNumberFixedDigits(number: number, fractionDigits: number = 3): string {
@@ -114,11 +116,11 @@ export function getPokemonLevelText(pokemon: Pokemon): string {
 }
 
 /**
- * Formats a string to title case
- * @param unformattedText Text to be formatted
- * @returns the formatted string
+ * @returns The input string, formatted in title case
+ * @example
+ * toTitleCase("an EXAMPLE string"); // Output "An example string"
  */
-export function formatText(unformattedText: string): string {
+export function toTitleCase(unformattedText: string): string {
   const text = unformattedText.split("_");
   for (let i = 0; i < text.length; i++) {
     text[i] = text[i].charAt(0).toUpperCase() + text[i].substring(1).toLowerCase();
@@ -140,7 +142,7 @@ export function toCamelCaseString(unformattedText: string): string {
 
 /**
  * This function checks if all localized images used by the game have been added for the given language.
- * @param key the language key (e.g. "ko").
+ * @param key - The language key (e.g. "ko").
  * @returns `true` if the given language is supported and has localized sprites.
  */
 function hasAllLocalizedSprites(key: string): boolean {
@@ -149,9 +151,10 @@ function hasAllLocalizedSprites(key: string): boolean {
 
 /**
  * Helper method to localize a filename (e.g. for types icons) based on the given language.
+ *
  * Defaults to English if the language is not a {@linkcode supportedLanguages} or does not have all pictures defined.
- * @param baseName the original name of the file (e.g. `types`)
- * @param langKey optional - language key. If not provided, by default uses the resolved language
+ * @param baseName - The original name of the file (e.g. `types`)
+ * @param langKey - (Optional) The language key (e.g. "en").
  * @returns the localized sprite key, of form "baseKey_{languageKey}"
  */
 export function getLocalizedFilename(baseName: string, langKey?: string): string {
@@ -163,18 +166,16 @@ export function getLocalizedFilename(baseName: string, langKey?: string): string
 
 /**
  * Truncate a string to a specified maximum length and add an ellipsis if it exceeds that length.
- *
  * @param str - The string to be truncated.
- * @param maxLength - The maximum length of the truncated string, defaults to 10.
+ * @param maxLength - (Default `10`) The maximum length of the truncated string.
  * @returns The truncated string with an ellipsis if it was longer than maxLength.
  */
 export function truncateString(str: string, maxLength: number = 10): string {
-  // Check if the string length exceeds the maximum length
   if (str.length > maxLength) {
-    // Truncate the string and add an ellipsis
-    return str.slice(0, maxLength - 3) + "..."; // Subtract 3 to accommodate the ellipsis
+    // Subtracts 3 to accommodate the ellipsis
+    return str.slice(0, maxLength - 3) + "...";
   }
-  // Return the original string if it does not exceed the maximum length
+
   return str;
 }
 
@@ -228,9 +229,7 @@ export function capitalizeFirstLetter(str: string): string {
 }
 
 /**
- * Helper method to return the animation filename for a given move
- *
- * @param moveId the move for which the animation filename is needed
+ * @returns The animation filename for the given move
  */
 export function animationFileName(moveId: MoveId): string {
   return MoveId[moveId].toLowerCase().replace(/\_/g, "-");
@@ -238,8 +237,6 @@ export function animationFileName(moveId: MoveId): string {
 
 /**
  * Transforms a camelCase string into a kebab-case string
- * @param str The camelCase string
- * @returns A kebab-case string
  *
  * @source {@link https://stackoverflow.com/a/67243723/}
  */

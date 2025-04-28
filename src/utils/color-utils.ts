@@ -7,8 +7,8 @@ export function rgbToHsv(r: number, g: number, b: number): number[] {
 
 /**
  * Compare color difference in RGB
- * @param rgb1 First RGB color in array
- * @param rgb2 Second RGB color in array
+ * @param rgb1 - First RGB color in array
+ * @param rgb2 - Second RGB color in array
  */
 export function deltaRgb(rgb1: number[], rgb2: number[]): number {
   const [r1, g1, b1] = rgb1;

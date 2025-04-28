@@ -15,7 +15,7 @@ import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { TimeOfDayWidget } from "./time-of-day-widget";
 import { fixedNumber, isNullOrUndefined } from "#app/utils/common";
-import { toCamelCaseString, formatText } from "#app/utils/string-utils";
+import { toCamelCaseString, toTitleCase } from "#app/utils/string-utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
@@ -49,7 +49,7 @@ export function getFieldEffectText(arenaTagType: string): string {
   const effectName = toCamelCaseString(arenaTagType);
   const i18nKey = `arenaFlyout:${effectName}` as ParseKeys;
   const resultName = i18next.t(i18nKey);
-  return !resultName || resultName === i18nKey ? formatText(arenaTagType) : resultName;
+  return !resultName || resultName === i18nKey ? toTitleCase(arenaTagType) : resultName;
 }
 
 export class ArenaFlyout extends Phaser.GameObjects.Container {
