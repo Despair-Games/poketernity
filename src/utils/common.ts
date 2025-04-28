@@ -32,12 +32,10 @@ export function getEnumValues(enumType: any): number[] {
 }
 
 /**
- * Utils to retrieve the length of an enum
- * @param theEnum the enum to get the length of
- * @returns length of the enum
+ * @returns length of the TypeScript enum
  */
-export function getEnumLength(theEnum: any): number {
-  return getEnumKeys(theEnum).length;
+export function getEnumLength(input: any): number {
+  return getEnumKeys(input).length;
 }
 
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {
@@ -47,6 +45,7 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
 /**
  * Alias for the constructor of a class.
  * Can be used to build an object of templated type.
+ *
  * Use {@linkcode AbstractConstructor} instead if comparing types
  */
 export type Constructor<T> = new (...args: unknown[]) => T;
@@ -74,10 +73,12 @@ export class NumberHolder {
 }
 
 /**
- * Holds a fixed number value, this is solely used to differentiate between a regular number
- * and a constant or fixed number.
+ * Holds a fixed number value, this is solely used to differentiate
+ * between a regular number and a constant or fixed number.
+ *
  * This is used in the game speed system to differentiate between a fixed game speed and a dynamic one.
  * @see `transformValue` in {@linkcode initGameSpeed}
+ * @see {@linkcode fixedNumber}
  */
 export class FixedNumber {
   public readonly value: number;
@@ -97,7 +98,7 @@ export function fixedNumber(value: number): number {
 
 /**
  * Prints the type and name of all game objects in a container for debugging purposes
- * @param container container with game objects inside it
+ * @param container - The container with game objects inside it
  */
 export function printContainerList(container: Phaser.GameObjects.Container): void {
   console.log(
@@ -110,47 +111,47 @@ export function printContainerList(container: Phaser.GameObjects.Container): voi
 /**
  * Perform a deep copy of an object.
  *
- * @param values - The object to be deep copied.
+ * @param obj - The object to be deep copied.
  * @returns A new object that is a deep copy of the input.
  */
-export function deepCopy<T>(values: T): T {
-  return Phaser.Utils.Objects.DeepCopy(values as unknown as object) as T;
+export function deepCopy<T>(obj: T): T {
+  return Phaser.Utils.Objects.DeepCopy(obj as unknown as object) as T;
 }
 
-export function isNullOrUndefined(object: any): object is undefined | null {
-  return null === object || undefined === object;
+export function isNullOrUndefined(obj: any): obj is null | undefined {
+  return null === obj || undefined === obj;
 }
 
 /**
  * This function is used in the context of a Pokémon battle game to calculate the actual integer damage value from a float result.
+ *
  * Many damage calculation formulas involve various parameters and result in float values.
+ *
  * The actual damage applied to a Pokémon's HP must be an integer.
+ *
  * This function helps in ensuring that by flooring the float value and enforcing a minimum damage value.
  *
- * @param value - The float value to convert.
- * @param minValue - The minimum integer value to return. Defaults to 1.
- * @returns The converted value as an integer.
+ * @param value - The input number
+ * @param minValue - The minimum integer value to return. Defaults to 1
+ * @returns The input number converted to an integer
  */
 export function toDmgValue(value: number, minValue: number = 1): number {
   return Math.max(Math.floor(value), minValue);
 }
 
 /**
- * Check if a number is **inclusive** between two numbers
- * @param num the number to check
- * @param min the minimum value (included)
- * @param max the maximum value (included)
- * @returns `true` if number is **inclusive** between min and max
+ * @returns `true` if `num` is between `[min, max]`
  */
 export function isBetween(num: number, min: number, max: number): boolean {
-  return num >= min && num <= max;
+  return min <= num && num <= max;
 }
 
 /**
  * Recursively calls `Object.freeze` on an object and all its properties.
  * @param obj - The object to freeze
  * @returns The input object after it has been frozen
- * @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360} */
+ * @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360}
+ */
 export function deepFreeze<T>(obj: T): Readonly<T> {
   if (obj === null || typeof obj !== "object") return obj;
   // support objects with reference loops
