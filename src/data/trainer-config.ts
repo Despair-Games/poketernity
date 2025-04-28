@@ -1307,10 +1307,13 @@ export class TrainerConfig {
   ): TrainerConfig {
     this.initForGymLeader(signatureSpecies, isMale, ...specialtyTypes);
     this.setBattleBgm("battle_paldea_gym");
-    // TODO: tera
-    // this.setGenModifiersFunc((party) => {
-    //   return getSpecificTeraModifier(party, party.length - 1, specialtyTypes[0]);
-    // });
+    this.genAIFuncs.push((party: EnemyPokemon[]) => {
+      const lastSlot = party.length - 1;
+      if (this.specialtyTypes?.length) {
+        party[lastSlot].teraType = randSeedItem(this.specialtyTypes);
+      }
+      this.trainerAI.setInstantTera(lastSlot);
+    });
 
     return this;
   }
