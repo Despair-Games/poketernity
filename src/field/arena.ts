@@ -11,7 +11,7 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { PRIMAL_WEATHER_TYPES } from "#app/constants/game";
+import { DEFAULT_NEW_TERRAIN_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/game";
 import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -378,6 +378,18 @@ export class Arena {
   }
 
   /**
+   * Sets terrain to the override specified in overrides.ts
+   * @param terrain new {@linkcode TerrainType} to set
+   * @returns true to force trySetTerrain to return true
+   */
+  trySetTerrainOverride(terrain: TerrainType): boolean {
+    this.terrain = new Terrain(terrain, 0);
+    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+    globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
+    return true;
+  }
+
+  /**
    * Helper function that checks if it is possible to set a new weather given current weather conditions
    * @param newWeather - The weather that the game is attempting to set
    * @returns `true` if the weather can be set given current conditions | `false` if not
@@ -485,13 +497,24 @@ export class Arena {
    * @returns whether or not the terrain was successfully set
    */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
+    if (Overrides.TERRAIN_OVERRIDE) {
+      return this.trySetTerrainOverride(Overrides.TERRAIN_OVERRIDE);
+    }
+
     if (this.terrain?.terrainType === (terrain || undefined)) {
       return false;
     }
 
     const oldTerrainType = this.terrain?.terrainType || TerrainType.NONE;
 
-    this.terrain = terrain ? new Terrain(terrain, hasPokemonSource ? 5 : 0) : null;
+    let newTerrainDuration = DEFAULT_NEW_TERRAIN_DURATION;
+
+    if (Overrides.NEW_TERRAIN_DURATION_OVERRIDE >= 0) {
+      newTerrainDuration = Overrides.NEW_TERRAIN_DURATION_OVERRIDE;
+    } else if (!hasPokemonSource) {
+      newTerrainDuration = 0;
+    }
+    this.terrain = terrain ? new Terrain(terrain, newTerrainDuration) : null;
 
     if (this.terrain) {
       this.eventTarget.dispatchEvent(

@@ -19,6 +19,7 @@ import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
@@ -72,6 +73,16 @@ class DefaultOverrides {
    * @see {@linkcode Arena.trySetWeather}
    */
   readonly NEW_WEATHER_DURATION_OVERRIDE: number = -1;
+  readonly TERRAIN_OVERRIDE: TerrainType = TerrainType.NONE;
+  /**
+   * Override the new terrain duration.
+   * **Can NOT be combined with {@linkcode TERRAIN_OVERRIDE}!**
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the terrain should last
+   * @see {@linkcode Arena.trySetTerrain}
+   */
+  readonly NEW_TERRAIN_DURATION_OVERRIDE: number = -1;
   /**
    * Determines the override for battle types.
    *
