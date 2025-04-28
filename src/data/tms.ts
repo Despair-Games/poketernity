@@ -1,4 +1,4 @@
-import { deepFreeze } from "#app/utils/utils";
+import { deepFreeze } from "#app/utils/common";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";

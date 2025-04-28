@@ -7,7 +7,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils/common";
 import { getPokemonLevelText } from "#app/utils/string-utils";
 import { getPlayTimeString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";

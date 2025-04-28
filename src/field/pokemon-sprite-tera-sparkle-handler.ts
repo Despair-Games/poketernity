@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils/utils";
+import { fixedNumber } from "#app/utils/common";
 import { randInt } from "#app/utils/random-utils";
 
 export default class PokemonSpriteTeraSparkleHandler {

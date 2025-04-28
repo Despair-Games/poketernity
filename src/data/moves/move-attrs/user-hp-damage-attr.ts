@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/utils";
+import type { NumberHolder } from "#app/utils/common";
 import type { Move } from "#app/data/moves/move";
 import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
 

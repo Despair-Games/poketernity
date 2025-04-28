@@ -27,7 +27,7 @@ import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper"
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { BooleanHolder, isNullOrUndefined } from "#app/utils/utils";
+import { BooleanHolder, isNullOrUndefined } from "#app/utils/common";
 import { toReadableString } from "#app/utils/string-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { FilterAllMoves } from "#app/utils/move-utils";

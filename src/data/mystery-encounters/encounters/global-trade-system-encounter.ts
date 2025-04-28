@@ -20,7 +20,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { getTypeRgb } from "#app/data/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { NumberHolder, isNullOrUndefined } from "#app/utils/utils";
+import { NumberHolder, isNullOrUndefined } from "#app/utils/common";
 import { randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";

@@ -1,6 +1,6 @@
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
-import { isNullOrUndefined } from "#app/utils/utils";
+import { isNullOrUndefined } from "#app/utils/common";
 import type { Nature } from "#enums/nature";
 
 /**

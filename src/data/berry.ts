@@ -6,7 +6,7 @@ import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder, toDmgValue } from "#app/utils/utils";
+import { NumberHolder, toDmgValue } from "#app/utils/common";
 import { randSeedInt } from "#app/utils/random-utils";
 import { getBerryName } from "#app/utils/berry-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

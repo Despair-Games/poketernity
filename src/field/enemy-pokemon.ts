@@ -17,7 +17,7 @@ import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import { EnemyBattleInfo } from "#app/ui/components/battle-info";
-import { isBetween, isNullOrUndefined, toDmgValue } from "#app/utils/utils";
+import { isBetween, isNullOrUndefined, toDmgValue } from "#app/utils/common";
 import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";

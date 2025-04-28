@@ -28,7 +28,7 @@ import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-ha
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined } from "#app/utils/utils";
+import { isNullOrUndefined } from "#app/utils/common";
 import { randSeedInt } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import type { AbilityId } from "#enums/ability-id";

@@ -6,7 +6,7 @@ import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { isNullOrUndefined } from "#app/utils/utils";
+import { isNullOrUndefined } from "#app/utils/common";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ChallengeType } from "#enums/challenge-type";

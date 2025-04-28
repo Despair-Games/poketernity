@@ -1,6 +1,6 @@
 import { SUNNY_WEATHER_TYPES } from "#app/constants/weather";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { getEnumKeys, toDmgValue } from "#app/utils/utils";
+import { getEnumKeys, toDmgValue } from "#app/utils/common";
 import { capitalizeString } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";

@@ -31,7 +31,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
-import { NumberHolder, isNullOrUndefined } from "#app/utils/utils";
+import { NumberHolder, isNullOrUndefined } from "#app/utils/common";
 import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { Challenges } from "#enums/challenges";

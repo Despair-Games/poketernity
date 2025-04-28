@@ -15,7 +15,7 @@ import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifi
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokeballType } from "#enums/pokeball-type";
 import { PlayerGender } from "#enums/player-gender";
-import { NumberHolder } from "#app/utils/utils";
+import { NumberHolder } from "#app/utils/common";
 import { randSeedInt } from "#app/utils/random-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";

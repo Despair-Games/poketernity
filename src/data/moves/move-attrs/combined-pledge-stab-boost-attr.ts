@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { BooleanHolder } from "#app/utils/utils";
+import type { BooleanHolder } from "#app/utils/common";
 
 /**
  * Attribute to apply STAB to the given {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves | Pledge move}

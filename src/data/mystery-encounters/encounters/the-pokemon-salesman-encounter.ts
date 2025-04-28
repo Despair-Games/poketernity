@@ -3,7 +3,7 @@ import {
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
-import { isNullOrUndefined } from "#app/utils/utils";
+import { isNullOrUndefined } from "#app/utils/common";
 import { randSeedInt } from "#app/utils/random-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";

@@ -1,7 +1,7 @@
 import { AnimConfig } from "#app/data/animations/anim-config";
 import { encounterAnims } from "../animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { getEnumKeys, isNullOrUndefined } from "#app/utils/utils";
+import { getEnumKeys, isNullOrUndefined } from "#app/utils/common";
 import { EncounterAnim } from "#enums/encounter-anims";
 
 /**

@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/utils";
+import type { BooleanHolder } from "#app/utils/common";
 import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 

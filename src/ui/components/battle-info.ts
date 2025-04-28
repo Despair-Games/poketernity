@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { getLevelRelExp } from "#app/data/exp";
-import { fixedNumber } from "#app/utils/utils";
+import { fixedNumber } from "#app/utils/common";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";

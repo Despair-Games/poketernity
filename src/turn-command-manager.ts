@@ -22,7 +22,7 @@ import { AttemptRunPhase } from "./phases/attempt-run-phase";
 import { MoveHeaderPhase } from "./phases/move-header-phase";
 import { MovePhase } from "./phases/move-phase";
 import { SwitchSummonPhase } from "./phases/switch-summon-phase";
-import { BooleanHolder, isNullOrUndefined } from "./utils/utils";
+import { BooleanHolder, isNullOrUndefined } from "./utils/common";
 import { randSeedShuffle } from "./utils/random-utils";
 
 /**

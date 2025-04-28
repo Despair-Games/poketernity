@@ -5,7 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
-import { toDmgValue } from "#app/utils/utils";
+import { toDmgValue } from "#app/utils/common";
 
 describe("Moves - G-Max damage over time arena moves", () => {
   let phaserGame: Phaser.Game;

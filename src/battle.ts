@@ -33,7 +33,7 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
 import { settings } from "#app/system/settings/settings-manager";
 import { TurnCommandManager } from "#app/turn-command-manager";
-import { isBetween, NumberHolder } from "#app/utils/utils";
+import { isBetween, NumberHolder } from "#app/utils/common";
 import { shiftCharCodes } from "./utils/string-utils";
 import { randInt, randSeedInt, randSeedItem } from "./utils/random-utils";
 import { randomString } from "./utils/random-utils";

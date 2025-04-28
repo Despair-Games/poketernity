@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/utils";
+import type { NumberHolder } from "#app/utils/common";
 import type { Move } from "#app/data/moves/move";
 import { VariableDefAttr } from "#app/data/moves/move-attrs/variable-def-attr";
 

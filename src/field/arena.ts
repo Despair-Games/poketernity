@@ -19,7 +19,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type AbstractConstructor, getEnumValues } from "#app/utils/utils";
+import { type AbstractConstructor, getEnumValues } from "#app/utils/common";
 import { randSeedInt, weightedPick } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

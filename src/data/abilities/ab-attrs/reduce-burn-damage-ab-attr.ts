@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { type NumberHolder, toDmgValue } from "#app/utils/utils";
+import { type NumberHolder, toDmgValue } from "#app/utils/common";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 

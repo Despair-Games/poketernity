@@ -5,7 +5,7 @@ import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { AbstractConstructor, Constructor } from "#app/utils/utils";
+import type { AbstractConstructor, Constructor } from "#app/utils/common";
 import { ChargeAnim } from "#enums/charge-anim";
 import { MoveId } from "#enums/move-id";
 

@@ -33,7 +33,7 @@ import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
-import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils/utils";
+import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils/common";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { TypeBoostTagTypes } from "#app/utils/battler-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";

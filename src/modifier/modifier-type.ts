@@ -55,7 +55,7 @@ import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { getModifierTierTextTint } from "#app/ui/text/text-utils";
-import { getEnumKeys, getEnumValues, isNullOrUndefined, NumberHolder } from "#app/utils/utils";
+import { getEnumKeys, getEnumValues, isNullOrUndefined, NumberHolder } from "#app/utils/common";
 import { formatMoney } from "#app/utils/string-utils";
 import { leftPad } from "#app/utils/string-utils";
 import { randSeedInt } from "#app/utils/random-utils";

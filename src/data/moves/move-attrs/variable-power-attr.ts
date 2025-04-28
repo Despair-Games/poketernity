@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { NumberHolder } from "#app/utils/utils";
+import type { NumberHolder } from "#app/utils/common";
 
 /**
  * Attribute to modify a move's power based on game state.

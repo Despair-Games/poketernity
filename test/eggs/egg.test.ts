@@ -2,7 +2,7 @@ import { speciesEggTiers } from "#app/data/species-egg-tiers";
 import { allSpecies } from "#app/data/data-lists";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import * as RandomUtils from "#app/utils/random-utils";
-import { isNullOrUndefined } from "#app/utils/utils";
+import { isNullOrUndefined } from "#app/utils/common";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
