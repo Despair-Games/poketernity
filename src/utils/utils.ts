@@ -1,12 +1,14 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { initGameSpeed } from "#app/system/game-speed";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
+
+import type { Pokemon } from "#app/field/pokemon";
+import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
-import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
-import type { Pokemon } from "#app/field/pokemon";
 
 export type nil = null | undefined;
 
