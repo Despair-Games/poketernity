@@ -42,6 +42,8 @@ export class FlinchedTag extends BattlerTag {
       );
 
       applyAbAttrs<FlinchEffectAbAttr>(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
+
+      return true;
     }
 
     return super.lapse(pokemon, lapseType);
