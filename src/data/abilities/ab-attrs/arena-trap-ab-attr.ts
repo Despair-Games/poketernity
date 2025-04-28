@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";

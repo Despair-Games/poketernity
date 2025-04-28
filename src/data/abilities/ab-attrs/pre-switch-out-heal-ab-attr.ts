@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { toDmgValue } from "#app/utils/common";
+import { toDmgValue } from "#app/utils/common-utils";
 import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
 
 export class PreSwitchOutHealAbAttr extends PreSwitchOutAbAttr {

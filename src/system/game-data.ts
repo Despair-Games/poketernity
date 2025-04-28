@@ -56,7 +56,7 @@ import {
 import { vouchers } from "#app/system/voucher";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNullOrUndefined } from "#app/utils/common";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNullOrUndefined } from "#app/utils/common-utils";
 import { randInt, randSeedItem } from "#app/utils/random-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";

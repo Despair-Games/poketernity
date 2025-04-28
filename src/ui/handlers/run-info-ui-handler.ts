@@ -15,7 +15,7 @@ import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { isNullOrUndefined } from "#app/utils/common";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { getPokemonLevelText } from "#app/utils/string-utils";
 import { formatMoney } from "#app/utils/string-utils";
 import { formatLargeNumberFixedDigits } from "#app/utils/string-utils";

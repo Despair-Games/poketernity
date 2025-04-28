@@ -28,7 +28,7 @@ import {
   getSpriteKeysFromPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import PokemonData from "#app/system/pokemon-data";
-import { isNullOrUndefined } from "#app/utils/common";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import type { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";

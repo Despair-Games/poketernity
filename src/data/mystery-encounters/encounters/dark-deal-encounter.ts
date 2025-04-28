@@ -1,5 +1,5 @@
 import type { ElementalType } from "#enums/elemental-type";
-import { isNullOrUndefined } from "#app/utils/common";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";

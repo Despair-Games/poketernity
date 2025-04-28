@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, getEnumKeys, toDmgValue, type AbstractConstructor } from "#app/utils/common";
+import { BooleanHolder, getEnumKeys, toDmgValue, type AbstractConstructor } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";

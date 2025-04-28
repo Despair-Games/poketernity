@@ -46,7 +46,7 @@ import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined } from "#app/utils/common";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import { randomString } from "#app/utils/random-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";

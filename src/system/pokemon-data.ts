@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
-import { isPokemon } from "#app/utils/common";
+import { isPokemon } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";

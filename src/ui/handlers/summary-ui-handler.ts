@@ -19,7 +19,7 @@ import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
-import { fixedNumber, getEnumValues, isNullOrUndefined } from "#app/utils/common";
+import { fixedNumber, getEnumValues, isNullOrUndefined } from "#app/utils/common-utils";
 import { rgbHexToRgba } from "#app/utils/color-utils";
 import { formatStat } from "#app/utils/string-utils";
 import { leftPad, toReadableString } from "#app/utils/string-utils";

@@ -29,7 +29,7 @@ import type PokemonData from "#app/system/pokemon-data";
 import { timedEventManager } from "#app/timed-event-manager";
 import { PlayerBattleInfo } from "#app/ui/components/battle-info";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { NumberHolder, isNullOrUndefined } from "#app/utils/common";
+import { NumberHolder, isNullOrUndefined } from "#app/utils/common-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";

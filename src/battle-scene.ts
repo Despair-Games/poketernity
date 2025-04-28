@@ -129,7 +129,7 @@ import {
   getEnumValues,
   isNullOrUndefined,
   NumberHolder,
-} from "#app/utils/common";
+} from "#app/utils/common-utils";
 import { getIvsFromId } from "./utils/pokemon-utils";
 import { formatMoney } from "./utils/string-utils";
 import { shiftCharCodes } from "./utils/string-utils";

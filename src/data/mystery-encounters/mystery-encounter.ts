@@ -5,7 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
-import { isNullOrUndefined } from "#app/utils/common";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { capitalizeFirstLetter } from "#app/utils/string-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import type { StatusEffect } from "#enums/status-effect";

@@ -14,7 +14,7 @@ import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { BooleanHolder, fixedNumber } from "#app/utils/common";
+import { BooleanHolder, fixedNumber } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { PhaseId } from "#enums/phase-id";
 import type { SpeciesId } from "#enums/species-id";

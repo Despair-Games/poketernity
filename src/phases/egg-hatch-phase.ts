@@ -10,7 +10,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
-import { fixedNumber, getFrameMs } from "#app/utils/common";
+import { fixedNumber, getFrameMs } from "#app/utils/common-utils";
 import { randInt } from "#app/utils/random-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";

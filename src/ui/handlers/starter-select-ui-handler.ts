@@ -52,7 +52,7 @@ import type {
 } from "#app/ui/interfaces/option-select-config";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { BooleanHolder, NumberHolder, fixedNumber, isNullOrUndefined } from "#app/utils/common";
+import { BooleanHolder, NumberHolder, fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
 import { rgbHexToRgba } from "#app/utils/color-utils";
 import { capitalizeString } from "#app/utils/string-utils";
 import { leftPad, toReadableString } from "#app/utils/string-utils";

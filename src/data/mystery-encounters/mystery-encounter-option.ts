@@ -12,7 +12,7 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import type { CanLearnMoveRequirementOptions } from "./requirements/can-learn-move-requirement";
 import { CanLearnMoveRequirement } from "./requirements/can-learn-move-requirement";
-import { isNullOrUndefined } from "#app/utils/common";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 
