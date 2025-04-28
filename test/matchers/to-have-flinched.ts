@@ -28,6 +28,6 @@ export function toHaveFlinchedMatcher(this: MatcherState, received: unknown): Sy
     message: () =>
       pass
         ? `Expected ${received.name} to NOT have flinched, but it did!`
-        : `Expected ${received.name} to have flinched, but did not.`,
+        : `Expected ${received.name} to have flinched, but it did not.`,
   };
 }
