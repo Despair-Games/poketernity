@@ -1,11 +1,11 @@
-import { toHaveEffectiveStatMatcher } from "#test/matchers/to-have-effective-stat-matcher";
-import { toHaveFullHpMatcher } from "#test/matchers/to-have-full-hp-matcher";
-import { toHaveMoveResultMatcher } from "#test/matchers/to-have-move-result-matcher";
-import { toHaveStatMatcher } from "#test/matchers/to-have-stat-matcher";
-import { toHaveStatusEffectMatcher } from "#test/matchers/to-have-status-effect-matcher";
-import { toHaveTakenDamageMatcher } from "#test/matchers/to-have-taken-damage-matcher";
-import { toHaveUsedMoveMatcher } from "#test/matchers/to-have-used-move-matcher";
-import { toHaveWeatherMatcher } from "#test/matchers/to-have-weather-matcher";
+import { toHaveEffectiveStatMatcher } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
+import { toHaveFullHpMatcher } from "#test/test-utils/matchers/to-have-full-hp-matcher";
+import { toHaveMoveResultMatcher } from "#test/test-utils/matchers/to-have-move-result-matcher";
+import { toHaveStatMatcher } from "#test/test-utils/matchers/to-have-stat-matcher";
+import { toHaveStatusEffectMatcher } from "#test/test-utils/matchers/to-have-status-effect-matcher";
+import { toHaveTakenDamageMatcher } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
+import { toHaveUsedMoveMatcher } from "#test/test-utils/matchers/to-have-used-move-matcher";
+import { toHaveWeatherMatcher } from "#test/test-utils/matchers/to-have-weather-matcher";
 import { expect } from "vitest";
 
 /**
