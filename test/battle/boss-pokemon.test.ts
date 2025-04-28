@@ -63,7 +63,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("should reduce the number of shields if we are in a double battle", async () => {
-    game.override.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.override.battleType("double").startingWave(150).enemyLevel(101); // Over level 100 -> 2 shields / 3 health segments
 
     await game.classicMode.startBattle([SpeciesId.MEWTWO]);
 
@@ -76,7 +76,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("shields should stop overflow damage and give stat stage boosts when broken", async () => {
-    game.override.startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.override.startingWave(150).enemyLevel(101); // Over level 100 -> 2 shields / 3 health segments
 
     await game.classicMode.startBattle([SpeciesId.MEWTWO]);
 
