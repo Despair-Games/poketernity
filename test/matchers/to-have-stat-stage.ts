@@ -30,7 +30,7 @@ export function toHaveStatStageMatcher(
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} ${statStr} stage to NOT be ${statStr}, but it is!`
+        ? `Expected ${received.name} ${statStr} stage to NOT be ${expectedStage}, but it is!`
         : `Expected ${received.name} ${statStr} stage to be ${expectedStage}, but got ${actualStage}.`,
   };
 }
