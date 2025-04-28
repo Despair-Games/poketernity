@@ -2,7 +2,8 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { Stat, type EffectiveStat } from "#enums/stat";
-import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 export interface ToHaveEffectiveStatMatcherOptions {
   /**
@@ -31,14 +32,15 @@ export interface ToHaveEffectiveStatMatcherOptions {
  * @returns Whether the matcher passed
  */
 export function toHaveEffectiveStatMatcher(
+  this: MatcherState,
   received: unknown,
   stat: EffectiveStat,
   expectedValue: number,
   { enemy, move, isCritical = false }: ToHaveEffectiveStatMatcherOptions = {},
-) {
+): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }
