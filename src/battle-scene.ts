@@ -1582,6 +1582,18 @@ export default class BattleScene extends SceneBase {
     return ret;
   }
 
+  /**
+   * Formula for getting boss segments
+   * Daily mode or final boss -> 5
+   * Legends, sublegends, mythics are automatically bosses
+   *
+   * Start with 2 segments
+   * +1 if level is over 100
+   * +1 if bst is >= 670
+   * +1 for every 250 floors
+   *
+   * @returns the number of hp segments
+   */
   getEncounterBossSegments(
     waveIndex: number,
     level: number,
@@ -1934,9 +1946,7 @@ export default class BattleScene extends SceneBase {
    * The formula for getting the level cap is as follows:
    * - the `waveIndex` is retrieved by rounding up to the nearest `10` i.e. `34 -> 40`
    * - the `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
-   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
-   * - If the number is odd, it is incremented by `1`
-   * - The final result is then incremented by `2`
+   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} rounded up
    *
    * @param ignoreLevelCap - (Default `false`) Whether or not to ignore the level cap
    * @returns the level cap
@@ -1952,7 +1962,7 @@ export default class BattleScene extends SceneBase {
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
     const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * LEVEL_CAP_SCALE_FACTOR;
-    return Math.ceil(baseLevel / 2) * 2 + 2;
+    return Math.ceil(baseLevel);
   }
 
   randomSpecies(
