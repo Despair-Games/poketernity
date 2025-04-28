@@ -122,6 +122,7 @@ import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container"
 import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
+import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import {
   type AbstractConstructor,
   BooleanHolder,
@@ -130,16 +131,12 @@ import {
   isNullOrUndefined,
   NumberHolder,
 } from "#app/utils/common-utils";
-import { getIvsFromId } from "./utils/pokemon-utils";
-import { formatMoney } from "./utils/string-utils";
-import { shiftCharCodes } from "./utils/string-utils";
-import { randItem, randSeedInt, randSeedItem } from "./utils/random-utils";
-import { randomString } from "./utils/random-utils";
-import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randItem, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { formatMoney, shiftCharCodes } from "#app/utils/string-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";

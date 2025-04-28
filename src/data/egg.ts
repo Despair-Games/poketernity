@@ -1,3 +1,5 @@
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#app/data/pokemon-species";
 import {
   EGG_PITY_EPIC_THRESHOLD,
   EGG_PITY_LEGENDARY_THRESHOLD,
@@ -25,15 +27,11 @@ import {
 } from "#app/data/rates";
 import { speciesEggTiers } from "#app/data/species-egg-tiers";
 import { speciesStarterCosts } from "#app/data/starters";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { getIvsFromId } from "#app/utils/pokemon-utils";
-import { randInt, randSeedInt } from "#app/utils/random-utils";
-import { randomString } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randInt, randomString, randSeedInt } from "#app/utils/random-utils";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
