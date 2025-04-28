@@ -1,7 +1,7 @@
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
-import { formatText } from "#app/utils";
+import { formatText } from "#app/utils/utils";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { TEXT_SCALE } from "#app/constants/ui";

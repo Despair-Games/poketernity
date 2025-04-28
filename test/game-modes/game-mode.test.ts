@@ -2,7 +2,7 @@ import type { GameMode } from "#app/game-mode";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as Utils from "#app/utils";
+import * as Utils from "#app/utils/utils";
 import { GameManager } from "#test/test-utils/gameManager";
 
 describe("game-mode", () => {

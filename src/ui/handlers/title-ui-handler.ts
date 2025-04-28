@@ -6,7 +6,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { fixedNumber, randItem } from "#app/utils";
+import { fixedNumber, randItem } from "#app/utils/utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";

@@ -63,7 +63,7 @@ import {
   leftPad,
   NumberHolder,
   randSeedInt,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";

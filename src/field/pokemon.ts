@@ -158,7 +158,7 @@ import {
   randSeedInt,
   toDmgValue,
   type nil,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,

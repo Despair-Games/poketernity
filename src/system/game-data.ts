@@ -64,7 +64,7 @@ import {
   isNullOrUndefined,
   randInt,
   randSeedItem,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BattleType } from "#enums/battle-type";

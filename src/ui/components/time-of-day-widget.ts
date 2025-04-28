@@ -1,4 +1,4 @@
-import { fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils/utils";
 import { globalScene } from "#app/global-scene";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { EaseType } from "#enums/ease-type";

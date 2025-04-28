@@ -30,7 +30,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import { WeatherType } from "#enums/weather-type";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/utils";
 import { StatusEffect } from "#enums/status-effect";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {

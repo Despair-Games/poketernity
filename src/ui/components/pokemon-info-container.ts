@@ -10,7 +10,7 @@ import i18next from "i18next";
 import { DexAttr } from "#app/data/dex-attributes";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterDataEntry } from "#app/@types/StarterData";
-import { capitalizeString, fixedNumber } from "#app/utils";
+import { capitalizeString, fixedNumber } from "#app/utils/utils";
 import { IVGraph } from "./iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";

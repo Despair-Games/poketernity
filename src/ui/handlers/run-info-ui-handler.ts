@@ -21,7 +21,7 @@ import {
   getPlayTimeString,
   getPokemonLevelText,
   isNullOrUndefined,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";

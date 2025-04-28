@@ -136,7 +136,7 @@ import {
   randSeedInt,
   randSeedItem,
   shiftCharCodes,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";

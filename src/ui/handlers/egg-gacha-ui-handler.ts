@@ -8,7 +8,7 @@ import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getEnumKeys, getEnumValues, randSeedShuffle } from "#app/utils";
+import { fixedNumber, getEnumKeys, getEnumValues, randSeedShuffle } from "#app/utils/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Button } from "#enums/buttons";
 import { EggTier } from "#enums/egg-type";

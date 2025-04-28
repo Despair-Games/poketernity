@@ -6,7 +6,7 @@ import type { PersistentModifier } from "#app/modifier/modifier";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { randItem, randSeedItem, toReadableString } from "#app/utils";
+import { randItem, randSeedItem, toReadableString } from "#app/utils/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";

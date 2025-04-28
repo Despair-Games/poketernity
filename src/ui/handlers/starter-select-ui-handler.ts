@@ -61,7 +61,7 @@ import {
   leftPad,
   rgbHexToRgba,
   toReadableString,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";

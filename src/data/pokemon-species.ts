@@ -6,7 +6,7 @@ import type { PokemonForm } from "#app/data/pokemon-form";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { variantData } from "#app/data/variant";
-import { randSeedGauss, randSeedItem } from "#app/utils";
+import { randSeedGauss, randSeedItem } from "#app/utils/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";

@@ -46,7 +46,7 @@ import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
+import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils/utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";

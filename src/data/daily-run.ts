@@ -2,7 +2,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import type { StarterConfig } from "#app/@types/StarterConfig";
-import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
+import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils/utils";
 import type { PokemonSpeciesForm } from "./pokemon-species-form";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";

@@ -7,7 +7,7 @@ import { handleTutorial } from "#app/tutorial";
 import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
 import type { LoginFormUiHandler } from "#app/ui/handlers/login-form-ui-handler";
 import type { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
-import { executeIf, getCookie, removeCookie } from "#app/utils";
+import { executeIf, getCookie, removeCookie } from "#app/utils/utils";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";

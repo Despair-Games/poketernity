@@ -3,7 +3,7 @@ import { TextStyle } from "#enums/text-style";
 import type { DamageResult } from "#app/@types/DamageResult";
 import type { Pokemon } from "./pokemon";
 import { HitResult } from "#enums/hit-result";
-import { formatStat, fixedNumber } from "#app/utils";
+import { formatStat, fixedNumber } from "#app/utils/utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";

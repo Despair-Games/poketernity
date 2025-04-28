@@ -33,7 +33,15 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
 import { settings } from "#app/system/settings/settings-manager";
 import { TurnCommandManager } from "#app/turn-command-manager";
-import { isBetween, NumberHolder, randInt, randomString, randSeedInt, randSeedItem, shiftCharCodes } from "#app/utils";
+import {
+  isBetween,
+  NumberHolder,
+  randInt,
+  randomString,
+  randSeedInt,
+  randSeedItem,
+  shiftCharCodes,
+} from "#app/utils/utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import { ModifierTier } from "#enums/modifier-tier";

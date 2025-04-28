@@ -27,7 +27,7 @@ import {
   leftPad,
   rgbHexToRgba,
   toReadableString,
-} from "#app/utils";
+} from "#app/utils/utils";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";

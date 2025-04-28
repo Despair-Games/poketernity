@@ -30,7 +30,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { getIvsFromId, randInt, randomString, randSeedInt } from "#app/utils";
+import { getIvsFromId, randInt, randomString, randSeedInt } from "#app/utils/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
