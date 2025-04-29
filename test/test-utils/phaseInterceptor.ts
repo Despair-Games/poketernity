@@ -214,7 +214,7 @@ export class PhaseInterceptor {
    * @param phaseFrom - The phase to start from.
    * @returns The instance of the PhaseInterceptor.
    */
-  runFrom(phaseFrom: PhaseInterceptorPhase): PhaseInterceptor {
+  protected runFrom(phaseFrom: PhaseInterceptorPhase): PhaseInterceptor {
     this.phaseFrom = phaseFrom;
     return this;
   }
@@ -225,7 +225,7 @@ export class PhaseInterceptor {
    * @param runTarget - Whether or not to run the target phase.
    * @returns A promise that resolves when the transition is complete.
    */
-  async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
+  public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
     return new Promise(async (resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       if (this.phaseFrom) {
@@ -262,7 +262,7 @@ export class PhaseInterceptor {
    * @param skipFn - Optional skip function.
    * @returns A promise that resolves when the phase is run.
    */
-  async run(phaseTarget: PhaseInterceptorPhase, skipFn?: (className: PhaseClass) => boolean): Promise<void> {
+  protected async run(phaseTarget: PhaseInterceptorPhase, skipFn?: (className: PhaseClass) => boolean): Promise<void> {
     const targetName = this.getPhaseName(phaseTarget);
     await new Promise<void>((resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
