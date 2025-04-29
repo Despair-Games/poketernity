@@ -1,14 +1,13 @@
-import { Stat } from "#enums/stat";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { AbilityId } from "#enums/ability-id";
-import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Tailwind", () => {
   let phaserGame: Phaser.Game;
@@ -49,7 +48,7 @@ describe("Moves - Tailwind", () => {
     game.move.select(MoveId.TAILWIND);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(magikarp.getEffectiveStat(Stat.SPD)).toBe(magikarpSpd * 2);
     expect(meowth.getEffectiveStat(Stat.SPD)).toBe(meowthSpd * 2);
@@ -97,7 +96,7 @@ describe("Moves - Tailwind", () => {
 
     game.move.select(MoveId.TAILWIND);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(ally.getEffectiveStat(Stat.SPD)).toBe(allySpd * 2);
     expect(enemy.getEffectiveStat(Stat.SPD)).equal(enemySpd);

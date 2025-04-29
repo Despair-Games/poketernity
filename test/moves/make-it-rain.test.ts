@@ -1,12 +1,10 @@
-import { Stat } from "#enums/stat";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 
 describe("Moves - Make It Rain", () => {
   let phaserGame: Phaser.Game;
@@ -41,7 +39,7 @@ describe("Moves - Make It Rain", () => {
     game.move.select(MoveId.MAKE_IT_RAIN);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);
   });
@@ -57,7 +55,7 @@ describe("Moves - Make It Rain", () => {
 
     game.move.select(MoveId.MAKE_IT_RAIN);
 
-    await game.phaseInterceptor.to(StatStageChangePhase);
+    await game.phaseInterceptor.to("StatStageChangePhase");
 
     expect(enemyPokemon.isFainted()).toBe(true);
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);
@@ -74,7 +72,7 @@ describe("Moves - Make It Rain", () => {
     game.move.select(MoveId.MAKE_IT_RAIN);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to(StatStageChangePhase);
+    await game.phaseInterceptor.to("StatStageChangePhase");
 
     enemyPokemon.forEach((p) => expect(p.isFainted()).toBe(true));
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);
@@ -91,7 +89,7 @@ describe("Moves - Make It Rain", () => {
     // Make Make It Rain miss the first target
     await game.move.forceMiss(true);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);
   });

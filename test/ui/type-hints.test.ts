@@ -1,15 +1,14 @@
+import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { Button } from "#enums/buttons";
+import { TypeEffectivenessColor } from "#enums/color";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { CommandPhase } from "#app/phases/command-phase";
-import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { MockText } from "#test/test-utils/mocks/mocksContainer/mockText";
 import i18next from "i18next";
-import { TypeEffectivenessColor } from "#enums/color";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("UI - Type Hints", () => {
   let phaserGame: Phaser.Game;
@@ -60,7 +59,7 @@ describe("UI - Type Hints", () => {
       expect.soft(dragonClawText.color).toBe(TypeEffectivenessColor.NO_EFFECT);
       ui.getHandler().processInput(Button.ACTION);
     });
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
   });
 
   it("check status move color", async () => {
@@ -85,6 +84,6 @@ describe("UI - Type Hints", () => {
       expect.soft(growlText.color).toBe(undefined);
       ui.getHandler().processInput(Button.ACTION);
     });
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
   });
 });

@@ -1,17 +1,15 @@
-import { Stat } from "#enums/stat";
-import { TerrainType } from "#enums/terrain-type";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { allMoves } from "#app/data/data-lists";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { StatusEffect } from "#enums/status-effect";
 
 // See also: TypeImmunityAbAttr
 describe("Abilities - Sap Sipper", () => {
@@ -51,7 +49,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(initialEnemyHp - enemyPokemon.hp).toBe(0);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
@@ -68,7 +66,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
@@ -83,7 +81,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.hasTerrain(TerrainType.GRASSY)).toBe(true);
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(0);
@@ -101,7 +99,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(initialEnemyHp - enemyPokemon.hp).toBe(0);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
@@ -118,11 +116,11 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(playerPokemon.getTag(BattlerTagType.SPIKY_SHIELD)).toBeDefined();
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
@@ -145,7 +143,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(initialEnemyHp - enemyPokemon.hp).toBe(0);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);

@@ -1,9 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
-import { StatusEffect } from "#enums/status-effect";
-import { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -44,7 +43,7 @@ describe("Moves - Sparkly Swirl", () => {
     vi.spyOn(partyPokemon, "resetStatus");
 
     game.move.select(MoveId.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
@@ -66,7 +65,7 @@ describe("Moves - Sparkly Swirl", () => {
     vi.spyOn(rightOpp, "resetStatus");
 
     game.move.select(MoveId.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 

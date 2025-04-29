@@ -5,7 +5,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
@@ -27,7 +27,7 @@ export class MoveHelper extends GameManagerHelper {
    * accuracy to -1, guaranteeing a hit.
    */
   public async forceHit(): Promise<void> {
-    await this.game.phaseInterceptor.to(MoveEffectPhase, false);
+    await this.game.phaseInterceptor.to("MoveEffectPhase", false);
     const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
     vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy").mockReturnValue(-1);
   }
@@ -38,7 +38,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param firstTargetOnly - Whether the move should force miss on the first target only, in the case of multi-target moves.
    */
   public async forceMiss(firstTargetOnly: boolean = false): Promise<void> {
-    await this.game.phaseInterceptor.to(MoveEffectPhase, false);
+    await this.game.phaseInterceptor.to("MoveEffectPhase", false);
     const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
     const accuracy = vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy");
 

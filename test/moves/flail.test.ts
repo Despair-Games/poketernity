@@ -1,14 +1,13 @@
+import { allMoves } from "#app/data/data-lists";
+import type { Move } from "#app/data/moves/move";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
-import { BattlerIndex } from "#enums/battler-index";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Flail", () => {
   let phaserGame: Phaser.Game;
@@ -62,9 +61,9 @@ describe("Moves - Flail", () => {
     game.move.select(MoveId.FLAIL, 0);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect((game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(flail.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
+    await game.phaseInterceptor.to("DamageAnimPhase", false);
     expect(flail.calculateBattlePower).toHaveLastReturnedWith(expectedBp);
   });
 });

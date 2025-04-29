@@ -1,7 +1,5 @@
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -36,13 +34,13 @@ describe("Abilities - Screen Cleaner", () => {
     await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.HAIL);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeDefined();
 
     await game.toNextTurn();
     game.switchPokemon(1);
-    await game.phaseInterceptor.to(PostSummonPhase);
+    await game.phaseInterceptor.to("PostSummonPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeUndefined();
   });
@@ -53,13 +51,13 @@ describe("Abilities - Screen Cleaner", () => {
     await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeDefined();
 
     await game.toNextTurn();
     game.switchPokemon(1);
-    await game.phaseInterceptor.to(PostSummonPhase);
+    await game.phaseInterceptor.to("PostSummonPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeUndefined();
   });
@@ -70,13 +68,13 @@ describe("Abilities - Screen Cleaner", () => {
     await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeDefined();
 
     await game.toNextTurn();
     game.switchPokemon(1);
-    await game.phaseInterceptor.to(PostSummonPhase);
+    await game.phaseInterceptor.to("PostSummonPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeUndefined();
   });

@@ -1,4 +1,4 @@
-import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
+import type { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
@@ -102,7 +102,7 @@ describe("Abilities - Speed Boost", () => {
     commandPhase.handleCommand(BattleCommand.RUN, 0);
     const runPhase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
     runPhase.forceFailEscape = true;
-    await game.phaseInterceptor.to(AttemptRunPhase);
+    await game.phaseInterceptor.to("AttemptRunPhase");
     await game.toNextTurn();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

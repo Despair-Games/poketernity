@@ -1,14 +1,11 @@
-import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerIndex } from "#enums/battler-index";
-import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 
 describe("Abilities - Moxie", () => {
   let phaserGame: Phaser.Game;
@@ -45,7 +42,7 @@ describe("Abilities - Moxie", () => {
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
 
     game.move.select(moveToUse);
-    await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(VictoryPhase);
+    await game.phaseInterceptor.to("VictoryPhase");
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);
   }, 20000);
@@ -66,7 +63,7 @@ describe("Abilities - Moxie", () => {
 
       game.move.select(moveToUse, BattlerIndex.PLAYER_2);
 
-      await game.phaseInterceptor.to(TurnEndPhase);
+      await game.phaseInterceptor.to("TurnEndPhase");
 
       expect(firstPokemon.getStatStage(Stat.ATK)).toBe(1);
     },

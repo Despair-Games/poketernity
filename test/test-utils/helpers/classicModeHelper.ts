@@ -1,16 +1,16 @@
-import { BattleStyle } from "#enums/battle-style";
-import type { SpeciesId } from "#enums/species-id";
 import { getGameMode } from "#app/game-mode";
-import { GameModes } from "#enums/game-modes";
 import overrides from "#app/overrides";
 import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
+import { settings } from "#app/system/settings/settings-manager";
+import { BattleStyle } from "#enums/battle-style";
+import { GameModes } from "#enums/game-modes";
+import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { generateStarter } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
-import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle classic mode specifics
@@ -36,7 +36,7 @@ export class ClassicModeHelper extends GameManagerHelper {
       selectStarterPhase.initBattle(starters);
     });
 
-    await this.game.phaseInterceptor.to(EncounterPhase);
+    await this.game.phaseInterceptor.to("EncounterPhase");
     if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
       this.game.removeEnemyHeldItems();
     }
@@ -72,7 +72,7 @@ export class ClassicModeHelper extends GameManagerHelper {
       );
     }
 
-    await this.game.phaseInterceptor.to(CommandPhase);
+    await this.game.phaseInterceptor.to("CommandPhase");
     console.log("==================[New Turn]==================");
   }
 }

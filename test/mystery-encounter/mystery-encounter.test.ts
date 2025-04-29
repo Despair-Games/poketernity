@@ -1,10 +1,10 @@
-import { afterEach, beforeAll, beforeEach, expect, describe, it } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
-import Phaser from "phaser";
-import { SpeciesId } from "#enums/species-id";
+import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import type BattleScene from "#app/battle-scene";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Mystery Encounters", () => {
   let phaserGame: Phaser.Game;
@@ -34,7 +34,7 @@ describe("Mystery Encounters", () => {
       SpeciesId.VOLCARONA,
     ]);
 
-    await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+    await game.phaseInterceptor.to("MysteryEncounterPhase", false);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(MysteryEncounterPhase.name);
   });
 
