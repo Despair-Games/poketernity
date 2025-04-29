@@ -1,5 +1,5 @@
 import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
-import { hasTouchscreen, isLandscapeMode } from "#app/utils";
+import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 

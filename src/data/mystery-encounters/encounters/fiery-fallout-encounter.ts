@@ -21,7 +21,7 @@ import {
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { SpeciesId } from "#enums/species-id";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -30,7 +30,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import { WeatherType } from "#enums/weather-type";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { StatusEffect } from "#enums/status-effect";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {

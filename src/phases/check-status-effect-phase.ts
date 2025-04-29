@@ -4,7 +4,7 @@ import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-p
 import { Stat } from "#enums/stat";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one

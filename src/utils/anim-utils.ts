@@ -4,6 +4,7 @@ import type { initCommonAnims } from "#app/data/init/init-common-anims";
 import type { initEncounterAnims } from "#app/data/init/init-encounter-anims";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
+
 import type { AnimConfig } from "#app/data/animations/anim-config";
 import { commonAnims } from "#app/data/animations/common-anims";
 import { encounterAnims } from "#app/data/animations/encounter-anims";
@@ -52,8 +53,6 @@ export function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promis
  * Loads common animation assets to scene.
  *
  * **Must** be called after {@linkcode initCommonAnims} to load all required animations properly.
- * @param startLoad
- * @returns
  */
 export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
@@ -62,10 +61,9 @@ export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
 }
 
 /**
- * Loads encounter animation assets to scene
+ * Loads mystery encounter animation assets to scene.
  *
- * **MUST** be called after {@linkcode initEncounterAnims} to load all required animations properly
- * @param startLoad
+ * **MUST** be called after {@linkcode initEncounterAnims} to load all required animations properly.
  */
 export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void> {
   await loadAnimAssets(Array.from(encounterAnims.values()), startLoad);

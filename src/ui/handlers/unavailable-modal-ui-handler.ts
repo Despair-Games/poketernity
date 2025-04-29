@@ -3,7 +3,7 @@ import { SESSION_ID_COOKIE } from "#app/constants/app";
 import { globalScene } from "#app/global-scene";
 import type { ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { removeCookie } from "#app/utils";
+import { removeCookie } from "#app/utils/app-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";

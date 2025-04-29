@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { getFrameMs, isNullOrUndefined } from "#app/utils";
+import { getFrameMs, isNullOrUndefined } from "#app/utils/common-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { AwaitableUiHandler } from "./awaitable-ui-handler";

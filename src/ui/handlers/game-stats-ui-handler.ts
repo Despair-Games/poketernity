@@ -1,17 +1,17 @@
-import { speciesStarterCosts } from "#app/data/starters";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { DexAttr } from "#app/data/dex-attributes";
+import { speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
 import type { GameData } from "#app/system/game-data";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { formatLargeNumberFixedDigits, getPlayTimeString } from "#app/utils";
+import { formatLargeNumberFixedDigits, getPlayTimeString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type Phaser from "phaser";
-import { UiHandler } from "./abstract-ui-handler";
 
 interface DisplayStat {
   readonly label_key: string;

@@ -1,6 +1,6 @@
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type { AutoCompleteUiHandler } from "./autocomplete-ui-handler";

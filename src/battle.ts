@@ -1,5 +1,3 @@
-import type { Move } from "#app/data/moves/move";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import {
   CHAMPION_WAVE,
   ELITE_FOUR_1_WAVE,
@@ -21,6 +19,9 @@ import {
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "#app/constants/special-waves";
+import { getLevelForWaveFunc } from "#app/data/exp";
+import type { Move } from "#app/data/moves/move";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
@@ -33,7 +34,9 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
 import { settings } from "#app/system/settings/settings-manager";
 import { TurnCommandManager } from "#app/turn-command-manager";
-import { isBetween, NumberHolder, randInt, randomString, randSeedInt, randSeedItem, shiftCharCodes } from "#app/utils";
+import { isBetween, NumberHolder } from "#app/utils/common-utils";
+import { randInt, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { shiftCharCodes } from "#app/utils/string-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -45,7 +48,6 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
-import { getLevelForWaveFunc } from "#app/data/exp";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

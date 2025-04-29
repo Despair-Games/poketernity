@@ -1,5 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
@@ -11,17 +12,16 @@ import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import {
   formatLargeNumberFixedDigits,
   formatMoney,
   getPlayTimeString,
   getPokemonLevelText,
-  isNullOrUndefined,
-} from "#app/utils";
+} from "#app/utils/string-utils";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";

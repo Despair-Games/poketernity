@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { setTextColor } from "#app/ui/text/text-utils";
-import { formatText } from "#app/utils";
+import { toTitleCase } from "#app/utils/string-utils";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
@@ -23,9 +23,9 @@ export class AdminUiHandler extends FormModalUiHandler {
   private readonly httpUserNotFoundErrorCode: number = 404;
   private readonly ERR_REQUIRED_FIELD = (field: string) => {
     if (field === "username") {
-      return `${formatText(field)} is required`;
+      return `${toTitleCase(field)} is required`;
     } else {
-      return `${formatText(field)} Id is required`;
+      return `${toTitleCase(field)} Id is required`;
     }
   };
   // returns a string saying whether a username has been successfully linked/unlinked to discord/google

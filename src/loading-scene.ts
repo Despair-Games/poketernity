@@ -24,7 +24,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/constants/ui";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
-import { getEnumKeys, getEnumValues } from "#app/utils";
+import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor } from "#enums/color";
 import { GachaType } from "#enums/gacha-types";

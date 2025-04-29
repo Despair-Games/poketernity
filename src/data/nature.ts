@@ -1,4 +1,4 @@
-import { toReadableString } from "#app/utils";
+import { toReadableString } from "#app/utils/string-utils";
 import { getBBCodeFragment } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { Nature } from "#enums/nature";

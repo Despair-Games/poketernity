@@ -9,7 +9,7 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";

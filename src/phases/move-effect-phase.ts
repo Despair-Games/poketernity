@@ -30,7 +30,7 @@ import {
   HitHealModifier,
 } from "#app/modifier/modifier";
 import { HitCheckPhase } from "#app/phases/hit-check-phase";
-import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils/common-utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";

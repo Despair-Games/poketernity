@@ -184,7 +184,7 @@ import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder, toDmgValue } from "#app/utils";
+import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { getWeatherCondition, normalTypeMoveConversionCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
