@@ -1,4 +1,3 @@
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -75,7 +74,7 @@ describe("Abilities - Teraform Zero", () => {
     game.move.use(MoveId.RAIN_DANCE, 0, null, true); // Activate Terastallization
     await game.move.forceEnemyMove(MoveId.SANDSTORM);
 
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(game).toHaveWeather(WeatherType.RAIN);
 
@@ -125,7 +124,7 @@ describe("Abilities - Teraform Zero", () => {
     game.move.use(MoveId.ELECTRIC_TERRAIN, 0, null, true); // Activate Terastallization
     await game.move.forceEnemyMove(MoveId.PSYCHIC_TERRAIN);
 
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(game).toHaveTerrain(TerrainType.ELECTRIC);
 

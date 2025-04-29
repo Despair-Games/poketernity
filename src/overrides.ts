@@ -62,6 +62,9 @@ class DefaultOverrides {
 
   /** a specific seed (default: a random string of 24 characters) */
   readonly SEED_OVERRIDE: string = "";
+  /**
+   * Overrides the weather
+   */
   readonly WEATHER_OVERRIDE: WeatherType = WeatherType.NONE;
   /**
    * Override the new weather duration. 
@@ -73,6 +76,9 @@ class DefaultOverrides {
    * @see {@linkcode Arena.trySetWeather}
    */
   readonly NEW_WEATHER_DURATION_OVERRIDE: number = -1;
+  /**
+   * Overrides the terrain
+   */
   readonly TERRAIN_OVERRIDE: TerrainType = TerrainType.NONE;
   /**
    * Override the new terrain duration.

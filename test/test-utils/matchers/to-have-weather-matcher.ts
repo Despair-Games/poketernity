@@ -2,7 +2,7 @@ import { capitalizeString } from "#app/utils/string-utils";
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 
 /**
  * Matcher to check if the {@linkcode WeatherType} is as expected

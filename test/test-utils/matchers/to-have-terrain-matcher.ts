@@ -1,7 +1,7 @@
 import { capitalizeString } from "#app/utils/string-utils";
 import { TerrainType } from "#enums/terrain-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 
 /**
  * Matcher to check if the {@linkcode TerrainType} is as expected

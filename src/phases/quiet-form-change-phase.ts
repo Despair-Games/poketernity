@@ -194,6 +194,11 @@ export class QuietFormChangePhase extends BattlePhase {
         this.pokemon,
         false,
       );
+      /**
+       * TODO: Smogon suggests this is tied to tera so move to `terastallization-phase` and
+       * rename the AbAttr in case we want randomizer modes where other Pokemon may have
+       * Tera Zero
+       */
       applyAbAttrs<PostTeraFormChangeClearWeatherTerrainAbAttr>(
         AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN,
         this.pokemon,

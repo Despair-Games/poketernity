@@ -416,6 +416,9 @@ export class Arena {
    * @returns true if new weather set, false if no weather provided or attempting to set the same weather as currently in use
    */
   trySetWeather(newWeatherType: WeatherType, hasPokemonSource: boolean): boolean {
+    /**
+     * TODO: Refactor into if(this.trySetWeatherOverride()) { return true }
+     */
     if (Overrides.WEATHER_OVERRIDE) {
       return this.trySetWeatherOverride(Overrides.WEATHER_OVERRIDE);
     }
@@ -498,6 +501,9 @@ export class Arena {
    * @returns whether or not the terrain was successfully set
    */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
+    /**
+     * TODO: Refactor into if(this.trySetTerrainOverride()) { return true }
+     */
     if (Overrides.TERRAIN_OVERRIDE) {
       return this.trySetTerrainOverride(Overrides.TERRAIN_OVERRIDE);
     }
