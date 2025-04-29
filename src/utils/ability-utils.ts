@@ -11,9 +11,9 @@ import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
 
 /**
- * Returns the Pokemon with weather-based forms
+ * @returns An array of Pokemon with weather-based forms
  */
-export function getPokemonWithWeatherBasedForms() {
+export function getPokemonWithWeatherBasedForms(): Pokemon[] {
   return globalScene
     .getField(true)
     .filter(

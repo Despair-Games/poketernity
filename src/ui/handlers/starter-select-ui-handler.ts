@@ -2,16 +2,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
-import type { LevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
-import {
-  POKERUS_STARTER_COUNT,
-  getCandyProgressRequirement,
-  getPassiveCandyCount,
-  getSameSpeciesEggCandyCounts,
-  getValueReductionCandyCounts,
-  speciesStarterCosts,
-} from "#app/data/starters";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
@@ -22,9 +13,19 @@ import { getNatureName } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
 import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type { LevelMoves } from "#app/data/pokemon-level-moves";
+import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { starterColors } from "#app/data/starter-colors";
+import {
+  POKERUS_STARTER_COUNT,
+  getCandyProgressRequirement,
+  getPassiveCandyCount,
+  getSameSpeciesEggCandyCounts,
+  getValueReductionCandyCounts,
+  speciesStarterCosts,
+} from "#app/data/starters";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
@@ -35,14 +36,16 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/s
 import { StarterPrefs } from "#app/system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
 import { FilterBar } from "#app/ui/components/filter-bar";
 import { IVGraph } from "#app/ui/components/iv-graph";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { StarterContainer } from "#app/ui/components/starter-container";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
 import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type {
@@ -52,18 +55,11 @@ import type {
 } from "#app/ui/interfaces/option-select-config";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import {
-  BooleanHolder,
-  NumberHolder,
-  capitalizeString,
-  fixedNumber,
-  isNullOrUndefined,
-  leftPad,
-  rgbHexToRgba,
-  toReadableString,
-} from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
-import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
+import { rgbHexToRgba } from "#app/utils/color-utils";
+import { BooleanHolder, NumberHolder, fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-utils";
+import { capitalizeString, leftPad, toReadableString } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
@@ -90,9 +86,6 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import Phaser from "phaser";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type { ConfirmUiHandler } from "./confirm-ui-handler";
-import type { OptionSelectUiHandler } from "./option-select-ui-handler";
-import type { RenamePokemonUiHandler } from "./rename-pokemon-ui-handler";
 
 type StarterSelectCallback = (starters: StarterConfig[]) => void;
 

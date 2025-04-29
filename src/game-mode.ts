@@ -1,25 +1,25 @@
-import i18next from "i18next";
-import type { FixedBattleConfigs } from "./battle";
-import { classicFixedBattles, FixedBattleConfig } from "./battle";
-import type { Challenge } from "./data/challenge";
-import { allChallenges, copyChallenge } from "./data/challenge";
-import { applyChallenges } from "./utils/challenge-utils";
-import { ChallengeType } from "#enums/challenge-type";
-import type PokemonSpecies from "./data/pokemon-species";
-import { allSpecies } from "#app/data/data-lists";
-import type { Arena } from "./field/arena";
-import Overrides from "#app/overrides";
-import { randSeedInt, randSeedItem } from "#app/utils";
-import { BiomeId } from "#enums/biome-id";
-import { SpeciesId } from "#enums/species-id";
-import { Challenges } from "#enums/challenges";
-import { globalScene } from "#app/global-scene";
-import { GameModes } from "#enums/game-modes";
+import type { FixedBattleConfigs } from "#app/battle";
+import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
 import { DEFAULT_STARTING_MONEY } from "#app/constants/game";
 import {
-  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
   CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
+  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
 } from "#app/constants/mystery-encounters";
+import type { Challenge } from "#app/data/challenge";
+import { allChallenges, copyChallenge } from "#app/data/challenge";
+import { allSpecies } from "#app/data/data-lists";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import type { Arena } from "#app/field/arena";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { applyChallenges } from "#app/utils/challenge-utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { BiomeId } from "#enums/biome-id";
+import { ChallengeType } from "#enums/challenge-type";
+import { Challenges } from "#enums/challenges";
+import { GameModes } from "#enums/game-modes";
+import { SpeciesId } from "#enums/species-id";
+import i18next from "i18next";
 
 interface GameModeConfig {
   isClassic?: boolean;

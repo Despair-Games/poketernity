@@ -1,4 +1,5 @@
-import { capitalizeString, isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils";
+import { capitalizeString } from "#app/utils/string-utils";
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";

@@ -6,7 +6,7 @@ import type { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 
 /**
  * Attribute to change the defensive stat to be used in a move's damage calculations.

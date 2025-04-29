@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { isNullOrUndefined, type BooleanHolder } from "#app/utils";
+import { isNullOrUndefined, type BooleanHolder } from "#app/utils/common-utils";
 import { getStatKey, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
 import { PreStatStageChangeAbAttr } from "./pre-stat-stage-change-ab-attr";

@@ -2,7 +2,7 @@ import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { vouchers } from "#app/system/voucher";
-import { randSeedItem } from "#app/utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";

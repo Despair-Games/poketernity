@@ -4,7 +4,7 @@ import type { Move } from "#app/data/moves/move";
 import { ChangeMultiHitTypeAttr } from "#app/data/moves/move-attrs/change-multi-hit-type-attr";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";

@@ -7,7 +7,7 @@ import type { ChargingMove } from "#app/data/moves/move";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
 import { globalScene } from "#app/global-scene";
-import { animationFileName } from "#app/utils";
+import { animationFileName } from "#app/utils/string-utils";
 import { MoveId } from "#enums/move-id";
 
 //#region Exports

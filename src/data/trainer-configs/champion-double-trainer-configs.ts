@@ -2,7 +2,7 @@ import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#a
 import { TrainerSlot } from "#enums/trainer-slot";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
-import { randInt } from "#app/utils";
+import { randInt } from "#app/utils/random-utils";
 import { TrainerVariant } from "#enums/trainer-variant";
 import {
   KANTO_CHAMPION_THEME,

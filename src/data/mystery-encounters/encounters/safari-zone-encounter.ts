@@ -15,9 +15,10 @@ import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifi
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokeballType } from "#enums/pokeball-type";
 import { PlayerGender } from "#enums/player-gender";
-import { NumberHolder, randSeedInt } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   doPlayerFlee,
