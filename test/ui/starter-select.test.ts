@@ -1,5 +1,4 @@
 import { allSpecies } from "#app/data/data-lists";
-import { EncounterPhase } from "#app/phases/encounter-phase";
 import type { TitlePhase } from "#app/phases/title-phase";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
@@ -85,7 +84,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
@@ -143,7 +142,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
@@ -204,7 +203,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
@@ -264,7 +263,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
@@ -322,7 +321,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(false);
@@ -381,7 +380,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
@@ -439,7 +438,7 @@ describe("UI - Starter select", () => {
         resolve();
       });
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
@@ -503,7 +502,7 @@ describe("UI - Starter select", () => {
       const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
       saveSlotSelectUiHandler.processInput(Button.ACTION);
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.CATERPIE);
   }, 20000);
 
@@ -566,7 +565,7 @@ describe("UI - Starter select", () => {
       const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
       saveSlotSelectUiHandler.processInput(Button.ACTION);
     });
-    await game.phaseInterceptor.whenAboutToRun(EncounterPhase);
+    await game.phaseInterceptor.to("EncounterPhase", false);
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.NIDORAN_M);
   }, 20000);
 });

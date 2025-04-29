@@ -295,7 +295,10 @@ export class PhaseInterceptor {
     });
   }
 
-  whenAboutToRun(phaseTarget: PhaseInterceptorPhase, _skipFn?: (className: PhaseClass) => boolean): Promise<void> {
+  protected whenAboutToRun(
+    phaseTarget: PhaseInterceptorPhase,
+    _skipFn?: (className: PhaseClass) => boolean,
+  ): Promise<void> {
     const targetName = this.getPhaseName(phaseTarget);
     return new Promise(async (resolve, _reject) => {
       ErrorInterceptor.getInstance().add(this);
