@@ -1,5 +1,10 @@
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { BattleType } from "#enums/battle-type";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 
 /**
  * A look up table containing the total amount of EXP required to reach each level (for the first `100` levels), ordered by growth rate:
@@ -186,6 +191,147 @@ export function getGrowthRateColor(growthRate: GrowthRate) {
     case GrowthRate.FLUCTUATING:
       return CommonColor.VIBRANT_PURPLE;
   }
+}
+
+/**
+ * Function to get the exp given from a defeated Pokemon from gen 1-4
+ */
+export function genOneThroughFourExpFormula(defeatedPokemon: EnemyPokemon): number {
+  const baseExp = defeatedPokemon.getExpValue();
+  const enemyLevel = defeatedPokemon.level;
+  // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
+  const expShareMultiplier = 1;
+  // Lucky egg bonus (being handled through modifiers)
+  const luckyEggBonus = 1;
+  // Trainer exp bonus
+  const trainerExpBonus =
+    this.currentBattle.battleType === BattleType.TRAINER
+    || this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      ? 1.5
+      : 1;
+  // This game does not use the outsider Pokemon bonus
+  const outsiderExpBonus = 1;
+
+  const expGained =
+    ((baseExp * enemyLevel) / 7) * expShareMultiplier * luckyEggBonus * trainerExpBonus * outsiderExpBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 5
+ * BW2 has a cap of 100,000 but that is ignored here
+ */
+export function genFiveExpFormula(defeatedPokemon: Pokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.getExpValue();
+  const playerLevel = playerPokemon.level;
+  const enemyLevel = defeatedPokemon.level;
+  // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
+  const expShareMultiplier = 1;
+  // Lucky egg bonus (being handled through modifiers)
+  const luckyEggBonus = 1;
+  // Trainer exp bonus
+  const trainerExpBonus =
+    this.currentBattle.battleType === BattleType.TRAINER
+    || this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      ? 1.5
+      : 1;
+  // This game does not use the outsider Pokemon bonus
+  const outsiderExpBonus = 1;
+  // Unused
+  const expPointPowerBonus = 1;
+
+  const levelScalingNumerator = Math.floor(
+    Math.round(Math.sqrt(2 * enemyLevel + 10)) * Math.pow(2 * enemyLevel + 10, 2),
+  );
+  const levelScalingDenominator = Math.floor(
+    Math.round(Math.sqrt(playerLevel + enemyLevel + 10)) * Math.pow(playerLevel + enemyLevel + 10, 2),
+  );
+  const levelScalingFactor = levelScalingNumerator / levelScalingDenominator;
+
+  const gainedExp =
+    (((baseExp * enemyLevel) / 5) * expShareMultiplier * trainerExpBonus * levelScalingFactor + 1)
+    * outsiderExpBonus
+    * luckyEggBonus
+    * expPointPowerBonus;
+  return Math.floor(gainedExp);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 6
+ */
+export function genSixExpFormula(defeatedPokemon: Pokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.getExpValue();
+  const enemyLevel = defeatedPokemon.level;
+  // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
+  const expShareMultiplier = 1;
+  // Lucky egg bonus (being handled through modifiers)
+  const luckyEggBonus = 1;
+  // Trainer exp bonus
+  const trainerExpBonus =
+    this.currentBattle.battleType === BattleType.TRAINER
+    || this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      ? 1.5
+      : 1;
+  const friendshipBonus = playerPokemon.friendship >= 220 ? 1.2 : 1;
+
+  // This game does not use the outsider Pokemon bonus
+  const outsiderExpBonus = 1;
+  // If the player Pokemon is past the level of evolution this should be 1.2, unused right now
+  const canEvolveBonus = 1;
+  // Unused
+  const expPointPowerBonus = 1;
+
+  const expGained =
+    ((baseExp * enemyLevel) / 7)
+    * expShareMultiplier
+    * luckyEggBonus
+    * trainerExpBonus
+    * outsiderExpBonus
+    * expPointPowerBonus
+    * friendshipBonus
+    * canEvolveBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 7+
+ */
+export function genSevenPlusExpFormula(defeatedPokemon: Pokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.getExpValue();
+  const enemyLevel = defeatedPokemon.level;
+  const playerLevel = playerPokemon.level;
+  // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
+  const expShareMultiplier = 1;
+  // Lucky egg bonus (being handled through modifiers)
+  const luckyEggBonus = 1;
+  // Trainer exp bonus
+  const trainerExpBonus =
+    this.currentBattle.battleType === BattleType.TRAINER
+    || this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      ? 1.5
+      : 1;
+  const friendshipBonus = playerPokemon.friendship >= 220 ? 1.2 : 1;
+
+  // This game does not use the outsider Pokemon bonus
+  const outsiderExpBonus = 1;
+  // If the player Pokemon is past the level of evolution this should be 1.2, unused right now
+  const canEvolveBonus = 1;
+  // Unused
+  const expPointPowerBonus = 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 5;
+  const levelScalingFactor = Math.pow((2 * enemyLevel + 10) / (playerLevel + enemyLevel + 10), 2.5);
+  const innerTerm = baseExpGain * levelScalingFactor * expShareMultiplier + 1;
+
+  const expGained =
+    innerTerm
+    * luckyEggBonus
+    * trainerExpBonus
+    * outsiderExpBonus
+    * expPointPowerBonus
+    * friendshipBonus
+    * canEvolveBonus;
+  return Math.floor(expGained);
 }
 
 /**
