@@ -189,7 +189,7 @@ export class GameManager {
    * @returns A promise that resolves when the title phase is reached.
    */
   async runToTitle(): Promise<void> {
-    await this.phaseInterceptor.whenAboutToRun(LoginPhase);
+    await this.phaseInterceptor.to("LoginPhase", false);
     this.phaseInterceptor.pop();
     await this.phaseInterceptor.to("TitlePhase");
 
@@ -207,10 +207,8 @@ export class GameManager {
 
   /**
    * Helper function to run to the final boss encounter as it's a bit tricky due to extra dialogue
+   *
    * Also handles Major/Minor bosses from endless modes
-   * @param game - The game manager
-   * @param species
-   * @param mode
    */
   async runToFinalBossEncounter(species: SpeciesId[], mode: GameModes) {
     console.log("===to final boss encounter===");

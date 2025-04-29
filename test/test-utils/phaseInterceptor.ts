@@ -213,6 +213,7 @@ export class PhaseInterceptor {
    * Method to set the starting phase.
    * @param phaseFrom - The phase to start from.
    * @returns The instance of the PhaseInterceptor.
+   * @deprecated Is this necessary any more?
    */
   protected runFrom(phaseFrom: PhaseInterceptorPhase): PhaseInterceptor {
     this.phaseFrom = phaseFrom;
@@ -295,6 +296,7 @@ export class PhaseInterceptor {
     });
   }
 
+  /** @deprecated Use `to("Phase", false)`? */
   protected whenAboutToRun(
     phaseTarget: PhaseInterceptorPhase,
     _skipFn?: (className: PhaseClass) => boolean,
