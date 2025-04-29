@@ -156,6 +156,7 @@ import { applyChallenges } from "#app/utils/challenge-utils";
 import {
   BooleanHolder,
   NumberHolder,
+  coerceArray,
   deepCopy,
   deepFreeze,
   fixedNumber,
@@ -1372,9 +1373,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let overrideArray: MoveId | Array<MoveId> = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
       : Overrides.ENEMY_MOVESET_OVERRIDE;
-    if (!Array.isArray(overrideArray)) {
-      overrideArray = [overrideArray];
-    }
+
+    overrideArray = coerceArray(overrideArray);
     if (overrideArray.length > 0) {
       if (!this.isPlayer()) {
         this.moveset = [];
@@ -1523,9 +1523,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isTerastallized) {
       return;
     }
-    if (!Array.isArray(types)) {
-      types = [types];
-    }
+    types = coerceArray(types);
     this.summonData.types = types;
   }
 
@@ -3880,9 +3878,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     includeConfusion: boolean = false,
     ignoreMockAbility: boolean = false,
   ): boolean {
-    if (!Array.isArray(statusList)) {
-      statusList = [statusList];
-    }
+    statusList = coerceArray(statusList);
     if (
       statusList.includes(this.getStatusEffect(ignoreMockAbility))
       || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))

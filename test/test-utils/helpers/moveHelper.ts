@@ -9,6 +9,7 @@ import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
+import { coerceArray } from "#app/utils/common-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
@@ -97,10 +98,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param useTera - If `true`, the Pokemon also chooses to Terastallize. This does not require a Tera Orb. Default: `false`.
    */
   public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null, useTera: boolean = false): void {
-    const movesetOverride = Array.isArray(Overrides.MOVESET_OVERRIDE)
-      ? Overrides.MOVESET_OVERRIDE
-      : [Overrides.MOVESET_OVERRIDE];
-    if (movesetOverride.length > 0) {
+    if (coerceArray(Overrides.MOVESET_OVERRIDE).length > 0) {
       vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn("Warning: `use` overwrites the Pokemon's moveset and disables the player moveset override!");
     }
@@ -128,9 +126,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveset - The moveset to use
    */
   public changeMoveset(pokemon: Pokemon, moveset: MoveId | MoveId[]): void {
-    if (!Array.isArray(moveset)) {
-      moveset = [moveset];
-    }
+    moveset = coerceArray(moveset);
     pokemon.moveset = [];
     moveset.forEach((moveId) => {
       pokemon.moveset.push(new PokemonMove(moveId));
@@ -185,10 +181,7 @@ export class MoveHelper extends GameManagerHelper {
     const enemy =
       this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
 
-    const movesetOverride = Array.isArray(Overrides.ENEMY_MOVESET_OVERRIDE)
-      ? Overrides.ENEMY_MOVESET_OVERRIDE
-      : [Overrides.ENEMY_MOVESET_OVERRIDE];
-    if (movesetOverride.length > 0) {
+    if (coerceArray(Overrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
       vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
         "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",

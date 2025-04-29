@@ -1,5 +1,6 @@
 import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import type { Pokemon } from "#app/field/pokemon";
+import { coerceArray } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
 
 export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigger {
@@ -8,9 +9,7 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
 
   constructor(statusEffects: StatusEffect | StatusEffect[], invert: boolean = false) {
     super();
-    if (!Array.isArray(statusEffects)) {
-      statusEffects = [statusEffects];
-    }
+    statusEffects = coerceArray(statusEffects);
     this.statusEffects = statusEffects;
     this.invert = invert;
   }
