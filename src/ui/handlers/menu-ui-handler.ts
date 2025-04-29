@@ -20,7 +20,7 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { GeneralSettingsUiHandler } from "../settings/general-settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import type { AchievementsUiHandler } from "./achievements-ui-handler";
 import type { AdminUiHandler } from "./admin-ui-handler";
 import { getAdminModeName } from "./admin-ui-handler";
