@@ -371,7 +371,7 @@ export class Arena {
    * @param weather new {@linkcode WeatherType} to set
    * @returns true to force trySetWeather to return true
    */
-  trySetWeatherOverride(weather: WeatherType): boolean {
+  tryOverrideWeather(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
     globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
     globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
@@ -383,7 +383,7 @@ export class Arena {
    * @param terrain new {@linkcode TerrainType} to set
    * @returns true to force trySetTerrain to return true
    */
-  trySetTerrainOverride(terrain: TerrainType): boolean {
+  tryOverrideTerrain(terrain: TerrainType): boolean {
     this.terrain = new Terrain(terrain, 0);
     globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
     globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
@@ -417,10 +417,10 @@ export class Arena {
    */
   trySetWeather(newWeatherType: WeatherType, hasPokemonSource: boolean): boolean {
     /**
-     * TODO: Refactor into if(this.trySetWeatherOverride()) { return true }
+     * TODO: Refactor into if(this.tryOverrideWeather()) { return true }
      */
     if (Overrides.WEATHER_OVERRIDE) {
-      return this.trySetWeatherOverride(Overrides.WEATHER_OVERRIDE);
+      return this.tryOverrideWeather(Overrides.WEATHER_OVERRIDE);
     }
 
     if (!this.canSetWeather(newWeatherType)) {
@@ -502,10 +502,10 @@ export class Arena {
    */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
     /**
-     * TODO: Refactor into if(this.trySetTerrainOverride()) { return true }
+     * TODO: Refactor into if(this.tryOverrideTerrain()) { return true }
      */
     if (Overrides.TERRAIN_OVERRIDE) {
-      return this.trySetTerrainOverride(Overrides.TERRAIN_OVERRIDE);
+      return this.tryOverrideTerrain(Overrides.TERRAIN_OVERRIDE);
     }
 
     if (this.terrain?.terrainType === (terrain || undefined)) {
