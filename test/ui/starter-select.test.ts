@@ -1,6 +1,5 @@
 import { allSpecies } from "#app/data/data-lists";
 import { EncounterPhase } from "#app/phases/encounter-phase";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import type { TitlePhase } from "#app/phases/title-phase";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
@@ -54,7 +53,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -112,7 +111,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -173,7 +172,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -233,7 +232,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -291,7 +290,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.CYCLE_SHINY);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -350,7 +349,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -408,7 +407,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -465,7 +464,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
@@ -527,7 +526,7 @@ describe("UI - Starter select", () => {
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
     });
-    await game.phaseInterceptor.run(SelectStarterPhase);
+    await game.phaseInterceptor.to("SelectStarterPhase");
     let options: OptionSelectItem[] = [];
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {

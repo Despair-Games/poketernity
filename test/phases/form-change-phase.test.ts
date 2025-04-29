@@ -1,15 +1,15 @@
+import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { AbilityId } from "#enums/ability-id";
+import { Button } from "#enums/buttons";
+import { ElementalType } from "#enums/elemental-type";
+import { FormChangeItem } from "#enums/form-change-item";
 import { MoveId } from "#enums/move-id";
+import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { ElementalType } from "#enums/elemental-type";
-import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { Button } from "#enums/buttons";
-import { FormChangeItem } from "#enums/form-change-item";
-import { SpeciesFormKey } from "#enums/species-form-key";
 
 describe("Form Change Phase", () => {
   let phaserGame: Phaser.Game;
@@ -158,13 +158,13 @@ describe("Form Change Phase", () => {
     await new Promise<void>((r) => setTimeout(r, 10));
     game.scene.ui.processInput(Button.ACTION);
     game.scene.ui.processInput(Button.ACTION);
-    await game.phaseInterceptor.run("FormChangePhase");
+    await game.phaseInterceptor.to("FormChangePhase");
     expect(rillaboom.getFormKey()).toBe("");
 
     // Navigate UI: Reactivate Max Mushrooms
     game.scene.ui.processInput(Button.ACTION);
     game.scene.ui.processInput(Button.ACTION);
-    await game.phaseInterceptor.run("FormChangePhase");
+    await game.phaseInterceptor.to("FormChangePhase");
     expect(rillaboom.getFormKey()).toBe("gigantamax");
 
     // Navigate UI: Exit "Check Party" menu

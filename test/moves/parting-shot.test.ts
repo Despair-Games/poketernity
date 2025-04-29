@@ -1,4 +1,3 @@
-import { MessagePhase } from "#app/phases/message-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -169,7 +168,7 @@ describe("Moves - Parting Shot", () => {
       // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
       await game.faintPokemon(game.scene.getPlayerParty()[0]);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-      await game.phaseInterceptor.run(MessagePhase);
+      await game.phaseInterceptor.to("MessagePhase");
       game.selectPartyPokemon(1);
 
       await game.phaseInterceptor.to("TurnInitPhase", false);

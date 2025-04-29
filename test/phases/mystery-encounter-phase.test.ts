@@ -55,7 +55,7 @@ describe("Mystery Encounter Phases", () => {
         // End phase early for test
         game.phaseInterceptor.superEndPhase();
       });
-      await game.phaseInterceptor.run(MysteryEncounterPhase);
+      await game.phaseInterceptor.to("MysteryEncounterPhase");
 
       expect(game.scene.mysteryEncounterSaveData.encounteredEvents.length).toBeGreaterThan(0);
       expect(game.scene.mysteryEncounterSaveData.encounteredEvents[0].type).toEqual(
@@ -79,7 +79,7 @@ describe("Mystery Encounter Phases", () => {
         handler.processInput(Button.ACTION);
       });
 
-      await game.phaseInterceptor.run(MysteryEncounterPhase);
+      await game.phaseInterceptor.to("MysteryEncounterPhase");
 
       // Select option 1 for encounter
       const handler = game.scene.ui.getHandler() as MysteryEncounterUiHandler;

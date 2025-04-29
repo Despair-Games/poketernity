@@ -106,7 +106,7 @@ export async function runSelectMysteryEncounterOption(
   );
 
   if (game.isCurrentPhase(MessagePhase)) {
-    await game.phaseInterceptor.run(MessagePhase);
+    await game.phaseInterceptor.to("MessagePhase");
   }
 
   // dispose of intro messages
