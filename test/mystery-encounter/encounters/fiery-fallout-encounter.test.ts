@@ -10,7 +10,7 @@ import type { MovePhase } from "#app/phases/move-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";

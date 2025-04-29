@@ -1,7 +1,8 @@
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
-import { rgbHexToRgba, leftPad } from "#app/utils";
+import { rgbHexToRgba } from "#app/utils/color-utils";
+import { leftPad } from "#app/utils/string-utils";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { speciesEggMoves } from "#app/data/egg-moves";
@@ -13,7 +14,7 @@ import { globalScene } from "#app/global-scene";
 import { argbFromRgba } from "@material/material-color-utilities";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
 
 /**
  * Class for the hatch info summary of each pokemon

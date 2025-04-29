@@ -20,7 +20,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";

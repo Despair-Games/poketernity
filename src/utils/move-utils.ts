@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, getEnumKeys, toDmgValue, type AbstractConstructor } from "#app/utils";
+import { BooleanHolder, getEnumKeys, toDmgValue, type AbstractConstructor } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
@@ -17,7 +17,7 @@ import { t } from "i18next";
 
 export const FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
-export const crashDamageFunc = (user: Pokemon, _move: Move) => {
+export const crashDamageFunc = (user: Pokemon, _move: Move): boolean => {
   const cancelled = new BooleanHolder(false);
   applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
   if (cancelled.value) {
@@ -111,7 +111,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
     move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
   }
 }
-export function isFieldTargeted(targets: BattlerIndex[]) {
+export function isFieldTargeted(targets: BattlerIndex[]): boolean {
   return targets.some((t) => [BattlerIndex.BOTH_SIDES, BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE].includes(t));
 }
 

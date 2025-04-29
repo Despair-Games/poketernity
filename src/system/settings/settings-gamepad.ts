@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 import type { SettingsGamepadUiHandler } from "#app/ui/settings/settings-gamepad-ui-handler";
-import { truncateString } from "#app/utils";
+import { truncateString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";

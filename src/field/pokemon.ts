@@ -146,19 +146,6 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { BattleInfo } from "#app/ui/components/battle-info";
-import {
-  BooleanHolder,
-  NumberHolder,
-  deepCopy,
-  deepFreeze,
-  fixedNumber,
-  getEnumValues,
-  getIvsFromId,
-  isNullOrUndefined,
-  randSeedInt,
-  toDmgValue,
-  type nil,
-} from "#app/utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
@@ -166,9 +153,21 @@ import {
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
+import {
+  BooleanHolder,
+  NumberHolder,
+  deepCopy,
+  deepFreeze,
+  fixedNumber,
+  getEnumValues,
+  isNullOrUndefined,
+  toDmgValue,
+  type nil,
+} from "#app/utils/common-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";

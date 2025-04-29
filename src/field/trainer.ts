@@ -11,8 +11,8 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
@@ -247,8 +247,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
   /**
    * Function to get levels for a given wave and the {@linkcode TrainerPartyTemplate}
    *
-   * First the waveIndex is scaled according to {@linkcode getWaveForDifficulty} which I will call `x` here
-   * The base level is 1 + x/2 + (x^2 / 625) a quadratic function that is outpaced by y=x until around wave 310
+   * First the waveIndex is scaled according to {@linkcode getWaveForDifficulty}
+   * and then plugged into the {@linkcode getWaveForDifficulty} function
    *
    * If the party member strength is below STRONG, the multiplier is scaled and a negative level offset is applied
    *

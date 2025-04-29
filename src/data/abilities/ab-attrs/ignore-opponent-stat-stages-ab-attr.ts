@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { type BattleStat, BATTLE_STATS } from "#enums/stat";
 import { AbAttr } from "./ab-attr";

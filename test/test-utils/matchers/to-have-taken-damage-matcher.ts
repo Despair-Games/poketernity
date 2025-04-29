@@ -1,4 +1,5 @@
-import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
  * Matcher to check if a Pokemon has taken a specific amount of damage
@@ -6,10 +7,14 @@ import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
  * @param expectedDamageTaken - The expected amount of damage the {@linkcode Pokemon} has taken
  * @returns Whether the matcher passed
  */
-export function toHaveTakenDamageMatcher(received: unknown, expectedDamageTaken: number) {
+export function toHaveTakenDamageMatcher(
+  this: MatcherState,
+  received: unknown,
+  expectedDamageTaken: number,
+): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }

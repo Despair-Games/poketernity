@@ -17,7 +17,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";

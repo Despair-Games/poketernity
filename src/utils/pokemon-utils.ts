@@ -3,42 +3,45 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
-import { isNullOrUndefined, randSeedItem } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given
- * @param species The species to fetch
+ * @param species - The species to fetch
  * @returns The associated {@linkcode PokemonSpecies} object
  */
 export function getPokemonSpecies(species: SpeciesId | SpeciesId[]): PokemonSpecies {
-  // If a special pool (named trainers) is used here it CAN happen that they have a array as species (which means choose one of those two). So we catch that with this code block
+  // If a special pool (named trainers) is used here it CAN happen that they have a array as species (which means choose one of those two).
+  // TODO: this should be handled elsewhere
   if (Array.isArray(species)) {
-    // Pick a random species from the list
     species = species[Math.floor(Math.random() * species.length)];
   }
+
   if (species >= 2000) {
-    return allSpecies.find((s) => s.speciesId === species)!; // TODO: is this bang correct?
+    return allSpecies.find((s) => s.speciesId === species)!;
   }
+
   return allSpecies[species - 1];
 }
 
 export function getPokemonSpeciesForm(species: SpeciesId, formIndex: number): PokemonSpeciesForm {
   const retSpecies: PokemonSpecies =
-    species >= 2000
-      ? allSpecies.find((s) => s.speciesId === species)! // TODO: is the bang correct?
-      : allSpecies[species - 1];
+    species >= 2000 ? allSpecies.find((s) => s.speciesId === species)! : allSpecies[species - 1];
+
   if (formIndex < retSpecies.forms?.length) {
     return retSpecies.forms[formIndex];
   }
+
   return retSpecies;
 }
 
 /**
  * Returns a list of Pokemon in a specific group (ex. Mythical, UB, etc.)
- * @param group the group used to make the list
- * @param includeLegends if `true`, AND if `group` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
+ * @param group - The group used to make the list
+ * @param includeLegends - (Optional) If `true`, AND if `group` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
  * @returns a list of species IDs belonging to the group
  */
 export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): SpeciesId[] {
@@ -49,11 +52,13 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
       }
     })
     .filter((s) => !isNullOrUndefined(s));
+
   if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
     speciesList.push(SpeciesId.COSMOG, SpeciesId.COSMOEM, SpeciesId.LUNALA, SpeciesId.SOLGALEO, SpeciesId.NECROZMA);
   } else if (includeLegends && group === SpeciesGroups.PARADOX) {
     speciesList.push(SpeciesId.KORAIDON, SpeciesId.MIRAIDON);
   }
+
   return speciesList as SpeciesId[];
 }
 
@@ -65,6 +70,7 @@ export function getPokerusStarters(): PokemonSpecies[] {
   const pokerusStarters: PokemonSpecies[] = [];
   const date = new Date();
   date.setUTCHours(0, 0, 0, 0);
+
   globalScene.executeWithSeedOffset(
     () => {
       while (pokerusStarters.length < POKERUS_STARTER_COUNT) {
@@ -78,5 +84,28 @@ export function getPokerusStarters(): PokemonSpecies[] {
     0,
     date.getTime().toString(),
   );
+
   return pokerusStarters;
+}
+
+/**
+ * Generates IVs from a given {@linkcode id} by extracting 5 bits at a time
+ * starting from the least significant bit up to the 30th most significant bit.
+ * @param id - 32-bit number
+ * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
+ * @todo Just generate 6 random numbers instead of doing this nonsense; also make pokemon IDs into actual UUIDs
+ */
+export function getIvsFromId(id?: number): number[] {
+  if (isNullOrUndefined(id)) {
+    id = randSeedInt(4294967296);
+  }
+
+  return [
+    (id & 0x3e000000) >>> 25,
+    (id & 0x01f00000) >>> 20,
+    (id & 0x000f8000) >>> 15,
+    (id & 0x00007c00) >>> 10,
+    (id & 0x000003e0) >>> 5,
+    id & 0x0000001f,
+  ];
 }

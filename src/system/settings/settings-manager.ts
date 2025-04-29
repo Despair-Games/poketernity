@@ -2,7 +2,7 @@ import type { UserFacingSettings, SettingsCategory, Settings } from "#app/@types
 import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app";
 import { eventBus } from "#app/event-bus";
 import { version } from "../../../package.json";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { defaultSettings } from "./default-settings";
 
 //#region Types

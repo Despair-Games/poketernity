@@ -4,7 +4,7 @@ import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";

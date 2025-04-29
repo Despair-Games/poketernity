@@ -3,7 +3,7 @@
 import type { MovePhase } from "#app/phases/move-phase";
 // -- end tsdoc imports
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";

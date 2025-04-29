@@ -2,7 +2,7 @@ import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
-import { getFrameMs } from "#app/utils";
+import { getFrameMs } from "#app/utils/common-utils";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

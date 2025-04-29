@@ -3,7 +3,8 @@ import {
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
-import { isNullOrUndefined, randSeedInt } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -15,7 +16,7 @@ import {
   getSpriteKeysFromPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { speciesStarterCosts } from "#app/data/starters";
 import { SpeciesId } from "#enums/species-id";
 import { PokeballType } from "#enums/pokeball-type";

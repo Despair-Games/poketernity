@@ -4,7 +4,7 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 
 describe("Arena - Type Hazards", () => {
   let phaserGame: Phaser.Game;

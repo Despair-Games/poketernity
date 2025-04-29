@@ -1,22 +1,23 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import type PokemonData from "#app/system/pokemon-data";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getPlayTimeString, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { getPlayTimeString, getPokemonLevelText } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { MessageUiHandler } from "./message-ui-handler";
-import type { RunInfoUiHandler } from "./run-info-ui-handler";
-import type { ConfirmUiHandler } from "./confirm-ui-handler";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;

@@ -6,7 +6,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interface
 import type { UIOptionSelectItem } from "#app/ui/interfaces/option-select-ui-item";
 import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";

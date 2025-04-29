@@ -2,7 +2,7 @@ import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
 import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import { HitResult } from "#enums/hit-result";
 import type { BattleStat } from "#enums/stat";
 

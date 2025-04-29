@@ -3,7 +3,7 @@ import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import i18next from "i18next";

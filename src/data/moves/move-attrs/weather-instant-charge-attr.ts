@@ -1,6 +1,6 @@
 import type { WeatherType } from "#enums/weather-type";
 import { globalScene } from "#app/global-scene";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { InstantChargeAttr } from "#app/data/moves/move-attrs/instant-charge-attr";
 
 /**

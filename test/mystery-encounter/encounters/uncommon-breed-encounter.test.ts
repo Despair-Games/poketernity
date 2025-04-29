@@ -11,7 +11,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";

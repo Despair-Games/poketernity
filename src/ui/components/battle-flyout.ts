@@ -1,7 +1,7 @@
 import type { Pokemon } from "../../field/pokemon";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
-import { fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/moves/move";
 import type { BerryUsedEvent, MoveUsedEvent } from "../../events/battle-scene";

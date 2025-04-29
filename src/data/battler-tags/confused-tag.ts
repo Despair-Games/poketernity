@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { MovePhase } from "#app/phases/move-phase";
-import { isNullOrUndefined, toDmgValue } from "#app/utils";
+import { isNullOrUndefined, toDmgValue } from "#app/utils/common-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

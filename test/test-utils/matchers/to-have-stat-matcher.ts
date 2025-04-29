@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { Stat, type PermanentStat } from "#enums/stat";
-import { receivedStr, isPokemonInstance } from "#test/test-utils/testUtils";
-import type { SyncExpectationResult } from "@vitest/expect";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 export interface ToHaveStatMatcherOptions {
   /**
@@ -20,6 +20,7 @@ export interface ToHaveStatMatcherOptions {
  * @returns Whether the matcher passed
  */
 export function toHaveStatMatcher(
+  this: MatcherState,
   received: unknown,
   stat: PermanentStat,
   expectedValue: number,
@@ -27,7 +28,7 @@ export function toHaveStatMatcher(
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
     };
   }

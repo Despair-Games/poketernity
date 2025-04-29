@@ -12,7 +12,7 @@ import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/en
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";

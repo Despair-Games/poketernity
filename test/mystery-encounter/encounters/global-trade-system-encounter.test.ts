@@ -18,7 +18,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { UiMode } from "#enums/ui-mode";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { ModifierTier } from "#enums/modifier-tier";
-import * as Utils from "#app/utils";
+import * as RandomUtils from "#app/utils/random-utils";
 
 const namespace = "mysteryEncounters/globalTradeSystem";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
@@ -180,7 +180,7 @@ describe("Global Trade System - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
 
-      vi.spyOn(Utils, "randSeedInt").mockReturnValue(1); // force shiny on reroll
+      vi.spyOn(RandomUtils, "randSeedInt").mockReturnValue(1); // force shiny on reroll
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
 

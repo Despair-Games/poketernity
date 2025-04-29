@@ -4,7 +4,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

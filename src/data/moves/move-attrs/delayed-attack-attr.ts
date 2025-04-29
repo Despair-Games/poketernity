@@ -5,7 +5,7 @@ import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveResult } from "#enums/move-result";

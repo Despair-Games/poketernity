@@ -11,7 +11,7 @@ import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
-import { shiftCharCodes } from "#app/utils";
+import { shiftCharCodes } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";

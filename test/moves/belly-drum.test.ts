@@ -1,5 +1,5 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";

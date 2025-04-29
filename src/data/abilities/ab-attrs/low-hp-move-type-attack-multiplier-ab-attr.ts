@@ -4,7 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
-import { isNullOrUndefined, type NumberHolder } from "#app/utils";
+import { isNullOrUndefined, type NumberHolder } from "#app/utils/common-utils";
 import { MoveCategory } from "#enums/move-category";
 
 /**
