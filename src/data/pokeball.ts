@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { PokeballType } from "#enums/pokeball-type";
 import i18next from "i18next";
 

@@ -14,7 +14,7 @@ import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import "#app/phaser-extensions";
 import { initAchievements } from "#app/system/achievements";
 import { initVouchers } from "#app/system/init-vouchers";
-import { setCookie } from "#app/utils";
+import { setCookie } from "#app/utils/app-utils";
 import { blobToString } from "#test/test-utils/gameManagerUtils";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { mockContext } from "#test/test-utils/mocks/mockContext";
@@ -79,7 +79,6 @@ export function initTestFile() {
     ({
       matches: false,
     }) as any;
-
 
   HTMLCanvasElement.prototype.getContext = () => mockContext;
 

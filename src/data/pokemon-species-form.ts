@@ -9,7 +9,7 @@ import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { speciesStarterCosts } from "#app/data/starters";
 import { type Variant, variantData, type VariantSet } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { PokemonRegion } from "#enums/pokemon-regions";

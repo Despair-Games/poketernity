@@ -5,10 +5,10 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { getLocalizedFilename } from "#app/utils";
 import { settings } from "#app/system/settings/settings-manager";
-import { ImagesFolder } from "#enums/images-folders";
 import { windowStyleDependantAtlases } from "#app/ui/ui-theme";
+import { getLocalizedFilename } from "#app/utils/string-utils";
+import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * Additional parameters that can be used when loading Images, Spritesheets or Atlases.

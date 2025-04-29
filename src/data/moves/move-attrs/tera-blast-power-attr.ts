@@ -1,6 +1,6 @@
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 

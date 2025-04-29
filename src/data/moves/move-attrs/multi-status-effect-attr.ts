@@ -1,6 +1,6 @@
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
-import { randSeedItem } from "#app/utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import type { Move } from "#app/data/moves/move";
 import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
 

@@ -7,7 +7,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { BooleanHolder } from "#app/utils";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";

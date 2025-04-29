@@ -14,7 +14,7 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import { isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";

@@ -1,7 +1,7 @@
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
-import { formatText } from "#app/utils";
+import { toTitleCase } from "#app/utils/string-utils";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { TEXT_SCALE } from "#app/constants/ui";
@@ -88,6 +88,6 @@ export class BgmBar extends Phaser.GameObjects.Container {
   }
 
   getRealBgmName(bgmName: string): string {
-    return i18next.t([`bgmName:${bgmName}`, "bgmName:missing_entries"], { name: formatText(bgmName) });
+    return i18next.t([`bgmName:${bgmName}`, "bgmName:missing_entries"], { name: toTitleCase(bgmName) });
   }
 }

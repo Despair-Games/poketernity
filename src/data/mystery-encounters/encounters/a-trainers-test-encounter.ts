@@ -13,7 +13,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { TrainerType } from "#enums/trainer-type";
 import { SpeciesId } from "#enums/species-id";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import i18next from "i18next";
 import type { EggOptions } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";

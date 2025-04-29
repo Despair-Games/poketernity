@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { getFrameMs, isNullOrUndefined } from "#app/utils";
+import { getFrameMs, isNullOrUndefined } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";

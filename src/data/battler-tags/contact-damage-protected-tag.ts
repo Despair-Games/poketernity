@@ -2,7 +2,7 @@ import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { DamageProtectedTag } from "#app/data/battler-tags/damage-protected-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";

@@ -1,12 +1,15 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { BattleAnim } from "./data/animations/battle-anims";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
-import { getFrameMs, randGauss, randInt, type BooleanHolder } from "#app/utils";
-import { PokeballType } from "#enums/pokeball-type";
-import type { Variant } from "./data/variant";
-import type BattleScene from "./battle-scene";
+
+import type BattleScene from "#app/battle-scene";
+import type { Variant } from "#app/data/variant";
 import { settings } from "#app/system/settings/settings-manager";
+import { getFrameMs, type BooleanHolder } from "#app/utils/common-utils";
+import { randGauss, randInt } from "#app/utils/random-utils";
+import { PokeballType } from "#enums/pokeball-type";
 
 /**
  * Class for handling general animations such as particle effects.

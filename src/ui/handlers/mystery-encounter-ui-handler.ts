@@ -7,7 +7,7 @@ import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases
 import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

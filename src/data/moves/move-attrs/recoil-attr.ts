@@ -6,7 +6,7 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import i18next from "i18next";

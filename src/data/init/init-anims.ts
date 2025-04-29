@@ -9,7 +9,7 @@ import {
 import { commonAnims } from "../animations/common-anims";
 import { chargeAnims } from "../animations/charge-anims";
 import { moveAnims } from "../animations/move-anims";
-import { getEnumKeys, getEnumValues } from "#app/utils";
+import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";

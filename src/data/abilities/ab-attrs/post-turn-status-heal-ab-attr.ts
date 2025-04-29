@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";

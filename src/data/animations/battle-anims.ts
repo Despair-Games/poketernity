@@ -3,7 +3,7 @@ import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { getEnumValues, getFrameMs, isNullOrUndefined, type nil } from "#app/utils";
+import { getEnumValues, getFrameMs, isNullOrUndefined, type nil } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";

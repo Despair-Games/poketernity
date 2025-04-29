@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { settings } from "#app/system/settings/settings-manager";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { PlayerPokemon } from "#app/field/player-pokemon";
@@ -10,7 +10,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { shiftCharCodes } from "#app/utils";
+import { shiftCharCodes } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";

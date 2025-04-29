@@ -1,6 +1,6 @@
 import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PreWeatherEffectAbAttr } from "./pre-weather-effect-ab-attr";
 

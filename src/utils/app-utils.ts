@@ -1,0 +1,65 @@
+import { supportedLanguages } from "#app/system/settings/supported-languages";
+
+/** This returns true if the env mode is development or beta. */
+export const isBeta = import.meta.env.MODE === "beta";
+
+export function setCookie(cName: string, cValue: string): void {
+  const expiration = new Date();
+  expiration.setTime(new Date().getTime() + 3600000 * 24 * 30 * 3 /*7*/);
+  document.cookie = `${cName}=${cValue};Secure;SameSite=Strict;Domain=${window.location.hostname};Path=/;Expires=${expiration.toUTCString()}`;
+}
+
+export function removeCookie(cName: string): void {
+  if (isBeta) {
+    // we need to remove the cookie from the main domain as well
+    document.cookie = `${cName}=;Secure;SameSite=Strict;Domain=poketernity.com;Path=/;Max-Age=-1`;
+  }
+
+  document.cookie = `${cName}=;Secure;SameSite=Strict;Domain=${window.location.hostname};Path=/;Max-Age=-1`;
+  // legacy cookie without domain, for older cookies to prevent a login loop
+  document.cookie = `${cName}=;Secure;SameSite=Strict;Path=/;Max-Age=-1`;
+}
+
+export function getCookie(cName: string): string {
+  // check if there are multiple cookies with the same name and delete them
+  if (document.cookie.split(";").filter((c) => c.includes(cName)).length > 1) {
+    removeCookie(cName);
+    return "";
+  }
+  const name = `${cName}=`;
+  const ca = document.cookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+/**
+ * Check if a language is supported
+ * @param key - The language key (e.g. "en") to check
+ * @returns `true` if the language is supported
+ */
+export function isSupportedLanguage(key: string): boolean {
+  return supportedLanguages.some((l) => l.key === key);
+}
+
+/**
+ * @returns `true` if the device has a touchscreen, otherwise `false`.
+ */
+export function hasTouchscreen(): boolean {
+  return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
+
+/**
+ * @returns `true` if the device window's `width > height`, and `false` otherwise
+ */
+export function isLandscapeMode(): boolean {
+  const { width, height } = window.screen;
+  return width > height;
+}

@@ -18,7 +18,7 @@ import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { AbstractConstructor, nil } from "#app/utils";
+import type { AbstractConstructor, nil } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
 import { FormChangeItem } from "#enums/form-change-item";
 import { MoveCategory } from "#enums/move-category";
