@@ -1,9 +1,8 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import Phaser from "phaser";
-import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species-id";
 import { MoveId } from "#enums/move-id";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Learn Move Phase", () => {
   let phaserGame: Phaser.Game;
@@ -31,7 +30,7 @@ describe("Learn Move Phase", () => {
     const newMovePos = pokemon?.getMoveset().length;
     game.move.select(MoveId.SPLASH);
     await game.faintOpponents();
-    await game.phaseInterceptor.to(LearnMovePhase);
+    await game.phaseInterceptor.to("LearnMovePhase");
     const levelMove = pokemon.getLevelMoves(5)[0];
     const levelReq = levelMove[0];
     const levelMoveId = levelMove[1];

@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -38,7 +37,7 @@ describe("Moves - Hard Press", () => {
     await game.startBattle([SpeciesId.PIKACHU]);
 
     game.move.select(MoveId.HARD_PRESS);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(100);
   });
@@ -51,7 +50,7 @@ describe("Moves - Hard Press", () => {
     vi.spyOn(enemy, "getHpRatio").mockReturnValue(targetHpRatio);
 
     game.move.select(MoveId.HARD_PRESS);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(50);
   });
@@ -64,7 +63,7 @@ describe("Moves - Hard Press", () => {
     vi.spyOn(enemy, "getHpRatio").mockReturnValue(targetHpRatio);
 
     game.move.select(MoveId.HARD_PRESS);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(1);
   });
@@ -77,7 +76,7 @@ describe("Moves - Hard Press", () => {
     vi.spyOn(enemy, "getHpRatio").mockReturnValue(targetHpRatio);
 
     game.move.select(MoveId.HARD_PRESS);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(1);
   });

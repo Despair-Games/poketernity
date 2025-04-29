@@ -1,27 +1,27 @@
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { BiomeId } from "#enums/biome-id";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  runMysteryEncounterToEnd,
-  runSelectMysteryEncounterOption,
-} from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon } from "#app/field/player-pokemon";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import {
   getSalesmanSpeciesOffer,
   ThePokemonSalesmanEncounter,
 } from "#app/data/mystery-encounters/encounters/the-pokemon-salesman-encounter";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { PlayerPokemon } from "#app/field/player-pokemon";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { getSpecialSpeciesList } from "#app/utils/pokemon-utils";
+import { BiomeId } from "#enums/biome-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesId } from "#enums/species-id";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
@@ -172,7 +172,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     it("should be disabled if player does not have enough money", async () => {
       scene.money = 0;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_POKEMON_SALESMAN, defaultParty);
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);

@@ -20,7 +20,6 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
@@ -190,9 +189,9 @@ export class GameManager {
    * @returns A promise that resolves when the title phase is reached.
    */
   async runToTitle(): Promise<void> {
-    await this.phaseInterceptor.whenAboutToRun(LoginPhase);
+    await this.phaseInterceptor.to("LoginPhase", false);
     this.phaseInterceptor.pop();
-    await this.phaseInterceptor.run(TitlePhase);
+    await this.phaseInterceptor.to("TitlePhase");
 
     settings.update("general", "gameSpeed", 5);
     settings.update("display", "enableMoveAnimations", false);
@@ -208,10 +207,8 @@ export class GameManager {
 
   /**
    * Helper function to run to the final boss encounter as it's a bit tricky due to extra dialogue
+   *
    * Also handles Major/Minor bosses from endless modes
-   * @param game - The game manager
-   * @param species
-   * @param mode
    */
   async runToFinalBossEncounter(species: SpeciesId[], mode: GameModes) {
     console.log("===to final boss encounter===");
@@ -275,7 +272,7 @@ export class GameManager {
       true,
     );
 
-    await this.phaseInterceptor.run("EncounterPhase");
+    await this.phaseInterceptor.to("EncounterPhase");
     if (!isNullOrUndefined(encounterType)) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }

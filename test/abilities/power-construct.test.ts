@@ -1,5 +1,3 @@
-import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -48,9 +46,9 @@ describe("Abilities - POWER CONSTRUCT", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.faintOpponents();
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.doSelectModifier();
-    await game.phaseInterceptor.to(QuietFormChangePhase);
+    await game.phaseInterceptor.to("QuietFormChangePhase");
 
     expect(zygarde.formIndex).toBe(baseForm);
   });
@@ -74,9 +72,9 @@ describe("Abilities - POWER CONSTRUCT", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.faintOpponents();
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.doSelectModifier();
-    await game.phaseInterceptor.to(QuietFormChangePhase);
+    await game.phaseInterceptor.to("QuietFormChangePhase");
 
     expect(zygarde.formIndex).toBe(baseForm);
   });

@@ -1,19 +1,9 @@
-import { BiomeId } from "#enums/biome-id";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  runMysteryEncounterToEnd,
-  runSelectMysteryEncounterOption,
-} from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/delibirdy-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   type BerryModifier,
   HealingBoosterModifier,
@@ -23,10 +13,20 @@ import {
   PokemonNatureWeightModifier,
   type PreserveBerryModifier,
 } from "#app/modifier/modifier";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { BerryType } from "#enums/berry-type";
+import { BiomeId } from "#enums/biome-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/delibirdy";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
@@ -147,7 +147,7 @@ describe("Delibird-y - Mystery Encounter", () => {
     it("should be disabled if player does not have enough money", async () => {
       scene.money = 0;
       await game.runToMysteryEncounter(MysteryEncounterType.DELIBIRDY, defaultParty);
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
@@ -302,7 +302,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
@@ -435,7 +435,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);

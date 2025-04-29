@@ -1,27 +1,27 @@
+import type BattleScene from "#app/battle-scene";
+import { FightOrFlightEncounter } from "#app/data/mystery-encounters/encounters/fight-or-flight-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { CommandPhase } from "#app/phases/command-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { UiMode } from "#enums/ui-mode";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { MoveId } from "#enums/move-id";
-import type BattleScene from "#app/battle-scene";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { UiMode } from "#enums/ui-mode";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { FightOrFlightEncounter } from "#app/data/mystery-encounters/encounters/fight-or-flight-encounter";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { CommandPhase } from "#app/phases/command-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/fightOrFlight";
 const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
@@ -120,9 +120,9 @@ describe("Fight or Flight - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      await game.phaseInterceptor.to("SelectModifierPhase");
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
 
       const modifierSelectHandler = scene.ui.handlers.find(
@@ -153,7 +153,7 @@ describe("Fight or Flight - Mystery Encounter", () => {
     it("should NOT be selectable if the player doesn't have a Stealing move", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIGHT_OR_FLIGHT, defaultParty);
       scene.getPlayerParty().forEach((p) => (p.moveset = []));
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
@@ -180,9 +180,9 @@ describe("Fight or Flight - Mystery Encounter", () => {
       const item = game.scene.currentBattle.mysteryEncounter!.misc;
 
       await runMysteryEncounterToEnd(game, 2);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      await game.phaseInterceptor.to("SelectModifierPhase");
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
 
       const modifierSelectHandler = scene.ui.handlers.find(

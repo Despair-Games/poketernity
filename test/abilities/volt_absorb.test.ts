@@ -1,13 +1,12 @@
-import { Stat } from "#enums/stat";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerIndex } from "#enums/battler-index";
 
 // See also: TypeImmunityAbAttr
 describe("Abilities - Volt Absorb", () => {
@@ -46,7 +45,7 @@ describe("Abilities - Volt Absorb", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(playerPokemon.getStatStage(Stat.SPDEF)).toBe(1);
     expect(playerPokemon.getTag(BattlerTagType.CHARGED)).toBeDefined();

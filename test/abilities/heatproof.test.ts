@@ -1,9 +1,8 @@
-import { SpeciesId } from "#enums/species-id";
-import { StatusEffect } from "#enums/status-effect";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { toDmgValue } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -45,14 +44,14 @@ describe("Abilities - Heatproof", () => {
     enemy.hp = initialHP;
 
     game.move.select(MoveId.FLAMETHROWER);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     const heatproofDamage = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
     game.override.enemyAbility(AbilityId.BALL_FETCH);
 
     game.move.select(MoveId.FLAMETHROWER);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     const regularDamage = initialHP - enemy.hp;
 
     expect(heatproofDamage).toBeLessThanOrEqual(regularDamage / 2 + 1);

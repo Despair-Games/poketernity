@@ -1,8 +1,7 @@
-import { StatusEffect } from "#enums/status-effect";
-import { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -48,7 +47,7 @@ describe("Moves - Lunar Blessing", () => {
     vi.spyOn(rightPlayer, "heal");
 
     game.move.select(MoveId.LUNAR_BLESSING, 0);
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
@@ -68,7 +67,7 @@ describe("Moves - Lunar Blessing", () => {
     vi.spyOn(rightPlayer, "resetStatus");
 
     game.move.select(MoveId.LUNAR_BLESSING, 0);
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 

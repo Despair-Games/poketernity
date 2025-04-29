@@ -1,16 +1,14 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { getGameMode } from "#app/game-mode";
-import { GameModes } from "#enums/game-modes";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { TrainerType } from "#enums/trainer-type";
-import { PhaseId } from "#enums/phase-id";
 
 describe("Double Battles", () => {
   const DOUBLE_CHANCE = 8; // Normal chance of double battle is 1/8
@@ -54,13 +52,13 @@ describe("Double Battles", () => {
 
     await game.faintOpponents();
 
-    await game.phaseInterceptor.to(BattleEndPhase);
+    await game.phaseInterceptor.to("BattleEndPhase");
     game.doSelectModifier();
 
     const charizard = game.scene.getPlayerParty().findIndex((p) => p.species.speciesId === SpeciesId.CHARIZARD);
     game.revivePokemon(charizard);
 
-    await game.phaseInterceptor.to(TurnInitPhase);
+    await game.phaseInterceptor.to("TurnInitPhase");
     expect(game.scene.getPlayerField().filter((p) => !p.isFainted())).toHaveLength(2);
   }, 20000);
 
