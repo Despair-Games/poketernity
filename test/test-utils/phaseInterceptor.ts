@@ -225,7 +225,7 @@ export class PhaseInterceptor {
    * @param runTarget - Whether or not to run the target phase.
    * @returns A promise that resolves when the transition is complete.
    */
-  async to(phaseTo: PhaseInterceptorPhase, runTarget: boolean = true): Promise<void> {
+  async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
     return new Promise(async (resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       if (this.phaseFrom) {
