@@ -1388,7 +1388,7 @@ export function initAbilities() {
     new Ability(AbilityId.CURIOUS_MEDICINE, 8)
       .attr(PostSummonClearAllyStatStagesAbAttr),
     new Ability(AbilityId.TRANSISTOR, 8)
-      .attr(MoveTypePowerBoostAbAttr, ElementalType.ELECTRIC),
+      .attr(MoveTypePowerBoostAbAttr, ElementalType.ELECTRIC, 1.3),
     new Ability(AbilityId.DRAGONS_MAW, 8)
       .attr(MoveTypePowerBoostAbAttr, ElementalType.DRAGON),
     new Ability(AbilityId.CHILLING_NEIGH, 8)
