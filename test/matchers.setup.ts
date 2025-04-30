@@ -1,5 +1,5 @@
 import { toHaveEffectiveStatMatcher } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
-import { toHaveFlinchedMatcher } from "#test/test-utils/matchers/to-have-flinched";
+import { toHaveBattlerTagTypeMatcher } from "#test/test-utils/matchers/to-have-battler-tag-type-matcher";
 import { toHaveFullHpMatcher } from "#test/test-utils/matchers/to-have-full-hp-matcher";
 import { toHaveMoveResultMatcher } from "#test/test-utils/matchers/to-have-move-result-matcher";
 import { toHaveStatMatcher } from "#test/test-utils/matchers/to-have-stat-matcher";
@@ -27,5 +27,5 @@ expect.extend({
   toHaveFullHp: toHaveFullHpMatcher,
   toHaveStatusEffect: toHaveStatusEffectMatcher,
   toHaveStatStage: toHaveStatStageMatcher,
-  toHaveFlinched: toHaveFlinchedMatcher,
+  toHaveBattlerTagType: toHaveBattlerTagTypeMatcher,
 });

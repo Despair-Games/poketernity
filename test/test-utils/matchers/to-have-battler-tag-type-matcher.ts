@@ -4,16 +4,22 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { capitalizeString } from "#app/utils/string-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
- * Matcher to check if a {@linkcode Pokemon} has flinched.
+ * Matcher to check if a {@linkcode Pokemon} has a specific {@linkcode BattlerTagType}.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
+ * @param expectedBattlerTagType - The {@linkcode BattlerTagType} to check for.
  * @returns Whether the matcher passed
  */
-export function toHaveFlinchedMatcher(this: MatcherState, received: unknown): SyncExpectationResult {
+export function toHaveBattlerTagTypeMatcher(
+  this: MatcherState,
+  received: unknown,
+  expectedBattlerTagType: BattlerTagType,
+): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
@@ -21,13 +27,15 @@ export function toHaveFlinchedMatcher(this: MatcherState, received: unknown): Sy
     };
   }
 
-  const pass = received.hasTag(BattlerTagType.FLINCHED);
+  const pass = received.hasTag(expectedBattlerTagType);
+  const battlerTagName = BattlerTagType[expectedBattlerTagType];
+  const battlerTagStr = capitalizeString(battlerTagName, "_", false, true);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} to NOT have flinched, but it did!`
-        : `Expected ${received.name} to have flinched, but it did not.`,
+        ? `Expected ${received.name} to NOT have ${battlerTagStr}, but it did!`
+        : `Expected ${received.name} to have ${battlerTagStr}, but it did not.`,
   };
 }
