@@ -451,6 +451,16 @@ export default class Battle {
   isBattleMysteryEncounter(): boolean {
     return this.battleType === BattleType.MYSTERY_ENCOUNTER;
   }
+
+  /**
+   * @param includeMEs - Whether to count Mystery Encounter trainer battles
+   * @returns `true` if the current battle is a trainer battle
+   */
+  public isTrainerBattle(includeMEs: boolean = false): boolean {
+    const { battleType, mysteryEncounter } = this;
+    const trainerME = includeMEs ? mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE : false;
+    return battleType === BattleType.TRAINER || trainerME;
+  }
 }
 
 export class FixedBattle extends Battle {
