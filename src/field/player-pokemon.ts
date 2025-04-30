@@ -29,7 +29,7 @@ import type PokemonData from "#app/system/pokemon-data";
 import { timedEventManager } from "#app/timed-event-manager";
 import { PlayerBattleInfo } from "#app/ui/components/battle-info";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { NumberHolder, isNullOrUndefined } from "#app/utils/common-utils";
+import { NumberHolder, isNil } from "#app/utils/common-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -445,7 +445,7 @@ export class PlayerPokemon extends Pokemon {
         }
 
         const type2 = this.getSpeciesForm().type2;
-        if (!isNullOrUndefined(type2) && type2 !== baseFormTypes[1]) {
+        if (!isNil(type2) && type2 !== baseFormTypes[1]) {
           if (this.customPokemonData.types.length > 1) {
             this.customPokemonData.types[1] = type2;
           } else {

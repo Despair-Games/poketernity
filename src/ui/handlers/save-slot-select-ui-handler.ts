@@ -10,7 +10,7 @@ import type { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { getPlayTimeString, getPokemonLevelText } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { RunDisplayMode } from "#enums/run-display-mode";
@@ -273,7 +273,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
       }
       this.setArrowVisibility(hasData);
     }
-    if (!isNullOrUndefined(prevSlotIndex)) {
+    if (!isNil(prevSlotIndex)) {
       this.revertSessionSlot(prevSlotIndex);
     }
 

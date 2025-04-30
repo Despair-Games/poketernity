@@ -1,3 +1,16 @@
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
+import { GAME_WIDTH } from "#app/constants/ui";
+import { allMoves } from "#app/data/data-lists";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import {
+  AttackTypeBoosterHeldItemTypeRequirement,
+  CombinationPokemonRequirement,
+  HeldItemRequirement,
+  TypeRequirement,
+} from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   generateModifierType,
@@ -8,37 +21,13 @@ import {
   selectPokemonForOption,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PartyMemberStrength } from "#enums/party-member-strength";
-import { globalScene } from "#app/global-scene";
-import { isNullOrUndefined } from "#app/utils/common-utils";
-import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { TrainerType } from "#enums/trainer-type";
-import { SpeciesId } from "#enums/species-id";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { MoveId } from "#enums/move-id";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import {
-  AttackTypeBoosterHeldItemTypeRequirement,
-  CombinationPokemonRequirement,
-  HeldItemRequirement,
-  TypeRequirement,
-} from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { ElementalType } from "#enums/elemental-type";
-import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
+import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   BypassSpeedChanceModifier,
@@ -46,14 +35,25 @@ import {
   GigantamaxAccessModifier,
   MegaEvolutionAccessModifier,
 } from "#app/modifier/modifier";
-import i18next from "i18next";
+import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
-import { allMoves } from "#app/data/data-lists";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import { isNil } from "#app/utils/common-utils";
+import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
+import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
-import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import { GAME_WIDTH } from "#app/constants/ui";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PartyMemberStrength } from "#enums/party-member-strength";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerType } from "#enums/trainer-type";
+import i18next from "i18next";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/bugTypeSuperfan";
@@ -568,7 +568,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         4,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNullOrUndefined(pool3Mon.formIndex)) {
+          if (!isNil(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -600,7 +600,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         3,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNullOrUndefined(pool3Mon.formIndex)) {
+          if (!isNil(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -610,7 +610,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         4,
         getRandomPartyMemberFunc([pool3Mon2.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNullOrUndefined(pool3Mon2.formIndex)) {
+          if (!isNil(pool3Mon2.formIndex)) {
             p.formIndex = pool3Mon2.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -645,7 +645,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         3,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNullOrUndefined(pool3Mon.formIndex)) {
+          if (!isNil(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -684,7 +684,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         2,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNullOrUndefined(pool3Mon.formIndex)) {
+          if (!isNil(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -694,7 +694,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         3,
         getRandomPartyMemberFunc([pool3Mon2.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNullOrUndefined(pool3Mon2.formIndex)) {
+          if (!isNil(pool3Mon2.formIndex)) {
             p.formIndex = pool3Mon2.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();

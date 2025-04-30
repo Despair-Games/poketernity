@@ -57,7 +57,7 @@ import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/t
 import { addWindow } from "#app/ui/ui-theme";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { rgbHexToRgba } from "#app/utils/color-utils";
-import { BooleanHolder, NumberHolder, fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { BooleanHolder, NumberHolder, fixedNumber, isNil } from "#app/utils/common-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-utils";
 import { capitalizeString, leftPad, toReadableString } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -2057,7 +2057,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           case Button.CYCLE_TERA:
             if (this.canCycleTera) {
               const speciesForm = getPokemonSpeciesForm(this.lastSpecies.speciesId, starterAttributes.form ?? 0);
-              if (speciesForm.type1 === this.teraCursor && !isNullOrUndefined(speciesForm.type2)) {
+              if (speciesForm.type1 === this.teraCursor && !isNil(speciesForm.type2)) {
                 starterAttributes.teraType = speciesForm.type2;
                 this.setSpeciesDetails(this.lastSpecies, { teraType: speciesForm.type2 });
               } else {
@@ -2231,7 +2231,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       return this.toggleShinyState(starterPrefs);
     } else if (props.shiny && this.canCycleVariant) {
       // Find next unlocked variant
-      const previousVariant = isNullOrUndefined(starterPrefs.variant) ? props.variant : starterPrefs.variant;
+      const previousVariant = isNil(starterPrefs.variant) ? props.variant : starterPrefs.variant;
       let variant = previousVariant;
       do {
         variant = (variant + 1) % 3;
@@ -2240,7 +2240,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           // we disable shiny state instead of looking through the other variants
           return this.toggleShinyState(starterPrefs);
         }
-        if (!isNullOrUndefined(this.speciesStarterDexEntry)) {
+        if (!isNil(this.speciesStarterDexEntry)) {
           if (variant === 0 && this.speciesStarterDexEntry.caughtAttr & DexAttr.DEFAULT_VARIANT) {
             return this.switchToVariant(starterPrefs, variant);
           } else if (variant === 1 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_2) {
@@ -3272,10 +3272,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     // We will only update the sprite if there is a change to form, shiny/variant
     // or gender for species with gender sprite differences
     const shouldUpdateSprite =
-      (species?.genderDiffs && !isNullOrUndefined(female))
-      || !isNullOrUndefined(formIndex)
-      || !isNullOrUndefined(shiny)
-      || !isNullOrUndefined(variant);
+      (species?.genderDiffs && !isNil(female)) || !isNil(formIndex) || !isNil(shiny) || !isNil(variant);
 
     if (this.activeTooltip === "CANDY") {
       if (this.lastSpecies && this.pokemonCandyContainer.visible) {
@@ -3311,7 +3308,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       );
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      this.teraCursor = !isNullOrUndefined(teraType) ? teraType : (teraType = oldTeraType);
+      this.teraCursor = !isNil(teraType) ? teraType : (teraType = oldTeraType);
       const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species);
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
@@ -3456,7 +3453,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.canCycleTera =
           !this.statsMode
           // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
-          && !isNullOrUndefined(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
+          && !isNil(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {
@@ -3588,7 +3585,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           return this.starterMoveset?.indexOf(move) === i;
         }) as StarterMoveset;
 
-        if (!isNullOrUndefined(formIndex)) {
+        if (!isNil(formIndex)) {
           // If we're switching form and the Pokemon is in the team, we need to update its moveset
           this.updateSelectedStarterMoveset(species.speciesId);
         }
@@ -4069,7 +4066,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.canCycleTera =
       !this.statsMode
       // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
-      && !isNullOrUndefined(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
+      && !isNil(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
     this.updateInstructions();
   }
 

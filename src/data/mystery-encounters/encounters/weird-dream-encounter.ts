@@ -31,9 +31,9 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
-import { NumberHolder, isNullOrUndefined } from "#app/utils/common-utils";
-import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
+import { NumberHolder, isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
+import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { Challenges } from "#enums/challenges";
 import type { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -557,7 +557,7 @@ function getTransformedSpecies(
   alreadyUsedSpecies: PokemonSpecies[],
 ): PokemonSpecies {
   let newSpecies: PokemonSpecies | undefined;
-  while (isNullOrUndefined(newSpecies)) {
+  while (isNil(newSpecies)) {
     const bstCap = originalBst + bstSearchRange[1];
     const bstMin = Math.max(originalBst + bstSearchRange[0], 0);
 
@@ -599,7 +599,7 @@ function getTransformedSpecies(
     if (validSpecies?.length > 20) {
       validSpecies = randSeedShuffle(validSpecies);
       newSpecies = validSpecies.pop();
-      while (isNullOrUndefined(newSpecies) || alreadyUsedSpecies.includes(newSpecies)) {
+      while (isNil(newSpecies) || alreadyUsedSpecies.includes(newSpecies)) {
         newSpecies = validSpecies.pop();
       }
     } else {
@@ -709,12 +709,12 @@ async function addEggMoveToNewPokemonMoveset(
   if (eggMoves) {
     const eggMoveIndices = randSeedShuffle([0, 1, 2, 3]);
     let randomEggMoveIndex = eggMoveIndices.pop();
-    let randomEggMove = !isNullOrUndefined(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
+    let randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
     let retries = 0;
     while (retries < 3 && (!randomEggMove || newPokemon.moveset.some((m) => m.moveId === randomEggMove))) {
       // If Pokemon already knows this move, roll for another egg move
       randomEggMoveIndex = eggMoveIndices.pop();
-      randomEggMove = !isNullOrUndefined(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
+      randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
       retries++;
     }
 
@@ -729,11 +729,7 @@ async function addEggMoveToNewPokemonMoveset(
       }
 
       // For pokemon that the player owns (including ones just caught), unlock the egg move
-      if (
-        !forBattle
-        && !isNullOrUndefined(randomEggMoveIndex)
-        && globalScene.gameData.dexData[speciesRootForm].caughtAttr > 0
-      ) {
+      if (!forBattle && !isNil(randomEggMoveIndex) && globalScene.gameData.dexData[speciesRootForm].caughtAttr > 0) {
         await globalScene.gameData.setEggMoveUnlocked(
           getPokemonSpecies(speciesRootForm),
           randomEggMoveIndex,

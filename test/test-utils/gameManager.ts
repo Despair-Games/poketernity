@@ -28,7 +28,7 @@ import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleStyle } from "#enums/battle-style";
@@ -241,7 +241,7 @@ export class GameManager {
    * @returns A promise that resolves when the EncounterPhase ends.
    */
   async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
-    if (!isNullOrUndefined(encounterType)) {
+    if (!isNil(encounterType)) {
       this.override.trainerChance(0);
       this.override.mysteryEncounter(encounterType);
     }
@@ -273,7 +273,7 @@ export class GameManager {
     );
 
     await this.phaseInterceptor.to("EncounterPhase");
-    if (!isNullOrUndefined(encounterType)) {
+    if (!isNil(encounterType)) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
   }

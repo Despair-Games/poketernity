@@ -1,35 +1,35 @@
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import { showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
   leaveEncounterWithoutBattle,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
-import { isNullOrUndefined } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   catchPokemon,
   getRandomSpeciesByStarterCost,
   getSpriteKeysFromPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { speciesStarterCosts } from "#app/data/starters";
-import { SpeciesId } from "#enums/species-id";
-import { PokeballType } from "#enums/pokeball-type";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PlayerPokemon } from "#app/field/player-pokemon";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+import { globalScene } from "#app/global-scene";
 import PokemonData from "#app/system/pokemon-data";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
+import { isNil } from "#app/utils/common-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { AbilityId } from "#enums/ability-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesId } from "#enums/species-id";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/thePokemonSalesman";
@@ -77,7 +77,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     let tries = 0;
 
     // Reroll any species that don't have HAs
-    while ((isNullOrUndefined(species.abilityHidden) || species.abilityHidden === AbilityId.NONE) && tries < 5) {
+    while ((isNil(species.abilityHidden) || species.abilityHidden === AbilityId.NONE) && tries < 5) {
       species = getSalesmanSpeciesOffer();
       tries++;
     }
@@ -85,7 +85,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     let pokemon: PlayerPokemon;
     if (
       randSeedInt(SHINY_MAGIKARP_WEIGHT) === 0
-      || isNullOrUndefined(species.abilityHidden)
+      || isNil(species.abilityHidden)
       || species.abilityHidden === AbilityId.NONE
     ) {
       // If no HA mon found or you roll 1%, give shiny Magikarp with random variant

@@ -160,7 +160,7 @@ import {
   deepFreeze,
   fixedNumber,
   getEnumValues,
-  isNullOrUndefined,
+  isNil,
   toDmgValue,
   type nil,
 } from "#app/utils/common-utils";
@@ -1547,7 +1547,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (Overrides.ENEMY_ABILITY_OVERRIDE && !this.isPlayer()) {
       return allAbilities[Overrides.ENEMY_ABILITY_OVERRIDE];
     }
-    if (!isNullOrUndefined(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
+    if (!isNil(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
       return allAbilities[this.customPokemonData.ability];
     }
     let abilityId = this.getSpeciesForm(baseOnly).getAbility(this.abilityIndex);
@@ -1571,7 +1571,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
       return allAbilities[Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE];
     }
-    if (!isNullOrUndefined(this.customPokemonData.passive) && this.customPokemonData.passive !== -1) {
+    if (!isNil(this.customPokemonData.passive) && this.customPokemonData.passive !== -1) {
       return allAbilities[this.customPokemonData.passive];
     }
 
@@ -1766,7 +1766,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getWeight(): number {
     const autotomizedTag = this.getTag<AutotomizedTag>(BattlerTagType.AUTOTOMIZED);
     let weightRemoved = 0;
-    if (!isNullOrUndefined(autotomizedTag)) {
+    if (!isNil(autotomizedTag)) {
       weightRemoved = 100 * autotomizedTag!.autotomizeCount;
     }
     const minWeight = 0.1;
@@ -1890,7 +1890,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     cancelled?: BooleanHolder,
   ): TypeDamageMultiplier {
-    if (!isNullOrUndefined(this.turnData?.moveEffectiveness)) {
+    if (!isNil(this.turnData?.moveEffectiveness)) {
       return this.turnData?.moveEffectiveness;
     }
 
@@ -2106,11 +2106,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (pokemonEvolutions.hasOwnProperty(this.species.speciesId)) {
       const evolutions = pokemonEvolutions[this.species.speciesId];
       for (const e of evolutions) {
-        if (
-          !e.item
-          && this.level >= e.level
-          && (isNullOrUndefined(e.preFormKey) || this.getFormKey() === e.preFormKey)
-        ) {
+        if (!e.item && this.level >= e.level && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)) {
           if (
             e.conditions === null
             || (e.conditions as SpeciesEvolutionCondition[]).every((condition) => condition.predicate(this))

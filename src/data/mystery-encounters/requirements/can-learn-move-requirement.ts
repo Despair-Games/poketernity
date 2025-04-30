@@ -1,9 +1,9 @@
-import type { MoveId } from "#enums/move-id";
+import { EncounterPokemonRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { isNullOrUndefined } from "#app/utils/common-utils";
-import { EncounterPokemonRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { globalScene } from "#app/global-scene";
+import { isNil } from "#app/utils/common-utils";
+import type { MoveId } from "#enums/move-id";
 
 /**
  * {@linkcode CanLearnMoveRequirement} options
@@ -44,7 +44,7 @@ export class CanLearnMoveRequirement extends EncounterPokemonRequirement {
       .getPlayerParty()
       .filter((pkm) => (this.includeFainted ? pkm.isAllowedInChallenge() : pkm.isAllowedInBattle()));
 
-    if (isNullOrUndefined(partyPokemon) || this.requiredMoves?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredMoves?.length < 0) {
       return false;
     }
 

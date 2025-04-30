@@ -13,9 +13,9 @@ import {
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/starters";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -28,9 +28,9 @@ import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-ha
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
+import { isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
@@ -287,7 +287,7 @@ export function getRandomSpeciesByStarterCost(
 
   if (types && types.length > 0) {
     filteredSpecies = filteredSpecies.filter(
-      (s) => types.includes(s[0].type1) || (!isNullOrUndefined(s[0].type2) && types.includes(s[0].type2)),
+      (s) => types.includes(s[0].type1) || (!isNil(s[0].type2) && types.includes(s[0].type2)),
     );
   }
 

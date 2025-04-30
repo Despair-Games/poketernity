@@ -6,8 +6,8 @@ import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
+import { isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { Gender } from "#enums/gender";
@@ -62,7 +62,7 @@ export class SelectStarterPhase extends Phase {
 
       if (
         speciesId in Overrides.STARTER_FORM_OVERRIDES
-        && !isNullOrUndefined(Overrides.STARTER_FORM_OVERRIDES[speciesId])
+        && !isNil(Overrides.STARTER_FORM_OVERRIDES[speciesId])
         && species.forms[Overrides.STARTER_FORM_OVERRIDES[speciesId]]
       ) {
         starterFormIndex = Overrides.STARTER_FORM_OVERRIDES[speciesId];
@@ -103,7 +103,7 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
-      if (!isNullOrUndefined(starter.teraType)) {
+      if (!isNil(starter.teraType)) {
         starterPokemon.teraType = starter.teraType;
       } else {
         starterPokemon.teraType = starterPokemon.species.type1;

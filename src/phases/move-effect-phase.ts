@@ -30,7 +30,7 @@ import {
   HitHealModifier,
 } from "#app/modifier/modifier";
 import { HitCheckPhase } from "#app/phases/hit-check-phase";
-import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils/common-utils";
+import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -90,7 +90,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (!isDelayedAttack) {
         return super.end();
       } else {
-        if (isNullOrUndefined(user.turnData)) {
+        if (isNil(user.turnData)) {
           user.resetTurnData();
         }
       }
@@ -305,7 +305,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     /** The first target hit by the move */
     const firstTarget = target === this.getTargets().find((_, i) => this.hitChecks[i][1] > 0);
 
-    if (isNullOrUndefined(user)) {
+    if (isNil(user)) {
       return;
     }
 
@@ -433,7 +433,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       (attr: MoveAttr) =>
         attr instanceof MoveEffectAttr
         && attr.trigger === triggerType
-        && (isNullOrUndefined(selfTarget) || attr.selfTarget === selfTarget)
+        && (isNil(selfTarget) || attr.selfTarget === selfTarget)
         && (!attr.firstHitOnly || this.firstHit)
         && (!attr.lastHitOnly || this.lastHit)
         && (!attr.firstTargetOnly || (firstTarget ?? true)),
@@ -681,7 +681,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     return (
       this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
-      && !isNullOrUndefined(targetAlly)
+      && !isNil(targetAlly)
       && targetAlly.isActive(true)
       && targetAlly !== this.getUserPokemon()
       && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)

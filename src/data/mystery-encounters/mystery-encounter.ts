@@ -1,18 +1,26 @@
 import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
-import { isNullOrUndefined } from "#app/utils/common-utils";
-import { capitalizeFirstLetter } from "#app/utils/string-utils";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import { isNil } from "#app/utils/common-utils";
 import { randSeedInt } from "#app/utils/random-utils";
+import { capitalizeFirstLetter } from "#app/utils/string-utils";
+import type { BattlerIndex } from "#enums/battler-index";
+import type { Challenges } from "#enums/challenges";
+import type { EncounterAnim } from "#enums/encounter-anims";
+import type { GameModes } from "#enums/game-modes";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { StatusEffect } from "#enums/status-effect";
-import type { OptionTextDisplay } from "./mystery-encounter-dialogue";
 import type MysteryEncounterDialogue from "./mystery-encounter-dialogue";
-import type { OptionPhaseCallback } from "./mystery-encounter-option";
+import type { OptionTextDisplay } from "./mystery-encounter-dialogue";
 import type MysteryEncounterOption from "./mystery-encounter-option";
+import type { OptionPhaseCallback } from "./mystery-encounter-option";
 import { MysteryEncounterOptionBuilder } from "./mystery-encounter-option";
 import {
   EncounterPokemonRequirement,
@@ -22,14 +30,6 @@ import {
   StatusEffectRequirement,
   WaveRangeRequirement,
 } from "./mystery-encounter-requirements";
-import type { BattlerIndex } from "#enums/battler-index";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { GameModes } from "#enums/game-modes";
-import type { EncounterAnim } from "#enums/encounter-anims";
-import type { Challenges } from "#enums/challenges";
-import { globalScene } from "#app/global-scene";
 
 export interface EncounterStartOfBattleEffect {
   sourcePokemon?: Pokemon;
@@ -279,7 +279,7 @@ export default class MysteryEncounter implements IMysteryEncounter {
   private seedOffset?: number;
 
   constructor(encounter: IMysteryEncounter | null) {
-    if (!isNullOrUndefined(encounter)) {
+    if (!isNil(encounter)) {
       Object.assign(this, encounter);
     }
     this.encounterTier = this.encounterTier ?? MysteryEncounterTier.COMMON;

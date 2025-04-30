@@ -8,7 +8,7 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 /**
  * Will handle (in order):
@@ -38,7 +38,7 @@ export class PostMysteryEncounterPhase extends Phase {
       globalScene.executeWithSeedOffset(
         async () => {
           return await this.onPostOptionSelect!().then((result) => {
-            if (isNullOrUndefined(result) || result) {
+            if (isNil(result) || result) {
               this.continueEncounter();
             }
           });
