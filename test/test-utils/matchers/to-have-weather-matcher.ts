@@ -2,6 +2,7 @@ import { capitalizeString } from "#app/utils/string-utils";
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
+import { isNullOrUndefined } from "#app/utils/common-utils";
 
 /**
  * Matcher to check if the {@linkcode WeatherType} is as expected
@@ -49,7 +50,7 @@ export function toHaveWeatherMatcher(
  * @returns A human readable string
  */
 function toWeatherStr(weatherType?: WeatherType) {
-  if (!weatherType) {
+  if (isNullOrUndefined(weatherType)) {
     return "undefined";
   } else {
     return capitalizeString(WeatherType[weatherType], "_", false, true);

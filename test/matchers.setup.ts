@@ -6,6 +6,7 @@ import { toHaveStatMatcher } from "#test/test-utils/matchers/to-have-stat-matche
 import { toHaveStatStageMatcher } from "#test/test-utils/matchers/to-have-stat-stage";
 import { toHaveStatusEffectMatcher } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import { toHaveTakenDamageMatcher } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
+import { toHaveTerrainMatcher } from "#test/test-utils/matchers/to-have-terrain-matcher";
 import { toHaveUsedMoveMatcher } from "#test/test-utils/matchers/to-have-used-move-matcher";
 import { toHaveWeatherMatcher } from "#test/test-utils/matchers/to-have-weather-matcher";
 import { expect } from "vitest";
@@ -22,6 +23,7 @@ expect.extend({
   toHaveEffectiveStat: toHaveEffectiveStatMatcher,
   toHaveTakenDamage: toHaveTakenDamageMatcher,
   toHaveWeather: toHaveWeatherMatcher,
+  toHaveTerrain: toHaveTerrainMatcher,
   toHaveFullHp: toHaveFullHpMatcher,
   toHaveStatusEffect: toHaveStatusEffectMatcher,
   toHaveStatStage: toHaveStatStageMatcher,
