@@ -4191,6 +4191,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.turnData = deepCopy<PokemonTurnData>(defaultTurnData);
   }
 
+  /**
+   * Custom Sam exp formula to multiply the base exp (along with form modifiers) by level/5 +1
+   */
   getExpValue(): number {
     // Logic to factor in victor level has been removed for balancing purposes, so the player doesn't have to focus on EXP maxxing
     return (this.getSpeciesForm().getBaseExp() * this.level) / 5 + 1;

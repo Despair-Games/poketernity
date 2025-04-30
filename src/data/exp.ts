@@ -197,7 +197,7 @@ export function getGrowthRateColor(growthRate: GrowthRate) {
  * Function to get the exp given from a defeated Pokemon from gen 1-4
  */
 export function genOneThroughFourExpFormula(defeatedPokemon: EnemyPokemon): number {
-  const baseExp = defeatedPokemon.getExpValue();
+  const baseExp = defeatedPokemon.species.baseExp;
   const enemyLevel = defeatedPokemon.level;
   // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
   const expShareMultiplier = 1;
@@ -222,7 +222,7 @@ export function genOneThroughFourExpFormula(defeatedPokemon: EnemyPokemon): numb
  * BW2 has a cap of 100,000 but that is ignored here
  */
 export function genFiveExpFormula(defeatedPokemon: Pokemon, playerPokemon: PlayerPokemon) {
-  const baseExp = defeatedPokemon.getExpValue();
+  const baseExp = defeatedPokemon.species.baseExp;
   const playerLevel = playerPokemon.level;
   const enemyLevel = defeatedPokemon.level;
   // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
@@ -260,7 +260,7 @@ export function genFiveExpFormula(defeatedPokemon: Pokemon, playerPokemon: Playe
  * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 6
  */
 export function genSixExpFormula(defeatedPokemon: Pokemon, playerPokemon: PlayerPokemon) {
-  const baseExp = defeatedPokemon.getExpValue();
+  const baseExp = defeatedPokemon.species.baseExp;
   const enemyLevel = defeatedPokemon.level;
   // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
   const expShareMultiplier = 1;
@@ -297,7 +297,7 @@ export function genSixExpFormula(defeatedPokemon: Pokemon, playerPokemon: Player
  * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 7+
  */
 export function genSevenPlusExpFormula(defeatedPokemon: Pokemon, playerPokemon: PlayerPokemon) {
-  const baseExp = defeatedPokemon.getExpValue();
+  const baseExp = defeatedPokemon.species.baseExp;
   const enemyLevel = defeatedPokemon.level;
   const playerLevel = playerPokemon.level;
   // Exp share multiplier (handled through expShareModifier and expBalanceModifier)
