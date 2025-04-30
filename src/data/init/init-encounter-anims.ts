@@ -1,8 +1,8 @@
 import { AnimConfig } from "#app/data/animations/anim-config";
+import { encounterAnims } from "#app/data/animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, isNil } from "#app/utils/common-utils";
 import { EncounterAnim } from "#enums/encounter-anims";
-import { encounterAnims } from "../animations/encounter-anims";
 
 /**
  * Fetches animation configs to be used in a Mystery Encounter
