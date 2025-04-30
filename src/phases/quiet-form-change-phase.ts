@@ -1,3 +1,4 @@
+import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-clear-weather-terrain-ab-attr";
 import type { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import {
@@ -190,6 +191,16 @@ export class QuietFormChangePhase extends BattlePhase {
       // TODO: add simulated support?
       applyAbAttrs<PostTeraFormChangeStatChangeAbAttr>(
         AbAttrFlag.POST_TERA_FORM_CHANGE_STAT_CHANGE,
+        this.pokemon,
+        false,
+      );
+      /**
+       * TODO: Smogon suggests this is tied to tera so move to `terastallization-phase` and
+       * rename the AbAttr in case we want randomizer modes where other Pokemon may have
+       * Tera Zero
+       */
+      applyAbAttrs<PostTeraFormChangeClearWeatherTerrainAbAttr>(
+        AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN,
         this.pokemon,
         false,
       );

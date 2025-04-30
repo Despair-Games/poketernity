@@ -1,12 +1,11 @@
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { toDmgValue } from "#app/utils/common-utils";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
-import { AbilityId } from "#enums/ability-id";
 
 // RATIO : HP Cost of Move
 const RATIO = 2;
@@ -48,7 +47,7 @@ describe("Moves - BELLY DRUM", () => {
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
 
     game.move.select(MoveId.BELLY_DRUM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(6);
@@ -65,7 +64,7 @@ describe("Moves - BELLY DRUM", () => {
     leadPokemon.setStatStage(Stat.SPATK, 6);
 
     game.move.select(MoveId.BELLY_DRUM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(6);
@@ -80,7 +79,7 @@ describe("Moves - BELLY DRUM", () => {
     leadPokemon.setStatStage(Stat.ATK, 6);
 
     game.move.select(MoveId.BELLY_DRUM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(6);
@@ -94,7 +93,7 @@ describe("Moves - BELLY DRUM", () => {
     leadPokemon.hp = hpLost - PREDAMAGE;
 
     game.move.select(MoveId.BELLY_DRUM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leadPokemon.hp).toBe(hpLost - PREDAMAGE);
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(0);

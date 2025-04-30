@@ -50,7 +50,7 @@ describe("SelectModifierPhase", () => {
     initSceneWithoutEncounterPhase(scene, [SpeciesId.ABRA, SpeciesId.VOLCARONA]);
     const selectModifierPhase = new SelectModifierPhase();
     scene.phaseManager.unshiftPhase(selectModifierPhase);
-    await game.phaseInterceptor.to(SelectModifierPhase);
+    await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
   });
@@ -239,7 +239,7 @@ describe("SelectModifierPhase", () => {
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.run(SelectModifierPhase);
+    await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
     const modifierSelectHandler = scene.ui.handlers.find(
@@ -263,7 +263,7 @@ describe("SelectModifierPhase", () => {
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.run(SelectModifierPhase);
+    await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
     const modifierSelectHandler = scene.ui.handlers.find(

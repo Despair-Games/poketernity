@@ -1,8 +1,7 @@
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
-import { SpeciesId } from "#enums/species-id";
-import { ExpPhase } from "#app/phases/exp-phase";
 import { AbilityId } from "#enums/ability-id";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -47,7 +46,7 @@ describe("UI - Battle Info", () => {
 
       game.move.select(MoveId.SPLASH);
       await game.faintOpponents();
-      await game.phaseInterceptor.to(ExpPhase, true);
+      await game.phaseInterceptor.to("ExpPhase", true);
 
       expect(Math.pow).not.toHaveBeenCalledWith(2, expGainsSpeed);
     },

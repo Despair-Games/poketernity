@@ -24,6 +24,7 @@ import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { expect, vi } from "vitest";
+import { TerrainType } from "#enums/terrain-type";
 
 /**
  * Helper to handle overrides in tests
@@ -273,6 +274,37 @@ export class OverridesHelper extends GameManagerHelper {
       this.log("Weather duration override disabled!");
     } else {
       this.log(`New weather duration set to ${newWeatherDuration === 0 ? "infinity" : newWeatherDuration}!`);
+    }
+    return this;
+  }
+
+  /**
+   * Override the {@linkcode TerrainType | terrain (type)}
+   * @param type {@linkcode TerrainType | terarin type} to set
+   * @returns `this`
+   */
+  public terrain(type: TerrainType): this {
+    vi.spyOn(Overrides, "TERRAIN_OVERRIDE", "get").mockReturnValue(type);
+    this.log(`Terrain set to ${TerrainType[type]} (=${type})!`);
+    return this;
+  }
+
+  /**
+   * Override the new terrain duration.
+   * **Can NOT be combined with {@linkcode terrain}!**
+   * @param newTerrainDuration -
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the terrain should last
+   * @returns `this`
+   * @see {@linkcode Arena.trySetTerrain}
+   */
+  public newTerrainDuration(newTerrainDuration: number): this {
+    vi.spyOn(Overrides, "NEW_TERRAIN_DURATION_OVERRIDE", "get").mockReturnValue(newTerrainDuration);
+    if (newTerrainDuration < 0) {
+      this.log("Terrain duration override disabled!");
+    } else {
+      this.log(`New terrain duration set to ${newTerrainDuration === 0 ? "infinity" : newTerrainDuration}!`);
     }
     return this;
   }

@@ -1,12 +1,11 @@
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { MoveResult } from "#enums/move-result";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 
 describe("Moves - Torment", () => {
   let phaserGame: Phaser.Game;
@@ -55,7 +54,7 @@ describe("Moves - Torment", () => {
     // Third turn, Tackle can be used.
     game.move.select(MoveId.TACKLE);
     await game.move.selectEnemyMove(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon).toHaveUsedMove(MoveId.TACKLE);
   });
 });

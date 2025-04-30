@@ -1,8 +1,7 @@
-import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
-import { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -34,7 +33,7 @@ describe("Abilities - Intrepid Sword", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    await game.phaseInterceptor.to(CommandPhase, false);
+    await game.phaseInterceptor.to("CommandPhase", false);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);

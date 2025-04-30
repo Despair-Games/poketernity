@@ -1,14 +1,10 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, test } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
-import { Stat } from "#enums/stat";
-import { BerryPhase } from "#app/phases/berry-phase";
-import { FaintPhase } from "#app/phases/faint-phase";
-import { MessagePhase } from "#app/phases/message-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
 
 describe("Moves - Parting Shot", () => {
   let phaserGame: Phaser.Game;
@@ -42,7 +38,7 @@ describe("Moves - Parting Shot", () => {
 
     game.move.select(MoveId.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
@@ -57,7 +53,7 @@ describe("Moves - Parting Shot", () => {
 
     game.move.select(MoveId.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
@@ -72,24 +68,24 @@ describe("Moves - Parting Shot", () => {
 
       // use Memento 3 times to debuff enemy
       game.move.select(MoveId.MEMENTO);
-      await game.phaseInterceptor.to(FaintPhase);
+      await game.phaseInterceptor.to("FaintPhase");
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       game.selectPartyPokemon(1);
 
-      await game.phaseInterceptor.to(TurnInitPhase, false);
+      await game.phaseInterceptor.to("TurnInitPhase", false);
       game.move.select(MoveId.MEMENTO);
-      await game.phaseInterceptor.to(FaintPhase);
+      await game.phaseInterceptor.to("FaintPhase");
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       game.selectPartyPokemon(2);
 
-      await game.phaseInterceptor.to(TurnInitPhase, false);
+      await game.phaseInterceptor.to("TurnInitPhase", false);
       game.move.select(MoveId.MEMENTO);
-      await game.phaseInterceptor.to(FaintPhase);
+      await game.phaseInterceptor.to("FaintPhase");
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       game.selectPartyPokemon(3);
 
       // set up done
-      await game.phaseInterceptor.to(TurnInitPhase, false);
+      await game.phaseInterceptor.to("TurnInitPhase", false);
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
 
@@ -99,7 +95,7 @@ describe("Moves - Parting Shot", () => {
       // now parting shot should fail
       game.move.select(MoveId.PARTING_SHOT);
 
-      await game.phaseInterceptor.to(BerryPhase, false);
+      await game.phaseInterceptor.to("BerryPhase", false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-6);
       expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-6);
       expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
@@ -118,7 +114,7 @@ describe("Moves - Parting Shot", () => {
 
       game.move.select(MoveId.PARTING_SHOT);
 
-      await game.phaseInterceptor.to(BerryPhase, false);
+      await game.phaseInterceptor.to("BerryPhase", false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
       expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
       expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
@@ -137,7 +133,7 @@ describe("Moves - Parting Shot", () => {
 
       game.move.select(MoveId.PARTING_SHOT);
 
-      await game.phaseInterceptor.to(BerryPhase, false);
+      await game.phaseInterceptor.to("BerryPhase", false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
       expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
       expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
@@ -155,7 +151,7 @@ describe("Moves - Parting Shot", () => {
 
       game.move.select(MoveId.PARTING_SHOT);
 
-      await game.phaseInterceptor.to(BerryPhase, false);
+      await game.phaseInterceptor.to("BerryPhase", false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
       expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
       expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
@@ -172,13 +168,13 @@ describe("Moves - Parting Shot", () => {
       // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
       await game.faintPokemon(game.scene.getPlayerParty()[0]);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-      await game.phaseInterceptor.run(MessagePhase);
+      await game.phaseInterceptor.to("MessagePhase");
       game.selectPartyPokemon(1);
 
-      await game.phaseInterceptor.to(TurnInitPhase, false);
+      await game.phaseInterceptor.to("TurnInitPhase", false);
       game.move.select(MoveId.PARTING_SHOT);
 
-      await game.phaseInterceptor.to(BerryPhase, false);
+      await game.phaseInterceptor.to("BerryPhase", false);
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
       expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);

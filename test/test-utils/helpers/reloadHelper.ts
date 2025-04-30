@@ -1,13 +1,13 @@
-import { TitlePhase } from "#app/phases/title-phase";
-import { UiMode } from "#enums/ui-mode";
-import { vi } from "vitest";
-import { BattleStyle } from "#enums/battle-style";
-import { CommandPhase } from "#app/phases/command-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { SessionSaveData } from "#app/@types/SessionData";
+import { CommandPhase } from "#app/phases/command-phase";
+import { TitlePhase } from "#app/phases/title-phase";
+import { TurnInitPhase } from "#app/phases/turn-init-phase";
+import { settings } from "#app/system/settings/settings-manager";
+import { BattleStyle } from "#enums/battle-style";
+import { UiMode } from "#enums/ui-mode";
 import type { GameManager } from "#test/test-utils/gameManager";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
-import { settings } from "#app/system/settings/settings-manager";
+import { vi } from "vitest";
 
 /**
  * Helper to allow reloading sessions in unit tests.
@@ -73,7 +73,7 @@ export class ReloadHelper extends GameManagerHelper {
       );
     }
 
-    await this.game.phaseInterceptor.to(CommandPhase);
+    await this.game.phaseInterceptor.to("CommandPhase");
     console.log("==================[New Turn]==================");
   }
 }

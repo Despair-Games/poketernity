@@ -1,24 +1,23 @@
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import { BiomeId } from "#enums/biome-id";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
+import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { AbilityId } from "#enums/ability-id";
+import { BiomeId } from "#enums/biome-id";
+import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
+import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { MoveId } from "#enums/move-id";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
-import { AbilityId } from "#enums/ability-id";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/anOfferYouCantRefuse";
 /** Gyarados for Indimidate */
@@ -200,7 +199,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       const expBefore = gyarados.exp;
 
       await runMysteryEncounterToEnd(game, 2);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       expect(gyarados.exp).toBe(
         expBefore + Math.floor((getPokemonSpecies(SpeciesId.LIEPARD).baseExp * defaultWave) / 5 + 1),
@@ -216,7 +215,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       const expBefore = abra.exp;
 
       await runMysteryEncounterToEnd(game, 2);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       expect(abra.exp).toBe(
         expBefore + Math.floor((getPokemonSpecies(SpeciesId.LIEPARD).baseExp * defaultWave) / 5 + 1),
