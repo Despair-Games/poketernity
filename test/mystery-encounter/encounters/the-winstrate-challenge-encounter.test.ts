@@ -356,7 +356,7 @@ async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean 
   game.scene.phaseManager.clearPhaseQueue();
   game.scene.phaseManager.clearPhaseQueueSplice();
   const commandUiHandler = game.scene.ui.handlers[UiMode.COMMAND];
-  commandUiHandler.clear();
+  commandUiHandler.stop();
   game.scene.getEnemyParty().forEach((p) => {
     p.faint();
     game.scene.field.remove(p);

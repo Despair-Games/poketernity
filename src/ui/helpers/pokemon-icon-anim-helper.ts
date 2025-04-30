@@ -4,13 +4,27 @@ import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
 
+/**
+ * Helper class that handles up and down / jumping animation of Pokemon icons.
+ */
 export class PokemonIconAnimHelper {
   private icons: Map<PokemonIcon, PokemonIconAnimMode>;
   private toggled: boolean;
+  private counterTween: Phaser.Tweens.Tween | undefined;
 
-  setup(): void {
+  constructor() {
     this.icons = new Map();
     this.toggled = false;
+  }
+
+  /**
+   * Start the loop updating the animation for the tracked icons.
+   * When no longer needed {@linkcode destroy} should be called to stop the loop.
+   */
+  public setup(): void {
+    if (this.counterTween) {
+      return;
+    }
 
     const onAlternate = (tween: Phaser.Tweens.Tween) => {
       const value = tween.getValue();
@@ -21,7 +35,7 @@ export class PokemonIconAnimHelper {
         i.y += delta * (this.toggled ? 1 : -1);
       }
     };
-    globalScene.tweens.addCounter({
+    this.counterTween = globalScene.tweens.addCounter({
       duration: fixedNumber(200),
       from: 0,
       to: 1,
@@ -32,7 +46,7 @@ export class PokemonIconAnimHelper {
     });
   }
 
-  getModeYDelta(mode: PokemonIconAnimMode): number {
+  private getModeYDelta(mode: PokemonIconAnimMode): number {
     switch (mode) {
       case PokemonIconAnimMode.NONE:
         return 0;
@@ -43,7 +57,16 @@ export class PokemonIconAnimHelper {
     }
   }
 
-  addOrUpdate(icons: PokemonIcon | PokemonIcon[], mode: PokemonIconAnimMode): void {
+  /**
+   * Add one or more Pokemon icons to the list of icons to animate, synchronizing them with
+   * the current animation state of the existing icons.
+   * If the icon(s) were already added but used a different animation mode, switches their mode
+   * and updates their position accordingly.
+   *
+   * @param icons - A single or array of {@linkcode PokemonIcon} ({@linkcode Sprite} or {@linkcode Container})
+   * @param mode - The {@linkcode PokemonIconAnimMode} to use for the icon(s).
+   */
+  public addOrUpdate(icons: PokemonIcon | PokemonIcon[], mode: PokemonIconAnimMode): void {
     if (!Array.isArray(icons)) {
       icons = [icons];
     }
@@ -60,7 +83,12 @@ export class PokemonIconAnimHelper {
     }
   }
 
-  remove(icons: PokemonIcon | PokemonIcon[]): void {
+  /**
+   * Removes one or more icons from the handler. Resets their position to the default.
+   *
+   * @param icons - The {@linkcode PokemonIcon}(s) to remove.
+   */
+  public remove(icons: PokemonIcon | PokemonIcon[]): void {
     if (!Array.isArray(icons)) {
       icons = [icons];
     }
@@ -74,7 +102,10 @@ export class PokemonIconAnimHelper {
     }
   }
 
-  removeAll(): void {
+  /**
+   * Removes all icons being animated by the handler. Resets their position to the default.
+   */
+  public removeAll(): void {
     for (const i of this.icons.keys()) {
       if (this.toggled) {
         const icon = this.icons.get(i);
@@ -82,6 +113,18 @@ export class PokemonIconAnimHelper {
         i.y -= delta;
       }
       this.icons.delete(i);
+    }
+  }
+
+  /**
+   * Prepares this element for garbage collection.
+   * Removes references to all tracked icons and stops the animation loop.
+   */
+  public destroy(): void {
+    this.removeAll();
+    if (this.counterTween) {
+      this.counterTween.destroy();
+      this.counterTween = undefined;
     }
   }
 }

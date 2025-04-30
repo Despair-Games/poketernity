@@ -25,21 +25,21 @@ export abstract class ModalUiHandler extends UiHandler {
     this.buttonLabels = [];
   }
 
-  abstract getModalTitle(config?: ModalConfig): string;
+  protected abstract getModalTitle(config?: ModalConfig): string;
 
-  abstract getWidth(config?: ModalConfig): number;
+  protected abstract getWidth(config?: ModalConfig): number;
 
-  abstract getHeight(config?: ModalConfig): number;
+  protected abstract getHeight(config?: ModalConfig): number;
 
-  abstract getMargin(config?: ModalConfig): [number, number, number, number];
+  protected abstract getMargin(config?: ModalConfig): [number, number, number, number];
 
-  abstract getButtonLabels(config?: ModalConfig): string[];
+  protected abstract getButtonLabels(config?: ModalConfig): string[];
 
-  getButtonTopMargin(): number {
+  protected getButtonTopMargin(): number {
     return 0;
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.modalContainer = globalScene.add.container(0, 0);
@@ -69,6 +69,10 @@ export abstract class ModalUiHandler extends UiHandler {
     this.modalContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.modalContainer.destroy();
+  }
+
   private addButton(label: string) {
     const buttonTopMargin = this.getButtonTopMargin();
     const buttonLabel = addTextObject(0, 8, label, TextStyle.TOOLTIP_CONTENT);
@@ -95,12 +99,10 @@ export abstract class ModalUiHandler extends UiHandler {
     this.modalContainer.add(buttonContainer);
   }
 
-  override show(config: ModalConfig | any, ..._args: unknown[]): boolean {
+  public override show(config: ModalConfig | any, ..._args: unknown[]): boolean {
     if (!config.hasOwnProperty("buttonActions")) {
       return false;
     }
-
-    super.show(config);
 
     if (config.fadeOut) {
       const [marginTop, marginRight, marginBottom, marginLeft] = this.getMargin();
@@ -143,7 +145,7 @@ export abstract class ModalUiHandler extends UiHandler {
     return true;
   }
 
-  updateContainer(config?: ModalConfig): void {
+  protected updateContainer(config?: ModalConfig): void {
     const [marginTop, marginRight, marginBottom, marginLeft] = this.getMargin(config);
 
     const [width, height] = [this.getWidth(config), this.getHeight(config)];
@@ -167,12 +169,11 @@ export abstract class ModalUiHandler extends UiHandler {
     }
   }
 
-  processInput(_button: Button): boolean {
+  public override processInput(_button: Button): boolean {
     return false;
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.modalContainer.setVisible(false);
 
     this.buttonBgs.map((bg) => bg.off("pointerdown"));

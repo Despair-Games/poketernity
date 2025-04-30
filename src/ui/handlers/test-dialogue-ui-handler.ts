@@ -13,7 +13,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     super(mode);
   }
 
-  override setup() {
+  protected override setup() {
     super.setup();
 
     const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
@@ -46,23 +46,23 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     this.keys = keys;
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "Test Dialogue";
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 300;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return ["Check", "Cancel"];
   }
 
-  override getReadableErrorMessage(error: string): string {
+  protected override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -71,11 +71,11 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     return super.getReadableErrorMessage(error);
   }
 
-  override getInputFieldConfigs(): InputFieldConfig[] {
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
     return [{ label: "Dialogue" }];
   }
 
-  override show(config: ModalConfig, prefilledText: string): boolean {
+  public override show(config: ModalConfig, prefilledText: string): boolean {
     const ui = this.getUi();
     const hasTitle = !!this.getModalTitle();
     this.updateFields(this.getInputFieldConfigs(), hasTitle);

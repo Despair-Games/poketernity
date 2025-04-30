@@ -237,6 +237,10 @@ export abstract class BattleAnim {
       targetSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       targetSprite.setAngle(0);
 
+      // Remove animation event listeners
+      userSprite.off("animationupdate");
+      targetSprite.off("animationupdate");
+
       /**
        * This and `targetSpriteToShow` are used to restore context lost
        * from the `isOppAnim` swap. Using these references instead of `this.user`

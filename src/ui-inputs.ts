@@ -6,11 +6,11 @@ import type { MenuUiHandler } from "#app/ui/handlers/menu-ui-handler";
 import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
 import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { SettingsAudioUiHandler } from "#app/ui/settings/settings-audio-ui-handler";
-import { SettingsDisplayUiHandler } from "#app/ui/settings/settings-display-ui-handler";
-import { SettingsGamepadUiHandler } from "#app/ui/settings/settings-gamepad-ui-handler";
-import { SettingsKeyboardUiHandler } from "#app/ui/settings/settings-keyboard-ui-handler";
-import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
+import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
+import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
+import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
+import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
+import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { settingsUiModes } from "#app/ui/ui";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
@@ -203,12 +203,12 @@ export class UiInputs {
   buttonCycleOption(button: Button): void {
     const whitelist = [
       StarterSelectUiHandler,
-      SettingsUiHandler,
+      GeneralSettingsUiHandler,
       RunInfoUiHandler,
-      SettingsDisplayUiHandler,
-      SettingsAudioUiHandler,
-      SettingsGamepadUiHandler,
-      SettingsKeyboardUiHandler,
+      DisplaySettingsUiHandler,
+      AudioSettingsUiHandler,
+      GamepadSettingsUiHandler,
+      KeyboardSettingsUiHandler,
     ];
     const uiHandler = globalScene.ui?.getHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {

@@ -47,7 +47,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     super(UiMode.FIGHT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.movesContainer = globalScene.add.container(18, -38.7);
@@ -118,9 +118,18 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     globalScene.addInfoToggle(this);
   }
 
-  override show(fieldIndex: number = 0, command: FightCommand = BattleCommand.FIGHT): boolean {
-    super.show();
+  protected override tearDown(): void {
+    // unregister the info toggle
+    globalScene.removeInfoToggle(this.moveInfoOverlay);
+    globalScene.removeInfoToggle(this);
 
+    // destroy the containers and their content
+    this.movesContainer.destroy();
+    this.moveInfoContainer.destroy();
+    this.moveInfoOverlay.destroy();
+  }
+
+  public override show(fieldIndex: number = 0, command: FightCommand = BattleCommand.FIGHT): boolean {
     this.fieldIndex = fieldIndex;
     this.fromCommand = command;
 
@@ -128,19 +137,20 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     messageHandler.bg.setVisible(false);
     messageHandler.commandWindow.setVisible(false);
     messageHandler.movesWindowContainer.setVisible(true);
+
     const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
-    if (pokemon.battleSummonData.turnCount <= 1) {
-      this.setCursor(0);
-    } else {
+    if (pokemon.battleSummonData?.turnCount > 1) {
       this.setCursor(this.getCursor());
+    } else {
+      this.setCursor(0);
     }
     this.displayMoves();
     this.toggleInfo(false); // in case cancel was pressed while info toggle is active
-    this.active = true;
+
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     const cursor = this.getCursor();
     let success = false;
@@ -212,11 +222,11 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     return this.active;
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ui = this.getUi();
 
     this.moveInfoOverlay.clear();
@@ -349,8 +359,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     return moveColors[0];
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     const messageHandler = this.getUi().getMessageHandler();
     this.clearMoves();
     this.typeIcon.setVisible(false);
@@ -364,7 +373,6 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoOverlay.clear();
     messageHandler.bg.setVisible(true);
     this.eraseCursor();
-    this.active = false;
   }
 
   clearMoves() {

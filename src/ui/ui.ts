@@ -43,11 +43,11 @@ import { UnavailableModalUiHandler } from "#app/ui/handlers/unavailable-modal-ui
 import { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 import { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
-import { SettingsAudioUiHandler } from "#app/ui/settings/settings-audio-ui-handler";
-import { SettingsDisplayUiHandler } from "#app/ui/settings/settings-display-ui-handler";
-import { SettingsGamepadUiHandler } from "#app/ui/settings/settings-gamepad-ui-handler";
-import { SettingsKeyboardUiHandler } from "#app/ui/settings/settings-keyboard-ui-handler";
-import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
+import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
+import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
+import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
+import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
+import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { executeIf } from "#app/utils/common-utils";
@@ -110,6 +110,8 @@ const noTransitionModes = [
   UiMode.RUN_INFO,
 ];
 
+const DEFAULT_MODE = UiMode.MESSAGE;
+
 export class UI extends Phaser.GameObjects.Container {
   private mode: UiMode;
   private modeChain: UiMode[];
@@ -129,7 +131,7 @@ export class UI extends Phaser.GameObjects.Container {
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
 
-    this.mode = UiMode.MESSAGE;
+    this.mode = DEFAULT_MODE;
     this.modeChain = [];
     this.handlers = [
       new BattleMessageUiHandler(),
@@ -151,12 +153,12 @@ export class UI extends Phaser.GameObjects.Container {
       new MenuUiHandler(),
       new OptionSelectUiHandler(UiMode.MENU_OPTION_SELECT),
       // settings
-      new SettingsUiHandler(),
-      new SettingsDisplayUiHandler(),
-      new SettingsAudioUiHandler(),
-      new SettingsGamepadUiHandler(),
+      new GeneralSettingsUiHandler(),
+      new DisplaySettingsUiHandler(),
+      new AudioSettingsUiHandler(),
+      new GamepadSettingsUiHandler(),
       new GamepadBindingUiHandler(),
-      new SettingsKeyboardUiHandler(),
+      new KeyboardSettingsUiHandler(),
       new KeyboardBindingUiHandler(),
       new AchievementsUiHandler(),
       new GameStatsUiHandler(),
@@ -181,7 +183,7 @@ export class UI extends Phaser.GameObjects.Container {
   setup(): void {
     this.setName(`ui-${UiMode[this.mode]}`);
     for (const handler of this.handlers) {
-      handler.setup();
+      handler.initialize();
     }
     this.overlay = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     this.overlay.setName("rect-ui-overlay");
@@ -199,6 +201,38 @@ export class UI extends Phaser.GameObjects.Container {
     this.savingIcon.setup();
 
     globalScene.uiContainer.add(this.savingIcon);
+  }
+
+  /**
+   * Stop any active handler, clear the mode chain and go back to the default MESSAGE ui mode.
+   *
+   * For now, only used to reset all handlers between tests.
+   */
+  public resetHandlers(): void {
+    this.mode = DEFAULT_MODE;
+    const currentHandler = this.getHandler();
+    for (const handler of this.handlers.filter((h) => h.active && h !== currentHandler)) {
+      handler.stop();
+    }
+    (this.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
+    this.resetModeChain();
+  }
+
+  public resetModeChain(): void {
+    this.modeChain = [];
+    globalScene.updateGameInfo();
+  }
+
+  public override destroy(fromScene?: boolean): void {
+    // Clear references to current handlers in the NavigationManager
+    NavigationManager.getInstance().clearMenus();
+
+    // Destroy all handlers
+    for (const handler of this.handlers) {
+      handler.destroy();
+    }
+
+    super.destroy(fromScene);
   }
 
   private setupTooltip() {
@@ -426,12 +460,6 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  override destroy(fromScene?: boolean): void {
-    NavigationManager.getInstance().clearMenus();
-    this.removeAll(true);
-    super.destroy(fromScene);
-  }
-
   clearText(): void {
     this.getCurrentMessageHandler().clearText();
   }
@@ -537,8 +565,8 @@ export class UI extends Phaser.GameObjects.Container {
       }
       const doSetMode = () => {
         if (this.mode !== mode) {
-          if (clear) {
-            this.getHandler().clear();
+          if (clear && this.getHandler().active) {
+            this.getHandler().stop();
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -549,7 +577,9 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getHandler().show(...params);
+          this.getHandler().start(...params);
+        } else if (!this.getHandler().active) {
+          this.getHandler().start(...params);
         }
         resolve();
       };
@@ -572,11 +602,6 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  resetModeChain(): void {
-    this.modeChain = [];
-    globalScene.updateGameInfo();
-  }
-
   revertMode(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (!this?.modeChain?.length) {
@@ -586,7 +611,7 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.getHandler().clear();
+        this.getHandler().stop();
         this.mode = this.modeChain.pop()!; // TODO: is this bang correct?
         globalScene.updateGameInfo();
         const touchControls = document.getElementById("touchControls");

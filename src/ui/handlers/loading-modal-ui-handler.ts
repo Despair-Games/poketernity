@@ -9,27 +9,27 @@ export class LoadingModalUiHandler extends ModalUiHandler {
     super(mode);
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "";
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 80;
   }
 
-  getHeight(): number {
+  protected override getHeight(): number {
     return 32;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [];
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const label = addTextObject(this.getWidth() / 2, this.getHeight() / 2, i18next.t("menu:loading"), TextStyle.WINDOW);

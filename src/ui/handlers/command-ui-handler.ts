@@ -31,7 +31,7 @@ export class CommandUiHandler extends UiHandler {
     super(UiMode.COMMAND);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     const commands = [
       i18next.t("commandUiHandler:fight"),
@@ -64,9 +64,11 @@ export class CommandUiHandler extends UiHandler {
     }
   }
 
-  override show(fieldIndex: number = 0): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.commandsContainer.destroy();
+  }
 
+  public override show(fieldIndex: number = 0): boolean {
     this.fieldIndex = fieldIndex;
 
     this.commandsContainer.setVisible(true);
@@ -102,7 +104,7 @@ export class CommandUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -214,7 +216,8 @@ export class CommandUiHandler extends UiHandler {
     return hasTeraOrb && !isBlockedForm && playerTerasUsed + plannedTera < 1;
   }
 
-  public toggleTeraButton(): void {
+  private toggleTeraButton(): void {
+    // todo: we don't need to set the whole pipeline again. `setPipelineData` should be enough
     this.teraButton.setPipeline(globalScene.spritePipeline, {
       tone: [0.0, 0.0, 0.0, 0.0],
       ignoreTimeTint: true,
@@ -223,11 +226,11 @@ export class CommandUiHandler extends UiHandler {
     });
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = this.getCursor() !== cursor;
     if (changed) {
       if (!this.fieldIndex) {
@@ -252,15 +255,17 @@ export class CommandUiHandler extends UiHandler {
     return changed;
   }
 
-  override clear(): void {
-    super.clear();
-    this.getUi().getMessageHandler().commandWindow.setVisible(false);
+  protected override clear(): void {
     this.commandsContainer.setVisible(false);
-    this.getUi().getMessageHandler().clearText();
+    const messageHandler = this.getUi().getMessageHandler();
+    if (messageHandler.ready) {
+      messageHandler.commandWindow.setVisible(false);
+      messageHandler.clearText();
+    }
     this.eraseCursor();
   }
 
-  eraseCursor(): void {
+  private eraseCursor(): void {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }

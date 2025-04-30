@@ -623,22 +623,26 @@ export default class BattleScene extends SceneBase {
 
     this.trainer = trainer;
 
-    this.anims.create({
-      key: "prompt",
-      frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
-      frameRate: 6,
-      repeat: -1,
-      showOnStart: true,
-    });
+    if (!this.anims.exists("prompt")) {
+      this.anims.create({
+        key: "prompt",
+        frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
+        frameRate: 6,
+        repeat: -1,
+        showOnStart: true,
+      });
+    }
 
-    this.anims.create({
-      key: "tera_sparkle",
-      frames: this.anims.generateFrameNumbers("tera_sparkle", { start: 0, end: 12 }),
-      frameRate: 18,
-      repeat: 0,
-      showOnStart: true,
-      hideOnComplete: true,
-    });
+    if (!this.anims.exists("tera_sparkle")) {
+      this.anims.create({
+        key: "tera_sparkle",
+        frames: this.anims.generateFrameNumbers("tera_sparkle", { start: 0, end: 12 }),
+        frameRate: 18,
+        repeat: 0,
+        showOnStart: true,
+        hideOnComplete: true,
+      });
+    }
 
     this.reset(false, false, true);
 
@@ -699,6 +703,7 @@ export default class BattleScene extends SceneBase {
     this.updateScoreText();
   }
 
+  // TODO: it seems to have 2 versions of the masterlist in memory, one with back and one without
   async initVariantData(): Promise<void> {
     Object.keys(variantData).forEach((key) => delete variantData[key]);
     await this.cachedFetch("./images/pokemon/variant/_masterlist.json")
@@ -882,12 +887,25 @@ export default class BattleScene extends SceneBase {
   }
 
   // store info toggles to be accessible by the ui
-  addInfoToggle(infoToggle: InfoToggle): void {
+  public addInfoToggle(infoToggle: InfoToggle): void {
     this.infoToggles.push(infoToggle);
   }
 
+  /**
+   * Removes a specified {@linkcode InfoToggle} from the {@linkcode infoToggles} array.
+   *
+   * @param infoToggle - The {@linkcode InfoToggle} instance to be removed. If the toggle
+   *                     is not found in the array, no action is taken.
+   */
+  public removeInfoToggle(infoToggle: InfoToggle): void {
+    const infoToggleIndex = this.infoToggles.indexOf(infoToggle);
+    if (infoToggleIndex !== -1) {
+      this.infoToggles.splice(infoToggleIndex, 1);
+    }
+  }
+
   // return the stored info toggles; used by ui-inputs
-  getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
+  public getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
     return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
   }
 
@@ -1169,6 +1187,13 @@ export default class BattleScene extends SceneBase {
         ease: "Sine.easeInOut",
         onComplete: () => {
           this.phaseManager.clearPhaseQueue();
+
+          // stop the tera sparkle handler
+          this.spriteTeraSparkleHandler.destroy();
+
+          // destroy elements placed directly on the scene
+          this.arenaBg.destroy();
+          this.arenaBgTransition.destroy();
 
           // destroying those containers will call 'container.removeAll(true)', destroying all their children as well
           this.uiContainer.destroy();

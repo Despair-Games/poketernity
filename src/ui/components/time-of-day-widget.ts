@@ -68,6 +68,12 @@ export class TimeOfDayWidget extends Phaser.GameObjects.Container {
     globalScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onEncounterPhaseEvent);
   }
 
+  override destroy(fromScene?: boolean): void {
+    globalScene.eventTarget.removeEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onEncounterPhaseEvent);
+
+    super.destroy(fromScene);
+  }
+
   /**
    * Creates a tween animation based on the 'Back' ease algorithm
    * @returns an array of all tweens in the animation
