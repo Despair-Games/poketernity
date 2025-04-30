@@ -44,7 +44,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     super(UiMode.SAVE_SLOT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.saveSlotSelectContainer = globalScene.add.container(0, 0);
@@ -75,9 +75,11 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.sessionSlots = [];
   }
 
-  override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.saveSlotSelectContainer.destroy();
+  }
 
+  public override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
     this.uiMode = mode;
     this.saveSlotSelectCallback = slotSelectCallback;
 
@@ -90,7 +92,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -208,7 +210,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,
@@ -235,7 +237,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
    * @param prevSlotIndex index of the previous session occupied by the cursor, between `0` and `SESSION_SLOTS_COUNT - 1` - optional
    * @returns `true` if the cursor position has changed | `false` if it has not
    */
-  override setCursor(cursor: number, prevSlotIndex?: number): boolean {
+  public override setCursor(cursor: number, prevSlotIndex?: number): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -324,8 +326,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.saveSlotSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();

@@ -51,7 +51,7 @@ export abstract class AwaitableUiHandler extends UiHandler {
     }
   }
 
-  override isAwaitableUiHandler(): this is this {
+  public override isAwaitableUiHandler(): this is this {
     return true;
   }
 }

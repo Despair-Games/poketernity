@@ -23,7 +23,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
    * Add the sprite to be displayed at the end of messages with prompts
    * @param container the container to add the sprite to
    */
-  initPromptSprite(container: Phaser.GameObjects.Container) {
+  protected initPromptSprite(container: Phaser.GameObjects.Container) {
     if (!this.prompt) {
       const promptSprite = globalScene.add.sprite(0, 0, "prompt");
       promptSprite.setVisible(false);
@@ -36,7 +36,17 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  showText(
+  /**
+   * Displays a dialogue message on the UI with optional delay and speaker name.
+   *
+   * @param text - The dialogue message to display.
+   * @param delay - (Optional) The delay in milliseconds before the dialogue is displayed. Defaults to `null` for no delay.
+   * @param callback - (Optional) A callback function to execute after the dialogue is displayed. Defaults to `null` for no callback.
+   * @param callbackDelay - (Optional) The delay in milliseconds before executing the callback. Defaults to `null` for no delay.
+   * @param prompt - (Optional) Whether to display the prompt icon at the end of the textbox.
+   * @param promptDelay - (Optional) The delay in milliseconds before showing the prompt. Defaults to `null` for no delay.
+   */
+  public showText(
     text: string,
     delay?: number | null,
     callback?: Function | null,
@@ -50,7 +60,18 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  showDialogue(
+  /**
+   * Displays a dialogue with the given text and optional parameters.
+   *
+   * @param text - The dialogue text to display.
+   * @param _name - (Optional) The name of the character speaking the dialogue.
+   * @param delay - (Optional) The delay in milliseconds before the dialogue is displayed.
+   * @param callback - (Optional) A function to execute after the dialogue is displayed.
+   * @param callbackDelay - (Optional) The delay in milliseconds before the callback is executed.
+   * @param prompt - (Optional) Whether to display the prompt icon at the end of the textbox.
+   * @param promptDelay - (Optional) The delay in milliseconds before the prompt is displayed.
+   */
+  public showDialogue(
     text: string,
     _name?: string,
     delay?: number | null,
@@ -215,7 +236,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  showPrompt(callback?: Function | null, callbackDelay?: number | null) {
+  private showPrompt(callback?: Function | null, callbackDelay?: number | null) {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
     const lastTextLine = wrappedTextLines[textLinesCount - 1];
@@ -249,7 +270,16 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     };
   }
 
-  isTextAnimationInProgress() {
+  /**
+   * Checks if the text animation is currently in progress.
+   *
+   * @returns `true` if the text animation is active and the timer has remaining repetitions; otherwise, `false`.
+   *
+   * The method evaluates the state of the `textTimer` property to determine whether the text animation is still ongoing.
+   * If `textTimer` is defined and its `repeatCount` is less than its `repeat` value, the animation is considered in progress.
+   * Otherwise, it returns `false`.
+   */
+  public isTextAnimationInProgress(): boolean {
     if (this.textTimer) {
       return this.textTimer.repeatCount < this.textTimer.repeat;
     }
@@ -257,12 +287,16 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     return false;
   }
 
-  clearText() {
-    this.message.setText("");
+  /**
+   * Clears the currently displayed text from the UI.
+   *
+   * This method sets the message text to an empty string and resets the `pendingPrompt` state.
+   * It ensures that the text is only cleared if the `ready` state is `true` and the `message` object is active.
+   */
+  public clearText(): void {
+    if (this.ready && this.message?.active) {
+      this.message.setText("");
+    }
     this.pendingPrompt = false;
-  }
-
-  override clear() {
-    super.clear();
   }
 }

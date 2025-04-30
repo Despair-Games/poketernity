@@ -60,6 +60,7 @@ export function hasTouchscreen(): boolean {
  * @returns `true` if the device window's `width > height`, and `false` otherwise
  */
 export function isLandscapeMode(): boolean {
+  // TODO: we should user Phaser's scale 'orientation' field instead
   const { width, height } = window.screen;
   return width > height;
 }

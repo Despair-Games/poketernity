@@ -59,7 +59,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.scrollCursor = 0;
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.mainContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
@@ -165,9 +165,11 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.mainContainer.setVisible(false);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.mainContainer.destroy();
+  }
 
+  public override show(): boolean {
     this.headerBgX = this.headerBg.getTopRight().x;
     this.updateAchvIcons();
 
@@ -206,7 +208,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     );
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -288,7 +290,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     return success;
   }
 
-  override setCursor(cursor: number, pageChange?: boolean): boolean {
+  public override setCursor(cursor: number, pageChange?: boolean): boolean {
     const ret = super.setCursor(cursor);
 
     let update = ret;
@@ -432,8 +434,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.currentTotal = this.vouchersTotal;
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.currentPage = Page.ACHIEVEMENTS;
     this.mainContainer.setVisible(false);
     this.setScrollCursor(0);

@@ -48,7 +48,7 @@ export class ScrollableGridController {
    * @param scrollBar {@linkcode ScrollBar}
    * @returns this
    */
-  withScrollBar(scrollBar: ScrollBar): ScrollableGridController {
+  public withScrollBar(scrollBar: ScrollBar): ScrollableGridController {
     this.scrollBar = scrollBar;
     this.scrollBar.setTotalRows(Math.ceil(this.totalElements / this.COLUMNS));
     return this;
@@ -59,7 +59,7 @@ export class ScrollableGridController {
    * @param callback {@linkcode UpdateGridCallbackFunction}
    * @returns this
    */
-  withUpdateGridCallBack(callback: UpdateGridCallbackFunction): ScrollableGridController {
+  public withUpdateGridCallBack(callback: UpdateGridCallbackFunction): ScrollableGridController {
     this.updateGridCallback = callback;
     return this;
   }
@@ -69,7 +69,7 @@ export class ScrollableGridController {
    * @param callback {@linkcode UpdateDetailsCallbackFunction}
    * @returns this
    */
-  withUpdateSingleElementCallback(callback: UpdateDetailsCallbackFunction): ScrollableGridController {
+  public withUpdateSingleElementCallback(callback: UpdateDetailsCallbackFunction): ScrollableGridController {
     this.updateDetailsCallback = callback;
     return this;
   }
@@ -77,7 +77,7 @@ export class ScrollableGridController {
   /**
    * @param totalElements the total number of elements that the grid needs to display
    */
-  setTotalElements(totalElements: number) {
+  public setTotalElements(totalElements: number) {
     this.totalElements = totalElements;
     if (this.scrollBar) {
       this.scrollBar.setTotalRows(Math.ceil(this.totalElements / this.COLUMNS));
@@ -88,7 +88,7 @@ export class ScrollableGridController {
   /**
    * @returns how many elements are hidden due to scrolling
    */
-  getItemOffset(): number {
+  public getItemOffset(): number {
     return this.scrollCursor * this.COLUMNS;
   }
 
@@ -97,7 +97,7 @@ export class ScrollableGridController {
    * @param button the button that was pressed
    * @returns `true` if either the cursor or scrollCursor was updated
    */
-  processInput(button: Button): boolean {
+  public processInput(button: Button): boolean {
     let success = false;
     const onScreenRows = Math.min(this.ROWS, Math.ceil(this.totalElements / this.COLUMNS));
     const maxScrollCursor = Math.max(0, Math.ceil(this.totalElements / this.COLUMNS) - onScreenRows);
@@ -155,7 +155,7 @@ export class ScrollableGridController {
   /**
    * Reset the scrolling
    */
-  reset(): void {
+  public reset(): void {
     this.setScrollCursor(0);
     this.setCursor(0);
   }

@@ -16,6 +16,8 @@ export class EggCounterContainer extends Phaser.GameObjects.Container {
   private readonly WINDOW_HEIGHT = 26;
   private readonly onEggCountChangedEvent = (event: Event) => this.onEggCountChanged(event);
 
+  private eventTarget: EventTarget;
+
   private eggCount: number;
   private eggCountWindow: Phaser.GameObjects.NineSlice;
   public eggCountText: Phaser.GameObjects.Text;
@@ -27,10 +29,16 @@ export class EggCounterContainer extends Phaser.GameObjects.Container {
     super(globalScene, 0, 0);
     this.eggCount = eggCount;
 
-    const uiHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
+    this.eventTarget = globalScene.ui.getHandler<EggHatchSceneUiHandler>().eventTarget;
+    this.eventTarget.addEventListener(EggEventType.EGG_COUNT_CHANGED, this.onEggCountChangedEvent);
 
-    uiHandler.eventTarget.addEventListener(EggEventType.EGG_COUNT_CHANGED, this.onEggCountChangedEvent);
     this.setup();
+  }
+
+  override destroy(fromScene?: boolean): void {
+    this.eventTarget.removeEventListener(EggEventType.EGG_COUNT_CHANGED, this.onEggCountChangedEvent);
+
+    super.destroy(fromScene);
   }
 
   /**

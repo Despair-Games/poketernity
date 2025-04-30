@@ -92,7 +92,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Setup UI elements.
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     this.navigationIcons = {};
 
@@ -303,6 +303,10 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
     this.settingsContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.settingsContainer.destroy();
+  }
+
   /**
    * Get the active configuration.
    *
@@ -385,9 +389,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    *
    * @returns `true` if successful.
    */
-  override show(): boolean {
-    super.show();
-
+  public override show(): boolean {
     this.updateNavigationDisplay();
     NavigationManager.getInstance().updateIcons();
     // Update the bindings for the current active gamepad configuration.
@@ -414,7 +416,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param activeConfig - The active device configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  setLayout(activeConfig: InterfaceConfig): boolean {
+  protected setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.
@@ -451,7 +453,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param button - The button to process.
    * @returns `true` if the input was processed successfully.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
     let success = false;
@@ -552,7 +554,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
     return success; // Return whether the input resulted in a successful action.
   }
 
-  resetScroll() {
+  protected resetScroll() {
     this.cursorObj?.destroy();
     this.cursorObj = null;
     this.cursor = 0;
@@ -567,7 +569,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
     // If the optionsContainer is not initialized, return the result from the parent class directly.
     if (!this.optionsContainer) {
@@ -594,7 +596,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param scrollCursor - The scroll cursor position to set.
    * @returns `true` if the scroll cursor was set successfully.
    */
-  setScrollCursor(scrollCursor: number): boolean {
+  private setScrollCursor(scrollCursor: number): boolean {
     // Check if the new scroll position is the same as the current one; if so, do not update.
     if (scrollCursor === this.scrollCursor) {
       return false;
@@ -621,7 +623,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
+  public setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
     // Retrieve the specific setting using the settingIndex from the settingDevice enumeration.
     const setting = this.setting[Object.keys(this.setting)[settingIndex]];
 
@@ -654,7 +656,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Update the scroll position of the settings UI.
    */
-  updateSettingsScroll(): void {
+  private updateSettingsScroll(): void {
     // Return immediately if the options container is not initialized.
     if (!this.optionsContainer) {
       return;
@@ -679,9 +681,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear(): void {
-    super.clear();
-
+  protected override clear(): void {
     // Hide the settings container to remove it from the view.
     this.settingsContainer.setVisible(false);
 
@@ -692,7 +692,7 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   /**
    * Erase the cursor from the UI.
    */
-  eraseCursor(): void {
+  private eraseCursor(): void {
     // Check if a cursor object exists.
     if (this.cursorObj) {
       this.cursorObj.destroy();

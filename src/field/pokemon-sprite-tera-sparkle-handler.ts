@@ -2,14 +2,17 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils/common-utils";
 import { randInt } from "#app/utils/random-utils";
+import type Phaser from "phaser";
 
 export default class PokemonSpriteTeraSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
 
+  private counterTween?: Phaser.Tweens.Tween;
+
   setup(): void {
     this.sprites = new Set();
 
-    globalScene.tweens.addCounter({
+    this.counterTween = globalScene.tweens.addCounter({
       duration: fixedNumber(200),
       from: 0,
       to: 1,
@@ -20,9 +23,11 @@ export default class PokemonSpriteTeraSparkleHandler {
   }
 
   onLapse(): void {
+    // Remove sprites that are no longer part of a scene
     Array.from(this.sprites.values())
       .filter((s) => !s.scene)
       .map((s) => this.sprites.delete(s));
+
     for (const s of this.sprites.values()) {
       if (!s.pipelineData["teraColor"] || !(s.pipelineData["teraColor"] as number[]).find((c) => c)) {
         continue;
@@ -81,6 +86,14 @@ export default class PokemonSpriteTeraSparkleHandler {
   removeAll(): void {
     for (const s of this.sprites.values()) {
       this.sprites.delete(s);
+    }
+  }
+
+  destroy(): void {
+    this.removeAll();
+    if (this.counterTween) {
+      this.counterTween.destroy();
+      this.counterTween = undefined;
     }
   }
 }

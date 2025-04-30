@@ -109,11 +109,12 @@ export class MoveTouchControlsHandler {
 
   //#endregion
 
-  public initListeners() {
+  // Note: at the moment we don't need to remove those listeners because only a single instance
+  // of this handler is ever created through the InputController during 'BattleScene.create'.
+  private initListeners() {
     globalScene.scale.on("orientationchange", () => {
       this.updateOrientation();
     });
-
     eventBus.on("touchControls/move/start", () => {
       this.enableConfigurationMode(globalScene.ui);
     });

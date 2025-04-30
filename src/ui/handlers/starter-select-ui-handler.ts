@@ -325,7 +325,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     super(UiMode.STARTER_SELECT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const langSettingKey =
@@ -1043,8 +1043,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
-  override show(selectedStarterCallback?: StarterSelectCallback): boolean {
-    if (!this.starterPreferences) {
+  protected override tearDown(): void {
+    this.starterSelectContainer.destroy();
+    this.iconAnimHandler.destroy();
+    this.clearStarterPreferences();
+  }
+
+  public override show(selectedStarterCallback?: StarterSelectCallback): boolean {
+    if (!this.starterPreferences || Object.keys(this.starterPreferences).length === 0) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
     }
@@ -1058,7 +1064,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       return false;
     }
 
-    super.show();
     this.starterSelectCallback = selectedStarterCallback;
 
     this.starterSelectContainer.setVisible(true);
@@ -1201,7 +1206,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,
@@ -1271,7 +1276,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return starterData.candyCount >= getSameSpeciesEggCandyCounts(speciesStarterCosts[speciesId]);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.blockInput) {
       return false;
     }
@@ -1473,7 +1478,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           error = true;
         } else if (this.starterSpecies.length <= 6) {
           const ui = this.getUi();
-          let options: any[] = []; // TODO: add proper type
+          let options: OptionSelectItem[] = [];
 
           const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies);
 
@@ -1534,7 +1539,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   return true;
                 },
-                overrideSound: true,
+                noSoundEffects: true,
               },
             ];
           } else if (isDupe) {
@@ -2919,7 +2924,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     });
   };
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed = false;
 
     if (this.filterMode) {
@@ -4080,7 +4085,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.statsContainer.updateIvs(this.speciesStarterDexEntry.ivs);
   }
 
-  override clearText() {
+  public override clearText() {
     this.starterSelectMessageBoxContainer.setVisible(false);
     super.clearText();
   }
@@ -4102,9 +4107,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.goFilterLabel.setVisible(false);
   }
 
-  override clear(): void {
-    super.clear();
-
+  protected override clear(): void {
     StarterPrefs.save(this.starterPreferences);
     this.cursor = -1;
     this.hideInstructions();
@@ -4142,8 +4145,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   /**
    * Clears this UI's starter preferences.
-   *
-   * This is intended to only be used for unit tests that work with this UI.
    */
   clearStarterPreferences() {
     this.starterPreferences = {};

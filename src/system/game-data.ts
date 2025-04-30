@@ -374,8 +374,6 @@ export class GameData {
           }
         }
 
-        console.debug(systemData);
-
         localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemDataStr, bypassLogin));
 
         // TODO: run history shouldn't be initialized here (and is it even needed?)
@@ -833,8 +831,6 @@ export class GameData {
     return new Promise(async (resolve, reject) => {
       try {
         const initSessionFromData = async (sessionData: SessionSaveData) => {
-          console.debug(sessionData);
-
           globalScene.gameMode = getGameMode(sessionData.gameMode || GameModes.CLASSIC);
           if (sessionData.challenges) {
             globalScene.gameMode.challenges = sessionData.challenges.map((c) => c.toChallenge());

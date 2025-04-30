@@ -115,7 +115,7 @@ export class SummaryUiHandler extends UiHandler {
     super(UiMode.SUMMARY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.summaryContainer = globalScene.add.container(0, 0);
@@ -278,6 +278,10 @@ export class SummaryUiHandler extends UiHandler {
     this.summaryPageTransitionContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.summaryContainer.destroy();
+  }
+
   getPageKey(page?: number) {
     if (page === undefined) {
       page = this.cursor;
@@ -297,14 +301,13 @@ export class SummaryUiHandler extends UiHandler {
    * @param isPlayerParty - boolean used to determine if the Pokemon is part of the player's party or not. Default: `true` (see PKR#2921)
    * @returns `true` is the UI was initiliazed properly
    */
-  override show(
+  public override show(
     pokemon: Pokemon,
     mode: SummaryUiMode = SummaryUiMode.DEFAULT,
     pageOrMove?: SummaryUiPage | Move,
     callback?: ExitCallBack | MoveSelectCallback,
     isPlayerParty: boolean = true,
   ): boolean {
-    super.show();
     this.pokemon = pokemon;
     this.summaryUiMode = mode;
     this.playerParty = isPlayerParty;
@@ -444,7 +447,7 @@ export class SummaryUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.transitioning) {
       return false;
     }
@@ -598,7 +601,7 @@ export class SummaryUiHandler extends UiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number, overrideChanged: boolean = false): boolean {
+  public override setCursor(cursor: number, overrideChanged: boolean = false): boolean {
     let changed: boolean = overrideChanged || this.moveCursor !== cursor;
 
     if (this.moveSelect) {
@@ -1194,8 +1197,7 @@ export class SummaryUiHandler extends UiHandler {
     });
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.pokemon = null;
     this.cursor = -1;
     this.newMove = null;
