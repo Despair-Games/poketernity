@@ -244,12 +244,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public isTerastallized: boolean = false; // TODO: put this in battle (wave) data if arena reset behavior is changed
   public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle (wave) data if arena reset behavior is changed
 
+  /** @todo Remove this */
   private summonDataPrimer: PokemonSummonData | null;
 
   public summonData: PokemonSummonData;
   // Default data defined in `resetWaveData()`
   public waveData: PokemonWaveData;
-  public battleSummonData: PokemonBattleSummonData;
   // Default data defined in `resetTurnData()`
   public turnData: PokemonTurnData;
   public customPokemonData: CustomPokemonData;
@@ -3698,7 +3698,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public getMoveHistory(): TurnMove[] {
-    return this.battleSummonData.moveHistory;
+    return this.summonData.moveHistory;
   }
 
   public pushMoveHistory(turnMove: TurnMove): void {
@@ -4098,7 +4098,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.waveData) {
       this.resetWaveData();
     }
-    this.resetBattleSummonData();
+    // TODO: why is this here?
+    if (this.getTag(BattlerTagType.SEEDED)) {
+      this.lapseTag(BattlerTagType.SEEDED);
+    }
+    if (globalScene) {
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
+    }
     if (this.summonDataPrimer) {
       for (const k of Object.keys(this.summonData)) {
         if (this.summonDataPrimer[k]) {
@@ -4131,16 +4137,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       abilitiesApplied: [],
       abilitiesRevealed: [],
     };
-  }
-
-  resetBattleSummonData(): void {
-    this.battleSummonData = new PokemonBattleSummonData();
-    if (this.getTag(BattlerTagType.SEEDED)) {
-      this.lapseTag(BattlerTagType.SEEDED);
-    }
-    if (globalScene) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
-    }
   }
 
   resetTurnData(): void {
@@ -4286,7 +4282,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.resetTurnData();
     if (clearEffects) {
       this.destroySubstitute();
-      this.resetSummonData(); // this also calls `resetBattleSummonData`
+      this.resetSummonData();
     }
     if (hideInfo) {
       this.hideInfo();
@@ -4357,17 +4353,4 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
   }
-}
-
-/** @todo Move these fields into {@linkcode PokemonSummonData} */
-export class PokemonBattleSummonData {
-  /** The number of turns the pokemon has passed since entering the battle */
-  public turnCount: number = 0;
-  /**
-   * The number of turns the pokemon has passed since the start of the wave.
-   * @todo Remove this
-   */
-  public waveTurnCount: number = 0;
-  /** The list of moves the pokemon has used since entering the battle */
-  public moveHistory: TurnMove[] = [];
 }

@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 
 export class FirstMoveCondition extends MoveCondition {
   constructor() {
-    super((user, _target, _move) => user.battleSummonData?.waveTurnCount === 1);
+    super((user, _target, _move) => user.summonData?.waveTurnCount === 1);
   }
 
   override getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

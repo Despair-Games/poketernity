@@ -2,6 +2,7 @@ import { getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ModifierBar } from "#app/modifier/modifier";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { BattlerIndex } from "#enums/battler-index";
@@ -9,7 +10,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Button } from "#enums/buttons";
 import type { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
-import { UiHandler } from "./abstract-ui-handler";
 
 export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 
@@ -71,7 +71,7 @@ export class TargetSelectUiHandler extends UiHandler {
    */
   resetCursor(cursorN: number, user: Pokemon): void {
     if (!isNil(cursorN)) {
-      if ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.battleSummonData.waveTurnCount === 1) {
+      if ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.summonData.waveTurnCount === 1) {
         // Reset cursor on the first turn of a fight or if an ally was targeted last turn
         cursorN = -1;
       }

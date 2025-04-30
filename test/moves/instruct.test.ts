@@ -1,13 +1,13 @@
-import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { ElementalType } from "#enums/elemental-type";
 
 describe("Moves - Instruct", () => {
   let phaserGame: Phaser.Game;
@@ -214,7 +214,7 @@ describe("Moves - Instruct", () => {
 
     const player = game.field.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.battleSummonData.moveHistory = [
+    enemyPokemon.summonData.moveHistory = [
       {
         move: expect.objectContaining({ id: MoveId.SONIC_BOOM }),
         targets: [BattlerIndex.PLAYER],

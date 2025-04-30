@@ -5,13 +5,13 @@ import {
 import { TurnInitEvent } from "#app/events/battle-scene";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
+import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
 import { CommandPhase } from "./command-phase";
 import { EnemyCommandPhase } from "./enemy-command-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
-import { PhaseId } from "#enums/phase-id";
 
 export class TurnInitPhase extends FieldPhase {
   override readonly id = PhaseId.TURN_INIT;
@@ -70,8 +70,8 @@ export class TurnInitPhase extends FieldPhase {
         }
 
         pokemon.resetTurnData();
-        pokemon.battleSummonData.turnCount++;
-        pokemon.battleSummonData.waveTurnCount++;
+        pokemon.summonData.turnCount++;
+        pokemon.summonData.waveTurnCount++;
 
         globalScene.phaseManager.pushPhase(
           pokemon.isPlayer() ? new CommandPhase(fieldIndex) : new EnemyCommandPhase(fieldIndex),
