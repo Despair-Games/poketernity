@@ -44,7 +44,7 @@ export function toHaveUsedMoveMatcher(
 
   const moveIndexStr = index === 0 ? "latest move" : `move no. ${index}`;
   const expectedResultStr = `${MoveId[expectedResult]} (=${expectedResult})`;
-  const actualResultStr = move.move.id ? `${MoveId[move.move.id]} (=${move.move.id})` : "undefined";
+  const actualResultStr = move?.move.id ? `${MoveId[move.move.id]} (=${move.move.id})` : "undefined";
 
   return {
     pass,
