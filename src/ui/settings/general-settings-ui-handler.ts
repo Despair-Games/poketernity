@@ -3,18 +3,36 @@ import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export class SettingsUiHandler extends AbstractSettingsUiHandler {
-  /**
-   * Creates an instance of SettingsGamepadUiHandler.
-   *
-   * @param mode - The UI mode, optional.
-   */
+export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
+  private onWindowResizeEvent = () => this.updateMoveTouchControlsSettingsLabel();
+
   constructor() {
     super("general", generalSettingsUiItems);
+  }
 
-    window.addEventListener("resize", () => {
+  protected override setup(): void {
+    super.setup();
+
+    if (hasTouchscreen()) {
+      // TODO: we should user Phaser's scale 'orientationchange' event instead
+      window.addEventListener("resize", this.onWindowResizeEvent);
+    }
+  }
+
+  protected override tearDown(): void {
+    if (hasTouchscreen()) {
+      window.removeEventListener("resize", this.onWindowResizeEvent);
+    }
+    super.tearDown();
+  }
+
+  public override show(): boolean {
+    super.show();
+
+    if (hasTouchscreen()) {
       this.updateMoveTouchControlsSettingsLabel();
-    });
+    }
+    return true;
   }
 
   private updateMoveTouchControlsSettingsLabel() {
@@ -23,6 +41,7 @@ export class SettingsUiHandler extends AbstractSettingsUiHandler {
     const settingIndex = this.uiItems.findIndex((uiItem) => uiItem.key === "moveTouchControls");
     if (settingIndex === -1) {
       console.warn("Could not find moveTouchControls setting label!");
+      return;
     }
 
     this.updateOptionValueLabel(settingIndex, 0, isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"));

@@ -224,19 +224,19 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       // Run to ability train option selection
       const confirmUiHandler = game.scene.ui.handlers[UiMode.CONFIRM] as ConfirmUiHandler;
-      vi.spyOn(confirmUiHandler, "show");
+      vi.spyOn(confirmUiHandler, "start");
       const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
-      vi.spyOn(partyUiHandler, "show");
+      vi.spyOn(partyUiHandler, "start");
       game.endPhase();
       await game.phaseInterceptor.to("PostMysteryEncounterPhase");
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
 
       // Wait for Yes/No confirmation to appear
-      await vi.waitFor(() => expect(confirmUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(confirmUiHandler.start).toHaveBeenCalled());
       // Select "Yes" on train ability
       confirmUiHandler.processInput(Button.ACTION);
       // Select first pokemon in party to train
-      await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(partyUiHandler.start).toHaveBeenCalled());
       partyUiHandler.processInput(Button.ACTION);
       // Click "Select" on Pokemon
       partyUiHandler.processInput(Button.ACTION);

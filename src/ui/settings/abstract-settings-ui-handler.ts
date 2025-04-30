@@ -70,7 +70,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Setup UI elements
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
@@ -208,10 +208,15 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
 
     this.settingsContainer.setVisible(false);
   }
+
+  protected override tearDown(): void {
+    this.settingsContainer.destroy();
+  }
+
   /**
    * Update the bindings for the current active device configuration.
    */
-  updateBindings(): void {
+  private updateBindings(): void {
     for (const settingName of Object.keys(this.navigationIcons)) {
       if (settingName === "BUTTON_HOME") {
         this.navigationIcons[settingName].setTexture("keyboard");
@@ -237,8 +242,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    *
    * @returns `true` if successful.
    */
-  override show(): boolean {
-    super.show();
+  public override show(): boolean {
     this.updateBindings();
 
     this.uiItems.forEach((uiItem, s) => {
@@ -280,7 +284,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param button - The button pressed by the user.
    * @returns `true` if the action associated with the button was successfully processed, `false` otherwise.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
 
@@ -379,7 +383,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -402,7 +406,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
+  protected setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
     if (settingIndex === -1) {
       settingIndex = this.cursor + this.scrollCursor;
     }
@@ -480,7 +484,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param scrollCursor - The scroll cursor position to set.
    * @returns `true` if the scroll cursor was set successfully.
    */
-  setScrollCursor(scrollCursor: number): boolean {
+  private setScrollCursor(scrollCursor: number): boolean {
     if (scrollCursor === this.scrollCursor) {
       return false;
     }
@@ -498,7 +502,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Update the scroll position of the settings UI.
    */
-  updateSettingsScroll(): void {
+  private updateSettingsScroll(): void {
     this.optionsContainer.setY(-16 * this.scrollCursor);
 
     for (let s = 0; s < this.settingLabels.length; s++) {
@@ -513,8 +517,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.settingsContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();
@@ -528,14 +531,14 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Erase the cursor from the UI.
    */
-  eraseCursor() {
+  private eraseCursor() {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }
     this.cursorObj = null;
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,

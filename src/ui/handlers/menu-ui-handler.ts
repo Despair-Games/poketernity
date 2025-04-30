@@ -20,7 +20,7 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { SettingsUiHandler } from "../settings/settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import type { AchievementsUiHandler } from "./achievements-ui-handler";
 import type { AdminUiHandler } from "./admin-ui-handler";
 import { getAdminModeName } from "./admin-ui-handler";
@@ -77,7 +77,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     ];
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const ui = this.getUi();
@@ -128,7 +128,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     this.initCommunityMenuOptions();
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     const config = this.getMenuOptionsConfig();
 
     super.show(config);
@@ -181,7 +181,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     };
   }
 
-  override computeWindowHeight(): number {
+  protected override computeWindowHeight(): number {
     return GAME_HEIGHT - 2; // always fill the screen
   }
 
@@ -525,7 +525,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     const ui = this.getUi();
     switch (option) {
       case MenuOptions.GAME_SETTINGS:
-        ui.setOverlayMode<SettingsUiHandler>(UiMode.SETTINGS);
+        ui.setOverlayMode<GeneralSettingsUiHandler>(UiMode.SETTINGS);
         success = true;
         break;
       case MenuOptions.ACHIEVEMENTS:
@@ -685,7 +685,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     return success;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     if (button === Button.CANCEL) {
       ui.playSelect();
@@ -700,7 +700,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     }
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,
@@ -713,7 +713,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  override clear() {
+  protected override clear() {
     super.clear();
     this.bgmBar.toggleBgmBar(false);
   }

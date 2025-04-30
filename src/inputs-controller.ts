@@ -6,8 +6,8 @@ import pad_xbox360 from "./configs/inputs/pad_xbox360";
 import pad_dualshock from "./configs/inputs/pad_dualshock";
 import pad_procon from "./configs/inputs/pad_procon";
 import { UiMode } from "#enums/ui-mode";
-import type { SettingsGamepadUiHandler } from "./ui/settings/settings-gamepad-ui-handler";
-import type { SettingsKeyboardUiHandler } from "./ui/settings/settings-keyboard-ui-handler";
+import type { GamepadSettingsUiHandler } from "./ui/settings/gamepad-settings-ui-handler";
+import type { KeyboardSettingsUiHandler } from "./ui/settings/keyboard-settings-ui-handler";
 import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
@@ -178,6 +178,8 @@ export class InputsController {
 
     this.setGamepadSupport(settings.gamepad.enabled);
 
+    // Note: at the moment we don't need to remove this listener because only a single instance
+    // Of InputController is ever created, during 'BattleScene.create'.
     eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
       if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
         this.setGamepadSupport(value);
@@ -251,7 +253,7 @@ export class InputsController {
     if (gamepadName) {
       this.selectedDevice[Device.GAMEPAD] = gamepadName.toLowerCase();
     }
-    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_GAMEPAD] as SettingsGamepadUiHandler;
+    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_GAMEPAD] as GamepadSettingsUiHandler;
     handler && handler.updateChosenGamepadDisplay();
   }
 
@@ -264,7 +266,7 @@ export class InputsController {
     if (layoutKeyboard) {
       this.selectedDevice[Device.KEYBOARD] = layoutKeyboard.toLowerCase();
     }
-    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_KEYBOARD] as SettingsKeyboardUiHandler;
+    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_KEYBOARD] as KeyboardSettingsUiHandler;
     handler && handler.updateChosenKeyboardDisplay();
   }
 
@@ -312,7 +314,7 @@ export class InputsController {
       globalScene.gameData?.saveMappingConfigs(gamepadID, this.configs[gamepadID]);
     }
     this.lastSource = "gamepad";
-    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_GAMEPAD] as SettingsGamepadUiHandler;
+    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_GAMEPAD] as GamepadSettingsUiHandler;
     handler && handler.updateChosenGamepadDisplay();
   }
 

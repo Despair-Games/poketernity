@@ -1,6 +1,5 @@
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
 import {
   setSettingGamepad,
   settingGamepadBlackList,
@@ -18,21 +17,16 @@ import { truncateString } from "#app/utils/string-utils";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app";
+import { UiMode } from "#enums/ui-mode";
 
 /**
  * Class representing the settings UI handler for gamepads.
  *
  * @extends AbstractControlSettingsUiHandler
  */
-
-export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
-  /**
-   * Creates an instance of SettingsGamepadUiHandler.
-   *
-   * @param mode - The UI mode, optional.
-   */
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
+  constructor() {
+    super(UiMode.SETTINGS_GAMEPAD);
     this.titleSelected = "Gamepad";
     this.setting = SettingGamepad;
     this.settingDeviceDefaults = settingGamepadDefaults;
@@ -49,7 +43,7 @@ export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
   /**
    * Setup UI elements.
    */
-  override setup() {
+  protected override setup() {
     super.setup();
     // If no gamepads are detected, set up a default UI prompt in the settings container.
     this.layout["noGamepads"] = new Map();
@@ -71,7 +65,7 @@ export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
    * @param activeConfig - The active gamepad configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  override setLayout(activeConfig: InterfaceConfig): boolean {
+  protected override setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.
@@ -88,7 +82,7 @@ export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
   /**
    * Update the display of the chosen gamepad.
    */
-  updateChosenGamepadDisplay(): void {
+  public updateChosenGamepadDisplay(): void {
     // Update any bindings that might have changed since the last update.
     this.updateBindings();
     this.resetScroll();

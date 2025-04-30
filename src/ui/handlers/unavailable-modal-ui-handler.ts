@@ -24,27 +24,27 @@ export class UnavailableModalUiHandler extends ModalUiHandler {
     this.reconnectDuration = this.minTime;
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "";
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 160;
   }
 
-  getHeight(): number {
+  protected override getHeight(): number {
     return 64;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [];
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const label = addTextObject(
@@ -80,7 +80,7 @@ export class UnavailableModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(reconnectCallback: () => void): boolean {
+  public override show(reconnectCallback: () => void): boolean {
     if (!reconnectCallback) {
       return false;
     }

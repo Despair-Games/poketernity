@@ -47,7 +47,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     super(UiMode.RUN_HISTORY);
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.runSelectContainer = globalScene.add.container(0, 0);
@@ -73,9 +73,11 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.runSelectContainer.destroy();
+  }
 
+  public override show(): boolean {
     this.getUi().bringToTop(this.runSelectContainer);
     this.runSelectContainer.setVisible(true);
     this.populateRuns().then(() => {
@@ -98,7 +100,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Button.ACTION allows the user to access more information about their runs.
    * Button.CANCEL allows the user to go back.
    */
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -200,7 +202,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     this.runsContainer.add(emptyText);
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -232,8 +234,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Called when the player returns back to the menu
    * Uses the functions clearCursor() and clearRuns()
    */
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.runSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.clearCursor();

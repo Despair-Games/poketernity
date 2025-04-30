@@ -10,9 +10,8 @@ import { AbstractBindingUiHandler } from "./abstract-binding-ui-handler";
 export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
-    globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }
-  override setup() {
+  protected override setup() {
     super.setup();
 
     // New button icon setup.
@@ -43,17 +42,31 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     this.optionSelectContainer.add(this.newButtonIcon);
     this.optionSelectContainer.add(this.swapText);
     this.optionSelectContainer.add(this.targetButtonIcon);
+
+    // Listen to gamepad button down events to initiate binding.
+    globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }
 
-  override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
+  protected override tearDown(): void {
+    // Remove gamepad listener
+    globalScene.input.gamepad?.off("down", this.gamepadButtonDown, this);
+
+    super.tearDown();
+  }
+
+  public override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
     return super.show(target, cancelHandler);
   }
 
-  getSelectedDevice() {
+  private getSelectedDevice() {
     return globalScene.inputController?.selectedDevice[Device.GAMEPAD];
   }
 
-  gamepadButtonDown(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, _value: number): void {
+  private gamepadButtonDown(
+    pad: Phaser.Input.Gamepad.Gamepad,
+    button: Phaser.Input.Gamepad.Button,
+    _value: number,
+  ): void {
     const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
     if (
@@ -76,7 +89,7 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     this.onInputDown(buttonIcon, assignedButtonIcon, type);
   }
 
-  swapAction(): boolean {
+  protected override swapAction(): boolean {
     const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
     if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
       globalScene.gameData.saveMappingConfigs(this.getSelectedDevice(), activeConfig);
@@ -88,7 +101,7 @@ export class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear() {
+  protected override clear() {
     super.clear();
     this.targetButtonIcon.setVisible(false);
     this.swapText.setVisible(false);

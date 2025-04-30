@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
-import type { SettingsKeyboardUiHandler } from "#app/ui/settings/settings-keyboard-ui-handler";
+import type { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
 import { Button } from "#enums/buttons";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
@@ -135,7 +135,7 @@ export function setSettingKeyboard(setting: SettingKeyboard, value: number): boo
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsKeyboardUiHandler).updateBindings();
+            (globalScene.ui.getHandler() as KeyboardSettingsUiHandler).updateBindings();
             return success;
           };
           globalScene.ui.setOverlayMode<KeyboardBindingUiHandler>(UiMode.KEYBOARD_BINDING, setting, cancelHandler);

@@ -23,7 +23,7 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     super(UiMode.FORM_CHANGE_SCENE);
   }
 
-  setup() {
+  protected override setup() {
     this.canCancel = false;
 
     const ui = this.getUi();
@@ -55,9 +55,13 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     this.initPromptSprite(this.messageContainer);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.container.destroy();
+    this.messageBg.destroy();
+    this.messageContainer.destroy();
+  }
 
+  public override show(): boolean {
     globalScene.ui.bringToTop(this.container);
     globalScene.ui.bringToTop(this.messageBg);
     globalScene.ui.bringToTop(this.messageContainer);
@@ -67,7 +71,7 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.canCancel && button === Button.CANCEL) {
       this.canCancel = false;
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
@@ -89,11 +93,11 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     return false;
   }
 
-  override setCursor(_cursor: number): boolean {
+  public override setCursor(_cursor: number): boolean {
     return false;
   }
 
-  override clear() {
+  protected override clear() {
     this.clearText();
     this.canCancel = false;
     this.container.removeAll(true);

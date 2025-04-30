@@ -37,20 +37,20 @@ export class AdminUiHandler extends FormModalUiHandler {
     super(UiMode.ADMIN);
   }
 
-  override getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "Admin panel";
   }
 
-  override getWidth(): number {
+  protected override getWidth(): number {
     // TODO: adapt these numbers
     return this.adminMode === AdminMode.ADMIN ? 180 : 160;
   }
 
-  override getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 0, 0];
   }
 
-  override getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     switch (this.adminMode) {
       case AdminMode.LINK:
         return ["Link Account", "Cancel"];
@@ -63,7 +63,7 @@ export class AdminUiHandler extends FormModalUiHandler {
     }
   }
 
-  override getInputFieldConfigs(): InputFieldConfig[] {
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
     const inputFieldConfigs: InputFieldConfig[] = [];
     switch (this.adminMode) {
       case AdminMode.LINK:
@@ -92,7 +92,7 @@ export class AdminUiHandler extends FormModalUiHandler {
     return inputFieldConfigs;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (button === Button.SUBMIT && this.submitAction) {
       this.submitAction();
       return true;
@@ -101,7 +101,7 @@ export class AdminUiHandler extends FormModalUiHandler {
     return false;
   }
 
-  override show(
+  public override show(
     config: ModalConfig,
     adminMode: AdminMode,
     adminResult?: AdminSearchInfo,
@@ -403,7 +403,7 @@ export class AdminUiHandler extends FormModalUiHandler {
     );
   }
 
-  override clear(): void {
+  protected override clear(): void {
     super.clear();
 
     // this is used to remove the existing fields on the admin panel so they can be updated
