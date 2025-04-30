@@ -10,7 +10,8 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
-import { fixedNumber, getFrameMs, randInt } from "#app/utils";
+import { fixedNumber, getFrameMs } from "#app/utils/common-utils";
+import { randInt } from "#app/utils/random-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
@@ -98,6 +99,8 @@ export class EggHatchPhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
+      // TODO: the hatch phase and ui handler should not be intertwined in this way;
+      // the phase also should not be the one creating the graphical objects
       this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
 
       this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
@@ -220,13 +223,16 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
-    // ????
-    // TODO: destroy PlayerPokemon object from EggHatchData
     if (globalScene.phaseManager.findPhase((p) => p instanceof EggHatchPhase)) {
-      this.eggHatchHandler.clear();
+      // There are more eggs about to hatch, clear up the handler
+      this.eggHatchHandler.prepareForNextEgg();
     } else {
+      // There are no more hatching eggs, re enable the modifiers
       globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));
     }
+
+    this.pokemon?.destroy();
+
     super.end();
   }
 

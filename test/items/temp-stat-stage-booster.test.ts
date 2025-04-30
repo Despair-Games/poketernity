@@ -1,16 +1,15 @@
-import { BATTLE_STATS, Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
+import { TempStatStageBoosterModifier } from "#app/modifier/modifier";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { AbilityId } from "#enums/ability-id";
+import { Button } from "#enums/buttons";
+import { MoveId } from "#enums/move-id";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
+import { BATTLE_STATS, Stat } from "#enums/stat";
+import { UiMode } from "#enums/ui-mode";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { MoveId } from "#enums/move-id";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { AbilityId } from "#enums/ability-id";
-import { TempStatStageBoosterModifier } from "#app/modifier/modifier";
-import { UiMode } from "#enums/ui-mode";
-import { Button } from "#enums/buttons";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { ShopCursorTarget } from "#enums/shop-cursor-target";
 
 describe("Items - Temporary Stat Stage Boosters", () => {
   let phaserGame: Phaser.Game;
@@ -47,7 +46,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.runFrom("EnemyCommandPhase").to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(partyMember.getStatStageMultiplier).toHaveReturnedWith(1.3);
   }, 20000);
@@ -64,11 +63,11 @@ describe("Items - Temporary Stat Stage Boosters", () => {
     // Raise ACC by +2 stat stages
     game.move.select(MoveId.HONE_CLAWS);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     // ACC at +3 stat stages yields a x2 multiplier
     expect(partyMember.getAccuracyMultiplier).toHaveReturnedWith(2);
@@ -84,11 +83,11 @@ describe("Items - Temporary Stat Stage Boosters", () => {
     // Raise ATK by +1 stat stage
     game.move.select(MoveId.HONE_CLAWS);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     // ATK at +1 stat stage yields a x1.5 multiplier, add 0.3 from X_ATTACK
     expect(partyMember.getStatStageMultiplier).toHaveReturnedWith(1.8);
@@ -112,7 +111,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(partyMember.getAccuracyMultiplier).toHaveReturnedWith(3);
     expect(partyMember.getStatStageMultiplier).toHaveReturnedWith(4);

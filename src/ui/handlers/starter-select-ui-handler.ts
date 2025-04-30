@@ -2,16 +2,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
-import type { LevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
-import {
-  POKERUS_STARTER_COUNT,
-  getCandyProgressRequirement,
-  getPassiveCandyCount,
-  getSameSpeciesEggCandyCounts,
-  getValueReductionCandyCounts,
-  speciesStarterCosts,
-} from "#app/data/starters";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
@@ -22,9 +13,19 @@ import { getNatureName } from "#app/data/nature";
 import { starterPassiveAbilities } from "#app/data/passives";
 import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type { LevelMoves } from "#app/data/pokemon-level-moves";
+import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { starterColors } from "#app/data/starter-colors";
+import {
+  POKERUS_STARTER_COUNT,
+  getCandyProgressRequirement,
+  getPassiveCandyCount,
+  getSameSpeciesEggCandyCounts,
+  getValueReductionCandyCounts,
+  speciesStarterCosts,
+} from "#app/data/starters";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
@@ -35,14 +36,16 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/s
 import { StarterPrefs } from "#app/system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
 import { FilterBar } from "#app/ui/components/filter-bar";
 import { IVGraph } from "#app/ui/components/iv-graph";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { StarterContainer } from "#app/ui/components/starter-container";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
 import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type {
@@ -52,18 +55,11 @@ import type {
 } from "#app/ui/interfaces/option-select-config";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import {
-  BooleanHolder,
-  NumberHolder,
-  capitalizeString,
-  fixedNumber,
-  isNullOrUndefined,
-  leftPad,
-  rgbHexToRgba,
-  toReadableString,
-} from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
-import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
+import { rgbHexToRgba } from "#app/utils/color-utils";
+import { BooleanHolder, NumberHolder, fixedNumber, isNil } from "#app/utils/common-utils";
+import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-utils";
+import { capitalizeString, leftPad, toReadableString } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
@@ -90,9 +86,6 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import Phaser from "phaser";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type { ConfirmUiHandler } from "./confirm-ui-handler";
-import type { OptionSelectUiHandler } from "./option-select-ui-handler";
-import type { RenamePokemonUiHandler } from "./rename-pokemon-ui-handler";
 
 type StarterSelectCallback = (starters: StarterConfig[]) => void;
 
@@ -332,7 +325,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     super(UiMode.STARTER_SELECT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const langSettingKey =
@@ -1050,8 +1043,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
-  override show(selectedStarterCallback?: StarterSelectCallback): boolean {
-    if (!this.starterPreferences) {
+  protected override tearDown(): void {
+    this.starterSelectContainer.destroy();
+    this.iconAnimHandler.destroy();
+    this.clearStarterPreferences();
+  }
+
+  public override show(selectedStarterCallback?: StarterSelectCallback): boolean {
+    if (!this.starterPreferences || Object.keys(this.starterPreferences).length === 0) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
     }
@@ -1065,7 +1064,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       return false;
     }
 
-    super.show();
     this.starterSelectCallback = selectedStarterCallback;
 
     this.starterSelectContainer.setVisible(true);
@@ -1208,7 +1206,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,
@@ -1278,7 +1276,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return starterData.candyCount >= getSameSpeciesEggCandyCounts(speciesStarterCosts[speciesId]);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.blockInput) {
       return false;
     }
@@ -1480,7 +1478,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           error = true;
         } else if (this.starterSpecies.length <= 6) {
           const ui = this.getUi();
-          let options: any[] = []; // TODO: add proper type
+          let options: OptionSelectItem[] = [];
 
           const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies);
 
@@ -1541,7 +1539,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   return true;
                 },
-                overrideSound: true,
+                noSoundEffects: true,
               },
             ];
           } else if (isDupe) {
@@ -2064,7 +2062,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           case Button.CYCLE_TERA:
             if (this.canCycleTera) {
               const speciesForm = getPokemonSpeciesForm(this.lastSpecies.speciesId, starterAttributes.form ?? 0);
-              if (speciesForm.type1 === this.teraCursor && !isNullOrUndefined(speciesForm.type2)) {
+              if (speciesForm.type1 === this.teraCursor && !isNil(speciesForm.type2)) {
                 starterAttributes.teraType = speciesForm.type2;
                 this.setSpeciesDetails(this.lastSpecies, { teraType: speciesForm.type2 });
               } else {
@@ -2238,7 +2236,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       return this.toggleShinyState(starterPrefs);
     } else if (props.shiny && this.canCycleVariant) {
       // Find next unlocked variant
-      const previousVariant = isNullOrUndefined(starterPrefs.variant) ? props.variant : starterPrefs.variant;
+      const previousVariant = isNil(starterPrefs.variant) ? props.variant : starterPrefs.variant;
       let variant = previousVariant;
       do {
         variant = (variant + 1) % 3;
@@ -2247,7 +2245,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           // we disable shiny state instead of looking through the other variants
           return this.toggleShinyState(starterPrefs);
         }
-        if (!isNullOrUndefined(this.speciesStarterDexEntry)) {
+        if (!isNil(this.speciesStarterDexEntry)) {
           if (variant === 0 && this.speciesStarterDexEntry.caughtAttr & DexAttr.DEFAULT_VARIANT) {
             return this.switchToVariant(starterPrefs, variant);
           } else if (variant === 1 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_2) {
@@ -2926,7 +2924,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     });
   };
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed = false;
 
     if (this.filterMode) {
@@ -3279,10 +3277,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     // We will only update the sprite if there is a change to form, shiny/variant
     // or gender for species with gender sprite differences
     const shouldUpdateSprite =
-      (species?.genderDiffs && !isNullOrUndefined(female))
-      || !isNullOrUndefined(formIndex)
-      || !isNullOrUndefined(shiny)
-      || !isNullOrUndefined(variant);
+      (species?.genderDiffs && !isNil(female)) || !isNil(formIndex) || !isNil(shiny) || !isNil(variant);
 
     if (this.activeTooltip === "CANDY") {
       if (this.lastSpecies && this.pokemonCandyContainer.visible) {
@@ -3318,7 +3313,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       );
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      this.teraCursor = !isNullOrUndefined(teraType) ? teraType : (teraType = oldTeraType);
+      this.teraCursor = !isNil(teraType) ? teraType : (teraType = oldTeraType);
       const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species);
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
@@ -3463,7 +3458,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.canCycleTera =
           !this.statsMode
           // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
-          && !isNullOrUndefined(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
+          && !isNil(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {
@@ -3595,7 +3590,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           return this.starterMoveset?.indexOf(move) === i;
         }) as StarterMoveset;
 
-        if (!isNullOrUndefined(formIndex)) {
+        if (!isNil(formIndex)) {
           // If we're switching form and the Pokemon is in the team, we need to update its moveset
           this.updateSelectedStarterMoveset(species.speciesId);
         }
@@ -4076,7 +4071,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.canCycleTera =
       !this.statsMode
       // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
-      && !isNullOrUndefined(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
+      && !isNil(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
     this.updateInstructions();
   }
 
@@ -4090,7 +4085,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.statsContainer.updateIvs(this.speciesStarterDexEntry.ivs);
   }
 
-  override clearText() {
+  public override clearText() {
     this.starterSelectMessageBoxContainer.setVisible(false);
     super.clearText();
   }
@@ -4112,9 +4107,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.goFilterLabel.setVisible(false);
   }
 
-  override clear(): void {
-    super.clear();
-
+  protected override clear(): void {
     StarterPrefs.save(this.starterPreferences);
     this.cursor = -1;
     this.hideInstructions();
@@ -4152,8 +4145,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   /**
    * Clears this UI's starter preferences.
-   *
-   * This is intended to only be used for unit tests that work with this UI.
    */
   clearStarterPreferences() {
     this.starterPreferences = {};

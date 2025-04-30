@@ -1,11 +1,12 @@
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { globalScene } from "#app/global-scene";
 import type { RunEntry } from "#app/system/game-data";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
+import { getPokemonLevelText } from "#app/utils/string-utils";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { GameModes } from "#enums/game-modes";
@@ -46,7 +47,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     super(UiMode.RUN_HISTORY);
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.runSelectContainer = globalScene.add.container(0, 0);
@@ -72,9 +73,11 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.runSelectContainer.destroy();
+  }
 
+  public override show(): boolean {
     this.getUi().bringToTop(this.runSelectContainer);
     this.runSelectContainer.setVisible(true);
     this.populateRuns().then(() => {
@@ -97,7 +100,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Button.ACTION allows the user to access more information about their runs.
    * Button.CANCEL allows the user to go back.
    */
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -199,7 +202,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     this.runsContainer.add(emptyText);
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -231,8 +234,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
    * Called when the player returns back to the menu
    * Uses the functions clearCursor() and clearRuns()
    */
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.runSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.clearCursor();
@@ -323,7 +325,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         this.add(enemyContainer);
       } else if (
         (data.battleType === BattleType.TRAINER || data.battleType === BattleType.MYSTERY_ENCOUNTER)
-        && !isNullOrUndefined(data.trainer)
+        && !isNil(data.trainer)
       ) {
         // Defeats from Trainers show the trainer's title and name
         const tObj = data.trainer.toTrainer();

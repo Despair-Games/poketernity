@@ -1,13 +1,13 @@
+import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -60,7 +60,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     super(UiMode.MYSTERY_ENCOUNTER);
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.cursorContainer = globalScene.add.container(18, -38.7);
@@ -120,12 +120,20 @@ export class MysteryEncounterUiHandler extends UiHandler {
     this.dexProgressContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 24, 28), Phaser.Geom.Rectangle.Contains);
   }
 
-  override show(settings?: OptionSelectSettings): boolean {
+  protected override tearDown(): void {
+    this.cursorContainer.destroy();
+    this.optionsContainer.destroy();
+    this.dexProgressContainer.destroy();
+    this.descriptionContainer.destroy();
+    this.tooltipContainer.destroy();
+  }
+
+  public override show(settings?: OptionSelectSettings): boolean {
     this.overrideSettings = settings;
-    const showDescriptionContainer = isNullOrUndefined(this.overrideSettings?.hideDescription)
+    const showDescriptionContainer = isNil(this.overrideSettings?.hideDescription)
       ? true
       : !this.overrideSettings.hideDescription;
-    const slideInDescription = isNullOrUndefined(this.overrideSettings?.slideInDescription)
+    const slideInDescription = isNil(this.overrideSettings?.slideInDescription)
       ? true
       : this.overrideSettings.slideInDescription;
     const startingCursorIndex = this.overrideSettings?.startingCursorIndex ?? 0;
@@ -152,7 +160,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     return true;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -343,11 +351,11 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return this.cursor ? this.cursor : 0;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const prevCursor = this.getCursor();
     const changed = prevCursor !== cursor;
     if (changed) {
@@ -587,7 +595,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
     this.tooltipContainer.setVisible(true);
 
-    if (isNullOrUndefined(cursor) || cursor > this.optionsContainer.length - 2) {
+    if (isNil(cursor) || cursor > this.optionsContainer.length - 2) {
       // Ignore hovers on view party button
       // Hide dex progress if visible
       this.showHideDexProgress(false);
@@ -667,8 +675,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
   }
 
-  override clear(): void {
-    super.clear();
+  protected override clear(): void {
     this.overrideSettings = undefined;
     this.optionsContainer.setVisible(false);
     this.optionsContainer.removeAll(true);

@@ -14,7 +14,7 @@ import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-ha
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import type { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
@@ -160,7 +160,7 @@ export class TitlePhase extends Phase {
       {
         label: i18next.t("menu:settings"),
         handler: () => {
-          ui.setOverlayMode<SettingsUiHandler>(UiMode.SETTINGS);
+          ui.setOverlayMode<GeneralSettingsUiHandler>(UiMode.SETTINGS);
           return true;
         },
         keepOpen: true,

@@ -2,7 +2,6 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
@@ -10,7 +9,7 @@ import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { isNullOrUndefined } from "#app/utils";
+import { isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
 import type { GameManager } from "#test/test-utils/gameManager";
@@ -84,9 +83,9 @@ export async function runMysteryEncounterToEnd(
       uiHandler.processInput(Button.ACTION);
     });
 
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
   } else {
-    await game.phaseInterceptor.to(MysteryEncounterRewardsPhase);
+    await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
   }
 }
 
@@ -107,7 +106,7 @@ export async function runSelectMysteryEncounterOption(
   );
 
   if (game.isCurrentPhase(MessagePhase)) {
-    await game.phaseInterceptor.run(MessagePhase);
+    await game.phaseInterceptor.to("MessagePhase");
   }
 
   // dispose of intro messages
@@ -121,7 +120,7 @@ export async function runSelectMysteryEncounterOption(
     () => game.isCurrentPhase(MysteryEncounterOptionSelectedPhase),
   );
 
-  await game.phaseInterceptor.to(MysteryEncounterPhase, true);
+  await game.phaseInterceptor.to("MysteryEncounterPhase", true);
 
   // select the desired option
   const uiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
@@ -144,7 +143,7 @@ export async function runSelectMysteryEncounterOption(
       break;
   }
 
-  if (!isNullOrUndefined(secondaryOptionSelect?.pokemonNo)) {
+  if (!isNil(secondaryOptionSelect?.pokemonNo)) {
     await handleSecondaryOptionSelect(game, secondaryOptionSelect.pokemonNo, secondaryOptionSelect.optionNo);
   } else {
     uiHandler.processInput(Button.ACTION);
@@ -154,12 +153,12 @@ export async function runSelectMysteryEncounterOption(
 async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number, optionNo?: number) {
   // Handle secondary option selections
   const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
-  vi.spyOn(partyUiHandler, "show");
+  vi.spyOn(partyUiHandler, "start");
 
   const encounterUiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
   encounterUiHandler.processInput(Button.ACTION);
 
-  await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
+  await vi.waitFor(() => expect(partyUiHandler.start).toHaveBeenCalled());
 
   for (let i = 1; i < pokemonNo; i++) {
     partyUiHandler.processInput(Button.DOWN);
@@ -171,11 +170,11 @@ async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number,
   partyUiHandler.processInput(Button.ACTION);
 
   // If there is a second choice to make after selecting a Pokemon
-  if (!isNullOrUndefined(optionNo)) {
+  if (!isNil(optionNo)) {
     // Wait for Summary menu to close and second options to spawn
     const secondOptionUiHandler = game.scene.ui.handlers[UiMode.OPTION_SELECT] as OptionSelectUiHandler;
-    vi.spyOn(secondOptionUiHandler, "show");
-    await vi.waitFor(() => expect(secondOptionUiHandler.show).toHaveBeenCalled());
+    vi.spyOn(secondOptionUiHandler, "start");
+    await vi.waitFor(() => expect(secondOptionUiHandler.start).toHaveBeenCalled());
 
     // Navigate down to the correct option
     for (let i = 1; i < optionNo!; i++) {
@@ -202,5 +201,5 @@ export async function skipBattleRunMysteryEncounterRewardsPhase(game: GameManage
   game.scene.phaseManager.pushPhase(new PostKnockoutPhase(0));
   game.phaseInterceptor.superEndPhase();
   game.setMode(UiMode.MESSAGE);
-  await game.phaseInterceptor.to(MysteryEncounterRewardsPhase, runRewardsPhase);
+  await game.phaseInterceptor.to("MysteryEncounterRewardsPhase", runRewardsPhase);
 }

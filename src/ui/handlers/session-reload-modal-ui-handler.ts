@@ -9,27 +9,27 @@ export class SessionReloadModalUiHandler extends ModalUiHandler {
     super(mode);
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "";
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 160;
   }
 
-  getHeight(): number {
+  protected override getHeight(): number {
     return 32;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [];
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const label = addTextObject(
@@ -44,7 +44,7 @@ export class SessionReloadModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  override show(): boolean {
+  public override show(): boolean {
     const config: ModalConfig = {
       buttonActions: [],
     };

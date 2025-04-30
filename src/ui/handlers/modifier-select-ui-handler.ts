@@ -1,3 +1,4 @@
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { allMoves } from "#app/data/data-lists";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
@@ -7,10 +8,10 @@ import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/mo
 import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
-import { formatMoney, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { isNil, NumberHolder } from "#app/utils/common-utils";
+import { formatMoney } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
 import { PokeballType } from "#enums/pokeball-type";
@@ -63,7 +64,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.shopOptionsRows = [];
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.modifierContainer = globalScene.add.container(0, 0);
@@ -157,7 +158,19 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     globalScene.addInfoToggle(this.moveInfoOverlay);
   }
 
-  override show(
+  protected override tearDown(): void {
+    globalScene.removeInfoToggle(this.moveInfoOverlay);
+
+    this.modifierContainer.destroy();
+    this.continueButtonContainer.destroy();
+    this.transferButtonContainer.destroy();
+    this.rerollButtonContainer.destroy();
+    this.lockRarityButtonContainer.destroy();
+    this.checkButtonContainer.destroy();
+    this.moveInfoOverlay.destroy();
+  }
+
+  public override show(
     player: boolean = false,
     typeOptions?: ModifierTypeOption[],
     actionCallback?: ModifierSelectCallback,
@@ -174,11 +187,9 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       return false;
     }
 
-    if (isNullOrUndefined(typeOptions) || isNullOrUndefined(actionCallback) || isNullOrUndefined(rerollCost)) {
+    if (isNil(typeOptions) || isNil(actionCallback) || isNil(rerollCost)) {
       return false;
     }
-
-    super.show();
 
     this.getUi().clearText();
 
@@ -356,7 +367,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     if (!this.awaitingActionInput) {
@@ -478,7 +489,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ui = this.getUi();
     const ret = super.setCursor(cursor);
 
@@ -628,9 +639,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     setTextColor(this.lockRarityButtonText, textStyle);
   }
 
-  override clear() {
-    super.clear();
-
+  protected override clear() {
     this.moveInfoOverlay.clear();
     this.moveInfoOverlayActive = false;
     this.awaitingActionInput = false;

@@ -21,7 +21,7 @@ import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { randSeedShuffle } from "#app/utils";
+import { randSeedShuffle } from "#app/utils/random-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

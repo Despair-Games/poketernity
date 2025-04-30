@@ -3,7 +3,7 @@ import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
 import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { type NumberHolder, toDmgValue } from "#app/utils";
+import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
 
 type MoveFilter = (moveId: MoveId) => boolean;

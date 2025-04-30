@@ -5,7 +5,7 @@ import { StatusCategoryOnAllyAttr } from "#app/data/moves/move-attrs/status-cate
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

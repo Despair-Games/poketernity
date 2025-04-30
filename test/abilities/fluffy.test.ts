@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";

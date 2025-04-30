@@ -9,23 +9,23 @@ export class RenamePokemonUiHandler extends FormModalUiHandler {
     super(UiMode.RENAME_POKEMON);
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return i18next.t("menu:renamePokemon");
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 160;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [i18next.t("menu:rename"), i18next.t("menu:cancel")];
   }
 
-  override getReadableErrorMessage(error: string): string {
+  protected override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -34,11 +34,11 @@ export class RenamePokemonUiHandler extends FormModalUiHandler {
     return super.getReadableErrorMessage(error);
   }
 
-  override getInputFieldConfigs(): InputFieldConfig[] {
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
     return [{ label: i18next.t("menu:nickname") }];
   }
 
-  override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
+  public override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
     if (!super.show(config)) {
       return false;
     }

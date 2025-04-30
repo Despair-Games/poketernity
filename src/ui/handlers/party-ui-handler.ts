@@ -3,6 +3,7 @@ import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
+import { GAME_WIDTH } from "#app/constants/ui";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
@@ -16,7 +17,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { GAME_WIDTH } from "#app/constants/ui";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
@@ -27,10 +27,11 @@ import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper"
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { BooleanHolder, isNullOrUndefined, toReadableString } from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
+import { BooleanHolder, isNil } from "#app/utils/common-utils";
 import { FilterAllMoves } from "#app/utils/move-utils";
 import { PartyFilterAll } from "#app/utils/party-ui-utils";
+import { toReadableString } from "#app/utils/string-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
@@ -138,7 +139,7 @@ export class PartyUiHandler extends MessageUiHandler {
     super(UiMode.PARTY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     const partyContainer = globalScene.add.container(0, 0);
@@ -206,7 +207,13 @@ export class PartyUiHandler extends MessageUiHandler {
     this.partySlots = [];
   }
 
-  override show(
+  protected override tearDown(): void {
+    this.partyContainer.destroy();
+    this.moveInfoOverlay.destroy();
+    this.iconAnimHandler.destroy();
+  }
+
+  public override show(
     mode?: PartyUiMode,
     fieldIndex: number = -1,
     callback: PartySelectCallback | PartyModifierTransferSelectCallback | null = null,
@@ -215,11 +222,9 @@ export class PartyUiHandler extends MessageUiHandler {
     tmMoveId: MoveId = MoveId.NONE,
     showMovePP: boolean = false,
   ): boolean {
-    if (this.active || isNullOrUndefined(mode)) {
+    if (this.active || isNil(mode)) {
       return false;
     }
-
-    super.show();
 
     // reset the infoOverlay
     this.moveInfoOverlay.clear();
@@ -240,7 +245,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     if (this.pendingPrompt || this.blockInput) {
@@ -665,7 +670,7 @@ export class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed: boolean;
 
     if (this.optionsMode) {
@@ -728,7 +733,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number | null,
     callback?: Function | null,
@@ -1146,8 +1151,7 @@ export class PartyUiHandler extends MessageUiHandler {
     this.optionsCursorObj = null;
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     // hide the overlay
     this.moveInfoOverlay.clear();
     this.partyContainer.setVisible(false);

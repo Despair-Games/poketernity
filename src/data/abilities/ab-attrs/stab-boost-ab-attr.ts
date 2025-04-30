@@ -7,7 +7,7 @@ import type { AbilityId } from "#enums/ability-id";
 import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 

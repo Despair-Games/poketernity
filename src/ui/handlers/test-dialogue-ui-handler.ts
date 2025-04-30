@@ -1,6 +1,6 @@
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined } from "#app/utils";
+import { isNil } from "#app/utils/common-utils";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type { AutoCompleteUiHandler } from "./autocomplete-ui-handler";
@@ -13,7 +13,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     super(mode);
   }
 
-  override setup() {
+  protected override setup() {
     super.setup();
 
     const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
@@ -21,7 +21,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
         .map((t, i) => {
           const value = Object.values(object)[i];
 
-          if (typeof value === "object" && !isNullOrUndefined(value)) {
+          if (typeof value === "object" && !isNil(value)) {
             // we check for not null or undefined here because if the language json file has a null key, the typeof will still be an object, but that object will be null, causing issues
             // If the value is an object, execute the same process
             // si el valor es un objeto ejecuta el mismo proceso
@@ -29,7 +29,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
             return flattenKeys(value, topKey ?? t, topKey ? (midleKey ? [...midleKey, t] : [t]) : undefined).filter(
               (t) => t.length > 0,
             );
-          } else if (typeof value === "string" || isNullOrUndefined(value)) {
+          } else if (typeof value === "string" || isNil(value)) {
             // we check for null or undefined here as per above - the typeof is still an object but the value is null so we need to exit out of this and pass the null key
 
             // Return in the format expected by i18next
@@ -46,23 +46,23 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     this.keys = keys;
   }
 
-  getModalTitle(): string {
+  protected override getModalTitle(): string {
     return "Test Dialogue";
   }
 
-  getWidth(): number {
+  protected override getWidth(): number {
     return 300;
   }
 
-  getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return ["Check", "Cancel"];
   }
 
-  override getReadableErrorMessage(error: string): string {
+  protected override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -71,11 +71,11 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     return super.getReadableErrorMessage(error);
   }
 
-  override getInputFieldConfigs(): InputFieldConfig[] {
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
     return [{ label: "Dialogue" }];
   }
 
-  override show(config: ModalConfig, prefilledText: string): boolean {
+  public override show(config: ModalConfig, prefilledText: string): boolean {
     const ui = this.getUi();
     const hasTitle = !!this.getModalTitle();
     this.updateFields(this.getInputFieldConfigs(), hasTitle);
@@ -113,7 +113,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
             handler: () => {
               // this is here to make sure that if you try to backspace then enter, the last known evt.data (backspace) is picked up
               // this is because evt.data is null for backspace, so without this, the autocomplete windows just closes
-              if (!isNullOrUndefined(evt.data) || evt.inputType?.toLowerCase() === "deletecontentbackward") {
+              if (!isNil(evt.data) || evt.inputType?.toLowerCase() === "deletecontentbackward") {
                 const separatedArray = inputObject.text.split(" ");
                 separatedArray[separatedArray.length - 1] = value;
                 inputObject.setText(separatedArray.join(" "));

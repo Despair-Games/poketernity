@@ -1,12 +1,10 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import Phaser from "phaser";
-import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species-id";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { MoveId } from "#enums/move-id";
-import { Stat, BATTLE_STATS } from "#enums/stat";
 import { AbilityId } from "#enums/ability-id";
-import { PostActionPhase } from "#app/phases/post-action-phase";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { BATTLE_STATS, Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Power Swap", () => {
   let phaserGame: Phaser.Game;
@@ -43,14 +41,14 @@ describe("Moves - Power Swap", () => {
 
     game.move.select(MoveId.POWER_SWAP);
 
-    await game.phaseInterceptor.to(PostActionPhase);
+    await game.phaseInterceptor.to("PostActionPhase");
 
     for (const s of BATTLE_STATS) {
       expect(player.getStatStage(s)).toBe(0);
       expect(enemy.getStatStage(s)).toBe(1);
     }
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     for (const s of BATTLE_STATS) {
       if (s === Stat.ATK || s === Stat.SPATK) {

@@ -1,18 +1,15 @@
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { TempCritBoosterModifier } from "#app/modifier/modifier";
+import { CommandPhase } from "#app/phases/command-phase";
+import { NewBattlePhase } from "#app/phases/new-battle-phase";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { TempCritBoosterModifier } from "#app/modifier/modifier";
-import { UiMode } from "#enums/ui-mode";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { Button } from "#enums/buttons";
-import { CommandPhase } from "#app/phases/command-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { ShopCursorTarget } from "#enums/shop-cursor-target";
 
 describe("Items - Dire Hit", () => {
   let phaserGame: Phaser.Game;
@@ -48,7 +45,7 @@ describe("Items - Dire Hit", () => {
 
     game.move.select(MoveId.POUND);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyPokemon.getCritStage).toHaveReturnedWith(1);
   }, 20000);
@@ -62,7 +59,7 @@ describe("Items - Dire Hit", () => {
 
     await game.faintOpponents();
 
-    await game.phaseInterceptor.to(BattleEndPhase);
+    await game.phaseInterceptor.to("BattleEndPhase");
 
     const modifier = game.scene.findModifier((m) => m instanceof TempCritBoosterModifier) as TempCritBoosterModifier;
     expect(modifier.getBattleCount()).toBe(4);
@@ -82,7 +79,7 @@ describe("Items - Dire Hit", () => {
       true,
     );
 
-    await game.phaseInterceptor.to(TurnInitPhase);
+    await game.phaseInterceptor.to("TurnInitPhase");
 
     // Making sure only one booster is in the modifier list even after picking up another
     let count = 0;

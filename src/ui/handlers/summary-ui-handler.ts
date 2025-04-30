@@ -1,6 +1,6 @@
 import { loggedInUser } from "#app/account";
+import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui";
 import type { Ability } from "#app/data/abilities/ability";
-import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/starters";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
@@ -8,6 +8,7 @@ import type { Move } from "#app/data/moves/move";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { starterColors } from "#app/data/starter-colors";
+import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/starters";
 import { getTypeRgb } from "#app/data/type";
 import { getVariantTint, type Variant } from "#app/data/variant";
 import type { Pokemon } from "#app/field/pokemon";
@@ -15,19 +16,12 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
-import {
-  fixedNumber,
-  formatStat,
-  getEnumValues,
-  isNullOrUndefined,
-  leftPad,
-  rgbHexToRgba,
-  toReadableString,
-} from "#app/utils";
+import { rgbHexToRgba } from "#app/utils/color-utils";
+import { fixedNumber, getEnumValues, isNil } from "#app/utils/common-utils";
+import { formatStat, leftPad, toReadableString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
@@ -121,7 +115,7 @@ export class SummaryUiHandler extends UiHandler {
     super(UiMode.SUMMARY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.summaryContainer = globalScene.add.container(0, 0);
@@ -284,6 +278,10 @@ export class SummaryUiHandler extends UiHandler {
     this.summaryPageTransitionContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.summaryContainer.destroy();
+  }
+
   getPageKey(page?: number) {
     if (page === undefined) {
       page = this.cursor;
@@ -303,14 +301,13 @@ export class SummaryUiHandler extends UiHandler {
    * @param isPlayerParty - boolean used to determine if the Pokemon is part of the player's party or not. Default: `true` (see PKR#2921)
    * @returns `true` is the UI was initiliazed properly
    */
-  override show(
+  public override show(
     pokemon: Pokemon,
     mode: SummaryUiMode = SummaryUiMode.DEFAULT,
     pageOrMove?: SummaryUiPage | Move,
     callback?: ExitCallBack | MoveSelectCallback,
     isPlayerParty: boolean = true,
   ): boolean {
-    super.show();
     this.pokemon = pokemon;
     this.summaryUiMode = mode;
     this.playerParty = isPlayerParty;
@@ -430,7 +427,7 @@ export class SummaryUiHandler extends UiHandler {
         break;
     }
 
-    const fromSummary = !isNullOrUndefined(pageOrMove);
+    const fromSummary = !isNil(pageOrMove);
 
     let statusTextKey: string | undefined;
     if (this.pokemon.isFainted()) {
@@ -450,7 +447,7 @@ export class SummaryUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.transitioning) {
       return false;
     }
@@ -604,7 +601,7 @@ export class SummaryUiHandler extends UiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number, overrideChanged: boolean = false): boolean {
+  public override setCursor(cursor: number, overrideChanged: boolean = false): boolean {
     let changed: boolean = overrideChanged || this.moveCursor !== cursor;
 
     if (this.moveSelect) {
@@ -805,7 +802,7 @@ export class SummaryUiHandler extends UiHandler {
         }
 
         if (
-          !isNullOrUndefined(this.pokemon) /*
+          !isNil(this.pokemon) /*
           && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id) */
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
@@ -1200,8 +1197,7 @@ export class SummaryUiHandler extends UiHandler {
     });
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.pokemon = null;
     this.cursor = -1;
     this.newMove = null;

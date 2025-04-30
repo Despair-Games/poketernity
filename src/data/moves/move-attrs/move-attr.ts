@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import type { MoveCondition } from "../move-conditions/move-condition";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";

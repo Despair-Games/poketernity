@@ -2,7 +2,7 @@ import type { GameMode } from "#app/game-mode";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as Utils from "#app/utils";
+import * as RandomUtils from "#app/utils/random-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 
 describe("game-mode", () => {
@@ -31,7 +31,7 @@ describe("game-mode", () => {
       /** set wave 16 to be a fixed trainer fight meaning wave 13-19 don't allow trainer spawns */
       vi.spyOn(classicGameMode, "isFixedBattle").mockImplementation((n: number) => (n === 16 ? true : false));
       vi.spyOn(arena, "getTrainerChance").mockReturnValue(1);
-      vi.spyOn(Utils, "randSeedInt").mockReturnValue(0);
+      vi.spyOn(RandomUtils, "randSeedInt").mockReturnValue(0);
       expect(classicGameMode.isWaveTrainer(11, arena)).toBeFalsy();
       expect(classicGameMode.isWaveTrainer(12, arena)).toBeTruthy();
       expect(classicGameMode.isWaveTrainer(13, arena)).toBeFalsy();

@@ -1,5 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
@@ -11,17 +12,16 @@ import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
+import { isNil } from "#app/utils/common-utils";
 import {
   formatLargeNumberFixedDigits,
   formatMoney,
   getPlayTimeString,
   getPokemonLevelText,
-  isNullOrUndefined,
-} from "#app/utils";
+} from "#app/utils/string-utils";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";
@@ -79,12 +79,18 @@ export class RunInfoUiHandler extends UiHandler {
     super(UiMode.RUN_INFO);
   }
 
-  override async setup() {
+  protected override async setup() {
     this.runContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
+    this.getUi().add(this.runContainer);
+
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
     globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
+  }
+
+  protected override tearDown(): void {
+    this.runContainer.destroy();
   }
 
   /**
@@ -94,9 +100,7 @@ export class RunInfoUiHandler extends UiHandler {
    * @param sessionData - The {@linkcode SessionSaveData} for the run to show information for.
    * @param isVictory - optional. `true` is this is the data for a finished, victorious run.
    */
-  override show(mode: RunDisplayMode, sessionData: SessionSaveData, isVictory?: boolean): boolean {
-    super.show();
-
+  public override show(mode: RunDisplayMode, sessionData: SessionSaveData, isVictory?: boolean): boolean {
     const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     runInfoBg.setOrigin(0, 0);
     this.runContainer.add(runInfoBg);
@@ -137,22 +141,22 @@ export class RunInfoUiHandler extends UiHandler {
     this.parsePartyInfo();
     this.showParty(true);
 
-    this.getUi().bringToTop(this.runContainer);
-    this.runContainer.setVisible(true);
-
     // Creates Hall of Fame if the run entry contains a victory
     if (this.isVictory) {
       this.createHallofFame();
-      this.getUi().bringToTop(this.hallofFameContainer);
     }
+
+    this.getUi().bringToTop(this.runContainer);
+    this.runContainer.setVisible(true);
 
     this.setCursor(0);
 
-    this.getUi().add(this.runContainer);
-
-    this.getUi().hideTooltip();
-
     return true;
+  }
+
+  protected override clear(): void {
+    this.runContainer.removeAll(true);
+    this.runContainer.setVisible(false);
   }
 
   /**
@@ -303,7 +307,7 @@ export class RunInfoUiHandler extends UiHandler {
       } else if (this.runInfo.enemyParty.length === 2) {
         this.parseWildDoubleDefeat(enemyContainer);
       }
-    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNullOrUndefined(this.runInfo.trainer)) {
+    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNil(this.runInfo.trainer)) {
       this.showTrainerSprites(enemyContainer);
       const row_limit = 3;
       this.runInfo.enemyParty.forEach((p, i) => {
@@ -436,7 +440,7 @@ export class RunInfoUiHandler extends UiHandler {
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
     const { trainer } = this.runInfo;
-    if (isNullOrUndefined(trainer)) {
+    if (isNil(trainer)) {
       console.warn("Missing TrainerData in session data, cannot render trainer sprites");
       return;
     }
@@ -974,7 +978,7 @@ export class RunInfoUiHandler extends UiHandler {
    * Button.CANCEL - removes all containers related to RunInfo and returns the user to Run History
    * Button.CYCLE_FORM, Button.CYCLE_SHINY, Button.CYCLE_ABILITY - runs the function buttonCycleOption()
    */
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -984,15 +988,6 @@ export class RunInfoUiHandler extends UiHandler {
       case Button.CANCEL:
         success = true;
         if (this.pageMode === RunInfoUiMode.MAIN) {
-          this.runInfoContainer.removeAll(true);
-          this.runResultContainer.removeAll(true);
-          this.partyContainer.removeAll(true);
-          this.runContainer.removeAll(true);
-          if (this.isVictory) {
-            this.hallofFameContainer.removeAll(true);
-          }
-          super.clear();
-          this.runContainer.setVisible(false);
           ui.revertMode();
         } else if (this.pageMode === RunInfoUiMode.HALL_OF_FAME) {
           this.hallofFameContainer.setVisible(false);

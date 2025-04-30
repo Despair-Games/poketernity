@@ -2,7 +2,7 @@ import { getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ModifierBar } from "#app/modifier/modifier";
-import { fixedNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -34,11 +34,11 @@ export class TargetSelectUiHandler extends UiHandler {
     this.cursor = -1;
   }
 
-  setup(): void {}
+  protected override setup(): void {}
 
-  override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
-    super.show();
+  protected override tearDown(): void {}
 
+  public override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
     this.fieldIndex = fieldIndex;
     this.moveId = moveId;
     this.targetSelectCallback = callback;
@@ -70,7 +70,7 @@ export class TargetSelectUiHandler extends UiHandler {
    * @param user the Pokemon using the move
    */
   resetCursor(cursorN: number, user: Pokemon): void {
-    if (!isNullOrUndefined(cursorN)) {
+    if (!isNil(cursorN)) {
       if ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.battleSummonData.waveTurnCount === 1) {
         // Reset cursor on the first turn of a fight or if an ally was targeted last turn
         cursorN = -1;
@@ -79,7 +79,7 @@ export class TargetSelectUiHandler extends UiHandler {
     this.setCursor(this.targets.includes(cursorN) ? cursorN : this.targets[0]);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -89,11 +89,11 @@ export class TargetSelectUiHandler extends UiHandler {
       this.targetSelectCallback(button === Button.ACTION ? targetIndexes : []);
       success = true;
       if (this.fieldIndex === BattlerIndex.PLAYER) {
-        if (isNullOrUndefined(this.cursor0) || this.cursor0 !== this.cursor) {
+        if (isNil(this.cursor0) || this.cursor0 !== this.cursor) {
           this.cursor0 = this.cursor;
         }
       } else if (this.fieldIndex === BattlerIndex.PLAYER_2) {
-        if (isNullOrUndefined(this.cursor1) || this.cursor1 !== this.cursor) {
+        if (isNil(this.cursor1) || this.cursor1 !== this.cursor) {
           this.cursor1 = this.cursor;
         }
       }
@@ -133,9 +133,7 @@ export class TargetSelectUiHandler extends UiHandler {
 
   /** @returns all valid target {@linkcode Pokemon} for the current target selection */
   protected getTargetsByIndex(): Pokemon[] {
-    return this.targets
-      .map((index) => globalScene.getFieldPokemonByBattlerIndex(index))
-      .filter((p) => !isNullOrUndefined(p));
+    return this.targets.map((index) => globalScene.getFieldPokemonByBattlerIndex(index)).filter((p) => !isNil(p));
   }
 
   /** @returns the {@linkcode Pokemon} to highlight based on the move's targeting */
@@ -153,7 +151,7 @@ export class TargetSelectUiHandler extends UiHandler {
     }
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const allTargets = this.getTargetsByIndex();
     this.targetsHighlighted = this.getHighlightedPokemon(cursor);
 
@@ -207,7 +205,14 @@ export class TargetSelectUiHandler extends UiHandler {
     return ret;
   }
 
-  eraseCursor() {
+  private highlightItems(targetId: number, val: number): void {
+    const targetItems = this.enemyModifiers.getAll("name", targetId.toString());
+    for (const item of targetItems as Phaser.GameObjects.Container[]) {
+      item.setAlpha(val);
+    }
+  }
+
+  protected override clear() {
     if (this.targetFlashTween) {
       this.targetFlashTween.stop();
       this.targetFlashTween = null;
@@ -225,17 +230,8 @@ export class TargetSelectUiHandler extends UiHandler {
     for (const pokemon of this.targetsHighlighted) {
       pokemon.getBattleInfo().resetY();
     }
-  }
 
-  private highlightItems(targetId: number, val: number): void {
-    const targetItems = this.enemyModifiers.getAll("name", targetId.toString());
-    for (const item of targetItems as Phaser.GameObjects.Container[]) {
-      item.setAlpha(val);
-    }
-  }
-
-  override clear() {
-    super.clear();
-    this.eraseCursor();
+    this.targets = [];
+    this.targetsHighlighted = [];
   }
 }

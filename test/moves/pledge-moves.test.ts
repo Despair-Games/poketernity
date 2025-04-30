@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

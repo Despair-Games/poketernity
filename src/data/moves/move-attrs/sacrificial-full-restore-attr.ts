@@ -1,10 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { PendingHealTag } from "#app/data/arena-tag";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon
@@ -26,21 +26,17 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const party = user.getParty();
+    globalScene.arena.addTag(ArenaTagType.PENDING_HEAL, 0);
 
-    // We don't know which party member will be chosen, so pick the highest max HP in the party
-    const maxPartyMemberHp = Math.max(...party.map((p) => p.getMaxHp()));
-
-    /**
-     * @todo If the incoming Pokemon does not get any HP healed, status healed, or PP restored,
-     * There should be an arena tag applied to the field which should expire whenever the heal
-     * would be needed
-     */
-    globalScene.phaseManager.queuePokemonHealPhase(false, user.getBattlerIndex(), maxPartyMemberHp, {
-      message: i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
-      healStatus: true,
-      fullRestorePP: this.restorePP,
-    });
+    const tag = globalScene.arena.getTag(ArenaTagType.PENDING_HEAL) as PendingHealTag;
+    if (tag) {
+      tag.queueHeal(user.getBattlerIndex(), {
+        sourceId: user.id,
+        moveId: move.id,
+        restorePP: this.restorePP,
+        healMessageKey: this.moveTriggerMessage,
+      });
+    }
 
     return super.applyEffect(user, target, move);
   }

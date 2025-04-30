@@ -1,7 +1,5 @@
 import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
-import { MovePhase } from "#app/phases/move-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -57,7 +55,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
       game.move.select(MoveId.SPIT_UP);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
       expect(spitUp.calculateBattlePower).toHaveReturnedWith(expectedPower);
@@ -80,7 +78,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
       game.move.select(MoveId.SPIT_UP);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
       expect(spitUp.calculateBattlePower).toHaveReturnedWith(expectedPower);
@@ -104,7 +102,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
       game.move.select(MoveId.SPIT_UP);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
       expect(spitUp.calculateBattlePower).toHaveReturnedWith(expectedPower);
@@ -122,7 +120,7 @@ describe("Moves - Spit Up", () => {
     expect(stockpilingTag).toBeUndefined();
 
     game.move.select(MoveId.SPIT_UP);
-    await game.phaseInterceptor.to(TurnInitPhase);
+    await game.phaseInterceptor.to("TurnInitPhase");
 
     expect(pokemon).toHaveMoveResult(MoveResult.FAIL);
     expect(spitUp.calculateBattlePower).not.toHaveBeenCalled();
@@ -139,12 +137,12 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
 
       game.move.select(MoveId.SPIT_UP);
-      await game.phaseInterceptor.to(MovePhase);
+      await game.phaseInterceptor.to("MovePhase");
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(1);
 
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
@@ -172,7 +170,7 @@ describe("Moves - Spit Up", () => {
       };
 
       game.move.select(MoveId.SPIT_UP);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
 

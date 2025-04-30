@@ -3,7 +3,7 @@ import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { getEnumValues, getFrameMs, isNullOrUndefined, type nil } from "#app/utils";
+import { getEnumValues, getFrameMs, isNil, type nil } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
@@ -236,6 +236,10 @@ export abstract class BattleAnim {
       }
       targetSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       targetSprite.setAngle(0);
+
+      // Remove animation event listeners
+      userSprite.off("animationupdate");
+      targetSprite.off("animationupdate");
 
       /**
        * This and `targetSpriteToShow` are used to restore context lost
@@ -613,7 +617,7 @@ export abstract class BattleAnim {
 
           const graphicIndex = graphicFrameCount++;
           const moveSprite = sprites[graphicIndex];
-          if (!isNullOrUndefined(frame.priority)) {
+          if (!isNil(frame.priority)) {
             const setSpritePriority = (priority: number) => {
               if (existingFieldSprites.length > priority) {
                 // Move to specified priority index

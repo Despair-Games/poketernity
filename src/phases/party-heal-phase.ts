@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 

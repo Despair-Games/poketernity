@@ -1,4 +1,3 @@
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -38,7 +37,7 @@ describe.todo("Items - Leek", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyMember.getCritStage).toHaveReturnedWith(2);
   }, 20000);
@@ -52,7 +51,7 @@ describe.todo("Items - Leek", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyMember.getCritStage).toHaveReturnedWith(2);
   }, 20000);
@@ -66,7 +65,7 @@ describe.todo("Items - Leek", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyMember.getCritStage).toHaveReturnedWith(2);
   }, 20000);
@@ -80,7 +79,7 @@ describe.todo("Items - Leek", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyMember.getCritStage).toHaveReturnedWith(0);
   }, 20000);

@@ -20,7 +20,6 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
@@ -28,8 +27,7 @@ import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { isNullOrUndefined } from "#app/utils";
+import { isNil } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleStyle } from "#enums/battle-style";
@@ -109,8 +107,9 @@ export class GameManager {
 
     if (!firstTimeScene) {
       this.scene.reset(false, true);
-      (this.scene.ui.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
+
       this.scene.phaseManager.clearAllPhases();
+      this.scene.ui.resetHandlers(); // reset ui state
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
       this.scene.phaseManager.pushPhase(new LoginPhase());
@@ -190,9 +189,9 @@ export class GameManager {
    * @returns A promise that resolves when the title phase is reached.
    */
   async runToTitle(): Promise<void> {
-    await this.phaseInterceptor.whenAboutToRun(LoginPhase);
+    await this.phaseInterceptor.to("LoginPhase", false);
     this.phaseInterceptor.pop();
-    await this.phaseInterceptor.run(TitlePhase);
+    await this.phaseInterceptor.to("TitlePhase");
 
     settings.update("general", "gameSpeed", 5);
     settings.update("display", "enableMoveAnimations", false);
@@ -208,10 +207,8 @@ export class GameManager {
 
   /**
    * Helper function to run to the final boss encounter as it's a bit tricky due to extra dialogue
+   *
    * Also handles Major/Minor bosses from endless modes
-   * @param game - The game manager
-   * @param species
-   * @param mode
    */
   async runToFinalBossEncounter(species: SpeciesId[], mode: GameModes) {
     console.log("===to final boss encounter===");
@@ -244,7 +241,7 @@ export class GameManager {
    * @returns A promise that resolves when the EncounterPhase ends.
    */
   async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
-    if (!isNullOrUndefined(encounterType)) {
+    if (!isNil(encounterType)) {
       this.override.trainerChance(0);
       this.override.mysteryEncounter(encounterType);
     }
@@ -275,8 +272,8 @@ export class GameManager {
       true,
     );
 
-    await this.phaseInterceptor.run("EncounterPhase");
-    if (!isNullOrUndefined(encounterType)) {
+    await this.phaseInterceptor.to("EncounterPhase");
+    if (!isNil(encounterType)) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
   }

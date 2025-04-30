@@ -6,7 +6,8 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { fixedNumber, randItem } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
+import { randItem } from "#app/utils/random-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
@@ -25,12 +26,13 @@ export class TitleUiHandler extends OptionSelectUiHandler {
   private eventDisplay?: TimedEventDisplay;
 
   private titleStatsTimer: NodeJS.Timeout | null;
+  private splashTextTween: Phaser.Tweens.Tween | null;
 
   constructor(mode: UiMode = UiMode.TITLE) {
     super(mode);
   }
 
-  override setup() {
+  protected override setup() {
     super.setup();
 
     const ui = this.getUi();
@@ -60,7 +62,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
 
     const originalSplashMessageScale = this.splashMessageText.scale;
 
-    globalScene.tweens.add({
+    this.splashTextTween = globalScene.tweens.add({
       targets: this.splashMessageText,
       duration: fixedNumber(350),
       scale: originalSplashMessageScale * 1.25,
@@ -72,6 +74,17 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     this.appVersionText.setOrigin(0.5, 0.5);
     this.appVersionText.setAngle(0);
     this.titleContainer.add(this.appVersionText);
+  }
+
+  protected override tearDown(): void {
+    this.titleContainer.destroy();
+
+    if (this.splashTextTween) {
+      this.splashTextTween.destroy();
+      this.splashTextTween = null;
+    }
+
+    super.tearDown();
   }
 
   updateTitleStats(): void {
@@ -90,7 +103,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
       });
   }
 
-  override show(config: OptionSelectModeConfig): boolean {
+  public override show(config: OptionSelectModeConfig): boolean {
     const ret = super.show(config);
 
     if (ret) {
@@ -133,7 +146,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     return ret;
   }
 
-  override clear(): void {
+  protected override clear(): void {
     super.clear();
 
     const ui = this.getUi();

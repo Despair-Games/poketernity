@@ -37,6 +37,7 @@ describe("Test Phase Interceptor", () => {
   });
 
   it("test phase interceptor with prompt", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
 
     game.onNextPrompt("SelectGenderPhase", UiMode.OPTION_SELECT, () => {
@@ -44,8 +45,9 @@ describe("Test Phase Interceptor", () => {
       game.endPhase();
     });
 
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("SelectGenderPhase");
-
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("TitlePhase");
     await game.waitMode(UiMode.TITLE);
 
@@ -54,6 +56,7 @@ describe("Test Phase Interceptor", () => {
   });
 
   it("test phase interceptor with prompt with preparation for a future prompt", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
 
     game.onNextPrompt("SelectGenderPhase", UiMode.OPTION_SELECT, () => {
@@ -65,8 +68,9 @@ describe("Test Phase Interceptor", () => {
       game.setMode(UiMode.MESSAGE);
       game.endPhase();
     });
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("SelectGenderPhase");
-
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("TitlePhase");
     await game.waitMode(UiMode.TITLE);
 
@@ -81,18 +85,23 @@ describe("Test Phase Interceptor", () => {
   });
 
   it("wrong phase", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase").catch((e) => {
       expect(e).toBe("Wrong phase: this is SelectGenderPhase and not LoginPhase");
     });
   });
 
   it("wrong phase but skip", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase", () => game.isCurrentPhase("SelectGenderPhase"));
   });
 
   it("good run", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
     game.onNextPrompt(
       "SelectGenderPhase",
@@ -103,11 +112,14 @@ describe("Test Phase Interceptor", () => {
       },
       () => game.isCurrentPhase("TitlePhase"),
     );
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("SelectGenderPhase", () => game.isCurrentPhase("TitlePhase"));
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("TitlePhase");
   });
 
   it("good run from select gender to title", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
     game.onNextPrompt(
       "SelectGenderPhase",
@@ -122,6 +134,7 @@ describe("Test Phase Interceptor", () => {
   });
 
   it("good run to SummonPhase phase", async () => {
+    // @ts-expect-error - this is specifically testing the phase interceptor class
     await game.phaseInterceptor.run("LoginPhase");
     game.onNextPrompt(
       "SelectGenderPhase",

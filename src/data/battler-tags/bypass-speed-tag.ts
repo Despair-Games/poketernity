@@ -2,7 +2,7 @@ import type { PreventBypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attr
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

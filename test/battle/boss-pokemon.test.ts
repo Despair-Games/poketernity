@@ -1,12 +1,12 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { SpeciesId } from "#enums/species-id";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS } from "#enums/stat";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 
 describe("Boss Pokemon / Shields", () => {
   let phaserGame: Phaser.Game;
@@ -63,7 +63,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("should reduce the number of shields if we are in a double battle", async () => {
-    game.override.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.override.battleType("double").startingWave(150).enemyLevel(101); // Over level 100 -> 2 shields / 3 health segments
 
     await game.classicMode.startBattle([SpeciesId.MEWTWO]);
 
@@ -76,7 +76,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("shields should stop overflow damage and give stat stage boosts when broken", async () => {
-    game.override.startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.override.startingWave(150).enemyLevel(101); // Over level 100 -> 2 shields / 3 health segments
 
     await game.classicMode.startBattle([SpeciesId.MEWTWO]);
 

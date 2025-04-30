@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { nil } from "#app/utils";
+import type { nil } from "#app/utils/common-utils";
 import { FieldPhase } from "./abstract-field-phase";
 
 /**

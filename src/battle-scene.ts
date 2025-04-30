@@ -122,26 +122,21 @@ import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container"
 import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
+import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import {
   type AbstractConstructor,
   BooleanHolder,
   fixedNumber,
-  formatMoney,
   getEnumValues,
-  getIvsFromId,
-  isNullOrUndefined,
+  isNil,
   NumberHolder,
-  randItem,
-  randomString,
-  randSeedInt,
-  randSeedItem,
-  shiftCharCodes,
-} from "#app/utils";
-import { loadCommonAnimAssets } from "#app/utils/anim-utils";
+} from "#app/utils/common-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randItem, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { formatMoney, shiftCharCodes } from "#app/utils/string-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
@@ -628,22 +623,26 @@ export default class BattleScene extends SceneBase {
 
     this.trainer = trainer;
 
-    this.anims.create({
-      key: "prompt",
-      frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
-      frameRate: 6,
-      repeat: -1,
-      showOnStart: true,
-    });
+    if (!this.anims.exists("prompt")) {
+      this.anims.create({
+        key: "prompt",
+        frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
+        frameRate: 6,
+        repeat: -1,
+        showOnStart: true,
+      });
+    }
 
-    this.anims.create({
-      key: "tera_sparkle",
-      frames: this.anims.generateFrameNumbers("tera_sparkle", { start: 0, end: 12 }),
-      frameRate: 18,
-      repeat: 0,
-      showOnStart: true,
-      hideOnComplete: true,
-    });
+    if (!this.anims.exists("tera_sparkle")) {
+      this.anims.create({
+        key: "tera_sparkle",
+        frames: this.anims.generateFrameNumbers("tera_sparkle", { start: 0, end: 12 }),
+        frameRate: 18,
+        repeat: 0,
+        showOnStart: true,
+        hideOnComplete: true,
+      });
+    }
 
     this.reset(false, false, true);
 
@@ -704,6 +703,7 @@ export default class BattleScene extends SceneBase {
     this.updateScoreText();
   }
 
+  // TODO: it seems to have 2 versions of the masterlist in memory, one with back and one without
   async initVariantData(): Promise<void> {
     Object.keys(variantData).forEach((key) => delete variantData[key]);
     await this.cachedFetch("./images/pokemon/variant/_masterlist.json")
@@ -887,12 +887,25 @@ export default class BattleScene extends SceneBase {
   }
 
   // store info toggles to be accessible by the ui
-  addInfoToggle(infoToggle: InfoToggle): void {
+  public addInfoToggle(infoToggle: InfoToggle): void {
     this.infoToggles.push(infoToggle);
   }
 
+  /**
+   * Removes a specified {@linkcode InfoToggle} from the {@linkcode infoToggles} array.
+   *
+   * @param infoToggle - The {@linkcode InfoToggle} instance to be removed. If the toggle
+   *                     is not found in the array, no action is taken.
+   */
+  public removeInfoToggle(infoToggle: InfoToggle): void {
+    const infoToggleIndex = this.infoToggles.indexOf(infoToggle);
+    if (infoToggleIndex !== -1) {
+      this.infoToggles.splice(infoToggleIndex, 1);
+    }
+  }
+
   // return the stored info toggles; used by ui-inputs
-  getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
+  public getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
     return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
   }
 
@@ -1175,6 +1188,13 @@ export default class BattleScene extends SceneBase {
         onComplete: () => {
           this.phaseManager.clearPhaseQueue();
 
+          // stop the tera sparkle handler
+          this.spriteTeraSparkleHandler.destroy();
+
+          // destroy elements placed directly on the scene
+          this.arenaBg.destroy();
+          this.arenaBgTransition.destroy();
+
           // destroying those containers will call 'container.removeAll(true)', destroying all their children as well
           this.uiContainer.destroy();
           this.field.destroy();
@@ -1218,7 +1238,7 @@ export default class BattleScene extends SceneBase {
 
     const playerField = this.getPlayerField();
 
-    if (this.gameMode.isFixedBattle(newWaveIndex) && isNullOrUndefined(trainerData)) {
+    if (this.gameMode.isFixedBattle(newWaveIndex) && isNil(trainerData)) {
       battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
@@ -1258,7 +1278,7 @@ export default class BattleScene extends SceneBase {
           : randSeedInt(2)
             ? TrainerVariant.FEMALE
             : TrainerVariant.DEFAULT;
-        newTrainer = !isNullOrUndefined(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
+        newTrainer = !isNil(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
         this.field.add(newTrainer);
       }
 
@@ -1286,7 +1306,7 @@ export default class BattleScene extends SceneBase {
       newDouble = false;
     }
 
-    if (!isNullOrUndefined(Overrides.BATTLE_TYPE_OVERRIDE)) {
+    if (!isNil(Overrides.BATTLE_TYPE_OVERRIDE)) {
       let doubleOverrideForWave: "single" | "double" | null = null;
 
       switch (Overrides.BATTLE_TYPE_OVERRIDE) {
@@ -1582,6 +1602,18 @@ export default class BattleScene extends SceneBase {
     return ret;
   }
 
+  /**
+   * Formula for getting boss segments
+   * Daily mode or final boss -> 5
+   * Legends, sublegends, mythics are automatically bosses
+   *
+   * Start with 2 segments
+   * +1 if level is over 100
+   * +1 if bst is >= 670
+   * +1 for every 250 floors
+   *
+   * @returns the number of hp segments
+   */
   getEncounterBossSegments(
     waveIndex: number,
     level: number,
@@ -1934,9 +1966,7 @@ export default class BattleScene extends SceneBase {
    * The formula for getting the level cap is as follows:
    * - the `waveIndex` is retrieved by rounding up to the nearest `10` i.e. `34 -> 40`
    * - the `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
-   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
-   * - If the number is odd, it is incremented by `1`
-   * - The final result is then incremented by `2`
+   * - the base level is `1.2` times the exp formula of {@linkcode getLevelForWaveFunc} rounded up
    *
    * @param ignoreLevelCap - (Default `false`) Whether or not to ignore the level cap
    * @returns the level cap
@@ -1952,7 +1982,7 @@ export default class BattleScene extends SceneBase {
     const waveIndex = Math.ceil((this.currentBattle?.waveIndex || 1) / 10) * 10;
     const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(waveIndex);
     const baseLevel = getLevelForWaveFunc(difficultyWaveIndex) * LEVEL_CAP_SCALE_FACTOR;
-    return Math.ceil(baseLevel / 2) * 2 + 2;
+    return Math.ceil(baseLevel);
   }
 
   randomSpecies(
@@ -2089,7 +2119,7 @@ export default class BattleScene extends SceneBase {
             } else {
               args.push(1);
             }
-          } else if (modifier instanceof RememberMoveModifier && !isNullOrUndefined(cost)) {
+          } else if (modifier instanceof RememberMoveModifier && !isNil(cost)) {
             args.push(cost);
           }
 
@@ -2907,7 +2937,7 @@ export default class BattleScene extends SceneBase {
         sessionEncounterRate
         + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_MAX_SPAWN_WEIGHT / 2);
 
-      const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
+      const successRate = isNil(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
         : Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
 
@@ -2915,7 +2945,7 @@ export default class BattleScene extends SceneBase {
       const canSpawn =
         encounteredEvents.length === 0
         || waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3
-        || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
+        || !isNil(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
         let roll = ME_MAX_SPAWN_WEIGHT;
@@ -2943,7 +2973,7 @@ export default class BattleScene extends SceneBase {
     // Loading override or session encounter
     let encounter: MysteryEncounter | null;
     if (
-      !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      !isNil(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
       && allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
       encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
@@ -2954,7 +2984,7 @@ export default class BattleScene extends SceneBase {
       encounter = allMysteryEncounters[encounterType ?? -1];
       return encounter;
     } else {
-      encounter = !isNullOrUndefined(encounterType) ? allMysteryEncounters[encounterType] : null;
+      encounter = !isNil(encounterType) ? allMysteryEncounters[encounterType] : null;
     }
 
     // Check for queued encounters first
@@ -3012,7 +3042,7 @@ export default class BattleScene extends SceneBase {
             ? MysteryEncounterTier.ULTRA
             : MysteryEncounterTier.EPIC;
 
-    if (!isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
+    if (!isNil(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
       tier = Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
     }
 

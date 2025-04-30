@@ -12,12 +12,11 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -214,9 +213,9 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      await game.phaseInterceptor.to("SelectModifierPhase");
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
       game.onNextPrompt("PostMysteryEncounterPhase", UiMode.MESSAGE, () => {
@@ -225,24 +224,24 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       // Run to ability train option selection
       const confirmUiHandler = game.scene.ui.handlers[UiMode.CONFIRM] as ConfirmUiHandler;
-      vi.spyOn(confirmUiHandler, "show");
+      vi.spyOn(confirmUiHandler, "start");
       const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
-      vi.spyOn(partyUiHandler, "show");
+      vi.spyOn(partyUiHandler, "start");
       game.endPhase();
-      await game.phaseInterceptor.to(PostMysteryEncounterPhase);
+      await game.phaseInterceptor.to("PostMysteryEncounterPhase");
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
 
       // Wait for Yes/No confirmation to appear
-      await vi.waitFor(() => expect(confirmUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(confirmUiHandler.start).toHaveBeenCalled());
       // Select "Yes" on train ability
       confirmUiHandler.processInput(Button.ACTION);
       // Select first pokemon in party to train
-      await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(partyUiHandler.start).toHaveBeenCalled());
       partyUiHandler.processInput(Button.ACTION);
       // Click "Select" on Pokemon
       partyUiHandler.processInput(Button.ACTION);
       // Stop next battle before it runs
-      await game.phaseInterceptor.to(NewBattlePhase, false);
+      await game.phaseInterceptor.to("NewBattlePhase", false);
 
       const leadPokemon = scene.getPlayerParty()[0];
       expect(leadPokemon.customPokemonData?.ability).toBe(abilityToTrain);

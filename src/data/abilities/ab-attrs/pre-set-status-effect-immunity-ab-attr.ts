@@ -1,7 +1,7 @@
 import { getStatusEffectDescriptor } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { PreSetStatusAbAttr } from "./pre-set-status-ab-attr";

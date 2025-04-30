@@ -2,7 +2,7 @@ import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";

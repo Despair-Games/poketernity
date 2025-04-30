@@ -5,12 +5,27 @@ import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { TurnCommandFilter } from "#app/@types/TurnCommandFilter";
+import type { TurnMove } from "#app/@types/TurnMove";
+import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { MoveHeaderAttr } from "#app/data/moves/move-attrs/move-header-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
+import { AttemptCapturePhase } from "#app/phases/attempt-capture-phase";
+import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
+import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { PostActionPhase } from "#app/phases/post-action-phase";
+import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
+import { TerastallizationPhase } from "#app/phases/terastallization-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { WeatherEffectPhase } from "#app/phases/weather-effect-phase";
-import { TerastallizationPhase } from "#app/phases/terastallization-phase";
+import { BooleanHolder, isNil } from "#app/utils/common-utils";
+import { randSeedShuffle } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -20,20 +35,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
-import type { TurnCommandFilter } from "./@types/TurnCommandFilter";
-import type { TurnMove } from "./@types/TurnMove";
-import type { BypassSpeedChanceAbAttr } from "./data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "./data/abilities/apply-ab-attrs";
-import { MoveHeaderAttr } from "./data/moves/move-attrs/move-header-attr";
-import type { Pokemon } from "./field/pokemon";
-import { PokemonMove } from "./field/pokemon-move";
-import { globalScene } from "./global-scene";
-import { BypassSpeedChanceModifier } from "./modifier/modifier";
-import { AttemptCapturePhase } from "./phases/attempt-capture-phase";
-import { AttemptRunPhase } from "./phases/attempt-run-phase";
-import { MoveHeaderPhase } from "./phases/move-header-phase";
-import { SwitchSummonPhase } from "./phases/switch-summon-phase";
-import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "./utils";
+import { isNullOrUndefined } from "util";
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.
@@ -460,7 +462,7 @@ export class TurnCommandManager {
   private handleBallCommand(turnCommand: TurnCommand): boolean {
     const { cursor, targets } = turnCommand;
 
-    if (isNullOrUndefined(cursor) || isNullOrUndefined(targets)) {
+    if (isNil(cursor) || isNil(targets)) {
       console.error("Error encountered when trying to throw Pokeball!");
       console.error(turnCommand);
       return false;
@@ -478,7 +480,7 @@ export class TurnCommandManager {
    */
   private handlePokemonCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, args } = turnCommand;
-    if (isNullOrUndefined(cursor)) {
+    if (isNil(cursor)) {
       console.error("Error encountered when trying to switch Pokemon!");
       console.error(turnCommand);
       return false;
