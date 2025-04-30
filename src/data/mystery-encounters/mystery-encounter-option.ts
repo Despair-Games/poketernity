@@ -1,20 +1,20 @@
 import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
-import type { MoveId } from "#enums/move-id";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import type { ElementalType } from "#enums/elemental-type";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
   MoneyRequirement,
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { isNil } from "#app/utils/common-utils";
+import { randSeedInt } from "#app/utils/random-utils";
+import type { ElementalType } from "#enums/elemental-type";
+import type { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { CanLearnMoveRequirementOptions } from "./requirements/can-learn-move-requirement";
 import { CanLearnMoveRequirement } from "./requirements/can-learn-move-requirement";
-import { isNullOrUndefined } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 
 export type OptionPhaseCallback = () => Promise<void | boolean>;
 
@@ -63,7 +63,7 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
   onPostOptionPhase?: OptionPhaseCallback;
 
   constructor(option: IMysteryEncounterOption | null) {
-    if (!isNullOrUndefined(option)) {
+    if (!isNil(option)) {
       Object.assign(this, option);
     }
     this.hasDexProgress = this.hasDexProgress ?? false;

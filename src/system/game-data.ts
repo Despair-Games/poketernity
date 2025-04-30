@@ -13,8 +13,14 @@ import {
   bypassLogin,
 } from "#app/constants/app";
 import { EntryHazardTag } from "#app/data/arena-tag";
+import { allMoves, allSpecies } from "#app/data/data-lists";
 import { defaultStarterSpecies } from "#app/data/default-starters";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import type { Egg } from "#app/data/egg";
 import { speciesEggMoves } from "#app/data/egg-moves";
+import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#app/data/pokemon-species";
 import {
   STARTER_CANDY_GAIN_FROM_CATCH,
   STARTER_CANDY_MULIPLIER_FOR_BOSS,
@@ -23,17 +29,11 @@ import {
   speciesStarterCosts,
 } from "#app/data/starters";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import { allMoves, allSpecies } from "#app/data/data-lists";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import type { Egg } from "#app/data/egg";
-import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
 import type { Variant } from "#app/data/variant";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
@@ -56,10 +56,10 @@ import {
 import { vouchers } from "#app/system/voucher";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNullOrUndefined } from "#app/utils/common-utils";
-import { randInt, randSeedItem } from "#app/utils/random-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randInt, randSeedItem } from "#app/utils/random-utils";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";
@@ -697,7 +697,7 @@ export class GameData {
     if (lsItem) {
       try {
         const lsTutorials: Tutorial[] = JSON.parse(lsItem);
-        lsTutorials.forEach((lsTutorial) => (!isNullOrUndefined(lsTutorial) ? tutorials.add(lsTutorial) : null));
+        lsTutorials.forEach((lsTutorial) => (!isNil(lsTutorial) ? tutorials.add(lsTutorial) : null));
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }

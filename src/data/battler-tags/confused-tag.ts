@@ -2,9 +2,10 @@ import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { MovePhase } from "#app/phases/move-phase";
-import { isNullOrUndefined, toDmgValue } from "#app/utils/common-utils";
+import { isNil, toDmgValue } from "#app/utils/common-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -13,7 +14,6 @@ import type { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import i18next from "i18next";
-import Overrides from "#app/overrides";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
@@ -57,7 +57,7 @@ export class ConfusedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret =
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
-      || !isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE);
+      || !isNil(Overrides.STATUS_ACTIVATION_OVERRIDE);
 
     if (ret) {
       globalScene.phaseManager.queueMessagePhase(

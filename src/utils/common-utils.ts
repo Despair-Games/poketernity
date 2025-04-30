@@ -118,7 +118,8 @@ export function deepCopy<T>(obj: T): T {
   return Phaser.Utils.Objects.DeepCopy(obj as unknown as object) as T;
 }
 
-export function isNullOrUndefined(obj: any): obj is null | undefined {
+/** @returns Whether the input is `null` or `undefined` */
+export function isNil(obj: any): obj is null | undefined {
   return null === obj || undefined === obj;
 }
 

@@ -56,7 +56,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { getModifierTierTextTint } from "#app/ui/text/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
-import { getEnumKeys, getEnumValues, isNullOrUndefined, NumberHolder } from "#app/utils/common-utils";
+import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { randSeedInt } from "#app/utils/random-utils";
@@ -194,7 +194,7 @@ export class ModifierType {
           if (weight > 0) {
             this.tier = modifier.modifierType.tier;
             return this;
-          } else if (isNullOrUndefined(defaultTier)) {
+          } else if (isNil(defaultTier)) {
             // If weight is 0, keep track of the first tier where the item was found
             defaultTier = modifier.modifierType.tier;
           }

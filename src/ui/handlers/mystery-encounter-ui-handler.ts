@@ -1,13 +1,13 @@
+import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -122,10 +122,10 @@ export class MysteryEncounterUiHandler extends UiHandler {
 
   override show(settings?: OptionSelectSettings): boolean {
     this.overrideSettings = settings;
-    const showDescriptionContainer = isNullOrUndefined(this.overrideSettings?.hideDescription)
+    const showDescriptionContainer = isNil(this.overrideSettings?.hideDescription)
       ? true
       : !this.overrideSettings.hideDescription;
-    const slideInDescription = isNullOrUndefined(this.overrideSettings?.slideInDescription)
+    const slideInDescription = isNil(this.overrideSettings?.slideInDescription)
       ? true
       : this.overrideSettings.slideInDescription;
     const startingCursorIndex = this.overrideSettings?.startingCursorIndex ?? 0;
@@ -587,7 +587,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
     this.tooltipContainer.setVisible(true);
 
-    if (isNullOrUndefined(cursor) || cursor > this.optionsContainer.length - 2) {
+    if (isNil(cursor) || cursor > this.optionsContainer.length - 2) {
       // Ignore hovers on view party button
       // Hide dex progress if visible
       this.showHideDexProgress(false);

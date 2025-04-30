@@ -4,7 +4,7 @@ import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -224,7 +224,7 @@ export class WaveRangeRequirement extends EncounterSceneRequirement {
   }
 
   override meetsRequirement(): boolean {
-    if (!isNullOrUndefined(this.waveRange) && this.waveRange[0] <= this.waveRange[1]) {
+    if (!isNil(this.waveRange) && this.waveRange[0] <= this.waveRange[1]) {
       const waveIndex = globalScene.currentBattle.waveIndex;
       if (
         (waveIndex >= 0 && this.waveRange[0] >= 0 && this.waveRange[0] > waveIndex)
@@ -280,11 +280,7 @@ export class TimeOfDayRequirement extends EncounterSceneRequirement {
 
   override meetsRequirement(): boolean {
     const timeOfDay = globalScene.arena?.getTimeOfDay();
-    if (
-      !isNullOrUndefined(timeOfDay)
-      && this.requiredTimeOfDay?.length > 0
-      && !this.requiredTimeOfDay.includes(timeOfDay)
-    ) {
+    if (!isNil(timeOfDay) && this.requiredTimeOfDay?.length > 0 && !this.requiredTimeOfDay.includes(timeOfDay)) {
       return false;
     }
 
@@ -306,11 +302,7 @@ export class WeatherRequirement extends EncounterSceneRequirement {
 
   override meetsRequirement(): boolean {
     const currentWeather = globalScene.arena.weather?.weatherType;
-    if (
-      !isNullOrUndefined(currentWeather)
-      && this.requiredWeather?.length > 0
-      && !this.requiredWeather.includes(currentWeather!)
-    ) {
+    if (!isNil(currentWeather) && this.requiredWeather?.length > 0 && !this.requiredWeather.includes(currentWeather!)) {
       return false;
     }
 
@@ -320,7 +312,7 @@ export class WeatherRequirement extends EncounterSceneRequirement {
   override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     const currentWeather = globalScene.arena.weather?.weatherType;
     let token = "";
-    if (!isNullOrUndefined(currentWeather)) {
+    if (!isNil(currentWeather)) {
       token = WeatherType[currentWeather].replace("_", " ").toLocaleLowerCase();
     }
     return ["weather", token];
@@ -344,7 +336,7 @@ export class PartySizeRequirement extends EncounterSceneRequirement {
   }
 
   override meetsRequirement(): boolean {
-    if (!isNullOrUndefined(this.partySizeRange) && this.partySizeRange[0] <= this.partySizeRange[1]) {
+    if (!isNil(this.partySizeRange) && this.partySizeRange[0] <= this.partySizeRange[1]) {
       const partySize = this.excludeDisallowedPokemon
         ? globalScene.getPokemonAllowedInBattle().length
         : globalScene.getPlayerParty().length;
@@ -376,7 +368,7 @@ export class PersistentModifierRequirement extends EncounterSceneRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredHeldItemModifiers?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredHeldItemModifiers?.length < 0) {
       return false;
     }
     let modifierCount = 0;
@@ -410,7 +402,7 @@ export class MoneyRequirement extends EncounterSceneRequirement {
 
   override meetsRequirement(): boolean {
     const money = globalScene.money;
-    if (isNullOrUndefined(money)) {
+    if (isNil(money)) {
       return false;
     }
 
@@ -441,7 +433,7 @@ export class SpeciesRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredSpecies?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredSpecies?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -480,7 +472,7 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredNature?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredNature?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -500,7 +492,7 @@ export class NatureRequirement extends EncounterPokemonRequirement {
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
-    if (!isNullOrUndefined(pokemon?.nature) && this.requiredNature.includes(pokemon.nature)) {
+    if (!isNil(pokemon?.nature) && this.requiredNature.includes(pokemon.nature)) {
       return ["nature", Nature[pokemon.nature]];
     }
     return ["nature", ""];
@@ -527,7 +519,7 @@ export class TypeRequirement extends EncounterPokemonRequirement {
   override meetsRequirement(): boolean {
     let partyPokemon = globalScene.getPlayerParty();
 
-    if (isNullOrUndefined(partyPokemon)) {
+    if (isNil(partyPokemon)) {
       return false;
     }
 
@@ -579,7 +571,7 @@ export class MoveRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredMoves?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredMoves?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -619,7 +611,7 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredMoves?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredMoves?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -674,7 +666,7 @@ export class AbilityRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredAbilities?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredAbilities?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -690,7 +682,7 @@ export class AbilityRequirement extends EncounterPokemonRequirement {
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const matchingAbility = this.requiredAbilities.find((a) => pokemon?.hasAbility(a, false));
-    if (!isNullOrUndefined(matchingAbility)) {
+    if (!isNil(matchingAbility)) {
       return ["ability", allAbilities[matchingAbility].name];
     }
     return ["ability", ""];
@@ -713,7 +705,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredStatusEffect?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredStatusEffect?.length < 0) {
       return false;
     }
     const x = this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -770,7 +762,7 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredFormChangeItem?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredFormChangeItem?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -837,7 +829,7 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon) || this.requiredEvolutionItem?.length < 0) {
+    if (isNil(partyPokemon) || this.requiredEvolutionItem?.length < 0) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -905,7 +897,7 @@ export class HeldItemRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon)) {
+    if (isNil(partyPokemon)) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -968,7 +960,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
 
   override meetsRequirement(): boolean {
     const partyPokemon = globalScene.getPlayerParty();
-    if (isNullOrUndefined(partyPokemon)) {
+    if (isNil(partyPokemon)) {
       return false;
     }
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
@@ -1032,7 +1024,7 @@ export class LevelRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     // Party Pokemon inside required level range
-    if (!isNullOrUndefined(this.requiredLevelRange) && this.requiredLevelRange[0] <= this.requiredLevelRange[1]) {
+    if (!isNil(this.requiredLevelRange) && this.requiredLevelRange[0] <= this.requiredLevelRange[1]) {
       const partyPokemon = globalScene.getPlayerParty();
       const pokemonInRange = this.queryParty(partyPokemon);
       if (pokemonInRange.length < this.minNumberOfPokemon) {
@@ -1072,10 +1064,7 @@ export class FriendshipRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     // Party Pokemon inside required friendship range
-    if (
-      !isNullOrUndefined(this.requiredFriendshipRange)
-      && this.requiredFriendshipRange[0] <= this.requiredFriendshipRange[1]
-    ) {
+    if (!isNil(this.requiredFriendshipRange) && this.requiredFriendshipRange[0] <= this.requiredFriendshipRange[1]) {
       const partyPokemon = globalScene.getPlayerParty();
       const pokemonInRange = this.queryParty(partyPokemon);
       if (pokemonInRange.length < this.minNumberOfPokemon) {
@@ -1123,7 +1112,7 @@ export class HealthRatioRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     // Party Pokemon's health inside required health range
-    if (!isNullOrUndefined(this.requiredHealthRange) && this.requiredHealthRange[0] <= this.requiredHealthRange[1]) {
+    if (!isNil(this.requiredHealthRange) && this.requiredHealthRange[0] <= this.requiredHealthRange[1]) {
       const partyPokemon = globalScene.getPlayerParty();
       const pokemonInRange = this.queryParty(partyPokemon);
       if (pokemonInRange.length < this.minNumberOfPokemon) {
@@ -1151,7 +1140,7 @@ export class HealthRatioRequirement extends EncounterPokemonRequirement {
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const hpRatio = pokemon?.getHpRatio();
-    if (!isNullOrUndefined(hpRatio)) {
+    if (!isNil(hpRatio)) {
       return ["healthRatio", Math.floor(hpRatio * 100).toString() + "%"];
     }
     return ["healthRatio", ""];
@@ -1170,7 +1159,7 @@ export class WeightRequirement extends EncounterPokemonRequirement {
 
   override meetsRequirement(): boolean {
     // Party Pokemon's weight inside required weight range
-    if (!isNullOrUndefined(this.requiredWeightRange) && this.requiredWeightRange[0] <= this.requiredWeightRange[1]) {
+    if (!isNil(this.requiredWeightRange) && this.requiredWeightRange[0] <= this.requiredWeightRange[1]) {
       const partyPokemon = globalScene.getPlayerParty();
       const pokemonInRange = this.queryParty(partyPokemon);
       if (pokemonInRange.length < this.minNumberOfPokemon) {

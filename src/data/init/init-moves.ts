@@ -238,9 +238,9 @@ import { userSleptOrComatoseCondition } from "#app/data/moves/move-conditions/us
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { isNil } from "#app/utils/common-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
@@ -1868,8 +1868,8 @@ export function initMoves() {
       )
       .condition(
         (_user, target, _move) =>
-          isNullOrUndefined(target.getTag(BattlerTagType.INGRAIN))
-          && isNullOrUndefined(target.getTag(BattlerTagType.IGNORE_FLYING)),
+          isNil(target.getTag(BattlerTagType.INGRAIN))
+          && isNil(target.getTag(BattlerTagType.IGNORE_FLYING)),
       )
       .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
       .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 })
@@ -2671,7 +2671,7 @@ export function initMoves() {
         MovePowerMultiplierAttr,
         (user, _target, _move) => {
           const result = user.getLastXMoves(2)[1]?.result;
-          if (isNullOrUndefined(result)) {
+          if (isNil(result)) {
             return 1;
           }
           return [MoveResult.MISS, MoveResult.FAIL].includes(result) ? 2 : 1;

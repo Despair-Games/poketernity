@@ -1,3 +1,4 @@
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { allMoves } from "#app/data/data-lists";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
@@ -7,10 +8,9 @@ import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/mo
 import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
-import { isNullOrUndefined, NumberHolder } from "#app/utils/common-utils";
+import { isNil, NumberHolder } from "#app/utils/common-utils";
 import { formatMoney } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -175,7 +175,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       return false;
     }
 
-    if (isNullOrUndefined(typeOptions) || isNullOrUndefined(actionCallback) || isNullOrUndefined(rerollCost)) {
+    if (isNil(typeOptions) || isNil(actionCallback) || isNil(rerollCost)) {
       return false;
     }
 

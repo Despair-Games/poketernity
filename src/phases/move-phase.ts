@@ -31,7 +31,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils/common-utils";
+import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -440,7 +440,7 @@ export class MovePhase extends BattlePhase {
           break;
         default:
           const target = globalScene.getFieldPokemonByBattlerIndex(t);
-          if (!isNullOrUndefined(target)) {
+          if (!isNil(target)) {
             targets.push(target);
           }
           break;
