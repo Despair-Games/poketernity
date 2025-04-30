@@ -17,9 +17,9 @@ import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import { EnemyBattleInfo } from "#app/ui/components/battle-info";
-import { isBetween, isNullOrUndefined, toDmgValue } from "#app/utils/common-utils";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
+import { isBetween, isNil, toDmgValue } from "#app/utils/common-utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -86,7 +86,7 @@ export class EnemyPokemon extends Pokemon {
 
     if (
       speciesId in Overrides.ENEMY_FORM_OVERRIDES
-      && !isNullOrUndefined(Overrides.ENEMY_FORM_OVERRIDES[speciesId])
+      && !isNil(Overrides.ENEMY_FORM_OVERRIDES[speciesId])
       && this.species.forms[Overrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
       this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId];
@@ -256,7 +256,7 @@ export class EnemyPokemon extends Pokemon {
 
             const moveTargets = getMoveTargets(this, move.id)
               .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
-              .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
+              .filter((p) => !isNil(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
             const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
 

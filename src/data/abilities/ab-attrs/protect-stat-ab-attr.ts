@@ -1,10 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { isNullOrUndefined, type BooleanHolder } from "#app/utils/common-utils";
+import { isNil, type BooleanHolder } from "#app/utils/common-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { getStatKey, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
 import { PreStatStageChangeAbAttr } from "./pre-stat-stage-change-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
@@ -22,7 +22,7 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   }
 
   override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, cancelled: BooleanHolder): boolean {
-    if (isNullOrUndefined(this.protectedStat) || stat === this.protectedStat) {
+    if (isNil(this.protectedStat) || stat === this.protectedStat) {
       cancelled.value = true;
       return true;
     }

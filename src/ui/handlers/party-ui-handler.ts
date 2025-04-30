@@ -3,6 +3,7 @@ import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
+import { GAME_WIDTH } from "#app/constants/ui";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
@@ -16,7 +17,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { GAME_WIDTH } from "#app/constants/ui";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
@@ -27,11 +27,11 @@ import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper"
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { BooleanHolder, isNullOrUndefined } from "#app/utils/common-utils";
-import { toReadableString } from "#app/utils/string-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
+import { BooleanHolder, isNil } from "#app/utils/common-utils";
 import { FilterAllMoves } from "#app/utils/move-utils";
 import { PartyFilterAll } from "#app/utils/party-ui-utils";
+import { toReadableString } from "#app/utils/string-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
@@ -216,7 +216,7 @@ export class PartyUiHandler extends MessageUiHandler {
     tmMoveId: MoveId = MoveId.NONE,
     showMovePP: boolean = false,
   ): boolean {
-    if (this.active || isNullOrUndefined(mode)) {
+    if (this.active || isNil(mode)) {
       return false;
     }
 

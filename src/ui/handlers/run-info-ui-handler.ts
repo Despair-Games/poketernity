@@ -15,7 +15,7 @@ import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import {
   formatLargeNumberFixedDigits,
   formatMoney,
@@ -303,7 +303,7 @@ export class RunInfoUiHandler extends UiHandler {
       } else if (this.runInfo.enemyParty.length === 2) {
         this.parseWildDoubleDefeat(enemyContainer);
       }
-    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNullOrUndefined(this.runInfo.trainer)) {
+    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNil(this.runInfo.trainer)) {
       this.showTrainerSprites(enemyContainer);
       const row_limit = 3;
       this.runInfo.enemyParty.forEach((p, i) => {
@@ -436,7 +436,7 @@ export class RunInfoUiHandler extends UiHandler {
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
     const { trainer } = this.runInfo;
-    if (isNullOrUndefined(trainer)) {
+    if (isNil(trainer)) {
       console.warn("Missing TrainerData in session data, cannot render trainer sprites");
       return;
     }

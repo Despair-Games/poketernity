@@ -1,7 +1,7 @@
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { ME_BASE_SPAWN_WEIGHT } from "#app/constants/mystery-encounters";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 
 export class SeenEncounterData {
   type: MysteryEncounterType;
@@ -28,7 +28,7 @@ export class MysteryEncounterSaveData {
   queuedEncounters: QueuedEncounter[] = [];
 
   constructor(data?: MysteryEncounterSaveData) {
-    if (!isNullOrUndefined(data)) {
+    if (!isNil(data)) {
       Object.assign(this, data);
     }
 

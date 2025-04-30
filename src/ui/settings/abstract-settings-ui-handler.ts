@@ -1,8 +1,8 @@
 import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { settings as settingsManager } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
@@ -11,8 +11,8 @@ import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-
 import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import { hasTouchscreen } from "#app/utils/app-utils";
+import { isNil } from "#app/utils/common-utils";
 import { capitalizeFirstLetter } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
@@ -337,7 +337,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
           }
           break;
         case Button.LEFT:
-          if (!isNullOrUndefined(optionCursor)) {
+          if (!isNil(optionCursor)) {
             // Moves the option cursor left (wrapping)
             if (uiItem.doWrap) {
               success = this.setOptionCursor(cursor, Wrap(optionCursor - 1, 0, maxOptionCursor), true);
@@ -348,7 +348,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
           break;
         case Button.RIGHT:
           // Moves the option cursor right (wrapping)
-          if (!isNullOrUndefined(optionCursor)) {
+          if (!isNil(optionCursor)) {
             if (uiItem.doWrap) {
               success = this.setOptionCursor(cursor, Wrap(optionCursor + 1, 0, maxOptionCursor), true);
             } else if (optionCursor < optionLabels.length - 1) {

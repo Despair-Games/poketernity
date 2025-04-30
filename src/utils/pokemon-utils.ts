@@ -3,7 +3,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
@@ -51,7 +51,7 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
         return s.speciesId;
       }
     })
-    .filter((s) => !isNullOrUndefined(s));
+    .filter((s) => !isNil(s));
 
   if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
     speciesList.push(SpeciesId.COSMOG, SpeciesId.COSMOEM, SpeciesId.LUNALA, SpeciesId.SOLGALEO, SpeciesId.NECROZMA);
@@ -96,7 +96,7 @@ export function getPokerusStarters(): PokemonSpecies[] {
  * @todo Just generate 6 random numbers instead of doing this nonsense; also make pokemon IDs into actual UUIDs
  */
 export function getIvsFromId(id?: number): number[] {
-  if (isNullOrUndefined(id)) {
+  if (isNil(id)) {
     id = randSeedInt(4294967296);
   }
 

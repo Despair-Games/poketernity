@@ -1,12 +1,12 @@
-import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { globalScene } from "#app/global-scene";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import type { UIOptionSelectItem } from "#app/ui/interfaces/option-select-ui-item";
 import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -245,7 +245,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
         const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
         label = label.padStart(label.length + neededSpaces);
         // Change the label color to fit the required text style
-        if (!isNullOrUndefined(option.color) && option.color !== DEFAULT_TEXT_STYLE) {
+        if (!isNil(option.color) && option.color !== DEFAULT_TEXT_STYLE) {
           label = getBBCodeFragment(label, option.color, true);
         }
       }
@@ -373,7 +373,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
       if (success) {
         // handle hover code if the option has a handler for it
         const newOption = this.getCurrentOption();
-        if (!isNullOrUndefined(newOption.onHover)) {
+        if (!isNil(newOption.onHover)) {
           newOption.onHover();
         }
       }

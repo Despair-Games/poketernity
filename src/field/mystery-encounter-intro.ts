@@ -1,11 +1,11 @@
-import type { GameObjects } from "phaser";
-import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import type { SpeciesId } from "#enums/species-id";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
+import { globalScene } from "#app/global-scene";
+import { isNil } from "#app/utils/common-utils";
 import { ImagesFolder } from "#enums/images-folders";
+import type { SpeciesId } from "#enums/species-id";
+import type { GameObjects } from "phaser";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 export class MysteryEncounterSpriteConfig {
@@ -74,7 +74,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         ...config,
       };
 
-      if (!isNullOrUndefined(result.species)) {
+      if (!isNil(result.species)) {
         const keys = getSpriteKeysFromSpecies(result.species, undefined, undefined, result.isShiny, result.variant);
         result.spriteKey = keys.spriteKey;
         result.fileRoot = keys.fileRoot;
@@ -176,12 +176,12 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         }
       }
 
-      if (!isNullOrUndefined(pokemonShinySparkle)) {
+      if (!isNil(pokemonShinySparkle)) {
         // Offset the sparkle to match the Pokemon's position
         pokemonShinySparkle.setPosition(sprite.x, sprite.y);
       }
 
-      if (!isNullOrUndefined(alpha)) {
+      if (!isNil(alpha)) {
         sprite.setAlpha(alpha);
         tintSprite.setAlpha(alpha);
       }

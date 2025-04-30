@@ -1,11 +1,11 @@
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { globalScene } from "#app/global-scene";
 import type { RunEntry } from "#app/system/game-data";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { getPokemonLevelText } from "#app/utils/string-utils";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
@@ -324,7 +324,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         this.add(enemyContainer);
       } else if (
         (data.battleType === BattleType.TRAINER || data.battleType === BattleType.MYSTERY_ENCOUNTER)
-        && !isNullOrUndefined(data.trainer)
+        && !isNil(data.trainer)
       ) {
         // Defeats from Trainers show the trainer's title and name
         const tObj = data.trainer.toTrainer();
