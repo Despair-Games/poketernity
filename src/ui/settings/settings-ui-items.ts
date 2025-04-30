@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type {
   AudioSettingsKey,
   DisplaySettingsKey,
@@ -6,6 +12,8 @@ import type {
   SettingUiItemOption,
 } from "#app/@types/Settings";
 import { GAME_SPEEDS } from "#app/constants/app";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
+import { getEnumLength } from "#app/utils/common-utils";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
@@ -17,11 +25,8 @@ import { MoneyFormat } from "#enums/money-format";
 import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
-import { getEnumLength } from "#app/utils/common-utils";
-import { isLandscapeMode } from "#app/utils/app-utils";
-import i18next, { t } from "i18next";
 import { UiWindowStyle } from "#enums/ui-window-style";
+import i18next, { t } from "i18next";
 
 //#region Types
 
@@ -80,119 +85,122 @@ function useGameSpeedOptions(): SettingUiItemOption[] {
 /**
  * UI items for general settings
  */
-export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
-  {
-    key: "gameSpeed",
-    label: t("settings:gameSpeed"),
-    options: useGameSpeedOptions(),
-    doWrap: true,
-  },
-  {
-    key: "hpBarSpeed",
-    label: t("settings:hpBarSpeed"),
-    options: [
-      { value: HpBarSpeed.DEFAULT, label: t("settings:normal") },
-      { value: HpBarSpeed.FAST, label: t("settings:fast") },
-      { value: HpBarSpeed.FASTER, label: t("settings:faster") },
-      { value: HpBarSpeed.SKIP, label: t("settings:skip") },
-    ],
-    doWrap: true,
-  },
-  {
-    key: "expGainsSpeed",
-    label: t("settings:expGainsSpeed"),
-    options: [
-      { value: ExpGainsSpeed.DEFAULT, label: t("settings:normal") },
-      { value: ExpGainsSpeed.FAST, label: t("settings:fast") },
-      { value: ExpGainsSpeed.FASTER, label: t("settings:faster") },
-      { value: ExpGainsSpeed.SKIP, label: t("settings:skip") },
-    ],
-    doWrap: true,
-  },
-  {
-    key: "partyExpNotificationMode",
-    label: t("settings:expPartyDisplay"),
-    options: [
-      { value: ExpNotification.DEFAULT, label: t("settings:normal") },
-      { value: ExpNotification.ONLY_LEVEL_UP, label: t("settings:levelUpNotifications") },
-      { value: ExpNotification.SKIP, label: t("settings:skip") },
-    ],
-    doWrap: true,
-  },
-  {
-    key: "skipSeenDialogues",
-    label: t("settings:skipSeenDialogues"),
-    options: useOnOffOptions(),
-    doWrap: true,
-  },
-  {
-    key: "eggSkipPreference",
-    label: t("settings:eggSkip"),
-    options: [
-      { value: EggSkipPreference.NEVER, label: t("settings:never") },
-      { value: EggSkipPreference.ASK, label: t("settings:ask") },
-      { value: EggSkipPreference.ALWAYS, label: t("settings:always") },
-    ],
-    doWrap: true,
-  },
-  {
-    key: "battleStyle",
-    label: t("settings:battleStyle"),
-    options: [
-      { value: BattleStyle.SWITCH, label: t("settings:switch") },
-      { value: BattleStyle.SET, label: t("settings:set") },
-    ],
-    doWrap: true,
-  },
-  {
-    key: "enableRetries",
-    label: t("settings:enableRetries"),
-    options: useOnOffOptions(),
-    doWrap: true,
-  },
-  {
-    key: "hideIvScanner",
-    label: t("settings:hideIvs"),
-    options: useOnOffOptions(),
-    doWrap: true,
-  },
-  {
-    key: "enableTutorials",
-    label: t("settings:tutorials"),
-    options: useOnOffOptions(),
-    doWrap: true,
-  },
-  {
-    key: "enableVibration",
-    label: t("settings:vibrations"),
-    options: useAutoDisabledOptions(),
-    doWrap: true,
-  },
-  {
-    key: "enableTouchControls",
-    label: t("settings:touchControls"),
-    options: useAutoDisabledOptions(
-      {},
-      { requiresConfirmation: true, confirmationMessage: t("settings:confirmDisableTouch") },
-    ),
-    touchscreenOnly: true,
-  },
-  {
-    key: "moveTouchControls",
-    label: t("settings:moveTouchControls"),
-    options: [
-      {
-        value: 0,
-        label: isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"),
-      },
-      {
-        value: 1,
-        label: t("settings:configure"),
-      },
-    ],
-    touchscreenOnly: true,
-  },
-];
+export function useGeneralSettingsUiItems(): SettingsUiItem<GeneralSettingsKey>[] {
+  return [
+    {
+      key: "gameSpeed",
+      label: t("settings:gameSpeed"),
+      options: useGameSpeedOptions(),
+      doWrap: true,
+    },
+    {
+      key: "hpBarSpeed",
+      label: t("settings:hpBarSpeed"),
+      options: [
+        { value: HpBarSpeed.DEFAULT, label: t("settings:normal") },
+        { value: HpBarSpeed.FAST, label: t("settings:fast") },
+        { value: HpBarSpeed.FASTER, label: t("settings:faster") },
+        { value: HpBarSpeed.SKIP, label: t("settings:skip") },
+      ],
+      doWrap: true,
+    },
+    {
+      key: "expGainsSpeed",
+      label: t("settings:expGainsSpeed"),
+      options: [
+        { value: ExpGainsSpeed.DEFAULT, label: t("settings:normal") },
+        { value: ExpGainsSpeed.FAST, label: t("settings:fast") },
+        { value: ExpGainsSpeed.FASTER, label: t("settings:faster") },
+        { value: ExpGainsSpeed.SKIP, label: t("settings:skip") },
+      ],
+      doWrap: true,
+    },
+    {
+      key: "partyExpNotificationMode",
+      label: t("settings:expPartyDisplay"),
+      options: [
+        { value: ExpNotification.DEFAULT, label: t("settings:normal") },
+        { value: ExpNotification.ONLY_LEVEL_UP, label: t("settings:levelUpNotifications") },
+        { value: ExpNotification.SKIP, label: t("settings:skip") },
+      ],
+      doWrap: true,
+    },
+    {
+      key: "skipSeenDialogues",
+      label: t("settings:skipSeenDialogues"),
+      options: useOnOffOptions(),
+      doWrap: true,
+    },
+    {
+      key: "eggSkipPreference",
+      label: t("settings:eggSkip"),
+      options: [
+        { value: EggSkipPreference.NEVER, label: t("settings:never") },
+        { value: EggSkipPreference.ASK, label: t("settings:ask") },
+        { value: EggSkipPreference.ALWAYS, label: t("settings:always") },
+      ],
+      doWrap: true,
+    },
+    {
+      key: "battleStyle",
+      label: t("settings:battleStyle"),
+      options: [
+        { value: BattleStyle.SWITCH, label: t("settings:switch") },
+        { value: BattleStyle.SET, label: t("settings:set") },
+      ],
+      doWrap: true,
+    },
+    {
+      key: "enableRetries",
+      label: t("settings:enableRetries"),
+      options: useOnOffOptions(),
+      doWrap: true,
+    },
+    {
+      key: "hideIvScanner",
+      label: t("settings:hideIvs"),
+      options: useOnOffOptions(),
+      doWrap: true,
+    },
+    {
+      key: "enableTutorials",
+      label: t("settings:tutorials"),
+      options: useOnOffOptions(),
+      doWrap: true,
+    },
+    {
+      key: "enableVibration",
+      label: t("settings:vibrations"),
+      options: useAutoDisabledOptions(),
+      doWrap: true,
+    },
+    {
+      key: "enableTouchControls",
+      label: t("settings:touchControls"),
+      options: useAutoDisabledOptions(
+        {},
+        { requiresConfirmation: true, confirmationMessage: t("settings:confirmDisableTouch") },
+      ),
+      touchscreenOnly: true,
+    },
+    {
+      key: "moveTouchControls",
+      label: t("settings:moveTouchControls"),
+      options: [
+        {
+          value: 0,
+          /** Replaced with the actual label in {@link GeneralSettingsUiHandler.updateMoveTouchControlsSettingsLabel} */
+          label: "ORIENTATION",
+        },
+        {
+          value: 1,
+          label: t("settings:configure"),
+        },
+      ],
+      touchscreenOnly: true,
+    },
+  ];
+}
 
 /**
  * UI items for display settings

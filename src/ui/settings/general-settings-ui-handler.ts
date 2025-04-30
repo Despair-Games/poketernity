@@ -1,4 +1,5 @@
-import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
+import { globalScene } from "#app/global-scene";
+import { useGeneralSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
@@ -7,7 +8,7 @@ export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
   private onWindowResizeEvent = () => this.updateMoveTouchControlsSettingsLabel();
 
   constructor() {
-    super("general", generalSettingsUiItems);
+    super("general", useGeneralSettingsUiItems());
   }
 
   protected override setup(): void {
@@ -44,6 +45,10 @@ export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
       return;
     }
 
-    this.updateOptionValueLabel(settingIndex, 0, isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"));
+    this.updateOptionValueLabel(
+      settingIndex,
+      0,
+      isLandscapeMode(globalScene) ? t("settings:landscape") : t("settings:portrait"),
+    );
   }
 }
