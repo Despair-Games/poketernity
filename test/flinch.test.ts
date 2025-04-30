@@ -61,7 +61,7 @@ describe("Flinch", () => {
     expect(player1).not.toHaveBattlerTagType(BattlerTagType.FLINCHED); // tag was lapsed
 
     // Check that Player 1 attempted to copy Swords Dance but could not move due to flinching
-    expect(player1.summonData.abilitiesApplied).toContain(AbilityId.DANCER);
+    expect(player1).toHaveAbilityApplied(AbilityId.DANCER);
     expect(player1).toHaveStatStage(Stat.ATK, 0);
   });
 });

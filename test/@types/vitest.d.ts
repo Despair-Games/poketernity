@@ -4,6 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
@@ -106,5 +107,11 @@ declare module "vitest" {
      * @param expectedBattlerTagType - The expected {@linkcode BattlerTagType}.
      */
     toHaveBattlerTagType(expectedBattlerTagType: BattlerTagType): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} had a specific {@linkcode AbilityId} applied.
+     * @param expectedAbilityId - The expected {@linkcode AbilityId}.
+     */
+    toHaveAbilityApplied(expectedAbilityId: AbilityId): void;
   }
 }
