@@ -1,12 +1,11 @@
-import { Stat } from "#enums/stat";
+import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import { CommandPhase } from "#app/phases/command-phase";
 
 describe("Moves - Freezy Frost", () => {
   let phaserGame: Phaser.Game;
@@ -77,7 +76,7 @@ describe("Moves - Freezy Frost", () => {
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
     game.move.select(MoveId.HOWL, 0);
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
@@ -87,7 +86,7 @@ describe("Moves - Freezy Frost", () => {
     expect(rightOpp.getStatStage(Stat.ATK)).toBe(2);
 
     game.move.select(MoveId.FREEZY_FROST, 0, leftOpp.getBattlerIndex());
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 

@@ -1,14 +1,12 @@
-import { Stat } from "#enums/stat";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Tidy Up", () => {
   let phaserGame: Phaser.Game;
@@ -42,9 +40,9 @@ describe("Moves - Tidy Up", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.SPIKES);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
     expect(game.scene.arena.getTag(ArenaTagType.SPIKES)).toBeUndefined();
   }, 20000);
 
@@ -54,9 +52,9 @@ describe("Moves - Tidy Up", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.STEALTH_ROCK);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
     expect(game.scene.arena.getTag(ArenaTagType.STEALTH_ROCK)).toBeUndefined();
   }, 20000);
 
@@ -66,9 +64,9 @@ describe("Moves - Tidy Up", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.TOXIC_SPIKES);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
     expect(game.scene.arena.getTag(ArenaTagType.TOXIC_SPIKES)).toBeUndefined();
   }, 20000);
 
@@ -79,9 +77,9 @@ describe("Moves - Tidy Up", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.STICKY_WEB);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
     expect(game.scene.arena.getTag(ArenaTagType.STICKY_WEB)).toBeUndefined();
   }, 20000);
 
@@ -92,9 +90,9 @@ describe("Moves - Tidy Up", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.SUBSTITUTE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to("MoveEndPhase");
 
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
     pokemon.forEach((p) => {
@@ -112,7 +110,7 @@ describe("Moves - Tidy Up", () => {
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
 
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(1);

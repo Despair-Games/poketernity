@@ -2,7 +2,6 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
@@ -84,9 +83,9 @@ export async function runMysteryEncounterToEnd(
       uiHandler.processInput(Button.ACTION);
     });
 
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
   } else {
-    await game.phaseInterceptor.to(MysteryEncounterRewardsPhase);
+    await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
   }
 }
 
@@ -107,7 +106,7 @@ export async function runSelectMysteryEncounterOption(
   );
 
   if (game.isCurrentPhase(MessagePhase)) {
-    await game.phaseInterceptor.run(MessagePhase);
+    await game.phaseInterceptor.to("MessagePhase");
   }
 
   // dispose of intro messages
@@ -121,7 +120,7 @@ export async function runSelectMysteryEncounterOption(
     () => game.isCurrentPhase(MysteryEncounterOptionSelectedPhase),
   );
 
-  await game.phaseInterceptor.to(MysteryEncounterPhase, true);
+  await game.phaseInterceptor.to("MysteryEncounterPhase", true);
 
   // select the desired option
   const uiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
@@ -202,5 +201,5 @@ export async function skipBattleRunMysteryEncounterRewardsPhase(game: GameManage
   game.scene.phaseManager.pushPhase(new PostKnockoutPhase(0));
   game.phaseInterceptor.superEndPhase();
   game.setMode(UiMode.MESSAGE);
-  await game.phaseInterceptor.to(MysteryEncounterRewardsPhase, runRewardsPhase);
+  await game.phaseInterceptor.to("MysteryEncounterRewardsPhase", runRewardsPhase);
 }

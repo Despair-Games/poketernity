@@ -119,6 +119,7 @@ import { PostSummonUnnamedMessageAbAttr } from "#app/data/abilities/ab-attrs/pos
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-change-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-suppressed-form-change-ab-attr";
+import { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-clear-weather-terrain-ab-attr";
 import { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-turn-form-change-ab-attr";
@@ -1658,7 +1659,7 @@ export function initAbilities() {
     new Ability(AbilityId.TERAFORM_ZERO, 9)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .unimplemented(),
+      .attr(PostTeraFormChangeClearWeatherTerrainAbAttr),
     new Ability(AbilityId.POISON_PUPPETEER, 9)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)

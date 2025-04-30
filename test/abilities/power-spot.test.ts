@@ -1,7 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -42,7 +40,7 @@ describe("Abilities - Power Spot", () => {
     await game.startBattle([SpeciesId.REGIELEKI, SpeciesId.STONJOURNER]);
     game.move.select(MoveId.DAZZLING_GLEAM);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower * powerSpotMultiplier);
   });
@@ -56,7 +54,7 @@ describe("Abilities - Power Spot", () => {
     await game.startBattle([SpeciesId.REGIELEKI, SpeciesId.STONJOURNER]);
     game.move.select(MoveId.BREAKING_SWIPE);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower * powerSpotMultiplier);
   });
@@ -70,7 +68,7 @@ describe("Abilities - Power Spot", () => {
     await game.startBattle([SpeciesId.STONJOURNER, SpeciesId.REGIELEKI]);
     game.move.select(MoveId.BREAKING_SWIPE);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower);
   });

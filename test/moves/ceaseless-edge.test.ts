@@ -1,15 +1,13 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/data-lists";
+import { toDmgValue } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { toDmgValue } from "#app/utils/common-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 describe("Moves - Ceaseless Edge", () => {
@@ -48,12 +46,12 @@ describe("Moves - Ceaseless Edge", () => {
 
     game.move.select(MoveId.CEASELESS_EDGE);
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
     // Spikes should not have any layers before move effect is applied
     const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(tagBefore instanceof EntryHazardTag).toBeFalsy();
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
     const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(tagAfter instanceof EntryHazardTag).toBeTruthy();
     expect(tagAfter.layers).toBe(1);
@@ -66,7 +64,7 @@ describe("Moves - Ceaseless Edge", () => {
     await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
 
     game.move.select(MoveId.CEASELESS_EDGE);
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
     // Spikes should not have any layers before move effect is applied
     const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(tagBefore instanceof EntryHazardTag).toBeFalsy();
@@ -78,7 +76,7 @@ describe("Moves - Ceaseless Edge", () => {
 
     game.forceEnemyToSwitch();
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase, false);
+    await game.phaseInterceptor.to("TurnEndPhase", false);
 
     const switchedInPokemon = game.field.getEnemyPokemon();
     expect(switchedInPokemon.getInverseHp()).toBe(toDmgValue(switchedInPokemon.getMaxHp() / 6));

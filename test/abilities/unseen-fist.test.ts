@@ -1,12 +1,10 @@
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { BerryPhase } from "#app/phases/berry-phase";
 
 describe("Abilities - Unseen Fist", () => {
   let phaserGame: Phaser.Game;
@@ -60,7 +58,7 @@ describe("Abilities - Unseen Fist", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeUndefined();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
@@ -87,7 +85,7 @@ async function testUnseenFistHitResult(
   const enemyStartingHp = enemyPokemon.hp;
 
   game.move.select(attackMoveId);
-  await game.phaseInterceptor.to(TurnEndPhase, false);
+  await game.phaseInterceptor.to("TurnEndPhase", false);
 
   if (shouldSucceed) {
     expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);

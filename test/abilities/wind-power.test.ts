@@ -1,6 +1,5 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -37,7 +36,7 @@ describe("Abilities - Wind Power", () => {
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
 
     game.move.select(MoveId.PETAL_BLIZZARD);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeDefined();
   });
@@ -52,7 +51,7 @@ describe("Abilities - Wind Power", () => {
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
 
     game.move.select(MoveId.TAILWIND);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeDefined();
   });
@@ -70,7 +69,7 @@ describe("Abilities - Wind Power", () => {
 
     game.move.select(MoveId.TAILWIND);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeDefined();
     expect(magikarp.getTag(BattlerTagType.CHARGED)).toBeUndefined();
@@ -86,7 +85,7 @@ describe("Abilities - Wind Power", () => {
 
     game.move.select(MoveId.SANDSTORM);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
   });

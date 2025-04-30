@@ -5,7 +5,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
@@ -27,7 +27,7 @@ export class MoveHelper extends GameManagerHelper {
    * accuracy to -1, guaranteeing a hit.
    */
   public async forceHit(): Promise<void> {
-    await this.game.phaseInterceptor.to(MoveEffectPhase, false);
+    await this.game.phaseInterceptor.to("MoveEffectPhase", false);
     const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
     vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy").mockReturnValue(-1);
   }
@@ -38,7 +38,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param firstTargetOnly - Whether the move should force miss on the first target only, in the case of multi-target moves.
    */
   public async forceMiss(firstTargetOnly: boolean = false): Promise<void> {
-    await this.game.phaseInterceptor.to(MoveEffectPhase, false);
+    await this.game.phaseInterceptor.to("MoveEffectPhase", false);
     const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
     const accuracy = vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy");
 
@@ -54,8 +54,14 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveId - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
+   * @param useTera - If `true`, the Pokemon also chooses to Terastallize. This does not require a Tera Orb. Default: `false`.
    */
-  public select(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+  public select(
+    moveId: MoveId,
+    pkmIndex: 0 | 1 = 0,
+    targetIndex?: BattlerIndex | null,
+    useTera: boolean = false,
+  ): void {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, moveId);
 
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
@@ -66,7 +72,7 @@ export class MoveHelper extends GameManagerHelper {
     });
     this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       (this.game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
-        BattleCommand.FIGHT,
+        useTera ? BattleCommand.TERA : BattleCommand.FIGHT,
         movePosition,
         false,
       );
@@ -88,8 +94,9 @@ export class MoveHelper extends GameManagerHelper {
    * @param moveId - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
+   * @param useTera - If `true`, the Pokemon also chooses to Terastallize. This does not require a Tera Orb. Default: `false`.
    */
-  public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+  public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null, useTera: boolean = false): void {
     const movesetOverride = Array.isArray(Overrides.MOVESET_OVERRIDE)
       ? Overrides.MOVESET_OVERRIDE
       : [Overrides.MOVESET_OVERRIDE];
@@ -101,7 +108,7 @@ export class MoveHelper extends GameManagerHelper {
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
     pokemon.moveset = [new PokemonMove(moveId)];
 
-    this.select(moveId, pkmIndex, targetIndex);
+    this.select(moveId, pkmIndex, targetIndex, useTera);
   }
 
   /**

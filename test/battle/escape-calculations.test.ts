@@ -1,4 +1,4 @@
-import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
+import type { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { NumberHolder } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -43,7 +43,7 @@ describe("Escape chance calculations", () => {
     const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
 
-    await game.phaseInterceptor.to(AttemptRunPhase, false);
+    await game.phaseInterceptor.to("AttemptRunPhase", false);
     const phase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
     const escapePercentage = new NumberHolder(0);
 
@@ -112,7 +112,7 @@ describe("Escape chance calculations", () => {
     const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
 
-    await game.phaseInterceptor.to(AttemptRunPhase, false);
+    await game.phaseInterceptor.to("AttemptRunPhase", false);
     const phase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
     const escapePercentage = new NumberHolder(0);
 
@@ -187,7 +187,7 @@ describe("Escape chance calculations", () => {
     const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
 
-    await game.phaseInterceptor.to(AttemptRunPhase, false);
+    await game.phaseInterceptor.to("AttemptRunPhase", false);
     const phase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
     const escapePercentage = new NumberHolder(0);
 
@@ -270,7 +270,7 @@ describe("Escape chance calculations", () => {
     const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
 
-    await game.phaseInterceptor.to(AttemptRunPhase, false);
+    await game.phaseInterceptor.to("AttemptRunPhase", false);
     const phase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
     const escapePercentage = new NumberHolder(0);
 

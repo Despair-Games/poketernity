@@ -1,9 +1,8 @@
-import { Stat } from "#enums/stat";
-import { BattlerIndex } from "#enums/battler-index";
 import { AbilityId } from "#enums/ability-id";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
@@ -46,7 +45,7 @@ describe("Moves - Follow Me", () => {
     await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
     await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
-    await game.phaseInterceptor.to(TurnEndPhase, false);
+    await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(playerPokemon[0].hp).toBeLessThan(playerPokemon[0].getMaxHp());
     expect(playerPokemon[1].hp).toBe(playerPokemon[1].getMaxHp());
@@ -64,7 +63,7 @@ describe("Moves - Follow Me", () => {
     await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
     await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
-    await game.phaseInterceptor.to(TurnEndPhase, false);
+    await game.phaseInterceptor.to("TurnEndPhase", false);
 
     playerPokemon.sort((a, b) => a.getEffectiveStat(Stat.SPD) - b.getEffectiveStat(Stat.SPD));
 
@@ -87,7 +86,7 @@ describe("Moves - Follow Me", () => {
     await game.move.selectEnemyMove(MoveId.FOLLOW_ME);
     await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase, false);
+    await game.phaseInterceptor.to("TurnEndPhase", false);
 
     // If redirection was bypassed, both enemies should be damaged
     expect(enemyPokemon[0].hp).toBeLessThan(enemyPokemon[0].getMaxHp());
@@ -107,7 +106,7 @@ describe("Moves - Follow Me", () => {
     await game.move.selectEnemyMove(MoveId.FOLLOW_ME);
     await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase, false);
+    await game.phaseInterceptor.to("TurnEndPhase", false);
 
     // If redirection was bypassed, both enemies should be damaged
     expect(enemyPokemon[0].hp).toBeLessThan(enemyPokemon[0].getMaxHp());
