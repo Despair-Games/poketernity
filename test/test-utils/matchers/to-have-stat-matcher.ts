@@ -1,4 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { Stat, type PermanentStat } from "#enums/stat";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
@@ -37,11 +38,14 @@ export function toHaveStatMatcher(
   const actualValue = pokemon.getStat(stat, bypassSummonData);
   const pass = actualValue === expectedValue;
 
+  const pkmName = getPokemonNameWithAffix(pokemon);
+  const statName = Stat[stat];
+
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${pokemon.name} to NOT have ${Stat[stat]}=${expectedValue}, but it did.`
-        : `Expected ${pokemon.name} to have ${Stat[stat]}=${expectedValue}, but got ${actualValue}.`,
+        ? `Expected ${pkmName} to NOT have ${statName}=${expectedValue}, but it did.`
+        : `Expected ${pkmName} to have ${statName}=${expectedValue}, but got ${actualValue}.`,
   };
 }

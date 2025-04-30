@@ -1,3 +1,4 @@
+import { getPokemonNameWithAffix } from "#app/messages";
 import { Stat, type BattleStat } from "#enums/stat";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
@@ -24,13 +25,15 @@ export function toHaveStatStageMatcher(
 
   const actualStage = received.getStatStage(stat);
   const pass = actualStage === expectedStage;
-  const statStr = Stat[stat];
+
+  const pkmName = getPokemonNameWithAffix(received);
+  const statName = Stat[stat];
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} ${statStr} stage to NOT be ${expectedStage}, but it is!`
-        : `Expected ${received.name} ${statStr} stage to be ${expectedStage}, but got ${actualStage}.`,
+        ? `Expected ${pkmName} ${statName} stage to NOT be ${expectedStage}, but it is!`
+        : `Expected ${pkmName} ${statName} stage to be ${expectedStage}, but got ${actualStage}.`,
   };
 }

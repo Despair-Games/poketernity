@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { capitalizeString } from "#app/utils/string-utils";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
@@ -28,14 +28,15 @@ export function toHaveBattlerTagTypeMatcher(
   }
 
   const pass = received.hasTag(expectedBattlerTagType);
-  const battlerTagName = BattlerTagType[expectedBattlerTagType];
-  const battlerTagStr = capitalizeString(battlerTagName, "_", false, true);
+
+  const pkmName = getPokemonNameWithAffix(received);
+  const expectedTagStr = `${BattlerTagType[expectedBattlerTagType]} (=${expectedBattlerTagType})`;
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} to NOT have ${battlerTagStr}, but it did!`
-        : `Expected ${received.name} to have ${battlerTagStr}, but it did not.`,
+        ? `Expected ${pkmName} to NOT have battler-tag ${expectedTagStr}, but it did!`
+        : `Expected ${pkmName} to have battler-tag ${expectedTagStr}, but it did not.`,
   };
 }

@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { capitalizeString } from "#app/utils/string-utils";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityId } from "#enums/ability-id";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
@@ -28,14 +28,15 @@ export function toHaveAbilityAppliedMatcher(
   }
 
   const pass = received.summonData.abilitiesApplied.includes(expectedAbilityId);
-  const abilityName = AbilityId[expectedAbilityId];
-  const abilityStr = capitalizeString(abilityName, "_", false, true);
+
+  const pkmName = getPokemonNameWithAffix(received);
+  const expectedAbilityStr = `${AbilityId[expectedAbilityId]} (=${expectedAbilityId})`;
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} to NOT have ${abilityStr} applied, but it did!`
-        : `Expected ${received.name} to have ${abilityStr} applied, but it did not.`,
+        ? `Expected ${pkmName} to NOT have ${expectedAbilityStr} ability applied, but it did!`
+        : `Expected ${pkmName} to have ${expectedAbilityStr} ability applied, but it did not.`,
   };
 }
