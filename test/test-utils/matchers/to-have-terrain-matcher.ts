@@ -2,6 +2,7 @@ import { capitalizeString } from "#app/utils/string-utils";
 import { TerrainType } from "#enums/terrain-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
 import { isNullOrUndefined } from "#app/utils/common-utils";
+import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
  * Matcher to check if the {@linkcode TerrainType} is as expected
@@ -9,17 +10,21 @@ import { isNullOrUndefined } from "#app/utils/common-utils";
  * @param expectedTerrainType - The expected {@linkcode TerrainType}
  * @returns Whether the matcher passed
  */
-export function toHaveTerrainMatcher(received: unknown, expectedTerrainType: TerrainType) {
+export function toHaveTerrainMatcher(
+  this: MatcherState,
+  received: unknown,
+  expectedTerrainType: TerrainType,
+): SyncExpectationResult {
   if (!isGameManagerInstance(received)) {
     return {
-      pass: false,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      pass: this.isNot,
+      message: () => `Expected GameManager, but got ${receivedStr(received)}!`,
     };
   }
 
   if (!received.scene?.arena) {
     return {
-      pass: false,
+      pass: this.isNot,
       message: () => `Expected GameManager.${received.scene ? "scene" : "scene.arena"} to be defined!`,
     };
   }
