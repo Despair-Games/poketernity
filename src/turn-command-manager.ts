@@ -35,7 +35,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
-import { isNullOrUndefined } from "util";
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.
