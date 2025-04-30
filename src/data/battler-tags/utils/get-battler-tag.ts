@@ -64,7 +64,7 @@ import { RollingTag } from "#app/data/battler-tags/rolling-tag";
 import { RoostedTag } from "#app/data/battler-tags/roosted-tag";
 import { SaltCuredTag } from "#app/data/battler-tags/salt-cured-tag";
 import { SandTombTag } from "#app/data/battler-tags/sand-tomb-tag";
-import { SeededTag } from "#app/data/battler-tags/seed-tag";
+import { SeededTag } from "#app/data/battler-tags/seeded-tag";
 import { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerable-tag";
 import { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
 import { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
