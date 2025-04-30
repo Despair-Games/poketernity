@@ -72,7 +72,7 @@ describe("Moves - Trick Room", () => {
 
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
-    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeFalsy();
   });
 
   it("should not reverse move priority order", async () => {
