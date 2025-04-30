@@ -13,7 +13,7 @@ import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TerastallizationPhase } from "#app/phases/terastallization-phase";
-import { BooleanHolder, isNullOrUndefined } from "#app/utils/common-utils";
+import { BooleanHolder, isNil } from "#app/utils/common-utils";
 import { randSeedShuffle } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -388,7 +388,7 @@ export class TurnCommandManager {
   private handleBallCommand(turnCommand: TurnCommand): boolean {
     const { cursor, targets } = turnCommand;
 
-    if (isNullOrUndefined(cursor) || isNullOrUndefined(targets)) {
+    if (isNil(cursor) || isNil(targets)) {
       console.error("Error encountered when trying to throw Pokeball!");
       console.error(turnCommand);
       return false;
@@ -400,7 +400,7 @@ export class TurnCommandManager {
 
   private handlePokemonCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor } = turnCommand;
-    if (isNullOrUndefined(cursor)) {
+    if (isNil(cursor)) {
       console.error("Error encountered when trying to switch Pokemon!");
       console.error(turnCommand);
       return false;

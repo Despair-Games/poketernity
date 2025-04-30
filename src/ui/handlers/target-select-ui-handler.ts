@@ -2,7 +2,7 @@ import { getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ModifierBar } from "#app/modifier/modifier";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -70,7 +70,7 @@ export class TargetSelectUiHandler extends UiHandler {
    * @param user the Pokemon using the move
    */
   resetCursor(cursorN: number, user: Pokemon): void {
-    if (!isNullOrUndefined(cursorN)) {
+    if (!isNil(cursorN)) {
       if ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.battleSummonData.waveTurnCount === 1) {
         // Reset cursor on the first turn of a fight or if an ally was targeted last turn
         cursorN = -1;
@@ -89,11 +89,11 @@ export class TargetSelectUiHandler extends UiHandler {
       this.targetSelectCallback(button === Button.ACTION ? targetIndexes : []);
       success = true;
       if (this.fieldIndex === BattlerIndex.PLAYER) {
-        if (isNullOrUndefined(this.cursor0) || this.cursor0 !== this.cursor) {
+        if (isNil(this.cursor0) || this.cursor0 !== this.cursor) {
           this.cursor0 = this.cursor;
         }
       } else if (this.fieldIndex === BattlerIndex.PLAYER_2) {
-        if (isNullOrUndefined(this.cursor1) || this.cursor1 !== this.cursor) {
+        if (isNil(this.cursor1) || this.cursor1 !== this.cursor) {
           this.cursor1 = this.cursor;
         }
       }
@@ -133,9 +133,7 @@ export class TargetSelectUiHandler extends UiHandler {
 
   /** @returns all valid target {@linkcode Pokemon} for the current target selection */
   protected getTargetsByIndex(): Pokemon[] {
-    return this.targets
-      .map((index) => globalScene.getFieldPokemonByBattlerIndex(index))
-      .filter((p) => !isNullOrUndefined(p));
+    return this.targets.map((index) => globalScene.getFieldPokemonByBattlerIndex(index)).filter((p) => !isNil(p));
   }
 
   /** @returns the {@linkcode Pokemon} to highlight based on the move's targeting */

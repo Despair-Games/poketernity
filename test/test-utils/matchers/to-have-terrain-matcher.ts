@@ -1,7 +1,7 @@
+import { isNil } from "#app/utils/common-utils";
 import { capitalizeString } from "#app/utils/string-utils";
 import { TerrainType } from "#enums/terrain-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
@@ -50,7 +50,7 @@ export function toHaveTerrainMatcher(
  * @returns A human readable string
  */
 function toTerrainStr(terrainType?: TerrainType) {
-  if (isNullOrUndefined(terrainType)) {
+  if (isNil(terrainType)) {
     return "undefined";
   } else {
     return capitalizeString(TerrainType[terrainType], "_", false, true);

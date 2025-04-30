@@ -1,6 +1,6 @@
+import { isNil } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import type { Nature } from "#enums/nature";
 
 /**
@@ -15,7 +15,7 @@ export class CustomPokemonData {
   public types: ElementalType[];
 
   constructor(data?: CustomPokemonData | Partial<CustomPokemonData>) {
-    if (!isNullOrUndefined(data)) {
+    if (!isNil(data)) {
       Object.assign(this, data);
     }
 

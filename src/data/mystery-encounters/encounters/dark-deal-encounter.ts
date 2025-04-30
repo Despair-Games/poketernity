@@ -15,7 +15,7 @@ import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import { Challenges } from "#enums/challenges";
@@ -136,7 +136,7 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
             };
           }),
         };
-        if (!isNullOrUndefined(bossSpecies.forms) && bossSpecies.forms.length > 0) {
+        if (!isNil(bossSpecies.forms) && bossSpecies.forms.length > 0) {
           pokemonConfig.formIndex = 0;
         }
         const config: EnemyPartyConfig = {

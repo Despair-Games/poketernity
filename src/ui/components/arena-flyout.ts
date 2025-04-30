@@ -1,23 +1,23 @@
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { globalScene } from "#app/global-scene";
 import { EntryHazardTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { WeatherType } from "#enums/weather-type";
-import { TerrainType } from "#enums/terrain-type";
-import { addWindow } from "../ui-theme";
-import { WindowVariant } from "#enums/window-variant";
 import type { ArenaEvent } from "#app/events/arena";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import { ArenaEventType } from "#enums/arena-event-type";
-import type { TurnEndEvent } from "../../events/battle-scene";
-import { BattleSceneEventType } from "#enums/battle-scene-event-type";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { TimeOfDayWidget } from "./time-of-day-widget";
-import { fixedNumber, isNullOrUndefined } from "#app/utils/common-utils";
+import { globalScene } from "#app/global-scene";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { toCamelCaseString, toTitleCase } from "#app/utils/string-utils";
+import { ArenaEventType } from "#enums/arena-event-type";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
+import { TerrainType } from "#enums/terrain-type";
+import { TextStyle } from "#enums/text-style";
+import { WeatherType } from "#enums/weather-type";
+import { WindowVariant } from "#enums/window-variant";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
+import type { TurnEndEvent } from "../../events/battle-scene";
+import { addWindow } from "../ui-theme";
+import { TimeOfDayWidget } from "./time-of-day-widget";
 
 /** Enum used to differentiate {@linkcode Arena} effects */
 enum ArenaEffectType {
@@ -360,7 +360,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
    * @param oldName - The name of the previous weather or terrain
    */
   private insertFieldEffectInfo(newInfo: ArenaEffectInfo, oldName: string): void {
-    if (isNullOrUndefined(newInfo.name)) {
+    if (isNil(newInfo.name)) {
       return;
     }
     const foundIndex = this.fieldEffectInfo.findIndex((info) => [newInfo.name, oldName].includes(info.name));

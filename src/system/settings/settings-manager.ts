@@ -1,8 +1,8 @@
-import type { UserFacingSettings, SettingsCategory, Settings } from "#app/@types/Settings";
+import type { Settings, SettingsCategory, UserFacingSettings } from "#app/@types/Settings";
 import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app";
 import { eventBus } from "#app/event-bus";
+import { isNil } from "#app/utils/common-utils";
 import { version } from "../../../package.json";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import { defaultSettings } from "./default-settings";
 
 //#region Types
@@ -120,7 +120,7 @@ class SettingsManager {
       throw new Error(`Unknown category: ${category}`);
     }
 
-    if (isNullOrUndefined(this._settings[category][key])) {
+    if (isNil(this._settings[category][key])) {
       eventBus.emit("settings/update/failed", { category, key, value });
       throw new Error(`Unknown key: ${category}.${String(key)}`);
     }

@@ -15,7 +15,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils/common-utils";
+import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -884,7 +884,7 @@ export class DelayedAttackTag extends ArenaTag {
     this.delayedAttacks.forEach((attack) => {
       attack.turnCount--;
 
-      if (!isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
+      if (!isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
           globalScene.phaseManager.unshiftPhase(
@@ -900,7 +900,7 @@ export class DelayedAttackTag extends ArenaTag {
     });
 
     this.delayedAttacks = this.delayedAttacks.filter(
-      (attack) => !isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
+      (attack) => !isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
     );
     return this.delayedAttacks.length > 0;
   }
@@ -1014,7 +1014,7 @@ export class PendingHealTag extends ArenaTag {
       targetEffects.splice(targetEffects.indexOf(healEffect), 1);
     }
 
-    return !isNullOrUndefined(healEffect);
+    return !isNil(healEffect);
   }
 
   /**

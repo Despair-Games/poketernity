@@ -28,8 +28,8 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { hslToHex } from "#app/utils/color-utils";
+import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -2117,10 +2117,7 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
    * @returns `true` if the {@linkcode PokemonHpRestoreModifier} should be applied
    */
   override shouldApply(playerPokemon?: PlayerPokemon, multiplier?: number): boolean {
-    return (
-      super.shouldApply(playerPokemon)
-      && (this.fainted || (!isNullOrUndefined(multiplier) && typeof multiplier === "number"))
-    );
+    return super.shouldApply(playerPokemon) && (this.fainted || (!isNil(multiplier) && typeof multiplier === "number"));
   }
 
   /**

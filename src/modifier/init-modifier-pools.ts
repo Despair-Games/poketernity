@@ -16,7 +16,7 @@ import {
 } from "#app/modifier/modifier-pools";
 import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { isNullOrUndefined } from "#app/utils/common-utils";
+import { isNil } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -312,7 +312,7 @@ export function initModifierPools() {
         return party.some((p) => {
           const moveset = p
             .getMoveset(true)
-            .filter((m) => !isNullOrUndefined(m))
+            .filter((m) => !isNil(m))
             .map((m) => m.moveId);
 
           const canSetStatus = p.canSetStatus(StatusEffect.TOXIC, true, true, null, true);
@@ -355,7 +355,7 @@ export function initModifierPools() {
         return party.some((p) => {
           const moveset = p
             .getMoveset(true)
-            .filter((m) => !isNullOrUndefined(m))
+            .filter((m) => !isNil(m))
             .map((m) => m.moveId);
           const canSetStatus = p.canSetStatus(StatusEffect.BURN, true, true, null, true);
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");

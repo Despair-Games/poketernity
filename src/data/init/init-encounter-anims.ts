@@ -1,7 +1,7 @@
 import { AnimConfig } from "#app/data/animations/anim-config";
-import { encounterAnims } from "../animations/encounter-anims";
+import { encounterAnims } from "#app/data/animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { getEnumKeys, isNullOrUndefined } from "#app/utils/common-utils";
+import { getEnumKeys, isNil } from "#app/utils/common-utils";
 import { EncounterAnim } from "#enums/encounter-anims";
 
 /**
@@ -13,7 +13,7 @@ export async function initEncounterAnims(encounterAnim: EncounterAnim | Encounte
   const encounterAnimNames = getEnumKeys(EncounterAnim);
   const encounterAnimFetches: Promise<Map<EncounterAnim, AnimConfig>>[] = [];
   for (const anim of anims) {
-    if (encounterAnims.has(anim) && !isNullOrUndefined(encounterAnims.get(anim))) {
+    if (encounterAnims.has(anim) && !isNil(encounterAnims.get(anim))) {
       continue;
     }
     encounterAnimFetches.push(

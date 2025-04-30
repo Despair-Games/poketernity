@@ -14,8 +14,8 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import { isNullOrUndefined } from "#app/utils/common-utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -292,7 +292,7 @@ export class CommandPhase extends FieldPhase {
           } else if (cursor < Object.keys(globalScene.pokeballCounts).length) {
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
 
-            if (isNullOrUndefined(targetPokemon)) {
+            if (isNil(targetPokemon)) {
               console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
               failCatchRun("battle:noPokeballForce");
             } else if (
