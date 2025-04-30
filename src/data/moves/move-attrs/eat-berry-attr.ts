@@ -6,7 +6,7 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
-import { BooleanHolder } from "#app/utils";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

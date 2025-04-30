@@ -80,6 +80,9 @@ export class FieldHelper extends GameManagerHelper {
 
   /**
    * Forces a pokemon to be terastallized. Defaults to the pokemon's primary type if not specified.
+   *
+   * This function only mocks the Pokemon's tera-related variables; it does NOT activate any tera-related abilities.
+   *
    * @param pokemon - The pokemon to terastallize.
    * @param teraType - (optional) The {@linkcode ElementalType} to terastallize it as.
    */

@@ -8,15 +8,15 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#app/system/settings/settings-keyboard";
-import { SettingKeyboard } from "#enums/setting-keyboard";
 import { AbstractControlSettingsUiHandler } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { reverseValueToKeySetting, truncateString } from "#app/utils";
+import { reverseValueToKeySetting, truncateString } from "#app/utils/string-utils";
 import { Device } from "#enums/devices";
-import i18next from "i18next";
+import { SettingKeyboard } from "#enums/setting-keyboard";
+import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /**
  * Class representing the settings UI handler for keyboards.

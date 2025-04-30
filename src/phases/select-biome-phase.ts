@@ -7,7 +7,7 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { SwitchBiomePhase } from "#app/phases/switch-biome-phase";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";

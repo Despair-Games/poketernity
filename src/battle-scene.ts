@@ -122,26 +122,21 @@ import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container"
 import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
+import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import {
   type AbstractConstructor,
   BooleanHolder,
   fixedNumber,
-  formatMoney,
   getEnumValues,
-  getIvsFromId,
-  isNullOrUndefined,
+  isNil,
   NumberHolder,
-  randItem,
-  randomString,
-  randSeedInt,
-  randSeedItem,
-  shiftCharCodes,
-} from "#app/utils";
-import { loadCommonAnimAssets } from "#app/utils/anim-utils";
+} from "#app/utils/common-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randItem, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { formatMoney, shiftCharCodes } from "#app/utils/string-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
@@ -1218,7 +1213,7 @@ export default class BattleScene extends SceneBase {
 
     const playerField = this.getPlayerField();
 
-    if (this.gameMode.isFixedBattle(newWaveIndex) && isNullOrUndefined(trainerData)) {
+    if (this.gameMode.isFixedBattle(newWaveIndex) && isNil(trainerData)) {
       battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
@@ -1258,7 +1253,7 @@ export default class BattleScene extends SceneBase {
           : randSeedInt(2)
             ? TrainerVariant.FEMALE
             : TrainerVariant.DEFAULT;
-        newTrainer = !isNullOrUndefined(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
+        newTrainer = !isNil(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
         this.field.add(newTrainer);
       }
 
@@ -1286,7 +1281,7 @@ export default class BattleScene extends SceneBase {
       newDouble = false;
     }
 
-    if (!isNullOrUndefined(Overrides.BATTLE_TYPE_OVERRIDE)) {
+    if (!isNil(Overrides.BATTLE_TYPE_OVERRIDE)) {
       let doubleOverrideForWave: "single" | "double" | null = null;
 
       switch (Overrides.BATTLE_TYPE_OVERRIDE) {
@@ -2099,7 +2094,7 @@ export default class BattleScene extends SceneBase {
             } else {
               args.push(1);
             }
-          } else if (modifier instanceof RememberMoveModifier && !isNullOrUndefined(cost)) {
+          } else if (modifier instanceof RememberMoveModifier && !isNil(cost)) {
             args.push(cost);
           }
 
@@ -2917,7 +2912,7 @@ export default class BattleScene extends SceneBase {
         sessionEncounterRate
         + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_MAX_SPAWN_WEIGHT / 2);
 
-      const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
+      const successRate = isNil(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
         : Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
 
@@ -2925,7 +2920,7 @@ export default class BattleScene extends SceneBase {
       const canSpawn =
         encounteredEvents.length === 0
         || waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3
-        || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
+        || !isNil(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
         let roll = ME_MAX_SPAWN_WEIGHT;
@@ -2953,7 +2948,7 @@ export default class BattleScene extends SceneBase {
     // Loading override or session encounter
     let encounter: MysteryEncounter | null;
     if (
-      !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      !isNil(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
       && allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
       encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
@@ -2964,7 +2959,7 @@ export default class BattleScene extends SceneBase {
       encounter = allMysteryEncounters[encounterType ?? -1];
       return encounter;
     } else {
-      encounter = !isNullOrUndefined(encounterType) ? allMysteryEncounters[encounterType] : null;
+      encounter = !isNil(encounterType) ? allMysteryEncounters[encounterType] : null;
     }
 
     // Check for queued encounters first
@@ -3022,7 +3017,7 @@ export default class BattleScene extends SceneBase {
             ? MysteryEncounterTier.ULTRA
             : MysteryEncounterTier.EPIC;
 
-    if (!isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
+    if (!isNil(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
       tier = Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
     }
 

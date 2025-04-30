@@ -1,6 +1,6 @@
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";

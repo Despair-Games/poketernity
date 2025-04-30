@@ -15,7 +15,7 @@ import {
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";

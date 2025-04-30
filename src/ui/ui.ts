@@ -50,7 +50,7 @@ import { SettingsKeyboardUiHandler } from "#app/ui/settings/settings-keyboard-ui
 import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { executeIf } from "#app/utils";
+import { executeIf } from "#app/utils/common-utils";
 import type { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
 import { PlayerGender } from "#enums/player-gender";

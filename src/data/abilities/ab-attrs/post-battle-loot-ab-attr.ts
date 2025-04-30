@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { randSeedItem } from "#app/utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import i18next from "i18next";
 import { PostBattleAbAttr } from "./post-battle-ab-attr";
 

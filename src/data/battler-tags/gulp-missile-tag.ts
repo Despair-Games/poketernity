@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
 import { GulpMissileBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";

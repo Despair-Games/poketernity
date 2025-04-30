@@ -1,7 +1,6 @@
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -55,7 +54,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -76,7 +75,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -97,7 +96,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -116,7 +115,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -141,7 +140,7 @@ describe("Abilities - Magic Guard", () => {
     const toxicStartCounter = enemyPokemon.status!.toxicTurnCount;
     //should be 0
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -165,7 +164,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -187,7 +186,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -212,7 +211,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -234,7 +233,7 @@ describe("Abilities - Magic Guard", () => {
     game.move.select(MoveId.HIGH_JUMP_KICK);
     await game.move.forceMiss();
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -251,7 +250,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.TAKE_DOWN);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -268,7 +267,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.STRUGGLE);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -286,7 +285,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.STEEL_BEAM);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -301,7 +300,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.CHARM);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
   });
 */
 
@@ -313,7 +312,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.BELLY_DRUM);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -335,7 +334,7 @@ describe("Abilities - Magic Guard", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -359,7 +358,7 @@ describe("Abilities - Magic Guard", () => {
     enemyPokemon.hp = 1;
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -382,7 +381,7 @@ describe("Abilities - Magic Guard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -405,7 +404,7 @@ describe("Abilities - Magic Guard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.ABSORB);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:
@@ -424,7 +423,7 @@ describe("Abilities - Magic Guard", () => {
     await game.startBattle([SpeciesId.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     /**
      * Expect:

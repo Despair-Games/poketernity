@@ -8,6 +8,7 @@ import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
 import type { EffectiveStat, PermanentStat } from "#enums/stat";
 import type { StatusEffect } from "#enums/status-effect";
+import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
 import type { ToHaveEffectiveStatMatcherOptions } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
 import type { ToHaveMoveResultMatcherOptions } from "#test/test-utils/matchers/to-have-move-result-matcher";
@@ -80,6 +81,12 @@ declare module "vitest" {
      * @param expectedWeatherType - The expected {@linkcode WeatherType}
      */
     toHaveWeather(expectedWeatherType: WeatherType): void;
+
+    /**
+     * Matcher to check if the {@linkcode TerrainType} is as expected
+     * @param expectedTerrainType - The expected {@linkcode TerrainType}
+     */
+    toHaveTerrain(expectedTerrainType: TerrainType): void;
 
     /**
      * Matcher to check if a {@linkcode Pokemon} has full HP

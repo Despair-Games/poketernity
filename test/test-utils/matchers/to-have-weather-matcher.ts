@@ -1,4 +1,5 @@
-import { capitalizeString } from "#app/utils";
+import { isNil } from "#app/utils/common-utils";
+import { capitalizeString } from "#app/utils/string-utils";
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
@@ -49,7 +50,7 @@ export function toHaveWeatherMatcher(
  * @returns A human readable string
  */
 function toWeatherStr(weatherType?: WeatherType) {
-  if (!weatherType) {
+  if (isNil(weatherType)) {
     return "undefined";
   } else {
     return capitalizeString(WeatherType[weatherType], "_", false, true);

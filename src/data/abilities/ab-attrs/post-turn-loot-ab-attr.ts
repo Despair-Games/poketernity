@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryModifierType } from "#app/modifier/modifier-type";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 

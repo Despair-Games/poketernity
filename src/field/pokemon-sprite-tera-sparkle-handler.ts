@@ -1,6 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { fixedNumber, randInt } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
+import { randInt } from "#app/utils/random-utils";
 
 export default class PokemonSpriteTeraSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;

@@ -2,7 +2,7 @@ import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 

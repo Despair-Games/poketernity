@@ -2,7 +2,7 @@ import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";

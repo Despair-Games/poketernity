@@ -1,12 +1,12 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { SpeciesId } from "#enums/species-id";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS } from "#enums/stat";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 
 describe("Boss Pokemon / Shields", () => {
   let phaserGame: Phaser.Game;

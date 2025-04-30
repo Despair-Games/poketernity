@@ -39,7 +39,7 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { randSeedInt, randSeedItem } from "#app/utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";

@@ -5,7 +5,7 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PhaseId } from "#enums/phase-id";

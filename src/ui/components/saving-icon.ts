@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
 
 export class SavingIcon extends Phaser.GameObjects.Container {

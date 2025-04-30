@@ -3,7 +3,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import type { BattleStat } from "#enums/stat";
 import { MoveImmunityAbAttr } from "./move-immunity-ab-attr";
 

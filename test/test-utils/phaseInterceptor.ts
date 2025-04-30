@@ -213,8 +213,9 @@ export class PhaseInterceptor {
    * Method to set the starting phase.
    * @param phaseFrom - The phase to start from.
    * @returns The instance of the PhaseInterceptor.
+   * @deprecated Is this necessary any more?
    */
-  runFrom(phaseFrom: PhaseInterceptorPhase): PhaseInterceptor {
+  protected runFrom(phaseFrom: PhaseInterceptorPhase): PhaseInterceptor {
     this.phaseFrom = phaseFrom;
     return this;
   }
@@ -225,7 +226,7 @@ export class PhaseInterceptor {
    * @param runTarget - Whether or not to run the target phase.
    * @returns A promise that resolves when the transition is complete.
    */
-  async to(phaseTo: PhaseInterceptorPhase, runTarget: boolean = true): Promise<void> {
+  public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
     return new Promise(async (resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       if (this.phaseFrom) {
@@ -262,7 +263,7 @@ export class PhaseInterceptor {
    * @param skipFn - Optional skip function.
    * @returns A promise that resolves when the phase is run.
    */
-  async run(phaseTarget: PhaseInterceptorPhase, skipFn?: (className: PhaseClass) => boolean): Promise<void> {
+  protected async run(phaseTarget: PhaseInterceptorPhase, skipFn?: (className: PhaseClass) => boolean): Promise<void> {
     const targetName = this.getPhaseName(phaseTarget);
     await new Promise<void>((resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
@@ -295,7 +296,11 @@ export class PhaseInterceptor {
     });
   }
 
-  whenAboutToRun(phaseTarget: PhaseInterceptorPhase, _skipFn?: (className: PhaseClass) => boolean): Promise<void> {
+  /** @deprecated Use `to("Phase", false)`? */
+  protected whenAboutToRun(
+    phaseTarget: PhaseInterceptorPhase,
+    _skipFn?: (className: PhaseClass) => boolean,
+  ): Promise<void> {
     const targetName = this.getPhaseName(phaseTarget);
     return new Promise(async (resolve, _reject) => {
       ErrorInterceptor.getInstance().add(this);

@@ -3,7 +3,7 @@ import type { WeatherType } from "#enums/weather-type";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
 import type { Move } from "#app/data/moves/move";
 

@@ -2,7 +2,7 @@ import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition"
 import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/ab-attrs/received-move-damage-multiplier-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 

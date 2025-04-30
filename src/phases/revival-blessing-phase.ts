@@ -4,7 +4,7 @@ import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import { PartyFilterFainted } from "#app/utils/party-ui-utils";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";

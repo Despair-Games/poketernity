@@ -1,8 +1,8 @@
-import { speciesEggTiers } from "#app/data/species-egg-tiers";
 import { allSpecies } from "#app/data/data-lists";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
-import * as Utils from "#app/utils";
-import { isNullOrUndefined } from "#app/utils";
+import { speciesEggTiers } from "#app/data/species-egg-tiers";
+import { isNil } from "#app/utils/common-utils";
+import * as RandomUtils from "#app/utils/random-utils";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
@@ -144,7 +144,7 @@ describe("Egg Generation Tests", () => {
   it("should return an egg with an egg move index of 0, 1, 2 or 3", () => {
     const eggMoveIndex = new Egg({ sourceType: EggSourceType.EVENT }).eggMoveIndex;
 
-    const result = !isNullOrUndefined(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
+    const result = !isNil(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
 
     expect(result).toBeTruthy();
   });
@@ -260,7 +260,7 @@ describe("Egg Generation Tests", () => {
   });
 
   it("should increase legendary egg rate when pulling from the legendary gacha", () => {
-    vi.spyOn(Utils, "randInt").mockReturnValue(1);
+    vi.spyOn(RandomUtils, "randInt").mockReturnValue(1);
 
     const expectedTier1 = EggTier.LEGENDARY;
     const expectedTier2 = EggTier.EPIC;

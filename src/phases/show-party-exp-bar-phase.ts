@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { ExpBoosterModifier } from "#app/modifier/modifier";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";

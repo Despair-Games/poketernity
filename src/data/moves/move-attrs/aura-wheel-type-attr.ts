@@ -1,7 +1,7 @@
 import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
 
