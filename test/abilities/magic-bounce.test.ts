@@ -173,7 +173,7 @@ describe("Abilities - Magic Bounce", () => {
     await game.toEndOfTurn();
 
     expect(game.scene.arena.findTag(ArenaTagType.SPIKES, ArenaTagSide.PLAYER)?.["layers"]).toBe(1);
-    expect(game.scene.arena.findTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 
   it("should bounce spikes even when the target is protected", async () => {
@@ -352,18 +352,16 @@ describe("Abilities - Magic Bounce", () => {
     game.move.use(MoveId.TRICK_ROOM, 1);
     await game.toEndOfTurn();
 
-    expect(
-      game.scene.arena.findTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER)?.getSourcePokemon()?.getBattlerIndex(),
-    ).toBe(BattlerIndex.ENEMY);
+    const tag1 = game.scene.arena.findTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER);
+    expect(tag1?.getSourcePokemon()?.getBattlerIndex()).toBe(BattlerIndex.ENEMY);
     game.scene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER, true);
 
     // turn 2
     game.move.use(MoveId.STICKY_WEB, 0);
     game.move.use(MoveId.TRICK_ROOM, 1);
     await game.toEndOfTurn();
-    expect(
-      game.scene.arena.findTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER)?.getSourcePokemon()?.getBattlerIndex(),
-    ).toBe(BattlerIndex.ENEMY);
+    const tag2 = game.scene.arena.findTag(ArenaTagType.STICKY_WEB, ArenaTagSide.PLAYER);
+    expect(tag2?.getSourcePokemon()?.getBattlerIndex()).toBe(BattlerIndex.ENEMY);
   });
 
   it("should not bounce back status moves that hit through semi-invulnerable states", async () => {

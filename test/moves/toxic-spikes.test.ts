@@ -131,9 +131,10 @@ describe("Moves - Toxic Spikes", () => {
 
     await game.reload.reloadSession();
 
-    const arenaTags = game.scene.arena.findTag(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
-    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
-    expect(arenaTags.layers).toBe(1);
+    const arenaTag = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY)!;
+    expect(arenaTag).toBeDefined();
+    expect(arenaTag.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTag.layers).toBe(1);
   });
 
   it("should apply even if the target is fainted", async () => {
@@ -148,8 +149,9 @@ describe("Moves - Toxic Spikes", () => {
     expect(enemyPokemon.isFainted()).toBe(true);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.findTag(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
-    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
-    expect(arenaTags.layers).toBe(1);
+    const arenaTag = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY)!;
+    expect(arenaTag).toBeDefined();
+    expect(arenaTag.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTag.layers).toBe(1);
   });
 });
