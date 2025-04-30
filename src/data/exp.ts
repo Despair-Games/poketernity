@@ -161,7 +161,7 @@ export function getLevelForWaveFunc(wave: number): number {
     return Math.floor(0.9 * wave - 92);
   } else if (wave < 201) {
     // Level cap of 83 * 1.2 = 100 at wave 200
-    return Math.floor(0.4 * wave + 0.3);
+    return Math.floor(0.4 * wave + 3);
   } else {
     // Temporary scaling value for now
     return Math.floor(0.5 * wave);
