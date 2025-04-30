@@ -10,7 +10,7 @@ import { FlinchEffectAbAttr } from "./flinch-effect-ab-attr";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Steadfast_(Ability) Steadfast - Bulbapedia}
  */
 export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
-  /** The {@linkcode BattleStat stats} to change. */
+  /** The {@linkcode BattleStat | stats} to change. */
   private readonly stats: BattleStat[];
 
   /** The number of stages to apply to the {@linkcode stats}. */
