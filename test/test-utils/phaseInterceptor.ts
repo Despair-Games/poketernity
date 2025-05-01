@@ -166,7 +166,6 @@ export class PhaseInterceptor {
   private promptInterval: NodeJS.Timeout;
   private intervalRun: NodeJS.Timeout;
   private prompts: PromptHandler[];
-  private phaseFrom: PhaseInterceptorPhase | null;
   private inProgress?: InProgressStub;
   private originalSetMode: UI["setMode"];
   private originalSuperEnd: Phase["end"];
@@ -218,10 +217,6 @@ export class PhaseInterceptor {
   public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
     return new Promise(async (resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
-      if (this.phaseFrom) {
-        await this.run(this.phaseFrom).catch((e) => reject(e));
-        this.phaseFrom = null;
-      }
       const targetName = this.getPhaseName(phaseTo);
       this.intervalRun = setInterval(async () => {
         const currentPhase = this.onHold?.length && this.onHold[0];
