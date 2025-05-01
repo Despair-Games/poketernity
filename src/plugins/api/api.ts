@@ -98,11 +98,24 @@ export class Api extends ApiBase {
 
   /**
    * Pings the server (via {@linkcode getGameTitleStats}) and updates {@linkcode _isConnected} accordingly.
+   *
+   * *We have no dedicated ping/status endpoint yet, so we ping the game title stats endpoint, but without printing any errors.*
    */
   async ping() {
-    const titleStats = await this.getGameTitleStats();
-    this._isConnected = !!titleStats;
-    console.log("isLocalServerConnected:", this.isConnected);
+    try {
+      const response = await this.doGet("/game/titlestats");
+      const data = await response.json();
+      this._isConnected = !!data;
+    } catch (err) {
+      this._isConnected = false;
+
+      if (import.meta.env.VITE_API_DEBUG === "1") {
+        console.warn("Server ping failed!", err);
+      }
+    }
+    if (import.meta.env.VITE_API_DEBUG === "1") {
+      console.log("isLocalServerConnected:", this.isConnected);
+    }
   }
   //#endregion
 }
