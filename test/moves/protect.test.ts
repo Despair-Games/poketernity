@@ -66,7 +66,7 @@ describe("Moves - Protect", () => {
     await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
-    expect(game.scene.arena.getTagOnSide(EntryHazardTag, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.getTags((t) => t instanceof EntryHazardTag, ArenaTagSide.ENEMY)).toEqual([]);
   });
 
   test("should protect the user from status moves", async () => {

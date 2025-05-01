@@ -366,7 +366,7 @@ export class CommandPhase extends FieldPhase {
           const trapTag =
             pokemon.getTag<TrappedTag>(...TrappedBattlerTagTypes)
             ?? pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
-          const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
+          const fairyLockTag = arena.findTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {
             ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);

@@ -1,8 +1,8 @@
-import { BattlerIndex } from "#enums/battler-index";
 import type { EntryHazardTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
@@ -112,9 +112,10 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
-    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
-    expect(arenaTags.layers).toBe(1);
+    const arenaTag = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY)!;
+    expect(arenaTag).toBeDefined();
+    expect(arenaTag.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTag.layers).toBe(1);
   });
 
   it("should persist through reload", async () => {
@@ -130,9 +131,10 @@ describe("Moves - Toxic Spikes", () => {
 
     await game.reload.reloadSession();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
-    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
-    expect(arenaTags.layers).toBe(1);
+    const arenaTag = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY)!;
+    expect(arenaTag).toBeDefined();
+    expect(arenaTag.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTag.layers).toBe(1);
   });
 
   it("should apply even if the target is fainted", async () => {
@@ -147,8 +149,9 @@ describe("Moves - Toxic Spikes", () => {
     expect(enemyPokemon.isFainted()).toBe(true);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
-    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
-    expect(arenaTags.layers).toBe(1);
+    const arenaTag = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY)!;
+    expect(arenaTag).toBeDefined();
+    expect(arenaTag.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTag.layers).toBe(1);
   });
 });

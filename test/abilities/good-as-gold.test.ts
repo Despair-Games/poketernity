@@ -85,7 +85,7 @@ describe("Abilities - Good As Gold", () => {
 
     await game.toEndOfTurn();
     expect(player).toHaveMoveResult(MoveResult.SUCCESS);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY)).toBeTruthy();
   });
 
   it("should not negate moves that target all Pokemon", async () => {
