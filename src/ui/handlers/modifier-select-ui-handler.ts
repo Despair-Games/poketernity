@@ -64,7 +64,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.shopOptionsRows = [];
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.modifierContainer = globalScene.add.container(0, 0);
@@ -158,7 +158,19 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     globalScene.addInfoToggle(this.moveInfoOverlay);
   }
 
-  override show(
+  protected override tearDown(): void {
+    globalScene.removeInfoToggle(this.moveInfoOverlay);
+
+    this.modifierContainer.destroy();
+    this.continueButtonContainer.destroy();
+    this.transferButtonContainer.destroy();
+    this.rerollButtonContainer.destroy();
+    this.lockRarityButtonContainer.destroy();
+    this.checkButtonContainer.destroy();
+    this.moveInfoOverlay.destroy();
+  }
+
+  public override show(
     player: boolean = false,
     typeOptions?: ModifierTypeOption[],
     actionCallback?: ModifierSelectCallback,
@@ -178,8 +190,6 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     if (isNil(typeOptions) || isNil(actionCallback) || isNil(rerollCost)) {
       return false;
     }
-
-    super.show();
 
     this.getUi().clearText();
 
@@ -357,7 +367,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     if (!this.awaitingActionInput) {
@@ -479,7 +489,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ui = this.getUi();
     const ret = super.setCursor(cursor);
 
@@ -629,9 +639,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     setTextColor(this.lockRarityButtonText, textStyle);
   }
 
-  override clear() {
-    super.clear();
-
+  protected override clear() {
     this.moveInfoOverlay.clear();
     this.moveInfoOverlayActive = false;
     this.awaitingActionInput = false;

@@ -180,21 +180,6 @@ export function truncateString(str: string, maxLength: number = 10): string {
 }
 
 /**
- * Convert a space-separated string into a capitalized and underscored string.
- *
- * @param input - The string to be converted.
- * @returns The converted string with words capitalized and separated by underscores.
- */
-export function reverseValueToKeySetting(input: string): string {
-  // Split the input string into an array of words
-  const words = input.split(" ");
-  // Capitalize the first letter of each word and convert the rest to lowercase
-  const capitalizedWords = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
-  // Join the capitalized words with underscores and return the result
-  return capitalizedWords.join("_");
-}
-
-/**
  * Capitalize a string.
  *
  * @param str - The string to be capitalized.

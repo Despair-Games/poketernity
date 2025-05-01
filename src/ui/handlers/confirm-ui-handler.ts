@@ -13,7 +13,7 @@ export class ConfirmUiHandler extends AbstractOptionSelectUiHandler<OptionSelect
     super(UiMode.CONFIRM);
   }
 
-  override show(config?: ConfirmModeConfig): boolean {
+  public override show(config?: ConfirmModeConfig): boolean {
     /*
      * `config` is optional but the function exists early if undefined because ME phase utils' `selectPokemonForOption`
      * and `selectOptionThenPokemon` finish by calling `ui.setMode(modeThatWasUsedWhenItWasCalled)`

@@ -27,7 +27,7 @@ export class BallUiHandler extends UiHandler {
     super(UiMode.BALL);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     let optionsTextContent = "";
@@ -64,9 +64,11 @@ export class BallUiHandler extends UiHandler {
     this.setCursor(0);
   }
 
-  override show(): boolean {
-    super.show();
+  protected override tearDown(): void {
+    this.pokeballSelectContainer.destroy();
+  }
 
+  public override show(): boolean {
     this.updateCounts();
     this.pokeballSelectContainer.setVisible(true);
     this.setCursor(this.cursor);
@@ -74,7 +76,7 @@ export class BallUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -124,7 +126,7 @@ export class BallUiHandler extends UiHandler {
     );
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -138,8 +140,7 @@ export class BallUiHandler extends UiHandler {
     return ret;
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.pokeballSelectContainer.setVisible(false);
     this.eraseCursor();
   }

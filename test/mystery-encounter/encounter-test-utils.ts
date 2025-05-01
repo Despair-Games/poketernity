@@ -153,12 +153,12 @@ export async function runSelectMysteryEncounterOption(
 async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number, optionNo?: number) {
   // Handle secondary option selections
   const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
-  vi.spyOn(partyUiHandler, "show");
+  vi.spyOn(partyUiHandler, "start");
 
   const encounterUiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
   encounterUiHandler.processInput(Button.ACTION);
 
-  await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
+  await vi.waitFor(() => expect(partyUiHandler.start).toHaveBeenCalled());
 
   for (let i = 1; i < pokemonNo; i++) {
     partyUiHandler.processInput(Button.DOWN);
@@ -173,8 +173,8 @@ async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number,
   if (!isNil(optionNo)) {
     // Wait for Summary menu to close and second options to spawn
     const secondOptionUiHandler = game.scene.ui.handlers[UiMode.OPTION_SELECT] as OptionSelectUiHandler;
-    vi.spyOn(secondOptionUiHandler, "show");
-    await vi.waitFor(() => expect(secondOptionUiHandler.show).toHaveBeenCalled());
+    vi.spyOn(secondOptionUiHandler, "start");
+    await vi.waitFor(() => expect(secondOptionUiHandler.start).toHaveBeenCalled());
 
     // Navigate down to the correct option
     for (let i = 1; i < optionNo!; i++) {

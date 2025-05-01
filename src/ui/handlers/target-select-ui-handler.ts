@@ -34,11 +34,11 @@ export class TargetSelectUiHandler extends UiHandler {
     this.cursor = -1;
   }
 
-  setup(): void {}
+  protected override setup(): void {}
 
-  override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
-    super.show();
+  protected override tearDown(): void {}
 
+  public override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
     this.fieldIndex = fieldIndex;
     this.moveId = moveId;
     this.targetSelectCallback = callback;
@@ -79,7 +79,7 @@ export class TargetSelectUiHandler extends UiHandler {
     this.setCursor(this.targets.includes(cursorN) ? cursorN : this.targets[0]);
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -151,7 +151,7 @@ export class TargetSelectUiHandler extends UiHandler {
     }
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const allTargets = this.getTargetsByIndex();
     this.targetsHighlighted = this.getHighlightedPokemon(cursor);
 
@@ -205,7 +205,14 @@ export class TargetSelectUiHandler extends UiHandler {
     return ret;
   }
 
-  eraseCursor() {
+  private highlightItems(targetId: number, val: number): void {
+    const targetItems = this.enemyModifiers.getAll("name", targetId.toString());
+    for (const item of targetItems as Phaser.GameObjects.Container[]) {
+      item.setAlpha(val);
+    }
+  }
+
+  protected override clear() {
     if (this.targetFlashTween) {
       this.targetFlashTween.stop();
       this.targetFlashTween = null;
@@ -223,17 +230,8 @@ export class TargetSelectUiHandler extends UiHandler {
     for (const pokemon of this.targetsHighlighted) {
       pokemon.getBattleInfo().resetY();
     }
-  }
 
-  private highlightItems(targetId: number, val: number): void {
-    const targetItems = this.enemyModifiers.getAll("name", targetId.toString());
-    for (const item of targetItems as Phaser.GameObjects.Container[]) {
-      item.setAlpha(val);
-    }
-  }
-
-  override clear() {
-    super.clear();
-    this.eraseCursor();
+    this.targets = [];
+    this.targetsHighlighted = [];
   }
 }

@@ -61,7 +61,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     super(UiMode.EGG_HATCH_SUMMARY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.summaryContainer = globalScene.add.container(0, -GAME_HEIGHT);
@@ -110,8 +110,13 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
-  override clear() {
-    super.clear();
+  protected override tearDown(): void {
+    this.summaryContainer.destroy();
+    this.eggHatchContainer.destroy();
+    this.iconAnimHandler.destroy();
+  }
+
+  protected override clear() {
     this.scrollGridHandler.reset();
     this.cursor = -1;
 
@@ -146,13 +151,11 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
   /**
    * @param hatchData - The {@linkcode EggHatchData} for each egg/pokemon hatched
    */
-  override show(hatchData: EggHatchData[]): boolean {
+  public override show(hatchData: EggHatchData[]): boolean {
     if (hatchData.length === 0) {
       console.log("Missing Egg Hatch Data in Egg Summary UI");
       return false;
     }
-
-    super.show();
 
     // sort the egg hatch data by egg tier then by species number (then by order hatched)
     this.eggHatchData = hatchData.sort(function sortHatchData(a: EggHatchData, b: EggHatchData) {
@@ -222,7 +225,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     }
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -250,7 +253,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed = false;
 
     const lastCursor = this.cursor;

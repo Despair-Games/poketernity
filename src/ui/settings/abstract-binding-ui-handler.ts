@@ -40,7 +40,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
 
   // Function to call on cancel or completion of binding.
   protected cancelFn: CancelFn | null;
-  abstract swapAction(): boolean;
+  protected abstract swapAction(): boolean;
 
   protected timeLeftAutoClose: number = 5;
   protected countdownTimer;
@@ -60,7 +60,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
   /**
    * Setup UI elements.
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     this.optionSelectContainer = globalScene.add.container(0, 0);
     this.actionsContainer = globalScene.add.container(0, 0);
@@ -112,6 +112,11 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
     this.actionsContainer.add(this.cancelLabel);
   }
 
+  protected override tearDown(): void {
+    this.optionSelectContainer.destroy();
+    this.actionsContainer.destroy();
+  }
+
   manageAutoCloseTimer() {
     clearTimeout(this.countdownTimer);
     this.countdownTimer = setTimeout(() => {
@@ -132,8 +137,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
    * @param cancelHandler - Handler to call if the binding gets cancelled
    * @returns `true` if successful.
    */
-  override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
-    super.show();
+  public override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
     this.cancelFn = cancelHandler;
@@ -175,7 +179,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
    * @param button - The button to process.
    * @returns `true` if the input was processed successfully.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (this.buttonPressed === null) {
       return false; // TODO: is false correct as default? (previously was `undefined`)
     }
@@ -216,7 +220,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     this.cursor = cursor;
     if (cursor === 1) {
       setTextColor(this.actionLabel, TextStyle.SETTINGS_SELECTED);
@@ -231,8 +235,7 @@ export abstract class AbstractBindingUiHandler extends UiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear() {
-    super.clear();
+  protected override clear() {
     clearTimeout(this.countdownTimer);
     this.timerText.setText("(5)");
     this.timeLeftAutoClose = 5;

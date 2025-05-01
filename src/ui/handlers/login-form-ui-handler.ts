@@ -38,11 +38,12 @@ export class LoginFormUiHandler extends FormModalUiHandler {
   private infoContainer: Phaser.GameObjects.Container;
   private externalPartyBg: Phaser.GameObjects.NineSlice;
   private externalPartyTitle: Phaser.GameObjects.Text;
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+
+  constructor() {
+    super(UiMode.LOGIN_FORM);
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
     this.buildExternalPartyContainer();
 
@@ -64,8 +65,18 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.infoContainer.destroy();
+    this.externalPartyContainer.destroy();
+
+    // TODO: it seems like the password and username input remains in a detached state even after destruction
+    super.tearDown();
+  }
+
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
+    this.getUi().add(this.externalPartyContainer);
+
     this.externalPartyContainer.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH / 2, GAME_HEIGHT / 2),
       Phaser.Geom.Rectangle.Contains,
@@ -81,29 +92,28 @@ export class LoginFormUiHandler extends FormModalUiHandler {
 
     this.externalPartyContainer.add(this.googleImage);
     this.externalPartyContainer.add(this.discordImage);
-    this.getUi().add(this.externalPartyContainer);
     this.externalPartyContainer.add(this.googleImage);
     this.externalPartyContainer.add(this.discordImage);
     this.externalPartyContainer.setVisible(false);
   }
 
-  override getModalTitle(): string {
+  protected override getModalTitle(): string {
     return i18next.t("menu:login");
   }
 
-  override getWidth(): number {
+  protected override getWidth(): number {
     return 160;
   }
 
-  override getMargin(): [number, number, number, number] {
+  protected override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  override getButtonLabels(): string[] {
+  protected override getButtonLabels(): string[] {
     return [i18next.t("menu:login"), i18next.t("menu:register")];
   }
 
-  override getReadableErrorMessage(error: string): string {
+  protected override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -126,14 +136,14 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     return super.getReadableErrorMessage(error);
   }
 
-  override getInputFieldConfigs(): InputFieldConfig[] {
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
     const inputFieldConfigs: InputFieldConfig[] = [];
     inputFieldConfigs.push({ label: i18next.t("menu:username") });
     inputFieldConfigs.push({ label: i18next.t("menu:password"), isPassword: true });
     return inputFieldConfigs;
   }
 
-  override show(config: ModalConfig): boolean {
+  public override show(config: ModalConfig): boolean {
     if (!super.show(config)) {
       return false;
     }
@@ -170,7 +180,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     return true;
   }
 
-  override clear() {
+  protected override clear() {
     super.clear();
     this.externalPartyContainer.setVisible(false);
     this.infoContainer.setVisible(false);

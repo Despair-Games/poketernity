@@ -60,7 +60,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     super(UiMode.MYSTERY_ENCOUNTER);
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.cursorContainer = globalScene.add.container(18, -38.7);
@@ -120,7 +120,15 @@ export class MysteryEncounterUiHandler extends UiHandler {
     this.dexProgressContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 24, 28), Phaser.Geom.Rectangle.Contains);
   }
 
-  override show(settings?: OptionSelectSettings): boolean {
+  protected override tearDown(): void {
+    this.cursorContainer.destroy();
+    this.optionsContainer.destroy();
+    this.dexProgressContainer.destroy();
+    this.descriptionContainer.destroy();
+    this.tooltipContainer.destroy();
+  }
+
+  public override show(settings?: OptionSelectSettings): boolean {
     this.overrideSettings = settings;
     const showDescriptionContainer = isNil(this.overrideSettings?.hideDescription)
       ? true
@@ -152,7 +160,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     return true;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -343,11 +351,11 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
   }
 
-  override getCursor(): number {
+  public override getCursor(): number {
     return this.cursor ? this.cursor : 0;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const prevCursor = this.getCursor();
     const changed = prevCursor !== cursor;
     if (changed) {
@@ -667,8 +675,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
   }
 
-  override clear(): void {
-    super.clear();
+  protected override clear(): void {
     this.overrideSettings = undefined;
     this.optionsContainer.setVisible(false);
     this.optionsContainer.removeAll(true);

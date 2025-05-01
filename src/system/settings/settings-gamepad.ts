@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
-import type { SettingsGamepadUiHandler } from "#app/ui/settings/settings-gamepad-ui-handler";
+import type { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
 import { truncateString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { SettingGamepad } from "#enums/setting-gamepad";
@@ -86,7 +86,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsGamepadUiHandler).updateBindings();
+            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
             return success;
           };
           globalScene.ui.setOverlayMode<GamepadBindingUiHandler>(UiMode.GAMEPAD_BINDING, setting, cancelHandler);
@@ -99,12 +99,12 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui && gp) {
           const cancelHandler = () => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsGamepadUiHandler).setOptionCursor(
+            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).setOptionCursor(
               Object.values(SettingGamepad).indexOf(SettingGamepad.Controller),
               0,
               true,
             );
-            (globalScene.ui.getHandler() as SettingsGamepadUiHandler).updateBindings();
+            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
             return false;
           };
           const changeGamepadHandler = (gamepad: string, index: number) => {

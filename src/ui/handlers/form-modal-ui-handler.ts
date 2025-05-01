@@ -43,9 +43,9 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
    * Gets used by {@linkcode updateFields} to add the proper text inputs and labels to the view
    * @returns array of {@linkcode InputFieldConfig}
    */
-  abstract getInputFieldConfigs(): InputFieldConfig[];
+  protected abstract getInputFieldConfigs(): InputFieldConfig[];
 
-  getHeight(config?: ModalConfig): number {
+  protected override getHeight(config?: ModalConfig): number {
     return (
       20 * this.getInputFieldConfigs().length
       + (this.getModalTitle() ? 26 : 0)
@@ -55,7 +55,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     );
   }
 
-  getReadableErrorMessage(error: string): string {
+  protected getReadableErrorMessage(error: string): string {
     if (error?.indexOf("connection refused") > -1) {
       return "Could not connect to the server";
     }
@@ -63,7 +63,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return error;
   }
 
-  override setup(): void {
+  protected override setup(): void {
     super.setup();
 
     const config = this.getInputFieldConfigs();
@@ -81,6 +81,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   }
 
   protected updateFields(fieldsConfig: InputFieldConfig[], hasTitle: boolean) {
+    // TODO: should destroy existing container and inputs, or reuse them
     this.inputContainers = [];
     this.inputs = [];
     this.formLabels = [];
@@ -115,7 +116,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(config: FormModalConfig, ..._args: unknown[]): boolean {
+  public override show(config: FormModalConfig, ..._args: unknown[]): boolean {
     if (!super.show(config)) {
       return false;
     }
@@ -147,7 +148,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return true;
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     if (button === Button.SUBMIT && this.submitAction) {
       this.submitAction();
       return true;
@@ -156,20 +157,20 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return false;
   }
 
-  sanitizeInputs(): void {
+  protected sanitizeInputs(): void {
     for (const input of this.inputs) {
       input.text = input.text.trim();
     }
   }
 
-  override updateContainer(config?: ModalConfig): void {
+  protected override updateContainer(config?: ModalConfig): void {
     super.updateContainer(config);
 
     this.errorMessage.setText(this.getReadableErrorMessage((config as FormModalConfig)?.errorMessage || ""));
     this.errorMessage.setVisible(!!this.errorMessage.text);
   }
 
-  override clear(): void {
+  protected override clear(): void {
     super.clear();
     this.modalContainer.setVisible(false);
 

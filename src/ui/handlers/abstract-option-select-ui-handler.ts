@@ -61,7 +61,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     return (this.maxOptions + 1) * 96 * this.scale - 2;
   }
 
-  override setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
@@ -83,16 +83,18 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     this.setCursor(0);
   }
 
+  protected override tearDown(): void {
+    this.optionSelectContainer.destroy();
+  }
+
   /**
    * @param args - args[0] should be of type `OptionSelectModeConfig<T>`.
    */
-  override show(...args: unknown[]): boolean {
+  public override show(...args: unknown[]): boolean {
     if (!args[0]?.hasOwnProperty("options")) {
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }
-
-    super.show();
 
     this.initOptions(args[0] as OptionSelectModeConfig<T>);
 
@@ -306,7 +308,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     return this.options[this.cursor + this.scrollCursor];
   }
 
-  override processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -396,7 +398,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     this.cursorObj?.setAlpha(1);
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const changed = this.cursor !== cursor;
 
     if (changed) {
@@ -428,9 +430,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
     return false;
   }
 
-  override clear(): void {
-    super.clear();
-
+  protected override clear(): void {
     this.config = null;
     this.options = [];
     this.maxOptions = DEFAULT_MAX_OPTIONS;

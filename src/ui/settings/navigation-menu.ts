@@ -7,7 +7,7 @@ import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { SettingsUiHandler } from "./settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "./general-settings-ui-handler";
 
 const LEFT = "LEFT";
 const RIGHT = "RIGHT";
@@ -83,7 +83,7 @@ export class NavigationManager {
     } else {
       this.selectedMode = this.modes[pos + increment];
     }
-    globalScene.ui.setMode<SettingsUiHandler>(this.selectedMode);
+    globalScene.ui.setMode<GeneralSettingsUiHandler>(this.selectedMode);
     this.updateNavigationMenus();
   }
 
@@ -125,7 +125,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Sets up the NavigationMenu by adding windows, icons, and labels.
    */
-  setup() {
+  private setup() {
     const navigationManager = NavigationManager.getInstance();
     const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
@@ -178,7 +178,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Updates the icons in the NavigationMenu based on the latest input recorded.
    */
-  updateIcons() {
+  public updateIcons() {
     const specialIcons = {
       BUTTON_HOME: "HOME.png",
       BUTTON_DELETE: "DEL.png",
@@ -207,7 +207,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
    * @param button The button pressed for navigation.
    * @returns A boolean indicating if the navigation was handled.
    */
-  navigate(button: Button): boolean {
+  public navigate(button: Button): boolean {
     const navigationManager = NavigationManager.getInstance();
     switch (button) {
       case Button.CYCLE_FORM:

@@ -139,7 +139,7 @@ export class PartyUiHandler extends MessageUiHandler {
     super(UiMode.PARTY);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     const partyContainer = globalScene.add.container(0, 0);
@@ -207,7 +207,13 @@ export class PartyUiHandler extends MessageUiHandler {
     this.partySlots = [];
   }
 
-  override show(
+  protected override tearDown(): void {
+    this.partyContainer.destroy();
+    this.moveInfoOverlay.destroy();
+    this.iconAnimHandler.destroy();
+  }
+
+  public override show(
     mode?: PartyUiMode,
     fieldIndex: number = -1,
     callback: PartySelectCallback | PartyModifierTransferSelectCallback | null = null,
@@ -219,8 +225,6 @@ export class PartyUiHandler extends MessageUiHandler {
     if (this.active || isNil(mode)) {
       return false;
     }
-
-    super.show();
 
     // reset the infoOverlay
     this.moveInfoOverlay.clear();
@@ -241,7 +245,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     if (this.pendingPrompt || this.blockInput) {
@@ -666,7 +670,7 @@ export class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let changed: boolean;
 
     if (this.optionsMode) {
@@ -729,7 +733,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number | null,
     callback?: Function | null,
@@ -1147,8 +1151,7 @@ export class PartyUiHandler extends MessageUiHandler {
     this.optionsCursorObj = null;
   }
 
-  override clear() {
-    super.clear();
+  protected override clear() {
     // hide the overlay
     this.moveInfoOverlay.clear();
     this.partyContainer.setVisible(false);

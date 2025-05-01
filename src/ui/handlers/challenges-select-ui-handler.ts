@@ -52,7 +52,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     super(UiMode.CHALLENGE_SELECT);
   }
 
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.widestTextBox = 0;
@@ -199,6 +199,10 @@ export class ChallengeSelectUiHandler extends UiHandler {
     this.challengesContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.challengesContainer.destroy();
+  }
+
   /**
    * Adds the default text color to the description text
    * @param text text to set to the BBCode description
@@ -304,9 +308,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     this.challengesContainer.update();
   }
 
-  override show(): boolean {
-    super.show();
-
+  public override show(): boolean {
     this.startCursor.setVisible(false);
     this.updateChallengeArrows(false);
     this.challengesContainer.setVisible(true);
@@ -322,6 +324,11 @@ export class ChallengeSelectUiHandler extends UiHandler {
     this.getUi().hideTooltip();
 
     return true;
+  }
+
+  protected override clear() {
+    this.challengesContainer.setVisible(false);
+    this.eraseCursor();
   }
 
   /* This code updates the challenge starter arrows to be tinted/not tinted when the start button is selected to show they can't be changed
@@ -348,7 +355,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
    * @param button - The button pressed by the user.
    * @returns `true` if the action associated with the button was successfully processed, `false` otherwise.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
     const rowsToDisplay = 9;
@@ -459,7 +466,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     let ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -501,12 +508,6 @@ export class ChallengeSelectUiHandler extends UiHandler {
 
   getActiveChallenge(): Challenge {
     return globalScene.gameMode.challenges[this.cursor + this.scrollCursor];
-  }
-
-  override clear() {
-    super.clear();
-    this.challengesContainer.setVisible(false);
-    this.eraseCursor();
   }
 
   eraseCursor() {
