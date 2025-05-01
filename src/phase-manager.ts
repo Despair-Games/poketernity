@@ -517,7 +517,7 @@ export class PhaseManager {
   }
 
   /**
-   * @param eager - (Optional) `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
+   * @param eager - `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
    * @param battlerIndex - The {@linkcode BattlerIndex} of the affected {@linkcode Pokemon}
    * @param source - The {@linkcode Pokemon} that caused the stat stage change
    * @param stats - The {@linkcode BattleStat | stats} modified by this phase
