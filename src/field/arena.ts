@@ -830,9 +830,9 @@ export class Arena {
    * @returns Whether the `ArenaTag` exists
    */
   hasTag(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): boolean {
-    return this.tags.some(
-      (t) => t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-    );
+    const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
+
+    return this.tags.some((t) => t.tagType === tagType && (side === ArenaTagSide.BOTH || validSides.has(t.side)));
   }
 
   /**
@@ -844,13 +844,13 @@ export class Arena {
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
   findTag<T extends ArenaTag = ArenaTag>(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): T | undefined {
-    return this.tags.find(
-      (t) => tagType === t.tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-    ) as T;
+    const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
+
+    return this.tags.find((t) => tagType === t.tagType && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T;
   }
 
   /**
-   * Returns specific tags from the arena that pass the `tagPredicate` function passed in as a parameter, and apply to the given side
+   * Returns all tags from the arena that pass the `tagPredicate` function passed in as a parameter, and apply to the given side
    * @param tagPredicate - A function mapping {@linkcode ArenaTag}s to `boolean`s
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return `true` and apply to the given side
@@ -859,9 +859,9 @@ export class Arena {
     tagPredicate: (t: ArenaTag) => boolean,
     side: ArenaTagSide = ArenaTagSide.BOTH,
   ): T[] {
-    return this.tags.filter(
-      (t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-    ) as T[];
+    const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
+
+    return this.tags.filter((t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T[];
   }
 
   lapseTags(): void {
