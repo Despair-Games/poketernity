@@ -4,8 +4,7 @@ import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-
 import type { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/terrain-event-type-change-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { ArenaTag } from "#app/data/arena-tag";
-import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
+import { getArenaTag, type ArenaTag, type EntryHazardTag } from "#app/data/arena-tag";
 import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
@@ -19,6 +18,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
+import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { getEnumValues } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#app/utils/random-utils";
@@ -799,8 +799,8 @@ export class Arena {
     if (existingTag) {
       existingTag.onOverlap(this);
 
-      if (existingTag instanceof EntryHazardTag) {
-        const { tagType, side, turnCount, layers, maxLayers } = existingTag;
+      if (EntryHazardArenaTagTypes.includes(existingTag.tagType)) {
+        const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
         this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
       }
 
@@ -813,7 +813,9 @@ export class Arena {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);
 
-      const { layers = 0, maxLayers = 0 } = newTag instanceof EntryHazardTag ? newTag : {};
+      const { layers = 0, maxLayers = 0 } = EntryHazardArenaTagTypes.includes(newTag.tagType)
+        ? (newTag as EntryHazardTag)
+        : {};
 
       this.eventTarget.dispatchEvent(
         new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers),
