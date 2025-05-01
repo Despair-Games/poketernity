@@ -4,16 +4,17 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { easeFunctions } from "#app/data/animations/ease-functions";
 import { globalScene } from "#app/global-scene";
 import { getFrameMs, isNil } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
+import type { AnimTimedEventType } from "#enums/anim-timed-event-type";
+import type { MoveId } from "#enums/move-id";
 import type Phaser from "phaser";
 import type { BattleAnim } from "./battle-anims";
 import type { MoveAnim } from "./move-anim";
-import type { MoveId } from "#enums/move-id";
-import type { easeFunctions } from "#app/data/animations/ease-functions";
 
 export interface AnimConfig {
   /**
@@ -110,6 +111,7 @@ export interface AnimProp {
    * - 1 is on top of player field
    * - 3 is on top of both fields
    * - 5 is on top of player sprite
+   * @todo define the allowed priority values as an enum
    */
   readonly priority?: AnimKeyFrame<0 | 1 | 3 | 5>[];
 }
@@ -141,7 +143,7 @@ export interface AnimTimedEvent {
    * - "AnimTimedAddBgEvent": for initializing a background image
    * - "AnimTimedUpdateBgEvent": for updating the background image
    */
-  readonly eventType: string;
+  readonly eventType: AnimTimedEventType;
 
   /** The start time for the event */
   readonly time: number;
@@ -181,7 +183,7 @@ export interface AnimTimedEvent {
   readonly scale?: number;
 }
 
-/** @deprecated */
+/** @deprecated to be replaced by {@linkcode AnimConfig} */
 export class LegacyAnimConfig {
   public id: number;
   public graphic: string;
@@ -473,6 +475,8 @@ class ImportedAnimFrame extends AnimFrame {
     this.graphicFrame = source.graphicFrame;
   }
 }
+
+/** @deprecated to be replaced by {@linkcode AnimTimedEvent} */
 export abstract class LegacyAnimTimedEvent {
   public frameIndex: number;
   public resourceName: string;

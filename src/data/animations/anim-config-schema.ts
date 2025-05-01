@@ -2,6 +2,7 @@ import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#app/da
 import { easeFunctions } from "#app/data/animations/ease-functions";
 import { getEnumValues } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
+import { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import { MoveId } from "#enums/move-id";
 import type { JSONSchemaType } from "ajv";
 
@@ -230,7 +231,7 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       ...getNumberArrayKeyFrameSetSchema({
         type: "array",
         items: {
-          type: "integer",
+          type: "number",
           minimum: 0,
           maximum: 255,
         },
@@ -273,7 +274,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     /** The type of event to execute. */
     eventType: {
       type: "string",
-      enum: ["AnimTimedSoundEvent", "AnimTimedAddBgEvent", "AnimTimedUpdateBgEvent"],
+      enum: Object.values(AnimTimedEventType),
     },
 
     /** The delay from the start of the animation to the given event (in frames) */
@@ -293,6 +294,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     volume: {
       type: "number",
       default: 100,
+      minimum: 0,
       nullable: true,
     },
 
@@ -303,6 +305,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
     pitch: {
       type: "number",
       default: 100,
+      minimum: 0,
       nullable: true,
     },
 
@@ -322,7 +325,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
       nullable: true,
     },
 
-    /** The amount of time the image is displayed (in frames) */
+    /** The duration the image is displayed (in frames) */
     duration: {
       type: "number",
       nullable: true,
