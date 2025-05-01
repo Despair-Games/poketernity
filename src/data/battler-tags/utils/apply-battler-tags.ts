@@ -18,7 +18,7 @@ export function applyBattlerTags<T extends BattlerTag = BattlerTag>(
   ...params: Parameters<T["apply"]>
 ): boolean {
   const [pokemon, simulated, ...args] = params;
-  const tagTypeArr = coerceArray(tagTypes) as BattlerTagType[];
+  const tagTypeArr = coerceArray(tagTypes);
 
   const tags = pokemon.findTags((tag) => tagTypeArr.includes(tag.tagType));
   return tags.some((tag) => tag.apply(pokemon, simulated, ...args));

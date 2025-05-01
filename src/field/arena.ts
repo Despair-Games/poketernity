@@ -757,7 +757,7 @@ export class Arena {
     simulated: boolean,
     ...args: unknown[]
   ): void {
-    const tagTypeArr = coerceArray(tagTypes) as ArenaTagType[];
+    const tagTypeArr = coerceArray(tagTypes);
     let tags = this.tags.filter((t) => tagTypeArr.includes(t.tagType));
     if (side !== ArenaTagSide.BOTH) {
       tags = tags.filter((t) => t.side === side);
