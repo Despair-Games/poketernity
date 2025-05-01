@@ -127,7 +127,7 @@ describe("Animations - Schema", () => {
 
         tone: [
           {
-            value: [255, 0, 0, 255],
+            value: [1, 0, 0, 1],
             duration: 100,
             delay: 0,
             ease: "Sine.easeIn",

@@ -102,7 +102,7 @@ export interface AnimProp {
   /** If this is a VFX property, specifies the graphic's tile index */
   readonly graphicFrame?: AnimKeyFrame<number>[];
 
-  /** A tone to pipeline over the animated sprite (RGBA, A is optional) */
+  /** A tone to pipeline over the animated sprite (normalized RGBA, A is optional) */
   readonly tone?: AnimKeyFrame<number[]>[];
 
   /**

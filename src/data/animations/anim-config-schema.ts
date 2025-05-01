@@ -226,14 +226,14 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /** A tone to pipeline over the animated sprite (RGBA) */
+    /** A tone to pipeline over the animated sprite (RGBA, normalized) */
     tone: {
       ...getNumberArrayKeyFrameSetSchema({
         type: "array",
         items: {
           type: "number",
           minimum: 0,
-          maximum: 255,
+          maximum: 1,
         },
         minItems: 3,
         maxItems: 4,
