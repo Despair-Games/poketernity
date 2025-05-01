@@ -62,7 +62,6 @@ function getNumberKeyFrameSetSchema(valueSpec: JSONSchemaType<number>): JSONSche
       required: ["value"],
     },
     minItems: 1,
-    readonly: true,
   } as const;
 }
 
@@ -87,7 +86,6 @@ function getBooleanKeyFrameSetSchema(valueSpec: JSONSchemaType<boolean>): JSONSc
       required: ["value"],
     },
     minItems: 1,
-    readonly: true,
   } as const;
 }
 
@@ -114,7 +112,6 @@ function getNumberArrayKeyFrameSetSchema(
       additionalProperties: false,
       required: ["value"],
     },
-    readonly: true,
   };
 }
 
@@ -260,7 +257,6 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
   },
   required: ["u", "x", "y"],
   additionalProperties: false,
-  readonly: true,
   nullable: true,
 } as const;
 
@@ -339,7 +335,6 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
       nullable: true,
     },
   },
-  readonly: true,
   nullable: true,
   additionalProperties: false,
   required: ["eventType", "time", "resourceName"],
@@ -403,7 +398,6 @@ export const animConfigSchema: JSONSchemaType<AnimConfig> = {
       nullable: true,
     },
   },
-  readonly: true,
   additionalProperties: false,
   required: [],
 } as const;
