@@ -218,6 +218,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.VOLCARONA], TrainerSlot.TRAINER, true, (p) => {
+        // Tera fire
         p.teraType = ElementalType.FIRE;
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
@@ -344,6 +345,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.KINGAMBIT], TrainerSlot.TRAINER, true, (p) => {
+        // Tera Flying
         p.teraType = ElementalType.FLYING;
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
@@ -390,7 +392,8 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
+    )
+    .setInstantTera(4),
   [TrainerType.KIERAN]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [KIERAN_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED]))
@@ -407,6 +410,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.HYDRAPPLE], TrainerSlot.TRAINER, true, (p) => {
+        // Tera Fighting
         p.teraType = ElementalType.FIGHTING;
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
