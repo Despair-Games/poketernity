@@ -14,6 +14,7 @@ import {
   SINNOH_CHAMPION_THEME,
 } from "#app/constants/music";
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
+import { ElementalType } from "#enums/elemental-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -217,7 +218,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.VOLCARONA], TrainerSlot.TRAINER, true, (p) => {
-        // Tera Fire
+        p.teraType = ElementalType.FIRE;
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
       }),
@@ -229,18 +230,8 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const teraPokemon = party[4];
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [ElementalType.FIRE])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(teraPokemon) as PersistentModifier,
-  //   ]; //TODO: is the bang correct?
-  // }),
+    )
+    .setInstantTera(4),
   [TrainerType.IRIS]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.FEMALE, [IRIS_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.HYDREIGON]))
@@ -307,6 +298,7 @@ export const championTrainerConfigs: TrainerConfigs = {
         TrainerSlot.TRAINER,
         true,
         (p) => {
+          p.teraType = p.species.type1; // Tera Grass/Fire/Water
           p.setBoss(true, 2);
           p.generateAndPopulateMoveset();
         },
@@ -319,29 +311,8 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const teraPokemon = party[4];
-  //   let teraType: ElementalType;
-  //   switch (teraPokemon.species.speciesId) {
-  //     case SpeciesId.DECIDUEYE:
-  //       teraType = ElementalType.GHOST;
-  //       break;
-  //     case SpeciesId.INCINEROAR:
-  //       teraType = ElementalType.DARK;
-  //       break;
-  //     default:
-  //       teraType = ElementalType.WATER;
-  //   }
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [teraType])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(teraPokemon) as PersistentModifier,
-  //   ]; //TODO: is the bang correct?
-  // }),
+    )
+    .setInstantTera(4),
   [TrainerType.LEON]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [GALAR_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.RILLABOOM, SpeciesId.CINDERACE, SpeciesId.INTELEON]))
@@ -373,7 +344,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.KINGAMBIT], TrainerSlot.TRAINER, true, (p) => {
-        // Tera flying
+        p.teraType = ElementalType.FLYING;
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
       }),
@@ -385,18 +356,8 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const teraPokemon = party[4];
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [ElementalType.FLYING])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(teraPokemon) as PersistentModifier,
-  //   ]; //TODO: is the bang correct?
-  // }),
+    )
+    .setInstantTera(4),
   [TrainerType.NEMONA]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.FEMALE, [NEMONA_CHAMPION_THEME])
     .setPartyMemberFunc(
@@ -416,7 +377,7 @@ export const championTrainerConfigs: TrainerConfigs = {
         TrainerSlot.TRAINER,
         true,
         (p) => {
-          // Tera Grass/Fire/Water based on the starter
+          p.teraType = p.species.type1; // Tera Grass/Fire/Water
           p.setBoss(true, 2);
           p.generateAndPopulateMoveset();
         },
@@ -430,28 +391,6 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const teraPokemon = party[4];
-  //   let teraType: ElementalType;
-  //   switch (teraPokemon.species.speciesId) {
-  //     case SpeciesId.MEOWSCARADA:
-  //       teraType = ElementalType.GRASS;
-  //       break;
-  //     case SpeciesId.SKELEDIRGE:
-  //       teraType = ElementalType.FIRE;
-  //       break;
-  //     default:
-  //       teraType = ElementalType.WATER;
-  //   }
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [teraType])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(teraPokemon) as PersistentModifier,
-  //   ]; //TODO: is the bang correct?
-  // }),
   [TrainerType.KIERAN]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [KIERAN_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED]))
@@ -468,6 +407,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.HYDRAPPLE], TrainerSlot.TRAINER, true, (p) => {
+        p.teraType = ElementalType.FIGHTING;
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
       }),
@@ -479,5 +419,6 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
+    )
+    .setInstantTera(4),
 };
