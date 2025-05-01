@@ -43,15 +43,15 @@ export function toHaveUsedMoveMatcher(
   const pass = move?.move.id === expectedResult;
 
   const moveIndexStr = index === 0 ? "latest move" : `move no. ${index}`;
+  const expectedResultStr = `${MoveId[expectedResult]} (=${expectedResult})`;
+  const actualResultStr = move?.move.id ? `${MoveId[move.move.id]} (=${move.move.id})` : "undefined";
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${moveIndexStr} NOT to have id: ${MoveId[expectedResult]} (=${expectedResult}), but it did.`
-        : `Expected ${moveIndexStr} to have id: ${MoveId[expectedResult]} (=${expectedResult}), but got: ${
-            move?.move.id ? `${MoveId[move.move.id]} (=${move.move.id})` : "undefined"
-          }`,
+        ? `Expected ${moveIndexStr} NOT to have id: ${expectedResultStr}, but it did.`
+        : `Expected ${moveIndexStr} to have id: ${expectedResultStr}, but got: ${actualResultStr}`,
   };
 }
 

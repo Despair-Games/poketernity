@@ -20,7 +20,7 @@ import i18next from "i18next";
  * to the Pokemon in the position of the original user.
  * @extends BattlerTag
  */
-export class SeedTag extends BattlerTag {
+export class SeededTag extends BattlerTag {
   private sourceIndex: number;
 
   constructor(sourceId: number) {
