@@ -11,7 +11,8 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { DEFAULT_NEW_TERRAIN_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/game";
+import { DEFAULT_NEW_TERRAIN_DURATION } from "#app/constants/game";
+import { PRIMAL_WEATHER_TYPES } from "#app/constants/weather";
 import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
