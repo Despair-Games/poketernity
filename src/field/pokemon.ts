@@ -1716,9 +1716,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Checks whether a pokemon has the specified ability and it's in effect. Accounts for all the various
    * effects which can affect whether an ability will be present or in effect, and both passive and
    * non-passive. This is the primary way to check whether a pokemon has a particular ability.
-   * @param ability The {@linkcode AbilityId | ability} to check for
-   * @param canApply If false, it doesn't check whether the ability is currently active
-   * @param baseOnly If true, it ignores ability changing effects
+   * @param ability - The {@linkcode AbilityId | ability} to check for
+   * @param canApply - (Default `true`) If `false`, it doesn't check whether the ability is currently active
+   * @param baseOnly - (Optional) If `true`, it ignores ability changing effects
    * @returns Whether the ability is present and active
    */
   public hasAbility(ability: AbilityId, canApply: boolean = true, baseOnly?: boolean): boolean {
@@ -3472,21 +3472,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * @param includeEternamax - Whether or not to include Eternamax
-   * @returns if the Pokemon is in a max form
+   * @param includeEternamax - (Default `true`) Whether or not to include Eternamax
+   * @returns Whether the Pokemon is in a max form
    */
-  isMax(includeEternamax: boolean = true): boolean {
-    const maxForms = [
+  public isMax(includeEternamax: boolean = true): boolean {
+    const maxForms: string[] = [
       SpeciesFormKey.GIGANTAMAX,
       SpeciesFormKey.GIGANTAMAX_RAPID,
       SpeciesFormKey.GIGANTAMAX_SINGLE,
       ...(includeEternamax ? [SpeciesFormKey.ETERNAMAX] : []),
-    ] as string[];
+    ];
     return maxForms.includes(this.getFormKey());
   }
 
   /**
-   * @returns `true` if the pokemon is a mega form
+   * @returns Whether the pokemon is in a mega form (includes Primals)
    */
   public isMega(): boolean {
     const megaForms: string[] = [
