@@ -67,7 +67,6 @@ export class SeededTag extends BattlerTag {
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
           globalScene.phaseManager.queuePokemonHealPhase(
-            true,
             source.getBattlerIndex(),
             !reverseDrain ? damage : damage * -1,
             {

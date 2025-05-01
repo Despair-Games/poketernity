@@ -550,7 +550,7 @@ class WishTag extends ArenaTag {
     const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.phaseManager.queueMessagePhase(this.triggerMessage);
-      globalScene.phaseManager.queuePokemonHealPhase(true, target.getBattlerIndex(), this.healHp);
+      globalScene.phaseManager.queuePokemonHealPhase(target.getBattlerIndex(), this.healHp);
     }
   }
 }
@@ -1005,7 +1005,7 @@ export class PendingHealTag extends ArenaTag {
         return this.apply(arena, simulated, pokemon);
       }
 
-      globalScene.phaseManager.queuePokemonHealPhase(true, targetIndex, pokemon.getMaxHp(), {
+      globalScene.phaseManager.queuePokemonHealPhase(targetIndex, pokemon.getMaxHp(), {
         message: i18next.t(healMessageKey, { pokemonName: getPokemonNameWithAffix(sourcePokemon) }),
         healStatus: true,
         fullRestorePP: restorePP,

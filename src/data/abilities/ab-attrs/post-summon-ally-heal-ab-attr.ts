@@ -21,7 +21,6 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     if (target?.isActive(true)) {
       if (!simulated) {
         globalScene.phaseManager.queuePokemonHealPhase(
-          true,
           target.getBattlerIndex(),
           toDmgValue(pokemon.getMaxHp() / this.healRatio),
           {

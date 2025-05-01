@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { VictoryPhase } from "#app/phases/victory-phase";
+import type { ChargeAnim } from "#enums/charge-anim";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -22,14 +23,12 @@ import { MovePhase } from "#app/phases/move-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
-import { StatStageChangePhase, type SSCPhaseOptions } from "#app/phases/stat-stage-change-phase";
+import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { BattlerIndex } from "#enums/battler-index";
-import type { ChargeAnim } from "#enums/charge-anim";
 import type { MoveId } from "#enums/move-id";
 import type { PhaseId } from "#enums/phase-id";
-import type { BattleStat } from "#enums/stat";
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -81,7 +80,6 @@ export class PhaseManager {
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
   private conditionalQueue: Array<[() => boolean, Phase]> = [];
-  private nextCommandPhaseQueue: Phase[] = [];
 
   private currentPhase: Phase | null = null;
   private standbyPhase: Phase | null = null;
@@ -115,8 +113,8 @@ export class PhaseManager {
    * @param defer - If `false`, adds the phase to `phaseQueue`. If `true`, adds the phase to `nextCommandPhaseQueue`. Default `false`.
    * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
    */
-  public pushPhase(phase: Phase, defer: boolean = false): void {
-    (!defer ? this.phaseQueue : this.nextCommandPhaseQueue).push(phase);
+  public pushPhase(phase: Phase): void {
+    this.phaseQueue.push(phase);
   }
 
   /**
@@ -145,7 +143,7 @@ export class PhaseManager {
    * Clears all phase-related stuff, including all phase queues, the current and standby phases, and a splice index.
    */
   public clearAllPhases(): void {
-    for (const queue of [this.phaseQueue, this.phaseQueuePrepend, this.conditionalQueue, this.nextCommandPhaseQueue]) {
+    for (const queue of [this.phaseQueue, this.phaseQueuePrepend, this.conditionalQueue]) {
       queue.splice(0, queue.length);
     }
     this.currentPhase = null;
@@ -274,18 +272,6 @@ export class PhaseManager {
     }
   }
 
-  /**
-   * @todo this is unused, may be removed?
-   */
-  public tryReplacePhase(phaseFilter: (phase: Phase) => boolean, phase: Phase): boolean {
-    const phaseIndex = this.phaseQueue.findIndex(phaseFilter);
-    if (phaseIndex > -1) {
-      this.phaseQueue[phaseIndex] = phase;
-      return true;
-    }
-    return false;
-  }
-
   public tryRemovePhase(phaseFilter: (phase: Phase) => boolean): boolean {
     const phaseIndex = this.phaseQueue.findIndex(phaseFilter);
     if (phaseIndex > -1) {
@@ -353,10 +339,6 @@ export class PhaseManager {
    * Moves everything from the {@linkcode nextCommandPhaseQueue} to the {@linkcode phaseQueue} (keeping order)
    */
   public populatePhaseQueue(): void {
-    if (this.nextCommandPhaseQueue.length) {
-      this.phaseQueue.push(...this.nextCommandPhaseQueue);
-      this.nextCommandPhaseQueue.splice(0, this.nextCommandPhaseQueue.length);
-    }
     this.phaseQueue.push(new TurnInitPhase());
   }
 
@@ -386,19 +368,13 @@ export class PhaseManager {
 
   /**
    * Queues a new {@linkcode PokemonHealPhase} for the given {@linkcode BattlerIndex}.
-   * @param eager - Whether to add the {@linkcode PokemonHealPhase} to the front of the phase queue or defer it
    * @param battlerIndex - The {@linkcode BattlerIndex} of the pokemon to heal
    * @param hpHealed - The amount of HP to heal
    * @param params_2 - The various {@linkcode PokemonHealPhaseOptions | optional parameters} of `PokemonHealPhase`
    */
-  public queuePokemonHealPhase(eager: boolean, ...params: ConstructorParameters<typeof PokemonHealPhase>) {
+  public queuePokemonHealPhase(...params: ConstructorParameters<typeof PokemonHealPhase>) {
     const pokemonHealPhase = new PokemonHealPhase(...params);
-
-    if (eager) {
-      this.unshiftPhase(pokemonHealPhase);
-    } else {
-      this.pushPhase(pokemonHealPhase, true);
-    }
+    this.unshiftPhase(pokemonHealPhase);
   }
 
   /**
@@ -407,16 +383,16 @@ export class PhaseManager {
    * @param targets - Array of target `BattlerIndex`es
    * @param move - The {@linkcode PokemonMove} being used
    */
-  public queueMoveChargePhase(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove): void {
-    this.unshiftPhase(new MoveChargePhase(battlerIndex, targets, move));
+  public queueMoveChargePhase(...params: ConstructorParameters<typeof MoveChargePhase>): void {
+    this.unshiftPhase(new MoveChargePhase(...params));
   }
 
   /**
    * Inserts a new {@linkcode SelectTargetPhase} to the phase queue.
-   * @param battlerIndex - The selected target's {@linkcode BattlerIndex}
+   * @param fieldIndex - The selected target's {@linkcode BattlerIndex}
    */
-  public queueSelectTargetPhase(battlerIndex: BattlerIndex): void {
-    this.unshiftPhase(new SelectTargetPhase(battlerIndex));
+  public queueSelectTargetPhase(...params: ConstructorParameters<typeof SelectTargetPhase>): void {
+    this.unshiftPhase(new SelectTargetPhase(...params));
   }
 
   /**
@@ -425,8 +401,8 @@ export class PhaseManager {
    * @param moveId - The {@linkcode MoveId} to be used
    * @param user - The {@linkcode Pokemon} using the move
    */
-  public queueMoveAnimPhase(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon): void {
-    this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
+  public queueMoveAnimPhase(...params: ConstructorParameters<typeof MoveChargeAnim>): void {
+    this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(...params)));
   }
 
   /**
@@ -540,15 +516,19 @@ export class PhaseManager {
     }
   }
 
+  /**
+   * @param eager - `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
+   * @param battlerIndex - The {@linkcode BattlerIndex} of the affected {@linkcode Pokemon}
+   * @param source - The {@linkcode Pokemon} that caused the stat stage change
+   * @param stats - The {@linkcode BattleStat | stats} modified by this phase
+   * @param stages - The change in each affected stat stage
+   * @param params_4 - (Optional) The {@linkcode SSCPhaseOptions} for the generated phase
+   */
   public queueStatStageChangePhase(
-    battlerIndex: BattlerIndex,
-    source: Pokemon | null,
-    stats: BattleStat[],
-    stages: number,
-    options: SSCPhaseOptions = {},
-    eager: boolean = true,
+    eager: boolean,
+    ...params: ConstructorParameters<typeof StatStageChangePhase>
   ): void {
-    const statStageChangePhase = new StatStageChangePhase(battlerIndex, source, stats, stages, options);
+    const statStageChangePhase = new StatStageChangePhase(...params);
     if (eager) {
       this.unshiftPhase(statStageChangePhase);
     } else {
