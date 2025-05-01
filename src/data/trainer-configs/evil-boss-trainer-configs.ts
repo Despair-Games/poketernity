@@ -641,6 +641,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([SpeciesId.SYLVEON], TrainerSlot.TRAINER, true, (p) => {
+        // Tera fairy
         p.abilityIndex = 2; // Pixilate
         p.generateAndPopulateMoveset();
         p.gender = Gender.FEMALE;
@@ -655,23 +656,14 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.ULTRA_BALL;
         p.generateName();
       }),
-    ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const teraPokemon = party[4];
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [teraPokemon.species.type1])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(teraPokemon) as PersistentModifier,
-  //   ]; //TODO: is the bang correct?
-  // }),
+    )
+    .setInstantTera(4),
   [TrainerType.PENNY_2]: new TrainerConfig(++t)
     .initForEvilTeamLeader(STAR_BOSS_TITLE, PENNY, true, STAR_MUSIC)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([SpeciesId.SYLVEON], TrainerSlot.TRAINER, true, (p) => {
+        // Tera fairy
         p.setBoss(true, 2);
         p.abilityIndex = 2; // Pixilate
         p.generateAndPopulateMoveset();
@@ -724,16 +716,6 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
           p.pokeball = PokeballType.ULTRA_BALL;
         },
       ),
-    ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const teraPokemon = party[0];
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [teraPokemon.species.type1])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(teraPokemon) as PersistentModifier,
-  //   ]; //TODO: is the bang correct?
-  // }),
+    )
+    .setInstantTera(0),
 };
