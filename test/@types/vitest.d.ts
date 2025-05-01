@@ -4,9 +4,11 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { AbilityId } from "#enums/ability-id";
+import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
-import type { EffectiveStat, PermanentStat } from "#enums/stat";
+import type { EffectiveStat, PermanentStat, Stat } from "#enums/stat";
 import type { StatusEffect } from "#enums/status-effect";
 import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
@@ -92,5 +94,24 @@ declare module "vitest" {
      * Matcher to check if a {@linkcode Pokemon} has full HP
      */
     toHaveFullHp(): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has a specific {@linkcode Stats} stage.
+     * @param stat - The {@linkcode Stat} to check
+     * @param expectedStage - The expected stage of the {@linkcode stat}
+     */
+    toHaveStatStage(stat: Stat, expectedStage: number): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has a specific {@linkcode BattlerTagType}.
+     * @param expectedBattlerTagType - The expected {@linkcode BattlerTagType}.
+     */
+    toHaveBattlerTagType(expectedBattlerTagType: BattlerTagType): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} had a specific {@linkcode AbilityId} applied.
+     * @param expectedAbilityId - The expected {@linkcode AbilityId}.
+     */
+    toHaveAbilityApplied(expectedAbilityId: AbilityId): void;
   }
 }
