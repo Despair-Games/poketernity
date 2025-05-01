@@ -308,10 +308,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     super(globalScene, x, y);
     this.type = "Pokemon";
 
-    if (!species.isObtainable() && this.isPlayer()) {
-      throw `Cannot create a player Pokemon for species '${species.getName(formIndex)}'`;
-    }
-
     this.species = species;
     // The `EnemyPokemon` constructor randomly picks from both types if applicable
     this.teraType = species.type1;
@@ -406,10 +402,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     this.generateName();
-
-    if (!species.isObtainable()) {
-      this.shiny = false;
-    }
 
     if (!dataSource) {
       this.calculateStats();
