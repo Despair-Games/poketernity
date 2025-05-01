@@ -9,7 +9,9 @@ import { SavedataApi } from "#app/plugins/api/savedata-api";
  * A wrapper for API requests.
  */
 export class Api extends ApiBase {
-  //#region Fields∏
+  //#region Fields
+
+  public readonly ERR_SERVER_NOT_CONNECTED: string = "The server is not connected";
 
   public readonly account: AccountApi;
   public readonly daily: DailyApi;
@@ -49,6 +51,11 @@ export class Api extends ApiBase {
    * Request game title-stats.
    */
   public async getGameTitleStats() {
+    if (!this.isConnected) {
+      this.printServerNotConnectedWarning();
+      return null;
+    }
+
     try {
       const response = await this.doGet("/game/titlestats");
       return (await response.json()) as TitleStatsResponse;
@@ -63,6 +70,11 @@ export class Api extends ApiBase {
    * @returns `true` if unlinking was successful, `false` if not
    */
   public async unlinkDiscord() {
+    if (!this.isConnected) {
+      this.printServerNotConnectedWarning();
+      return false;
+    }
+
     try {
       const response = await this.doPost("/auth/discord/logout");
       if (response.ok) {
@@ -82,6 +94,11 @@ export class Api extends ApiBase {
    * @returns `true` if unlinking was successful, `false` if not
    */
   public async unlinkGoogle() {
+    if (!this.isConnected) {
+      this.printServerNotConnectedWarning();
+      return false;
+    }
+
     try {
       const response = await this.doPost("/auth/google/logout");
       if (response.ok) {
@@ -117,6 +134,16 @@ export class Api extends ApiBase {
       console.log("isLocalServerConnected:", this.isConnected);
     }
   }
+
+  //#endregion
+  //#region Private
+
+  private printServerNotConnectedWarning() {
+    if (import.meta.env.VITE_API_DEBUG === "1") {
+      console.warn(this.ERR_SERVER_NOT_CONNECTED);
+    }
+  }
+
   //#endregion
 }
 
