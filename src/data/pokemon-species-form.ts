@@ -161,7 +161,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   /**
-   * Deprecated function Sam created to slowly introduce Pokemon into the game generation by generation
+   * Deprecated function created to slowly introduce Pokemon into the game generation by generation
    * @todo remove this function as it will always return true
    */
   isObtainable(): boolean {
@@ -209,7 +209,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   /**
-   * Custom Sam logic to make Megas, Primals, and g-max Pokemon give 1.5x exp
+   * Custom legacy logic to make Megas, Primals, and g-max Pokemon give 1.5x exp
    * TODO: Do we want to keep this? The function itself can use some refactoring too...
    */
   getBaseExp(): number {

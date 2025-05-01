@@ -66,7 +66,7 @@ const expLevels = [
 ];
 
 /**
- * Custom value derived by Sam so that Pokemon with slower leveling rates would be better.
+ * Custom legacy value so that Pokemon with slower leveling rates would be better.
  *
  * TODO: See if this needs tweaking (or is needed at all) and then update the above hardcoded
  * arrays for more optimization
