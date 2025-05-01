@@ -858,7 +858,7 @@ export class Arena {
   getTags<T extends ArenaTag = ArenaTag>(
     tagPredicate: (t: ArenaTag) => boolean,
     side: ArenaTagSide = ArenaTagSide.BOTH,
-  ): T[] {
+  ): T[] | undefined {
     const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
 
     return this.tags.filter((t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T[];
