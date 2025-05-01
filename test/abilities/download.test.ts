@@ -28,7 +28,8 @@ describe("Abilities - Download", () => {
       .battleType("single")
       .disableCrits()
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(MoveId.SPLASH);
+      .enemyMoveset(MoveId.SPLASH)
+      .enemyLevel(100);
   });
 
   it("should boost special attack if the enemy's defense is higher", async () => {

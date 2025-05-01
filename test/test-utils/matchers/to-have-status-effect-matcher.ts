@@ -3,6 +3,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 // -- end tsdoc imports --
 
+import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
@@ -39,15 +40,19 @@ export function toHaveStatusEffectMatcher(
     };
   }
 
-  const statusEffect = received.getStatusEffect(ignoreMockAbility);
-  const pass = statusEffect === expectedStatusEffect;
+  const actualStatusEffect = received.getStatusEffect(ignoreMockAbility);
+  const pass = actualStatusEffect === expectedStatusEffect;
+
+  const pkmName = getPokemonNameWithAffix(received);
+  const expectedStatusEffectStr = `${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect})`;
+  const actualStatusEffectStr = `${StatusEffect[actualStatusEffect]} (=${actualStatusEffect})`;
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} NOT to have status effect: ${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect}), but it did.`
-        : `Expected ${received.name} to have status effect: ${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect}), but got: ${StatusEffect[statusEffect]} (=${statusEffect})`,
+        ? `Expected ${pkmName} NOT to have status effect: ${expectedStatusEffectStr}, but it did.`
+        : `Expected ${pkmName} to have status effect: ${expectedStatusEffectStr}, but got: ${actualStatusEffectStr}.`,
   };
 }
 

@@ -1,5 +1,6 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { Stat, type EffectiveStat } from "#enums/stat";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
@@ -48,11 +49,14 @@ export function toHaveEffectiveStatMatcher(
   const actualValue = received.getEffectiveStat(stat, enemy, move, AbilityApplyMode.DEFAULT, isCritical);
   const pass = actualValue === expectedValue;
 
+  const pkmName = getPokemonNameWithAffix(received);
+  const statName = Stat[stat];
+
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} to NOT have EFFECTIVE ${Stat[stat]}=${expectedValue}, but it did.`
-        : `Expected ${received.name} to have EFFECTIVE ${Stat[stat]}=${expectedValue}, but got ${actualValue}.`,
+        ? `Expected ${pkmName} to NOT have EFFECTIVE ${statName}=${expectedValue}, but it did.`
+        : `Expected ${pkmName} to have EFFECTIVE ${statName}=${expectedValue}, but got ${actualValue}.`,
   };
 }

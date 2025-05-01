@@ -159,7 +159,7 @@ export class MovePhase extends BattlePhase {
       return this.end();
     }
 
-    console.log(MoveId[this.move.moveId]);
+    console.log(MoveId[this.move.moveId], `(${getPokemonNameWithAffix(this.pokemon)})`);
 
     // Check if move is unusable (e.g. because it's out of PP due to a mid-turn Spite).
     if (!this.canMove(true)) {
