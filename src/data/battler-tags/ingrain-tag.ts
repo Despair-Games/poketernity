@@ -33,14 +33,9 @@ export class IngrainTag extends TrappedTag {
     const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.queuePokemonHealPhase(
-        true,
-        pokemon.getBattlerIndex(),
-        toDmgValue(pokemon.getMaxHp() / 16),
-        {
-          message: i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-        },
-      );
+      globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+        message: i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      });
     }
 
     return ret;
