@@ -1,9 +1,10 @@
+import { DEFAULT_NEW_TERRAIN_DURATION } from "#app/constants/game";
+import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/weather";
 import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/terrain-event-type-change-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { ArenaTag } from "#app/data/arena-tag";
-import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
+import { getArenaTag, type ArenaTag, type EntryHazardTag } from "#app/data/arena-tag";
 import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
@@ -11,18 +12,16 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { DEFAULT_NEW_TERRAIN_DURATION } from "#app/constants/game";
-import { PRIMAL_WEATHER_TYPES } from "#app/constants/weather";
-import { DEFAULT_NEW_WEATHER_DURATION } from "#app/constants/weather";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type AbstractConstructor, getEnumValues } from "#app/utils/common-utils";
-import { randSeedInt, weightedPick } from "#app/utils/random-utils";
+import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { getEnumValues } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedInt, weightedPick } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -796,11 +795,11 @@ export class Arena {
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
   ): boolean {
-    const existingTag = this.getTagOnSide(tagType, side);
+    const existingTag = this.findTag(tagType, side);
     if (existingTag) {
       existingTag.onOverlap(this);
 
-      if (existingTag instanceof EntryHazardTag) {
+      if (EntryHazardArenaTagTypes.includes(existingTag.tagType)) {
         const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
         this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
       }
@@ -814,7 +813,9 @@ export class Arena {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);
 
-      const { layers = 0, maxLayers = 0 } = newTag instanceof EntryHazardTag ? newTag : {};
+      const { layers = 0, maxLayers = 0 } = EntryHazardArenaTagTypes.includes(newTag.tagType)
+        ? (newTag as EntryHazardTag)
+        : {};
 
       this.eventTarget.dispatchEvent(
         new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers),
@@ -825,57 +826,44 @@ export class Arena {
   }
 
   /**
-   * Attempts to get a tag from the Arena via {@linkcode getTagOnSide} that applies to both sides
-   * @param tagType The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
-   * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
+   * Checks if an {@linkcode ArenaTag} exists on the specified side of the Arena.
+   * @param tagType - The {@linkcode ArenaTagType} to check for
+   * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
+   * @returns Whether the `ArenaTag` exists
    */
-  getTag(tagType: ArenaTagType | AbstractConstructor<ArenaTag>): ArenaTag | undefined {
-    return this.getTagOnSide(tagType, ArenaTagSide.BOTH);
-  }
+  hasTag(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): boolean {
+    const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
 
-  hasTag(tagType: ArenaTagType): boolean {
-    return !!this.getTag(tagType);
+    return this.tags.some((t) => t.tagType === tagType && (side === ArenaTagSide.BOTH || validSides.has(t.side)));
   }
 
   /**
    * Attempts to get a tag from the Arena from a specific side (the tag passed in has to either apply to both sides, or the specific side only)
    *
    * eg: `MIST` only applies to the user's side, while `MUD_SPORT` applies to both user and enemy side
-   * @param tagType The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
-   * @param side The {@linkcode ArenaTagSide} to look at
+   * @param tagType - The {@linkcode ArenaTagType} to get
+   * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTagOnSide(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
-    return typeof tagType === "number"
-      ? this.tags.find(
-          (t) =>
-            t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-        )
-      : this.tags.find(
-          (t) =>
-            t instanceof tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-        );
+  findTag<T extends ArenaTag = ArenaTag>(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): T | undefined {
+    const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
+
+    return this.tags.find((t) => tagType === t.tagType && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T;
   }
 
   /**
-   * Uses {@linkcode findTagsOnSide} to filter (using the parameter function) for specific tags that apply to both sides
-   * @param tagPredicate a function mapping {@linkcode ArenaTag}s to `boolean`s
-   * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return true and apply to both sides
-   */
-  findTags(tagPredicate: (t: ArenaTag) => boolean): ArenaTag[] {
-    return this.findTagsOnSide(tagPredicate, ArenaTagSide.BOTH);
-  }
-
-  /**
-   * Returns specific tags from the arena that pass the `tagPredicate` function passed in as a parameter, and apply to the given side
-   * @param tagPredicate a function mapping {@linkcode ArenaTag}s to `boolean`s
-   * @param side The {@linkcode ArenaTagSide} to look at
+   * Returns all tags from the arena that pass the `tagPredicate` function passed in as a parameter, and apply to the given side
+   * @param tagPredicate - A function mapping {@linkcode ArenaTag}s to `boolean`s
+   * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return `true` and apply to the given side
    */
-  findTagsOnSide(tagPredicate: (t: ArenaTag) => boolean, side: ArenaTagSide): ArenaTag[] {
-    return this.tags.filter(
-      (t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-    );
+  getTags<T extends ArenaTag = ArenaTag>(
+    tagPredicate: (t: ArenaTag) => boolean,
+    side: ArenaTagSide = ArenaTagSide.BOTH,
+  ): T[] | undefined {
+    const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
+
+    return this.tags.filter((t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T[];
   }
 
   lapseTags(): void {
@@ -902,7 +890,7 @@ export class Arena {
   }
 
   removeTagOnSide(tagType: ArenaTagType, side: ArenaTagSide, quiet: boolean = false): boolean {
-    const tag = this.getTagOnSide(tagType, side);
+    const tag = this.findTag(tagType, side);
     if (tag) {
       tag.onRemove(this, quiet);
       this.tags.splice(this.tags.indexOf(tag), 1);

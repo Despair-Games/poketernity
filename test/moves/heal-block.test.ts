@@ -1,12 +1,12 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { GameManager } from "#test/test-utils/gameManager";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -61,8 +61,8 @@ describe("Moves - Heal Block", () => {
     game.move.select(MoveId.WISH);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeDefined();
-    while (game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
+    expect(game.scene.arena.hasTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeTruthy();
+    while (game.scene.arena.hasTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
       game.move.select(MoveId.SPLASH);
       await game.toEndOfTurn();
     }

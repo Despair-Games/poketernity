@@ -767,7 +767,7 @@ export abstract class Move implements Localizable {
       moveAccuracy.value = Math.floor(moveAccuracy.value * FOG_ACCURACY_MULTIPLIER);
     }
 
-    if (!isOhko && globalScene.arena.getTag(ArenaTagType.GRAVITY)) {
+    if (!isOhko && globalScene.arena.hasTag(ArenaTagType.GRAVITY)) {
       moveAccuracy.value = Math.floor(moveAccuracy.value * 1.67);
     }
 
