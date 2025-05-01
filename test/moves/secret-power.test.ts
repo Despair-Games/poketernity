@@ -1,17 +1,17 @@
+import { allAbilities, allMoves } from "#app/data/data-lists";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import { Stat } from "#enums/stat";
-import { allAbilities, allMoves } from "#app/data/data-lists";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { StatusEffect } from "#enums/status-effect";
-import { BattlerIndex } from "#enums/battler-index";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Moves - Secret Power", () => {
   let phaserGame: Phaser.Game;
@@ -75,10 +75,9 @@ describe("Moves - Secret Power", () => {
     const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
     vi.spyOn(sereneGraceAttr, "apply");
 
-    let rainbowEffect = game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);
+    const rainbowEffect = game.scene.arena.findTag(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)!;
     expect(rainbowEffect).toBeDefined();
 
-    rainbowEffect = rainbowEffect!;
     vi.spyOn(rainbowEffect, "apply");
 
     game.move.select(MoveId.SECRET_POWER, 0, BattlerIndex.ENEMY);

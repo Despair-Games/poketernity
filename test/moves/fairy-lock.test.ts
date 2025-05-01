@@ -1,12 +1,12 @@
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Fairy Lock", () => {
   let phaserGame: Phaser.Game;
@@ -43,8 +43,8 @@ describe("Moves - Fairy Lock", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
 
@@ -72,8 +72,8 @@ describe("Moves - Fairy Lock", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
 
@@ -101,8 +101,8 @@ describe("Moves - Fairy Lock", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
@@ -128,8 +128,8 @@ describe("Moves - Fairy Lock", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
 
@@ -166,8 +166,8 @@ describe("Moves - Fairy Lock", () => {
     expect(enemyPokemon[1].isFainted()).toBe(true);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeTruthy();
     expect(playerPokemon[0].isTrapped()).toBe(true);
   });
 });

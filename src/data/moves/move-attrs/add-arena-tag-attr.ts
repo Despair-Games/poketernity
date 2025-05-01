@@ -83,7 +83,7 @@ export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
 
   override getCondition(): MoveConditionFunc | null {
     return this.failOnOverlap
-      ? (user, _target, move) => !globalScene.arena.getTagOnSide(this.tagType, this.getTagSide(user, move))
+      ? (user, _target, move) => !globalScene.arena.hasTag(this.tagType, this.getTagSide(user, move))
       : null;
   }
 }

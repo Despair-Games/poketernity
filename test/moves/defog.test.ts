@@ -1,5 +1,5 @@
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -62,7 +62,7 @@ describe("Moves - Defog", () => {
     await game.toEndOfTurn();
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      expect(game.scene.arena.getTagOnSide(tagType, side)).toBeUndefined(),
+      expect(game.scene.arena.hasTag(tagType, side)).toBeFalsy(),
     );
   });
 
@@ -83,7 +83,7 @@ describe("Moves - Defog", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 });

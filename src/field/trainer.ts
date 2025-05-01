@@ -1,4 +1,4 @@
-import { EntryHazardTag } from "#app/data/arena-tag";
+import type { EntryHazardTag } from "#app/data/arena-tag";
 import { getLevelForWaveFunc } from "#app/data/exp";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -11,16 +11,17 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
+import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
+import { TeraAIMode } from "#enums/tera-ai-mode";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
-import { TeraAIMode } from "#enums/tera-ai-mode";
 import i18next from "i18next";
 
 export default class Trainer extends Phaser.GameObjects.Container {
@@ -551,8 +552,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
         score /= playerField.length;
         if (forSwitch && !p.isOnField()) {
           globalScene.arena
-            .findTagsOnSide((t) => t instanceof EntryHazardTag, ArenaTagSide.ENEMY)
-            .map((t) => (score *= (t as EntryHazardTag).getMatchupScoreMultiplier(p)));
+            .getTags<EntryHazardTag>((t) => EntryHazardArenaTagTypes.includes(t.tagType), ArenaTagSide.ENEMY)
+            ?.map((t) => (score *= t.getMatchupScoreMultiplier(p)));
         }
       }
 

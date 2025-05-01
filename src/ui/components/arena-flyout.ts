@@ -1,8 +1,11 @@
-import { EntryHazardTag } from "#app/data/arena-tag";
 import type { ArenaEvent } from "#app/events/arena";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
+import type { TurnEndEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
+import { TimeOfDayWidget } from "#app/ui/components/time-of-day-widget";
 import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { toCamelCaseString, toTitleCase } from "#app/utils/string-utils";
 import { ArenaEventType } from "#enums/arena-event-type";
@@ -15,9 +18,6 @@ import { WeatherType } from "#enums/weather-type";
 import { WindowVariant } from "#enums/window-variant";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
-import type { TurnEndEvent } from "../../events/battle-scene";
-import { addWindow } from "../ui-theme";
-import { TimeOfDayWidget } from "./time-of-day-widget";
 
 /** Enum used to differentiate {@linkcode Arena} effects */
 enum ArenaEffectType {
@@ -279,7 +279,9 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           return;
         }
 
-        const isEntryHazardTag = globalScene.arena.getTag(tagAddedEvent.arenaTagType) instanceof EntryHazardTag;
+        const isEntryHazardTag =
+          EntryHazardArenaTagTypes.includes(tagAddedEvent.arenaTagType)
+          && globalScene.arena.hasTag(tagAddedEvent.arenaTagType);
         let arenaEffectType: ArenaEffectType;
 
         if (tagAddedEvent.arenaTagSide === ArenaTagSide.BOTH) {

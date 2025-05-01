@@ -1,16 +1,16 @@
 import type { EntryHazardTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/data-lists";
+import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { BattlerIndex } from "#enums/battler-index";
-import { StatusEffect } from "#enums/status-effect";
-import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 
 describe("Moves - Destiny Bond", () => {
   let phaserGame: Phaser.Game;
@@ -195,8 +195,7 @@ describe("Moves - Destiny Bond", () => {
     expect(playerPokemon?.isFainted()).toBe(true);
 
     // Ceaseless Edge spikes effect should still activate
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
-    expect(tagAfter.tagType).toBe(ArenaTagType.SPIKES);
+    const tagAfter = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)!;
     expect(tagAfter.layers).toBe(1);
   });
 
@@ -220,8 +219,7 @@ describe("Moves - Destiny Bond", () => {
     expect(playerPokemon1?.isFainted()).toBe(true);
 
     // Pledge secondary effect should still activate
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY);
-    expect(tagAfter?.tagType).toBe(ArenaTagType.GRASS_WATER_PLEDGE);
+    expect(game.scene.arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY)).toBeTruthy();
   });
 
   /**

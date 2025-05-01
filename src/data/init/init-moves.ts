@@ -1604,7 +1604,7 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, true, { failOnOverlap: true, turnCountMin: 5 })
       .condition(
         (user, _target, _move) =>
-          !globalScene.arena.getTag(ArenaTagType.GRAVITY)
+          !globalScene.arena.hasTag(ArenaTagType.GRAVITY)
           && [BattlerTagType.FLOATING, BattlerTagType.IGNORE_FLYING, BattlerTagType.INGRAIN].every(
             (tag) => !user.getTag(tag),
           ),
@@ -2928,7 +2928,7 @@ export function initMoves() {
     new AttackMove(MoveId.GRAV_APPLE, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, 100, 10, 100, 0, 8)
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
       .attr(MovePowerMultiplierAttr, (_user, _target, _move) =>
-        globalScene.arena.getTag(ArenaTagType.GRAVITY) ? 1.5 : 1,
+        globalScene.arena.hasTag(ArenaTagType.GRAVITY) ? 1.5 : 1,
       )
       .makesContact(false),
     new AttackMove(MoveId.SPIRIT_BREAK, ElementalType.FAIRY, MoveCategory.PHYSICAL, 75, 100, 15, 100, 0, 8)
