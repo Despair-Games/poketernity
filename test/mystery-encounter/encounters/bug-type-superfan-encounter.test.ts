@@ -555,7 +555,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const gripClawCountBefore =
         scene.findModifier((m) => m instanceof ContactHeldItemTransferChanceModifier)?.stackCount ?? 0;
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.to("SelectModifierPhase");
@@ -576,7 +576,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(encounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [SpeciesId.BUTTERFREE]);
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });

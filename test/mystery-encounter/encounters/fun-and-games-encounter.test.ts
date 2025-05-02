@@ -139,7 +139,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.TACKLE]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(scene.getEnemyPokemon()?.species.speciesId).toBe(SpeciesId.WOBBUFFET);
@@ -169,7 +169,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
     it("should have no items in rewards if Wubboffet doesn't take enough damage", async () => {
       scene.money = 20000;
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -195,7 +195,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -224,7 +224,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -253,7 +253,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {

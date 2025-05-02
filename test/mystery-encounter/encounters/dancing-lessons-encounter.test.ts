@@ -158,7 +158,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [];
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof LearnMovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
@@ -170,7 +170,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [];
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -198,7 +198,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       const partyCountBefore = scene.getPlayerParty().length;
       scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.DRAGON_DANCE)];
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
       const partyCountAfter = scene.getPlayerParty().length;
 
       expect(partyCountBefore + 1).toBe(partyCountAfter);
@@ -237,7 +237,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.DRAGON_DANCE)];
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });

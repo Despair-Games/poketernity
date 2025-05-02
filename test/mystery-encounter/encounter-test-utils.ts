@@ -15,20 +15,22 @@ import type { GameManager } from "#test/test-utils/gameManager";
 import { vi } from "vitest";
 
 /**
- * Runs a {@linkcode MysteryEncounter} to either the start of a battle, or to the {@linkcode MysteryEncounterRewardsPhase}, depending on the option selected
- * @param game
- * @param optionNo Human number, not index
- * @param secondaryOptionSelect
- * @param isBattle If selecting option should lead to battle, set to `true`
+ * Runs a Mystery Encounter to either the start of a battle, or to the {@linkcode MysteryEncounterRewardsPhase}, depending on the option selected.
+ *
+ * @param game - The {@linkcode GameManager}
+ * @param optionNumber - The choice to make in the ME, starting from 1
+ * @param secondaryOptionSelect - (Optional) Needs to be provided if there is a Pokemon to select in the party
+ *  for the chosen option, with the slot of the Pokemon, and if there is another choice after that, which one.
+ * @param isBattle - Needs to be set to `true` if the selected option should lead to battle. Default: `false`
  */
 export async function runMysteryEncounterToEnd(
   game: GameManager,
-  optionNo: number,
-  secondaryOptionSelect?: { pokemonNo: number; optionNo?: number },
+  optionNumber: number,
+  secondaryOptionSelect?: { partySlot: number; optionNumber?: number },
   isBattle: boolean = false,
 ) {
   vi.spyOn(EncounterPhaseUtils, "selectPokemonForOption");
-  await runSelectMysteryEncounterOption(game, optionNo, secondaryOptionSelect);
+  await runSelectMysteryEncounterOption(game, optionNumber, secondaryOptionSelect);
 
   // run the selected options phase
   game.onNextPrompt(
@@ -88,10 +90,18 @@ export async function runMysteryEncounterToEnd(
   }
 }
 
+/**
+ * Makes the inputs required to select the given option for a Mystery Encounter.
+ *
+ * @param game - The {@linkcode GameManager}
+ * @param optionNumber - The choice to make in the ME, starting from 1
+ * @param secondaryOptionSelect - (Optional) Needs to be provided if there is a Pokemon to select in the party
+ *  for the chosen option, with the slot of the Pokemon, and if there is another choice after that, which one.
+ */
 export async function runSelectMysteryEncounterOption(
   game: GameManager,
-  optionNo: number,
-  secondaryOptionSelect?: { pokemonNo: number; optionNo?: number },
+  optionNumber: number,
+  secondaryOptionSelect?: { partySlot: number; optionNumber?: number },
 ) {
   await game.phaseInterceptor.to("MysteryEncounterPhase", true);
 
@@ -99,7 +109,7 @@ export async function runSelectMysteryEncounterOption(
   const uiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
   uiHandler.unblockInput(); // input are blocked by 1s to prevent accidental input. Tests need to handle that
 
-  switch (optionNo) {
+  switch (optionNumber) {
     default:
     case 1:
       // no movement needed. Default cursor position
@@ -116,20 +126,22 @@ export async function runSelectMysteryEncounterOption(
       break;
   }
 
-  if (!isNil(secondaryOptionSelect?.pokemonNo)) {
-    await handleSecondaryOptionSelect(game, secondaryOptionSelect.pokemonNo, secondaryOptionSelect.optionNo);
+  if (!isNil(secondaryOptionSelect?.partySlot)) {
+    await handleSecondaryOptionSelect(game, secondaryOptionSelect.partySlot, secondaryOptionSelect.optionNumber);
   } else {
     uiHandler.processInput(Button.ACTION);
   }
 }
 
 /**
+ * Makes the input to select a Pokemon in the party, and optionally make a selection in a subsequent Option Select menu.
+ *
  * @param game - The {@linkcode GameManager}.
- * @param pokemonNo - The Pokemon to select, from 1 to 6.
- * @param optionNo - (Optional) If the Pokemon selection is followed by another menu,
+ * @param partySlot - The Pokemon to select in the party, from 1 to 6.
+ * @param optionNumber - (Optional) If the Pokemon selection is followed by another menu,
  *   the number of the option to select for this menu, starting from 1.
  */
-async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number, optionNo?: number) {
+async function handleSecondaryOptionSelect(game: GameManager, partySlot: number, optionNumber?: number) {
   // Queue prompt reaction to select the requested Pokemon in party screen
   game.onNextPrompt(
     "MysteryEncounterPhase",
@@ -137,7 +149,7 @@ async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number,
     () => {
       const partyUiHandler = game.scene.ui.getHandler<PartyUiHandler>();
       // Move to the requested Pokemon, open menu and click "Select"
-      for (let i = 1; i < pokemonNo; i++) {
+      for (let i = 1; i < partySlot; i++) {
         partyUiHandler.processInput(Button.DOWN);
       }
       partyUiHandler.processInput(Button.ACTION);
@@ -147,14 +159,14 @@ async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number,
   );
 
   // Queue prompt reaction to select the requested option in the Option Select menu
-  if (!isNil(optionNo)) {
+  if (!isNil(optionNumber)) {
     game.onNextPrompt(
       "MysteryEncounterPhase",
       UiMode.OPTION_SELECT,
       () => {
         const optionUiHandler = game.scene.ui.getHandler<OptionSelectUiHandler>();
         // Navigate to and select the requestion option
-        for (let i = 1; i < optionNo; i++) {
+        for (let i = 1; i < optionNumber; i++) {
           optionUiHandler.processInput(Button.DOWN);
         }
         optionUiHandler.processInput(Button.ACTION);
