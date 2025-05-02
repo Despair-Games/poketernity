@@ -132,7 +132,7 @@ export class SpeciesFormChange {
     return trigger;
   }
 
-  /** @returns `true` if the form change is to a Mega Evolution */
+  /** @returns `true` if the form change is to a Mega Evolution (excludes Primals) */
   public isMega(): boolean {
     const megaForms: string[] = [SpeciesFormKey.MEGA, SpeciesFormKey.MEGA_X, SpeciesFormKey.MEGA_Y];
     return megaForms.includes(this.formKey);
@@ -262,21 +262,19 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
    * @returns `true` if the Pokemon will revert to its original form, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
-    if (pokemon.hasAbility(this.ability, false, true)) {
-      const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();
-      const isAbilitySuppressed = pokemon.summonData.abilitySuppressed;
-      const summonDataAbility = pokemon.summonData.ability;
-      const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== AbilityId.NONE;
-
-      if (
-        globalScene.arena.hasWeather(this.weathers)
-        || isWeatherSuppressed
-        || isAbilitySuppressed
-        || isAbilityChanged
-      ) {
-        return true;
-      }
+    if (!pokemon.hasAbility(this.ability, false, true)) {
+      return false;
     }
+
+    const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();
+    const isAbilitySuppressed = pokemon.summonData.abilitySuppressed;
+    const summonDataAbility = pokemon.summonData.ability;
+    const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== AbilityId.NONE;
+
+    if (globalScene.arena.hasWeather(this.weathers) || isWeatherSuppressed || isAbilitySuppressed || isAbilityChanged) {
+      return true;
+    }
+
     return false;
   }
 }
