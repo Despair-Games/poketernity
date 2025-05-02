@@ -4,7 +4,7 @@ import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encount
 import { CommandPhase } from "#app/phases/command-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";

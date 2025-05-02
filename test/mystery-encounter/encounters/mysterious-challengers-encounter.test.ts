@@ -6,7 +6,7 @@ import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encount
 import { TrainerConfig, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";

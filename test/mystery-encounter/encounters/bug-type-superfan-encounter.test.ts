@@ -8,7 +8,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -367,7 +367,10 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await skipBattleRunMysteryEncounterRewardsPhase(game, false);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterRewardsPhase.name);
-      game.phaseInterceptor["prompts"] = []; // Clear out prompt handlers
+
+      // Clear out prompt handlers created by `runMysteryEncounterToEnd`.
+      // TODO: refactor the prompt handler queue to add this handler at the front of the queue instead.
+      game.phaseInterceptor["prompts"] = [];
       game.onNextPrompt("MysteryEncounterRewardsPhase", UiMode.OPTION_SELECT, () => {
         game.phaseInterceptor.superEndPhase();
       });

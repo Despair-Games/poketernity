@@ -7,7 +7,7 @@ import { generateModifierType } from "#app/data/mystery-encounters/utils/encount
 import { PokemonNatureWeightModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import * as RandomUtils from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";

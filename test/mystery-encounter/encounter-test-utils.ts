@@ -1,6 +1,5 @@
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MessagePhase } from "#app/phases/message-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
@@ -13,7 +12,7 @@ import { isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
 import type { GameManager } from "#test/test-utils/gameManager";
-import { expect, vi } from "vitest";
+import { vi } from "vitest";
 
 /**
  * Runs a {@linkcode MysteryEncounter} to either the start of a battle, or to the {@linkcode MysteryEncounterRewardsPhase}, depending on the option selected
@@ -94,32 +93,6 @@ export async function runSelectMysteryEncounterOption(
   optionNo: number,
   secondaryOptionSelect?: { pokemonNo: number; optionNo?: number },
 ) {
-  // Handle any eventual queued messages (e.g. weather phase, etc.)
-  game.onNextPrompt(
-    "MessagePhase",
-    UiMode.MESSAGE,
-    () => {
-      const uiHandler = game.scene.ui.getHandler<MessageUiHandler>();
-      uiHandler.processInput(Button.ACTION);
-    },
-    () => game.isCurrentPhase(MysteryEncounterOptionSelectedPhase),
-  );
-
-  if (game.isCurrentPhase(MessagePhase)) {
-    await game.phaseInterceptor.to("MessagePhase");
-  }
-
-  // dispose of intro messages
-  game.onNextPrompt(
-    "MysteryEncounterPhase",
-    UiMode.MESSAGE,
-    () => {
-      const uiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
-      uiHandler.processInput(Button.ACTION);
-    },
-    () => game.isCurrentPhase(MysteryEncounterOptionSelectedPhase),
-  );
-
   await game.phaseInterceptor.to("MysteryEncounterPhase", true);
 
   // select the desired option
@@ -150,40 +123,48 @@ export async function runSelectMysteryEncounterOption(
   }
 }
 
+/**
+ * @param game - The {@linkcode GameManager}.
+ * @param pokemonNo - The Pokemon to select, from 1 to 6.
+ * @param optionNo - (Optional) If the Pokemon selection is followed by another menu,
+ *   the number of the option to select for this menu, starting from 1.
+ */
 async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number, optionNo?: number) {
-  // Handle secondary option selections
-  const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
-  vi.spyOn(partyUiHandler, "start");
+  // Queue prompt reaction to select the requested Pokemon in party screen
+  game.onNextPrompt(
+    "MysteryEncounterPhase",
+    UiMode.PARTY,
+    () => {
+      const partyUiHandler = game.scene.ui.getHandler<PartyUiHandler>();
+      // Move to the requested Pokemon, open menu and click "Select"
+      for (let i = 1; i < pokemonNo; i++) {
+        partyUiHandler.processInput(Button.DOWN);
+      }
+      partyUiHandler.processInput(Button.ACTION);
+      partyUiHandler.processInput(Button.ACTION);
+    },
+    () => game.isCurrentPhase(MysteryEncounterOptionSelectedPhase),
+  );
+
+  // Queue prompt reaction to select the requested option in the Option Select menu
+  if (!isNil(optionNo)) {
+    game.onNextPrompt(
+      "MysteryEncounterPhase",
+      UiMode.OPTION_SELECT,
+      () => {
+        const optionUiHandler = game.scene.ui.getHandler<OptionSelectUiHandler>();
+        // Navigate to and select the requestion option
+        for (let i = 1; i < optionNo; i++) {
+          optionUiHandler.processInput(Button.DOWN);
+        }
+        optionUiHandler.processInput(Button.ACTION);
+      },
+      () => game.isCurrentPhase(MysteryEncounterOptionSelectedPhase),
+    );
+  }
 
   const encounterUiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
   encounterUiHandler.processInput(Button.ACTION);
-
-  await vi.waitFor(() => expect(partyUiHandler.start).toHaveBeenCalled());
-
-  for (let i = 1; i < pokemonNo; i++) {
-    partyUiHandler.processInput(Button.DOWN);
-  }
-
-  // Open options on Pokemon
-  partyUiHandler.processInput(Button.ACTION);
-  // Click "Select" on Pokemon options
-  partyUiHandler.processInput(Button.ACTION);
-
-  // If there is a second choice to make after selecting a Pokemon
-  if (!isNil(optionNo)) {
-    // Wait for Summary menu to close and second options to spawn
-    const secondOptionUiHandler = game.scene.ui.handlers[UiMode.OPTION_SELECT] as OptionSelectUiHandler;
-    vi.spyOn(secondOptionUiHandler, "start");
-    await vi.waitFor(() => expect(secondOptionUiHandler.start).toHaveBeenCalled());
-
-    // Navigate down to the correct option
-    for (let i = 1; i < optionNo!; i++) {
-      secondOptionUiHandler.processInput(Button.DOWN);
-    }
-
-    // Select the option
-    secondOptionUiHandler.processInput(Button.ACTION);
-  }
 }
 
 /**

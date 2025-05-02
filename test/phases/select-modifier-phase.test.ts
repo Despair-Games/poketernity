@@ -4,7 +4,7 @@ import { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { shiftCharCodes } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";

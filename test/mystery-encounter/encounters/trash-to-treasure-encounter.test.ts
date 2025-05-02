@@ -7,7 +7,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import * as MoveAnimUtils from "#app/utils/move-anim-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";

@@ -6,8 +6,6 @@ import pad_xbox360 from "./configs/inputs/pad_xbox360";
 import pad_dualshock from "./configs/inputs/pad_dualshock";
 import pad_procon from "./configs/inputs/pad_procon";
 import { UiMode } from "#enums/ui-mode";
-import type { GamepadSettingsUiHandler } from "./ui/settings/gamepad-settings-ui-handler";
-import type { KeyboardSettingsUiHandler } from "./ui/settings/keyboard-settings-ui-handler";
 import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
