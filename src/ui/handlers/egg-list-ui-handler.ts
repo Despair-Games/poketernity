@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import { ScrollableGridController } from "#app/ui/helpers/scrollable-grid-controller";

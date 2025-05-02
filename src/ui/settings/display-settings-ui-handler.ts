@@ -1,5 +1,5 @@
 import type { SupportedLanguage } from "#app/@types/Language";
-import { LANGUAGE_MAX_OPTIONS } from "#app/constants/ui";
+import { LANGUAGE_MAX_OPTIONS } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { supportedLanguages } from "#app/system/settings/supported-languages";

@@ -4,7 +4,7 @@ import i18next from "i18next";
 import { toTitleCase } from "#app/utils/string-utils";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { TEXT_SCALE } from "#app/constants/ui";
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 
 const hiddenX = -150;
 const shownX = 0;

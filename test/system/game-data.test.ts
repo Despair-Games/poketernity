@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import * as account from "#app/account";
-import * as constants from "#app/constants/app";
+import * as constants from "#app/constants/app-constants";
 import { api } from "#app/plugins/api/api";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

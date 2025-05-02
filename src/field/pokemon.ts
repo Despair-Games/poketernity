@@ -13,7 +13,7 @@ import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game-constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -4186,6 +4186,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.turnData = deepCopy<PokemonTurnData>(defaultTurnData);
   }
 
+  /**
+   * Custom legacy exp formula to multiply the base exp (along with form modifiers) by level/5 +1
+   */
   getExpValue(): number {
     // Logic to factor in victor level has been removed for balancing purposes, so the player doesn't have to focus on EXP maxxing
     return (this.getSpeciesForm().getBaseExp() * this.level) / 5 + 1;

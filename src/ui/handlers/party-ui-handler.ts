@@ -3,7 +3,7 @@ import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
-import { GAME_WIDTH } from "#app/constants/ui";
+import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";

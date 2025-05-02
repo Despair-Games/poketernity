@@ -1,4 +1,4 @@
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import {
   doPokeballBounceAnim,

@@ -1,5 +1,5 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";

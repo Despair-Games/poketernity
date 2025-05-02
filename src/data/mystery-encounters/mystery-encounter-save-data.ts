@@ -1,4 +1,4 @@
-import { ME_BASE_SPAWN_WEIGHT } from "#app/constants/mystery-encounters";
+import { ME_BASE_SPAWN_WEIGHT } from "#app/constants/mystery-encounter-constants";
 import { isNil } from "#app/utils/common-utils";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";

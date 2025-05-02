@@ -6,15 +6,15 @@ import type { AnySettingKey, SettingsUpdateEventArgs } from "#app/@types/Setting
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import Battle, { type FixedBattleConfig } from "#app/battle";
-import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game";
+import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game-constants";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
-} from "#app/constants/mystery-encounters";
-import { ELITE_FOUR_1_WAVE } from "#app/constants/special-waves";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+} from "#app/constants/mystery-encounter-constants";
+import { ELITE_FOUR_1_WAVE } from "#app/constants/wave-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";

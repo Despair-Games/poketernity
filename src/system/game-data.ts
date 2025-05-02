@@ -11,7 +11,7 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
   bypassLogin,
-} from "#app/constants/app";
+} from "#app/constants/app-constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { allMoves, allSpecies } from "#app/data/data-lists";
 import { defaultStarterSpecies } from "#app/data/default-starters";

@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE } from "#app/constants/ui";
+import { CANVAS_SCALE } from "#app/constants/ui-constants";
 import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
 import { WindowVariant } from "#enums/window-variant";
