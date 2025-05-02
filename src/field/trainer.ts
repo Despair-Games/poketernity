@@ -1,3 +1,4 @@
+import { LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game";
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { getLevelForWaveFunc } from "#app/data/exp";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
@@ -275,23 +276,27 @@ export default class Trainer extends Phaser.GameObjects.Container {
       const strength = partyTemplate.getStrength(i);
 
       /**
-       * TODO: Tweak these values, the 1.2 value is the {@linkcode LEVEL_CAP_SCALE_FACTOR}
+       * These values are based on {@linkcode LEVEL_CAP_SCALE_FACTOR} which represents the
+       * level cap for the current floor. For reference, ordinary wild Pokemon have a 1.0x
+       * multiplier which corresponds to WEAK while most trainers have AVERAGE which is 1.1
+       * Stronger trainers will have Pokemon at STRONG which is the level cap and STRONGER
+       * actually goes over the level cap
        */
       switch (strength) {
         case PartyMemberStrength.WEAKER:
-          multiplier = 0.95;
+          multiplier = LEVEL_CAP_SCALE_FACTOR - 0.25; // 0.95
           break;
         case PartyMemberStrength.WEAK:
-          multiplier = 1.0;
+          multiplier = LEVEL_CAP_SCALE_FACTOR - 0.2; // 1.0
           break;
         case PartyMemberStrength.AVERAGE:
-          multiplier = 1.1;
+          multiplier = LEVEL_CAP_SCALE_FACTOR - 0.1; // 1.1
           break;
         case PartyMemberStrength.STRONG:
-          multiplier = 1.2;
+          multiplier = LEVEL_CAP_SCALE_FACTOR; // 1.2
           break;
         case PartyMemberStrength.STRONGER:
-          multiplier = 1.25;
+          multiplier = LEVEL_CAP_SCALE_FACTOR + 0.05; // 1.25
           break;
       }
 
