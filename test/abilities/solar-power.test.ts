@@ -1,4 +1,4 @@
-import { SUNNY_WEATHER_TYPES } from "#app/constants/weather";
+import { SUNNY_WEATHER_TYPES } from "#app/constants/weather-constants";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getEnumKeys, toDmgValue } from "#app/utils/common-utils";
 import { capitalizeString } from "#app/utils/string-utils";

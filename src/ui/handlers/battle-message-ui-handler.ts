@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";

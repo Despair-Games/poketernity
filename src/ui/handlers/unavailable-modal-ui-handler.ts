@@ -1,5 +1,5 @@
 import { updateUserInfo } from "#app/account";
-import { SESSION_ID_COOKIE } from "#app/constants/app";
+import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";

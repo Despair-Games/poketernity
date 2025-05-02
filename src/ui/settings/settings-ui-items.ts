@@ -11,7 +11,7 @@ import type {
   SettingsUiItem,
   SettingUiItemOption,
 } from "#app/@types/Settings";
-import { GAME_SPEEDS } from "#app/constants/app";
+import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { getEnumLength } from "#app/utils/common-utils";
 import { BattleStyle } from "#enums/battle-style";

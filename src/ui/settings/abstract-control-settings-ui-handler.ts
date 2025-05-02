@@ -2,7 +2,7 @@ import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";

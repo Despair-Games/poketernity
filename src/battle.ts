@@ -18,7 +18,7 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "#app/constants/special-waves";
+} from "#app/constants/wave-constants";
 import { getLevelForWaveFunc } from "#app/data/exp";
 import type { Move } from "#app/data/moves/move";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";

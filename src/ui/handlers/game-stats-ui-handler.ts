@@ -1,4 +1,4 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";

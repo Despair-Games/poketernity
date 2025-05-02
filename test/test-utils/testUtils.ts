@@ -1,4 +1,4 @@
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameManager } from "#test/test-utils/gameManager";
 import fs from "fs";

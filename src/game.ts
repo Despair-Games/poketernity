@@ -7,7 +7,7 @@ import pkg from "../package.json";
 import InvertPostFX from "./pipelines/invert";
 import { LoadingScene } from "./loading-scene";
 import BattleScene from "./battle-scene";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 
 export const game = new Phaser.Game({
   type: Phaser.WEBGL,

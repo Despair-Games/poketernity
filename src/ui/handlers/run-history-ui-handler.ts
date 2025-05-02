@@ -1,4 +1,4 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { RunEntry } from "#app/system/game-data";
 import type PokemonData from "#app/system/pokemon-data";

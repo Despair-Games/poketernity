@@ -1,5 +1,5 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounters";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allSpecies } from "#app/data/data-lists";
 import { getGenderSymbol } from "#app/data/gender";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";

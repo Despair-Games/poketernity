@@ -1,4 +1,4 @@
-import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game-constants";
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";

@@ -1,4 +1,4 @@
-import { SESSION_ID_COOKIE } from "#app/constants/app";
+import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { getCookie } from "#app/utils/app-utils";
 
 type DataType = "json" | "form-urlencoded";

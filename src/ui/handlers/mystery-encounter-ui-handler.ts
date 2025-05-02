@@ -1,4 +1,4 @@
-import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";

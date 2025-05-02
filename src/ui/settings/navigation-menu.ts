@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { GAME_WIDTH } from "#app/constants/ui";
+import { GAME_WIDTH } from "#app/constants/ui-constants";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";

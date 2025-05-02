@@ -1,5 +1,5 @@
 import BattleScene from "#app/battle-scene";
-import * as constants from "#app/constants/app";
+import * as constants from "#app/constants/app-constants";
 import { MoveAnim } from "#app/data/animations/move-anim";
 import { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

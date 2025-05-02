@@ -3,7 +3,7 @@ import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT } from "#app/constants/ui";
+import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import { HatchedPokemonContainer } from "#app/ui/components/hatched-pokemon-container";
 import { PokemonHatchInfoContainer } from "#app/ui/components/pokemon-hatch-info-container";
 import { ScrollBar } from "#app/ui/components/scroll-bar";

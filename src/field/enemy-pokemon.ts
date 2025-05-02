@@ -1,5 +1,5 @@
 import type { TurnMove } from "#app/@types/TurnMove";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";

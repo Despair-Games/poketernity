@@ -1,4 +1,4 @@
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";

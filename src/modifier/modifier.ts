@@ -1,4 +1,4 @@
-import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship";
+import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship-constants";
 import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";

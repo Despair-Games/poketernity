@@ -1,5 +1,5 @@
-import { DEFAULT_NEW_TERRAIN_DURATION } from "#app/constants/game";
-import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/weather";
+import { DEFAULT_NEW_TERRAIN_DURATION } from "#app/constants/game-constants";
+import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/weather-constants";
 import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/terrain-event-type-change-ab-attr";
