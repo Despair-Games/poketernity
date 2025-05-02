@@ -69,7 +69,7 @@ export abstract class ApiBase {
       "Content-Type": config.headers?.["Content-Type"] ?? "application/json",
     };
 
-    if (import.meta.env.MODE === "development") {
+    if (import.meta.env.VITE_API_DEBUG === "1") {
       console.debug(`Sending ${config.method ?? "GET"} request to: `, this.base + path, config);
     }
 

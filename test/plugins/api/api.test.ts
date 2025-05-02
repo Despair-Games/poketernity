@@ -5,7 +5,7 @@ import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-const apiBase = getApiBaseUrl();
+const baseUrl = getApiBaseUrl();
 
 let server;
 beforeAll(async () => {
@@ -19,6 +19,7 @@ afterEach(() => {
 describe("API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
+    vi.spyOn(api, "isConnected", "get").mockReturnValue(true);
   });
 
   describe("Game Title Stats", () => {
@@ -28,7 +29,7 @@ describe("API", () => {
     };
 
     it("should return the stats on SUCCESS", async () => {
-      server.use(http.get(`${apiBase}/game/titlestats`, () => HttpResponse.json(expectedTitleStats)));
+      server.use(http.get(`${baseUrl}/game/titlestats`, () => HttpResponse.json(expectedTitleStats)));
 
       const titleStats = await api.getGameTitleStats();
 
@@ -36,17 +37,24 @@ describe("API", () => {
     });
 
     it("should return null and report a warning on ERROR", async () => {
-      server.use(http.get(`${apiBase}/game/titlestats`, () => HttpResponse.error()));
+      server.use(http.get(`${baseUrl}/game/titlestats`, () => HttpResponse.error()));
       const titleStats = await api.getGameTitleStats();
 
       expect(titleStats).toBeNull();
       expect(console.warn).toHaveBeenCalledWith("Could not get game title stats!", expect.any(Error));
     });
+
+    it("should return null when not connected", async () => {
+      vi.spyOn(api, "isConnected", "get").mockReturnValue(false);
+      const titleStats = await api.getGameTitleStats();
+
+      expect(titleStats).toBeNull();
+    });
   });
 
   describe("Unlink Discord", () => {
     it("should return true on SUCCESS", async () => {
-      server.use(http.post(`${apiBase}/auth/discord/logout`, () => new HttpResponse("", { status: 200 })));
+      server.use(http.post(`${baseUrl}/auth/discord/logout`, () => new HttpResponse("", { status: 200 })));
 
       const success = await api.unlinkDiscord();
 
@@ -54,7 +62,7 @@ describe("API", () => {
     });
 
     it("should return false and report a warning on FAILURE", async () => {
-      server.use(http.post(`${apiBase}/auth/discord/logout`, () => new HttpResponse("", { status: 401 })));
+      server.use(http.post(`${baseUrl}/auth/discord/logout`, () => new HttpResponse("", { status: 401 })));
 
       const success = await api.unlinkDiscord();
 
@@ -63,18 +71,26 @@ describe("API", () => {
     });
 
     it("should return false and report a warning on ERROR", async () => {
-      server.use(http.post(`${apiBase}/auth/discord/logout`, () => HttpResponse.error()));
+      server.use(http.post(`${baseUrl}/auth/discord/logout`, () => HttpResponse.error()));
 
       const success = await api.unlinkDiscord();
 
       expect(success).toBe(false);
       expect(console.warn).toHaveBeenCalledWith("Could not unlink Discord!", expect.any(Error));
     });
+
+    it("should return false when not connected", async () => {
+      vi.spyOn(api, "isConnected", "get").mockReturnValue(false);
+
+      const success = await api.unlinkDiscord();
+
+      expect(success).toBe(false);
+    });
   });
 
   describe("Unlink Google", () => {
     it("should return true on SUCCESS", async () => {
-      server.use(http.post(`${apiBase}/auth/google/logout`, () => new HttpResponse("", { status: 200 })));
+      server.use(http.post(`${baseUrl}/auth/google/logout`, () => new HttpResponse("", { status: 200 })));
 
       const success = await api.unlinkGoogle();
 
@@ -82,7 +98,7 @@ describe("API", () => {
     });
 
     it("should return false and report a warning on FAILURE", async () => {
-      server.use(http.post(`${apiBase}/auth/google/logout`, () => new HttpResponse("", { status: 401 })));
+      server.use(http.post(`${baseUrl}/auth/google/logout`, () => new HttpResponse("", { status: 401 })));
 
       const success = await api.unlinkGoogle();
 
@@ -91,12 +107,20 @@ describe("API", () => {
     });
 
     it("should return false and report a warning on ERROR", async () => {
-      server.use(http.post(`${apiBase}/auth/google/logout`, () => HttpResponse.error()));
+      server.use(http.post(`${baseUrl}/auth/google/logout`, () => HttpResponse.error()));
 
       const success = await api.unlinkGoogle();
 
       expect(success).toBe(false);
       expect(console.warn).toHaveBeenCalledWith("Could not unlink Google!", expect.any(Error));
+    });
+
+    it("should return false when not connected", async () => {
+      vi.spyOn(api, "isConnected", "get").mockReturnValue(false);
+
+      const success = await api.unlinkGoogle();
+
+      expect(success).toBe(false);
     });
   });
 });

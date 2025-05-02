@@ -9,6 +9,7 @@ interface ImportMetaEnv {
   readonly VITE_DISCORD_CLIENT_ID?: string;
   readonly VITE_GOOGLE_CLIENT_ID?: string;
   readonly VITE_I18N_DEBUG?: string;
+  readonly VITE_API_DEBUG?: string;
   readonly VITE_WIKI_URL?: string;
   readonly VITE_DISCORD_URL?: string;
   readonly VITE_GITHUB_URL?: string;
