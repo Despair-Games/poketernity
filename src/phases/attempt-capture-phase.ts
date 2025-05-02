@@ -330,6 +330,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                         });
                       },
                       false,
+                      false,
                     );
                     return true;
                   },
