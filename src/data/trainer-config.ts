@@ -179,7 +179,6 @@ export const trainerPartyTemplates = {
   SIX_WEAK_SAME: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, true),
   SIX_WEAK_BALANCED: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, false, true),
 
-  // TODO: adjust gym leader templates
   GYM_LEADER_1: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
@@ -1640,7 +1639,7 @@ export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
     return trainerPartyTemplates.THREE_AVG;
   } else if (waveIndex <= EVIL_GRUNT_3_WAVE) {
     return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
-  } else if (waveIndex <= EVIL_GRUNT_4_WAVE) {
+  } else if (waveIndex < EVIL_GRUNT_4_WAVE) {
     return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
   } else {
     return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
