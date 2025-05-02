@@ -1,10 +1,8 @@
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { hasTouchscreen } from "#app/utils/app-utils";
 import { Button } from "#enums/buttons";
 import EventEmitter = Phaser.Events.EventEmitter;
-import { hasTouchscreen } from "./utils";
-import { settings } from "./system/settings/settings-manager";
-import { UiTheme } from "#enums/ui-theme";
-import { UiWindowStyle } from "#enums/ui-window-style";
 
 const repeatInputDelayMillis = 250;
 
@@ -46,7 +44,7 @@ export default class TouchControl {
     document.querySelectorAll(".apad-button").forEach((element) => this.preventElementZoom(element as HTMLElement));
     // Select all elements with the 'data-key' attribute and bind keys to them
     for (const button of document.querySelectorAll("[data-key]")) {
-      // @ts-ignore - Bind the key to the button using the dataset key
+      // @ts-expect-error - Bind the key to the button using the dataset key
       this.bindKey(button, button.dataset.key);
     }
   }
@@ -194,8 +192,6 @@ export default class TouchControl {
    */
   render() {
     if (hasTouchscreen() && settings.general.enableTouchControls) {
-      document.documentElement.dataset.uiTheme = UiTheme[settings.display.uiTheme];
-      document.documentElement.dataset.windowStyle = UiWindowStyle[settings.display.uiWindowStyle];
       const touchControls = document.getElementById("touchControls");
       if (touchControls) {
         touchControls.classList.add("visible");

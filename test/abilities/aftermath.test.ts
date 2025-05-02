@@ -1,9 +1,9 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -24,17 +24,17 @@ describe("Abilities - Aftermath", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.NO_GUARD)
+      .ability(AbilityId.NO_GUARD)
       .startingLevel(50)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.AFTERMATH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.AFTERMATH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should cause the attacker to take damage equal to 25% of their max HP when fainted by a contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -45,7 +45,7 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should not cause the attacker to take damage when fainted by a non-contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -56,8 +56,8 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should not cause the attacker to take damage if the attacker has Long Reach", async () => {
-    game.override.ability(Abilities.LONG_REACH);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.ability(AbilityId.LONG_REACH);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -69,7 +69,7 @@ describe("Abilities - Aftermath", () => {
 
   it("should not cause any Pokemon other than the attacker to take damage", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
     const enemy1 = game.field.getEnemyPokemon();
@@ -84,12 +84,12 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should cause the attacker to take damage if the user faints to U-Turn", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
     game.move.use(MoveId.U_TURN);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(feebas.isOnField()).toBe(false);
@@ -100,13 +100,13 @@ describe("Abilities - Aftermath", () => {
 
   it("should not allow the opponent to revive using a Reviver Seed", async () => {
     game.override.startingHeldItems([{ name: "REVIVER_SEED" }]);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
     feebas.hp = 1;
 
     game.move.use(MoveId.GRASS_KNOT);
-    game.doSelectPartyPokemon(1);
+    game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
     expect(feebas.getHeldItems()[0]?.type.id).toBe("REVIVER_SEED");
@@ -115,7 +115,7 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should not activate if the user faints by using Self-Destruct", async () => {
-    await game.classicMode.startBattle([Species.GASTLY]); // Ghost-type, immune to Self-Destruct
+    await game.classicMode.startBattle([SpeciesId.GASTLY]); // Ghost-type, immune to Self-Destruct
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -130,7 +130,7 @@ describe("Abilities - Aftermath", () => {
 
   it("should not activate if the user faints via indirect damage", async () => {
     game.override.enemyStatusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

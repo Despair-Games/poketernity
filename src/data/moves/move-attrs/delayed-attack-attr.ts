@@ -1,15 +1,15 @@
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { type Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
-import i18next from "i18next";
-import { type ChargeAnim } from "#enums/charge-anim";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { DelayedAttackTag } from "#app/data/arena-tag";
 import type { Move } from "#app/data/moves/move";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
-import type { DelayedAttackTag } from "#app/data/arena-tag";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import type { BooleanHolder } from "#app/utils/common-utils";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { ChargeAnim } from "#enums/charge-anim";
+import { MoveResult } from "#enums/move-result";
+import i18next from "i18next";
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple uses on the same target.
@@ -30,8 +30,11 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
   /**
    * If used virtually, this queues a message and proceeds normally.
+   *
    * Otherwise, this adds a delayed attack to the field and cancels other move effects
    * for the current attack.
+   *
+   * @todo Remove the virtual check, this behavior is incorrect and doesn't match mainline
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
     // Edge case for the move applied on a pokemon that has fainted
@@ -41,8 +44,8 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
     if (!virtual) {
       overridden.value = true;
-      globalScene.queueMoveChargeAnimation(this.chargeAnim, move.id, user);
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMoveAnimPhase(this.chargeAnim, move.id, user);
+      globalScene.phaseManager.queueMessagePhase(
         this.chargeText
           .replace("{TARGET}", getPokemonNameWithAffix(target))
           .replace("{USER}", getPokemonNameWithAffix(user)),
@@ -56,13 +59,12 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       // Add a Delayed Attack tag to the arena if it doesn't already exist
       globalScene.arena.addTag(ArenaTagType.DELAYED_ATTACK, user.id);
       // Queue an attack on the added (or existing) tag
-      const tag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
-      if (tag) {
-        tag.addAttack(user, move.id, target.getBattlerIndex());
-      }
+      const tag = globalScene.arena.findTag<DelayedAttackTag>(ArenaTagType.DELAYED_ATTACK);
+      tag?.addAttack(user, move.id, target.getBattlerIndex());
+
       return true;
     } else {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("moveTriggers:tookMoveAttack", {
           pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
           moveName: move.name,
@@ -75,7 +77,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   /** Delayed attacks fail if another delayed attack is already queued against the target */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
-      const delayedAttackTag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      const delayedAttackTag = globalScene.arena.findTag<DelayedAttackTag>(ArenaTagType.DELAYED_ATTACK);
       return !delayedAttackTag?.delayedAttacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
     };
   }

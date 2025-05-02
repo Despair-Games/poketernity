@@ -1,12 +1,12 @@
-import type { GameObjects } from "phaser";
-import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import type { Species } from "#enums/species";
-import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
-import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
+import { globalScene } from "#app/global-scene";
+import { isNil } from "#app/utils/common-utils";
 import { ImagesFolder } from "#enums/images-folders";
+import type { SpeciesId } from "#enums/species-id";
+import type { GameObjects } from "phaser";
+import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 export class MysteryEncounterSpriteConfig {
   /** The sprite key (which is the image file name). e.g. "ace_trainer_f" */
@@ -19,7 +19,7 @@ export class MysteryEncounterSpriteConfig {
    */
   fileRoot: ImagesFolder | string;
   /** Optional replacement for `spriteKey`/`fileRoot`. Just know this defaults to male/genderless, form 0, no shiny */
-  species?: Species;
+  species?: SpeciesId;
   /** Enable shadow. Defaults to `false` */
   hasShadow?: boolean = false;
   /** Disable animation. Defaults to `false` */
@@ -74,7 +74,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         ...config,
       };
 
-      if (!isNullOrUndefined(result.species)) {
+      if (!isNil(result.species)) {
         const keys = getSpriteKeysFromSpecies(result.species, undefined, undefined, result.isShiny, result.variant);
         result.spriteKey = keys.spriteKey;
         result.fileRoot = keys.fileRoot;
@@ -87,24 +87,24 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
       return;
     }
 
-    const getSprite = (spriteKey: string, hasShadow?: boolean, yShadow?: number) => {
+    const getSprite = (spriteKey: string, hasShadow: boolean = false, yShadow: number = 0) => {
       const ret = globalScene.addFieldSprite(0, 0, spriteKey);
       ret.setOrigin(0.5, 1);
       ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
-        hasShadow: !!hasShadow,
-        yShadowOffset: yShadow ?? 0,
+        hasShadow,
+        yShadowOffset: yShadow,
       });
       return ret;
     };
 
-    const getItemSprite = (spriteKey: string, hasShadow?: boolean, yShadow?: number) => {
+    const getItemSprite = (spriteKey: string, hasShadow: boolean = false, yShadow: number = 0) => {
       const icon = globalScene.add.sprite(-19, 2, "items", spriteKey);
       icon.setOrigin(0.5, 1);
       icon.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
-        hasShadow: !!hasShadow,
-        yShadowOffset: yShadow ?? 0,
+        hasShadow,
+        yShadowOffset: yShadow,
       });
       return icon;
     };
@@ -176,12 +176,12 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         }
       }
 
-      if (!isNullOrUndefined(pokemonShinySparkle)) {
+      if (!isNil(pokemonShinySparkle)) {
         // Offset the sparkle to match the Pokemon's position
         pokemonShinySparkle.setPosition(sprite.x, sprite.y);
       }
 
-      if (!isNullOrUndefined(alpha)) {
+      if (!isNil(alpha)) {
         sprite.setAlpha(alpha);
         tintSprite.setAlpha(alpha);
       }

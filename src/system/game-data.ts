@@ -1,80 +1,84 @@
-import i18next from "i18next";
-import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from "#app/constants";
-import { globalScene } from "#app/global-scene";
-import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import type { DexData, DexEntry } from "#app/@types/DexData";
+import type { SessionSaveData } from "#app/@types/SessionData";
+import type { StarterData } from "#app/@types/StarterData";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
+import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
+import {
+  APP_ABBREVIATION,
+  MAPPING_CONFIG_LS_KEY,
+  RUN_HISTORY_LIMIT,
+  SAVE_FILE_EXTENSION,
+  SETTINGS_LS_KEY,
+  TUTORIALS_LS_KEY,
+  bypassLogin,
+} from "#app/constants/app-constants";
+import { EntryHazardTag } from "#app/data/arena-tag";
+import { allMoves, allSpecies } from "#app/data/data-lists";
+import { defaultStarterSpecies } from "#app/data/default-starters";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import type { Egg } from "#app/data/egg";
+import { speciesEggMoves } from "#app/data/egg-moves";
+import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies } from "#app/data/data-lists";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import {
   STARTER_CANDY_GAIN_FROM_CATCH,
   STARTER_CANDY_MULIPLIER_FOR_BOSS,
   STARTER_CANDY_MULIPLIER_FOR_EGG,
   getCandyGainMultiplierForShinies,
   speciesStarterCosts,
-} from "#app/data/balance/starters";
-import {
-  randInt,
-  getEnumKeys,
-  executeIf,
-  fixedNumber,
-  randSeedItem,
-  NumberHolder,
-  isNullOrUndefined,
-} from "#app/utils";
-import Overrides from "#app/overrides";
-import PokemonData from "#app/system/pokemon-data";
-import PersistentModifierData from "#app/system/modifier-data";
-import ArenaData from "#app/system/arena-data";
-import { Unlockables } from "#enums/unlockables";
-import { getGameMode } from "#app/game-mode";
-import { GameModes } from "#enums/game-modes";
-import { BattleType } from "#enums/battle-type";
-import TrainerData from "#app/system/trainer-data";
-import { achvs } from "#app/system/achievements";
-import EggData from "#app/system/egg-data";
-import type { Egg } from "#app/data/egg";
-import { vouchers } from "#app/system/voucher";
-import { VoucherType } from "#enums/voucher-type";
-import { AES, enc } from "crypto-js";
-import { UiMode } from "#enums/ui-mode";
-import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
-import { Nature } from "#enums/nature";
-import { GameStats } from "#app/system/game-stats";
-import type { Tutorial } from "#enums/tutorial";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { allMoves } from "#app/data/data-lists";
-import { TrainerVariant } from "#enums/trainer-variant";
+} from "#app/data/starters";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { Variant } from "#app/data/variant";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { getGameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
-import ChallengeData from "#app/system/challenge-data";
-import type { Device } from "#enums/devices";
-import { GameDataType } from "#enums/game-data-type";
-import { PlayerGender } from "#enums/player-gender";
-import type { Species } from "#enums/species";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { ChallengeType } from "#enums/challenge-type";
-import { WeatherType } from "#enums/weather-type";
-import { TerrainType } from "#enums/terrain-type";
+import Overrides from "#app/overrides";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import { RUN_HISTORY_LIMIT } from "#app/ui/run-history-ui-handler";
-import { applySessionVersionMigration, applySystemVersionMigration } from "./version_migration/version_converter";
-import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
-import { EntryHazardTag } from "#app/data/arena-tag";
-import { MAPPING_CONFIG_LS_KEY, SAVE_FILE_EXTENSION } from "#app/constants";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import type { StarterData } from "#app/@types/StarterData";
-import type { DexData, DexEntry } from "#app/@types/DexData";
-import type { SessionSaveData } from "#app/@types/SessionData";
-import { defaultStarterSpecies } from "#app/data/balance/default-starters";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { achvs } from "#app/system/achievements";
+import ArenaData from "#app/system/arena-data";
+import ChallengeData from "#app/system/challenge-data";
+import EggData from "#app/system/egg-data";
+import { GameStats } from "#app/system/game-stats";
+import PersistentModifierData from "#app/system/modifier-data";
+import PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
+import TrainerData from "#app/system/trainer-data";
+import {
+  applySessionVersionMigration,
+  applySystemVersionMigration,
+} from "#app/system/version_migration/version_converter";
+import { vouchers } from "#app/system/voucher";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { applyChallenges } from "#app/utils/challenge-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#app/utils/common-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randInt, randSeedItem } from "#app/utils/random-utils";
+import { BattleType } from "#enums/battle-type";
+import { ChallengeType } from "#enums/challenge-type";
+import type { Device } from "#enums/devices";
+import type { ElementalType } from "#enums/elemental-type";
+import { GameDataType } from "#enums/game-data-type";
+import { GameModes } from "#enums/game-modes";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
+import { PlayerGender } from "#enums/player-gender";
+import type { SpeciesId } from "#enums/species-id";
+import { TerrainType } from "#enums/terrain-type";
+import { TrainerVariant } from "#enums/trainer-variant";
+import type { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
+import { Unlockables } from "#enums/unlockables";
+import { VoucherType } from "#enums/voucher-type";
+import { WeatherType } from "#enums/weather-type";
+import { AES, enc } from "crypto-js";
+import i18next from "i18next";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -139,6 +143,7 @@ export interface StarterAttributes {
   shiny?: boolean;
   favorite?: boolean;
   nickname?: string;
+  teraType?: ElementalType;
 }
 
 export interface StarterPreferences {
@@ -203,7 +208,6 @@ export class GameData {
   public secretId: number;
 
   public dexData: DexData;
-  private defaultDexData: DexData | null;
 
   public starterData: StarterData;
 
@@ -296,8 +300,8 @@ export class GameData {
           globalScene.ui.savingIcon.hide();
           if (error) {
             if (error.startsWith("session out of date")) {
-              globalScene.clearPhaseQueue();
-              globalScene.unshiftPhase(new ReloadSessionPhase());
+              globalScene.phaseManager.clearPhaseQueue();
+              globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
             }
             console.error(error);
             return resolve(false);
@@ -324,14 +328,14 @@ export class GameData {
         api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
-              globalScene.queueMessage(
+              globalScene.phaseManager.queueMessagePhase(
                 "Save data could not be found. If this is a new account, you can safely ignore this message.",
                 null,
                 true,
               );
               return resolve(true);
             } else if (saveDataOrErr?.includes("Too many connections")) {
-              globalScene.queueMessage(
+              globalScene.phaseManager.queueMessagePhase(
                 "Too many people are trying to connect and the server is overloaded. Please try again later.",
                 null,
                 true,
@@ -370,10 +374,9 @@ export class GameData {
           }
         }
 
-        console.debug(systemData);
-
         localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemDataStr, bypassLogin));
 
+        // TODO: run history shouldn't be initialized here (and is it even needed?)
         const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
         const lsItem = localStorage.getItem(lsItemKey);
         if (!lsItem) {
@@ -385,34 +388,7 @@ export class GameData {
         this.trainerId = systemData.trainerId;
         this.secretId = systemData.secretId;
 
-        if (!systemData.starterData) {
-          this.initStarterData();
-
-          if (systemData["starterMoveData"]) {
-            const starterMoveData = systemData["starterMoveData"];
-            for (const s of Object.keys(starterMoveData)) {
-              this.starterData[s].moveset = starterMoveData[s];
-            }
-          }
-
-          if (systemData["starterEggMoveData"]) {
-            const starterEggMoveData = systemData["starterEggMoveData"];
-            for (const s of Object.keys(starterEggMoveData)) {
-              this.starterData[s].eggMoves = starterEggMoveData[s];
-            }
-          }
-
-          this.migrateStarterAbilities(systemData, this.starterData);
-
-          const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as Species);
-          for (const s of starterIds) {
-            this.starterData[s].candyCount += systemData.dexData[s].caughtCount;
-            this.starterData[s].candyCount += systemData.dexData[s].hatchedCount * 2;
-            if (systemData.dexData[s].caughtAttr & DexAttr.SHINY) {
-              this.starterData[s].candyCount += 4;
-            }
-          }
-        } else {
+        if (systemData.starterData) {
           this.starterData = systemData.starterData;
         }
 
@@ -457,8 +433,6 @@ export class GameData {
         this.unlockPity = systemData.unlockPity ? systemData.unlockPity.slice(0) : [0, 0, 0, 0];
 
         this.dexData = Object.assign(this.dexData, systemData.dexData);
-        this.consolidateDexData(this.dexData);
-        this.defaultDexData = null;
 
         // Ensure that the player gender in settings matches the player gender in system data
         if (systemData.gender !== PlayerGender.UNSET && systemData.gender !== settings.display.playerGender) {
@@ -611,8 +585,8 @@ export class GameData {
     const systemData = await api.savedata.system.verify({ clientSessionId });
 
     if (systemData) {
-      globalScene.clearPhaseQueue();
-      globalScene.unshiftPhase(new ReloadSessionPhase(JSON.stringify(systemData)));
+      globalScene.phaseManager.clearPhaseQueue();
+      globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase(JSON.stringify(systemData)));
       this.clearLocalData();
       return false;
     }
@@ -721,7 +695,7 @@ export class GameData {
     if (lsItem) {
       try {
         const lsTutorials: Tutorial[] = JSON.parse(lsItem);
-        lsTutorials.forEach((lsTutorial) => (!isNullOrUndefined(lsTutorial) ? tutorials.add(lsTutorial) : null));
+        lsTutorials.forEach((lsTutorial) => (!isNil(lsTutorial) ? tutorials.add(lsTutorial) : null));
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
@@ -809,6 +783,7 @@ export class GameData {
       challenges: globalScene.gameMode.challenges.map((c) => new ChallengeData(c)),
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,
+      playerTerasUsed: globalScene.playerTerasUsed,
     } as SessionSaveData;
   }
 
@@ -856,8 +831,6 @@ export class GameData {
     return new Promise(async (resolve, reject) => {
       try {
         const initSessionFromData = async (sessionData: SessionSaveData) => {
-          console.debug(sessionData);
-
           globalScene.gameMode = getGameMode(sessionData.gameMode || GameModes.CLASSIC);
           if (sessionData.challenges) {
             globalScene.gameMode.challenges = sessionData.challenges.map((c) => c.toChallenge());
@@ -957,6 +930,8 @@ export class GameData {
             );
           }
 
+          globalScene.playerTerasUsed = sessionData.playerTerasUsed;
+
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
             for (const tag of globalScene.arena.tags) {
@@ -1029,8 +1004,8 @@ export class GameData {
         api.savedata.session.delete({ slot: slotId, clientSessionId }).then((error) => {
           if (error) {
             if (error.startsWith("session out of date")) {
-              globalScene.clearPhaseQueue();
-              globalScene.unshiftPhase(new ReloadSessionPhase());
+              globalScene.phaseManager.clearPhaseQueue();
+              globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
             }
             console.error(error);
             resolve(false);
@@ -1107,8 +1082,8 @@ export class GameData {
         localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
       } else {
         if (jsonResponse && jsonResponse.error?.startsWith("session out of date")) {
-          globalScene.clearPhaseQueue();
-          globalScene.unshiftPhase(new ReloadSessionPhase());
+          globalScene.phaseManager.clearPhaseQueue();
+          globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
         }
 
         console.error(jsonResponse);
@@ -1129,6 +1104,11 @@ export class GameData {
           v = [];
         }
         for (const pd of v) {
+          // TODO: remove later, temporary to prevent devs from needing to wipe their local storage
+          // due to the field in `PokemonData` being renamed from `species` to `speciesId`
+          if (pd.hasOwnProperty("species")) {
+            pd.speciesId = pd.species;
+          }
           ret.push(new PokemonData(pd));
         }
         return ret;
@@ -1247,8 +1227,8 @@ export class GameData {
             }
             if (error) {
               if (error.startsWith("session out of date")) {
-                globalScene.clearPhaseQueue();
-                globalScene.unshiftPhase(new ReloadSessionPhase());
+                globalScene.phaseManager.clearPhaseQueue();
+                globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
               }
               console.error(error);
               return resolve(false);
@@ -1367,9 +1347,11 @@ export class GameData {
             globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
+          const dataNotLoadedString =
+            dataName === "session" ? i18next.t("menu:sessionDataNotLoaded") : i18next.t("menu:gameDataNotLoaded");
           if (!valid) {
             return globalScene.ui.showText(
-              `Your ${dataName} data could not be loaded. It may be corrupted.`,
+              dataNotLoadedString,
               null,
               () => globalScene.ui.showText("", 0),
               fixedNumber(1500),
@@ -1384,7 +1366,7 @@ export class GameData {
               if (!bypassLogin && dataType < GameDataType.SETTINGS) {
                 updateUserInfo().then((success) => {
                   if (!success[0]) {
-                    return displayError(`Could not contact the server. Your ${dataName} data could not be imported.`);
+                    return displayError(i18next.t("menu:couldNotContactServer"));
                   }
                   const { trainerId, secretId } = this;
                   let updatePromise: Promise<string | null>;
@@ -1399,15 +1381,13 @@ export class GameData {
                   updatePromise.then((error) => {
                     if (error) {
                       console.error(error);
-                      return displayError(
-                        `An error occurred while updating ${dataName} data. Please contact the administrator.`,
-                      );
+                      return displayError(i18next.t("menu:errorUpdating"));
                     }
-                    window.location = window.location;
+                    window.location.reload();
                   });
                 });
               } else {
-                window.location = window.location;
+                window.location.reload();
               }
             },
             noHandler: () => {
@@ -1416,13 +1396,14 @@ export class GameData {
             },
             xOffset: confirmWindowXOffset,
           };
-          globalScene.ui.showText(
-            `Your ${dataName} data will be overridden and the page will reload. Proceed?`,
-            null,
-            () => {
-              globalScene.ui.setOverlayMode(UiMode.CONFIRM, importDataConfirmOptions);
-            },
-          );
+
+          const dataOverwriteString =
+            dataName === "session"
+              ? i18next.t("menu:sessionDataOverwriteWarning")
+              : i18next.t("menu:gameDataOverwriteWarning");
+          globalScene.ui.showText(dataOverwriteString, null, () => {
+            globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions);
+          });
         };
       })((e.target as any).files[0]);
 
@@ -1472,14 +1453,13 @@ export class GameData {
       }
     }
 
-    this.defaultDexData = Object.assign({}, data);
     this.dexData = data;
   }
 
   private initStarterData(): void {
     const starterData: StarterData = {};
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as Species);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       starterData[speciesId] = {
@@ -1540,14 +1520,14 @@ export class GameData {
    *   otherwise (e.g. evolution situation) the nature, ability and other unlocks will get updated, but no the game stats.
    * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
     pokemon: Pokemon,
     isNonRentalCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<Species[]> {
+  ): Promise<SpeciesId[]> {
     // If isNonRentalCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
@@ -1576,7 +1556,7 @@ export class GameData {
    * @param giveCandy - Whether to give starter candy for the root species. Default: `true`
    * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
   private setPokemonSpeciesCaught(
     pokemon: Pokemon,
@@ -1585,9 +1565,9 @@ export class GameData {
     giveCandy: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-    unlockedStarters: Species[] = [],
-  ): Promise<Species[]> {
-    return new Promise<Species[]>((resolve) => {
+    unlockedStarters: SpeciesId[] = [],
+  ): Promise<SpeciesId[]> {
+    return new Promise<SpeciesId[]>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
 
@@ -1650,7 +1630,7 @@ export class GameData {
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
-      const checkPreEvolution = (unlockedStarters: Species[]) => {
+      const checkPreEvolution = (unlockedStarters: SpeciesId[]) => {
         if (hasPreEvolution) {
           const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
@@ -1720,7 +1700,7 @@ export class GameData {
   }
 
   incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
-    const speciesIdToIncrement: Species = species.getRootSpeciesId(forStarter);
+    const speciesIdToIncrement: SpeciesId = species.getRootSpeciesId(forStarter);
 
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
       this.starterData[speciesIdToIncrement].classicWinCount = 0;
@@ -1831,7 +1811,7 @@ export class GameData {
       return;
     }
 
-    const _unlockSpeciesNature = (speciesId: Species) => {
+    const _unlockSpeciesNature = (speciesId: SpeciesId) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
       if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
         _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
@@ -1840,7 +1820,7 @@ export class GameData {
     _unlockSpeciesNature(species.speciesId);
   }
 
-  updateSpeciesDexIvs(speciesId: Species, ivs: number[]): void {
+  updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
     let dexEntry: DexEntry;
     do {
       dexEntry = globalScene.gameData.dexData[speciesId];
@@ -1971,7 +1951,7 @@ export class GameData {
     return ret;
   }
 
-  getSpeciesStarterValue(speciesId: Species): number {
+  getSpeciesStarterValue(speciesId: SpeciesId): number {
     const baseValue = speciesStarterCosts[speciesId];
     let value = baseValue;
 
@@ -2007,41 +1987,5 @@ export class GameData {
 
   getFormAttr(formIndex: number): bigint {
     return BigInt(1) << BigInt(7 + formIndex);
-  }
-
-  consolidateDexData(dexData: DexData): void {
-    for (const k of Object.keys(dexData)) {
-      const entry = dexData[k] as DexEntry;
-      if (!entry.hasOwnProperty("hatchedCount")) {
-        entry.hatchedCount = 0;
-      }
-      if (!entry.hasOwnProperty("natureAttr") || (entry.caughtAttr && !entry.natureAttr)) {
-        entry.natureAttr = this.defaultDexData?.[k].natureAttr || 1 << randInt(25, 1);
-      }
-    }
-  }
-
-  migrateStarterAbilities(systemData: SystemSaveData, initialStarterData?: StarterData): void {
-    const starterIds = Object.keys(this.starterData).map((s) => parseInt(s) as Species);
-    const starterData = initialStarterData || systemData.starterData;
-    const dexData = systemData.dexData;
-    for (const s of starterIds) {
-      const dexAttr = dexData[s].caughtAttr;
-      starterData[s].abilityAttr =
-        (dexAttr & DexAttr.DEFAULT_VARIANT ? AbilityAttr.ABILITY_1 : 0)
-        | (dexAttr & DexAttr.VARIANT_2 ? AbilityAttr.ABILITY_2 : 0)
-        | (dexAttr & DexAttr.VARIANT_3 ? AbilityAttr.ABILITY_HIDDEN : 0);
-      if (dexAttr) {
-        if (!(dexAttr & DexAttr.DEFAULT_VARIANT)) {
-          dexData[s].caughtAttr ^= DexAttr.DEFAULT_VARIANT;
-        }
-        if (dexAttr & DexAttr.VARIANT_2) {
-          dexData[s].caughtAttr ^= DexAttr.VARIANT_2;
-        }
-        if (dexAttr & DexAttr.VARIANT_3) {
-          dexData[s].caughtAttr ^= DexAttr.VARIANT_3;
-        }
-      }
-    }
   }
 }

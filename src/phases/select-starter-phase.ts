@@ -1,17 +1,20 @@
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { ChallengeType } from "#enums/challenge-type";
+import type { StarterConfig } from "#app/@types/StarterConfig";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { globalScene } from "#app/global-scene";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
-import type { Starter } from "#app/ui/starter-select-ui-handler";
-import { UiMode } from "#enums/ui-mode";
+import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
+import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
+import { applyChallenges } from "#app/utils/challenge-utils";
+import { isNil } from "#app/utils/common-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { ChallengeType } from "#enums/challenge-type";
 import { Gender } from "#enums/gender";
-import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { PhaseId } from "#enums/phase-id";
+import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
+import { UiMode } from "#enums/ui-mode";
+import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export class SelectStarterPhase extends Phase {
   override readonly id = PhaseId.SELECT_STARTER;
@@ -21,11 +24,11 @@ export class SelectStarterPhase extends Phase {
 
     globalScene.audioManager.playBgm("menu");
 
-    globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: Starter[]) => {
+    globalScene.ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT, (starters: StarterConfig[]) => {
       globalScene.ui.clearText();
-      globalScene.ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
+      globalScene.ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
-          globalScene.toTitleScreen({ clearPhaseQueue: true });
+          globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
           return this.end();
         }
         globalScene.sessionSlotId = slotId;
@@ -38,7 +41,7 @@ export class SelectStarterPhase extends Phase {
    * Initialize starters before starting the first battle
    * @param starters {@linkcode Pokemon} with which to start the first battle
    */
-  public initBattle(starters: Starter[]): void {
+  public initBattle(starters: StarterConfig[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
     const { dexData, gameStats } = gameData;
     const { isClassic } = gameMode;
@@ -46,7 +49,7 @@ export class SelectStarterPhase extends Phase {
     const party = globalScene.getPlayerParty();
     const loadPokemonAssets: Promise<void>[] = [];
 
-    starters.forEach((starter: Starter, i: number) => {
+    starters.forEach((starter: StarterConfig, i: number) => {
       if (!i && Overrides.STARTER_SPECIES_OVERRIDE) {
         starter.species = getPokemonSpecies(Overrides.STARTER_SPECIES_OVERRIDE);
       }
@@ -59,9 +62,10 @@ export class SelectStarterPhase extends Phase {
 
       if (
         speciesId in Overrides.STARTER_FORM_OVERRIDES
-        && species.forms[Overrides.STARTER_FORM_OVERRIDES[speciesId]!]
+        && !isNil(Overrides.STARTER_FORM_OVERRIDES[speciesId])
+        && species.forms[Overrides.STARTER_FORM_OVERRIDES[speciesId]]
       ) {
-        starterFormIndex = Overrides.STARTER_FORM_OVERRIDES[speciesId]!;
+        starterFormIndex = Overrides.STARTER_FORM_OVERRIDES[speciesId];
       }
 
       let starterGender =
@@ -97,6 +101,12 @@ export class SelectStarterPhase extends Phase {
 
       if (nickname) {
         starterPokemon.nickname = nickname;
+      }
+
+      if (!isNil(starter.teraType)) {
+        starterPokemon.teraType = starter.teraType;
+      } else {
+        starterPokemon.teraType = starterPokemon.species.type1;
       }
 
       starterPokemon.setVisible(false);

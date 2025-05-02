@@ -1,0 +1,81 @@
+import { AbilityId } from "#enums/ability-id";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+
+describe("Abilities - POWER CONSTRUCT", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    const moveToUse = MoveId.SPLASH;
+    game.override.battleType("single");
+    game.override.ability(AbilityId.POWER_CONSTRUCT);
+    game.override.moveset([moveToUse]);
+    game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
+  });
+
+  test("check if fainted 50% Power Construct Pokemon switches to base form on arena reset", async () => {
+    const baseForm = 2,
+      completeForm = 4;
+    game.override.startingWave(4);
+    game.override.starterForms({
+      [SpeciesId.ZYGARDE]: completeForm,
+    });
+
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.ZYGARDE]);
+
+    const zygarde = game.scene.getPlayerParty().find((p) => p.species.speciesId === SpeciesId.ZYGARDE)!;
+    expect(zygarde).not.toBe(undefined);
+    expect(zygarde.formIndex).toBe(completeForm);
+
+    zygarde.faint();
+    expect(zygarde.isFainted()).toBe(true);
+
+    game.move.select(MoveId.SPLASH);
+    await game.faintOpponents();
+    await game.phaseInterceptor.to("TurnEndPhase");
+    game.doSelectModifier();
+    await game.phaseInterceptor.to("QuietFormChangePhase");
+
+    expect(zygarde.formIndex).toBe(baseForm);
+  });
+
+  test("check if fainted 10% Power Construct Pokemon switches to base form on arena reset", async () => {
+    const baseForm = 3,
+      completeForm = 5;
+    game.override.startingWave(4);
+    game.override.starterForms({
+      [SpeciesId.ZYGARDE]: completeForm,
+    });
+
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.ZYGARDE]);
+
+    const zygarde = game.scene.getPlayerParty().find((p) => p.species.speciesId === SpeciesId.ZYGARDE)!;
+    expect(zygarde).not.toBe(undefined);
+    expect(zygarde.formIndex).toBe(completeForm);
+
+    zygarde.faint();
+    expect(zygarde.isFainted()).toBe(true);
+
+    game.move.select(MoveId.SPLASH);
+    await game.faintOpponents();
+    await game.phaseInterceptor.to("TurnEndPhase");
+    game.doSelectModifier();
+    await game.phaseInterceptor.to("QuietFormChangePhase");
+
+    expect(zygarde.formIndex).toBe(baseForm);
+  });
+});

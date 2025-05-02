@@ -1,9 +1,10 @@
-import { Button } from "#enums/buttons";
-import { UiMode } from "#enums/ui-mode";
-import type SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
-import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
+import type { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
+import { Button } from "#enums/buttons";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 const pressAction = i18next.t("settings:pressToBind");
 
@@ -36,8 +37,8 @@ export const settingKeyboardOptions = {
   [SettingKeyboard.Alt_Button_Cycle_Ability]: [`KEY ${Button.CYCLE_ABILITY.toString()}`, pressAction],
   [SettingKeyboard.Button_Cycle_Nature]: [`KEY ${Button.CYCLE_NATURE.toString()}`, pressAction],
   [SettingKeyboard.Alt_Button_Cycle_Nature]: [`KEY ${Button.CYCLE_NATURE.toString()}`, pressAction],
-  [SettingKeyboard.Button_Cycle_Variant]: [`KEY ${Button.V.toString()}`, pressAction],
-  [SettingKeyboard.Alt_Button_Cycle_Variant]: [`KEY ${Button.V.toString()}`, pressAction],
+  [SettingKeyboard.Button_Cycle_Tera]: [`KEY ${Button.CYCLE_TERA.toString()}`, pressAction],
+  [SettingKeyboard.Alt_Button_Cycle_Tera]: [`KEY ${Button.CYCLE_TERA.toString()}`, pressAction],
   [SettingKeyboard.Button_Speed_Up]: [`KEY ${Button.SPEED_UP.toString()}`, pressAction],
   [SettingKeyboard.Alt_Button_Speed_Up]: [`KEY ${Button.SPEED_UP.toString()}`, pressAction],
   [SettingKeyboard.Button_Slow_Down]: [`KEY ${Button.SLOW_DOWN.toString()}`, pressAction],
@@ -75,8 +76,8 @@ export const settingKeyboardDefaults = {
   [SettingKeyboard.Alt_Button_Cycle_Ability]: 0,
   [SettingKeyboard.Button_Cycle_Nature]: 0,
   [SettingKeyboard.Alt_Button_Cycle_Nature]: 0,
-  [SettingKeyboard.Button_Cycle_Variant]: 0,
-  [SettingKeyboard.Alt_Button_Cycle_Variant]: 0,
+  [SettingKeyboard.Button_Cycle_Tera]: 0,
+  [SettingKeyboard.Alt_Button_Cycle_Tera]: 0,
   [SettingKeyboard.Button_Speed_Up]: 0,
   [SettingKeyboard.Alt_Button_Speed_Up]: 0,
   [SettingKeyboard.Button_Slow_Down]: 0,
@@ -110,7 +111,7 @@ export function setSettingKeyboard(setting: SettingKeyboard, value: number): boo
     case SettingKeyboard.Button_Cycle_Gender:
     case SettingKeyboard.Button_Cycle_Ability:
     case SettingKeyboard.Button_Cycle_Nature:
-    case SettingKeyboard.Button_Cycle_Variant:
+    case SettingKeyboard.Button_Cycle_Tera:
     case SettingKeyboard.Button_Speed_Up:
     case SettingKeyboard.Button_Slow_Down:
     case SettingKeyboard.Alt_Button_Up:
@@ -126,7 +127,7 @@ export function setSettingKeyboard(setting: SettingKeyboard, value: number): boo
     case SettingKeyboard.Alt_Button_Cycle_Gender:
     case SettingKeyboard.Alt_Button_Cycle_Ability:
     case SettingKeyboard.Alt_Button_Cycle_Nature:
-    case SettingKeyboard.Alt_Button_Cycle_Variant:
+    case SettingKeyboard.Alt_Button_Cycle_Tera:
     case SettingKeyboard.Alt_Button_Speed_Up:
     case SettingKeyboard.Alt_Button_Slow_Down:
     case SettingKeyboard.Alt_Button_Submit:
@@ -134,13 +135,10 @@ export function setSettingKeyboard(setting: SettingKeyboard, value: number): boo
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsKeyboardUiHandler).updateBindings();
+            (globalScene.ui.getHandler() as KeyboardSettingsUiHandler).updateBindings();
             return success;
           };
-          globalScene.ui.setOverlayMode(UiMode.KEYBOARD_BINDING, {
-            target: setting,
-            cancelHandler: cancelHandler,
-          });
+          globalScene.ui.setOverlayMode<KeyboardBindingUiHandler>(UiMode.KEYBOARD_BINDING, setting, cancelHandler);
         }
       }
       break;

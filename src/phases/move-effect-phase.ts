@@ -1,9 +1,15 @@
-import { BattlerIndex } from "#enums/battler-index";
+import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { DamageResult } from "#app/@types/DamageResult";
+import type { TurnMove } from "#app/@types/TurnMove";
+import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
+import type { PostAttackAbAttr } from "#app/data/abilities/ab-attrs/post-attack-ab-attr";
+import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
+import type { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveAnim } from "#app/data/animations/move-anim";
-import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/utils/move-utils";
+import type { BideTag } from "#app/data/battler-tags/bide-tag";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
+import { TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/moves/move-attrs/miss-effect-attr";
@@ -14,11 +20,7 @@ import { NoEffectAttr } from "#app/data/moves/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { DamageResult, Pokemon } from "#app/field/pokemon";
-import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
-import type { TurnMove } from "#app/@types/TurnMove";
-import { MoveResult } from "#enums/move-result";
-import { HitResult } from "#enums/hit-result";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -27,20 +29,24 @@ import {
   FlinchChanceModifier,
   HitHealModifier,
 } from "#app/modifier/modifier";
-import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { HitCheckPhase } from "#app/phases/hit-check-phase";
+import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
+import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
+import { HitResult } from "#enums/hit-result";
 import { MoveCategory } from "#enums/move-category";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { MoveTarget } from "#enums/move-target";
-import { MoveId } from "#enums/move-id";
-import i18next from "i18next";
-import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
-import { isFieldTargeted } from "#app/utils/move-utils";
+import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
   override readonly id = PhaseId.MOVE_EFFECT;
@@ -84,7 +90,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (!isDelayedAttack) {
         return super.end();
       } else {
-        if (isNullOrUndefined(user.turnData)) {
+        if (isNil(user.turnData)) {
           user.resetTurnData();
         }
       }
@@ -122,14 +128,6 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     });
 
-    // If the user is acting again (such as due to Instruct), reset hitsLeft/hitCount so that
-    // the move executes correctly (ensures all hits of a multi-hit are properly calculated)
-    if (user.turnData.hitsLeft === 0 && user.turnData.hitCount > 0 && user.turnData.extraTurns > 0) {
-      user.turnData.hitsLeft = -1;
-      user.turnData.hitCount = 0;
-      user.turnData.extraTurns--;
-    }
-
     /**
      * If this phase is for the first hit of the invoked move,
      * resolve the move's total hit count. This block combines the
@@ -140,7 +138,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
-      applyAbAttrs(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
+      applyAbAttrs<AddSecondStrikeAbAttr>(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
       // TODO: re-add multi-lens calculation
       // Set the user's relevant turnData fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
@@ -154,7 +152,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.canApplySmartTargeting() && user.turnData.hitsLeft % 2 === 1) {
       const targetAlly = targets[0].getAlly();
-      if (targetAlly.isActive(true)) {
+      if (targetAlly?.isActive(true)) {
         targets[0] = targetAlly;
         this.adjustedTargets = [targetAlly.getBattlerIndex()];
       }
@@ -171,7 +169,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.canApplySmartTargeting() && this.hitChecks[0][0] !== HitCheckResult.HIT) {
       const targetAlly = targets[0].getAlly();
-      if (targetAlly.isActive(true)) {
+      if (targetAlly?.isActive(true)) {
         targets[0] = targetAlly;
         this.adjustedTargets = [targetAlly.getBattlerIndex()];
         this.hitChecks[0] = this.hitCheck(targets[0]);
@@ -195,8 +193,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Moves are logged as a SUCCESS if at least one target was successfully hit
       this.moveHistoryEntry.result = MoveResult.SUCCESS;
     } else {
-      user.turnData.hitCount = 1;
-      user.turnData.hitsLeft = 1;
+      user.stopMultiHit();
 
       // If all targets were missed, log the move as a MISS.
       // Otherwise, log the move as a FAIL.
@@ -234,11 +231,11 @@ export class MoveEffectPhase extends HitCheckPhase {
             break;
           case HitCheckResult.NO_EFFECT:
             if (move.id === MoveId.SHEER_COLD) {
-              globalScene.queueMessage(
+              globalScene.phaseManager.queueMessagePhase(
                 i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(target) }),
               );
             } else {
-              globalScene.queueMessage(
+              globalScene.phaseManager.queueMessagePhase(
                 i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
               );
             }
@@ -247,7 +244,7 @@ export class MoveEffectPhase extends HitCheckPhase {
             applyMoveAttrs(NoEffectAttr, user, target, move);
             break;
           case HitCheckResult.MISS:
-            globalScene.queueMessage(
+            globalScene.phaseManager.queueMessagePhase(
               i18next.t("battle:attackMissed", { pokemonNameWithAffix: getPokemonNameWithAffix(target) }),
             );
             applyMoveAttrs(MissEffectAttr, user, target, move);
@@ -263,6 +260,15 @@ export class MoveEffectPhase extends HitCheckPhase {
         this.triggerMoveEffects(MoveEffectTrigger.POST_TARGET, user, null);
       }
       this.updateSubstitutes();
+      const moveType = user.getMoveType(move, true);
+      if (
+        this.lastHit
+        && user.isTerastallized
+        && move.isAttackMove(user, targets[0])
+        && !user.stellarTypesBoosted.includes(moveType)
+      ) {
+        user.stellarTypesBoosted.push(moveType);
+      }
       this.end();
     });
   }
@@ -299,7 +305,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     /** The first target hit by the move */
     const firstTarget = target === this.getTargets().find((_, i) => this.hitChecks[i][1] > 0);
 
-    if (isNullOrUndefined(user)) {
+    if (isNil(user)) {
       return;
     }
 
@@ -323,7 +329,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyAbAttrs(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
+        applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
       }
     }
   }
@@ -378,8 +384,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
 
     // G-Max Gold Rush should not give money twice for double battles
-    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
+    const allyPokemon = user.getAlly();
+    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && allyPokemon?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, allyPokemon, target, firstTarget, true);
     }
   }
 
@@ -399,8 +406,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     // G-Max Snooze is the only G-Max move to only apply its effect on a single target
-    if (move.id !== MoveId.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
+    const allyPokemon = target.getAlly();
+    if (move.id !== MoveId.G_MAX_SNOOZE && allyPokemon?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, allyPokemon, firstTarget, false);
     }
   }
 
@@ -425,7 +433,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       (attr: MoveAttr) =>
         attr instanceof MoveEffectAttr
         && attr.trigger === triggerType
-        && (isNullOrUndefined(selfTarget) || attr.selfTarget === selfTarget)
+        && (isNil(selfTarget) || attr.selfTarget === selfTarget)
         && (!attr.firstHitOnly || this.firstHit)
         && (!attr.lastHitOnly || this.lastHit)
         && (!attr.firstTargetOnly || (firstTarget ?? true)),
@@ -488,15 +496,14 @@ export class MoveEffectPhase extends HitCheckPhase {
        * We explicitly require to ignore the faint phase here, as we want to show the messages
        * about the critical hit and the super effective/not very effective messages before the faint phase.
        */
-      const damage = target.damageAndUpdate(
-        isBlockedBySubstitute ? 0 : dmg,
-        result as DamageResult,
+      const damage = target.damageAndUpdate(isBlockedBySubstitute ? 0 : dmg, {
+        result: result as DamageResult,
         isCritical,
-        isOneHitKo,
-        isOneHitKo,
-        true,
-        user,
-      );
+        ignoreSegments: isOneHitKo,
+        preventEndure: isOneHitKo,
+        ignoreFaintPhase: true,
+        source: user,
+      });
 
       if (damage > 0) {
         if (user.isPlayer()) {
@@ -506,8 +513,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         }
         user.turnData.totalDamageDealt += damage;
         user.turnData.singleHitDamageDealt = damage;
-        target.turnData.damageTaken += damage;
-        target.battleData.hitCount++;
+        target.waveData.hitCount++;
 
         const attackResult: AttackMoveResult = {
           moveId: move.id,
@@ -522,8 +528,11 @@ export class MoveEffectPhase extends HitCheckPhase {
           globalScene.applyModifiers(DamageMoneyRewardModifier, true, user, new NumberHolder(damage));
         }
 
+        const targetBideTag = target.getTag<BideTag>(BattlerTagType.BIDE);
+        targetBideTag?.updateAttackData(user, damage);
+
         if (isCritical) {
-          globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
+          globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultCriticalHit"));
         }
 
         // `.isFainted()` is here in case a multi hit move ends early
@@ -531,13 +540,13 @@ export class MoveEffectPhase extends HitCheckPhase {
         if (user.turnData.hitsLeft === 1 || target.isFainted()) {
           switch (result) {
             case HitResult.SUPER_EFFECTIVE:
-              globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
+              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultSuperEffective"));
               break;
             case HitResult.NOT_VERY_EFFECTIVE:
-              globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
+              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultNotVeryEffective"));
               break;
             case HitResult.ONE_HIT_KO:
-              globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
+              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultOneHitKO"));
               break;
           }
         }
@@ -545,7 +554,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     if (target.isFainted()) {
-      globalScene.faintBattler(target.getBattlerIndex(), {
+      globalScene.phaseManager.queueBattlerFaintPhase(target.getBattlerIndex(), {
         preventEndure: isOneHitKo,
         destinyTag,
         grudgeTag,
@@ -578,10 +587,10 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
-    applyAbAttrs(AbAttrFlag.POST_ATTACK, user, false, target, move);
+    applyAbAttrs<PostAttackAbAttr>(AbAttrFlag.POST_ATTACK, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
-    if (move.isAttackMove()) {
+    if (move.isAttackMove(user, target)) {
       globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }
@@ -598,14 +607,12 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
       const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
-      if (
-        ogTarget?.isFainted()
-        && ogTarget.getAlly()?.isActive(true)
-        && ogTarget.getAlly().id !== this.getUserPokemon()?.id
-      ) {
-        this.targets = [ogTarget.getAlly().getBattlerIndex()];
+      const allyPokemon = ogTarget?.getAlly();
+      if (ogTarget?.isFainted() && allyPokemon?.isActive(true) && allyPokemon.id !== this.getUserPokemon()?.id) {
+        this.targets = [allyPokemon.getBattlerIndex()];
       }
     }
+
     /**
      * If this phase isn't for the invoked move's last strike,
      * unshift another MoveEffectPhase for the next strike.
@@ -615,14 +622,14 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (user) {
       if (user.turnData.hitsLeft && --user.turnData.hitsLeft >= 1 && this.getFirstTarget()?.isActive()) {
-        globalScene.unshiftPhase(this.getNewHitPhase());
+        globalScene.phaseManager.unshiftPhase(this.getNewHitPhase());
       } else {
         // Queue message for number of hits made by multi-move
         // If multi-hit attack only hits once, still want to render a message
         const hitsTotal = user.turnData.hitCount - Math.max(user.turnData.hitsLeft, 0);
         if (hitsTotal > 1 || user.turnData.hitsLeft > 0) {
           // If there are multiple hits, or if there are hits of the multi-hit move left
-          globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
+          globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
         globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets
@@ -640,7 +647,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
-    applyAbAttrs(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
+    applyAbAttrs<PostDefendAbAttr>(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 
@@ -674,7 +681,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     return (
       this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
-      && !isNullOrUndefined(targetAlly)
+      && !isNil(targetAlly)
       && targetAlly.isActive(true)
       && targetAlly !== this.getUserPokemon()
       && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)

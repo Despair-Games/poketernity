@@ -1,0 +1,103 @@
+import { AbilityId } from "#enums/ability-id";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+describe("Abilities - ZERO TO HERO", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+  const baseForm = 0;
+  const heroForm = 1;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .battleType("single")
+      .moveset(MoveId.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
+      .enemyAbility(AbilityId.BALL_FETCH);
+  });
+
+  it("should swap to base form on arena reset", async () => {
+    game.override.startingWave(4);
+    game.override.starterForms({
+      [SpeciesId.PALAFIN]: heroForm,
+    });
+
+    await game.startBattle([SpeciesId.FEEBAS, SpeciesId.PALAFIN, SpeciesId.PALAFIN]);
+
+    const palafin1 = game.scene.getPlayerParty()[1];
+    const palafin2 = game.scene.getPlayerParty()[2];
+    expect(palafin1.formIndex).toBe(heroForm);
+    expect(palafin2.formIndex).toBe(heroForm);
+    palafin2.faint();
+    expect(palafin2.isFainted()).toBe(true);
+
+    game.move.select(MoveId.SPLASH);
+    await game.faintOpponents();
+    await game.phaseInterceptor.to("TurnEndPhase");
+    game.doSelectModifier();
+    await game.phaseInterceptor.to("QuietFormChangePhase");
+    await game.phaseInterceptor.to("QuietFormChangePhase");
+
+    expect(palafin1.formIndex).toBe(baseForm);
+    expect(palafin2.formIndex).toBe(baseForm);
+  });
+
+  it("should swap to Hero form when switching out during a battle", async () => {
+    await game.startBattle([SpeciesId.PALAFIN, SpeciesId.FEEBAS]);
+
+    const palafin = game.scene.getPlayerPokemon()!;
+    expect(palafin.formIndex).toBe(baseForm);
+
+    game.switchPokemon(1);
+    await game.phaseInterceptor.to("QuietFormChangePhase");
+    expect(palafin.formIndex).toBe(heroForm);
+  });
+
+  it("should not swap to Hero form if switching due to faint", async () => {
+    await game.startBattle([SpeciesId.PALAFIN, SpeciesId.FEEBAS]);
+
+    const palafin = game.scene.getPlayerPokemon()!;
+    expect(palafin.formIndex).toBe(baseForm);
+
+    game.move.select(MoveId.SPLASH);
+    await game.faintPokemon(palafin);
+    game.selectPartyPokemon(1);
+    await game.toNextTurn();
+    expect(palafin.formIndex).toBe(baseForm);
+  });
+
+  it("should stay hero form if fainted and then revived", async () => {
+    game.override.starterForms({
+      [SpeciesId.PALAFIN]: heroForm,
+    });
+
+    await game.startBattle([SpeciesId.PALAFIN, SpeciesId.FEEBAS]);
+
+    const palafin = game.scene.getPlayerPokemon()!;
+    expect(palafin.formIndex).toBe(heroForm);
+
+    game.move.select(MoveId.SPLASH);
+    await game.faintPokemon(palafin);
+    game.selectPartyPokemon(1);
+    await game.toNextTurn();
+
+    game.revivePokemon(1);
+    game.switchPokemon(1);
+    await game.toNextTurn();
+
+    expect(palafin.formIndex).toBe(heroForm);
+  });
+});

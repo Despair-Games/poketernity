@@ -79,15 +79,15 @@ async function runInteractive() {
   const fileNameAnswer = await promptFileName(typeAnswer.selectedOption);
 
   const type = typeAnswer.selectedOption.toLowerCase();
-  // Convert fileName from kebab-case or camelCase to snake_case
+  // Convert fileName from snake_case or camelCase to kebab-case
   const fileName = fileNameAnswer.userInput
-    .replace(/-+/g, "_") // Convert kebab-case (dashes) to underscores
-    .replace(/([a-z])([A-Z])/g, "$1_$2") // Convert camelCase to snake_case
-    .replace(/\s+/g, "_") // Replace spaces with underscores
+    .replace(/_+/g, "-") // Convert snake_case (underscore) to kebab-case (dashes)
+    .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
+    .replace(/\s+/g, "-") // Replace spaces with dashes
     .toLowerCase(); // Ensure all lowercase
   // Format the description for the test case
 
-  const formattedName = fileName.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  const formattedName = fileName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
   // Determine the directory based on the type
   let dir;
   let description;
@@ -114,10 +114,10 @@ async function runInteractive() {
   }
 
   // Define the content template
-  const content = `import { Abilities } from "#enums/abilities";
+  const content = `import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -138,18 +138,18 @@ describe("${description}", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should do X", async () => {
-    await game.classicMode.startBattle([ Species.FEEBAS ]);
+    await game.classicMode.startBattle([ SpeciesId.FEEBAS ]);
 
     game.move.use(MoveId.SPLASH);
     

@@ -1,10 +1,10 @@
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -26,16 +26,16 @@ describe("Moves - Defog", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.DEFOG])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should lower the target's Evasion stat", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -51,7 +51,7 @@ describe("Moves - Defog", () => {
     { tagType: ArenaTagType.STEALTH_ROCK, name: "Stealth Rock" },
     { tagType: ArenaTagType.STICKY_WEB, name: "Sticky Web" },
   ])("should remove the effects of $name from all sides of the field", async ({ tagType }) => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side, true),
@@ -62,7 +62,7 @@ describe("Moves - Defog", () => {
     await game.toEndOfTurn();
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      expect(game.scene.arena.getTagOnSide(tagType, side)).toBeUndefined(),
+      expect(game.scene.arena.hasTag(tagType, side)).toBeFalsy(),
     );
   });
 
@@ -73,7 +73,7 @@ describe("Moves - Defog", () => {
     { tagType: ArenaTagType.MIST, name: "Mist" },
     { tagType: ArenaTagType.AURORA_VEIL, name: "Aurora Veil" },
   ])("should remove the effects of $name from only the target's side of the field", async ({ tagType }) => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side, true),
@@ -83,7 +83,7 @@ describe("Moves - Defog", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 });

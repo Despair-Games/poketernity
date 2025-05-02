@@ -1,25 +1,28 @@
 import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { settings as settingsManager } from "#app/system/settings/settings-manager";
-import MessageUiHandler from "#app/ui/message-ui-handler";
-import { ScrollBar } from "#app/ui/scroll-bar";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { addTextObject, setTextColor } from "#app/ui/text";
+import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { hasTouchscreen } from "#app/utils/app-utils";
+import { isNil } from "#app/utils/common-utils";
+import { capitalizeFirstLetter } from "#app/utils/string-utils";
+import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { addWindow } from "#app/ui/ui-theme";
-import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/utils";
-import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 /**
  * Abstract class for handling UI elements related to settings.
  */
-export default class AbstractSettingsUiHandler extends MessageUiHandler {
+export class AbstractSettingsUiHandler extends MessageUiHandler {
   private settingsContainer: Phaser.GameObjects.Container;
   private optionsContainer: Phaser.GameObjects.Container;
   private messageBoxContainer: Phaser.GameObjects.Container;
@@ -67,7 +70,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Setup UI elements
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
 
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
@@ -205,10 +208,15 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     this.settingsContainer.setVisible(false);
   }
+
+  protected override tearDown(): void {
+    this.settingsContainer.destroy();
+  }
+
   /**
    * Update the bindings for the current active device configuration.
    */
-  updateBindings(): void {
+  private updateBindings(): void {
     for (const settingName of Object.keys(this.navigationIcons)) {
       if (settingName === "BUTTON_HOME") {
         this.navigationIcons[settingName].setTexture("keyboard");
@@ -232,11 +240,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  public override show(): boolean {
     this.updateBindings();
 
     this.uiItems.forEach((uiItem, s) => {
@@ -278,7 +284,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param button - The button pressed by the user.
    * @returns `true` if the action associated with the button was successfully processed, `false` otherwise.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
 
@@ -335,7 +341,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           }
           break;
         case Button.LEFT:
-          if (!isNullOrUndefined(optionCursor)) {
+          if (!isNil(optionCursor)) {
             // Moves the option cursor left (wrapping)
             if (uiItem.doWrap) {
               success = this.setOptionCursor(cursor, Wrap(optionCursor - 1, 0, maxOptionCursor), true);
@@ -346,7 +352,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           break;
         case Button.RIGHT:
           // Moves the option cursor right (wrapping)
-          if (!isNullOrUndefined(optionCursor)) {
+          if (!isNil(optionCursor)) {
             if (uiItem.doWrap) {
               success = this.setOptionCursor(cursor, Wrap(optionCursor + 1, 0, maxOptionCursor), true);
             } else if (optionCursor < optionLabels.length - 1) {
@@ -377,7 +383,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -400,7 +406,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
+  protected setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
     if (settingIndex === -1) {
       settingIndex = this.cursor + this.scrollCursor;
     }
@@ -462,7 +468,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           canBypassInputDelay: true,
         };
         globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode(UiMode.CONFIRM, confirmSettingOptions);
+          globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, confirmSettingOptions);
         });
       } else {
         this.handleSaveSetting<typeof value>(uiItem, value);
@@ -478,7 +484,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param scrollCursor - The scroll cursor position to set.
    * @returns `true` if the scroll cursor was set successfully.
    */
-  setScrollCursor(scrollCursor: number): boolean {
+  private setScrollCursor(scrollCursor: number): boolean {
     if (scrollCursor === this.scrollCursor) {
       return false;
     }
@@ -496,7 +502,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Update the scroll position of the settings UI.
    */
-  updateSettingsScroll(): void {
+  private updateSettingsScroll(): void {
     this.optionsContainer.setY(-16 * this.scrollCursor);
 
     for (let s = 0; s < this.settingLabels.length; s++) {
@@ -511,8 +517,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Clear the UI elements and state.
    */
-  override clear() {
-    super.clear();
+  protected override clear() {
     this.settingsContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();
@@ -526,14 +531,14 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Erase the cursor from the UI.
    */
-  eraseCursor() {
+  private eraseCursor() {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }
     this.cursorObj = null;
   }
 
-  override showText(
+  public override showText(
     text: string,
     delay?: number,
     callback?: Function,
@@ -598,7 +603,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       },
     };
     this.showText(text, undefined, () => {
-      globalScene.ui.setOverlayMode(UiMode.CONFIRM, config);
+      globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, config);
     });
   }
 

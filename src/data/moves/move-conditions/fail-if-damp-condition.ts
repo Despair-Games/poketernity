@@ -1,8 +1,9 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { FieldPreventExplosionLikeAbAttr } from "#app/data/abilities/ab-attrs/field-prevent-explosion-like-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder } from "#app/utils";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
@@ -13,7 +14,7 @@ export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   globalScene
     .getField(true)
     .map((p) =>
-      applyAbAttrs(
+      applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
         AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
         p,
         false,

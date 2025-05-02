@@ -1,23 +1,23 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { EvolutionItem } from "#enums/evolution-item";
 import { globalScene } from "#app/global-scene";
 import { TimeOfDay } from "#enums/time-of-day";
 import type { MoveId } from "#enums/move-id";
 import { ElementalType } from "#enums/elemental-type";
-import type { Gender } from "#enums/gender";
-import { randSeedInt } from "#app/utils";
-import { PokeballType } from "#enums/pokeball";
+import { Gender } from "#enums/gender";
+import { randSeedInt } from "#app/utils/random-utils";
+import { PokeballType } from "#enums/pokeball-type";
 import { WeatherType } from "#enums/weather-type";
-import type { Biome } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { Nature } from "#enums/nature";
 
 /**
  * Pokemon Evolution tuple type consisting of:
- * @property 0 {@linkcode Species} The species of the Pokemon.
+ * @property 0 {@linkcode SpeciesId} The species of the Pokemon.
  * @property 1 The level at which the Pokemon evolves.
  */
-export type EvolutionLevel = [species: Species, level: number];
+export type EvolutionLevel = [species: SpeciesId, level: number];
 
 export type EvolutionConditionPredicate = (p: Pokemon) => boolean;
 
@@ -25,11 +25,11 @@ export interface PokemonEvolutions {
   [key: string]: SpeciesFormEvolution[];
 }
 export interface PokemonPreEvolutions {
-  [key: string]: Species;
+  [key: string]: SpeciesId;
 }
 
 export class SpeciesFormEvolution {
-  public speciesId: Species;
+  public speciesId: SpeciesId;
   public preFormKey: string | null;
   public evoFormKey: string | null;
   public level: number;
@@ -47,7 +47,7 @@ export class SpeciesFormEvolution {
    * @param enemyEvolveLevel The level at which enemy spawns will undergo this evolution. Default: Equal to `level`.
    */
   constructor(
-    speciesId: Species,
+    speciesId: SpeciesId,
     preFormKey: string | null,
     evoFormKey: string | null,
     level: number,
@@ -67,7 +67,7 @@ export class SpeciesFormEvolution {
 
 export class SpeciesEvolution extends SpeciesFormEvolution {
   constructor(
-    speciesId: Species,
+    speciesId: SpeciesId,
     level: number,
     item: EvolutionItem | null,
     conditions: SpeciesEvolutionCondition[] | null,
@@ -88,14 +88,74 @@ export class SpeciesEvolutionCondition {
   }
 }
 
-// TODO: Break this up into a MaleCondition and FemaleCondition?
-export class GenderEvolutionCondition extends SpeciesEvolutionCondition {
-  constructor(requiredGender: Gender) {
-    super((p) => p.gender === requiredGender);
-    this.description = "requires gender";
+/**
+ * For Pokemon that require being male, including:
+ * ```
+ * Gallade
+ * Mothim
+ * Basculegion
+ * Oinkalogne
+ * Meowstic
+ * ```
+ *
+ * Custom:
+ * ```
+ * Glalie
+ * Huntail
+ * ```
+ */
+export class MaleEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super((p) => p.gender === Gender.MALE);
+    this.description = "requires male";
   }
 }
 
+/**
+ * For Pokemon that require being female, including:
+ * ```
+ * Froslass
+ * Wormadam, Vespiquen
+ * Basculegion
+ * Salazzle
+ * Oinkalogne
+ * Meowstic
+ * ```
+ *
+ * Custom:
+ * ```
+ * Gardevoir
+ * Gorebyss
+ * ```
+ */
+export class FemaleEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super((p) => p.gender === Gender.FEMALE);
+    this.description = "requires female";
+  }
+}
+
+/**
+ * For Pokemon that have mainline evolutions requiring day time. Includes:
+ * ```
+ * Eevee
+ * Budew, Happiny, Riolu
+ * Tyrunt
+ * Yungoos
+ * Rockruff, Formantis
+ * Hisui Sneasel
+ * ```
+ *
+ * Also includes Pokemon that have alternate forms like:
+ * ```
+ * Cubone, Koffing, Mime Jr
+ * Quilava
+ * Wurmple
+ * Samurott, Rufflet
+ * Goomy
+ * Dartrix, Cosmoem
+ * ```
+ */
 export class DayEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]));
@@ -103,6 +163,29 @@ export class DayEvolutionCondition extends SpeciesEvolutionCondition {
   }
 }
 
+/**
+ * For Pokemon that have mainline evolutions requiring night time. Includes:
+ * ```
+ * Eevee
+ * Gligar, Sneasel, Chingling
+ * Amaura
+ * Alola Rattata
+ * Rockruff
+ * Galar Linoone, Snom
+ * Ursaring
+ * Greavard
+ * ```
+ *
+ * Also includes Pokemon that have alternate forms like:
+ * ```
+ * Cubone, Koffing, Mime Jr
+ * Quilava
+ * Wurmple
+ * Samurott, Rufflet
+ * Goomy
+ * Dartrix, Cosmoem
+ * ```
+ */
 export class NightEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]));
@@ -169,8 +252,8 @@ export class RngFormEvoCondition extends SpeciesEvolutionCondition {
  * Accelgor (Shelmet)
  */
 export class SpeciesOwnedEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredSpecies: Species) {
-    super(() => !!globalScene.gameData.dexData[requiredSpecies].caughtAttr);
+  constructor(requiredSpecies: SpeciesId) {
+    super(() => globalScene.gameData.dexData[requiredSpecies].caughtAttr > 0);
     // Todo: find efficient way to get species name from Species
     this.description = "requires owning " + requiredSpecies;
   }
@@ -184,6 +267,35 @@ export class ShedinjaEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(() => globalScene.getPlayerParty().length < 6 && globalScene.pokeballCounts[PokeballType.POKEBALL] > 0);
     this.description = "Have an empty slot in the party and a Pokeball";
+  }
+}
+
+/**
+ * Amped Toxtricity requires a specific nature.
+ * All other natures result in amped form
+ */
+export class AmpedToxtricityEvoCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super(
+      (p) =>
+        [
+          Nature.HARDY,
+          Nature.BRAVE,
+          Nature.ADAMANT,
+          Nature.NAUGHTY,
+          Nature.DOCILE,
+          Nature.IMPISH,
+          Nature.LAX,
+          Nature.HASTY,
+          Nature.JOLLY,
+          Nature.NAIVE,
+          Nature.RASH,
+          Nature.SASSY,
+          Nature.QUIRKY,
+        ].indexOf(p.getNature()) > -1,
+    );
+    this.description =
+      "Nature is Hardy, Brave, Adamant, Naughty, Docile, Impish, Lax, Hasty, Jolly, Naive, Rash, Sassy, or Quirky.";
   }
 }
 
@@ -211,15 +323,15 @@ export class LowKeyToxtricityEvoCondition extends SpeciesEvolutionCondition {
         ].indexOf(p.getNature()) > -1,
     );
     this.description =
-      "Requires lonely, bold, relaxed, timid, serious, modest, mild, quiet, bashful, calm, gentle, or careful nature";
+      "Nature is Lonely, Bold, Relaxed, Timid, Serious, Modest, Mild, Quiet, Bashful, Calm, Gentle, or Careful.";
   }
 }
 
 /** Pancham requires the player to have a Dark type Pokemon (not including Tera) on the team */
 export class PangoroEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
-    super(
-      () => !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
+    super(() =>
+      globalScene.getPlayerParty().some((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
     );
     this.description = "Requires a Dark type Pokemon on the team";
   }
@@ -239,8 +351,8 @@ export class GoodraEvoCondition extends SpeciesEvolutionCondition {
  * Only used for Alcremie forms
  */
 export class BiomeEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredBiomes: Biome[]) {
-    super(() => globalScene.arena.isInBiome(requiredBiomes));
+  constructor(requiredBiomes: readonly BiomeId[]) {
+    super(() => requiredBiomes.includes(globalScene.arena.biomeId));
     this.description = "Needs to be in certain biomes";
   }
 }
@@ -262,11 +374,52 @@ export class GholdengoEvoCondition extends SpeciesEvolutionCondition {
 }
 
 /**
+ * Values obtained from the friendship values needed to evolve in generations 2-7 and 8-9
+ */
+const BABY_FRIENDSHIP_EVO_REQUIREMENT = 160;
+const FRIENDSHIP_EVO_REQUIREMENT = 220;
+
+/**
+ * For baby evolutions that require friendship
+ * Used for the following:
+ * ```
+ * Pichu
+ * Cleffa
+ * Igglybuff
+ * Happiny
+ * Togepi
+ * Azurill
+ * Budew
+ * Chingling
+ * ```
+ */
+export class BabySpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super((p) => p.friendship >= BABY_FRIENDSHIP_EVO_REQUIREMENT);
+    this.description = "with friendship: " + BABY_FRIENDSHIP_EVO_REQUIREMENT;
+  }
+}
+
+/**
  * For evolutions that require friendship
+ * Used for the following:
+ * ```
+ * Golbat
+ * Chansey
+ * Eevee
+ * Munchlax
+ * Riolu
+ * Buneary
+ * Woobat
+ * Swadloon
+ * Type:Null
+ * Alola Meowth
+ * Snom
+ * ```
  */
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
-  constructor(friendshipAmount: number) {
-    super((p) => p.friendship >= friendshipAmount);
-    this.description = "with friendship: " + friendshipAmount;
+  constructor() {
+    super((p) => p.friendship >= FRIENDSHIP_EVO_REQUIREMENT);
+    this.description = "with friendship: " + FRIENDSHIP_EVO_REQUIREMENT;
   }
 }

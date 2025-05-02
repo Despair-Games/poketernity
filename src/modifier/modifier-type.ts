@@ -1,14 +1,16 @@
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
-import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants";
+import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
 import { pokemonFormChanges, SpeciesFormChangeCondition } from "#app/data/pokemon-forms";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import { tmPoolTiers, tmSpecies } from "#app/data/tms";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -42,7 +44,6 @@ import {
   RememberMoveModifier,
   SpeciesStatBoosterModifier,
   TempStatStageBoosterModifier,
-  TerastallizeModifier,
   TmModifier,
   TurnHeldItemTransferModifier,
   type Modifier,
@@ -53,19 +54,13 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
-import { getModifierTierTextTint } from "#app/ui/text";
-import {
-  formatMoney,
-  getEnumKeys,
-  getEnumValues,
-  isNullOrUndefined,
-  leftPad,
-  NumberHolder,
-  randSeedInt,
-} from "#app/utils";
+import { getModifierTierTextTint } from "#app/ui/text/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
+import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
+import { randSeedInt } from "#app/utils/random-utils";
+import { formatMoney, leftPad } from "#app/utils/string-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -74,13 +69,13 @@ import { FormChangeItem } from "#enums/form-change-item";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
-import { type Nature } from "#enums/nature";
-import { type PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
-import { type VoucherType } from "#enums/voucher-type";
+import type { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
 
 const outputModifierData = false;
@@ -199,7 +194,7 @@ export class ModifierType {
           if (weight > 0) {
             this.tier = modifier.modifierType.tier;
             return this;
-          } else if (isNullOrUndefined(defaultTier)) {
+          } else if (isNil(defaultTier)) {
             // If weight is 0, keep track of the first tier where the item was found
             defaultTier = modifier.modifierType.tier;
           }
@@ -1281,10 +1276,14 @@ export class TempStatStageBoosterModifierTypeGenerator extends ModifierTypeGener
 export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
   /** Object comprised of the currently available species-based stat boosting held items */
   public static readonly items = {
-    LIGHT_BALL: { stats: [Stat.ATK, Stat.SPATK], multiplier: 2, species: [Species.PIKACHU] },
-    THICK_CLUB: { stats: [Stat.ATK], multiplier: 2, species: [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK] },
-    METAL_POWDER: { stats: [Stat.DEF], multiplier: 2, species: [Species.DITTO] },
-    QUICK_POWDER: { stats: [Stat.SPD], multiplier: 2, species: [Species.DITTO] },
+    LIGHT_BALL: { stats: [Stat.ATK, Stat.SPATK], multiplier: 2, species: [SpeciesId.PIKACHU] },
+    THICK_CLUB: {
+      stats: [Stat.ATK],
+      multiplier: 2,
+      species: [SpeciesId.CUBONE, SpeciesId.MAROWAK, SpeciesId.ALOLA_MAROWAK],
+    },
+    METAL_POWDER: { stats: [Stat.DEF], multiplier: 2, species: [SpeciesId.DITTO] },
+    QUICK_POWDER: { stats: [Stat.SPD], multiplier: 2, species: [SpeciesId.DITTO] },
   };
 
   constructor() {
@@ -1319,7 +1318,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
             if (checkedSpecies.includes(speciesId)) {
               // Add weight if party member has a matching species
               weights[i]++;
-            } else if (checkedSpecies.includes(Species.PIKACHU) && hasFling) {
+            } else if (checkedSpecies.includes(SpeciesId.PIKACHU) && hasFling) {
               // Add weight to Light Ball if party member has Fling
               weights[i]++;
             }
@@ -1387,8 +1386,8 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
           (p) =>
             pokemonEvolutions.hasOwnProperty(p.species.speciesId)
             && (!p.pauseEvolutions
-              || p.species.speciesId === Species.SLOWPOKE
-              || p.species.speciesId === Species.EEVEE),
+              || p.species.speciesId === SpeciesId.SLOWPOKE
+              || p.species.speciesId === SpeciesId.EEVEE),
         )
         .flatMap((p) => {
           const evolutions = pokemonEvolutions[p.species.speciesId];
@@ -1449,7 +1448,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                     ),
                 );
 
-              if (p.species.speciesId === Species.NECROZMA) {
+              if (p.species.speciesId === SpeciesId.NECROZMA) {
                 // technically we could use a simplified version and check for formChanges.length > 3, but in case any code changes later, this might break...
 
                 let foundULTRA_Z = false,
@@ -1491,37 +1490,6 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
 
       return new FormChangeItemModifierType(formChangeItemPool[randSeedInt(formChangeItemPool.length)]);
     });
-  }
-}
-
-export class TerastallizeModifierType extends PokemonHeldItemModifierType implements GeneratedPersistentModifierType {
-  private teraType: ElementalType;
-
-  constructor(teraType: ElementalType) {
-    super(
-      "",
-      `${ElementalType[teraType].toLowerCase()}_tera_shard`,
-      (type, args) => new TerastallizeModifier(type as TerastallizeModifierType, (args[0] as Pokemon).id, teraType),
-      "tera_shard",
-    );
-
-    this.teraType = teraType;
-  }
-
-  override get name(): string {
-    return i18next.t("modifierType:ModifierType.TerastallizeModifierType.name", {
-      teraType: i18next.t(`pokemonInfo:Type.${ElementalType[this.teraType]}`),
-    });
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.TerastallizeModifierType.description", {
-      teraType: i18next.t(`pokemonInfo:Type.${ElementalType[this.teraType]}`),
-    });
-  }
-
-  getPregenArgs(): any[] {
-    return [this.teraType];
   }
 }
 
@@ -1613,7 +1581,7 @@ export type GeneratorModifierOverride = {
       type?: Nature;
     }
   | {
-      name: keyof Pick<typeof modifierTypes, "ATTACK_TYPE_BOOSTER" | "TERA_SHARD">;
+      name: keyof Pick<typeof modifierTypes, "ATTACK_TYPE_BOOSTER">;
       type?: ElementalType;
     }
   | {
@@ -2078,10 +2046,10 @@ function getNewModifierTypeOption(
   } else if (upgradeCount === undefined && player) {
     upgradeCount = 0;
     if (tier < ModifierTier.MASTER && allowLuckUpgrades) {
-      const partyShinyCount = party.filter((p) => p.isShiny() && !p.isFainted()).length;
-      const upgradeOdds = Math.floor(32 / ((partyShinyCount + 2) / 2));
+      const partyLuckValue = getPartyLuckValue(party);
+      const upgradeOdds = Math.floor(128 / ((partyLuckValue + 4) / 4));
       while (modifierPool.hasOwnProperty(tier + upgradeCount + 1) && modifierPool[tier + upgradeCount + 1].length) {
-        if (!randSeedInt(upgradeOdds)) {
+        if (randSeedInt(upgradeOdds) < 4) {
           upgradeCount++;
         } else {
           break;

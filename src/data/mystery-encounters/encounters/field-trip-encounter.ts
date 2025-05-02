@@ -7,7 +7,7 @@ import {
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
@@ -19,7 +19,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 
 /** i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fieldTrip";

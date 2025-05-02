@@ -1,11 +1,13 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
+import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
+import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
+import type { SyncEncounterNatureAbAttr } from "#app/data/abilities/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { initEncounterAnims } from "#app/data/init/init-encounter-anims";
@@ -13,7 +15,6 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getNatureName } from "#app/data/nature";
-import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -38,22 +39,21 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { randSeedInt, randSeedItem } from "#app/utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { ImagesFolder } from "#enums/images-folders";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
-import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
@@ -91,7 +91,7 @@ export class EncounterPhase extends BattlePhase {
 
     // Failsafe if players somehow skip floor 200 in classic mode
     if (gameMode.isClassic && waveIndex > 200) {
-      globalScene.gameOver({ clearPhaseQueue: false });
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
     }
 
     const loadEnemyAssets: Promise<void>[] = [];
@@ -144,7 +144,7 @@ export class EncounterPhase extends BattlePhase {
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
             && !gameMode.isBoss(waveIndex)
-            && arena.biomeType !== Biome.END
+            && arena.biomeId !== BiomeId.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);
@@ -153,7 +153,7 @@ export class EncounterPhase extends BattlePhase {
             enemySpecies,
             level,
             TrainerSlot.NONE,
-            !!globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies),
+            globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies) > 0,
           );
           if (isClassicFinalBoss) {
             currentBattle.enemyParty[e].ivs = new Array(6).fill(31);
@@ -163,7 +163,12 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(AbAttrFlag.SYNC_ENCOUNTER_NATURE, playerPokemon, false, currentBattle.enemyParty[e]);
+              applyAbAttrs<SyncEncounterNatureAbAttr>(
+                AbAttrFlag.SYNC_ENCOUNTER_NATURE,
+                playerPokemon,
+                false,
+                currentBattle.enemyParty[e],
+              );
             });
         }
       }
@@ -182,7 +187,7 @@ export class EncounterPhase extends BattlePhase {
         );
       }
 
-      if (enemyPokemon.species.speciesId === Species.ETERNATUS) {
+      if (enemyPokemon.species.speciesId === SpeciesId.ETERNATUS) {
         if (isClassicFinalBoss) {
           enemyPokemon.setBoss();
         } else if (!(waveIndex % 1000)) {
@@ -211,6 +216,7 @@ export class EncounterPhase extends BattlePhase {
       console.log(
         `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
         `| Species ID: ${enemyPokemon.species.speciesId}`,
+        `| Level: ${enemyPokemon.level}`,
         `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
       );
       console.log(`Stats (IVs): ${stats}`);
@@ -303,10 +309,15 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      ui.setMode(UiMode.MESSAGE).then(() => {
+      if (battleType === BattleType.TRAINER) {
+        trainer?.genAI(globalScene.getEnemyParty());
+      }
+
+      ui.setMessageMode().then(() => {
         if (!this.loaded) {
-          // Set weather before session gets saved to ensure it's properly added to session data
+          // Set weather and terrain before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();
+          this.trySetTerrainIfNewBiome();
           // Game currently syncs to server on waves X1 and X6, or after 5 minutes have passed without a save
           gameData.saveAll(true, waveIndex % 5 === 1 || (globalScene.lastSavePlayTime ?? 0) >= 300).then((success) => {
             globalScene.disableMenu = false;
@@ -335,6 +346,9 @@ export class EncounterPhase extends BattlePhase {
       globalScene.isMysteryEncounterValidForWave(battleType, waveIndex)
       && !currentBattle.isBattleMysteryEncounter()
     ) {
+      /**
+       * TODO: This does not occur in most cases. See https://github.com/Despair-Games/poketernity/issues/395
+       */
       // Increment ME spawn chance if an ME could have spawned but did not
       // Only do this AFTER session has been saved to avoid duplicating increments
       mysteryEncounterSaveData.encounterSpawnChance += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
@@ -342,7 +356,7 @@ export class EncounterPhase extends BattlePhase {
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
-        pokemon.resetBattleData();
+        pokemon.resetWaveData();
       }
     }
 
@@ -436,9 +450,9 @@ export class EncounterPhase extends BattlePhase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
           if (double && availablePartyMembers > 1) {
-            globalScene.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
           }
           this.end();
         };
@@ -490,7 +504,7 @@ export class EncounterPhase extends BattlePhase {
           ui.clearText();
           ui.getMessageHandler().hideNameText();
 
-          globalScene.unshiftPhase(new MysteryEncounterPhase());
+          globalScene.phaseManager.unshiftPhase(new MysteryEncounterPhase());
           this.end();
         };
 
@@ -543,11 +557,11 @@ export class EncounterPhase extends BattlePhase {
 
     enemyField.forEach((enemyPokemon, e) => {
       if (enemyPokemon.isShiny()) {
-        globalScene.unshiftPhase(new ShinySparklePhase(BattlerIndex.ENEMY + e));
+        globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(BattlerIndex.ENEMY + e));
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
-        enemyPokemon.species.speciesId === Species.ETERNATUS
+        enemyPokemon.species.speciesId === SpeciesId.ETERNATUS
         && (gameMode.isBattleClassicFinalBoss(waveIndex) || gameMode.isEndlessMajorBoss(waveIndex))
       ) {
         const enemyMBH = globalScene.findModifier(
@@ -564,7 +578,7 @@ export class EncounterPhase extends BattlePhase {
 
     if (![BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
       enemyField.map((p) =>
-        globalScene.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
+        globalScene.phaseManager.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
           if (!globalScene.getPlayerParty().length) {
             return false;
           }
@@ -582,7 +596,7 @@ export class EncounterPhase extends BattlePhase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.map((p) =>
-          globalScene.pushPhase(
+          globalScene.phaseManager.pushPhase(
             new ScanIvsPhase(p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
           ),
         );
@@ -593,29 +607,29 @@ export class EncounterPhase extends BattlePhase {
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
 
       if (!availablePartyMembers[0].isOnField()) {
-        globalScene.pushPhase(new SummonPhase(0));
+        globalScene.phaseManager.pushPhase(new SummonPhase(0));
       }
 
       if (double) {
         if (availablePartyMembers.length > 1) {
-          globalScene.pushPhase(new ToggleDoublePositionPhase(true));
+          globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
           if (!availablePartyMembers[1].isOnField()) {
-            globalScene.pushPhase(new SummonPhase(1));
+            globalScene.phaseManager.pushPhase(new SummonPhase(1));
           }
         }
       } else {
         if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          globalScene.pushPhase(new ReturnPhase(1));
+          globalScene.phaseManager.pushPhase(new ReturnPhase(1));
         }
-        globalScene.pushPhase(new ToggleDoublePositionPhase(false));
+        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !gameMode.isDaily)) {
         const minPartySize = double ? 2 : 1;
         if (availablePartyMembers.length > minPartySize) {
-          globalScene.pushPhase(new CheckSwitchPhase(0, double));
+          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
           if (double) {
-            globalScene.pushPhase(new CheckSwitchPhase(1, double));
+            globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
           }
         }
       }
@@ -660,7 +674,7 @@ export class EncounterPhase extends BattlePhase {
   }
 
   /**
-   * Set biome weather if and only if this encounter is the start of a new biome.
+   * Set biome weather and terrain if and only if this encounter is the start of a new biome.
    *
    * By using function overrides, this should happen if and only if this phase
    * is exactly a NewBiomeEncounterPhase or an EncounterPhase (to account for
@@ -669,7 +683,13 @@ export class EncounterPhase extends BattlePhase {
    */
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
-      globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
+      globalScene.arena.setRandomWeather();
+    }
+  }
+
+  protected trySetTerrainIfNewBiome(): void {
+    if (!this.loaded) {
+      globalScene.arena.setRandomTerrain();
     }
   }
 }

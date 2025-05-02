@@ -1,11 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { UiMode } from "#enums/ui-mode";
-import { PlayerGender } from "#enums/player-gender";
-import i18next from "i18next";
-import { PhaseId } from "#enums/phase-id";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { PhaseId } from "#enums/phase-id";
+import { PlayerGender } from "#enums/player-gender";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 export class SelectGenderPhase extends Phase {
   override readonly id = PhaseId.SELECT_GENDER;
@@ -40,12 +41,12 @@ export class SelectGenderPhase extends Phase {
     };
 
     ui.showText(i18next.t("menu:boyOrGirl"), null, () => {
-      ui.setMode(UiMode.OPTION_SELECT, menuOptionsConfig);
+      ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, menuOptionsConfig);
     });
   }
 
   public override end(): void {
-    globalScene.ui.setMode(UiMode.MESSAGE);
+    globalScene.ui.setMessageMode();
     super.end();
   }
 }

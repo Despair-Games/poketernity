@@ -1,5 +1,5 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import { type EntryHazardTag } from "#app/data/arena-tag";
+import type { EntryHazardTag } from "#app/data/arena-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -18,15 +18,18 @@ export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (this.condition(pokemon, attacker, move)) {
-      const tag = globalScene.arena.getTag(this.tagType) as EntryHazardTag;
-      if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
-        if (!simulated) {
-          globalScene.arena.addTag(this.tagType, pokemon.id, undefined, undefined, pokemon.getOpposingArenaTagSide());
-        }
-        return true;
-      }
+    if (!this.condition(pokemon, attacker, move)) {
+      return false;
     }
+
+    const tag = globalScene.arena.findTag<EntryHazardTag>(this.tagType);
+    if (!tag || tag.layers < tag.maxLayers) {
+      if (!simulated) {
+        globalScene.arena.addTag(this.tagType, pokemon.id, undefined, undefined, pokemon.getOpposingArenaTagSide());
+      }
+      return true;
+    }
+
     return false;
   }
 }

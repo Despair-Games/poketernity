@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { MoneyMultiplierModifier } from "#app/modifier/modifier";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
@@ -26,7 +26,7 @@ export class MoneyRewardPhase extends BattlePhase {
 
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
 
-    if (globalScene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
+    if (globalScene.arena.hasTag(ArenaTagType.HAPPY_HOUR)) {
       moneyAmount.value *= 2;
     }
 

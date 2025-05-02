@@ -1,10 +1,10 @@
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 
@@ -28,14 +28,14 @@ describe("Moves - Geomancy", () => {
       .moveset(MoveId.GEOMANCY)
       .battleType("single")
       .startingLevel(100)
-      .enemySpecies(Species.SNORLAX)
+      .enemySpecies(SpeciesId.SNORLAX)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should boost the user's stats on the second turn of use", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const affectedStats: EffectiveStat[] = [Stat.SPATK, Stat.SPDEF, Stat.SPD];
@@ -44,19 +44,19 @@ describe("Moves - Geomancy", () => {
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(0));
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.OTHER);
+    expect(player).toHaveMoveResult(MoveResult.OTHER);
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(2));
     expect(player.getMoveHistory()).toHaveLength(2);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerGeomancy = player.getMoveset().find((mv) => mv && mv.moveId === MoveId.GEOMANCY);
     expect(playerGeomancy?.ppUsed).toBe(1);
   });
 
   it("should execute over 2 turns between waves", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const affectedStats: EffectiveStat[] = [Stat.SPATK, Stat.SPDEF, Stat.SPD];
@@ -64,14 +64,14 @@ describe("Moves - Geomancy", () => {
     game.move.select(MoveId.GEOMANCY);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
-    await game.doKillOpponents();
+    await game.faintOpponents();
 
     await game.toNextWave();
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(2));
     expect(player.getMoveHistory()).toHaveLength(2);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
 
     const playerGeomancy = player.getMoveset().find((mv) => mv && mv.moveId === MoveId.GEOMANCY);
     expect(playerGeomancy?.ppUsed).toBe(1);

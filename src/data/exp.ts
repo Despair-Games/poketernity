@@ -1,6 +1,13 @@
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { globalScene } from "#app/global-scene";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
 
+/**
+ * A look up table containing the total amount of EXP required to reach each level (for the first `100` levels), ordered by growth rate:
+ * Erratic, fast, medium fast, medium slow, slow, fluctuating
+ */
 const expLevels = [
   [
     0, 15, 52, 122, 237, 406, 637, 942, 1326, 1800, 2369, 3041, 3822, 4719, 5737, 6881, 8155, 9564, 11111, 12800, 14632,
@@ -58,11 +65,28 @@ const expLevels = [
   ],
 ];
 
+/**
+ * Custom legacy value so that Pokemon with slower leveling rates would be better.
+ *
+ * TODO: See if this needs tweaking (or is needed at all) and then update the above hardcoded
+ * arrays for more optimization
+ */
+const SMOOTHING_FACTOR = 0.675;
+
+/**
+ * Function to calculate the amount of EXP required for a given level based on growth rate.
+ *
+ * If the growth rate is not `MEDIUM_FAST` then it is smoothed with `MEDIUM_FAST`
+ * (The growth rate only contributes `32.5%` of the formula, the other `67.5%` is `MEDIUM_FAST`)
+ * @returns The total amount of EXP required to get from level `1` (`0` EXP) to the input level
+ */
 export function getLevelTotalExp(level: number, growthRate: GrowthRate): number {
   if (level < 100) {
     const levelExp = expLevels[growthRate][level - 1];
     if (growthRate !== GrowthRate.MEDIUM_FAST) {
-      return Math.floor(levelExp * 0.325 + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * 0.675);
+      return Math.floor(
+        levelExp * (1 - SMOOTHING_FACTOR) + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * SMOOTHING_FACTOR,
+      );
     }
     return levelExp;
   }
@@ -71,6 +95,7 @@ export function getLevelTotalExp(level: number, growthRate: GrowthRate): number 
 
   switch (growthRate) {
     case GrowthRate.ERRATIC:
+      // Custom: There is no erratic formula past level 100 so this is totally custom
       ret = (Math.pow(level, 4) + Math.pow(level, 3) * 2000) / 3500;
       break;
     case GrowthRate.FAST:
@@ -86,34 +111,212 @@ export function getLevelTotalExp(level: number, growthRate: GrowthRate): number 
       ret = (Math.pow(level, 3) * 5) / 4;
       break;
     case GrowthRate.FLUCTUATING:
+      // Custom: There is no fluctuating formula past level 100 so this is totally custom
       ret = (Math.pow(level, 3) * (level / 2 + 8) * 4) / (100 + level);
       break;
   }
 
   if (growthRate !== GrowthRate.MEDIUM_FAST) {
-    return Math.floor(ret * 0.325 + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * 0.675);
+    return Math.floor(
+      ret * (1 - SMOOTHING_FACTOR) + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * SMOOTHING_FACTOR,
+    );
   }
 
   return Math.floor(ret);
 }
 
+/**
+ * @returns The amount of EXP required to go from `level - 1` to `level`
+ */
 export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
   return getLevelTotalExp(level, growthRate) - getLevelTotalExp(level - 1, growthRate);
 }
 
-export function getGrowthRateColor(growthRate: GrowthRate, shadow?: boolean) {
+/**
+ * Gets the level for a wild Pokemon for a given wave
+ * The formula were derived as a series of linear functions with specific breakpoints
+ * (10, 10), (20, 15), (70, 30), (100, 40), (170, 65), (180, 70), (190, 79), and (200, 83)
+ *
+ * @param wave - The adjusted wave based on whether or not the game is daily mode
+ * @returns the level for the wave
+ */
+export function getLevelForWaveFunc(wave: number): number {
+  if (wave < 11) {
+    // Level cap of 10 * 1.2 = 12 at wave 10
+    return wave;
+  } else if (wave < 21) {
+    // Level cap of 15 * 1.2 = 18 at wave 20
+    return Math.floor(0.5 * wave + 5);
+  } else if (wave < 71) {
+    // Level cap of 30 * 1.2 = 36 at wave 70
+    return Math.floor(0.3 * wave + 9);
+  } else if (wave < 101) {
+    // Level cap of 50 * 1.2 = 48 at wave 100
+    return Math.floor(0.366 * wave + 4.33);
+  } else if (wave < 171) {
+    // Level cap of 65 * 1.2 = 78 at wave 170
+    return Math.floor(0.371 * wave + 2.86);
+  } else if (wave < 181) {
+    // Level cap of 70 * 1.2 = 84 at wave 180
+    return Math.floor(0.5 * wave - 20);
+  } else if (wave < 191) {
+    // Level cap of 79 * 1.2 = 95 at wave 190
+    return Math.floor(0.9 * wave - 92);
+  } else if (wave < 201) {
+    // Level cap of 83 * 1.2 = 100 at wave 200
+    return Math.floor(0.4 * wave + 3);
+  } else {
+    // Temporary scaling value for now
+    return Math.floor(0.5 * wave);
+  }
+}
+
+/**
+ * @returns The color to display in the starter select UI for each growth rate
+ */
+export function getGrowthRateColor(growthRate: GrowthRate) {
   switch (growthRate) {
     case GrowthRate.ERRATIC:
-      return shadow ? ShadowColor.DUSTY_ROSE : CommonColor.BRIGHT_PINK;
+      return CommonColor.BRIGHT_PINK;
     case GrowthRate.FAST:
-      return shadow ? ShadowColor.MUTED_GOLD : CommonColor.GOLD_YELLOW;
+      return CommonColor.GOLD_YELLOW;
     case GrowthRate.MEDIUM_FAST:
-      return shadow ? ShadowColor.MUTED_GREEN : CommonColor.LIGHT_GREEN;
+      return CommonColor.LIGHT_GREEN;
     case GrowthRate.MEDIUM_SLOW:
-      return shadow ? ShadowColor.DARK_GREY : CommonColor.SOFT_BLUE;
+      return CommonColor.SOFT_BLUE;
     case GrowthRate.SLOW:
-      return shadow ? ShadowColor.DARK_RED : CommonColor.BRIGHT_ORANGE;
+      return CommonColor.BRIGHT_ORANGE;
     case GrowthRate.FLUCTUATING:
-      return shadow ? ShadowColor.DARK_PURPLE : CommonColor.VIBRANT_PURPLE;
+      return CommonColor.VIBRANT_PURPLE;
+  }
+}
+
+/**
+ * Function to get the exp given from a defeated Pokemon from gen 1-4
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ */
+export function genOneThroughFourExpFormula(defeatedPokemon: EnemyPokemon): number {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const enemyLevel = defeatedPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 7;
+
+  const expGained = baseExpGain * expShareMultiplier * luckyEggBonus * trainerExpBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 5
+ *
+ * BW2 has a cap of 100,000 but that is ignored here.
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ * - Exp Power Point bonus
+ */
+export function genFiveExpFormula(defeatedPokemon: EnemyPokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const playerLevel = playerPokemon.level;
+  const enemyLevel = defeatedPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 5;
+
+  const levelScalingNumerator = Math.floor(
+    Math.round(Math.sqrt(2 * enemyLevel + 10)) * Math.pow(2 * enemyLevel + 10, 2),
+  );
+  const levelScalingDenominator = Math.floor(
+    Math.round(Math.sqrt(playerLevel + enemyLevel + 10)) * Math.pow(playerLevel + enemyLevel + 10, 2),
+  );
+  const levelScalingFactor = levelScalingNumerator / levelScalingDenominator;
+
+  const gainedExp = (baseExpGain * expShareMultiplier * trainerExpBonus * levelScalingFactor + 1) * luckyEggBonus;
+  return Math.floor(gainedExp);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 6
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ * - O-Power bonus
+ */
+export function genSixExpFormula(defeatedPokemon: EnemyPokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const enemyLevel = defeatedPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+  const friendshipBonus = playerPokemon.friendship >= 220 ? 1.2 : 1;
+  // If the player Pokemon is past the level it can normally evolve this should be 1.2, currently unused
+  // TODO: use this?
+  const canEvolveBonus = 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 7;
+
+  const expGained =
+    baseExpGain * expShareMultiplier * luckyEggBonus * trainerExpBonus * friendshipBonus * canEvolveBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 7+
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ * - Rotom Power bonus
+ */
+export function genSevenPlusExpFormula(defeatedPokemon: EnemyPokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const enemyLevel = defeatedPokemon.level;
+  const playerLevel = playerPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+  const friendshipBonus = playerPokemon.friendship >= 220 ? 1.2 : 1;
+  // If the player Pokemon is past the level it can normally evolve this should be 1.2, currently unused
+  // TODO: use this?
+  const canEvolveBonus = 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 5;
+  const levelScalingFactor = Math.pow((2 * enemyLevel + 10) / (playerLevel + enemyLevel + 10), 2.5);
+  const innerTerm = baseExpGain * levelScalingFactor * expShareMultiplier + 1;
+
+  const expGained = innerTerm * luckyEggBonus * trainerExpBonus * friendshipBonus * canEvolveBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * @returns The shadow color to display in the starter select UI for each growth rate
+ */
+export function getGrowthRateShadowColor(growthRate: GrowthRate) {
+  switch (growthRate) {
+    case GrowthRate.ERRATIC:
+      return ShadowColor.DUSTY_ROSE;
+    case GrowthRate.FAST:
+      return ShadowColor.MUTED_GOLD;
+    case GrowthRate.MEDIUM_FAST:
+      return ShadowColor.MUTED_GREEN;
+    case GrowthRate.MEDIUM_SLOW:
+      return ShadowColor.DARK_GREY;
+    case GrowthRate.SLOW:
+      return ShadowColor.DARK_RED;
+    case GrowthRate.FLUCTUATING:
+      return ShadowColor.DARK_PURPLE;
   }
 }

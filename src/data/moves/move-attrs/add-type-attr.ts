@@ -28,7 +28,7 @@ export class AddTypeAttr extends MoveEffectAttr {
     target.summonData.addedType = this.type;
     target.updateInfo();
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:addType", {
         typeName: i18next.t(`pokemonInfo:Type.${ElementalType[this.type]}`),
         pokemonName: getPokemonNameWithAffix(target),
@@ -39,6 +39,6 @@ export class AddTypeAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) => !target.isTerastallized() && !target.getTypes().includes(this.type);
+    return (_user, target, _move) => !target.isTerastallized && !target.getTypes().includes(this.type);
   }
 }

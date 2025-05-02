@@ -1,11 +1,10 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import Phaser from "phaser";
-import { GameManager } from "#test/testUtils/gameManager";
-import { Species } from "#enums/species";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Stat, BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { BATTLE_STATS, EFFECTIVE_STATS, Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 // TODO: Add more tests once Transform is fully implemented
 describe("Moves - Transform", () => {
@@ -26,20 +25,20 @@ describe("Moves - Transform", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(Species.MEW)
+      .enemySpecies(SpeciesId.MEW)
       .enemyLevel(200)
-      .enemyAbility(Abilities.BEAST_BOOST)
-      .enemyPassiveAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BEAST_BOOST)
+      .enemyPassiveAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
-      .ability(Abilities.INTIMIDATE)
+      .ability(AbilityId.INTIMIDATE)
       .moveset([MoveId.TRANSFORM]);
   });
 
   it("should copy species, ability, gender, all stats except HP, all stat stages, moveset, and types of target", async () => {
-    await game.classicMode.startBattle([Species.DITTO]);
+    await game.classicMode.startBattle([SpeciesId.DITTO]);
 
     game.move.select(MoveId.TRANSFORM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -77,7 +76,7 @@ describe("Moves - Transform", () => {
   it("should copy in-battle overridden stats", async () => {
     game.override.enemyMoveset([MoveId.POWER_SPLIT]);
 
-    await game.classicMode.startBattle([Species.DITTO]);
+    await game.classicMode.startBattle([SpeciesId.DITTO]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -86,7 +85,7 @@ describe("Moves - Transform", () => {
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
     game.move.select(MoveId.TRANSFORM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);
     expect(enemy.getStat(Stat.ATK, false)).toBe(avgAtk);
@@ -98,11 +97,11 @@ describe("Moves - Transform", () => {
   it("should set each move's pp to a maximum of 5", async () => {
     game.override.enemyMoveset([MoveId.SWORDS_DANCE, MoveId.GROWL, MoveId.SKETCH, MoveId.RECOVER]);
 
-    await game.classicMode.startBattle([Species.DITTO]);
+    await game.classicMode.startBattle([SpeciesId.DITTO]);
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.TRANSFORM);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     player.getMoveset().forEach((move) => {
       // Should set correct maximum PP without touching `ppUp`

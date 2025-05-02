@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils";
+import { toDmgValue } from "#app/utils/common-utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -26,12 +26,16 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const abilityName = this.source.name;
     if (!simulated) {
-      globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healPercent), {
-        message: i18next.t("abilityTriggers:healFromBerryUse", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          abilityName,
-        }),
-      });
+      globalScene.phaseManager.queuePokemonHealPhase(
+        pokemon.getBattlerIndex(),
+        toDmgValue(pokemon.getMaxHp() * this.healPercent),
+        {
+          message: i18next.t("abilityTriggers:healFromBerryUse", {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+            abilityName,
+          }),
+        },
+      );
     }
     return true;
   }

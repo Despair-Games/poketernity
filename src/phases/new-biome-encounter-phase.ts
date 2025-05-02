@@ -1,9 +1,9 @@
+import type { PostBiomeChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getRandomWeatherType } from "#app/data/weather";
 import { globalScene } from "#app/global-scene";
+import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
-import { NextEncounterPhase } from "./next-encounter-phase";
 
 /**
  * Triggers the first encounter of a new biome
@@ -19,12 +19,12 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
-        pokemon.resetBattleData();
+        pokemon.resetWaveData();
       }
     }
 
     for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
-      applyAbAttrs(AbAttrFlag.POST_BIOME_CHANGE, pokemon, false);
+      applyAbAttrs<PostBiomeChangeAbAttr>(AbAttrFlag.POST_BIOME_CHANGE, pokemon, false);
     }
 
     const enemyField = globalScene.getEnemyField();
@@ -53,6 +53,6 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
    * Set biome weather.
    */
   protected override trySetWeatherIfNewBiome(): void {
-    globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
+    globalScene.arena.setRandomWeather();
   }
 }

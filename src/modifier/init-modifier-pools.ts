@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -7,21 +7,21 @@ import {
   ResetNegativeStatStageModifier,
   TurnStatusEffectModifier,
 } from "#app/modifier/modifier";
-import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
 import {
   dailyStarterModifierPool,
   enemyBuffModifierPool,
   modifierPool,
   trainerModifierPool,
   wildModifierPool,
-} from "./modifier-pools";
+} from "#app/modifier/modifier-pools";
+import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { isNullOrUndefined } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { isNil } from "#app/utils/common-utils";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Unlockables } from "#enums/unlockables";
 
@@ -262,7 +262,6 @@ export function initModifierPools() {
       4,
     ),
     new WeightedModifierType(modifierTypes.BASE_STAT_BOOSTER, 3),
-    new WeightedModifierType(modifierTypes.TERA_SHARD, 1),
     new WeightedModifierType(
       modifierTypes.VOUCHER,
       (_party: Pokemon[], rerollCount: number) => (!globalScene.gameMode.isDaily ? Math.max(1 - rerollCount, 0) : 0),
@@ -313,7 +312,7 @@ export function initModifierPools() {
         return party.some((p) => {
           const moveset = p
             .getMoveset(true)
-            .filter((m) => !isNullOrUndefined(m))
+            .filter((m) => !isNil(m))
             .map((m) => m.moveId);
 
           const canSetStatus = p.canSetStatus(StatusEffect.TOXIC, true, true, null, true);
@@ -328,12 +327,12 @@ export function initModifierPools() {
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
-            Abilities.QUICK_FEET,
-            Abilities.GUTS,
-            Abilities.MARVEL_SCALE,
-            Abilities.TOXIC_BOOST,
-            Abilities.POISON_HEAL,
-            Abilities.MAGIC_GUARD,
+            AbilityId.QUICK_FEET,
+            AbilityId.GUTS,
+            AbilityId.MARVEL_SCALE,
+            AbilityId.TOXIC_BOOST,
+            AbilityId.POISON_HEAL,
+            AbilityId.MAGIC_GUARD,
           ].some((a) => p.hasAbility(a, false, true));
 
           if (!isHoldingOrb) {
@@ -356,7 +355,7 @@ export function initModifierPools() {
         return party.some((p) => {
           const moveset = p
             .getMoveset(true)
-            .filter((m) => !isNullOrUndefined(m))
+            .filter((m) => !isNil(m))
             .map((m) => m.moveId);
           const canSetStatus = p.canSetStatus(StatusEffect.BURN, true, true, null, true);
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");
@@ -370,11 +369,11 @@ export function initModifierPools() {
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
-            Abilities.QUICK_FEET,
-            Abilities.GUTS,
-            Abilities.MARVEL_SCALE,
-            Abilities.FLARE_BOOST,
-            Abilities.MAGIC_GUARD,
+            AbilityId.QUICK_FEET,
+            AbilityId.GUTS,
+            AbilityId.MARVEL_SCALE,
+            AbilityId.FLARE_BOOST,
+            AbilityId.MAGIC_GUARD,
           ].some((a) => p.hasAbility(a, false, true));
 
           if (!isHoldingOrb) {
@@ -395,12 +394,12 @@ export function initModifierPools() {
       modifierTypes.WHITE_HERB,
       (party: Pokemon[]) => {
         const checkedAbilities = [
-          Abilities.WEAK_ARMOR,
-          Abilities.CONTRARY,
-          Abilities.MOODY,
-          Abilities.ANGER_SHELL,
-          Abilities.COMPETITIVE,
-          Abilities.DEFIANT,
+          AbilityId.WEAK_ARMOR,
+          AbilityId.CONTRARY,
+          AbilityId.MOODY,
+          AbilityId.ANGER_SHELL,
+          AbilityId.COMPETITIVE,
+          AbilityId.DEFIANT,
         ];
         const weightMultiplier = party.filter(
           (p) =>
@@ -449,7 +448,7 @@ export function initModifierPools() {
       modifierTypes.CATCHING_CHARM,
       () =>
         !globalScene.gameMode.isFreshStartChallenge()
-        && globalScene.gameData.getSpeciesCount((d) => !!d.caughtAttr) > 100
+        && globalScene.gameData.getSpeciesCount((d) => d.caughtAttr > 0) > 100
           ? 4
           : 0,
       4,

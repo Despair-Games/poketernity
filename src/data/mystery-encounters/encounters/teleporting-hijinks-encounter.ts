@@ -7,20 +7,20 @@ import {
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MoneyRequirement, WaveModulusRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import PokemonData from "#app/system/pokemon-data";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { Biome } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { getBiomeKey } from "#app/field/arena";
 import { ElementalType } from "#enums/elemental-type";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
@@ -30,17 +30,18 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { TeleportingHijinksBiomeCandidates } from "#app/data/biome-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/teleportingHijinks";
 
 const MONEY_COST_MULTIPLIER = 1.75;
-const BIOME_CANDIDATES = [Biome.SPACE, Biome.FAIRY_CAVE, Biome.LABORATORY, Biome.ISLAND, Biome.WASTELAND, Biome.DOJO];
+
 const MACHINE_INTERFACING_TYPES = [ElementalType.ELECTRIC, ElementalType.STEEL];
 
 /**
@@ -178,7 +179,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
 
   // Calculate new biome (cannot be current biome)
-  const filteredBiomes = BIOME_CANDIDATES.filter((b) => globalScene.arena.biomeType !== b);
+  const filteredBiomes = TeleportingHijinksBiomeCandidates.filter((b) => globalScene.arena.biomeId !== b);
   const newBiome = filteredBiomes[randSeedInt(filteredBiomes.length)];
 
   // Show dialogue and transition biome
@@ -214,7 +215,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
         tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
         mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
           queueEncounterMessage(`${namespace}:boss_enraged`);
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
           );
         },
@@ -225,7 +226,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   return config;
 }
 
-async function animateBiomeChange(nextBiome: Biome) {
+async function animateBiomeChange(nextBiome: BiomeId) {
   return new Promise<void>((resolve) => {
     globalScene.tweens.add({
       targets: [globalScene.arenaEnemy, globalScene.lastEnemyTrainer],

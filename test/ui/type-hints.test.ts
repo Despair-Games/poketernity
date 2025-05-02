@@ -1,15 +1,14 @@
+import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { Button } from "#enums/buttons";
+import { TypeEffectivenessColor } from "#enums/color";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { CommandPhase } from "#app/phases/command-phase";
-import FightUiHandler from "#app/ui/fight-ui-handler";
+import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
+import type { MockText } from "#test/test-utils/mocks/mocksContainer/mockText";
+import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import type { MockText } from "#test/testUtils/mocks/mocksContainer/mockText";
-import i18next from "i18next";
-import { TypeEffectivenessColor } from "#enums/color";
 
 describe("UI - Type Hints", () => {
   let phaserGame: Phaser.Game;
@@ -36,12 +35,12 @@ describe("UI - Type Hints", () => {
       .battleType("single")
       .startingLevel(100)
       .startingWave(1)
-      .enemySpecies(Species.FLORGES)
+      .enemySpecies(SpeciesId.FLORGES)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.DRAGON_CLAW]);
     game.settings.typeHints(true); //activate type hints
 
-    await game.startBattle([Species.RAYQUAZA]);
+    await game.startBattle([SpeciesId.RAYQUAZA]);
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
@@ -60,13 +59,13 @@ describe("UI - Type Hints", () => {
       expect.soft(dragonClawText.color).toBe(TypeEffectivenessColor.NO_EFFECT);
       ui.getHandler().processInput(Button.ACTION);
     });
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
   });
 
   it("check status move color", async () => {
-    game.override.enemySpecies(Species.FLORGES).moveset([MoveId.GROWL]);
+    game.override.enemySpecies(SpeciesId.FLORGES).moveset([MoveId.GROWL]);
 
-    await game.startBattle([Species.RAYQUAZA]);
+    await game.startBattle([SpeciesId.RAYQUAZA]);
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
@@ -85,6 +84,6 @@ describe("UI - Type Hints", () => {
       expect.soft(growlText.color).toBe(undefined);
       ui.getHandler().processInput(Button.ACTION);
     });
-    await game.phaseInterceptor.to(CommandPhase);
+    await game.phaseInterceptor.to("CommandPhase");
   });
 });

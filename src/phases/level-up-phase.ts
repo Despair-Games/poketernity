@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
@@ -8,6 +8,7 @@ import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship-constants";
 
 /**
  * Handles the effects of a pokemon levelling up:
@@ -44,6 +45,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
 
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();
+    this.pokemon.addFriendship(FRIENDSHIP_GAIN_PER_LEVEL_UP);
     this.pokemon.updateInfo();
 
     const promptLevelUpStats = (): Promise<void> =>
@@ -73,14 +75,14 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     if (this.lastLevel < 100) {
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
       for (const [, learnMoveId] of levelMoves) {
-        globalScene.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, learnMoveId));
+        globalScene.phaseManager.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, learnMoveId));
       }
     }
 
     if (!this.pokemon.pauseEvolutions) {
       const evolution = this.pokemon.getEvolution();
       if (evolution) {
-        globalScene.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
+        globalScene.phaseManager.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
       }
     }
 

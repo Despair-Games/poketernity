@@ -2,7 +2,7 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type FadeIn from "phaser3-rex-plugins/plugins/audio/fade/FadeIn";
 import type FadeOut from "phaser3-rex-plugins/plugins/audio/fade/FadeOut";
 import { globalScene } from "#app/global-scene";
-import { FixedNumber } from "#app/utils";
+import { FixedNumber } from "#app/utils/common-utils";
 import { settings } from "#app/system/settings/settings-manager";
 
 //#region Types

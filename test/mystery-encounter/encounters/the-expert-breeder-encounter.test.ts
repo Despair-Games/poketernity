@@ -1,31 +1,30 @@
+import type BattleScene from "#app/battle-scene";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship-constants";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
+import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/encounters/the-expert-pokemon-breeder-encounter";
+import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { CommandPhase } from "#app/phases/command-phase";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { BiomeId } from "#enums/biome-id";
+import { EggTier } from "#enums/egg-type";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import type BattleScene from "#app/battle-scene";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { CommandPhase } from "#app/phases/command-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/encounters/the-expert-pokemon-breeder-encounter";
-import { TrainerType } from "#enums/trainer-type";
-import { EggTier } from "#enums/egg-type";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
@@ -40,13 +39,12 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]]]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
+    ]);
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
@@ -83,7 +81,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(
@@ -158,7 +156,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(successfullyLoaded).toBe(true);
 
       // Check usual battle stuff
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
@@ -176,8 +174,8 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const eggsAfter = scene.gameData.eggs;
       const commonEggs = scene.currentBattle.mysteryEncounter!.misc.pokemon1CommonEggs;
@@ -188,13 +186,12 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(eggsAfter.filter((egg) => egg.tier === EggTier.RARE).length).toBe(rareEggs);
 
       game.phaseInterceptor.superEndPhase();
-      await game.phaseInterceptor.to(PostMysteryEncounterPhase);
+      game.phaseInterceptor.shift();
+      await game.phaseInterceptor.to("PostMysteryEncounterPhase");
 
       const friendshipAfter = scene.currentBattle.mysteryEncounter!.misc.pokemon1.friendship;
-      // 20 from ME + extra from winning battle (that extra is not accurate to what happens in game.
-      // The Pokemon normally gets FRIENDSHIP_GAIN_FROM_BATTLE 3 times, once for each defeated Pokemon
-      // but due to how skipBattleRunMysteryEncounterRewardsPhase is implemented, it only receives it once)
-      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_FROM_BATTLE);
+      // 20 from ME + extra from winning battle
+      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_PER_LEVEL_UP);
     });
   });
 
@@ -243,7 +240,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(successfullyLoaded).toBe(true);
 
       // Check usual battle stuff
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
@@ -261,8 +258,8 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const eggsAfter = scene.gameData.eggs;
       const commonEggs = scene.currentBattle.mysteryEncounter!.misc.pokemon2CommonEggs;
@@ -273,10 +270,11 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(eggsAfter.filter((egg) => egg.tier === EggTier.RARE).length).toBe(rareEggs);
 
       game.phaseInterceptor.superEndPhase();
-      await game.phaseInterceptor.to(PostMysteryEncounterPhase);
+      game.phaseInterceptor.shift();
+      await game.phaseInterceptor.to("PostMysteryEncounterPhase");
 
       const friendshipAfter = scene.currentBattle.mysteryEncounter!.misc.pokemon2.friendship;
-      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_FROM_BATTLE); // 20 from ME + extra for friendship gained from winning battle
+      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_PER_LEVEL_UP); // 20 from ME + extra for friendship gained from winning battle
     });
   });
 
@@ -325,7 +323,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(successfullyLoaded).toBe(true);
 
       // Check usual battle stuff
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
@@ -343,8 +341,8 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 3, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const eggsAfter = scene.gameData.eggs;
       const commonEggs = scene.currentBattle.mysteryEncounter!.misc.pokemon3CommonEggs;
@@ -355,10 +353,11 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(eggsAfter.filter((egg) => egg.tier === EggTier.RARE).length).toBe(rareEggs);
 
       game.phaseInterceptor.superEndPhase();
-      await game.phaseInterceptor.to(PostMysteryEncounterPhase);
+      game.phaseInterceptor.shift();
+      await game.phaseInterceptor.to("PostMysteryEncounterPhase");
 
       const friendshipAfter = scene.currentBattle.mysteryEncounter!.misc.pokemon3.friendship;
-      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_FROM_BATTLE); // 20 + extra for friendship gained from winning battle
+      expect(friendshipAfter).toBe(friendshipBefore + 20 + FRIENDSHIP_GAIN_PER_LEVEL_UP); // 20 + extra for friendship gained from winning battle
     });
   });
 });

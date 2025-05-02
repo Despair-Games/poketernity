@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
@@ -22,6 +22,14 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
+  /**
+   * @param pokemon - The Pokémon with the ability.
+   * @param simulated - If `true` then the game state will not be modified.
+   * @param attacker - The attacking Pokémon.
+   * @param move - The move being used.
+   * @param multiplier - The damage multiplier.
+   * @returns `true` if the ability was applied.
+   */
   override apply(
     pokemon: Pokemon,
     _simulated: boolean,

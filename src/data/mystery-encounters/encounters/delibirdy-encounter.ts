@@ -15,10 +15,10 @@ import {
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import {
   type BerryModifier,
@@ -34,7 +34,7 @@ import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/delibirdy";
@@ -74,7 +74,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     {
       spriteKey: "",
       fileRoot: "",
-      species: Species.DELIBIRD,
+      species: SpeciesId.DELIBIRD,
       hasShadow: true,
       repeat: true,
       startFrame: 38,
@@ -83,7 +83,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     {
       spriteKey: "",
       fileRoot: "",
-      species: Species.DELIBIRD,
+      species: SpeciesId.DELIBIRD,
       hasShadow: true,
       repeat: true,
       scale: 1.06,
@@ -91,7 +91,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     {
       spriteKey: "",
       fileRoot: "",
-      species: Species.DELIBIRD,
+      species: SpeciesId.DELIBIRD,
       hasShadow: true,
       repeat: true,
       startFrame: 65,
@@ -116,7 +116,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
   ])
   .withOnInit(() => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
-    encounter.setDialogueToken("delibirdName", getPokemonSpecies(Species.DELIBIRD).getName());
+    encounter.setDialogueToken("delibirdName", getPokemonSpecies(SpeciesId.DELIBIRD).getName());
 
     globalScene.loadBgm("mystery_encounter_fun_and_games", "mystery_encounter_fun_and_games.mp3");
     return true;
@@ -161,7 +161,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             true,
           );
         } else {
-          globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.AMULET_COIN));
+          globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.AMULET_COIN));
         }
 
         leaveEncounterWithoutBattle(true);
@@ -242,7 +242,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               true,
             );
           } else {
-            globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.CANDY_JAR));
+            globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.CANDY_JAR));
           }
         } else {
           // Check if the player has max stacks of that Berry Pouch already
@@ -260,7 +260,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               true,
             );
           } else {
-            globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.BERRY_POUCH));
+            globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.BERRY_POUCH));
           }
         }
 
@@ -342,7 +342,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             true,
           );
         } else {
-          globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.HEALING_CHARM));
+          globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.HEALING_CHARM));
         }
 
         chosenPokemon.loseHeldItem(modifier, false);

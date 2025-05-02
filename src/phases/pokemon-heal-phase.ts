@@ -1,15 +1,13 @@
-import type { HealBlockTag } from "#app/data/battler-tags";
+import type { HealBlockTag } from "#app/data/battler-tags/heal-block-tag";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import { type DamageResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
-import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
@@ -60,7 +58,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
       fullRestorePP = false,
     }: PokemonHealPhaseOptions = {},
   ) {
-    super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
+    super(CommonAnim.HEALTH_UP, battlerIndex);
 
     this.hpHealed = hpHealed;
     this.message = message;
@@ -90,12 +88,13 @@ export class PokemonHealPhase extends CommonAnimPhase {
     // TODO: This seems weird, why are we storing the message check way before we use it
     // (at which point it could be outdated)
     const hasMessage = !!this.message;
-    const healOrDamage = !pokemon.isFullHp() || this.hpHealed < 0;
-    const healBlock = pokemon.getTag(BattlerTagType.HEAL_BLOCK) as HealBlockTag;
+    const canRestorePP = this.fullRestorePP && pokemon.getMoveset().some((mv) => mv.ppUsed > 0);
+    const healOrDamage = !pokemon.isFullHp() || this.hpHealed < 0 || canRestorePP;
+    const healBlock = pokemon.getTag<HealBlockTag>(BattlerTagType.HEAL_BLOCK);
     let lastStatusEffect = StatusEffect.NONE;
 
     if (healBlock && this.hpHealed > 0) {
-      globalScene.queueMessage(healBlock.onActivation(pokemon));
+      globalScene.phaseManager.queueMessagePhase(healBlock.onActivation(pokemon));
       // TODO: is this necessary?
       delete this.message;
       return super.end();
@@ -107,7 +106,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
       const healAmount = new NumberHolder(Math.floor(this.hpHealed * hpRestoreMultiplier.value));
       if (healAmount.value < 0) {
-        pokemon.damageAndUpdate(healAmount.value * -1, HitResult.HEAL as DamageResult);
+        pokemon.damageAndUpdate(healAmount.value * -1);
         healAmount.value = 0;
       }
 
@@ -116,9 +115,8 @@ export class PokemonHealPhase extends CommonAnimPhase {
         healAmount.value = pokemon.getMaxHp() - pokemon.hp - 1;
       }
 
-      healAmount.value = pokemon.heal(healAmount.value);
-      if (healAmount.value) {
-        globalScene.damageNumberHandler.add(pokemon, healAmount.value, HitResult.HEAL);
+      if (healAmount.value > 0) {
+        healAmount.value = pokemon.heal(healAmount.value);
       }
 
       if (pokemon.isPlayer()) {
@@ -151,11 +149,13 @@ export class PokemonHealPhase extends CommonAnimPhase {
     }
 
     if (this.message) {
-      globalScene.queueMessage(this.message);
+      globalScene.phaseManager.queueMessagePhase(this.message);
     }
 
     if (this.healStatus && lastStatusEffect && !hasMessage) {
-      globalScene.queueMessage(getStatusEffectHealText(lastStatusEffect, getPokemonNameWithAffix(pokemon)));
+      globalScene.phaseManager.queueMessagePhase(
+        getStatusEffectHealText(lastStatusEffect, getPokemonNameWithAffix(pokemon)),
+      );
     }
 
     if (!healOrDamage && !lastStatusEffect) {

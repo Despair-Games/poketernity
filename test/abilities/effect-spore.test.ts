@@ -1,0 +1,131 @@
+import { allMoves } from "#app/data/data-lists";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+describe("Abilities - Effect Spore", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .moveset([MoveId.SPLASH])
+      .ability(AbilityId.EFFECT_SPORE)
+      .battleType("single")
+      .disableCrits()
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH);
+
+    // Force minimum RNG roll so that Effect Spore's RNG roll succeeds
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min);
+  });
+
+  it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    vi.spyOn(abilityAttr, "apply");
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceHit();
+    await game.toEndOfTurn();
+
+    expect(abilityAttr.apply).toHaveLastReturnedWith(true);
+    expect(enemyPokemon.getStatusEffect()).not.toBe(StatusEffect.NONE);
+  });
+
+  it("should not affect Pokemon with the ability Overcoat", async () => {
+    game.override.enemyAbility(AbilityId.OVERCOAT);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    vi.spyOn(abilityAttr, "apply");
+
+    game.move.select(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceHit();
+    await game.toEndOfTurn();
+
+    expect(abilityAttr.apply).toHaveLastReturnedWith(false);
+  });
+
+  it("should not affect Grass-type Pokemon", async () => {
+    game.override.enemySpecies(SpeciesId.TREECKO);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    vi.spyOn(abilityAttr, "apply");
+
+    game.move.select(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceHit();
+    await game.toEndOfTurn();
+
+    expect(abilityAttr.apply).toHaveLastReturnedWith(false);
+  });
+
+  it("should require contact to activate", async () => {
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    vi.spyOn(abilityAttr, "apply");
+
+    game.move.select(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.WATER_GUN);
+    await game.move.forceHit();
+    await game.toEndOfTurn();
+
+    expect(abilityAttr.apply).toHaveLastReturnedWith(false);
+  });
+
+  it("should have correct chances of inflicting sleep (11%), paralysis (10%), and poison (9%)", async () => {
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const abilityAttr = playerPokemon.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+
+    // Setup for counting number of times each status gets inflicted
+    let sleepCount = 0;
+    let parCount = 0;
+    let poisonCount = 0;
+    vi.spyOn(enemyPokemon, "trySetStatus").mockImplementation((status): boolean => {
+      if (status === StatusEffect.SLEEP) {
+        sleepCount++;
+      } else if (status === StatusEffect.PARALYSIS) {
+        parCount++;
+      } else if (status === StatusEffect.POISON) {
+        poisonCount++;
+      }
+      return true;
+    });
+
+    // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
+    // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
+    await game.rng.equalSample(100, () => {
+      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves.get(MoveId.TACKLE));
+    });
+
+    expect(sleepCount).toBe(11);
+    expect(parCount).toBe(10);
+    expect(poisonCount).toBe(9);
+  });
+});

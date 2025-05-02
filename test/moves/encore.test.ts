@@ -1,10 +1,10 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -26,23 +26,23 @@ describe("Moves - Encore", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.ENCORE])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH, MoveId.TACKLE])
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should prevent the target from using any move except the last used move", async () => {
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.ENCORE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     await game.toNextTurn();
     expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeDefined();
@@ -65,7 +65,7 @@ describe("Moves - Encore", () => {
     ])("$name", async ({ moveId, delay }) => {
       game.override.enemyMoveset(moveId);
 
-      await game.classicMode.startBattle([Species.SNORLAX]);
+      await game.classicMode.startBattle([SpeciesId.SNORLAX]);
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -82,7 +82,7 @@ describe("Moves - Encore", () => {
       game.setTurnOrder(turnOrder);
 
       await game.toEndOfTurn();
-      expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+      expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
       expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeUndefined();
     });
   });
@@ -90,25 +90,24 @@ describe("Moves - Encore", () => {
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
     const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
     game.override.moveset([MoveId.ENCORE, MoveId.TORMENT, MoveId.SPLASH]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     game.move.select(MoveId.ENCORE);
     game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
-    expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
+    expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.TORMENT);
     game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
-    expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
+    expect(enemyPokemon.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
-    const lastMove = enemyPokemon?.getLastXMoves()[0];
-    expect(lastMove?.move.id).toBe(MoveId.STRUGGLE);
+    expect(enemyPokemon).toHaveUsedMove(MoveId.STRUGGLE);
   });
 });

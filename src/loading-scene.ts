@@ -1,38 +1,38 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type UiWindowStyle } from "#enums/ui-window-style";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
-import { GachaType } from "#enums/gacha-types";
+
+import { initChallenges } from "#app/data/challenge";
+import { initEggMoves } from "#app/data/egg-moves";
+import { initAbilities } from "#app/data/init/init-abilities";
+import { initBiomes } from "#app/data/init/init-biomes";
+import { initMoves } from "#app/data/init/init-moves";
+import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
+import { initPokemonForms } from "#app/data/pokemon-forms";
+import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { getBiomeHasProps } from "#app/field/arena";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { api } from "#app/plugins/api/api";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
-import { getWindowVariantSuffix } from "#app/ui/ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import { isMobile } from "#app/touch-controls";
-import { getEnumValues, getEnumKeys } from "#app/utils";
-import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { initBiomes } from "#app/data/balance/biomes";
-import { initEggMoves } from "#app/data/balance/egg-moves";
-import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initSpecies } from "./data/init/init-species";
 import { initAchievements } from "#app/system/achievements";
-import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
-import { initChallenges } from "#app/data/challenge";
-import i18next from "i18next";
-import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
-import { Biome } from "#enums/biome";
-import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initVouchers } from "#app/system/init-vouchers";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/ui-constants";
-import { ImagesFolder } from "#enums/images-folders";
-import { CommonColor } from "#enums/color";
-import { initAbilities } from "#app/data/init/init-abilities";
-import { api } from "#app/plugins/api/api";
-import { initMoves } from "#app/data/init/init-moves";
-import { initModifierTypes } from "#app/modifier/init-modifier-types";
-import { initModifierPools } from "#app/modifier/init-modifier-pools";
-import { timedEventManager } from "#app/timed-event-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import { timedEventManager } from "#app/timed-event-manager";
+import { isMobile } from "#app/touch-controls";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/constants/ui-constants";
+import { getWindowVariantSuffix } from "#app/ui/ui-theme";
+import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
+import { BiomeId } from "#enums/biome-id";
+import { CommonColor } from "#enums/color";
+import { GachaType } from "#enums/gacha-types";
+import { ImagesFolder } from "#enums/images-folders";
+import { WindowVariant } from "#enums/window-variant";
+import i18next from "i18next";
+import { initSpecies } from "./data/init/init-species";
+import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -80,6 +80,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("select_cursor_pokerus", ImagesFolder.UI_CURSORS);
     this.loadImage("select_gen_cursor", ImagesFolder.UI_CURSORS); // same as select_cursor, could be removed by using it as a nineslice
     this.loadAtlas("summary_moves_cursor", ImagesFolder.UI_CURSORS);
+    this.loadImage("cursor_tera", ImagesFolder.UI_CURSORS, { uiThemeDependant: true });
 
     this.loadImage("ability_bar_left", ImagesFolder.UI_NOTIFICATION_BARS);
     this.loadImage("bgm_bar", ImagesFolder.UI_NOTIFICATION_BARS); // same as abilitity_bar_left, could be removed by using it as a nineslice
@@ -110,6 +111,8 @@ export class LoadingScene extends SceneBase {
     this.loadImage("icon_ha_capsule", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_champion_ribbon", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_tera", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("type_tera", ImagesFolder.UI); // not sure where to put this yet
+    this.loadAtlas("button_tera", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_owned", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("icon_egg_move", ImagesFolder.UI_GAME_ICONS);
     this.loadImage("candy", ImagesFolder.UI_GAME_ICONS);
@@ -209,8 +212,8 @@ export class LoadingScene extends SceneBase {
 
     // Load arena images
     this.loadImage("default_bg", ImagesFolder.ARENAS);
-    getEnumValues(Biome).map((bt) => {
-      const btKey = Biome[bt].toLowerCase();
+    getEnumValues(BiomeId).map((bt) => {
+      const btKey = BiomeId[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
       const baseBKey = `${btKey}_b`;
@@ -332,6 +335,7 @@ export class LoadingScene extends SceneBase {
     this.loadSe("pb_move");
     this.loadSe("pb_catch");
     this.loadSe("pb_lock");
+    this.loadSe("crit_throw");
 
     this.loadSe("pb_tray_enter");
     this.loadSe("pb_tray_ball");
@@ -358,19 +362,12 @@ export class LoadingScene extends SceneBase {
     this.loadBgm("evolution", "bw/evolution.mp3");
     this.loadBgm("evolution_fanfare", "bw/evolution_fanfare.mp3");
 
-    this.load.plugin(
-      "rextexteditplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js",
-      true,
-    );
-
     this.loadLoadingScreen();
 
     initModifierTypes();
     initModifierPools();
     initAchievements();
     initVouchers();
-    initStatsKeys();
     initPokemonPreEvolutions();
     initBiomes();
     initEggMoves();

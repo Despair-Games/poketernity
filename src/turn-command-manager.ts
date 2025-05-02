@@ -1,5 +1,22 @@
+import type { TurnCommandFilter } from "#app/@types/TurnCommandFilter";
+import type { TurnMove } from "#app/@types/TurnMove";
+import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { MoveHeaderAttr } from "#app/data/moves/move-attrs/move-header-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
+import { AttemptCapturePhase } from "#app/phases/attempt-capture-phase";
+import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
+import { MoveHeaderPhase } from "#app/phases/move-header-phase";
+import { MovePhase } from "#app/phases/move-phase";
+import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
+import { TerastallizationPhase } from "#app/phases/terastallization-phase";
+import { BooleanHolder, isNil } from "#app/utils/common-utils";
+import { randSeedShuffle } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -7,21 +24,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
-import type { TurnCommandFilter } from "./@types/TurnCommandFilter";
-import type { TurnMove } from "./@types/TurnMove";
-import type { BypassSpeedChanceAbAttr } from "./data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "./data/abilities/apply-ab-attrs";
-import { MoveHeaderAttr } from "./data/moves/move-attrs/move-header-attr";
-import type { Pokemon } from "./field/pokemon";
-import { PokemonMove } from "./field/pokemon-move";
-import { globalScene } from "./global-scene";
-import { BypassSpeedChanceModifier } from "./modifier/modifier";
-import { AttemptCapturePhase } from "./phases/attempt-capture-phase";
-import { AttemptRunPhase } from "./phases/attempt-run-phase";
-import { MoveHeaderPhase } from "./phases/move-header-phase";
-import { MovePhase } from "./phases/move-phase";
-import { SwitchSummonPhase } from "./phases/switch-summon-phase";
-import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "./utils";
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.
@@ -176,6 +178,7 @@ export class TurnCommandManager {
     }
 
     switch (nextCommand.command) {
+      case BattleCommand.TERA:
       case BattleCommand.FIGHT:
         return this.handleFightCommand(nextCommand);
       case BattleCommand.BALL:
@@ -225,7 +228,7 @@ export class TurnCommandManager {
         pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
         ?? new PokemonMove(turnMove.move.id);
 
-      globalScene.appendToPhase(
+      globalScene.phaseManager.appendToPhase(
         new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
         PhaseId.MOVE_END,
       );
@@ -332,7 +335,7 @@ export class TurnCommandManager {
           return -1;
         }
       } else if (a.command === BattleCommand.FIGHT) {
-        const [aQuashed, bQuashed] = [a, b].map((tc) => !!tc.pokemon.getTag(BattlerTagType.QUASHED));
+        const [aQuashed, bQuashed] = [a, b].map((tc) => tc.pokemon.hasTag(BattlerTagType.QUASHED));
         if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
           return aQuashed ? 1 : -1;
         }
@@ -343,7 +346,7 @@ export class TurnCommandManager {
         });
 
         const priorityBrackets = priority.map((p) => Math.ceil(p));
-        const bypassSpeed = [a, b].map((tc) => !!tc.pokemon.getTag(BattlerTagType.BYPASS_SPEED));
+        const bypassSpeed = [a, b].map((tc) => tc.pokemon.hasTag(BattlerTagType.BYPASS_SPEED));
 
         if (priority[0] !== priority[1]) {
           if (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1]) {
@@ -360,9 +363,9 @@ export class TurnCommandManager {
   }
 
   private handleFightCommand(turnCommand: TurnCommand): boolean {
-    const { pokemon, cursor, turnMove, targets } = turnCommand;
+    const { pokemon, cursor, turnMove, targets, command } = turnCommand;
     if (!pokemon.isActive(true) || !turnMove) {
-      console.warn(`FIGHT command from ${pokemon?.name} is invalid`);
+      console.warn(`${BattleCommand[command]} command from ${pokemon?.name} is invalid`);
       return false;
     }
 
@@ -372,7 +375,11 @@ export class TurnCommandManager {
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
 
-    globalScene.unshiftPhase(
+    if (command === BattleCommand.TERA) {
+      globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
+    }
+
+    globalScene.phaseManager.unshiftPhase(
       new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
     );
     return true;
@@ -381,26 +388,26 @@ export class TurnCommandManager {
   private handleBallCommand(turnCommand: TurnCommand): boolean {
     const { cursor, targets } = turnCommand;
 
-    if (isNullOrUndefined(cursor) || isNullOrUndefined(targets)) {
+    if (isNil(cursor) || isNil(targets)) {
       console.error("Error encountered when trying to throw Pokeball!");
       console.error(turnCommand);
       return false;
     }
 
-    globalScene.unshiftPhase(new AttemptCapturePhase(targets[0] % 2, cursor));
+    globalScene.phaseManager.unshiftPhase(new AttemptCapturePhase(targets[0] % 2, cursor));
     return true;
   }
 
   private handlePokemonCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor } = turnCommand;
-    if (isNullOrUndefined(cursor)) {
+    if (isNil(cursor)) {
       console.error("Error encountered when trying to switch Pokemon!");
       console.error(turnCommand);
       return false;
     }
 
     const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-    globalScene.unshiftPhase(
+    globalScene.phaseManager.unshiftPhase(
       new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
     );
     return true;
@@ -414,11 +421,11 @@ export class TurnCommandManager {
       if (playerActivePokemon.length > 1) {
         const fasterPokemon = playerActivePokemon.sort((a, b) => b.getStat(Stat.SPD) - a.getStat(Stat.SPD))[0];
 
-        const hasRunAway = playerActivePokemon.find((p) => p.hasAbility(Abilities.RUN_AWAY));
+        const hasRunAway = playerActivePokemon.find((p) => p.hasAbility(AbilityId.RUN_AWAY));
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
+    globalScene.phaseManager.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
     return true;
   }
 
@@ -474,7 +481,7 @@ export class TurnCommandManager {
         pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id) ?? new PokemonMove(turnMove.move.id);
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
-        globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
+        globalScene.phaseManager.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
       }
     });
   }

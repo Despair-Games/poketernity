@@ -1,21 +1,25 @@
-import i18next from "i18next";
-import type { FixedBattleConfigs } from "./battle";
-import { classicFixedBattles, FixedBattleConfig } from "./battle";
-import type { Challenge } from "./data/challenge";
-import { allChallenges, copyChallenge } from "./data/challenge";
-import { applyChallenges } from "./utils/challenge-utils";
-import { ChallengeType } from "#enums/challenge-type";
-import type PokemonSpecies from "./data/pokemon-species";
+import type { FixedBattleConfigs } from "#app/battle";
+import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
+import { DEFAULT_STARTING_MONEY } from "#app/constants/game-constants";
+import {
+  CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
+  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
+} from "#app/constants/mystery-encounter-constants";
+import type { Challenge } from "#app/data/challenge";
+import { allChallenges, copyChallenge } from "#app/data/challenge";
 import { allSpecies } from "#app/data/data-lists";
-import type { Arena } from "./field/arena";
-import Overrides from "#app/overrides";
-import { randSeedInt, randSeedItem } from "#app/utils";
-import { Biome } from "#enums/biome";
-import { Species } from "#enums/species";
-import { Challenges } from "#enums/challenges";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import type { Arena } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { applyChallenges } from "#app/utils/challenge-utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { BiomeId } from "#enums/biome-id";
+import { ChallengeType } from "#enums/challenge-type";
+import { Challenges } from "#enums/challenges";
 import { GameModes } from "#enums/game-modes";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES, CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES } from "./constants";
+import { SpeciesId } from "#enums/species-id";
+import i18next from "i18next";
 
 interface GameModeConfig {
   isClassic?: boolean;
@@ -98,7 +102,7 @@ export class GameMode implements GameModeConfig {
    * - 1000
    */
   getStartingMoney(): number {
-    return Overrides.STARTING_MONEY_OVERRIDE || 1000;
+    return Overrides.STARTING_MONEY_OVERRIDE || DEFAULT_STARTING_MONEY;
   }
 
   /**
@@ -107,12 +111,12 @@ export class GameMode implements GameModeConfig {
    * - override from overrides.ts
    * - Town
    */
-  getStartingBiome(): Biome {
+  getStartingBiome(): BiomeId {
     switch (this.modeId) {
       case GameModes.DAILY:
         return globalScene.generateRandomBiome(this.getWaveForDifficulty(1));
       default:
-        return Overrides.STARTING_BIOME_OVERRIDE || Biome.TOWN;
+        return Overrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN;
     }
   }
 
@@ -142,19 +146,18 @@ export class GameMode implements GameModeConfig {
    * @returns `true` if a trainer should be generated, `false` otherwise
    */
   isWaveTrainer(waveIndex: number, arena: Arena): boolean {
-    /**
-     * Daily spawns trainers on floors 5, 15, 20, 25, 30, 35, 40, and 45
-     */
+    // Daily spawns trainers on floors 5, 15, 20, 25, 30, 35, 40, and 45
     if (this.isDaily) {
       return waveIndex % 10 === 5 || (!(waveIndex % 10) && waveIndex > 10 && !this.isWaveFinal(waveIndex));
     }
-    if (waveIndex % 30 === (globalScene.offsetGym ? 0 : 20) && !this.isWaveFinal(waveIndex)) {
+
+    if (this.isGymWave(waveIndex) && !this.isWaveFinal(waveIndex)) {
       return true;
-    } else if (waveIndex % 10 !== 1 && waveIndex % 10) {
-      /**
-       * Do not check X1 floors since there's a bug that stops trainer sprites from appearing
-       * after a X0 full party heal
-       */
+    }
+
+    // Trainers must not appear on X1 waves due to a bug that prevents trainer sprites from appearing
+    // after the full party heal that happens between X0 and X1 waves
+    if (waveIndex % 10 > 1) {
       const trainerChance = arena.getTrainerChance();
       let allowTrainerBattle = true;
       if (trainerChance) {
@@ -164,10 +167,13 @@ export class GameMode implements GameModeConfig {
           if (w === waveIndex) {
             continue;
           }
-          if (w % 30 === (globalScene.offsetGym ? 0 : 20) || this.isFixedBattle(w)) {
+
+          if (this.isGymWave(w) || this.isFixedBattle(w)) {
             allowTrainerBattle = false;
             break;
-          } else if (w < waveIndex) {
+          }
+
+          if (w < waveIndex) {
             globalScene.executeWithSeedOffset(() => {
               const waveTrainerChance = arena.getTrainerChance();
               if (!randSeedInt(waveTrainerChance)) {
@@ -182,18 +188,25 @@ export class GameMode implements GameModeConfig {
       }
       return Boolean(allowTrainerBattle && trainerChance && !randSeedInt(trainerChance));
     }
+
     return false;
   }
 
-  isTrainerBoss(waveIndex: number, biomeType: Biome, offsetGym: boolean): boolean {
+  /** @returns `true` if the wave is a multiple of `20` between `20-160` in classic mode */
+  public isGymWave(waveIndex: number): boolean {
+    const gymWaves = [20, 40, 60, 80, 100, 120, 140, 160];
+    return this.isClassic && gymWaves.includes(waveIndex);
+  }
+
+  public isTrainerBoss(waveIndex: number, biomeId: BiomeId): boolean {
     switch (this.modeId) {
       case GameModes.DAILY:
         return waveIndex > 10 && waveIndex < 50 && !(waveIndex % 10);
-      default:
-        return (
-          waveIndex % 30 === (offsetGym ? 0 : 20)
-          && (biomeType !== Biome.END || this.isClassic || this.isWaveFinal(waveIndex))
-        );
+      case GameModes.CLASSIC:
+      case GameModes.CHALLENGE:
+        return this.isGymWave(waveIndex) && (biomeId !== BiomeId.END || this.isWaveFinal(waveIndex));
+      case GameModes.ENDLESS:
+        return false;
     }
   }
 
@@ -201,7 +214,10 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          s.isLegendLike() && s.baseTotal >= 600 && s.speciesId !== Species.ETERNATUS && s.speciesId !== Species.ARCEUS,
+          s.isLegendLike()
+          && s.baseTotal >= 600
+          && s.speciesId !== SpeciesId.ETERNATUS
+          && s.speciesId !== SpeciesId.ARCEUS,
       );
       return randSeedItem(allFinalBossSpecies);
     }
@@ -340,9 +356,9 @@ export class GameMode implements GameModeConfig {
       default:
         return [0, 0];
       case GameModes.CLASSIC:
-        return CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES;
+        return [...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES];
       case GameModes.CHALLENGE:
-        return CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES;
+        return [...CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES];
     }
   }
 

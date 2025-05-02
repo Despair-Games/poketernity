@@ -1,18 +1,19 @@
 import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import { settings } from "#app/system/settings/settings-manager";
-import { EggSkipPreference } from "#enums/egg-skip-preference";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
+import { settings } from "#app/system/settings/settings-manager";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { EggHatchPhase } from "./egg-hatch-phase";
 import { EggSummaryPhase } from "./egg-summary-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.
@@ -54,7 +55,7 @@ export class EggLapsePhase extends Phase {
             };
             // show prompt for skip, blocking inputs for 1 second
             globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
-            globalScene.ui.setModeWithoutClear(UiMode.CONFIRM, options);
+            globalScene.ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
           },
           100,
           true,
@@ -63,12 +64,12 @@ export class EggLapsePhase extends Phase {
         eggsToHatchCount >= this.minEggsToSkip
         && settings.general.eggSkipPreference === EggSkipPreference.ALWAYS
       ) {
-        globalScene.queueMessage(i18next.t("battle:eggHatching"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:eggHatching"));
         this.hatchEggsSkipped(eggsToHatch);
         this.showSummary();
       } else {
         // regular hatches, no summary
-        globalScene.queueMessage(i18next.t("battle:eggHatching"));
+        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:eggHatching"));
         this.hatchEggsRegular(eggsToHatch);
         this.end();
       }
@@ -84,7 +85,7 @@ export class EggLapsePhase extends Phase {
   protected hatchEggsRegular(eggsToHatch: Egg[]): void {
     let eggsToHatchCount: number = eggsToHatch.length;
     for (const egg of eggsToHatch) {
-      globalScene.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
+      globalScene.phaseManager.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
       eggsToHatchCount--;
     }
   }
@@ -100,7 +101,7 @@ export class EggLapsePhase extends Phase {
   }
 
   protected showSummary(): void {
-    globalScene.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
+    globalScene.phaseManager.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
     this.end();
   }
 
@@ -128,6 +129,8 @@ export class EggLapsePhase extends Phase {
     let newHatchData: EggHatchData;
     globalScene.executeWithSeedOffset(
       () => {
+        // TODO: we should not generate PlayerPokemon objects since they are Phaser graphical objects.
+        // At the very least we should destroy them when we are done with them
         ret = egg.generatePlayerPokemon();
         newHatchData = new EggHatchData(ret, egg.eggMoveIndex);
         newHatchData.setDex();

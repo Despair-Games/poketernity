@@ -5,7 +5,7 @@ import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { AbstractConstructor, Constructor } from "#app/utils";
+import type { AbstractConstructor, Constructor } from "#app/utils/common-utils";
 import { ChargeAnim } from "#enums/charge-anim";
 import { MoveId } from "#enums/move-id";
 
@@ -43,7 +43,7 @@ export function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param target the {@linkcode Pokemon} targeted by this move (optional)
      */
     showChargeText(user: Pokemon, target?: Pokemon): void {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         this._chargeText
           .replace("{USER}", getPokemonNameWithAffix(user))
           .replace("{TARGET}", getPokemonNameWithAffix(target)),

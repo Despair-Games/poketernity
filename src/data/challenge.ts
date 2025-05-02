@@ -1,29 +1,28 @@
-import type { BooleanHolder, NumberHolder } from "#app/utils";
-import { randSeedItem } from "#app/utils";
-import i18next from "i18next";
-import type { DexAttrProps, GameData } from "#app/system/game-data";
-import { defaultStarterSpecies } from "#app/data/balance/default-starters";
+import type { FixedBattleConfig } from "#app/battle";
+import { defaultStarterSpecies } from "#app/data/default-starters";
+import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
+import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
-import { getPokemonSpecies } from "../utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import type { FixedBattleConfig } from "#app/battle";
-import { BattleType } from "#enums/battle-type";
 import Trainer from "#app/field/trainer";
-import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
-import { ElementalType } from "#enums/elemental-type";
+import type { DexAttrProps, GameData } from "#app/system/game-data";
+import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
+import { randSeedItem } from "#app/utils/random-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
+import { BattleType } from "#enums/battle-type";
 import { Challenges } from "#enums/challenges";
-import { Species } from "#enums/species";
-import { TrainerType } from "#enums/trainer-type";
-import { Nature } from "#enums/nature";
-import type { MoveId } from "#enums/move-id";
 import { TypeColor, TypeShadowColor } from "#enums/color";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import { ElementalType } from "#enums/elemental-type";
+import type { MoveId } from "#enums/move-id";
 import type { MoveSourceType } from "#enums/move-source-type";
+import { Nature } from "#enums/nature";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
+import i18next from "i18next";
 
 /** A constant for the default max cost of the starting party before a run */
 const DEFAULT_PARTY_MAX_COST = 10;
@@ -232,11 +231,11 @@ export abstract class Challenge {
 
   /**
    * An apply function for {@linkcode ChallengeType.STARTER_COST} challenges. Derived classes should alter this.
-   * @param _species {@linkcode Species} The pokemon to change the cost of.
+   * @param _species {@linkcode SpeciesId} The pokemon to change the cost of.
    * @param _cost {@link NumberHolder} The cost of the starter.
    * @returns `true` if this function did anything.
    */
-  applyStarterCost(_species: Species, _cost: NumberHolder): boolean {
+  applyStarterCost(_species: SpeciesId, _cost: NumberHolder): boolean {
     return false;
   }
 
@@ -399,7 +398,7 @@ export class SingleGenerationChallenge extends Challenge {
 
   override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     const baseGeneration =
-      pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
+      pokemon.species.speciesId === SpeciesId.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
     if (pokemon.isPlayer() && baseGeneration !== this.value) {
       valid.value = false;
       return true;
@@ -532,7 +531,7 @@ export class SingleGenerationChallenge extends Challenge {
 
 interface monotypeOverride {
   /** The species to override */
-  species: Species;
+  species: SpeciesId;
   /** The type to count as */
   type: ElementalType;
 }
@@ -541,8 +540,8 @@ interface monotypeOverride {
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: ElementalType.NORMAL }];
-  private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: SpeciesId.CASTFORM, type: ElementalType.NORMAL }];
+  private static SPECIES_OVERRIDES: SpeciesId[] = [SpeciesId.MELOETTA];
 
   constructor() {
     super(Challenges.SINGLE_TYPE, 18);
@@ -654,7 +653,7 @@ export class FreshStartChallenge extends Challenge {
     return false;
   }
 
-  override applyStarterCost(species: Species, cost: NumberHolder): boolean {
+  override applyStarterCost(species: SpeciesId, cost: NumberHolder): boolean {
     if (defaultStarterSpecies.includes(species)) {
       cost.value = speciesStarterCosts[species];
       return true;

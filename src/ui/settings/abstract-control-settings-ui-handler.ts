@@ -1,18 +1,18 @@
-import UiHandler from "#app/ui/ui-handler";
-import type { UiMode } from "#enums/ui-mode";
-import type { InterfaceConfig } from "#app/inputs-controller";
-import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject, setTextColor } from "#app/ui/text";
-import { TextStyle } from "#enums/text-style";
-import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import type { Device } from "#enums/devices";
-import { Button } from "#enums/buttons";
-import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { InterfaceConfig } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
+import type { Device } from "#enums/devices";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -30,7 +30,7 @@ export interface LayoutConfig {
 /**
  * Abstract class for handling UI elements related to control settings.
  */
-export default abstract class AbstractControlSettingsUiHandler extends UiHandler {
+export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   protected settingsContainer: Phaser.GameObjects.Container;
   protected optionsContainer: Phaser.GameObjects.Container;
   protected navigationContainer: NavigationMenu;
@@ -92,7 +92,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Setup UI elements.
    */
-  setup() {
+  protected override setup() {
     const ui = this.getUi();
     this.navigationIcons = {};
 
@@ -303,6 +303,10 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     this.settingsContainer.setVisible(false);
   }
 
+  protected override tearDown(): void {
+    this.settingsContainer.destroy();
+  }
+
   /**
    * Get the active configuration.
    *
@@ -383,12 +387,9 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
-
+  public override show(): boolean {
     this.updateNavigationDisplay();
     NavigationManager.getInstance().updateIcons();
     // Update the bindings for the current active gamepad configuration.
@@ -415,7 +416,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param activeConfig - The active device configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  setLayout(activeConfig: InterfaceConfig): boolean {
+  protected setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.
@@ -452,7 +453,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param button - The button to process.
    * @returns `true` if the input was processed successfully.
    */
-  processInput(button: Button): boolean {
+  public override processInput(button: Button): boolean {
     const ui = this.getUi();
     // Defines the maximum number of rows that can be displayed on the screen.
     let success = false;
@@ -553,7 +554,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     return success; // Return whether the input resulted in a successful action.
   }
 
-  resetScroll() {
+  protected resetScroll() {
     this.cursorObj?.destroy();
     this.cursorObj = null;
     this.cursor = 0;
@@ -568,7 +569,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: number): boolean {
+  public override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
     // If the optionsContainer is not initialized, return the result from the parent class directly.
     if (!this.optionsContainer) {
@@ -595,7 +596,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param scrollCursor - The scroll cursor position to set.
    * @returns `true` if the scroll cursor was set successfully.
    */
-  setScrollCursor(scrollCursor: number): boolean {
+  private setScrollCursor(scrollCursor: number): boolean {
     // Check if the new scroll position is the same as the current one; if so, do not update.
     if (scrollCursor === this.scrollCursor) {
       return false;
@@ -622,7 +623,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
+  public setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
     // Retrieve the specific setting using the settingIndex from the settingDevice enumeration.
     const setting = this.setting[Object.keys(this.setting)[settingIndex]];
 
@@ -655,7 +656,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Update the scroll position of the settings UI.
    */
-  updateSettingsScroll(): void {
+  private updateSettingsScroll(): void {
     // Return immediately if the options container is not initialized.
     if (!this.optionsContainer) {
       return;
@@ -680,9 +681,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Clear the UI elements and state.
    */
-  override clear(): void {
-    super.clear();
-
+  protected override clear(): void {
     // Hide the settings container to remove it from the view.
     this.settingsContainer.setVisible(false);
 
@@ -693,7 +692,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Erase the cursor from the UI.
    */
-  eraseCursor(): void {
+  private eraseCursor(): void {
     // Check if a cursor object exists.
     if (this.cursorObj) {
       this.cursorObj.destroy();

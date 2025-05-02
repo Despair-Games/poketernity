@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryModifierType } from "#app/modifier/modifier-type";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
@@ -42,7 +42,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
    * @returns whether a new berry was created
    */
   createEatenBerry(pokemon: Pokemon, simulated: boolean): boolean {
-    const berriesEaten = pokemon.battleData.berriesEaten;
+    const berriesEaten = pokemon.waveData.berriesEaten;
 
     if (!berriesEaten.length) {
       return false;
@@ -73,7 +73,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
       berryModifier.stackCount++;
     }
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("abilityTriggers:postTurnLootCreateEatenBerry", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         berryName: chosenBerry.name,

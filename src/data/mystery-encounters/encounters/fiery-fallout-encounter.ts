@@ -20,8 +20,8 @@ import {
   CombinationPokemonRequirement,
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { Species } from "#enums/species";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { SpeciesId } from "#enums/species-id";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -30,7 +30,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import { WeatherType } from "#enums/weather-type";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { StatusEffect } from "#enums/status-effect";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
@@ -41,8 +41,8 @@ import {
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { EncounterAnim } from "#enums/encounter-anims";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { Abilities } from "#enums/abilities";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
@@ -82,7 +82,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mons
-    const volcaronaSpecies = getPokemonSpecies(Species.VOLCARONA);
+    const volcaronaSpecies = getPokemonSpecies(SpeciesId.VOLCARONA);
     const config: EnemyPartyConfig = {
       pokemonConfigs: [
         {
@@ -91,7 +91,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           gender: Gender.MALE,
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
-            globalScene.unshiftPhase(
+            globalScene.phaseManager.unshiftPhase(
               new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.SPD], 1),
             );
           },
@@ -102,7 +102,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           gender: Gender.FEMALE,
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
-            globalScene.unshiftPhase(
+            globalScene.phaseManager.unshiftPhase(
               new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.SPD], 1),
             );
           },
@@ -118,7 +118,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       {
         spriteKey: "",
         fileRoot: "",
-        species: Species.VOLCARONA,
+        species: SpeciesId.VOLCARONA,
         repeat: true,
         hidden: true,
         hasShadow: true,
@@ -128,7 +128,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       {
         spriteKey: "",
         fileRoot: "",
-        species: Species.VOLCARONA,
+        species: SpeciesId.VOLCARONA,
         repeat: true,
         hidden: true,
         hasShadow: true,
@@ -141,7 +141,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
 
     globalScene.arena.trySetWeather(WeatherType.SUNNY, true);
 
-    encounter.setDialogueToken("volcaronaName", getPokemonSpecies(Species.VOLCARONA).getName());
+    encounter.setDialogueToken("volcaronaName", getPokemonSpecies(SpeciesId.VOLCARONA).getName());
 
     return true;
   })
@@ -235,11 +235,11 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
         if (chosenPokemon.trySetStatus(StatusEffect.BURN)) {
           // Burn applied
           encounter.setDialogueToken("burnedPokemon", chosenPokemon.getNameToRender());
-          encounter.setDialogueToken("abilityName", new Ability(Abilities.HEATPROOF, 3).name);
+          encounter.setDialogueToken("abilityName", new Ability(AbilityId.HEATPROOF, 3).name);
           queueEncounterMessage(`${namespace}:option.2.target_burned`);
 
           // Also permanently change the burned Pokemon's ability to Heatproof
-          applyAbilityOverrideToPokemon(chosenPokemon, Abilities.HEATPROOF);
+          applyAbilityOverrideToPokemon(chosenPokemon, AbilityId.HEATPROOF);
         }
       }
 
@@ -279,7 +279,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
 
         const primary = encounter.options[2].primaryPokemon!;
 
-        setEncounterExp([primary.id], getPokemonSpecies(Species.VOLCARONA).baseExp * 2);
+        setEncounterExp([primary.id], getPokemonSpecies(SpeciesId.VOLCARONA).baseExp * 2);
         leaveEncounterWithoutBattle();
       })
       .build(),

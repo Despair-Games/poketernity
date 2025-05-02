@@ -1,21 +1,23 @@
-import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
-import { BooleanHolder, toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { SwitchType } from "#enums/switch-type";
-import { PostDamageAbAttr } from "./post-damage-ab-attr";
+import type { ForceSwitchOutImmunityAbAttr } from "#app/data/abilities/ab-attrs/force-switch-out-immunity-ab-attr";
+import { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { BattleType } from "#enums/battle-type";
-import i18next from "i18next";
+import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
+import { BattleType } from "#enums/battle-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
+import { SwitchType } from "#enums/switch-type";
+import i18next from "i18next";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -69,7 +71,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
         if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        } else if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
+        } else if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(AbilityId.SHEER_FORCE)) {
           return false;
           // Activate only after the last hit of multistrike moves
         } else if (source.turnData.hitsLeft > 1) {
@@ -133,8 +135,8 @@ class ForceSwitchOutHelper {
    * @param pokemon The {@linkcode Pokemon} attempting to switch out.
    * @returns `true` if the switch is successful
    */
-  public switchOutLogic(pokemon: Pokemon): boolean {
-    const switchOutTarget = pokemon;
+  public switchOutLogic(switchOutTarget: Pokemon): boolean {
+    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
@@ -147,7 +149,7 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.prependToPhase(
+        globalScene.phaseManager.prependToPhase(
           new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
           PhaseId.MOVE_END,
         );
@@ -157,16 +159,14 @@ class ForceSwitchOutHelper {
        * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
        * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
        */
-    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
+    } else if (battleType !== BattleType.WILD) {
       if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = globalScene.currentBattle.trainer
-          ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-          : 0;
-        globalScene.prependToPhase(
+        const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
+        globalScene.phaseManager.prependToPhase(
           new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
           PhaseId.MOVE_END,
         );
@@ -177,30 +177,31 @@ class ForceSwitchOutHelper {
        * It will not flee if it is a Mystery Encounter with fleeing disabled (checked in `getSwitchOutCondition()`) or if it is a wave 10x wild boss
        */
     } else {
-      if (!globalScene.currentBattle.waveIndex || globalScene.currentBattle.waveIndex % 10 === 0) {
+      if (waveIndex === 0 || waveIndex % 10 === 0) {
         return false;
       }
 
+      const allyPokemon = switchOutTarget.getAlly();
+
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
           null,
           true,
           500,
         );
 
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
+        if (double && allyPokemon) {
           globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
         }
       }
 
-      if (!switchOutTarget.getAlly()?.isActive(true)) {
+      if (!allyPokemon?.isActive(true)) {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          globalScene.nextBattle(false);
+          globalScene.phaseManager.queueNextBattle(false);
         }
       }
     }
@@ -220,7 +221,12 @@ class ForceSwitchOutHelper {
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
+      applyAbAttrs<ForceSwitchOutImmunityAbAttr>(
+        AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
+        pokemon,
+        false,
+        blockedByAbility,
+      );
       return !blockedByAbility.value;
     }
 
@@ -257,7 +263,7 @@ class ForceSwitchOutHelper {
    */
   public getFailedText(target: Pokemon): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;

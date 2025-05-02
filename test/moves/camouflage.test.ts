@@ -1,10 +1,10 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { ElementalType } from "#enums/elemental-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -26,16 +26,16 @@ describe("Moves - Camouflage", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.CAMOUFLAGE])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.REGIELEKI)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.REGIELEKI)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.PSYCHIC_TERRAIN);
   });
 
   it("Camouflage should look at terrain first when selecting a type to change into", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

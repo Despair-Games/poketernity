@@ -1,139 +1,44 @@
-import { Biome } from "#enums/biome";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { DarkDealEncounter } from "./encounters/dark-deal-encounter";
-import { DepartmentStoreSaleEncounter } from "./encounters/department-store-sale-encounter";
-import { FieldTripEncounter } from "./encounters/field-trip-encounter";
-import { FightOrFlightEncounter } from "./encounters/fight-or-flight-encounter";
-import { LostAtSeaEncounter } from "./encounters/lost-at-sea-encounter";
-import { MysteriousChallengersEncounter } from "./encounters/mysterious-challengers-encounter";
-import { MysteriousChestEncounter } from "./encounters/mysterious-chest-encounter";
-import { ShadyVitaminDealerEncounter } from "./encounters/shady-vitamin-dealer-encounter";
-import { SlumberingSnorlaxEncounter } from "./encounters/slumbering-snorlax-encounter";
-import { TrainingSessionEncounter } from "./encounters/training-session-encounter";
-import type MysteryEncounter from "./mystery-encounter";
-import { SafariZoneEncounter } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
-import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
-import { TheStrongStuffEncounter } from "#app/data/mystery-encounters/encounters/the-strong-stuff-encounter";
-import { ThePokemonSalesmanEncounter } from "#app/data/mystery-encounters/encounters/the-pokemon-salesman-encounter";
-import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
-import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/delibirdy-encounter";
-import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
+import {
+  CivilizationEncounterBiomes,
+  ExtremeEncounterBiomes,
+  getBiomeName,
+  HumanTransitableBiomes,
+  NonExtremeEncounterBiomes,
+} from "#app/data/biome-utils";
 import { ATrainersTestEncounter } from "#app/data/mystery-encounters/encounters/a-trainers-test-encounter";
-import { TrashToTreasureEncounter } from "#app/data/mystery-encounters/encounters/trash-to-treasure-encounter";
+import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
+import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
 import { BerriesAboundEncounter } from "#app/data/mystery-encounters/encounters/berries-abound-encounter";
-import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
-import { PartTimerEncounter } from "#app/data/mystery-encounters/encounters/part-timer-encounter";
-import { DancingLessonsEncounter } from "#app/data/mystery-encounters/encounters/dancing-lessons-encounter";
-import { WeirdDreamEncounter } from "#app/data/mystery-encounters/encounters/weird-dream-encounter";
-import { TheWinstrateChallengeEncounter } from "#app/data/mystery-encounters/encounters/the-winstrate-challenge-encounter";
-import { TeleportingHijinksEncounter } from "#app/data/mystery-encounters/encounters/teleporting-hijinks-encounter";
 import { BugTypeSuperfanEncounter } from "#app/data/mystery-encounters/encounters/bug-type-superfan-encounter";
+import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
+import { DancingLessonsEncounter } from "#app/data/mystery-encounters/encounters/dancing-lessons-encounter";
+import { DarkDealEncounter } from "#app/data/mystery-encounters/encounters/dark-deal-encounter";
+import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/delibirdy-encounter";
+import { DepartmentStoreSaleEncounter } from "#app/data/mystery-encounters/encounters/department-store-sale-encounter";
+import { FieldTripEncounter } from "#app/data/mystery-encounters/encounters/field-trip-encounter";
+import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
+import { FightOrFlightEncounter } from "#app/data/mystery-encounters/encounters/fight-or-flight-encounter";
 import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
-import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
 import { GlobalTradeSystemEncounter } from "#app/data/mystery-encounters/encounters/global-trade-system-encounter";
+import { LostAtSeaEncounter } from "#app/data/mystery-encounters/encounters/lost-at-sea-encounter";
+import { MysteriousChallengersEncounter } from "#app/data/mystery-encounters/encounters/mysterious-challengers-encounter";
+import { MysteriousChestEncounter } from "#app/data/mystery-encounters/encounters/mysterious-chest-encounter";
+import { PartTimerEncounter } from "#app/data/mystery-encounters/encounters/part-timer-encounter";
+import { SafariZoneEncounter } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
+import { ShadyVitaminDealerEncounter } from "#app/data/mystery-encounters/encounters/shady-vitamin-dealer-encounter";
+import { SlumberingSnorlaxEncounter } from "#app/data/mystery-encounters/encounters/slumbering-snorlax-encounter";
+import { TeleportingHijinksEncounter } from "#app/data/mystery-encounters/encounters/teleporting-hijinks-encounter";
 import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/encounters/the-expert-pokemon-breeder-encounter";
-import { getBiomeName } from "#app/data/balance/biomes";
-
-export const EXTREME_ENCOUNTER_BIOMES = [
-  Biome.SEA,
-  Biome.SEABED,
-  Biome.BADLANDS,
-  Biome.DESERT,
-  Biome.ICE_CAVE,
-  Biome.VOLCANO,
-  Biome.WASTELAND,
-  Biome.ABYSS,
-  Biome.SPACE,
-  Biome.END,
-];
-
-export const NON_EXTREME_ENCOUNTER_BIOMES = [
-  Biome.TOWN,
-  Biome.PLAINS,
-  Biome.GRASS,
-  Biome.TALL_GRASS,
-  Biome.METROPOLIS,
-  Biome.FOREST,
-  Biome.SWAMP,
-  Biome.BEACH,
-  Biome.LAKE,
-  Biome.MOUNTAIN,
-  Biome.CAVE,
-  Biome.MEADOW,
-  Biome.POWER_PLANT,
-  Biome.GRAVEYARD,
-  Biome.DOJO,
-  Biome.FACTORY,
-  Biome.RUINS,
-  Biome.CONSTRUCTION_SITE,
-  Biome.JUNGLE,
-  Biome.FAIRY_CAVE,
-  Biome.TEMPLE,
-  Biome.SLUM,
-  Biome.SNOWY_FOREST,
-  Biome.ISLAND,
-  Biome.LABORATORY,
-];
-
-/**
- * Places where you could very reasonably expect to encounter a single human
- *
- * Diff from NON_EXTREME_ENCOUNTER_BIOMES:
- * + BADLANDS
- * + DESERT
- * + ICE_CAVE
- */
-export const HUMAN_TRANSITABLE_BIOMES = [
-  Biome.TOWN,
-  Biome.PLAINS,
-  Biome.GRASS,
-  Biome.TALL_GRASS,
-  Biome.METROPOLIS,
-  Biome.FOREST,
-  Biome.SWAMP,
-  Biome.BEACH,
-  Biome.LAKE,
-  Biome.MOUNTAIN,
-  Biome.BADLANDS,
-  Biome.CAVE,
-  Biome.DESERT,
-  Biome.ICE_CAVE,
-  Biome.MEADOW,
-  Biome.POWER_PLANT,
-  Biome.GRAVEYARD,
-  Biome.DOJO,
-  Biome.FACTORY,
-  Biome.RUINS,
-  Biome.CONSTRUCTION_SITE,
-  Biome.JUNGLE,
-  Biome.FAIRY_CAVE,
-  Biome.TEMPLE,
-  Biome.SLUM,
-  Biome.SNOWY_FOREST,
-  Biome.ISLAND,
-  Biome.LABORATORY,
-];
-
-/**
- * Places where you could expect a town or city, some form of large civilization
- */
-export const CIVILIZATION_ENCOUNTER_BIOMES = [
-  Biome.TOWN,
-  Biome.PLAINS,
-  Biome.GRASS,
-  Biome.TALL_GRASS,
-  Biome.METROPOLIS,
-  Biome.BEACH,
-  Biome.LAKE,
-  Biome.MEADOW,
-  Biome.POWER_PLANT,
-  Biome.GRAVEYARD,
-  Biome.DOJO,
-  Biome.FACTORY,
-  Biome.CONSTRUCTION_SITE,
-  Biome.SLUM,
-  Biome.ISLAND,
-];
+import { ThePokemonSalesmanEncounter } from "#app/data/mystery-encounters/encounters/the-pokemon-salesman-encounter";
+import { TheStrongStuffEncounter } from "#app/data/mystery-encounters/encounters/the-strong-stuff-encounter";
+import { TheWinstrateChallengeEncounter } from "#app/data/mystery-encounters/encounters/the-winstrate-challenge-encounter";
+import { TrainingSessionEncounter } from "#app/data/mystery-encounters/encounters/training-session-encounter";
+import { TrashToTreasureEncounter } from "#app/data/mystery-encounters/encounters/trash-to-treasure-encounter";
+import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
+import { WeirdDreamEncounter } from "#app/data/mystery-encounters/encounters/weird-dream-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { BiomeId } from "#enums/biome-id";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 
 export const allMysteryEncounters: { [encounterType: number]: MysteryEncounter } = {};
 
@@ -186,41 +91,43 @@ const anyBiomeEncounters: MysteryEncounterType[] = [
  * Adding specific Encounters to the mysteryEncountersByBiome map is for specific cases and special circumstances
  * that biome groups do not cover
  */
-export const mysteryEncountersByBiome = new Map<Biome, MysteryEncounterType[]>([
-  [Biome.TOWN, []],
-  [Biome.PLAINS, [MysteryEncounterType.SLUMBERING_SNORLAX, MysteryEncounterType.ABSOLUTE_AVARICE]],
-  [Biome.GRASS, [MysteryEncounterType.SLUMBERING_SNORLAX, MysteryEncounterType.ABSOLUTE_AVARICE]],
-  [Biome.TALL_GRASS, [MysteryEncounterType.ABSOLUTE_AVARICE]],
-  [Biome.METROPOLIS, []],
-  [Biome.FOREST, [MysteryEncounterType.SAFARI_ZONE, MysteryEncounterType.ABSOLUTE_AVARICE]],
-  [Biome.SEA, [MysteryEncounterType.LOST_AT_SEA]],
-  [Biome.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
-  [Biome.BEACH, []],
-  [Biome.LAKE, []],
-  [Biome.SEABED, []],
-  [Biome.MOUNTAIN, []],
-  [Biome.BADLANDS, [MysteryEncounterType.DANCING_LESSONS]],
-  [Biome.CAVE, [MysteryEncounterType.THE_STRONG_STUFF]],
-  [Biome.DESERT, [MysteryEncounterType.DANCING_LESSONS]],
-  [Biome.ICE_CAVE, []],
-  [Biome.MEADOW, []],
-  [Biome.POWER_PLANT, []],
-  [Biome.VOLCANO, [MysteryEncounterType.FIERY_FALLOUT, MysteryEncounterType.DANCING_LESSONS]],
-  [Biome.GRAVEYARD, []],
-  [Biome.DOJO, []],
-  [Biome.FACTORY, []],
-  [Biome.RUINS, []],
-  [Biome.WASTELAND, [MysteryEncounterType.DANCING_LESSONS]],
-  [Biome.ABYSS, [MysteryEncounterType.DANCING_LESSONS]],
-  [Biome.SPACE, [MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER]],
-  [Biome.CONSTRUCTION_SITE, []],
-  [Biome.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
-  [Biome.FAIRY_CAVE, []],
-  [Biome.TEMPLE, []],
-  [Biome.SLUM, []],
-  [Biome.SNOWY_FOREST, []],
-  [Biome.ISLAND, []],
-  [Biome.LABORATORY, []],
+export const mysteryEncountersByBiome = new Map<BiomeId, MysteryEncounterType[]>([
+  [BiomeId.TOWN, []],
+  [BiomeId.PLAINS, [MysteryEncounterType.SLUMBERING_SNORLAX, MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [BiomeId.GRASS, [MysteryEncounterType.SLUMBERING_SNORLAX, MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [BiomeId.TALL_GRASS, [MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [BiomeId.METROPOLIS, []],
+  [BiomeId.FOREST, [MysteryEncounterType.SAFARI_ZONE, MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [BiomeId.SEA, [MysteryEncounterType.LOST_AT_SEA]],
+  [BiomeId.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
+  [BiomeId.BEACH, []],
+  [BiomeId.LAKE, []],
+  [BiomeId.SEABED, []],
+  [BiomeId.MOUNTAIN, []],
+  [BiomeId.BADLANDS, [MysteryEncounterType.DANCING_LESSONS]],
+  [BiomeId.CAVE, [MysteryEncounterType.THE_STRONG_STUFF]],
+  [BiomeId.DESERT, [MysteryEncounterType.DANCING_LESSONS]],
+  [BiomeId.ICE_CAVE, []],
+  [BiomeId.MEADOW, []],
+  [BiomeId.POWER_PLANT, []],
+  [BiomeId.VOLCANO, [MysteryEncounterType.FIERY_FALLOUT, MysteryEncounterType.DANCING_LESSONS]],
+  [BiomeId.GRAVEYARD, []],
+  [BiomeId.DOJO, []],
+  [BiomeId.FACTORY, []],
+  [BiomeId.RUINS, []],
+  [BiomeId.WASTELAND, [MysteryEncounterType.DANCING_LESSONS]],
+  [BiomeId.ABYSS, [MysteryEncounterType.DANCING_LESSONS]],
+  [BiomeId.SPACE, [MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER]],
+  [BiomeId.CONSTRUCTION_SITE, []],
+  [BiomeId.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
+  [BiomeId.FAIRY_CAVE, []],
+  [BiomeId.TEMPLE, []],
+  [BiomeId.SLUM, []],
+  [BiomeId.SNOWY_FOREST, []],
+  [BiomeId.ISLAND, []],
+  [BiomeId.LABORATORY, []],
+  [BiomeId.STEAM_VENT, []],
+  [BiomeId.CHARGESTONE_CAVE, []],
 ]);
 
 export function initMysteryEncounters() {
@@ -258,7 +165,7 @@ export function initMysteryEncounters() {
 
   // Add extreme encounters to biome map
   extremeBiomeEncounters.forEach((encounter) => {
-    EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
+    ExtremeEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -267,7 +174,7 @@ export function initMysteryEncounters() {
   });
   // Add non-extreme encounters to biome map
   nonExtremeBiomeEncounters.forEach((encounter) => {
-    NON_EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
+    NonExtremeEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -276,7 +183,7 @@ export function initMysteryEncounters() {
   });
   // Add human encounters to biome map
   humanTransitableBiomeEncounters.forEach((encounter) => {
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -285,7 +192,7 @@ export function initMysteryEncounters() {
   });
   // Add civilization encounters to biome map
   civilizationBiomeEncounters.forEach((encounter) => {
-    CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
+    CivilizationEncounterBiomes.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);

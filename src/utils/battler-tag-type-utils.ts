@@ -17,7 +17,12 @@ export const ProtectionBattlerTagTypes = Object.freeze([
   BattlerTagType.OBSTRUCT,
 ]);
 
-export const MoveLockTagTypes = Object.freeze([BattlerTagType.FRENZY, BattlerTagType.UPROAR]);
+export const MoveLockTagTypes = Object.freeze([
+  BattlerTagType.FRENZY,
+  BattlerTagType.ROLLING,
+  BattlerTagType.UPROAR,
+  BattlerTagType.BIDE,
+]);
 
 export const CritBoostBattlerTagTypes = Object.freeze([BattlerTagType.CRIT_BOOST, BattlerTagType.DRAGON_CHEER]);
 
@@ -55,3 +60,5 @@ export const GulpMissileBattlerTagTypes = Object.freeze([
   BattlerTagType.GULP_MISSILE_ARROKUDA,
   BattlerTagType.GULP_MISSILE_PIKACHU,
 ]);
+
+export const TypeBoostTagTypes = Object.freeze([BattlerTagType.FIRE_BOOST, BattlerTagType.CHARGED]);

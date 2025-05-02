@@ -1,10 +1,10 @@
 import { allMoves } from "#app/data/data-lists";
 import { PresentPowerAttr } from "#app/data/moves/move-attrs/present-power-attr";
-import { NumberHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { NumberHolder } from "#app/utils/common-utils";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -25,11 +25,11 @@ describe("Moves - Present", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -39,7 +39,7 @@ describe("Moves - Present", () => {
   ])("should have correct probabilities on $descriptor", async ({ hitsLeft, totalOutcomes, expectedHeals }) => {
     const presentAttr = allMoves.get(MoveId.PRESENT).getAttrs(PresentPowerAttr)[0];
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -47,18 +47,12 @@ describe("Moves - Present", () => {
     player.turnData.hitsLeft = hitsLeft;
     player.turnData.hitCount = 2;
 
-    let rngSweepProgress = 0; // This will simulate entire range of RNG calls by slowly sweeping from 0 to 1
-    vi.spyOn(player, "randSeedInt").mockImplementation((range: number, min: number = 0) => {
-      return Math.floor(min + rngSweepProgress * range);
-    });
+    let count40power = 0;
+    let count80power = 0;
+    let count120power = 0;
+    let countHeal = 0;
 
-    let count40power = 0,
-      count80power = 0,
-      count120power = 0,
-      countHeal = 0;
-    for (let i = 0; i < totalOutcomes; i++) {
-      rngSweepProgress = (2 * i + 1) / (2 * totalOutcomes);
-
+    await game.rng.equalSample(totalOutcomes, () => {
       const power = new NumberHolder(-1);
       presentAttr.apply(player, enemy, allMoves.get(MoveId.PRESENT), power);
       switch (power.value) {
@@ -74,7 +68,7 @@ describe("Moves - Present", () => {
         case -1:
           countHeal++;
       }
-    }
+    });
 
     expect(count40power).toBe(40);
     expect(count80power).toBe(30);
@@ -83,8 +77,8 @@ describe("Moves - Present", () => {
   });
 
   it("should end multi-hit Present, and should not deal damage, if it heals", async () => {
-    game.override.ability(Abilities.PARENTAL_BOND).enemyAbility(Abilities.NO_GUARD);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.ability(AbilityId.PARENTAL_BOND).enemyAbility(AbilityId.NO_GUARD);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -92,16 +86,13 @@ describe("Moves - Present", () => {
     // Force RNG rolls to be maximum, which corresponds to Present healing
     vi.spyOn(player, "randSeedInt").mockImplementation((range: number, min: number = 0) => min + range - 1);
 
-    // Check that enemy never takes positive damage
-    vi.spyOn(enemy, "damage").mockImplementation((damage: number) => {
-      expect(damage).toBe(0);
-      return damage;
-    });
+    vi.spyOn(enemy, "damageAndUpdate");
 
     enemy.hp = 1;
     game.move.use(MoveId.PRESENT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(1 + Math.floor(enemy.getMaxHp() / 4));
+    expect(enemy.damageAndUpdate).toHaveBeenCalledTimes(0);
   });
 });

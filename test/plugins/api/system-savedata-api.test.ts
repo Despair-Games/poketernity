@@ -6,10 +6,10 @@ import type {
 } from "#app/@types/SystemSavedataApi";
 import { SystemSavedataApi } from "#app/plugins/api/system-savedata-api";
 import type { SystemSaveData } from "#app/@types/SystemData";
-import { getApiBaseUrl } from "#test/testUtils/testUtils";
+import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
+import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 
 const apiBase = getApiBaseUrl();
 const systemSavedataApi = new SystemSavedataApi(getApiBaseUrl());

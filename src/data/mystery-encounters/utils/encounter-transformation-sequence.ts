@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
@@ -69,7 +69,8 @@ export function doPokemonTransformationSequence(
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
-        teraColor: getTypeRgb(previousPokemon.getTeraType()),
+        teraColor: getTypeRgb(previousPokemon.teraType),
+        isTerastallized: previousPokemon.isTerastallized,
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());
@@ -109,7 +110,7 @@ export function doPokemonTransformationSequence(
           to: 1,
           duration: 1000,
           onUpdate: (t) => {
-            pokemonTintSprite.setAlpha(t.getValue());
+            pokemonTintSprite.setAlpha(t.getValue() ?? 1);
           },
           onComplete: () => {
             pokemonSprite.setVisible(false);

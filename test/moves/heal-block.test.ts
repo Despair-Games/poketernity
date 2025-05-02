@@ -1,0 +1,130 @@
+import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+// Bulbapedia Reference: https://bulbapedia.bulbagarden.net/wiki/Heal_Block_(move)
+describe("Moves - Heal Block", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .moveset([MoveId.ABSORB, MoveId.WISH, MoveId.SPLASH, MoveId.AQUA_RING])
+      .enemyMoveset(MoveId.HEAL_BLOCK)
+      .ability(AbilityId.NO_GUARD)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.BLISSEY)
+      .disableCrits();
+  });
+
+  it("should block the usage of damaging moves that heal the user", async () => {
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+
+    const player = game.scene.getPlayerPokemon()!;
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    player.damageAndUpdate(enemy.getMaxHp() - 1);
+
+    game.move.select(MoveId.ABSORB);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
+
+    expect(player).toHaveUsedMove(MoveId.NONE);
+  });
+
+  it("should stop delayed heals, such as from Wish", async () => {
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+
+    const player = game.scene.getPlayerPokemon()!;
+
+    player.damageAndUpdate(player.getMaxHp() - 1);
+
+    game.move.select(MoveId.WISH);
+    await game.toEndOfTurn();
+
+    expect(game.scene.arena.hasTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeTruthy();
+    while (game.scene.arena.hasTag(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
+      game.move.select(MoveId.SPLASH);
+      await game.toEndOfTurn();
+    }
+
+    expect(player.hp).toBe(1);
+  });
+
+  it("should prevent Grassy Terrain from restoring HP", async () => {
+    game.override.enemyAbility(AbilityId.GRASSY_SURGE);
+
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+
+    const player = game.scene.getPlayerPokemon()!;
+
+    player.damageAndUpdate(player.getMaxHp() - 1);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(player.hp).toBe(1);
+  });
+
+  it("should prevent healing from heal-over-time moves", async () => {
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+
+    const player = game.scene.getPlayerPokemon()!;
+
+    player.damageAndUpdate(player.getMaxHp() - 1);
+
+    game.move.select(MoveId.AQUA_RING);
+    await game.toEndOfTurn();
+
+    expect(player.getTag(BattlerTagType.AQUA_RING)).toBeDefined();
+    expect(player.hp).toBe(1);
+  });
+
+  it("should prevent abilities from restoring HP", async () => {
+    game.override.weather(WeatherType.RAIN).ability(AbilityId.RAIN_DISH);
+
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+
+    const player = game.scene.getPlayerPokemon()!;
+
+    player.damageAndUpdate(player.getMaxHp() - 1);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(player.hp).toBe(1);
+  });
+
+  it("should stop healing from items", async () => {
+    game.override.startingHeldItems([{ name: "LEFTOVERS" }]);
+
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+
+    const player = game.scene.getPlayerPokemon()!;
+    player.damageAndUpdate(player.getMaxHp() - 1);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(player.hp).toBe(1);
+  });
+});

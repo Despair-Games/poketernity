@@ -8,10 +8,8 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { UiMode } from "#enums/ui-mode";
-import { isNullOrUndefined } from "#app/utils";
+import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
-
 /**
  * Will handle (in order):
  * - {@linkcode MysteryEncounterOption.onPostOptionPhase} logic (based on an option that was selected)
@@ -40,7 +38,7 @@ export class PostMysteryEncounterPhase extends Phase {
       globalScene.executeWithSeedOffset(
         async () => {
           return await this.onPostOptionSelect!().then((result) => {
-            if (isNullOrUndefined(result) || result) {
+            if (isNil(result) || result) {
               this.continueEncounter();
             }
           });
@@ -60,7 +58,7 @@ export class PostMysteryEncounterPhase extends Phase {
     const { mysteryEncounter } = currentBattle;
 
     const endPhase = (): void => {
-      globalScene.pushPhase(new NewBattlePhase());
+      globalScene.phaseManager.pushPhase(new NewBattlePhase());
       this.end();
     };
 
@@ -77,7 +75,7 @@ export class PostMysteryEncounterPhase extends Phase {
         }
 
         i++;
-        ui.setMode(UiMode.MESSAGE);
+        ui.setMessageMode();
         if (title) {
           ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {

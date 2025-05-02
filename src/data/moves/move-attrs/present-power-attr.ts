@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type NumberHolder, toDmgValue } from "#app/utils";
+import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
@@ -36,9 +36,8 @@ export class PresentPowerAttr extends VariablePowerAttr {
       power.value = 120;
     } else if (powerSeed < 100) {
       // If this move is multi-hit, disable all other hits
-      user.turnData.hitCount = 1;
-      user.turnData.hitsLeft = 1;
-      globalScene.queuePokemonHeal(true, target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
+      user.stopMultiHit();
+      globalScene.phaseManager.queuePokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
         message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
       });
     }

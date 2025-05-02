@@ -1,23 +1,25 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type EvolutionPhase } from "#app/phases/evolution-phase";
+import type { EvolutionPhase } from "#app/phases/evolution-phase";
 // -- end tsdoc imports --
 
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
-import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achievements";
-import type PartyUiHandler from "#app/ui/party-ui-handler";
-import { UiMode } from "#enums/ui-mode";
-import { fixedNumber } from "#app/utils";
+import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import { fixedNumber } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { UiMode } from "#enums/ui-mode";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
 import { LearnMovePhase } from "./learn-move-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * A phase for handling certain form changes for player Pokemon.
@@ -47,14 +49,14 @@ export class FormChangePhase extends FormChangeBasePhase {
   }
 
   public override validate(): boolean {
-    return !!this.formChange;
+    return true;
   }
 
   public override setMode(): Promise<void> {
     if (!this.modal) {
       return super.setMode();
     }
-    return globalScene.ui.setOverlayMode(UiMode.FORM_CHANGE_SCENE);
+    return globalScene.ui.setOverlayMode<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
   }
 
   public override doFormChange(): void {
@@ -102,7 +104,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               to: 1,
               duration: 2000,
               onUpdate: (t) => {
-                this.pokemonTintSprite.setAlpha(t.getValue());
+                this.pokemonTintSprite.setAlpha(t.getValue() ?? 1);
               },
               onComplete: () => {
                 this.pokemonSprite.setVisible(false);
@@ -224,10 +226,12 @@ export class FormChangePhase extends FormChangeBasePhase {
       // then end the form change cutscene via `EndEvolutionPhase`.
       for (const [, learnMoveId] of this.pokemon.getLevelMoves(1, true)) {
         if (this.formChange.movesToLearn.includes(learnMoveId)) {
-          globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+          globalScene.phaseManager.unshiftPhase(
+            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId),
+          );
         }
       }
-      globalScene.unshiftPhase(new EndEvolutionPhase());
+      globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
 
       super.end();
     }

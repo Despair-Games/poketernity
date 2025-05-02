@@ -1,12 +1,12 @@
-import { type SubstituteTag } from "#app/data/battler-tags";
-import { type Pokemon } from "#app/field/pokemon";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { isNullOrUndefined } from "#app/utils";
+import { isNil } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
@@ -58,7 +58,7 @@ export class PokemonAnimPhase extends BattlePhase {
     const { field, tweens } = globalScene;
 
     const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-    if (isNullOrUndefined(substitute)) {
+    if (isNil(substitute)) {
       return this.end();
     }
 
@@ -258,7 +258,7 @@ export class PokemonAnimPhase extends BattlePhase {
     }
 
     const dondozo = this.pokemon.getAlly();
-    if (dondozo?.species?.speciesId !== Species.DONDOZO) {
+    if (dondozo?.species?.speciesId !== SpeciesId.DONDOZO) {
       return this.end();
     }
 
@@ -329,7 +329,7 @@ export class PokemonAnimPhase extends BattlePhase {
     // Note: unlike the other Commander animation, this is played through the
     // Dondozo instead of the Tatsugiri.
     const tatsugiri = this.pokemon.getAlly();
-    if (isNullOrUndefined(tatsugiri)) {
+    if (isNil(tatsugiri)) {
       console.warn("Aborting COMMANDER_REMOVE anim: Tatsugiri is undefined");
       return this.end();
     }

@@ -1,8 +1,8 @@
-import { type TurnMove } from "#app/@types/TurnMove";
-import { MoveResult } from "#enums/move-result";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
+import type { TurnMove } from "#app/@types/TurnMove";
+import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveResult } from "#enums/move-result";
 
 /**
  * Attribute to apply a set type of protection to the user.

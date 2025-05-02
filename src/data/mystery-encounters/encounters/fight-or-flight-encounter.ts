@@ -8,7 +8,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { ModifierTier } from "#enums/modifier-tier";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
@@ -33,9 +33,9 @@ import {
 import PokemonData from "#app/system/pokemon-data";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fightOrFlight";
@@ -83,7 +83,7 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             // Randomly boost 1 stat 2 stages
             // Cannot boost Spd, Acc, or Evasion
-            globalScene.unshiftPhase(
+            globalScene.phaseManager.unshiftPhase(
               new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [randSeedInt(4, 1)], 2),
             );
           },

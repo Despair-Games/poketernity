@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import { speciesStarterCosts } from "#app/data/starters";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import {
   getEncounterText,
@@ -14,12 +14,12 @@ import {
   getRandomSpeciesByStarterCost,
   koPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ElementalType } from "#enums/elemental-type";
 import { MessagePhase } from "#app/phases/message-phase";
-import { GameManager } from "#test/testUtils/gameManager";
-import { Species } from "#enums/species";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -41,7 +41,7 @@ describe("Mystery Encounter Utils", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    initSceneWithoutEncounterPhase(game.scene, [Species.ARCEUS, Species.MANAPHY]);
+    initSceneWithoutEncounterPhase(game.scene, [SpeciesId.ARCEUS, SpeciesId.MANAPHY]);
   });
 
   describe("getRandomPlayerPokemon", () => {
@@ -50,12 +50,12 @@ describe("Mystery Encounter Utils", () => {
       game.override.seed("random");
 
       let result = getRandomPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
 
       game.override.seed("random2");
 
       result = getRandomPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
     it("gets a fainted pokemon from player party if isAllowedInBattle is false", () => {
@@ -69,12 +69,12 @@ describe("Mystery Encounter Utils", () => {
       game.override.seed("random");
 
       let result = getRandomPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
 
       game.override.seed("random2");
 
       result = getRandomPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
     it("gets an unfainted legal pokemon from player party if isAllowed is true and isFainted is false", async () => {
@@ -87,12 +87,12 @@ describe("Mystery Encounter Utils", () => {
       game.override.seed("random");
 
       let result = getRandomPlayerPokemon(true);
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
 
       game.override.seed("random2");
 
       result = getRandomPlayerPokemon(true);
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
     });
 
     it("returns last unfainted pokemon if doNotReturnLastAbleMon is false", async () => {
@@ -105,12 +105,12 @@ describe("Mystery Encounter Utils", () => {
       game.override.seed("random");
 
       let result = getRandomPlayerPokemon(true, false);
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
 
       game.override.seed("random2");
 
       result = getRandomPlayerPokemon(true, false);
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
     });
 
     it("never returns last unfainted pokemon if doNotReturnLastAbleMon is true", async () => {
@@ -123,12 +123,12 @@ describe("Mystery Encounter Utils", () => {
       game.override.seed("random");
 
       let result = getRandomPlayerPokemon(true, false, true);
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
 
       game.override.seed("random2");
 
       result = getRandomPlayerPokemon(true, false, true);
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
   });
 
@@ -138,7 +138,7 @@ describe("Mystery Encounter Utils", () => {
       party[0].level = 100;
 
       const result = getHighestLevelPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
     it("gets highest level pokemon at different index", () => {
@@ -146,7 +146,7 @@ describe("Mystery Encounter Utils", () => {
       party[1].level = 100;
 
       const result = getHighestLevelPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
     });
 
     it("breaks ties by getting returning lower index", () => {
@@ -155,7 +155,7 @@ describe("Mystery Encounter Utils", () => {
       party[1].level = 100;
 
       const result = getHighestLevelPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
     it("returns highest level unfainted if unfainted is true", async () => {
@@ -166,7 +166,7 @@ describe("Mystery Encounter Utils", () => {
       party[1].level = 10;
 
       const result = getHighestLevelPlayerPokemon(true);
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
     });
   });
 
@@ -176,7 +176,7 @@ describe("Mystery Encounter Utils", () => {
       party[0].level = 100;
 
       const result = getLowestLevelPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
     });
 
     it("gets lowest level pokemon at different index", () => {
@@ -184,7 +184,7 @@ describe("Mystery Encounter Utils", () => {
       party[1].level = 100;
 
       const result = getLowestLevelPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
     it("breaks ties by getting returning lower index", () => {
@@ -193,7 +193,7 @@ describe("Mystery Encounter Utils", () => {
       party[1].level = 100;
 
       const result = getLowestLevelPlayerPokemon();
-      expect(result.species.speciesId).toBe(Species.ARCEUS);
+      expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
     it("returns lowest level unfainted if unfainted is true", async () => {
@@ -204,7 +204,7 @@ describe("Mystery Encounter Utils", () => {
       party[1].level = 100;
 
       const result = getLowestLevelPlayerPokemon(true);
-      expect(result.species.speciesId).toBe(Species.MANAPHY);
+      expect(result.species.speciesId).toBe(SpeciesId.MANAPHY);
     });
   });
 
@@ -229,22 +229,22 @@ describe("Mystery Encounter Utils", () => {
     it("excludes species from search", () => {
       // Only 9 tiers are: Koraidon, Miraidon, Arceus, Rayquaza, Kyogre, Groudon, Zacian
       const result = getRandomSpeciesByStarterCost(9, [
-        Species.KORAIDON,
-        Species.MIRAIDON,
-        Species.ARCEUS,
-        Species.RAYQUAZA,
-        Species.KYOGRE,
-        Species.GROUDON,
+        SpeciesId.KORAIDON,
+        SpeciesId.MIRAIDON,
+        SpeciesId.ARCEUS,
+        SpeciesId.RAYQUAZA,
+        SpeciesId.KYOGRE,
+        SpeciesId.GROUDON,
       ]);
       const pokeSpecies = getPokemonSpecies(result);
-      expect(pokeSpecies.speciesId).toBe(Species.ZACIAN);
+      expect(pokeSpecies.speciesId).toBe(SpeciesId.ZACIAN);
     });
 
     it("gets species of specified types", () => {
       // Only 9 tiers are: Koraidon, Miraidon, Arceus, Rayquaza, Kyogre, Groudon, Zacian
       const result = getRandomSpeciesByStarterCost(9, undefined, [ElementalType.GROUND]);
       const pokeSpecies = getPokemonSpecies(result);
-      expect(pokeSpecies.speciesId).toBe(Species.GROUDON);
+      expect(pokeSpecies.speciesId).toBe(SpeciesId.GROUDON);
     });
   });
 
@@ -283,8 +283,8 @@ describe("Mystery Encounter Utils", () => {
     it("queues a message with encounter dialogue tokens", async () => {
       scene.currentBattle.mysteryEncounter = new MysteryEncounter(null);
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
-      const spy = vi.spyOn(game.scene, "queueMessage");
-      const phaseSpy = vi.spyOn(game.scene, "unshiftPhase");
+      const spy = vi.spyOn(game.scene.phaseManager, "queueMessagePhase");
+      const phaseSpy = vi.spyOn(game.scene.phaseManager, "unshiftPhase");
 
       queueEncounterMessage("mysteryEncounter:unit_test_dialogue");
       expect(spy).toHaveBeenCalledWith("mysteryEncounter:unit_test_dialogue", null, true);

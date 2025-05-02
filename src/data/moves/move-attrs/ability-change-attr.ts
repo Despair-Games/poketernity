@@ -1,4 +1,4 @@
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -17,9 +17,9 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
  * @extends MoveEffectAttr
  */
 export class AbilityChangeAttr extends MoveEffectAttr {
-  public ability: Abilities;
+  public ability: AbilityId;
 
-  constructor(ability: Abilities, selfTarget?: boolean) {
+  constructor(ability: AbilityId, selfTarget?: boolean) {
     super(selfTarget);
 
     this.ability = ability;
@@ -31,7 +31,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     moveTarget.summonData.ability = this.ability;
     globalScene.triggerPokemonFormChange(moveTarget, SpeciesFormChangeRevertWeatherFormTrigger);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:acquiredAbility", {
         pokemonName: getPokemonNameWithAffix(this.selfTarget ? user : target),
         abilityName: allAbilities[this.ability].name,

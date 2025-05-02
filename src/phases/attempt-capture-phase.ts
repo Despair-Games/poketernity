@@ -1,6 +1,5 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { type SubstituteTag } from "#app/data/battler-tags";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import {
   doPokeballBounceAnim,
   getCriticalCaptureChance,
@@ -9,22 +8,27 @@ import {
   getPokeballTintColor,
 } from "#app/data/pokeball";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { type EnemyPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
+import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { achvs } from "#app/system/achievements";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { type PartyOption } from "#enums/party-option";
-import { PartyUiMode } from "#enums/party-ui-mode";
-import { SummaryUiMode } from "#enums/summary-ui-mode";
-import { UiMode } from "#enums/ui-mode";
-import { type PokeballType } from "#enums/pokeball";
-import { StatusEffect } from "#enums/status-effect";
-import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
+import type { PokeballType } from "#enums/pokeball-type";
+import { StatusEffect } from "#enums/status-effect";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { SummaryUiPage } from "#enums/summary-ui-page";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -81,7 +85,11 @@ export class AttemptCapturePhase extends PokemonPhase {
     this.pokeball.setOrigin(0.5, 0.625);
     field.add(this.pokeball);
 
-    globalScene.audioManager.playSound("se/pb_throw", isCritical ? { rate: 0.2 } : undefined); // Crit catch throws are higher pitched
+    if (isCritical) {
+      globalScene.audioManager.playSound("se/crit_throw");
+    } else {
+      globalScene.audioManager.playSound("se/pb_throw");
+    }
     time.delayedCall(300, () => {
       field.moveBelow(this.pokeball as Phaser.GameObjects.GameObject, pokemon);
     });
@@ -129,7 +137,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 repeatDelay: 500,
                 onUpdate: (t) => {
                   if (shakeCount && shakeCount < (isCritical ? 2 : 4)) {
-                    const value = t.getValue();
+                    const value = t.getValue() ?? 0;
                     const directionMultiplier = shakeCount % 2 === 1 ? 1 : -1;
                     this.pokeball.setX(pbX + value * 4 * directionMultiplier);
                     this.pokeball.setAngle(value * 27.5 * directionMultiplier);
@@ -261,7 +269,7 @@ export class AttemptCapturePhase extends PokemonPhase {
       null,
       () => {
         const end = (): void => {
-          globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
+          globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));
           pokemonInfoContainer.hide();
           this.removePb();
           this.end();
@@ -311,13 +319,13 @@ export class AttemptCapturePhase extends PokemonPhase {
                       pokemon.nature,
                       pokemon,
                     );
-                    ui.setMode(
+                    ui.setMode<SummaryUiHandler>(
                       UiMode.SUMMARY,
                       newPokemon,
-                      0,
                       SummaryUiMode.DEFAULT,
+                      SummaryUiPage.PROFILE,
                       () => {
-                        ui.setMode(UiMode.MESSAGE).then(() => {
+                        ui.setMessageMode().then(() => {
                           promptRelease();
                         });
                       },
@@ -329,12 +337,12 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:yes"),
                   handler: () => {
-                    ui.setMode(
+                    ui.setMode<PartyUiHandler>(
                       UiMode.PARTY,
                       PartyUiMode.RELEASE,
                       this.fieldIndex,
                       (slotIndex: number, _option: PartyOption) => {
-                        ui.setMode(UiMode.MESSAGE).then(() => {
+                        ui.setMessageMode().then(() => {
                           if (slotIndex < PLAYER_PARTY_MAX_SIZE) {
                             addToParty(slotIndex);
                           } else {
@@ -349,7 +357,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:no"),
                   handler: () => {
-                    ui.setMode(UiMode.MESSAGE).then(() => {
+                    ui.setMessageMode().then(() => {
                       removePokemon();
                       end();
                     });
@@ -364,7 +372,7 @@ export class AttemptCapturePhase extends PokemonPhase {
             };
             const promptRelease = (): void => {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
-                ui.setMode(UiMode.OPTION_SELECT, addToPartyMenuConfig);
+                ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig);
               });
             };
             promptRelease();

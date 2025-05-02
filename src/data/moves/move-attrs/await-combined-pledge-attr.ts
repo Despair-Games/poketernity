@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
@@ -20,7 +20,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     if (user.turnData.combiningPledge) {
       // "The two moves have become one!\nIt's a combined move!"
-      globalScene.queueMessage(i18next.t("moveTriggers:combiningPledge"));
+      globalScene.phaseManager.queueMessagePhase(i18next.t("moveTriggers:combiningPledge"));
       return false;
     }
 
@@ -36,16 +36,18 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
     });
 
     if (ret) {
-      const ally = user.getAlly();
-      // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
-      globalScene.queueMessage(
-        i18next.t("moveTriggers:awaitingPledge", {
-          userPokemonName: getPokemonNameWithAffix(user),
-          allyPokemonName: getPokemonNameWithAffix(ally),
-        }),
-      );
-      ally.turnData.combiningPledge = move.id;
-      overridden.value = true;
+      const allyPokemon = user.getAlly();
+      if (allyPokemon) {
+        // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
+        globalScene.phaseManager.queueMessagePhase(
+          i18next.t("moveTriggers:awaitingPledge", {
+            userPokemonName: getPokemonNameWithAffix(user),
+            allyPokemonName: getPokemonNameWithAffix(allyPokemon),
+          }),
+        );
+        allyPokemon.turnData.combiningPledge = move.id;
+        overridden.value = true;
+      }
     }
 
     return ret;

@@ -1,30 +1,30 @@
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  runMysteryEncounterToEnd,
-  runSelectMysteryEncounterOption,
-} from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   getSafariSpeciesSpawn,
   SafariZoneEncounter,
 } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
+import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { getSpecialSpeciesList } from "#app/utils/pokemon-utils";
+import { BiomeId } from "#enums/biome-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesId } from "#enums/species-id";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/safariZone";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.SWAMP;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.SWAMP;
 const defaultWave = 45;
 
 describe("Safari Zone - Mystery Encounter", () => {
@@ -39,16 +39,13 @@ describe("Safari Zone - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
-      [Biome.FOREST, [MysteryEncounterType.SAFARI_ZONE]],
-      [Biome.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
-      [Biome.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
+      [BiomeId.FOREST, [MysteryEncounterType.SAFARI_ZONE]],
+      [BiomeId.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
+      [BiomeId.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
     ]);
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
   });
@@ -74,7 +71,7 @@ describe("Safari Zone - Mystery Encounter", () => {
 
   it("should not spawn outside of the forest, swamp, or jungle biomes", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.SAFARI_ZONE);
@@ -114,9 +111,9 @@ describe("Safari Zone - Mystery Encounter", () => {
     it("should NOT be selectable if the player doesn't have enough money", async () => {
       game.scene.money = 0;
       await game.runToMysteryEncounter(MysteryEncounterType.SAFARI_ZONE, defaultParty);
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.getCurrentPhase();
+      const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
@@ -125,7 +122,7 @@ describe("Safari Zone - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -133,18 +130,13 @@ describe("Safari Zone - Mystery Encounter", () => {
 
     it("should not spawn any Paradox Pokemon", async () => {
       const NUM_ROLLS = 2000; // As long as this is greater than total number of species, this should cover all possible RNG rolls
-      let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 1
 
-      vi.spyOn(Phaser.Math.RND, "realInRange").mockImplementation((min: number, max: number) => {
-        return rngSweepProgress * (max - min) + min;
-      });
       vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation((arr: any[]) => arr);
 
-      for (let i = 0; i < NUM_ROLLS; i++) {
-        rngSweepProgress = (2 * i + 1) / (2 * NUM_ROLLS);
+      await game.rng.equalSample(NUM_ROLLS, () => {
         const simSpecies = getSafariSpeciesSpawn().speciesId;
         expect(getSpecialSpeciesList(SpeciesGroups.PARADOX, false)).not.toContain(simSpecies);
-      }
+      });
     });
 
     // TODO: Tests for player actions inside the Safari Zone (Pokeball, Mud, Bait, Flee)

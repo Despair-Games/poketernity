@@ -1,19 +1,20 @@
-import type Phaser from "phaser";
-import { settingsUiModes } from "#app/ui/ui";
-import { UiMode } from "#enums/ui-mode";
-import type { InputsController } from "./inputs-controller";
-import type MessageUiHandler from "./ui/message-ui-handler";
-import StarterSelectUiHandler from "./ui/starter-select-ui-handler";
-import SettingsUiHandler from "./ui/settings/settings-ui-handler";
-import { Button } from "#enums/buttons";
-import SettingsGamepadUiHandler from "./ui/settings/settings-gamepad-ui-handler";
-import SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
+import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
-import SettingsDisplayUiHandler from "./ui/settings/settings-display-ui-handler";
-import SettingsAudioUiHandler from "./ui/settings/settings-audio-ui-handler";
-import RunInfoUiHandler from "./ui/run-info-ui-handler";
-import { settings } from "./system/settings/settings-manager";
-import { GAME_SPEEDS } from "./constants";
+import type { InputsController } from "#app/inputs-controller";
+import { settings } from "#app/system/settings/settings-manager";
+import type { MenuUiHandler } from "#app/ui/handlers/menu-ui-handler";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
+import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
+import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
+import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
+import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
+import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
+import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
+import { settingsUiModes } from "#app/ui/ui";
+import { Button } from "#enums/buttons";
+import { UiMode } from "#enums/ui-mode";
+import type Phaser from "phaser";
 
 type ActionKeys = Record<Button, () => void>;
 
@@ -94,7 +95,7 @@ export class UiInputs {
       [Button.CYCLE_GENDER]: () => this.buttonCycleOption(Button.CYCLE_GENDER),
       [Button.CYCLE_ABILITY]: () => this.buttonCycleOption(Button.CYCLE_ABILITY),
       [Button.CYCLE_NATURE]: () => this.buttonCycleOption(Button.CYCLE_NATURE),
-      [Button.V]: () => this.buttonCycleOption(Button.V),
+      [Button.CYCLE_TERA]: () => this.buttonCycleOption(Button.CYCLE_TERA),
       [Button.SPEED_UP]: () => this.buttonSpeedChange(),
       [Button.SLOW_DOWN]: () => this.buttonSpeedChange(false),
     };
@@ -117,7 +118,7 @@ export class UiInputs {
       [Button.CYCLE_GENDER]: () => undefined,
       [Button.CYCLE_ABILITY]: () => undefined,
       [Button.CYCLE_NATURE]: () => undefined,
-      [Button.V]: () => this.buttonInfo(false),
+      [Button.CYCLE_TERA]: () => this.buttonInfo(false),
       [Button.SPEED_UP]: () => undefined,
       [Button.SLOW_DOWN]: () => undefined,
     };
@@ -185,7 +186,7 @@ export class UiInputs {
       case UiMode.COMMAND:
       case UiMode.MODIFIER_SELECT:
       case UiMode.MYSTERY_ENCOUNTER:
-        globalScene.ui.setOverlayMode(UiMode.MENU);
+        globalScene.ui.setOverlayMode<MenuUiHandler>(UiMode.MENU);
         break;
       case UiMode.STARTER_SELECT:
         this.buttonTouch();
@@ -202,17 +203,17 @@ export class UiInputs {
   buttonCycleOption(button: Button): void {
     const whitelist = [
       StarterSelectUiHandler,
-      SettingsUiHandler,
+      GeneralSettingsUiHandler,
       RunInfoUiHandler,
-      SettingsDisplayUiHandler,
-      SettingsAudioUiHandler,
-      SettingsGamepadUiHandler,
-      SettingsKeyboardUiHandler,
+      DisplaySettingsUiHandler,
+      AudioSettingsUiHandler,
+      GamepadSettingsUiHandler,
+      KeyboardSettingsUiHandler,
     ];
     const uiHandler = globalScene.ui?.getHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {
       globalScene.ui.processInput(button);
-    } else if (button === Button.V) {
+    } else if (button === Button.CYCLE_TERA) {
       this.buttonInfo(true);
     }
   }

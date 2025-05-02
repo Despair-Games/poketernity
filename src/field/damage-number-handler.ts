@@ -1,14 +1,15 @@
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
-import type { DamageResult } from "./pokemon";
+import type { DamageResult } from "#app/@types/DamageResult";
 import type { Pokemon } from "./pokemon";
 import { HitResult } from "#enums/hit-result";
-import { formatStat, fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
+import { formatStat } from "#app/utils/string-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
-import { GAME_HEIGHT } from "#app/ui-constants";
+import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import { CommonColor, ShadowColor } from "#enums/color";
 
 type TextAndShadowArr = [string | null, string | null];
@@ -104,7 +105,7 @@ export default class DamageNumberHandler {
         ease: "Sine.easeIn",
         onComplete: () => {
           this.damageNumbers.get(battlerIndex)!.splice(this.damageNumbers.get(battlerIndex)!.indexOf(damageNumber), 1);
-          damageNumber.destroy(true);
+          damageNumber.destroy();
         },
       });
       return;
@@ -190,7 +191,7 @@ export default class DamageNumberHandler {
             this.damageNumbers
               .get(battlerIndex)!
               .splice(this.damageNumbers.get(battlerIndex)!.indexOf(damageNumber), 1);
-            damageNumber.destroy(true);
+            damageNumber.destroy();
           },
         },
       ],

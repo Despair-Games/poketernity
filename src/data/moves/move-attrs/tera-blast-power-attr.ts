@@ -1,6 +1,6 @@
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 
@@ -10,7 +10,7 @@ import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-att
  */
 export class TeraBlastPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    if (user.isTerastallized() && user.getTeraType() === ElementalType.STELLAR) {
+    if (user.isTerastallized && user.teraType === ElementalType.STELLAR) {
       power.value = 100;
       return true;
     }
