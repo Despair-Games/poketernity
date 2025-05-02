@@ -8,7 +8,7 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { getEnemyMoveChoices, type MoveChoiceSet } from "./utils/enemy-command-utils";
+import { getEnemyMoveChoices } from "./utils/enemy-command-utils";
 
 let globalScene: BattleScene;
 
@@ -45,12 +45,9 @@ describe("Enemy Commands - Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices: MoveChoiceSet = {};
-    const enemyMoveset = enemyPokemon.getMoveset();
-    enemyMoveset.forEach((mv) => (moveChoices[mv!.moveId] = 0));
-    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
+    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
 
-    enemyMoveset.forEach((mv) => {
+    enemyPokemon.getMoveset().forEach((mv) => {
       if (mv?.getMove().category === MoveCategory.STATUS) {
         expect(moveChoices[mv.moveId]).toBe(0);
       }
@@ -69,12 +66,9 @@ describe("Enemy Commands - Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices: MoveChoiceSet = {};
-    const enemyMoveset = enemyPokemon.getMoveset();
-    enemyMoveset.forEach((mv) => (moveChoices[mv!.moveId] = 0));
-    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
+    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
 
-    enemyMoveset.forEach((mv) => {
+    enemyPokemon.getMoveset().forEach((mv) => {
       if (mv?.getMove().category === MoveCategory.STATUS || mv?.moveId === MoveId.LAST_RESORT) {
         expect(moveChoices[mv.moveId]).toBe(0);
       }
@@ -93,10 +87,7 @@ describe("Enemy Commands - Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices: MoveChoiceSet = {};
-    const enemyMoveset = enemyPokemon.getMoveset();
-    enemyMoveset.forEach((mv) => (moveChoices[mv.moveId] = 0));
-    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
+    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
 
     expect(moveChoices[MoveId.SPLASH]).toBe(0);
     expect(moveChoices[MoveId.COVET]).toBe(0);

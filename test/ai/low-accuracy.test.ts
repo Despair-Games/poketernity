@@ -3,7 +3,7 @@ import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { type MoveChoiceSet, getEnemyMoveChoices } from "#test/ai/utils/enemy-command-utils";
+import { getEnemyMoveChoices } from "#test/ai/utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 
@@ -38,12 +38,9 @@ describe("Enemy Commands - Low Accuracy", () => {
     const enemyPokemon = game.field.getEnemyPokemon();
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices: MoveChoiceSet = {};
-    const enemyMoveset = enemyPokemon.getMoveset();
-    enemyMoveset.forEach((mv) => (moveChoices[mv.moveId] = 0));
-    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
+    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
 
-    enemyMoveset.forEach((mv) => {
+    enemyPokemon.getMoveset().forEach((mv) => {
       if (mv.moveId !== MoveId.SPORE) {
         expect(moveChoices[mv.moveId]).toBe(0);
       }
