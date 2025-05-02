@@ -1,4 +1,4 @@
-import { GAME_SPEEDS } from "#app/constants/app";
+import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { InputsController } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";

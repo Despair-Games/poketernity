@@ -18,7 +18,7 @@ import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui";
+import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui-constants";
 
 export class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;

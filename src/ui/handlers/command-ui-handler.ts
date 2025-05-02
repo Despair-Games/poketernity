@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerastallizeAccessModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
-import { TEXT_SCALE } from "#app/constants/ui";
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";

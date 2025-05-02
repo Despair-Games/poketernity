@@ -16,7 +16,7 @@ import { Device } from "#enums/devices";
 import { truncateString } from "#app/utils/string-utils";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
-import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app";
+import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app-constants";
 import { UiMode } from "#enums/ui-mode";
 
 /**

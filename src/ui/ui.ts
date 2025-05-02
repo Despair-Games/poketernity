@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { AchvBar } from "#app/ui/components/achv-bar";
 import type { BgmBar } from "#app/ui/components/bgm-bar";
 import { SavingIcon } from "#app/ui/components/saving-icon";

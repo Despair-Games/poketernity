@@ -6,7 +6,7 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_WIDTH } from "#app/constants/ui";
+import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";

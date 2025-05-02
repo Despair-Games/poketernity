@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship-constants";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import { TheExpertPokemonBreederEncounter } from "#app/data/mystery-encounters/encounters/the-expert-pokemon-breeder-encounter";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";

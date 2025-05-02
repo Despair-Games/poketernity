@@ -1,7 +1,7 @@
 import { getPokeballName } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { BattleCommand } from "#enums/battle-command";
