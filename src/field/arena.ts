@@ -19,7 +19,7 @@ import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
-import { getEnumValues } from "#app/utils/common-utils";
+import { coerceArray, getEnumValues } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -86,7 +86,7 @@ export class Arena {
    * @returns `true` if the arena is of the specified biome, `false` otherwise
    */
   public isInBiome(biomeId: BiomeId | BiomeId[]): boolean {
-    return Array.isArray(biomeId) ? biomeId.includes(this.biomeId) : this.biomeId === biomeId;
+    return coerceArray(biomeId).includes(this.biomeId);
   }
 
   /**
@@ -96,7 +96,7 @@ export class Arena {
    */
   public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
     const terrainType = this.getTerrainType();
-    return Array.isArray(terrain) ? terrain.includes(terrainType) : terrainType === terrain;
+    return coerceArray(terrain).includes(terrainType);
   }
 
   /**
@@ -108,7 +108,7 @@ export class Arena {
    */
   public hasWeather(weather: WeatherType | WeatherType[]): boolean {
     const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
-    return Array.isArray(weather) ? weather.includes(weatherType) : weatherType === weather;
+    return coerceArray(weather).includes(weatherType);
   }
 
   /**
@@ -117,7 +117,7 @@ export class Arena {
    * @returns `true` if the arena is of the specified time of day, `false` otherwise
    */
   public isTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
-    return Array.isArray(timeOfDay) ? timeOfDay.includes(this.getTimeOfDay()) : this.getTimeOfDay() === timeOfDay;
+    return coerceArray(timeOfDay).includes(this.getTimeOfDay());
   }
 
   /**
@@ -746,18 +746,18 @@ export class Arena {
 
   /**
    * Applies each `ArenaTag` in this Arena, based on which side (self, enemy, or both) is passed in as a parameter
-   * @param tagType Either an {@linkcode ArenaTagType} string, or an actual {@linkcode ArenaTag} class to filter which ones to apply
+   * @param tagTypes Either an {@linkcode ArenaTagType} string, or an actual {@linkcode ArenaTag} class to filter which ones to apply
    * @param side {@linkcode ArenaTagSide} which side's arena tags to apply
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
   applyTagsForSide(
-    tagType: ArenaTagType | ArenaTagType[],
+    tagTypes: ArenaTagType | ArenaTagType[],
     side: ArenaTagSide,
     simulated: boolean,
     ...args: unknown[]
   ): void {
-    const tagTypeArr = Array.isArray(tagType) ? tagType : [tagType];
+    const tagTypeArr = coerceArray(tagTypes);
     let tags = this.tags.filter((t) => tagTypeArr.includes(t.tagType));
     if (side !== ArenaTagSide.BOTH) {
       tags = tags.filter((t) => t.side === side);

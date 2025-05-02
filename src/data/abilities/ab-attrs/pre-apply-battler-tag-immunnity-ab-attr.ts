@@ -1,7 +1,7 @@
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common-utils";
+import { coerceArray, type BooleanHolder } from "#app/utils/common-utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import i18next from "i18next";
 import { PreApplyBattlerTagAbAttr } from "./pre-apply-battler-tag-ab-attr";
@@ -17,7 +17,7 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
   constructor(immuneTagTypes: BattlerTagType | BattlerTagType[]) {
     super();
 
-    this.immuneTagTypes = Array.isArray(immuneTagTypes) ? immuneTagTypes : [immuneTagTypes];
+    this.immuneTagTypes = coerceArray(immuneTagTypes);
   }
 
   override apply(_pokemon: Pokemon, simulated: boolean, tag: BattlerTag, cancelled: BooleanHolder): boolean {

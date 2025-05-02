@@ -19,7 +19,7 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
   constructor(stats: BattleStat[], stages: number) {
     super();
 
-    this.stats = Array.isArray(stats) ? stats : [stats];
+    this.stats = stats;
     this.stages = stages;
   }
 

@@ -1,4 +1,5 @@
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import { coerceArray } from "#app/utils/common-utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
@@ -17,7 +18,7 @@ export function applyBattlerTags<T extends BattlerTag = BattlerTag>(
   ...params: Parameters<T["apply"]>
 ): boolean {
   const [pokemon, simulated, ...args] = params;
-  const tagTypeArr = Array.isArray(tagTypes) ? tagTypes : [tagTypes];
+  const tagTypeArr = coerceArray(tagTypes);
 
   const tags = pokemon.findTags((tag) => tagTypeArr.includes(tag.tagType));
   return tags.some((tag) => tag.apply(pokemon, simulated, ...args));

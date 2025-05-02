@@ -6,9 +6,10 @@ import type { PersistentModifier } from "#app/modifier/modifier";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { toReadableString } from "#app/utils/string-utils";
-import { randItem, randSeedItem } from "#app/utils/random-utils";
+import { coerceArray } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randItem, randSeedItem } from "#app/utils/random-utils";
+import { toReadableString } from "#app/utils/string-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -1136,9 +1137,7 @@ export class TrainerConfig {
     this.speciesPools = this.speciesPoolPerEvilTeamAdmin(poolName);
 
     signatureSpecies.forEach((speciesPool, s) => {
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
 
@@ -1173,9 +1172,7 @@ export class TrainerConfig {
     this.setPartyTemplates(trainerPartyTemplates.ELITE_FOUR);
 
     signatureSpecies.forEach((speciesPool, s) => {
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
     if (specialtyTypes.length) {
@@ -1254,10 +1251,7 @@ export class TrainerConfig {
 
     // Set up party members with their corresponding species.
     signatureSpecies.forEach((speciesPool, s) => {
-      // Ensure speciesPool is an array.
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       // Set a function to get a random party member from the species pool.
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
@@ -1341,10 +1335,7 @@ export class TrainerConfig {
 
     // Set up party members with their corresponding species.
     signatureSpecies.forEach((speciesPool, s) => {
-      // Ensure speciesPool is an array.
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       // Set a function to get a random party member from the species pool.
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });

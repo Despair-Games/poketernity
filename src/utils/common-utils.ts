@@ -171,3 +171,12 @@ export function deepFreeze<T>(obj: T): Readonly<T> {
 export function isPokemon(data: any): data is Pokemon {
   return data.hasOwnProperty("type") && data.type === "Pokemon";
 }
+
+/**
+ * If the input isn't already an array, turns it into one.
+ * @returns An array with the same type as the type of the input
+ */
+export function coerceArray<T>(input: T | readonly T[]): T[];
+export function coerceArray<T>(input: T | T[]): T[] {
+  return Array.isArray(input) ? [...input] : [input];
+}
