@@ -1,9 +1,10 @@
-import type { LanguageEvent } from "./@types/Language";
-import type { ControlsEvent, SettingsEvent } from "./@types/Settings";
-import type { TouchControlsEvent } from "./@types/TouchControls";
 import Phaser from "phaser";
+import type { InputsEvent } from "./@types/InputsEvent";
+import type { LanguageEvent } from "./@types/Language";
+import type { SettingsEvent } from "./@types/Settings";
+import type { TouchControlsEvent } from "./@types/TouchControlsEvent";
 
-type EventName = SettingsEvent | ControlsEvent | TouchControlsEvent | LanguageEvent;
+type EventName = SettingsEvent | InputsEvent | TouchControlsEvent | LanguageEvent;
 type CallbackFn<D> = (data: D) => void;
 
 /**

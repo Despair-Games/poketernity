@@ -119,5 +119,3 @@ export interface SettingsUpdateEventArgs {
 }
 
 export type SettingsEvent = "settings/updated" | "settings/update/failed" | "settings/saved";
-
-export type ControlsEvent = "keyboard/init" | "gamepad/init";
