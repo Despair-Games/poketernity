@@ -1,4 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -31,51 +32,51 @@ describe("Abilities - Screen Cleaner", () => {
     game.override.moveset([MoveId.HAIL]);
     game.override.enemyMoveset([MoveId.AURORA_VEIL, MoveId.AURORA_VEIL, MoveId.AURORA_VEIL, MoveId.AURORA_VEIL]);
 
-    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.HAIL);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.AURORA_VEIL, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
     game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.AURORA_VEIL, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 
   it("removes Light Screen", async () => {
-    game.override.enemyMoveset([MoveId.LIGHT_SCREEN, MoveId.LIGHT_SCREEN, MoveId.LIGHT_SCREEN, MoveId.LIGHT_SCREEN]);
+    game.override.enemyMoveset(MoveId.LIGHT_SCREEN);
 
-    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
     game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 
   it("removes Reflect", async () => {
-    game.override.enemyMoveset([MoveId.REFLECT, MoveId.REFLECT, MoveId.REFLECT, MoveId.REFLECT]);
+    game.override.enemyMoveset(MoveId.REFLECT);
 
-    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeTruthy();
 
     await game.toNextTurn();
     game.switchPokemon(1);
     await game.phaseInterceptor.to("PostSummonPhase");
 
-    expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 });

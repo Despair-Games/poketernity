@@ -55,7 +55,7 @@ describe("Moves - Trick Room", () => {
 
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeTruthy();
   });
 
   it("should cancel an active Trick Room if used again", async () => {
@@ -72,7 +72,7 @@ describe("Moves - Trick Room", () => {
 
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
-    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeFalsy();
   });
 
   it("should not reverse move priority order", async () => {
@@ -85,7 +85,7 @@ describe("Moves - Trick Room", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeTruthy();
   });
 
   it("should not reverse effects which cause Pokemon to move first/last within a priority bracket", async () => {
@@ -105,6 +105,6 @@ describe("Moves - Trick Room", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeTruthy();
   });
 });

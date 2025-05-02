@@ -1,6 +1,6 @@
-import { globalScene } from "#app/global-scene";
-import type { EntryHazardTag } from "../../arena-tag";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { EntryHazardTag } from "#app/data/arena-tag";
+import { globalScene } from "#app/global-scene";
 import { AddArenaTagAttr } from "./add-arena-tag-attr";
 
 /**
@@ -11,7 +11,7 @@ export class AddEntryHazardTagAttr extends AddArenaTagAttr {
   override getCondition(): MoveConditionFunc {
     return (user, _target, move) => {
       const side = this.getTagSide(user, move);
-      const tag = globalScene.arena.getTagOnSide(this.tagType, side) as EntryHazardTag;
+      const tag = globalScene.arena.findTag<EntryHazardTag>(this.tagType, side);
       if (!tag) {
         return true;
       }
