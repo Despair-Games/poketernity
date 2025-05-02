@@ -361,7 +361,7 @@ export const animConfigSchema: JSONSchemaType<AnimConfig> = {
      * associated with the anim (if applicable).
      * This is required for all {@linkcode MoveAnim | MoveAnims}.
      */
-    id: {
+    moveId: {
       type: "integer",
       enum: getEnumValues(MoveId),
       nullable: true,

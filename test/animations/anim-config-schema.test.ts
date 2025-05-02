@@ -14,7 +14,7 @@ describe("Animations - Schema", () => {
 
   it("should accept configs with a fully defined source property", async () => {
     const validConfig = {
-      id: MoveId.TACKLE,
+      moveId: MoveId.TACKLE,
       graphic: "003-Attack01.png",
       sourceProperties: {
         u: [
@@ -157,7 +157,7 @@ describe("Animations - Schema", () => {
 
   it("should accept configs with partially defined properties", async () => {
     const validPartialConfig = {
-      id: MoveId.TACKLE,
+      moveId: MoveId.TACKLE,
       graphic: "003-Attack01.png",
 
       sourceProperties: {
@@ -216,7 +216,7 @@ describe("Animations - Schema", () => {
 
   it("should not accept configs with unrecognized fields", async () => {
     const invalidConfig = {
-      id: MoveId.TACKLE,
+      moveId: MoveId.TACKLE,
       graphic: "003-Attack01.png",
 
       // This is intentionally misspelled
@@ -240,7 +240,7 @@ describe("Animations - Schema", () => {
 
   it("should not accept configs with invalid property values", async () => {
     const invalidConfig = {
-      id: MoveId.TACKLE,
+      moveId: MoveId.TACKLE,
       graphic: "003-Attack01.png",
 
       sourceProperties: {

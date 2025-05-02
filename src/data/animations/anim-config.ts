@@ -21,7 +21,7 @@ export interface AnimConfig {
    * If this is for a {@linkcode MoveAnim}, this specifies the {@linkcode MoveId}
    * associated with the animation.
    */
-  readonly id?: MoveId;
+  readonly moveId?: MoveId;
 
   /** The file name for VFX assets used in this animation */
   readonly graphic?: string;
