@@ -8,7 +8,7 @@ import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { getEnemyMoveChoices, type MoveChoiceSet } from "./utils/enemy_command_utils";
+import { getEnemyMoveChoices, type MoveChoiceSet } from "./utils/enemy-command-utils";
 
 let globalScene: BattleScene;
 

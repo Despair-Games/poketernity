@@ -171,7 +171,6 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -3941,7 +3940,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
-    this.battleData.revealedMoves.add(turnMove.move.id);
+    this.waveData.revealedMoves.add(turnMove.move.id);
   }
 
   /**
@@ -4586,7 +4585,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 }
 
-interface TargetScoreData {
+/** @todo Move this interface to `enemy-pokemon.ts` or its own file */
+export interface TargetScoreData {
   moveId: MoveId;
   targets: BattlerIndex[];
   score: number;

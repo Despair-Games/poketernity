@@ -31,12 +31,19 @@ import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accura
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
 import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
-import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { TypeBoostTagTypes } from "#app/utils/battler-tag-type-utils";
-import { AbstractConstructor, Constructor, nil, BooleanHolder, NumberHolder } from "#app/utils/common-utils";
+import {
+  type AbstractConstructor,
+  type Constructor,
+  type nil,
+  BooleanHolder,
+  NumberHolder,
+} from "#app/utils/common-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";

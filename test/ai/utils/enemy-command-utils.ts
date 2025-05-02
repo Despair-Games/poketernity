@@ -1,7 +1,7 @@
 import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#app/data/data-lists";
-import type { EnemyPokemon } from "#app/field/pokemon";
-import { randSeedInt } from "#app/utils";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { randSeedInt } from "#app/utils/random-utils";
 import type { MoveId } from "#enums/move-id";
 import { vi } from "vitest";
 

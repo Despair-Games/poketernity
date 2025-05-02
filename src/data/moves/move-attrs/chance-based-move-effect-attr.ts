@@ -3,7 +3,8 @@ import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-at
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr, type MoveEffectAttrOptions } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

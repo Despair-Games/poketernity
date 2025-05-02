@@ -1,5 +1,6 @@
 import type { AbilityId } from "#enums/ability-id";
 import type { BerryType } from "#enums/berry-type";
+import type { MoveId } from "#enums/move-id";
 
 /** Container for Pokemon-specific data that resets at the end of each wave. */
 export interface PokemonWaveData {
@@ -16,4 +17,8 @@ export interface PokemonWaveData {
    * without applying them.
    */
   abilitiesRevealed: AbilityId[];
+  /**
+   * The moves revealed from this Pokemon
+   */
+  revealedMoves: Set<MoveId>;
 }
