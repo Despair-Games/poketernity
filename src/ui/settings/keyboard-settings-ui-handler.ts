@@ -1,5 +1,6 @@
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
 import { deleteBind } from "#app/configs/inputs/configHandler";
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import {
@@ -77,11 +78,15 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
     this.homeKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.HOME);
     this.deleteKey?.on("up", this.deleteBinding, this);
     this.homeKey?.on("up", this.resetBindings, this);
+
+    eventBus.on("keyboard/init", this.updateChosenKeyboardDisplay, this);
   }
 
   protected override tearDown(): void {
     this.deleteKey?.off("up", this.deleteBinding, this);
     this.homeKey?.off("up", this.resetBindings, this);
+
+    eventBus.off("keyboard/init", this.updateChosenKeyboardDisplay, this);
 
     super.tearDown();
   }
@@ -142,7 +147,7 @@ export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler 
   /**
    * Update the display of the chosen keyboard layout.
    */
-  public updateChosenKeyboardDisplay(): void {
+  private updateChosenKeyboardDisplay(): void {
     // Update any bindings that might have changed since the last update.
     this.updateBindings();
 

@@ -220,10 +220,11 @@ export class InputsController {
    * This method first deactivates any active key presses and then initializes the gamepad settings.
    *
    * @param gamepad - The identifier of the gamepad to set as chosen.
+   * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
-  setChosenGamepad(gamepad: String): void {
+  setChosenGamepad(gamepad: String, emitInitEvent: boolean = true): void {
     this.deactivatePressedKey();
-    this.initChosenGamepad(gamepad);
+    this.initChosenGamepad(gamepad, emitInitEvent);
   }
 
   /**
@@ -247,14 +248,16 @@ export class InputsController {
   /**
    * Initializes the chosen gamepad by setting its identifier in the local storage and updating the UI to reflect the chosen gamepad.
    * If a gamepad name is provided, it uses that as the chosen gamepad; otherwise, it defaults to the currently chosen gamepad.
-   * @param gamepadName Optional parameter to specify the name of the gamepad to initialize as chosen.
+   * @param gamepadName - Optional parameter to specify the name of the gamepad to initialize as chosen.
+   * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
-  initChosenGamepad(gamepadName?: String): void {
+  initChosenGamepad(gamepadName?: String, emitInitEvent: boolean = true): void {
     if (gamepadName) {
       this.selectedDevice[Device.GAMEPAD] = gamepadName.toLowerCase();
     }
-    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_GAMEPAD] as GamepadSettingsUiHandler;
-    handler && handler.updateChosenGamepadDisplay();
+    if (emitInitEvent) {
+      eventBus.emit("gamepad/init");
+    }
   }
 
   /**
@@ -266,8 +269,8 @@ export class InputsController {
     if (layoutKeyboard) {
       this.selectedDevice[Device.KEYBOARD] = layoutKeyboard.toLowerCase();
     }
-    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_KEYBOARD] as KeyboardSettingsUiHandler;
-    handler && handler.updateChosenKeyboardDisplay();
+
+    eventBus.emit("keyboard/init");
   }
 
   /**
@@ -306,7 +309,7 @@ export class InputsController {
     for (const gamepad of allGamepads) {
       const gamepadID = gamepad.toLowerCase();
       if (!this.selectedDevice[Device.GAMEPAD]) {
-        this.setChosenGamepad(gamepadID);
+        this.setChosenGamepad(gamepadID, false);
       }
       const config = deepCopy(this.getConfig(gamepadID)) as InterfaceConfig;
       config.custom = this.configs[gamepadID]?.custom || { ...config.default };
@@ -314,8 +317,8 @@ export class InputsController {
       globalScene.gameData?.saveMappingConfigs(gamepadID, this.configs[gamepadID]);
     }
     this.lastSource = "gamepad";
-    const handler = globalScene.ui?.handlers[UiMode.SETTINGS_GAMEPAD] as GamepadSettingsUiHandler;
-    handler && handler.updateChosenGamepadDisplay();
+
+    eventBus.emit("gamepad/init");
   }
 
   /**
