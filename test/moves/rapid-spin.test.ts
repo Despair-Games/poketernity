@@ -1,7 +1,7 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -78,7 +78,7 @@ describe("Moves - Rapid Spin", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeUndefined();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.PLAYER)).toBeFalsy();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.ENEMY)).toBeTruthy();
   });
 });

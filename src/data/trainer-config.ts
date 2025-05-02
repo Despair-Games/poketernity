@@ -1701,28 +1701,3 @@ export function getSpeciesFilterRandomPartyMemberFunc(
     return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
   };
 }
-
-/**
- * Function to create a {@linkcode PersistentModifier} of applying random tera types to a trainer's team
- * @param party the party
- * @param count how many random teras will be applied
- * @param types an array of possible ElementalTypes to apply the tera
- * @returns a PersistentModifier
- */
-// TODO: remove this when trainer teras are reworked
-// function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
-//   const ret: PersistentModifier[] = [];
-//   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
-//   for (let t = 0; t < Math.min(count, party.length); t++) {
-//     const randomIndex = randSeedItem(partyMemberIndexes);
-//     partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
-//     ret.push(
-//       modifierTypes
-//         .TERA_SHARD()
-//         .generateType([], [randSeedItem(types ? types : party[randomIndex].getTypes())])!
-//         .withIdFromFunc(modifierTypes.TERA_SHARD)
-//         .newModifier(party[randomIndex]) as PersistentModifier,
-//     ); // TODO: is the bang correct?
-//   }
-//   return ret;
-// }

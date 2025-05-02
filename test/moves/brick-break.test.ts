@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
@@ -52,8 +52,8 @@ describe("Moves - Brick Break", () => {
     game.move.select(MoveId.BRICK_BREAK);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(tagType, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 
   it("Reflect should not reduce Brick Break's damage when removed", async () => {
@@ -86,6 +86,6 @@ describe("Moves - Brick Break", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeTruthy();
   });
 });

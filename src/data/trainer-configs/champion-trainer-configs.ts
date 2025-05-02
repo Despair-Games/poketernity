@@ -390,7 +390,8 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
+    )
+    .setInstantTera(4),
   [TrainerType.KIERAN]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [KIERAN_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED]))
