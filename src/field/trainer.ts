@@ -1,4 +1,4 @@
-import { LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game";
+import { LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game-constants";
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { getLevelForWaveFunc } from "#app/data/exp";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";

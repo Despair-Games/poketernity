@@ -1,4 +1,10 @@
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
+import {
+  EVIL_GRUNT_1_WAVE,
+  EVIL_GRUNT_2_WAVE,
+  EVIL_GRUNT_3_WAVE,
+  EVIL_GRUNT_4_WAVE,
+} from "#app/constants/wave-constants";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
@@ -20,12 +26,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
-import {
-  EVIL_GRUNT_1_WAVE,
-  EVIL_GRUNT_2_WAVE,
-  EVIL_GRUNT_3_WAVE,
-  EVIL_GRUNT_4_WAVE,
-} from "#app/constants/special-waves";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
