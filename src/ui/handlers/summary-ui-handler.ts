@@ -337,11 +337,7 @@ export class SummaryUiHandler extends UiHandler {
     setTextColor(this.numberText, this.pokemon.isShiny() ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY);
 
     const spriteKey = this.pokemon.getSpriteKey(true);
-    try {
-      this.pokemonSprite.play(spriteKey);
-    } catch (err: unknown) {
-      console.error(`Failed to play animation for ${spriteKey}`, err);
-    }
+    this.pokemonSprite.play(spriteKey);
     this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.teraType));
     this.pokemonSprite.setPipelineData("isTerastallized", this.pokemon.isTerastallized);
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
