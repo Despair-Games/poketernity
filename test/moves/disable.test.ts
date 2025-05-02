@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { TurnMove } from "#app/@types/TurnMove";
 import { ElementalType } from "#enums/elemental-type";
@@ -26,12 +26,12 @@ describe("Moves - Disable", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.BALL_FETCH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.DISABLE, MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH)
-      .starterSpecies(Species.PIKACHU)
-      .enemySpecies(Species.SHUCKLE);
+      .starterSpecies(SpeciesId.PIKACHU)
+      .enemySpecies(SpeciesId.SHUCKLE);
   });
 
   it("restricts moves", async () => {
@@ -95,8 +95,8 @@ describe("Moves - Disable", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(playerMon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
-    expect(enemyMon.getLastXMoves()[0].move.id).toBe(MoveId.STRUGGLE);
+    expect(playerMon).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemyMon).toHaveUsedMove(MoveId.STRUGGLE);
     expect(enemyMon.isMoveRestricted(MoveId.STRUGGLE)).toBe(false);
   }, 20000);
 

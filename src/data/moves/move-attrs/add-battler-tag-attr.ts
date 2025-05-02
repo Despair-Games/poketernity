@@ -107,6 +107,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.INFESTATION:
         return -3;
       case BattlerTagType.ENCORE:
+      case BattlerTagType.ROLLING:
       case BattlerTagType.GORILLA_TACTICS:
       case BattlerTagType.THROAT_CHOPPED:
       case BattlerTagType.TAR_SHOT:
@@ -142,6 +143,9 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.COMMANDED:
       case BattlerTagType.PSYCHO_SHIFT:
       case BattlerTagType.SKY_DROP:
+      case BattlerTagType.MAGIC_COAT:
+      case BattlerTagType.ME_FIRST_POWER_BOOST:
+      case BattlerTagType.BIDE:
         return 0;
       case BattlerTagType.INGRAIN:
       case BattlerTagType.IGNORE_ACCURACY:
@@ -162,6 +166,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.RAGE:
       case BattlerTagType.IMPRISONING:
       case BattlerTagType.BYPASS_SPEED:
+      case BattlerTagType.SNATCHING:
         return 3;
       case BattlerTagType.PROTECTED:
       case BattlerTagType.SPIKY_SHIELD:
@@ -186,7 +191,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    let moveChance = this.getMoveChance(user, target, move, this.selfTarget, false);
+    let moveChance = this.getMoveChance(user, target, move);
     if (moveChance < 0) {
       moveChance = 100;
     }

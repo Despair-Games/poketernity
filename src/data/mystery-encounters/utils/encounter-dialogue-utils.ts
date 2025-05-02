@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
+import { getTextWithColors } from "#app/ui/text/text-utils";
+import { isNil } from "#app/utils/common-utils";
 import type { TextStyle } from "#enums/text-style";
-import { getTextWithColors } from "#app/ui/text";
-import { isNullOrUndefined } from "#app/utils";
 import i18next from "i18next";
 
 /**
@@ -11,7 +11,7 @@ import i18next from "i18next";
  * @param primaryStyle Can define a text style to be applied to the entire string. Must be defined for BBCodeText styles to be applied correctly
  */
 export function getEncounterText(keyOrString?: string, primaryStyle?: TextStyle): string | null {
-  if (isNullOrUndefined(keyOrString)) {
+  if (isNil(keyOrString)) {
     return null;
   }
 
@@ -46,7 +46,7 @@ function getTextWithDialogueTokens(keyOrString: string): string | null {
  */
 export function queueEncounterMessage(contentKey: string): void {
   const text: string | null = getEncounterText(contentKey);
-  globalScene.queueMessage(text ?? "", null, true);
+  globalScene.phaseManager.queueMessagePhase(text ?? "", null, true);
 }
 
 /**

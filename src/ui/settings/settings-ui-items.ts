@@ -5,7 +5,7 @@ import type {
   SettingsUiItem,
   SettingUiItemOption,
 } from "#app/@types/Settings";
-import { GAME_SPEEDS } from "#app/constants";
+import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
@@ -18,7 +18,8 @@ import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
-import { getEnumLength, isLandscapeMode } from "#app/utils";
+import { getEnumLength } from "#app/utils/common-utils";
+import { isLandscapeMode } from "#app/utils/app-utils";
 import i18next, { t } from "i18next";
 import { UiWindowStyle } from "#enums/ui-window-style";
 

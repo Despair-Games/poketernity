@@ -1,21 +1,22 @@
 import type { AnySound } from "#app/audio-manager";
 import type { Egg } from "#app/data/egg";
+import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import EggCounterContainer from "#app/ui/egg-counter-container";
-import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
-import PokemonInfoContainer from "#app/ui/pokemon-info-container";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
+import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
+import { fixedNumber, getFrameMs } from "#app/utils/common-utils";
+import { randInt } from "#app/utils/random-utils";
+import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
-import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { EggLapsePhase } from "./egg-lapse-phase";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Class that represents egg hatching
@@ -35,7 +36,7 @@ export class EggHatchPhase extends Phase {
   private eggCounterContainer: EggCounterContainer;
 
   /** The scene handler for egg hatching */
-  private eggHatchHandler: EggHatchSceneHandler;
+  private eggHatchHandler: EggHatchSceneUiHandler;
   /** The phaser gameobject container that holds everything */
   private eggHatchContainer: Phaser.GameObjects.Container;
   /** The phaser image that is the background */
@@ -83,7 +84,7 @@ export class EggHatchPhase extends Phase {
   public override start(): void {
     super.start();
 
-    globalScene.ui.setModeForceTransition(UiMode.EGG_HATCH_SCENE).then(() => {
+    globalScene.ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE).then(() => {
       if (!this.egg) {
         return this.end();
       }
@@ -98,7 +99,9 @@ export class EggHatchPhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
-      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneHandler;
+      // TODO: the hatch phase and ui handler should not be intertwined in this way;
+      // the phase also should not be the one creating the graphical objects
+      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
 
       this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
 
@@ -220,11 +223,16 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
-    if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
-      this.eggHatchHandler.clear();
+    if (globalScene.phaseManager.findPhase((p) => p instanceof EggHatchPhase)) {
+      // There are more eggs about to hatch, clear up the handler
+      this.eggHatchHandler.prepareForNextEgg();
     } else {
+      // There are no more hatching eggs, re enable the modifiers
       globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));
     }
+
+    this.pokemon?.destroy();
+
     super.end();
   }
 

@@ -1,12 +1,20 @@
-import { getSpeciesFormChangeMessage, type SpeciesFormChange } from "#app/data/pokemon-forms";
+import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-clear-weather-terrain-ab-attr";
+import type { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import {
+  getSpeciesFormChangeMessage,
+  SpeciesFormChangeTeraTrigger,
+  type SpeciesFormChange,
+} from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
-import { type Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import type { MovePhase } from "#app/phases/move-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
-import { BattlePhase } from "./abstract-battle-phase";
-import type { MovePhase } from "./move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
   override readonly id = PhaseId.QUIET_FORM_CHANGE;
@@ -65,7 +73,8 @@ export class QuietFormChangePhase extends BattlePhase {
       sprite.setPipeline(spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
-        teraColor: getTypeRgb(this.pokemon.getTeraType()),
+        teraColor: getTypeRgb(this.pokemon.teraType),
+        isTerastallized: this.pokemon.isTerastallized,
       });
 
       let key = "spriteColors";
@@ -159,7 +168,7 @@ export class QuietFormChangePhase extends BattlePhase {
 
     if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon.isEnemy()) {
       globalScene.audioManager.playBgm();
-      globalScene.queuePokemonHeal(true, this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
+      globalScene.phaseManager.queuePokemonHealPhase(this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
         showFullHpMessage: false,
         healStatus: true,
       });
@@ -170,12 +179,31 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = globalScene.findPhase<MovePhase>(
+      const movePhase = globalScene.phaseManager.findPhase<MovePhase>(
         (p) => p.is<MovePhase>(PhaseId.MOVE) && p.pokemon === this.pokemon,
       );
       if (movePhase) {
         movePhase.cancel();
       }
+    }
+
+    if (this.formChange.trigger instanceof SpeciesFormChangeTeraTrigger) {
+      // TODO: add simulated support?
+      applyAbAttrs<PostTeraFormChangeStatChangeAbAttr>(
+        AbAttrFlag.POST_TERA_FORM_CHANGE_STAT_CHANGE,
+        this.pokemon,
+        false,
+      );
+      /**
+       * TODO: Smogon suggests this is tied to tera so move to `terastallization-phase` and
+       * rename the AbAttr in case we want randomizer modes where other Pokemon may have
+       * Tera Zero
+       */
+      applyAbAttrs<PostTeraFormChangeClearWeatherTerrainAbAttr>(
+        AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN,
+        this.pokemon,
+        false,
+      );
     }
 
     super.end();

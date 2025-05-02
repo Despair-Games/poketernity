@@ -1,13 +1,11 @@
-import { Stat } from "#enums/stat";
-import { type StockpilingTag } from "#app/data/battler-tags";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveResult } from "#enums/move-result";
-import { MovePhase } from "#app/phases/move-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { MoveResult } from "#enums/move-result";
+import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -28,13 +26,13 @@ describe("Moves - Swallow", () => {
 
     game.override.battleType("single");
 
-    game.override.enemySpecies(Species.RATTATA);
+    game.override.enemySpecies(SpeciesId.RATTATA);
     game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
+    game.override.enemyAbility(AbilityId.NONE);
     game.override.enemyLevel(2000);
 
     game.override.moveset([MoveId.SWALLOW, MoveId.SWALLOW, MoveId.SWALLOW, MoveId.SWALLOW]);
-    game.override.ability(Abilities.NONE);
+    game.override.ability(AbilityId.NONE);
   });
 
   describe("consumes all stockpile stacks to heal (scaling with stacks)", () => {
@@ -42,7 +40,7 @@ describe("Moves - Swallow", () => {
       const stacksToSetup = 1;
       const expectedHeal = 25;
 
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       vi.spyOn(pokemon, "getMaxHp").mockReturnValue(100);
@@ -57,7 +55,7 @@ describe("Moves - Swallow", () => {
       vi.spyOn(pokemon, "heal");
 
       game.move.select(MoveId.SWALLOW);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
       expect(pokemon.heal).toHaveReturnedWith(expectedHeal);
@@ -69,7 +67,7 @@ describe("Moves - Swallow", () => {
       const stacksToSetup = 2;
       const expectedHeal = 50;
 
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       vi.spyOn(pokemon, "getMaxHp").mockReturnValue(100);
@@ -85,7 +83,7 @@ describe("Moves - Swallow", () => {
       vi.spyOn(pokemon, "heal");
 
       game.move.select(MoveId.SWALLOW);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
       expect(pokemon.heal).toHaveReturnedWith(expectedHeal);
@@ -97,7 +95,7 @@ describe("Moves - Swallow", () => {
       const stacksToSetup = 3;
       const expectedHeal = 100;
 
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       vi.spyOn(pokemon, "getMaxHp").mockReturnValue(100);
@@ -114,7 +112,7 @@ describe("Moves - Swallow", () => {
       vi.spyOn(pokemon, "heal");
 
       game.move.select(MoveId.SWALLOW);
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
       expect(pokemon.heal).toHaveReturnedWith(expect.closeTo(expectedHeal));
@@ -124,7 +122,7 @@ describe("Moves - Swallow", () => {
   });
 
   it("fails without stacks", async () => {
-    await game.startBattle([Species.ABOMASNOW]);
+    await game.startBattle([SpeciesId.ABOMASNOW]);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -132,14 +130,14 @@ describe("Moves - Swallow", () => {
     expect(stockpilingTag).toBeUndefined();
 
     game.move.select(MoveId.SWALLOW);
-    await game.phaseInterceptor.to(TurnInitPhase);
+    await game.phaseInterceptor.to("TurnInitPhase");
 
-    expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
+    expect(pokemon).toHaveMoveResult(MoveResult.FAIL);
   });
 
   describe("restores stat stage boosts granted by stacks", () => {
     it("decreases stats based on stored values (both boosts equal)", async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
@@ -148,14 +146,14 @@ describe("Moves - Swallow", () => {
       expect(stockpilingTag).toBeDefined();
 
       game.move.select(MoveId.SWALLOW);
-      await game.phaseInterceptor.to(MovePhase);
+      await game.phaseInterceptor.to("MovePhase");
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(1);
 
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
-      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
+      expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(0);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(0);
@@ -164,7 +162,7 @@ describe("Moves - Swallow", () => {
     });
 
     it("lower stat stages based on stored values (different boosts)", async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
@@ -180,9 +178,9 @@ describe("Moves - Swallow", () => {
 
       game.move.select(MoveId.SWALLOW);
 
-      await game.phaseInterceptor.to(TurnInitPhase);
+      await game.phaseInterceptor.to("TurnInitPhase");
 
-      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
+      expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(-2);

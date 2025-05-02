@@ -1,4 +1,4 @@
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -13,9 +13,9 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   /** Message to display after using move */
   private message: string | null;
   /** Skips mons with this ability, ie. Soundproof */
-  private abilityCondition: Abilities;
+  private abilityCondition: AbilityId;
 
-  constructor(message: string | null, abilityCondition: Abilities) {
+  constructor(message: string | null, abilityCondition: AbilityId) {
     super(true);
 
     this.message = message;
@@ -27,7 +27,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 
     if (this.message) {
-      globalScene.queueMessage(this.message);
+      globalScene.phaseManager.queueMessagePhase(this.message);
     }
 
     return true;
@@ -47,7 +47,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
       pokemon.resetStatus();
       pokemon.updateInfo();
     } else {
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new ShowAbilityPhase(pokemon.id, pokemon.getPassiveAbility()?.id === this.abilityCondition),
       );
     }

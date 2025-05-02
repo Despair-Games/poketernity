@@ -8,14 +8,14 @@ import {
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
@@ -39,7 +39,7 @@ import i18next from "#app/plugins/i18n";
 import { BerryType } from "#enums/berry-type";
 import { PERMANENT_STATS, Stat } from "#enums/stat";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/berriesAbound";
@@ -235,7 +235,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           config.pokemonConfigs![0].tags = [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON];
           config.pokemonConfigs![0].mysteryEncounterBattleEffects = (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
-            globalScene.unshiftPhase(
+            globalScene.phaseManager.unshiftPhase(
               new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
             );
           };

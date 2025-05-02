@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 
@@ -36,6 +36,8 @@ export class PartyHealPhase extends BattlePhase {
         }
         pokemon.updateInfo(true);
       }
+      globalScene.playerTerasUsed = 0;
+
       const healSong = globalScene.audioManager.playSoundWithoutBgm("heal");
       time.delayedCall(fixedNumber(healSong.totalDuration * 1000), () => {
         healSong.destroy();

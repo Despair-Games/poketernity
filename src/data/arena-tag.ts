@@ -1,4 +1,10 @@
+import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants/game-constants";
+import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
+import type { InfiltratorAbAttr } from "#app/data/abilities/ab-attrs/infiltrator-ab-attr";
+import type { ProtectStatAbAttr } from "#app/data/abilities/ab-attrs/protect-stat-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -9,9 +15,9 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -27,9 +33,6 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonBattleAnim } from "./animations/common-battle-anim";
-import { type SkyDropTag } from "./battler-tags";
-import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
   constructor(
@@ -57,7 +60,7 @@ export abstract class ArenaTag {
 
   public onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t(`arenaTag:arenaOnRemove${this.i18nSideKey}`, { moveName: this.getMoveName() }),
       );
     }
@@ -66,7 +69,7 @@ export abstract class ArenaTag {
   public onOverlap(_arena: Arena): void {}
 
   public lapse(_arena: Arena): boolean {
-    return this.turnCount < 1 || !!--this.turnCount;
+    return this.turnCount < 1 || --this.turnCount !== 0;
   }
 
   public getMoveName(): string | null {
@@ -126,7 +129,7 @@ export class MistTag extends ArenaTag {
       const source = globalScene.getPokemonById(this.sourceId);
 
       if (!quiet && source) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("arenaTag:mistOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
         );
       } else if (!quiet) {
@@ -147,7 +150,7 @@ export class MistTag extends ArenaTag {
   override apply(_arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
     if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
+      applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -156,7 +159,7 @@ export class MistTag extends ArenaTag {
     cancelled.value = true;
 
     if (!simulated) {
-      globalScene.queueMessage(i18next.t("arenaTag:mistApply"));
+      globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mistApply"));
     }
 
     return true;
@@ -212,7 +215,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
+      applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -234,7 +237,7 @@ class ReflectTag extends WeakenMoveScreenTag {
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.queueMessage(i18next.t(`arenaTag:reflectOnAdd${this.i18nSideKey}`));
+      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:reflectOnAdd${this.i18nSideKey}`));
     }
   }
 }
@@ -250,7 +253,7 @@ class LightScreenTag extends WeakenMoveScreenTag {
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.queueMessage(i18next.t(`arenaTag:lightScreenOnAdd${this.i18nSideKey}`));
+      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:lightScreenOnAdd${this.i18nSideKey}`));
     }
   }
 }
@@ -269,7 +272,7 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.queueMessage(i18next.t(`arenaTag:auroraVeilOnAdd${this.i18nSideKey}`));
+      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:auroraVeilOnAdd${this.i18nSideKey}`));
     }
   }
 }
@@ -301,7 +304,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t(`arenaTag:conditionalProtectOnAdd${this.i18nSideKey}`, { moveName: super.getMoveName() }),
     );
   }
@@ -338,7 +341,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
         isProtected.value = true;
         if (!simulated) {
           new CommonBattleAnim(CommonAnim.PROTECT, defender).play();
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("arenaTag:conditionalProtectApply", {
               moveName: super.getMoveName(),
               pokemonNameWithAffix: getPokemonNameWithAffix(defender),
@@ -362,7 +365,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
  */
 const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves.get(moveId);
-  const effectPhase = globalScene.getCurrentPhase();
+  const effectPhase = globalScene.phaseManager.getCurrentPhase();
 
   if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
     const attacker = effectPhase.getUserPokemon();
@@ -439,7 +442,7 @@ class MatBlockTag extends ConditionalProtectTag {
     if (this.sourceId) {
       const source = globalScene.getPokemonById(this.sourceId);
       if (source) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("arenaTag:matBlockOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
         );
       } else {
@@ -496,7 +499,7 @@ export class NoCritTag extends ArenaTag {
 
   /** Queues a message upon adding this effect to the field */
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t(`arenaTag:noCritOnAdd${this.i18nSideKey}`, {
         moveName: this.getMoveName(),
       }),
@@ -506,7 +509,7 @@ export class NoCritTag extends ArenaTag {
   /** Queues a message upon removing this effect from the field */
   override onRemove(_arena: Arena): void {
     const source = globalScene.getPokemonById(this.sourceId!); // TODO: is this bang correct?
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("arenaTag:noCritOnRemove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(source ?? undefined),
         moveName: this.getMoveName(),
@@ -546,8 +549,8 @@ class WishTag extends ArenaTag {
   override onRemove(_arena: Arena): void {
     const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
-      globalScene.queueMessage(this.triggerMessage);
-      globalScene.queuePokemonHeal(true, target.getBattlerIndex(), this.healHp);
+      globalScene.phaseManager.queueMessagePhase(this.triggerMessage);
+      globalScene.phaseManager.queuePokemonHealPhase(target.getBattlerIndex(), this.healHp);
     }
   }
 }
@@ -600,11 +603,11 @@ class MudSportTag extends WeakenMoveTypeTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:mudSportOnAdd"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mudSportOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:mudSportOnRemove"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mudSportOnRemove"));
   }
 }
 
@@ -618,11 +621,11 @@ class WaterSportTag extends WeakenMoveTypeTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:waterSportOnAdd"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:waterSportOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:waterSportOnRemove"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:waterSportOnRemove"));
   }
 }
 
@@ -638,7 +641,7 @@ export class IonDelugeTag extends ArenaTag {
 
   /** Queues an on-add message */
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:plasmaFistsOnAdd"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:plasmaFistsOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {} // Removes default on-remove message
@@ -736,7 +739,7 @@ class SpikesTag extends EntryHazardTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("arenaTag:spikesOnAdd", {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -748,7 +751,7 @@ class SpikesTag extends EntryHazardTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
+      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -758,13 +761,10 @@ class SpikesTag extends EntryHazardTag {
         const damageHpRatio = 1 / (10 - 2 * this.layers);
         const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
 
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("arenaTag:spikesActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
-        pokemon.damageAndUpdate(damage, HitResult.OTHER);
-        if (pokemon.turnData) {
-          pokemon.turnData.damageTaken += damage;
-        }
+        pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
         return true;
       }
     }
@@ -792,7 +792,7 @@ class ToxicSpikesTag extends EntryHazardTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("arenaTag:toxicSpikesOnAdd", {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -815,7 +815,7 @@ class ToxicSpikesTag extends EntryHazardTag {
       if (pokemon.isOfType(ElementalType.POISON)) {
         this.neutralized = true;
         if (globalScene.arena.removeTag(this.tagType)) {
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("arenaTag:toxicSpikesActivateTrapPoison", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               moveName: this.getMoveName(),
@@ -884,15 +884,15 @@ export class DelayedAttackTag extends ArenaTag {
     this.delayedAttacks.forEach((attack) => {
       attack.turnCount--;
 
-      if (!isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
+      if (!isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.moveId, 0, 0, true)),
           );
         } else if (globalScene.currentBattle.double) {
           const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
-          globalScene.unshiftPhase(
+          globalScene.phaseManager.unshiftPhase(
             new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.moveId, 0, 0, true)),
           );
         }
@@ -900,7 +900,7 @@ export class DelayedAttackTag extends ArenaTag {
     });
 
     this.delayedAttacks = this.delayedAttacks.filter(
-      (attack) => !isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
+      (attack) => !isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
     );
     return this.delayedAttacks.length > 0;
   }
@@ -910,6 +910,131 @@ export class DelayedAttackTag extends ArenaTag {
   override loadTag(source: ArenaTag | any): void {
     super.loadTag(source);
     this.delayedAttacks = source.delayedAttacks;
+  }
+}
+
+/**
+ * Contains data related to a queued healing effect from
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
+ * or {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
+ */
+interface PendingHealEffect {
+  /** The id for the {@linkcode Pokemon} that created the effect */
+  readonly sourceId: number;
+  /** The {@linkcode MoveId | id} for the move that created the effect */
+  readonly moveId: MoveId;
+  /** If `true`, also restores the target's PP when the effect activates */
+  readonly restorePP: boolean;
+  /** The `i18n` key for the message to display when the effect activates */
+  readonly healMessageKey: string;
+}
+
+/**
+ * Arena tag to contain stored healing effects, namely from
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
+ * When a damaged Pokemon first enters the effect's {@linkcode BattlerIndex | field position},
+ * their HP is fully restored, and they are cured of any non-volatile status condition.
+ * If the effect is from Lunar Dance, their PP is also restored.
+ * @extends ArenaTag
+ */
+export class PendingHealTag extends ArenaTag {
+  /** All pending healing effects, organized by {@linkcode BattlerIndex} */
+  private pendingHeals: Partial<Record<BattlerIndex, PendingHealEffect[]>> = {};
+
+  constructor() {
+    super(ArenaTagType.PENDING_HEAL, 0);
+  }
+
+  /**
+   * Adds a pending healing effect to the field. Effects under the same move *and*
+   * target index as an existing effect are ignored.
+   * @param targetIndex - The {@linkcode BattlerIndex} under which the effect applies
+   * @param healEffect - The {@linkcode PendingHealEffect | data} for the pending heal effect
+   */
+  public queueHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
+    const existingHealEffects = this.pendingHeals[targetIndex];
+    if (existingHealEffects) {
+      if (!existingHealEffects.some((he) => he.moveId === healEffect.moveId)) {
+        existingHealEffects.push(healEffect);
+      }
+    } else {
+      this.pendingHeals[targetIndex] = [healEffect];
+    }
+  }
+
+  /** Removes default on-remove message */
+  override onRemove(_arena: Arena): void {}
+
+  /** This arena tag is removed at the end of the turn if no pending healing effects are on the field */
+  override lapse(_arena: Arena): boolean {
+    for (const key in this.pendingHeals) {
+      if (this.pendingHeals[key].length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Applies a pending healing effect on the given target index. If an effect is found for
+   * the index, the Pokemon at that index is healed to full HP, is cured of any non-volatile status,
+   * and has its PP fully restored (if the effect is from Lunar Dance).
+   * @param arena - The {@linkcode Arena} containing this tag
+   * @param simulated - If `true`, suppresses changes to game state
+   * @param pokemon - The {@linkcode Pokemon} receiving the healing effect
+   * @returns `true` if the target Pokemon was healed by this effect
+   * @todo This should also be called when a Pokemon moves into a new position via Ally Switch
+   */
+  override apply(arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
+    const targetIndex = pokemon.getBattlerIndex();
+    const targetEffects = this.pendingHeals[targetIndex];
+
+    if (simulated) {
+      return !!targetEffects?.length;
+    }
+
+    const healEffect = targetEffects?.find((effect) => this.canApply(effect, pokemon));
+    if (targetEffects && healEffect) {
+      const { sourceId, moveId, restorePP, healMessageKey } = healEffect;
+      const sourcePokemon = globalScene.getPokemonById(sourceId);
+      if (!sourcePokemon) {
+        console.warn(`Source of pending ${allMoves.get(moveId).name} effect is undefined!`);
+        targetEffects.splice(targetEffects.indexOf(healEffect), 1);
+        // Re-evaluate after the invalid heal effect is removed
+        return this.apply(arena, simulated, pokemon);
+      }
+
+      globalScene.phaseManager.queuePokemonHealPhase(targetIndex, pokemon.getMaxHp(), {
+        message: i18next.t(healMessageKey, { pokemonName: getPokemonNameWithAffix(sourcePokemon) }),
+        healStatus: true,
+        fullRestorePP: restorePP,
+      });
+
+      targetEffects.splice(targetEffects.indexOf(healEffect), 1);
+    }
+
+    return !isNil(healEffect);
+  }
+
+  /**
+   * Determines if the given {@linkcode PendingHealEffect} can immediately heal
+   * the given target {@linkcode Pokemon}.
+   * @param healEffect - The {@linkcode PendingHealEffect} to evaluate
+   * @param pokemon - The {@linkcode Pokemon} to evaluate against
+   * @returns `true` if the Pokemon can be healed by the effect
+   */
+  private canApply(healEffect: PendingHealEffect, pokemon: Pokemon): boolean {
+    return (
+      !pokemon.isFullHp()
+      || pokemon.hasNonVolatileStatusEffect()
+      || (healEffect.restorePP && pokemon.getMoveset().some((mv) => mv.ppUsed > 0))
+    );
+  }
+
+  override loadTag(source: ArenaTag | any): void {
+    super.loadTag(source);
+    this.pendingHeals = source.pendingHeals;
   }
 }
 
@@ -943,7 +1068,9 @@ class TypeHazardTag extends EntryHazardTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(i18next.t(this.onAddKey, { opponentDesc: source.getOpponentDescriptor() }));
+      globalScene.phaseManager.queueMessagePhase(
+        i18next.t(this.onAddKey, { opponentDesc: source.getOpponentDescriptor() }),
+      );
     }
   }
 
@@ -954,7 +1081,7 @@ class TypeHazardTag extends EntryHazardTag {
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
+    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
 
     if (cancelled.value) {
       return false;
@@ -967,13 +1094,10 @@ class TypeHazardTag extends EntryHazardTag {
         return true;
       }
       const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      pokemon.damageAndUpdate(damage, HitResult.OTHER);
-      if (pokemon.turnData) {
-        pokemon.turnData.damageTaken += damage;
-      }
+      pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
       return true;
     }
 
@@ -1029,7 +1153,7 @@ class StickyWebTag extends EntryHazardTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t(`arenaTag:stickyWebOnAdd${this.i18nSideKey}Side`, {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -1041,19 +1165,21 @@ class StickyWebTag extends EntryHazardTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulated, Stat.SPD, cancelled);
+      applyAbAttrs<ProtectStatAbAttr>(AbAttrFlag.PROTECT_STAT, pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;
       }
 
       if (!cancelled.value) {
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }),
         );
         const stages = new NumberHolder(-1);
-        globalScene.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value),
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value, {
+            isStickyWeb: true,
+          }),
         );
         return true;
       }
@@ -1094,21 +1220,21 @@ export class TrickRoomTag extends ArenaRoomTag {
   override onAdd(_arena: Arena): void {
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (source) {
-      globalScene.queueMessage(
+      globalScene.phaseManager.queueMessagePhase(
         i18next.t("arenaTag:trickRoomOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
       );
     }
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:trickRoomOnRemove"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:trickRoomOnRemove"));
   }
 }
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Gravity_(move) Gravity}.
  * Grounds all Pokémon on the field, including Flying-types and those with
- * {@linkcode Abilities.LEVITATE} for the duration of the arena tag, usually 5 turns.
+ * {@linkcode AbilityId.LEVITATE} for the duration of the arena tag, usually 5 turns.
  */
 export class GravityTag extends ArenaTag {
   constructor(turnCount: number) {
@@ -1116,7 +1242,7 @@ export class GravityTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:gravityOnAdd"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
       if (pokemon) {
         pokemon.removeTag(BattlerTagType.FLOATING);
@@ -1130,7 +1256,7 @@ export class GravityTag extends ArenaTag {
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:gravityOnRemove"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:gravityOnRemove"));
   }
 }
 
@@ -1146,7 +1272,7 @@ class TailwindTag extends ArenaTag {
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.queueMessage(i18next.t(`arenaTag:tailwindOnAdd${this.i18nSideKey}`));
+      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:tailwindOnAdd${this.i18nSideKey}`));
     }
 
     const source = globalScene.getPokemonById(this.sourceId!); //TODO: this bang is questionable!
@@ -1154,9 +1280,9 @@ class TailwindTag extends ArenaTag {
 
     for (const pokemon of party) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
-      if (pokemon.hasAbility(Abilities.WIND_POWER) && !pokemon.getTag(BattlerTagType.CHARGED)) {
+      if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.getTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("abilityTriggers:windPowerCharged", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             moveName: this.getMoveName(),
@@ -1164,16 +1290,18 @@ class TailwindTag extends ArenaTag {
         );
       }
       // Raise attack by one stage if party member has WIND_RIDER ability
-      if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
-        globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1));
+      if (pokemon.hasAbility(AbilityId.WIND_RIDER)) {
+        globalScene.phaseManager.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
+        globalScene.phaseManager.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1),
+        );
       }
     }
   }
 
   override onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.queueMessage(i18next.t(`arenaTag:tailwindOnRemove${this.i18nSideKey}`));
+      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:tailwindOnRemove${this.i18nSideKey}`));
     }
   }
 }
@@ -1188,11 +1316,11 @@ class HappyHourTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:happyHourOnAdd"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:happyHourOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:happyHourOnRemove"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:happyHourOnRemove"));
   }
 }
 
@@ -1202,11 +1330,11 @@ class SafeguardTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`));
+    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`));
   }
 }
 
@@ -1230,7 +1358,7 @@ class FireGrassPledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A sea of fire enveloped your/the opposing team!"
-    globalScene.queueMessage(i18next.t(`arenaTag:fireGrassPledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:fireGrassPledgeOnAdd${this.i18nSideKey}`));
   }
 
   override lapse(arena: Arena): boolean {
@@ -1241,18 +1369,18 @@ class FireGrassPledgeTag extends ArenaTag {
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }
 
         // "{pokemonNameWithAffix} was hurt by the sea of fire!"
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("arenaTag:fireGrassPledgeLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
         // TODO: Replace this with a proper animation
-        globalScene.unshiftPhase(
-          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.MAGMA_STORM),
+        globalScene.phaseManager.unshiftPhase(
+          new CommonAnimPhase(CommonAnim.MAGMA_STORM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
         );
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
       });
@@ -1275,7 +1403,7 @@ class WaterFirePledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A rainbow appeared in the sky on your/the opposing team's side!"
-    globalScene.queueMessage(i18next.t(`arenaTag:waterFirePledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:waterFirePledgeOnAdd${this.i18nSideKey}`));
   }
 
   /**
@@ -1305,7 +1433,7 @@ class GrassWaterPledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A swamp enveloped your/the opposing team!"
-    globalScene.queueMessage(i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`));
   }
 }
 
@@ -1343,7 +1471,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena) {
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t(`arenaTag:TypeImmuneDamageOverTimeOnAdd${this.i18nSideKey}${ElementalType[this.immuneType]}`),
     );
   }
@@ -1356,19 +1484,19 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }
 
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${ElementalType[this.immuneType]}`, {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           }),
         );
         // TODO: Replace this with a proper animation
-        globalScene.unshiftPhase(
-          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
+        globalScene.phaseManager.unshiftPhase(
+          new CommonAnimPhase(this.getAnimationForType(), pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
         );
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
       });
@@ -1390,7 +1518,7 @@ export class FairyLockTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.queueMessage(i18next.t("arenaTag:fairyLockOnAdd"));
+    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:fairyLockOnAdd"));
   }
 }
 
@@ -1427,6 +1555,8 @@ export function getArenaTag(
       return new ToxicSpikesTag(sourceId, side);
     case ArenaTagType.DELAYED_ATTACK:
       return new DelayedAttackTag();
+    case ArenaTagType.PENDING_HEAL:
+      return new PendingHealTag();
     case ArenaTagType.WISH:
       return new WishTag(turnCount, sourceId, side);
     case ArenaTagType.STEALTH_ROCK:

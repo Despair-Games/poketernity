@@ -1,51 +1,53 @@
-import type { ElementalType } from "#enums/elemental-type";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { globalScene } from "#app/global-scene";
+import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { allSpecies } from "#app/data/data-lists";
+import { getLevelTotalExp } from "#app/data/exp";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type { EnemyPartyConfig, EnemyPokemonConfig } from "../utils/encounter-phase-utils";
+import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-} from "../utils/encounter-phase-utils";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { PlayerPokemon } from "#app/field/pokemon";
+  type EnemyPartyConfig,
+  type EnemyPokemonConfig,
+} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { doPokemonTransformationSequence } from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { TrainerPartyTemplate } from "#app/data/trainer-config";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
-import { allSpecies } from "#app/data/data-lists";
+import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
-import { doPokemonTransformationSequence } from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
-import { TransformationScreenPosition } from "#enums/transformation-screen-position";
-import { getLevelTotalExp } from "#app/data/exp";
-import { Stat } from "#enums/stat";
-import { Challenges } from "#enums/challenges";
-import { ModifierTier } from "#enums/modifier-tier";
-import { PlayerGender } from "#enums/player-gender";
-import { TrainerType } from "#enums/trainer-type";
 import PokemonData from "#app/system/pokemon-data";
-import { Nature } from "#enums/nature";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import { TrainerPartyTemplate } from "#app/data/trainer-config";
-import { PartyMemberStrength } from "#enums/party-member-strength";
-import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { addPokemonDataToDexAndValidateAchievements } from "../utils/encounter-pokemon-utils";
+import { NumberHolder, isNil } from "#app/utils/common-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
+import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
+import { Challenges } from "#enums/challenges";
+import type { ElementalType } from "#enums/elemental-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
+import { PartyMemberStrength } from "#enums/party-member-strength";
+import { PlayerGender } from "#enums/player-gender";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { TrainerType } from "#enums/trainer-type";
+import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -441,7 +443,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 async function postProcessTransformedPokemon(
   previousPokemon: PlayerPokemon,
   newPokemon: PlayerPokemon,
-  speciesRootForm: Species,
+  speciesRootForm: SpeciesId,
   forBattle: boolean = false,
 ): Promise<void> {
   // Roll HA a second time
@@ -555,7 +557,7 @@ function getTransformedSpecies(
   alreadyUsedSpecies: PokemonSpecies[],
 ): PokemonSpecies {
   let newSpecies: PokemonSpecies | undefined;
-  while (isNullOrUndefined(newSpecies)) {
+  while (isNil(newSpecies)) {
     const bstCap = originalBst + bstSearchRange[1];
     const bstMin = Math.max(originalBst + bstSearchRange[0], 0);
 
@@ -571,24 +573,24 @@ function getTransformedSpecies(
         && (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
       /** Exclude Ultra Beasts, Paradox, Eternatus, and all legendary/mythical/trio pokemon that are below 570 BST */
       const EXCLUDED_TRANSFORMATION_SPECIES = [
-        Species.ETERNATUS,
+        SpeciesId.ETERNATUS,
         /** UBs */
         ...getSpecialSpeciesList(SpeciesGroups.ULTRA_BEAST, false),
         /** Paradox */
         ...getSpecialSpeciesList(SpeciesGroups.PARADOX, false),
         /** These are banned so they don't appear in the < 570 BST pool */
-        Species.COSMOG,
-        Species.MELTAN,
-        Species.KUBFU,
-        Species.COSMOEM,
-        Species.TERAPAGOS,
-        Species.TYPE_NULL,
-        Species.CALYREX,
-        Species.URSHIFU,
-        Species.OGERPON,
-        Species.OKIDOGI,
-        Species.MUNKIDORI,
-        Species.FEZANDIPITI,
+        SpeciesId.COSMOG,
+        SpeciesId.MELTAN,
+        SpeciesId.KUBFU,
+        SpeciesId.COSMOEM,
+        SpeciesId.TERAPAGOS,
+        SpeciesId.TYPE_NULL,
+        SpeciesId.CALYREX,
+        SpeciesId.URSHIFU,
+        SpeciesId.OGERPON,
+        SpeciesId.OKIDOGI,
+        SpeciesId.MUNKIDORI,
+        SpeciesId.FEZANDIPITI,
       ];
       return bstInRange && validBst && !EXCLUDED_TRANSFORMATION_SPECIES.includes(s.speciesId);
     });
@@ -597,7 +599,7 @@ function getTransformedSpecies(
     if (validSpecies?.length > 20) {
       validSpecies = randSeedShuffle(validSpecies);
       newSpecies = validSpecies.pop();
-      while (isNullOrUndefined(newSpecies) || alreadyUsedSpecies.includes(newSpecies)) {
+      while (isNil(newSpecies) || alreadyUsedSpecies.includes(newSpecies)) {
         newSpecies = validSpecies.pop();
       }
     } else {
@@ -699,7 +701,7 @@ function doSideBySideTransformations(transformations: PokemonTransformation[]) {
  */
 async function addEggMoveToNewPokemonMoveset(
   newPokemon: PlayerPokemon,
-  speciesRootForm: Species,
+  speciesRootForm: SpeciesId,
   forBattle: boolean = false,
 ): Promise<number | null> {
   let eggMoveIndex: null | number = null;
@@ -707,12 +709,12 @@ async function addEggMoveToNewPokemonMoveset(
   if (eggMoves) {
     const eggMoveIndices = randSeedShuffle([0, 1, 2, 3]);
     let randomEggMoveIndex = eggMoveIndices.pop();
-    let randomEggMove = !isNullOrUndefined(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
+    let randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
     let retries = 0;
     while (retries < 3 && (!randomEggMove || newPokemon.moveset.some((m) => m.moveId === randomEggMove))) {
       // If Pokemon already knows this move, roll for another egg move
       randomEggMoveIndex = eggMoveIndices.pop();
-      randomEggMove = !isNullOrUndefined(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
+      randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
       retries++;
     }
 
@@ -727,11 +729,7 @@ async function addEggMoveToNewPokemonMoveset(
       }
 
       // For pokemon that the player owns (including ones just caught), unlock the egg move
-      if (
-        !forBattle
-        && !isNullOrUndefined(randomEggMoveIndex)
-        && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
-      ) {
+      if (!forBattle && !isNil(randomEggMoveIndex) && globalScene.gameData.dexData[speciesRootForm].caughtAttr > 0) {
         await globalScene.gameData.setEggMoveUnlocked(
           getPokemonSpecies(speciesRootForm),
           randomEggMoveIndex,

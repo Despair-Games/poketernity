@@ -1,3 +1,8 @@
+import type { PostStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-stat-stage-change-ab-attr";
+import type { ProtectStatAbAttr } from "#app/data/abilities/ab-attrs/protect-stat-ab-attr";
+import type { ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
+import type { StatStageChangeCopyAbAttr } from "#app/data/abilities/ab-attrs/stat-stage-change-copy-ab-attr";
+import type { StatStageChangeMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-stage-change-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -6,8 +11,8 @@ import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { CANVAS_SCALE } from "#app/ui-constants";
-import { BooleanHolder, NumberHolder } from "#app/utils";
+import { CANVAS_SCALE } from "#app/constants/ui-constants";
+import { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -20,11 +25,12 @@ import i18next from "i18next";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
-interface SSCPhaseOptions {
+export interface SSCPhaseOptions {
   showMessage?: boolean;
   ignoreAbilities?: boolean;
   canBeCopied?: boolean;
   bypassReflect?: boolean;
+  isStickyWeb?: boolean;
   onChange?: StatStageChangeCallback;
 }
 
@@ -43,6 +49,13 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly onChange?: StatStageChangeCallback;
   private readonly options: SSCPhaseOptions;
 
+  /**
+   * Sticky Web has an edge case where its source gets ignored by Defiant/Competitive, but not Mirror Armor.
+   *
+   * TODO: Do other effects (Mist, Clear Body, etc.) also ignore the source of Sticky Web?
+   */
+  protected readonly isStickyWeb: boolean;
+
   constructor(
     battlerIndex: BattlerIndex,
     source: Pokemon | null,
@@ -53,6 +66,7 @@ export class StatStageChangePhase extends PokemonPhase {
       ignoreAbilities = false,
       canBeCopied = true,
       bypassReflect = false,
+      isStickyWeb = false,
       onChange,
     }: SSCPhaseOptions = {},
   ) {
@@ -65,6 +79,7 @@ export class StatStageChangePhase extends PokemonPhase {
     this.ignoreAbilities = ignoreAbilities;
     this.canBeCopied = canBeCopied;
     this.bypassReflect = bypassReflect;
+    this.isStickyWeb = isStickyWeb;
     this.onChange = onChange;
     this.options = { showMessage, ignoreAbilities, canBeCopied, bypassReflect, onChange };
   }
@@ -81,7 +96,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
     if (!this.ignoreAbilities && !this.bypassReflect) {
       const reflected = new BooleanHolder(false);
-      applyAbAttrs(
+      applyAbAttrs<ReflectStatStageChangeAbAttr>(
         AbAttrFlag.REFLECT_STAT_STAGE_CHANGE,
         pokemon,
         false,
@@ -99,7 +114,7 @@ export class StatStageChangePhase extends PokemonPhase {
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
-        globalScene.unshiftPhase(
+        globalScene.phaseManager.unshiftPhase(
           new StatStageChangePhase(this.battlerIndex, this.source, stat, this.stages, this.options),
         );
       }
@@ -109,7 +124,7 @@ export class StatStageChangePhase extends PokemonPhase {
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
+      applyAbAttrs<StatStageChangeMultiplierAbAttr>(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
     }
 
     let simulate = false;
@@ -122,7 +137,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {
-        applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
+        applyAbAttrs<ProtectStatAbAttr>(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -156,7 +171,7 @@ export class StatStageChangePhase extends PokemonPhase {
           messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
         }
         for (const message of messages) {
-          globalScene.queueMessage(message);
+          globalScene.phaseManager.queueMessagePhase(message);
         }
       }
 
@@ -180,17 +195,32 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
-          applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_COPY, opponent, false, this.stats, stages.value);
+          applyAbAttrs<StatStageChangeCopyAbAttr>(
+            AbAttrFlag.STAT_STAGE_CHANGE_COPY,
+            opponent,
+            false,
+            this.stats,
+            stages.value,
+          );
         }
       }
 
-      applyAbAttrs(AbAttrFlag.POST_STAT_STAGE_CHANGE, pokemon, false, filteredStats, this.stages, selfTarget);
+      applyAbAttrs<PostStatStageChangeAbAttr>(
+        AbAttrFlag.POST_STAT_STAGE_CHANGE,
+        pokemon,
+        false,
+        filteredStats,
+        this.stages,
+        this.source,
+        this.isStickyWeb,
+      );
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
-      const existingPhase = globalScene.findPhase(
+      const phaseExists = globalScene.phaseManager.hasPhase(
         (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
+        true,
       );
-      if (!existingPhase) {
+      if (!phaseExists) {
         // Apply White Herb if needed
         const whiteHerb = globalScene.applyModifier(
           ResetNegativeStatStageModifier,

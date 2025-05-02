@@ -1,7 +1,6 @@
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -23,10 +22,10 @@ describe("Moves - Foresight", () => {
     game = new GameManager(phaserGame);
     game.override
       .disableCrits()
-      .enemySpecies(Species.GASTLY)
+      .enemySpecies(SpeciesId.GASTLY)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(5)
-      .starterSpecies(Species.MAGIKARP)
+      .starterSpecies(SpeciesId.MAGIKARP)
       .moveset([MoveId.FORESIGHT, MoveId.QUICK_ATTACK, MoveId.MACH_PUNCH]);
   });
 
@@ -48,7 +47,7 @@ describe("Moves - Foresight", () => {
     enemy.hp = enemy.getMaxHp();
 
     game.move.select(MoveId.MACH_PUNCH);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
   });
@@ -63,7 +62,7 @@ describe("Moves - Foresight", () => {
     game.move.select(MoveId.FORESIGHT);
     await game.toNextTurn();
     game.move.select(MoveId.QUICK_ATTACK);
-    await game.phaseInterceptor.to(MoveEffectPhase);
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(pokemon.getAccuracyMultiplier).toHaveReturnedWith(1);
   });

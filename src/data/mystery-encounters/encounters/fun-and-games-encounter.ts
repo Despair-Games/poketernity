@@ -11,15 +11,15 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { TrainerSlot } from "#enums/trainer-slot";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerGender } from "#enums/player-gender";
@@ -29,7 +29,7 @@ import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-tr
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { Nature } from "#enums/nature";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { settings } from "#app/system/settings/settings-manager";
 
@@ -92,7 +92,7 @@ export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.wi
   .withOnInit(() => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
     globalScene.loadBgm("mystery_encounter_fun_and_games", "mystery_encounter_fun_and_games.mp3");
-    encounter.setDialogueToken("wobbuffetName", getPokemonSpecies(Species.WOBBUFFET).getName());
+    encounter.setDialogueToken("wobbuffetName", getPokemonSpecies(SpeciesId.WOBBUFFET).getName());
     return true;
   })
   .withOnVisualsStart(() => {
@@ -206,7 +206,7 @@ async function summonPlayerPokemon() {
     });
 
     // Also loads Wobbuffet data (cannot be shiny)
-    const enemySpecies = getPokemonSpecies(Species.WOBBUFFET);
+    const enemySpecies = getPokemonSpecies(SpeciesId.WOBBUFFET);
     globalScene.currentBattle.enemyParty = [];
     const wobbuffet = globalScene.addEnemyPokemon(
       enemySpecies,
@@ -396,13 +396,13 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
                 pokemon.resetSummonData();
                 globalScene.time.delayedCall(1000, () => {
                   if (pokemon.isShiny()) {
-                    globalScene.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+                    globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
                   }
 
                   pokemon.resetTurnData();
 
                   globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
-                  globalScene.pushPhase(new PostSummonPhase(pokemon.getBattlerIndex()));
+                  globalScene.phaseManager.pushPhase(new PostSummonPhase(pokemon.getBattlerIndex()));
                   resolve();
                 });
               },

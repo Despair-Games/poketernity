@@ -1,48 +1,48 @@
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import * as MoveAnimUtils from "#app/utils/move-anim-utils";
+import type BattleScene from "#app/battle-scene";
 import * as InitMoveAnim from "#app/data/init/init-move-anim";
+import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  runMysteryEncounterToEnd,
-  skipBattleRunMysteryEncounterRewardsPhase,
-} from "#test/mystery-encounter/encounter-test-utils";
-import { MoveId } from "#enums/move-id";
-import type BattleScene from "#app/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { UiMode } from "#enums/ui-mode";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { ModifierTier } from "#enums/modifier-tier";
-import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
-import { TrainerType } from "#enums/trainer-type";
-import { Abilities } from "#enums/abilities";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { Button } from "#enums/buttons";
-import type PartyUiHandler from "#app/ui/party-ui-handler";
-import type ConfirmUiHandler from "#app/ui/confirm-ui-handler";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { BerryType } from "#enums/berry-type";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { ElementalType } from "#enums/elemental-type";
 import { CommandPhase } from "#app/phases/command-phase";
-import { type MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
+import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import * as MoveAnimUtils from "#app/utils/move-anim-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { AbilityId } from "#enums/ability-id";
+import { BerryType } from "#enums/berry-type";
+import { BiomeId } from "#enums/biome-id";
+import { Button } from "#enums/buttons";
+import { ElementalType } from "#enums/elemental-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PhaseId } from "#enums/phase-id";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
+import { UiMode } from "#enums/ui-mode";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+  skipBattleRunMysteryEncounterRewardsPhase,
+} from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/clowningAround";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("Clowning Around - Mystery Encounter", () => {
@@ -57,13 +57,10 @@ describe("Clowning Around - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
+      new Map<BiomeId, MysteryEncounterType[]>([[BiomeId.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
     );
   });
 
@@ -117,33 +114,33 @@ describe("Clowning Around - Mystery Encounter", () => {
     expect(config.doubleBattle).toBe(true);
     expect(config.trainerConfig?.trainerType).toBe(TrainerType.HARLEQUIN);
     expect(config.pokemonConfigs?.[0]).toEqual({
-      species: getPokemonSpecies(Species.MR_MIME),
+      species: getPokemonSpecies(SpeciesId.MR_MIME),
       isBoss: true,
       moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
     });
     expect(config.pokemonConfigs?.[1]).toEqual({
-      species: getPokemonSpecies(Species.BLACEPHALON),
+      species: getPokemonSpecies(SpeciesId.BLACEPHALON),
       customPokemonData: expect.anything(),
       isBoss: true,
       moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
     });
     expect(config.pokemonConfigs?.[1].customPokemonData?.types.length).toBe(2);
     expect([
-      Abilities.STURDY,
-      Abilities.PICKUP,
-      Abilities.INTIMIDATE,
-      Abilities.GUTS,
-      Abilities.DROUGHT,
-      Abilities.DRIZZLE,
-      Abilities.SNOW_WARNING,
-      Abilities.SAND_STREAM,
-      Abilities.ELECTRIC_SURGE,
-      Abilities.PSYCHIC_SURGE,
-      Abilities.GRASSY_SURGE,
-      Abilities.MISTY_SURGE,
-      Abilities.MAGICIAN,
-      Abilities.SHEER_FORCE,
-      Abilities.PRANKSTER,
+      AbilityId.STURDY,
+      AbilityId.PICKUP,
+      AbilityId.INTIMIDATE,
+      AbilityId.GUTS,
+      AbilityId.DROUGHT,
+      AbilityId.DRIZZLE,
+      AbilityId.SNOW_WARNING,
+      AbilityId.SAND_STREAM,
+      AbilityId.ELECTRIC_SURGE,
+      AbilityId.PSYCHIC_SURGE,
+      AbilityId.GRASSY_SURGE,
+      AbilityId.MISTY_SURGE,
+      AbilityId.MAGICIAN,
+      AbilityId.SHEER_FORCE,
+      AbilityId.PRANKSTER,
     ]).toContain(config.pokemonConfigs?.[1].customPokemonData?.ability);
     expect(ClowningAroundEncounter.misc.ability).toBe(config.pokemonConfigs?.[1].customPokemonData?.ability);
     await vi.waitFor(() => expect(moveInitSpy).toHaveBeenCalled());
@@ -169,22 +166,22 @@ describe("Clowning Around - Mystery Encounter", () => {
     });
 
     it("should start double battle against the clown", async () => {
-      const phaseSpy = vi.spyOn(scene, "pushPhase");
+      const phaseSpy = vi.spyOn(scene.phaseManager, "pushPhase");
 
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(2);
-      expect(enemyField[0].species.speciesId).toBe(Species.MR_MIME);
+      expect(enemyField[0].species.speciesId).toBe(SpeciesId.MR_MIME);
       expect(enemyField[0].moveset).toEqual([
         new PokemonMove(MoveId.TEETER_DANCE),
         new PokemonMove(MoveId.ALLY_SWITCH),
         new PokemonMove(MoveId.DAZZLING_GLEAM),
         new PokemonMove(MoveId.PSYCHIC),
       ]);
-      expect(enemyField[1].species.speciesId).toBe(Species.BLACEPHALON);
+      expect(enemyField[1].species.speciesId).toBe(SpeciesId.BLACEPHALON);
       expect(enemyField[1].moveset).toEqual([
         new PokemonMove(MoveId.TRICK),
         new PokemonMove(MoveId.HYPNOSIS),
@@ -199,13 +196,26 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
     });
 
+    it("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {
+      // Prevent test from failing due to the clown randomly picking the ability Sturdy
+      game.override.startingLevel(1000).enemyAbility(AbilityId.BALL_FETCH);
+
+      await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, [SpeciesId.FEEBAS]);
+      await runSelectMysteryEncounterOption(game, 1);
+
+      game.move.use(MoveId.DAZZLING_GLEAM);
+      await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
+
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.ME_REWARDS), true)).toBe(false);
+    });
+
     it("should let the player gain the ability after battle completion", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase");
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
       game.onNextPrompt("PostMysteryEncounterPhase", UiMode.MESSAGE, () => {
@@ -214,24 +224,24 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       // Run to ability train option selection
       const confirmUiHandler = game.scene.ui.handlers[UiMode.CONFIRM] as ConfirmUiHandler;
-      vi.spyOn(confirmUiHandler, "show");
+      vi.spyOn(confirmUiHandler, "start");
       const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
-      vi.spyOn(partyUiHandler, "show");
+      vi.spyOn(partyUiHandler, "start");
       game.endPhase();
-      await game.phaseInterceptor.to(PostMysteryEncounterPhase);
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
+      await game.phaseInterceptor.to("PostMysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
 
       // Wait for Yes/No confirmation to appear
-      await vi.waitFor(() => expect(confirmUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(confirmUiHandler.start).toHaveBeenCalled());
       // Select "Yes" on train ability
       confirmUiHandler.processInput(Button.ACTION);
       // Select first pokemon in party to train
-      await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(partyUiHandler.start).toHaveBeenCalled());
       partyUiHandler.processInput(Button.ACTION);
       // Click "Select" on Pokemon
       partyUiHandler.processInput(Button.ACTION);
       // Stop next battle before it runs
-      await game.phaseInterceptor.to(NewBattlePhase, false);
+      await game.phaseInterceptor.to("NewBattlePhase", false);
 
       const leadPokemon = scene.getPlayerParty()[0];
       expect(leadPokemon.customPokemonData?.ability).toBe(abilityToTrain);

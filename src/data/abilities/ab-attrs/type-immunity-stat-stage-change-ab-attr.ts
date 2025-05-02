@@ -3,7 +3,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import type { BattleStat } from "#enums/stat";
 import type { ElementalType } from "#enums/elemental-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
@@ -32,7 +32,7 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message
       if (!simulated) {
-        globalScene.unshiftPhase(
+        globalScene.phaseManager.unshiftPhase(
           new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [this.stat], this.stages),
         );
       }

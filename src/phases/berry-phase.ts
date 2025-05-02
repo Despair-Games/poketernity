@@ -1,15 +1,17 @@
+import type { HealFromBerryUseAbAttr } from "#app/data/abilities/ab-attrs/heal-from-berry-use-ab-attr";
+import type { PreventBerryUseAbAttr } from "#app/data/abilities/ab-attrs/prevent-berry-use-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { BooleanHolder } from "#app/utils";
-import i18next from "i18next";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
+import i18next from "i18next";
 
 /**
  * The phase after attacks where the pokemon eat berries
@@ -28,15 +30,17 @@ export class BerryPhase extends FieldPhase {
 
       if (hasUsableBerry) {
         const cancelled = new BooleanHolder(false);
-        pokemon.getOpponents().map((opp) => applyAbAttrs(AbAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
+        pokemon
+          .getOpponents()
+          .map((opp) => applyAbAttrs<PreventBerryUseAbAttr>(AbAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
 
         if (cancelled.value) {
-          globalScene.queueMessage(
+          globalScene.phaseManager.queueMessagePhase(
             i18next.t("abilityTriggers:preventBerryUse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
           );
         } else {
-          globalScene.unshiftPhase(
-            new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.USE_ITEM),
+          globalScene.phaseManager.unshiftPhase(
+            new CommonAnimPhase(CommonAnim.USE_ITEM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
           );
 
           for (const berryModifier of globalScene.applyModifiers(BerryModifier, pokemon.isPlayer(), pokemon)) {
@@ -49,7 +53,7 @@ export class BerryPhase extends FieldPhase {
 
           globalScene.updateModifiers(pokemon.isPlayer());
 
-          applyAbAttrs(AbAttrFlag.HEAL_FROM_BERRY_USE, pokemon, false);
+          applyAbAttrs<HealFromBerryUseAbAttr>(AbAttrFlag.HEAL_FROM_BERRY_USE, pokemon, false);
         }
       }
     });

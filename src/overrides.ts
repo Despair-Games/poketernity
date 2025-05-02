@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { type PokeballCounts } from "#app/battle-scene";
+import type { PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
-import { type ModifierOverride } from "#app/modifier/modifier-type";
-import { Abilities } from "#enums/abilities";
+import type { Arena } from "#app/field/arena";
+import type { ModifierOverride } from "#app/modifier/modifier-type";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { EggTier } from "#enums/egg-type";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -14,11 +15,13 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
@@ -26,7 +29,7 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
  * {@linkcode BerryType}, {@linkcode ElementalType}, {@linkcode EvolutionItem}
- * {@linkcode FormChangeItem}, {@linkcode Stat}
+ * {@linkcode FormChangeItem}, {@linkcode Stat}, {@linkcode Arena}
  */
 /**
  * Overrides that are used to test different in game situations
@@ -38,8 +41,8 @@ import { WeatherType } from "#enums/weather-type";
  * @example
  * ```
  * const overrides = {
- *   ABILITY_OVERRIDE: Abilities.PROTEAN,
- *   PASSIVE_ABILITY_OVERRIDE: Abilities.PIXILATE,
+ *   ABILITY_OVERRIDE: AbilityId.PROTEAN,
+ *   PASSIVE_ABILITY_OVERRIDE: AbilityId.PIXILATE,
  * }
  * ```
  */
@@ -59,7 +62,33 @@ class DefaultOverrides {
 
   /** a specific seed (default: a random string of 24 characters) */
   readonly SEED_OVERRIDE: string = "";
+  /**
+   * Overrides the weather
+   */
   readonly WEATHER_OVERRIDE: WeatherType = WeatherType.NONE;
+  /**
+   * Override the new weather duration. 
+   * **Will ALSO affect primal weathers!**
+   * **Can NOT be combined with {@linkcode WEATHER_OVERRIDE}!**
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the weather should last
+   * @see {@linkcode Arena.trySetWeather}
+   */
+  readonly NEW_WEATHER_DURATION_OVERRIDE: number = -1;
+  /**
+   * Overrides the terrain
+   */
+  readonly TERRAIN_OVERRIDE: TerrainType = TerrainType.NONE;
+  /**
+   * Override the new terrain duration.
+   * **Can NOT be combined with {@linkcode TERRAIN_OVERRIDE}!**
+   * - `-1` to disable the override
+   * - `0` for "infinite" duration
+   * - `>= 1` to set the number of turns the terrain should last
+   * @see {@linkcode Arena.trySetTerrain}
+   */
+  readonly NEW_TERRAIN_DURATION_OVERRIDE: number = -1;
   /**
    * Determines the override for battle types.
    *
@@ -76,10 +105,12 @@ class DefaultOverrides {
    */
   readonly BATTLE_TYPE_OVERRIDE: BattleStyle | null = null;
   readonly STARTING_WAVE_OVERRIDE: number = 0;
-  readonly STARTING_BIOME_OVERRIDE: Biome = Biome.TOWN;
+  readonly STARTING_BIOME_OVERRIDE: BiomeId = BiomeId.TOWN;
   readonly ARENA_TINT_OVERRIDE: TimeOfDay | null = null;
   /** Multiplies XP gained by this value including 0. Set to null to ignore the override */
   readonly XP_MULTIPLIER_OVERRIDE: number | null = null;
+  /** Overrides the level cap to the number specified if greater than `0`. Negative numbers will disable the cap entirely. */
+  readonly LEVEL_CAP_OVERRIDE: number = 0;
   readonly NEVER_CRIT_OVERRIDE: boolean = false;
   /** default 1000 */
   readonly STARTING_MONEY_OVERRIDE: number = 0;
@@ -121,11 +152,11 @@ class DefaultOverrides {
    * @example
    * ```
    * const STARTER_FORM_OVERRIDES = {
-   *   [Species.DARMANITAN]: 1
+   *   [SpeciesId.DARMANITAN]: 1
    * }
    * ```
    */
-  readonly STARTER_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+  readonly STARTER_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
 
   /** default 5 or 20 for Daily */
   readonly STARTING_LEVEL_OVERRIDE: number = 0;
@@ -133,11 +164,11 @@ class DefaultOverrides {
    * SPECIES OVERRIDE
    * will only apply to the first starter in your party or each enemy pokemon
    * default is 0 to not override
-   * @example SPECIES_OVERRIDE = Species.Bulbasaur;
+   * @example SPECIES_OVERRIDE = SpeciesId.Bulbasaur;
    */
-  readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
-  readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly STARTER_SPECIES_OVERRIDE: SpeciesId | number = 0;
+  readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly GENDER_OVERRIDE: Gender | null = null;
   readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
@@ -148,17 +179,17 @@ class DefaultOverrides {
   // ENEMY OVERRIDES
   // --------------------------
 
-  readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
+  readonly ENEMY_SPECIES_OVERRIDE: SpeciesId | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
-  readonly ENEMY_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly ENEMY_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
   readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
-  readonly ENEMY_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+  readonly ENEMY_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
   /**
    * Override to give the enemy Pokemon a given amount of health segments
    *
@@ -249,23 +280,34 @@ class DefaultOverrides {
    * If more entries are listed than rolled, only the first X entries will be used, where X is the number of items rolled.
    *
    * Note that, for all items in the array, `count` is not used.
-   * 
+   *
    * @example
    * ```
    * // Attempts to make the first item reward a rarer candy, the second one a dynamax band, and the third a rare evolution item
    * ITEM_REWARD_OVERRIDE: [{ name: "RARER_CANDY" }, { name: "DYNAMAX_BAND" }, { name: "RARE_EVOLUTION_ITEM" }]
-   * 
+   *
    * // Example of a vitamin that boosts def (Iron)
    * ITEM_REWARD_OVERRIDE: [{ name: "BASE_STAT_BOOSTER", type: Stat.DEF }]
-   * 
+   *
    * // Example of a type boosting item (Charcoal)
    * { name: "ATTACK_TYPE_BOOSTER", type: ElementalType.FIRE }
    * ```
    */
   readonly ITEM_REWARD_OVERRIDE: ModifierOverride[] = [];
 
-  /** If `true`, disable all non-scripted enemy trainer encounters. */
-  readonly DISABLE_RANDOM_TRAINERS_OVERRIDE: boolean = false;
+  /**
+   * Possible values:
+   * - `null`: Ignore this override; each biome uses its normal trainer rate.
+   * - `0`: Disable all non-scripted enemy trainer encounters.
+   * - Positive number `n`: Sets the chance of a non-scripted enemy trainer encounter to be 1/n.
+   *
+   * CAUTION: This function does not disable any rules that may prevent trainer spawns
+   * (e.g., The rule requiring trainers to be 3 waves apart, and the rule preventing trainer spawns on wave X1).
+   */
+  readonly RANDOM_TRAINER_CHANCE_OVERRIDE: number | null = null;
+
+  /** If not `null`, force all non-scripted enemy trainer encounters to be of this trainer type. */
+  readonly TRAINER_TYPE_OVERRIDE: TrainerType | null = null;
 }
 
 export const defaultOverrides = new DefaultOverrides();

@@ -1,20 +1,20 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { type handleMysteryEncounterBattleStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { type TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { handleMysteryEncounterBattleStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { TurnEndPhase } from "#app/phases/turn-end-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { SwitchType } from "#enums/switch-type";
 import { PhaseId } from "#enums/phase-id";
+import { SwitchType } from "#enums/switch-type";
 
 /**
  * Runs at the beginning of an Encounter's battle.
@@ -55,8 +55,8 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     });
 
     // Remove any status tick phases
-    while (globalScene.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
-      globalScene.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
+    while (globalScene.phaseManager.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
+      globalScene.phaseManager.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
     }
 
     /** The total number of Pokemon in the player's party that can legally fight */
@@ -64,7 +64,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     /** The total number of legal player Pokemon that aren't currently on the field */
     const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
-      globalScene.gameOver({ clearPhaseQueue: false });
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
       return this.end();
     }
 
@@ -73,13 +73,13 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const playerField = globalScene.getPlayerField();
     playerField.forEach((pokemon, i) => {
       if (!pokemon.isAllowedInBattle() && legalPlayerPartyPokemon.length > i) {
-        globalScene.unshiftPhase(new SwitchPhase(SwitchType.SWITCH, i, true, false));
+        globalScene.phaseManager.unshiftPhase(new SwitchPhase(SwitchType.SWITCH, i, true, false));
       }
     });
 
     // THEN, if is a double battle, and player only has 1 summoned pokemon, center pokemon on field
     if (globalScene.currentBattle.double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
-      globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
+      globalScene.phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
     }
 
     this.end();

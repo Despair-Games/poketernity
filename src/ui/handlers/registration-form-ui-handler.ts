@@ -1,0 +1,119 @@
+import { globalScene } from "#app/global-scene";
+import { api } from "#app/plugins/api/api";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
+
+export class RegistrationFormUiHandler extends FormModalUiHandler {
+  constructor() {
+    super(UiMode.REGISTRATION_FORM, TextStyle.REGISTRATION_FORM_LABEL, TextStyle.REGISTRATION_FORM_ERROR);
+  }
+
+  protected override getModalTitle(): string {
+    return i18next.t("menu:register");
+  }
+
+  protected override getWidth(): number {
+    return 160;
+  }
+
+  protected override getMargin(): [number, number, number, number] {
+    return [0, 0, 48, 0];
+  }
+
+  protected override getButtonTopMargin(): number {
+    return 8;
+  }
+
+  protected override getButtonLabels(): string[] {
+    return [i18next.t("menu:register"), i18next.t("menu:backToLogin")];
+  }
+
+  protected override getReadableErrorMessage(error: string): string {
+    const colonIndex = error?.indexOf(":");
+    if (colonIndex > 0) {
+      error = error.slice(0, colonIndex);
+    }
+    switch (error) {
+      case "empty username":
+        return i18next.t("menu:emptyUsername");
+      case "invalid username":
+        return i18next.t("menu:invalidRegisterUsername");
+      case "invalid password":
+        return i18next.t("menu:invalidRegisterPassword");
+      case "password doesn't match":
+        return i18next.t("menu:passwordNotMatchingConfirmPassword");
+      case "failed to add account record":
+        return i18next.t("menu:usernameAlreadyUsed");
+    }
+
+    return super.getReadableErrorMessage(error);
+  }
+
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
+    const inputFieldConfigs: InputFieldConfig[] = [];
+    inputFieldConfigs.push({ label: i18next.t("menu:username") });
+    inputFieldConfigs.push({ label: i18next.t("menu:password"), isPassword: true });
+    inputFieldConfigs.push({ label: i18next.t("menu:confirmPassword"), isPassword: true });
+    return inputFieldConfigs;
+  }
+
+  protected override setup(): void {
+    super.setup();
+
+    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.REGISTRATION_FORM_WARNING);
+
+    this.modalContainer.add(label);
+  }
+
+  public override show(config: ModalConfig): boolean {
+    if (!super.show(config)) {
+      return false;
+    }
+
+    const originalRegistrationAction = this.submitAction;
+    this.submitAction = (_) => {
+      // Prevent overlapping overrides on action modification
+      this.submitAction = originalRegistrationAction;
+      this.sanitizeInputs();
+      globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
+      const onFail = (error: string) => {
+        const message = this.getReadableErrorMessage(error);
+        globalScene.ui.setMode<RegistrationFormUiHandler>(
+          UiMode.REGISTRATION_FORM,
+          Object.assign(config, { errorMessage: message.trim() }),
+        );
+        globalScene.ui.playError();
+      };
+      if (!this.inputs[0].text) {
+        return onFail("empty username");
+      }
+      if (!this.inputs[1].text) {
+        return onFail("invalid password");
+      }
+      if (this.inputs[1].text !== this.inputs[2].text) {
+        return onFail("password doesn't match");
+      }
+      const [usernameInput, passwordInput] = this.inputs;
+      api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {
+        if (!registerError) {
+          api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
+            if (!loginError) {
+              originalRegistrationAction && originalRegistrationAction();
+            } else {
+              onFail(loginError);
+            }
+          });
+        } else {
+          onFail(registerError);
+        }
+      });
+    };
+
+    return true;
+  }
+}

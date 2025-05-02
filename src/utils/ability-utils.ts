@@ -1,27 +1,31 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { type Pokemon } from "#app/field/pokemon";
+import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
+import { TERA_MOVES } from "#app/constants/move-constants";
+import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { Abilities } from "#enums/abilities";
-import { Species } from "#enums/species";
+import { AbilityId } from "#enums/ability-id";
+import { ElementalType } from "#enums/elemental-type";
+import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
 
 /**
- * Returns the Pokemon with weather-based forms
+ * @returns An array of Pokemon with weather-based forms
  */
-export function getPokemonWithWeatherBasedForms() {
+export function getPokemonWithWeatherBasedForms(): Pokemon[] {
   return globalScene
     .getField(true)
     .filter(
       (p) =>
-        (p.hasAbility(Abilities.FORECAST) && p.species.speciesId === Species.CASTFORM)
-        || (p.hasAbility(Abilities.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM),
+        (p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === SpeciesId.CASTFORM)
+        || (p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === SpeciesId.CHERRIM),
     );
 }
 
 export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
-  globalScene.clearPhaseQueueSplice();
+  globalScene.phaseManager.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
+  globalScene.phaseManager.clearPhaseQueueSplice();
 }
 
 export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
@@ -36,22 +40,27 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
+/** Used for Aerialate, Refrigerate, Pixilate, Galvanize */
+export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
+  move?.type === ElementalType.NORMAL
+  && (!move.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized));
+
 /** Abilities perceived by the Enemy AI to have high value */
-export const highValueAbilities: Readonly<Abilities[]> = [
-  Abilities.WONDER_GUARD,
-  Abilities.DESOLATE_LAND,
-  Abilities.PRIMORDIAL_SEA,
-  Abilities.HUGE_POWER,
-  Abilities.PURE_POWER,
-  Abilities.CONTRARY,
+export const highValueAbilities: Readonly<AbilityId[]> = [
+  AbilityId.WONDER_GUARD,
+  AbilityId.DESOLATE_LAND,
+  AbilityId.PRIMORDIAL_SEA,
+  AbilityId.HUGE_POWER,
+  AbilityId.PURE_POWER,
+  AbilityId.CONTRARY,
 ];
 
 /** Abilities perceived by the Enemy AI to have a detrimental effect on the source */
-export const detrimentalAbilities: Readonly<Abilities[]> = [
-  Abilities.TRUANT,
-  Abilities.WIMP_OUT,
-  Abilities.EMERGENCY_EXIT,
-  Abilities.DEFEATIST,
-  Abilities.KLUTZ,
-  Abilities.SLOW_START,
+export const detrimentalAbilities: Readonly<AbilityId[]> = [
+  AbilityId.TRUANT,
+  AbilityId.WIMP_OUT,
+  AbilityId.EMERGENCY_EXIT,
+  AbilityId.DEFEATIST,
+  AbilityId.KLUTZ,
+  AbilityId.SLOW_START,
 ];

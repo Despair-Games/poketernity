@@ -18,7 +18,9 @@ export class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [stat], this.stages));
+      globalScene.phaseManager.unshiftPhase(
+        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [stat], this.stages),
+      );
     }
     return true;
   }

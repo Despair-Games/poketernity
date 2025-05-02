@@ -1,3 +1,4 @@
+import type { PostBattleAbAttr } from "#app/data/abilities/ab-attrs/post-battle-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -30,17 +31,9 @@ export class BattleEndPhase extends BattlePhase {
       gameData.gameStats.highestEndlessWave = currentBattle.waveIndex + 1;
     }
 
-    if (this.isVictory) {
-      currentBattle.addBattleScore();
-
-      if (currentBattle.trainer) {
-        gameData.gameStats.trainersDefeated++;
-      }
-    }
-
     // Endless graceful end
     if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
-      globalScene.gameOver({ clearPhaseQueue: true, isVictory: true });
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
     }
 
     for (const pokemon of globalScene.getField()) {
@@ -50,19 +43,36 @@ export class BattleEndPhase extends BattlePhase {
     }
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyAbAttrs(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
+      applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
     }
 
-    if (currentBattle.moneyScattered) {
-      currentBattle.pickUpScatteredMoney();
+    if (this.isVictory) {
+      currentBattle.addBattleScore();
+
+      if (currentBattle.trainer) {
+        gameData.gameStats.trainersDefeated++;
+      }
+
+      /**
+       * Custom behavior that differs slightly from mainline
+       * Will award money on defeating foe
+       * Will award money on capturing foe
+       * Will NOT award money on forcing foe to flee
+       * Will NOT award money if foe flees
+       */
+      if (currentBattle.moneyScattered) {
+        currentBattle.pickUpScatteredMoney();
+      }
     }
 
     globalScene.clearEnemyHeldItemModifiers();
 
-    try {
-      globalScene.getEnemyParty().forEach((p) => p.destroy());
-    } catch {
-      console.warn("Unable to destroy stale pokemon objects in BattleEndPhase.");
+    for (const p of globalScene.getEnemyParty()) {
+      try {
+        p.destroy();
+      } catch {
+        console.warn("Unable to destroy stale pokemon object in BattleEndPhase:", p);
+      }
     }
 
     const lapsingModifiers = globalScene.findModifiers(

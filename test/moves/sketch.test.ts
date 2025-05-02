@@ -1,9 +1,9 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveResult } from "#enums/move-result";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#enums/status-effect";
@@ -28,23 +28,23 @@ describe("Moves - Sketch", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SHUCKLE)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("Sketch should not fail even if a previous Sketch failed to retrieve a valid move and ran out of PP", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     // can't use normal moveset override because we need to check moveset changes
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.SKETCH)];
 
     game.move.select(MoveId.SKETCH);
     await game.toEndOfTurn();
-    expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
     const moveSlot0 = playerPokemon.getMoveset()[0]!;
     expect(moveSlot0.moveId).toBe(MoveId.SKETCH);
     expect(moveSlot0.getPpRatio()).toBe(0);
@@ -52,14 +52,14 @@ describe("Moves - Sketch", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SKETCH);
     await game.toEndOfTurn();
-    expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.SPLASH);
     expect(playerPokemon.moveset[1]?.moveId).toBe(MoveId.SKETCH);
   });
 
   it("Sketch should retrieve the most recent valid move from its target history", async () => {
     game.override.enemyStatusEffect(StatusEffect.PARALYSIS);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.GROWL)];
@@ -68,14 +68,14 @@ describe("Moves - Sketch", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(false);
     await game.toEndOfTurn();
-    expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
 
     await game.toNextTurn();
     game.move.select(MoveId.SKETCH);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(true);
     await game.toEndOfTurn();
-    expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.SPLASH);
     expect(playerPokemon.moveset[1]?.moveId).toBe(MoveId.GROWL);
   });
@@ -87,7 +87,7 @@ describe("Moves - Sketch", () => {
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FALSE_SWIPE);
 
     game.override.enemyMoveset([MoveId.METRONOME]);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH)];
 
@@ -95,7 +95,7 @@ describe("Moves - Sketch", () => {
     game.move.select(MoveId.SKETCH);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
-    expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.METRONOME);
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp()); // Make sure opponent actually used False Swipe
   });

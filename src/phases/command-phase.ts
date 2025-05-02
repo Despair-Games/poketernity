@@ -1,30 +1,34 @@
+import type { FightCommand } from "#app/@types/FightCommand";
 import type { TurnMove } from "#app/@types/TurnMove";
-import type { TurnCommand } from "#app/turn-command-manager";
-import { type FairyLockTag } from "#app/data/arena-tag";
-import { speciesStarterCosts } from "#app/data/balance/starters";
-import type { EncoreTag } from "#app/data/battler-tags";
-import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
+import type { FairyLockTag } from "#app/data/arena-tag";
+import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
+import type { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/moves/move";
+import { speciesStarterCosts } from "#app/data/starters";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { isNullOrUndefined } from "#app/utils";
+import type { TurnCommand } from "#app/turn-command-manager";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
+import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 
@@ -71,9 +75,12 @@ export class CommandPhase extends FieldPhase {
       if (globalScene.getPlayerField().filter((p) => p.isActive()).length === 1) {
         this.fieldIndex = FieldPosition.CENTER;
       } else {
-        const allyCommand = turnManager.findCommandFromPokemon(pokemon.getAlly());
-        if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
-          return this.end();
+        const allyPokemon = pokemon.getAlly();
+        if (allyPokemon) {
+          const allyCommand = turnManager.findCommandFromPokemon(allyPokemon);
+          if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
+            return this.end();
+          }
         }
       }
     }
@@ -117,15 +124,15 @@ export class CommandPhase extends FieldPhase {
           MoveLockTagTypes.forEach((tagType) => pokemon.lapseTag(tagType));
           this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
-          ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
         }
       }
     } else {
       if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
         ui.clearText();
-        ui.setMode(UiMode.FIGHT, this.fieldIndex);
+        ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
       } else {
-        ui.setMode(UiMode.COMMAND, this.fieldIndex);
+        ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
       }
     }
   }
@@ -138,14 +145,14 @@ export class CommandPhase extends FieldPhase {
    */
   public handleCommand(command: BattleCommand.BALL | BattleCommand.RUN, cursor: number): boolean;
   /**
-   * @param command - {@linkcode BattleCommand.FIGHT}
+   * @param command - Which of {@linkcode BattleCommand.FIGHT} or {@linkcode BattleCommand.TERA} was chosen
    * @param cursor - Cursor index for the selected Move
    * @param ignorePp - (optional) `true` if the move shouldn't use PP
    * @param turnMove - (optional) A {@linkcode TurnMove} object for an existing queued move
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: BattleCommand.FIGHT, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
+  public handleCommand(command: FightCommand, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
   /**
    * @param command - {@linkcode BattleCommand.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon
@@ -163,15 +170,16 @@ export class CommandPhase extends FieldPhase {
 
     const failCatchRunCallback = (): void => {
       ui.showText("", 0);
-      ui.setMode(UiMode.COMMAND, this.fieldIndex);
+      ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
     };
     const failCatchRun = (i18nKey: string): void => {
-      ui.setMode(UiMode.COMMAND, this.fieldIndex);
-      ui.setMode(UiMode.MESSAGE);
+      ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
+      ui.setMessageMode();
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
     switch (command) {
+      case BattleCommand.TERA:
       case BattleCommand.FIGHT:
         const ignorePp = args[0] as boolean | undefined;
         const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
@@ -184,14 +192,14 @@ export class CommandPhase extends FieldPhase {
           } else if (turnMove !== undefined) {
             moveId = turnMove.move.id;
           } else if (cursor > -1) {
-            moveId = pokemon.getMoveset()[cursor]!.moveId;
+            moveId = pokemon.getMoveset()[cursor]?.moveId ?? MoveId.NONE;
           } else {
             moveId = MoveId.NONE;
           }
 
           const turnCommand: TurnCommand = {
             pokemon,
-            command: BattleCommand.FIGHT,
+            command,
             cursor,
             turnMove: {
               move: allMoves.get(moveId),
@@ -215,7 +223,7 @@ export class CommandPhase extends FieldPhase {
             (isFieldTargeted(moveTargets.targets) && double)
             || (moveTargets.targets.length > 1 && moveTargets.multiple)
           ) {
-            globalScene.selectTarget(this.fieldIndex);
+            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
           }
           if (turnCommand.turnMove && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.turnMove.targets = moveTargets.targets;
@@ -226,14 +234,14 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.selectTarget(this.fieldIndex);
+            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
           }
 
           turnManager.addCommand(turnCommand);
           success = true;
         } else if (cursor < pokemon.getMoveset().length) {
           const move = pokemon.getMoveset()[cursor];
-          ui.setMode(UiMode.MESSAGE);
+          ui.setMessageMode();
 
           let errorMessageKey: string;
           if (pokemon.isMoveRestricted(move.moveId, pokemon)) {
@@ -252,7 +260,7 @@ export class CommandPhase extends FieldPhase {
             null,
             () => {
               ui.clearText();
-              ui.setMode(UiMode.FIGHT, this.fieldIndex);
+              ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
             },
             null,
             true,
@@ -265,9 +273,9 @@ export class CommandPhase extends FieldPhase {
             .getEnemyField()
             .filter((p) => p.isActive(true))
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
-          && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
+          && gameData.getStarterCount((d) => d.caughtAttr > 0) < Object.keys(speciesStarterCosts).length - 1;
 
-        if (arena.biomeType === Biome.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
+        if (arena.biomeId === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
           failCatchRun("battle:noPokeballForce");
         } else if (battleType === BattleType.TRAINER) {
           failCatchRun("battle:noPokeballTrainer");
@@ -284,13 +292,13 @@ export class CommandPhase extends FieldPhase {
           } else if (cursor < Object.keys(globalScene.pokeballCounts).length) {
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
 
-            if (isNullOrUndefined(targetPokemon)) {
+            if (isNil(targetPokemon)) {
               console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
               failCatchRun("battle:noPokeballForce");
             } else if (
               targetPokemon.isBoss()
               && targetPokemon.bossSegmentIndex >= 1
-              && !targetPokemon.hasAbility(Abilities.WONDER_GUARD, false, true)
+              && !targetPokemon.hasAbility(AbilityId.WONDER_GUARD, false, true)
               && cursor !== PokeballType.MASTER_BALL
             ) {
               failCatchRun("battle:noPokeballStrong");
@@ -310,7 +318,7 @@ export class CommandPhase extends FieldPhase {
         }
         break;
       case BattleCommand.RUN:
-        if (arena.biomeType === Biome.END || mysteryEncounter?.fleeAllowed === false) {
+        if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
         } else if (
@@ -332,7 +340,7 @@ export class CommandPhase extends FieldPhase {
             () => {
               ui.showText("", 0);
               if (!isSwitch) {
-                ui.setMode(UiMode.COMMAND, this.fieldIndex);
+                ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
               }
             },
             null,
@@ -351,18 +359,18 @@ export class CommandPhase extends FieldPhase {
           }
         } else if (trappedAbMessages.length > 0) {
           if (!isSwitch) {
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
           const trapTag =
             pokemon.getTag<TrappedTag>(...TrappedBattlerTagTypes)
             ?? pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
-          const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
+          const fairyLockTag = arena.findTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {
-            ui.setMode(UiMode.COMMAND, this.fieldIndex);
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
+            ui.setMessageMode();
           }
 
           const getNoEscapeText = (tag?: TrappedTag | SkyDropTag | FairyLockTag) => {
@@ -393,8 +401,8 @@ export class CommandPhase extends FieldPhase {
 
   public cancel(): void {
     if (this.fieldIndex) {
-      globalScene.unshiftPhase(new CommandPhase(0));
-      globalScene.unshiftPhase(new CommandPhase(1));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(0));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(1));
       this.end();
     }
   }
@@ -408,6 +416,6 @@ export class CommandPhase extends FieldPhase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode(UiMode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMessageMode().then(() => super.end());
   }
 }

@@ -1,10 +1,10 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -25,11 +25,11 @@ describe("Moves - Quash", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -49,7 +49,7 @@ describe("Moves - Quash", () => {
   };
 
   it("should force the target to move last", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     setFieldSpeed();
 
@@ -64,9 +64,9 @@ describe("Moves - Quash", () => {
   });
 
   it("should override the target's move priority", async () => {
-    game.override.ability(Abilities.PRANKSTER);
+    game.override.ability(AbilityId.PRANKSTER);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     setFieldSpeed();
 
@@ -85,7 +85,7 @@ describe("Moves - Quash", () => {
   });
 
   it("should fail if the target has already used a move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     setFieldSpeed();
 
@@ -98,12 +98,12 @@ describe("Moves - Quash", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[1].getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
 
   it("should fail if the target is already under the effects of Quash", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     setFieldSpeed();
 
@@ -116,14 +116,14 @@ describe("Moves - Quash", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[0].getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
-    expect(game.scene.getPlayerField()[1].getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[0]).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
     // Both used Quash on the slowest enemy, so turn order should match speed order
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
 
   it("should have its effects overridden by After You", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     setFieldSpeed();
 
@@ -138,7 +138,7 @@ describe("Moves - Quash", () => {
   });
 
   it("if multiple Pokemon are simultaneously affected by Quash, they should move from fastest to slowest", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     setFieldSpeed();
 

@@ -1,25 +1,35 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class IntimidateImmunityAbAttr extends AbAttr {
-  constructor() {
+  protected readonly hasTriggerMessage: boolean;
+
+  constructor(hasTriggerMessage: boolean = true) {
     super(false);
-    this._flags.add(AbAttrFlag.INITIMIDATE_IMMUNITY);
+    this.hasTriggerMessage = hasTriggerMessage;
+
+    this._flags.add(AbAttrFlag.INTIMIDATE_IMMUNITY);
   }
 
   override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
-    cancelled.value = true;
-    return true;
+    if (!cancelled.value) {
+      cancelled.value = true;
+      return true;
+    }
+    return false;
   }
 
   override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:intimidateImmunity", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
+    if (this.hasTriggerMessage) {
+      return i18next.t("abilityTriggers:intimidateImmunity", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        abilityName,
+      });
+    }
+    return "";
   }
 }

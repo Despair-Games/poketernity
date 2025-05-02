@@ -11,7 +11,7 @@ import { PhaseId } from "#enums/phase-id";
 export class EnemyCommandPhase extends FieldPhase {
   override readonly id = PhaseId.ENEMY_COMMAND;
 
-  protected readonly fieldIndex: number;
+  public readonly fieldIndex: number;
 
   constructor(fieldIndex: number) {
     super();
@@ -45,9 +45,5 @@ export class EnemyCommandPhase extends FieldPhase {
     battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);
 
     this.end();
-  }
-
-  public getFieldIndex(): number {
-    return this.fieldIndex;
   }
 }

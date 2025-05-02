@@ -12,12 +12,13 @@ import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
-import type { EnemyPokemon } from "#app/field/pokemon";
-import { PokeballType } from "#enums/pokeball";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { PokeballType } from "#enums/pokeball-type";
 import { PlayerGender } from "#enums/player-gender";
-import { NumberHolder, randSeedInt } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   doPlayerFlee,
@@ -31,7 +32,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { settings } from "#app/system/settings/settings-manager";
 import { ImagesFolder } from "#enums/images-folders";
@@ -274,7 +275,7 @@ async function summonSafariPokemon() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   // Message pokemon remaining
   encounter.setDialogueToken("remainingCount", encounter.misc.safariPokemonRemaining);
-  globalScene.queueMessage(getEncounterText(`${namespace}:safari.remaining_count`) ?? "", null, true);
+  globalScene.phaseManager.queueMessagePhase(getEncounterText(`${namespace}:safari.remaining_count`) ?? "", null, true);
 
   // Generate pokemon using safariPokemonRemaining so they are always the same pokemon no matter how many turns are taken
   // Safari pokemon roll twice on shiny and HA chances, but are otherwise normal
@@ -323,7 +324,7 @@ async function summonSafariPokemon() {
   encounter.misc.pokemon = pokemon;
   encounter.misc.safariPokemonRemaining -= 1;
 
-  globalScene.unshiftPhase(new SummonPhase(0, false));
+  globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
 
   encounter.setDialogueToken("pokemonName", getPokemonNameWithAffix(pokemon));
 
@@ -334,7 +335,7 @@ async function summonSafariPokemon() {
 
   const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
   if (ivScannerModifier) {
-    globalScene.pushPhase(
+    globalScene.phaseManager.pushPhase(
       new ScanIvsPhase(pokemon.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
     );
   }
@@ -559,7 +560,12 @@ async function doEndTurn(cursorIndex: number) {
       leaveEncounterWithoutBattle(true);
     }
   } else {
-    globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", null, null, 1000);
+    globalScene.phaseManager.queueMessagePhase(
+      getEncounterText(`${namespace}:safari.watching`) ?? "",
+      null,
+      null,
+      1000,
+    );
     initSubsequentOptionSelect({
       overrideOptions: safariZoneGameOptions,
       startingCursorIndex: cursorIndex,

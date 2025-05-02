@@ -1,13 +1,12 @@
-import { GameModes } from "#enums/game-modes";
 import { api } from "#app/plugins/api/api";
-import { Biome } from "#enums/biome";
-import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { BiomeId } from "#enums/biome-id";
 import { Button } from "#enums/buttons";
-import { UiMode } from "#enums/ui-mode";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import { UiMode } from "#enums/ui-mode";
+import { GameManager } from "#test/test-utils/gameManager";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Reload", () => {
   let phaserGame: Phaser.Game;
@@ -47,7 +46,7 @@ describe("Reload", () => {
       .startingWave(10)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.dailyMode.startBattle();
@@ -58,7 +57,7 @@ describe("Reload", () => {
       // Input first option for Map
       game.scene.ui.getHandler().processInput(Button.ACTION);
     });
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 
@@ -74,17 +73,17 @@ describe("Reload", () => {
   it("should not have weather inconsistencies after a biome switch", async () => {
     game.override
       .startingWave(10)
-      .startingBiome(Biome.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
+      .startingBiome(BiomeId.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
-      .disableTrainerWaves()
+      .trainerChance(0)
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.classicMode.startBattle(); // Apparently daily mode would override the biome
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.move.select(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 
@@ -150,7 +149,7 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run wave 50 Boss fight", async () => {
     game.override.battleType("single").startingWave(50);
-    await game.runToFinalBossEncounter([Species.BULBASAUR], GameModes.DAILY);
+    await game.dailyMode.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
 
@@ -162,13 +161,13 @@ describe("Reload", () => {
   });
 
   it("should save status effects properly", async () => {
-    game.override.battleType("single").enemySpecies(Species.MAREANIE).enemyMoveset(MoveId.TOXIC);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.battleType("single").enemySpecies(SpeciesId.MAREANIE).enemyMoveset(MoveId.TOXIC);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.TOXIC);

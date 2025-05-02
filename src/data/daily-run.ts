@@ -1,18 +1,17 @@
-import type { Species } from "#enums/species";
-import { globalScene } from "#app/global-scene";
-import { PlayerPokemon } from "#app/field/pokemon";
-import type { Starter } from "#app/ui/starter-select-ui-handler";
-import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
-import type { PokemonSpeciesForm } from "./pokemon-species-form";
+import type { StarterConfig } from "#app/@types/StarterConfig";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import { speciesStarterCosts } from "#app/data/starters";
+import { PlayerPokemon } from "#app/field/player-pokemon";
+import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
+import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import type { SpeciesId } from "#enums/species-id";
 
 export interface DailyRunConfig {
   seed: number;
-  starters: Starter;
+  starters: StarterConfig;
 }
 
 export function fetchDailyRunSeed(): Promise<string | null> {
@@ -23,8 +22,8 @@ export function fetchDailyRunSeed(): Promise<string | null> {
   });
 }
 
-export function getDailyRunStarters(seed: string): Starter[] {
-  const starters: Starter[] = [];
+export function getDailyRunStarters(seed: string): StarterConfig[] {
+  const starters: StarterConfig[] = [];
 
   globalScene.executeWithSeedOffset(
     () => {
@@ -34,7 +33,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
         for (let s = 0; s < 3; s++) {
           const offset = 6 + s * 6;
           const starterSpeciesForm = getPokemonSpeciesForm(
-            parseInt(seed.slice(offset, offset + 4)) as Species,
+            parseInt(seed.slice(offset, offset + 4)) as SpeciesId,
             parseInt(seed.slice(offset + 4, offset + 6)),
           );
           starters.push(getDailyRunStarter(starterSpeciesForm, startingLevel));
@@ -50,7 +49,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
       for (let c = 0; c < starterCosts.length; c++) {
         const cost = starterCosts[c];
         const costSpecies = Object.keys(speciesStarterCosts)
-          .map((s) => parseInt(s) as Species)
+          .map((s) => parseInt(s) as SpeciesId)
           .filter((s) => speciesStarterCosts[s] === cost);
         const randPkmSpecies = getPokemonSpecies(randSeedItem(costSpecies));
         const starterSpecies = getPokemonSpecies(randPkmSpecies.getEnemySpeciesForLevel(startingLevel, true));
@@ -64,7 +63,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
   return starters;
 }
 
-function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: number): Starter {
+function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: number): StarterConfig {
   const starterSpecies =
     starterSpeciesForm.type === "PokemonSpecies"
       ? (starterSpeciesForm as PokemonSpecies)
@@ -82,7 +81,7 @@ function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLeve
     undefined,
     undefined,
   );
-  const starter: Starter = {
+  const starter: StarterConfig = {
     species: starterSpecies,
     dexAttr: pokemon.getDexAttr(),
     abilityIndex: pokemon.abilityIndex,

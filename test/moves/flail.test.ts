@@ -1,14 +1,13 @@
-import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Flail", () => {
   let phaserGame: Phaser.Game;
@@ -32,9 +31,9 @@ describe("Moves - Flail", () => {
       .moveset(MoveId.FLAIL)
       .battleType("single")
       .startingLevel(100)
-      .enemySpecies(Species.SNORLAX)
+      .enemySpecies(SpeciesId.SNORLAX)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
     vi.spyOn(flail, "calculateBattlePower");
   });
@@ -53,7 +52,7 @@ describe("Moves - Flail", () => {
     { hpRatio: 33, expectedBp: 20 },
     { hpRatio: 48, expectedBp: 20 },
   ])("should have $expectedBp base power at ($hpRatio / 48) health", async ({ hpRatio, expectedBp }) => {
-    await game.classicMode.startBattle([Species.BLISSEY]);
+    await game.classicMode.startBattle([SpeciesId.BLISSEY]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMaxHp").mockReturnValue(480);
@@ -62,9 +61,9 @@ describe("Moves - Flail", () => {
     game.move.select(MoveId.FLAIL, 0);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(flail.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
+    expect((game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(flail.id);
+    await game.phaseInterceptor.to("DamageAnimPhase", false);
     expect(flail.calculateBattlePower).toHaveLastReturnedWith(expectedBp);
   });
 });

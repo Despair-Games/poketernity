@@ -1,12 +1,12 @@
 import type { AccountInfoResponse } from "#app/@types/AccountApi";
-import { SESSION_ID_COOKIE } from "#app/constants";
+import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { AccountApi } from "#app/plugins/api/account-api";
-import { getApiBaseUrl } from "#test/testUtils/testUtils";
-import * as Utils from "#app/utils";
-import { setCookie, removeCookie } from "#app/utils";
+import { getApiBaseUrl } from "#test/test-utils/testUtils";
+import * as AppUtils from "#app/utils/app-utils";
+import { setCookie, removeCookie } from "#app/utils/app-utils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
+import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 
 const apiBase = getApiBaseUrl();
 const accountApi = new AccountApi(apiBase);
@@ -98,7 +98,7 @@ describe("Account API", () => {
     const loginParams = { username: "test", password: "test" };
 
     it("should return null and set the cookie on SUCCESS", async () => {
-      vi.spyOn(Utils, "setCookie");
+      vi.spyOn(AppUtils, "setCookie");
       server.use(http.post(`${apiBase}/account/login`, () => HttpResponse.json({ token: "abctest" })));
 
       const error = await accountApi.login(loginParams);
@@ -130,11 +130,11 @@ describe("Account API", () => {
 
   describe("Logout", () => {
     beforeEach(() => {
-      vi.spyOn(Utils, "removeCookie");
+      vi.spyOn(AppUtils, "removeCookie");
     });
 
     it("should remove cookie on success", async () => {
-      vi.spyOn(Utils, "setCookie");
+      vi.spyOn(AppUtils, "setCookie");
       server.use(http.get(`${apiBase}/account/logout`, () => new HttpResponse("", { status: 200 })));
 
       await accountApi.logout();

@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
@@ -16,12 +16,12 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
   }
 
   /**
-   * If the user is a {@linkcode Species.CRAMORANT | Cramorant} with {@linkcode Abilities.GULP_MISSILE | Gulp Missile},
+   * If the user is a {@linkcode SpeciesId.CRAMORANT | Cramorant} with {@linkcode AbilityId.GULP_MISSILE | Gulp Missile},
    * allows the user to swallow a {@linkcode BattlerTagType.GULP_MISSILE_ARROKUDA | Arrokuda} or
    * {@linkcode BattlerTagType.GULP_MISSILE_PIKACHU | Pikachu} depending on the user's HP ratio
    */
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
-    if (user.hasAbility(Abilities.GULP_MISSILE) && user.species.speciesId === Species.CRAMORANT) {
+    if (user.hasAbility(AbilityId.GULP_MISSILE) && user.species.speciesId === SpeciesId.CRAMORANT) {
       if (user.getHpRatio() >= 0.5) {
         user.addTag(BattlerTagType.GULP_MISSILE_ARROKUDA, 0, move.id);
       } else {
@@ -34,7 +34,7 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    const isCramorant = user.hasAbility(Abilities.GULP_MISSILE) && user.species.speciesId === Species.CRAMORANT;
+    const isCramorant = user.hasAbility(AbilityId.GULP_MISSILE) && user.species.speciesId === SpeciesId.CRAMORANT;
     return isCramorant && !user.getTag(...GulpMissileBattlerTagTypes) ? 10 : 0;
   }
 }

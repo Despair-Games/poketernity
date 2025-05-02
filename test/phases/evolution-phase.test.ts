@@ -1,12 +1,12 @@
-import { Abilities } from "#enums/abilities";
+import type { EvolutionPhase } from "#app/phases/evolution-phase";
+import { AbilityId } from "#enums/ability-id";
+import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Button } from "#enums/buttons";
-import { type EvolutionPhase } from "#app/phases/evolution-phase";
-import { UiMode } from "#enums/ui-mode";
 
 describe("Evolution Phase", () => {
   let phaserGame: Phaser.Game;
@@ -25,18 +25,18 @@ describe("Evolution Phase", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .startingWave(100) // Make sure level cap is high enough for evolution
-      .ability(Abilities.BALL_FETCH)
+      .levelCap(-1)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemyLevel(1000)
-      .enemySpecies(Species.BLISSEY)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.BLISSEY)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should evolve the Pokemon by exactly 1 stage", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
     const pokemon = game.field.getPlayerPokemon();
     expect(pokemon.species.getName()).toBe("Bulbasaur");
@@ -45,7 +45,7 @@ describe("Evolution Phase", () => {
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     expect(pokemon.level).toBeGreaterThan(32);
@@ -54,7 +54,7 @@ describe("Evolution Phase", () => {
   });
 
   it("should be cancellable", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
     const pokemon = game.field.getPlayerPokemon();
     expect(pokemon.species.getName()).toBe("Bulbasaur");
@@ -70,7 +70,7 @@ describe("Evolution Phase", () => {
     });
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
 
     // Repeatedly press "Cancel" to cancel evolution and say "No" to pausing evolutions
     const pressCancelInterval = setInterval(() => game.scene.ui.processInput(Button.CANCEL));
@@ -84,7 +84,7 @@ describe("Evolution Phase", () => {
   });
 
   it("should allow to pause evolutions after cancelling them", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
     const pokemon = game.field.getPlayerPokemon();
     expect(pokemon.species.getName()).toBe("Bulbasaur");
@@ -94,11 +94,11 @@ describe("Evolution Phase", () => {
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.phaseInterceptor.to("EvolutionPhase", false);
 
     // Cancel the evolution
-    (game.scene.getCurrentPhase() as EvolutionPhase).cancelEvolution();
+    (game.scene.phaseManager.getCurrentPhase() as EvolutionPhase).cancelEvolution();
 
     // Say yes to pausing the evolution
     game.onNextPrompt("EvolutionPhase", UiMode.CONFIRM, () => game.scene.ui.processInput(Button.ACTION));
@@ -111,7 +111,7 @@ describe("Evolution Phase", () => {
     expect(pokemon.calculateBaseStats()).toStrictEqual([45, 49, 49, 65, 65, 45]);
 
     game.move.use(MoveId.SPLASH);
-    await game.doKillOpponents();
+    await game.faintOpponents();
     await game.toNextWave();
 
     // Should not have a second EvolutionPhase after pausing

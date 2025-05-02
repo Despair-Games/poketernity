@@ -32,7 +32,7 @@ export class MessagePhase extends Phase {
 
     if (this.text.indexOf("$") > -1) {
       const pageIndex = this.text.indexOf("$");
-      globalScene.unshiftPhase(
+      globalScene.phaseManager.unshiftPhase(
         new MessagePhase(
           this.text.slice(pageIndex + 1),
           this.callbackDelay,

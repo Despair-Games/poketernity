@@ -1,10 +1,10 @@
 import { getTypeRgb } from "#app/data/type";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * A base phase for handling Pokemon form changes, including evolutions
@@ -13,7 +13,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 export abstract class FormChangeBasePhase extends Phase {
   protected pokemon: PlayerPokemon;
 
-  protected handler: FormChangeSceneHandler;
+  protected handler: FormChangeSceneUiHandler;
 
   protected container: Phaser.GameObjects.Container;
   protected baseBgImg: Phaser.GameObjects.Image;
@@ -36,7 +36,7 @@ export abstract class FormChangeBasePhase extends Phase {
   public abstract validate(): boolean;
 
   public setMode(): Promise<void> {
-    return globalScene.ui.setModeForceTransition(UiMode.FORM_CHANGE_SCENE);
+    return globalScene.ui.setModeForceTransition<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
   }
 
   public override start(): void {
@@ -50,7 +50,7 @@ export abstract class FormChangeBasePhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
-      this.handler = ui.getHandler() as FormChangeSceneHandler;
+      this.handler = ui.getHandler() as FormChangeSceneUiHandler;
 
       this.container = this.handler.container;
 
@@ -108,7 +108,8 @@ export abstract class FormChangeBasePhase extends Phase {
           sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],
             hasShadow: false,
-            teraColor: getTypeRgb(this.pokemon.getTeraType()),
+            teraColor: getTypeRgb(this.pokemon.teraType),
+            isTerastallized: this.pokemon.isTerastallized,
           });
           sprite.setPipelineData("ignoreTimeTint", true);
           sprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());

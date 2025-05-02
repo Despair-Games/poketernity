@@ -1,20 +1,13 @@
-import { Biome } from "#enums/biome";
-import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#app/field/pokemon";
-import { ElementalType } from "#enums/elemental-type";
+import { PRIMAL_WEATHER_TYPES } from "#app/constants/weather-constants";
+import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { randSeedInt } from "#app/utils";
-import { type SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
-import i18next from "i18next";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Arena } from "#app/field/arena";
-import { WeatherType } from "#enums/weather-type";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-
-/**
- * Weather types that are associated with the primal forms of the Generation III cover legendaries and cannot be overwritten by weaker weather types
- */
-export const PRIMAL_WEATHER = Object.freeze([WeatherType.HARSH_SUN, WeatherType.HEAVY_RAIN, WeatherType.STRONG_WINDS]);
+import { ElementalType } from "#enums/elemental-type";
+import { WeatherType } from "#enums/weather-type";
+import i18next from "i18next";
 
 /**
  * Class representing Weather effects
@@ -31,15 +24,15 @@ export class Weather {
   }
 
   /**
-   * Decrements turnsLeft by 1
-   * @returns false if turnsLeft is set to 0. True otherwise
+   * Decrements {@linkcode turnsLeft} by 1
+   * @returns `true` if the weather {@linkcode isPrimal} or if `turnsLeft !== 0`
    */
   lapse(): boolean {
     if (this.isPrimal()) {
       return true;
     }
     if (this.turnsLeft) {
-      return !!--this.turnsLeft;
+      return --this.turnsLeft !== 0;
     }
 
     return true;
@@ -50,7 +43,7 @@ export class Weather {
    * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
   isPrimal(): boolean {
-    return PRIMAL_WEATHER.includes(this.weatherType);
+    return PRIMAL_WEATHER_TYPES.includes(this.weatherType);
   }
 
   /**
@@ -265,152 +258,4 @@ export function getWeatherClearMessage(weatherType: WeatherType): string | null 
   }
 
   return null;
-}
-
-/**
- * A mapping of weather type to weight
- */
-interface WeatherPoolEntry {
-  weatherType: WeatherType;
-  weight: number;
-}
-
-/**
- * Gets a random weather type for an arena's biome
- * Each biome has their own weighted weather distribution
- * TODO: the biome specific weather pools should probably be moved into either biome.ts or a balance/ file
- * @param arena - The associated arena
- * @returns the {@linkcode WeatherType}, WeatherType.NONE if no weather
- */
-export function getRandomWeatherType(arena: Arena): WeatherType {
-  let weatherPool: WeatherPoolEntry[] = [];
-  const hasSun = arena.getTimeOfDay() < 2;
-  switch (arena.biomeType) {
-    case Biome.GRASS:
-      weatherPool = [{ weatherType: WeatherType.NONE, weight: 7 }];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 3 });
-      }
-      break;
-    case Biome.TALL_GRASS:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 8 },
-        { weatherType: WeatherType.RAIN, weight: 5 },
-      ];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 8 });
-      }
-      break;
-    case Biome.FOREST:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 8 },
-        { weatherType: WeatherType.RAIN, weight: 5 },
-      ];
-      break;
-    case Biome.SEA:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 3 },
-        { weatherType: WeatherType.RAIN, weight: 12 },
-      ];
-      break;
-    case Biome.SWAMP:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 3 },
-        { weatherType: WeatherType.RAIN, weight: 4 },
-        { weatherType: WeatherType.FOG, weight: 1 },
-      ];
-      break;
-    case Biome.BEACH:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 8 },
-        { weatherType: WeatherType.RAIN, weight: 3 },
-      ];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 5 });
-      }
-      break;
-    case Biome.LAKE:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 10 },
-        { weatherType: WeatherType.RAIN, weight: 5 },
-        { weatherType: WeatherType.FOG, weight: 1 },
-      ];
-      break;
-    case Biome.SEABED:
-      weatherPool = [{ weatherType: WeatherType.RAIN, weight: 1 }];
-      break;
-    case Biome.BADLANDS:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 8 },
-        { weatherType: WeatherType.SANDSTORM, weight: 2 },
-      ];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 5 });
-      }
-      break;
-    case Biome.DESERT:
-      weatherPool = [{ weatherType: WeatherType.SANDSTORM, weight: 2 }];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 2 });
-      }
-      break;
-    case Biome.ICE_CAVE:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 3 },
-        { weatherType: WeatherType.SNOW, weight: 4 },
-        { weatherType: WeatherType.HAIL, weight: 1 },
-      ];
-      break;
-    case Biome.MEADOW:
-      weatherPool = [{ weatherType: WeatherType.NONE, weight: 2 }];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 2 });
-      }
-    case Biome.VOLCANO:
-      weatherPool = [{ weatherType: hasSun ? WeatherType.SUNNY : WeatherType.NONE, weight: 1 }];
-      break;
-    case Biome.GRAVEYARD:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 3 },
-        { weatherType: WeatherType.FOG, weight: 1 },
-      ];
-      break;
-    case Biome.JUNGLE:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 8 },
-        { weatherType: WeatherType.RAIN, weight: 2 },
-      ];
-      break;
-    case Biome.SNOWY_FOREST:
-      weatherPool = [
-        { weatherType: WeatherType.SNOW, weight: 7 },
-        { weatherType: WeatherType.HAIL, weight: 1 },
-      ];
-      break;
-    case Biome.ISLAND:
-      weatherPool = [
-        { weatherType: WeatherType.NONE, weight: 5 },
-        { weatherType: WeatherType.RAIN, weight: 1 },
-      ];
-      if (hasSun) {
-        weatherPool.push({ weatherType: WeatherType.SUNNY, weight: 2 });
-      }
-      break;
-  }
-
-  if (weatherPool.length > 1) {
-    let totalWeight = 0;
-    weatherPool.forEach((w) => (totalWeight += w.weight));
-
-    const rand = randSeedInt(totalWeight);
-    let w = 0;
-    for (const weather of weatherPool) {
-      w += weather.weight;
-      if (rand < w) {
-        return weather.weatherType;
-      }
-    }
-  }
-
-  return weatherPool.length ? weatherPool[0].weatherType : WeatherType.NONE;
 }

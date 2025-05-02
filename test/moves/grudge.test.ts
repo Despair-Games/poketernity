@@ -1,8 +1,8 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -24,20 +24,20 @@ describe("Moves - Grudge", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.EMBER, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SHEDINJA)
-      .enemyAbility(Abilities.WONDER_GUARD)
+      .enemySpecies(SpeciesId.SHEDINJA)
+      .enemyAbility(AbilityId.WONDER_GUARD)
       .enemyMoveset([MoveId.GRUDGE, MoveId.SPLASH]);
   });
 
   it("should reduce the PP of the Pokemon's move to 0 when the user has fainted", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.EMBER);
-    await game.forceEnemyMove(MoveId.GRUDGE);
+    await game.move.selectEnemyMove(MoveId.GRUDGE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
@@ -47,16 +47,16 @@ describe("Moves - Grudge", () => {
   });
 
   it("should remain in effect until the user's next move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.GRUDGE);
+    await game.move.selectEnemyMove(MoveId.GRUDGE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(MoveId.EMBER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
@@ -70,15 +70,15 @@ describe("Moves - Grudge", () => {
     game.override
       .moveset([MoveId.FALSE_SWIPE])
       .startingLevel(100)
-      .enemyAbility(Abilities.SAND_STREAM)
-      .enemySpecies(Species.RATTATA);
-    await game.classicMode.startBattle([Species.GEODUDE]);
+      .enemyAbility(AbilityId.SAND_STREAM)
+      .enemySpecies(SpeciesId.RATTATA);
+    await game.classicMode.startBattle([SpeciesId.GEODUDE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.FALSE_SWIPE);
-    await game.forceEnemyMove(MoveId.GRUDGE);
+    await game.move.selectEnemyMove(MoveId.GRUDGE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 

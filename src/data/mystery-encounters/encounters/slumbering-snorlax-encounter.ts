@@ -2,7 +2,7 @@ import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requir
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { globalScene } from "#app/global-scene";
 import { StatusEffect } from "#enums/status-effect";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -23,11 +23,11 @@ import { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { AiType } from "#enums/ai-type";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { BerryType } from "#enums/berry-type";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 
@@ -48,7 +48,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
   .withFleeAllowed(false)
   .withIntroSpriteConfigs([
     {
-      spriteKey: Species.SNORLAX.toString(),
+      spriteKey: SpeciesId.SNORLAX.toString(),
       fileRoot: "pokemon",
       hasShadow: true,
       tint: 0.25,
@@ -67,7 +67,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     console.log(encounter);
 
     // Calculate boss mon
-    const bossSpecies = getPokemonSpecies(Species.SNORLAX);
+    const bossSpecies = getPokemonSpecies(SpeciesId.SNORLAX);
     const pokemonConfig: EnemyPokemonConfig = {
       species: bossSpecies,
       isBoss: true,
@@ -96,7 +96,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     // Load animations/sfx for Snorlax fight start moves
     loadCustomMovesForEncounter([MoveId.SNORE]);
 
-    encounter.setDialogueToken("snorlaxName", getPokemonSpecies(Species.SNORLAX).getName());
+    encounter.setDialogueToken("snorlaxName", getPokemonSpecies(SpeciesId.SNORLAX).getName());
 
     return true;
   })
@@ -148,7 +148,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     async () => {
       // Fall asleep waiting for Snorlax
       // Full heal party
-      globalScene.unshiftPhase(new PartyHealPhase(true));
+      globalScene.phaseManager.unshiftPhase(new PartyHealPhase(true));
       queueEncounterMessage(`${namespace}:option.2.rest_result`);
       leaveEncounterWithoutBattle();
     },
@@ -171,7 +171,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
         const instance = globalScene.currentBattle.mysteryEncounter!;
         setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.LEFTOVERS], fillRemaining: false });
         // Snorlax exp to Pokemon that did the stealing
-        setEncounterExp(instance.primaryPokemon!.id, getPokemonSpecies(Species.SNORLAX).baseExp);
+        setEncounterExp(instance.primaryPokemon!.id, getPokemonSpecies(SpeciesId.SNORLAX).baseExp);
         leaveEncounterWithoutBattle();
       })
       .build(),

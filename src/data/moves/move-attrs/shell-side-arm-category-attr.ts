@@ -1,7 +1,7 @@
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import { VariableMoveCategoryAttr } from "#app/data/moves/move-attrs/variable-move-category-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -27,7 +27,7 @@ export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
      * MoveFlags are not reset every turn so if this flag is set it needs to be reset if the move is a special attack
      * Need the if check for unit tests
      */
-    if (move.hasFlag(MoveFlags.MAKES_CONTACT)) {
+    if (move.checkFlag(MoveFlags.MAKES_CONTACT, user, target)) {
       move.makesContact(false);
     }
     return false;

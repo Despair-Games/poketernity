@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { NumberHolder } from "#app/utils";
-import { randSeedInt } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";

@@ -1,15 +1,16 @@
-import type { Abilities } from "#enums/abilities";
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
-import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { highValueAbilities } from "#app/utils/ability-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { AbilityId } from "#enums/ability-id";
+import i18next from "i18next";
 
 /**
  * Attribute to change a target's ability to a set ability.
@@ -18,9 +19,9 @@ import { highValueAbilities } from "#app/utils/ability-utils";
  * @extends MoveEffectAttr
  */
 export class AbilityChangeAttr extends MoveEffectAttr {
-  public ability: Abilities;
+  public ability: AbilityId;
 
-  constructor(ability: Abilities, selfTarget?: boolean) {
+  constructor(ability: AbilityId, selfTarget?: boolean) {
     super(selfTarget);
 
     this.ability = ability;
@@ -32,7 +33,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     moveTarget.summonData.ability = this.ability;
     globalScene.triggerPokemonFormChange(moveTarget, SpeciesFormChangeRevertWeatherFormTrigger);
 
-    globalScene.queueMessage(
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:acquiredAbility", {
         pokemonName: getPokemonNameWithAffix(this.selfTarget ? user : target),
         abilityName: allAbilities[this.ability].name,

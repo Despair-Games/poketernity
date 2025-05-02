@@ -1,6 +1,6 @@
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
-import { randSeedItem } from "#app/utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import type { Move } from "#app/data/moves/move";
 import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
 
@@ -25,7 +25,7 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, false);
+    const moveChance = this.getMoveChance(user, target, move);
     const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
     const pokemon = this.selfTarget ? user : target;
 

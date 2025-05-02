@@ -1,12 +1,16 @@
-import type { BattlerIndex } from "#enums/battler-index";
+import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
+import type { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { MysteryEncounterPostSummonTag } from "#app/data/battler-tags/mystery-encounter-post-summon-tag";
 import { globalScene } from "#app/global-scene";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import { StatusEffect } from "#enums/status-effect";
 
 export class PostSummonPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_SUMMON;
@@ -23,19 +27,24 @@ export class PostSummonPhase extends PokemonPhase {
     if (pokemon.hasStatusEffect(StatusEffect.TOXIC)) {
       pokemon.status!.toxicTurnCount = 0;
     }
+
+    // Apply pending heal effects from Healing Wish and Lunar Dance.
+    globalScene.arena.applyTags(ArenaTagType.PENDING_HEAL, false, pokemon);
+
     globalScene.arena.applyTags([...EntryHazardArenaTagTypes], false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
     if (
       globalScene.currentBattle.isBattleMysteryEncounter()
-      && pokemon.findTags((t) => t.isMysteryEncounterPostSummonTag()).length > 0
+      && pokemon.findTags((t) => t.isType<MysteryEncounterPostSummonTag>(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON))
+        .length > 0
     ) {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
 
-    applyAbAttrs(AbAttrFlag.POST_SUMMON, pokemon, false);
+    applyAbAttrs<PostSummonAbAttr>(AbAttrFlag.POST_SUMMON, pokemon, false);
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(AbAttrFlag.COMMANDER, p, false));
+    field.forEach((p) => applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false));
 
     this.end();
   }

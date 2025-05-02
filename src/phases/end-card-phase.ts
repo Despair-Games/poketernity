@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
+import { GAME_WIDTH, GAME_HEIGHT } from "#app/constants/ui-constants";
 import { PhaseId } from "#enums/phase-id";
 
 /**

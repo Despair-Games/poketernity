@@ -1,13 +1,9 @@
 import { allMoves } from "#app/data/data-lists";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BerryPhase } from "#app/phases/berry-phase";
-import { CommandPhase } from "#app/phases/command-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
@@ -29,8 +25,8 @@ describe("Moves - Astonish", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.moveset([MoveId.ASTONISH, MoveId.SPLASH]);
-    game.override.enemySpecies(Species.BLASTOISE);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemySpecies(SpeciesId.BLASTOISE);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
@@ -39,7 +35,7 @@ describe("Moves - Astonish", () => {
   });
 
   test("move effect should cancel the target's move on the turn it applies", async () => {
-    await game.startBattle([Species.MEOWSCARADA]);
+    await game.startBattle([SpeciesId.MEOWSCARADA]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -47,20 +43,20 @@ describe("Moves - Astonish", () => {
 
     game.move.select(MoveId.ASTONISH);
 
-    await game.phaseInterceptor.to(MoveEndPhase, false);
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeDefined();
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeUndefined();
 
-    await game.phaseInterceptor.to(CommandPhase, false);
+    await game.phaseInterceptor.to("CommandPhase", false);
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
+    await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(leadPokemon.hp).toBeLessThan(leadPokemon.getMaxHp());
   });

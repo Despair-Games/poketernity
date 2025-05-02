@@ -1,16 +1,16 @@
-import { ElementalType } from "#enums/elemental-type";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { getTypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder } from "#app/utils";
-import i18next from "i18next";
+import { NumberHolder } from "#app/utils/common-utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
-import { type Move } from "#app/data/moves/move";
-import { getTypeDamageMultiplier } from "#app/data/type";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { ElementalType } from "#enums/elemental-type";
+import i18next from "i18next";
 
 /**
  * Attribute used for Conversion 2, to convert the user's type to a random type that resists the target's last used move.
@@ -33,12 +33,12 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     const userTypes = user.getTypes();
     const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t));
 
-    const type = validTypes[user.randSeedInt(validTypes.length)];
-    user.summonData.types = [type];
-    globalScene.queueMessage(
+    const modifiedType = validTypes[user.randSeedInt(validTypes.length)];
+    user.setTemporaryTypes(modifiedType);
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`),
+        type: i18next.t(`pokemonInfo:Type.${ElementalType[modifiedType]}`),
       }),
     );
     user.updateInfo();

@@ -1,25 +1,27 @@
-import { BattleType } from "#enums/battle-type";
-import { globalScene } from "#app/global-scene";
-import type { Gender } from "#enums/gender";
-import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Status } from "../data/status-effect";
-import { type Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { TrainerSlot } from "#enums/trainer-slot";
-import type { Variant } from "#app/data/variant";
-import { loadBattlerTag } from "../data/battler-tags";
-import type { Biome } from "#enums/biome";
-import { MoveId } from "#enums/move-id";
-import type { Species } from "#enums/species";
+import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { Status } from "#app/data/status-effect";
+import type { Variant } from "#app/data/variant";
+import type { Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
+import { globalScene } from "#app/global-scene";
+import { isPokemon } from "#app/utils/common-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { BattleType } from "#enums/battle-type";
+import type { BiomeId } from "#enums/biome-id";
+import type { ElementalType } from "#enums/elemental-type";
+import type { Gender } from "#enums/gender";
+import { MoveId } from "#enums/move-id";
+import { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball-type";
+import type { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 export default class PokemonData {
   public id: number;
   public player: boolean;
-  public species: Species;
+  public speciesId: SpeciesId;
   public nickname: string;
   public formIndex: number;
   public abilityIndex: number;
@@ -36,19 +38,22 @@ export default class PokemonData {
   public ivs: number[];
   public nature: Nature;
   public moveset: PokemonMove[];
-  public status: Status | null;
+  public status: Status | null = null;
   public friendship: number;
   public metLevel: number;
-  public metBiome: Biome | -1; // -1 for starters
-  public metSpecies: Species;
+  public metBiome: BiomeId | -1; // -1 for starters
+  public metSpecies: SpeciesId;
   public metWave: number; // 0 for unknown (previous saves), -1 for starters
   public luck: number;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
   public usedTMs: MoveId[];
   public evoCounter: number;
+  public teraType: ElementalType;
+  public isTerastallized: boolean;
+  public stellarTypesBoosted: ElementalType[];
 
-  public boss: boolean;
+  public boss: boolean = false;
   public bossSegments?: number;
 
   public summonData: PokemonSummonData;
@@ -56,13 +61,16 @@ export default class PokemonData {
   /** Data that can customize a Pokemon in non-standard ways from its Species */
   public customPokemonData: CustomPokemonData;
 
-  constructor(source: Pokemon | any, forHistory: boolean = false) {
-    const sourcePokemon = source.type === "Pokemon" ? source : null;
+  /**
+   * @param source - The typing of `source` as `PokemonData` (approximately?) matches the typing of
+   * the `json` object passed in to it in `GameData#parseSessionData`
+   */
+  constructor(source: Pokemon | PokemonData) {
     this.id = source.id;
-    this.player = sourcePokemon ? sourcePokemon.isPlayer() : source.player;
-    this.species = sourcePokemon ? sourcePokemon.species.speciesId : source.species;
-    this.nickname = sourcePokemon ? sourcePokemon.nickname : source.nickname;
-    this.formIndex = Math.max(Math.min(source.formIndex, getPokemonSpecies(this.species).forms.length - 1), 0);
+    this.player = isPokemon(source) ? source.isPlayer() : source.player;
+    this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
+    this.nickname = source.nickname;
+    this.formIndex = Phaser.Math.Clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
     this.abilityIndex = source.abilityIndex;
     this.passive = source.passive;
     this.shiny = source.shiny;
@@ -70,78 +78,74 @@ export default class PokemonData {
     this.pokeball = source.pokeball;
     this.level = source.level;
     this.exp = source.exp;
-    if (!forHistory) {
-      this.levelExp = source.levelExp;
-    }
+    this.levelExp = source.levelExp;
     this.gender = source.gender;
-    if (!forHistory) {
-      this.hp = source.hp;
-    }
+    this.hp = source.hp;
     this.stats = source.stats;
     this.ivs = source.ivs;
-    this.nature = source.nature !== undefined ? source.nature : (0 as Nature);
-    this.friendship =
-      source.friendship !== undefined ? source.friendship : getPokemonSpecies(this.species).baseFriendship;
+    this.nature = source.nature ?? Nature.HARDY;
+    this.friendship = source.friendship ?? getPokemonSpecies(this.speciesId).baseFriendship;
     this.metLevel = source.metLevel || 5;
-    this.metBiome = source.metBiome !== undefined ? source.metBiome : -1;
+    this.metBiome = source.metBiome ?? -1;
     this.metSpecies = source.metSpecies;
     this.metWave = source.metWave ?? (this.metBiome === -1 ? -1 : 0);
-    this.luck = source.luck !== undefined ? source.luck : source.shiny ? source.variant + 1 : 0;
-    if (!forHistory) {
-      this.pauseEvolutions = !!source.pauseEvolutions;
-      this.evoCounter = source.evoCounter ?? 0;
-    }
-    this.pokerus = !!source.pokerus;
+    this.luck = (source.luck ?? source.shiny) ? source.variant + 1 : 0;
+    this.pauseEvolutions = source.pauseEvolutions;
+    this.evoCounter = source.evoCounter ?? 0;
+    this.pokerus = source.pokerus;
     this.usedTMs = source.usedTMs ?? [];
+    this.teraType = source.teraType;
+    this.isTerastallized = source.isTerastallized ?? false;
+    this.stellarTypesBoosted = source.stellarTypesBoosted ?? [];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
-    if (!forHistory) {
-      this.boss = (source instanceof EnemyPokemon && !!source.bossSegments) || (!this.player && !!source.boss);
+    if (source.hasOwnProperty("bossSegments")) {
+      // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
+      this.boss = source.bossSegments > 0;
+      // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
       this.bossSegments = source.bossSegments;
     }
 
-    if (sourcePokemon) {
-      this.moveset = sourcePokemon.moveset;
-      if (!forHistory) {
-        this.status = sourcePokemon.status;
-        if (this.player) {
-          this.summonData = sourcePokemon.summonData;
-        }
+    if (isPokemon(source)) {
+      this.moveset = source.moveset;
+      this.status = source.status;
+      if (this.player) {
+        this.summonData = source.summonData;
       }
-    } else {
-      this.moveset = (source.moveset || [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.GROWL)])
-        .filter((m) => m)
-        .map((m: any) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride));
-      if (!forHistory) {
-        this.status = source.status
-          ? new Status(source.status.effect, source.status.toxicTurnCount, source.status.sleepTurnsRemaining)
-          : null;
-      }
-
-      this.summonData = new PokemonSummonData();
-      if (!forHistory && source.summonData) {
-        this.summonData.stats = source.summonData.stats;
-        this.summonData.statStages = source.summonData.statStages;
-        this.summonData.moveQueue = source.summonData.moveQueue;
-        this.summonData.abilitySuppressed = source.summonData.abilitySuppressed;
-        this.summonData.abilitiesApplied = source.summonData.abilitiesApplied;
-
-        this.summonData.ability = source.summonData.ability;
-        this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m));
-        this.summonData.types = source.summonData.types;
-
-        if (source.summonData.tags) {
-          this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t));
-        } else {
-          this.summonData.tags = [];
-        }
-      }
+      return;
     }
+
+    // TODO: is this `.map()` needed? why?
+    this.moveset = (source.moveset || [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.GROWL)]).map(
+      (m) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride),
+    );
+    // TODO: can this just be `this.status = source.status`?
+    if (source.status) {
+      // @ts-expect-error - `Status#effect` is protected but we need to use the raw values when parsing save data
+      this.status = new Status(source.status.effect, source.status.toxicTurnCount, source.status.sleepTurnsRemaining);
+    }
+
+    this.summonData = new PokemonSummonData();
+    if (!source.summonData) {
+      return;
+    }
+    this.summonData.stats = source.summonData.stats;
+    this.summonData.statStages = source.summonData.statStages;
+    this.summonData.moveQueue = source.summonData.moveQueue;
+    this.summonData.abilitySuppressed = source.summonData.abilitySuppressed;
+    this.summonData.abilitiesApplied = source.summonData.abilitiesApplied;
+    this.summonData.ability = source.summonData.ability;
+    this.summonData.types = source.summonData.types;
+
+    // TODO: is this `.map()` needed? why?
+    this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
+    // TODO: is this `.map()` needed? why?
+    this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
   }
 
   toPokemon(battleType?: BattleType, partyMemberIndex: number = 0, double: boolean = false): Pokemon {
-    const species = getPokemonSpecies(this.species);
+    const species = getPokemonSpecies(this.speciesId);
     const ret: Pokemon = this.player
       ? globalScene.addPlayerPokemon(
           species,

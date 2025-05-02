@@ -1,5 +1,5 @@
-import { SESSION_ID_COOKIE } from "#app/constants";
-import { getCookie } from "#app/utils";
+import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { getCookie } from "#app/utils/app-utils";
 
 type DataType = "json" | "form-urlencoded";
 
@@ -69,8 +69,8 @@ export abstract class ApiBase {
       "Content-Type": config.headers?.["Content-Type"] ?? "application/json",
     };
 
-    if (import.meta.env.DEV) {
-      console.log(`Sending ${config.method ?? "GET"} request to: `, this.base + path, config);
+    if (import.meta.env.VITE_API_DEBUG === "1") {
+      console.debug(`Sending ${config.method ?? "GET"} request to: `, this.base + path, config);
     }
 
     return await fetch(this.base + path, config);

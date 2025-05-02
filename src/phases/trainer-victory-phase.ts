@@ -2,7 +2,7 @@ import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { vouchers } from "#app/system/voucher";
-import { randSeedItem } from "#app/utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
@@ -27,16 +27,16 @@ export class TrainerVictoryPhase extends BattlePhase {
 
     globalScene.audioManager.playBgm(trainer.config.victoryBgm);
 
-    globalScene.unshiftPhase(new MoneyRewardPhase(trainer.config.moneyMultiplier));
+    globalScene.phaseManager.unshiftPhase(new MoneyRewardPhase(trainer.config.moneyMultiplier));
 
     const modifierRewardFuncs = trainer.config.modifierRewardFuncs;
     for (const modifierRewardFunc of modifierRewardFuncs) {
-      globalScene.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
+      globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
     }
 
     if (timedEventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
       for (const rewardFunc of trainer.config.eventRewardFuncs) {
-        globalScene.unshiftPhase(new ModifierRewardPhase(rewardFunc));
+        globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(rewardFunc));
       }
     }
 
@@ -44,7 +44,7 @@ export class TrainerVictoryPhase extends BattlePhase {
     // Validate Voucher for boss trainers
     if (vouchers.hasOwnProperty(TrainerType[trainerType])) {
       if (!globalScene.validateVoucher(vouchers[TrainerType[trainerType]]) && trainer.config.isBoss) {
-        globalScene.unshiftPhase(
+        globalScene.phaseManager.unshiftPhase(
           new ModifierRewardPhase(
             [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
               vouchers[TrainerType[trainerType]].voucherType

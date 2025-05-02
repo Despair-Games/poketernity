@@ -14,15 +14,15 @@ import {
   getHighestLevelPlayerPokemon,
   koPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { ModifierTier } from "#enums/modifier-tier";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/mysteriousChest";
@@ -84,7 +84,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
       disableSwitch: true,
       pokemonConfigs: [
         {
-          species: getPokemonSpecies(Species.GIMMIGHOUL),
+          species: getPokemonSpecies(SpeciesId.GIMMIGHOUL),
           formIndex: 0,
           isBoss: true,
           moveSet: [MoveId.NASTY_PLOT, MoveId.SHADOW_BALL, MoveId.POWER_GEM, MoveId.THIEF],
@@ -94,7 +94,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
 
     encounter.enemyPartyConfigs = [config];
 
-    encounter.setDialogueToken("gimmighoulName", getPokemonSpecies(Species.GIMMIGHOUL).getName());
+    encounter.setDialogueToken("gimmighoulName", getPokemonSpecies(SpeciesId.GIMMIGHOUL).getName());
     encounter.setDialogueToken("trapPercent", TRAP_PERCENT.toString());
     encounter.setDialogueToken("commonPercent", COMMON_REWARDS_PERCENT.toString());
     encounter.setDialogueToken("ultraPercent", ULTRA_REWARDS_PERCENT.toString());
@@ -187,7 +187,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           const allowedPokemon = globalScene.getPokemonAllowedInBattle();
           if (allowedPokemon.length === 0) {
             // If there are no longer any legal pokemon in the party, game over.
-            globalScene.gameOver({ clearPhaseQueue: true });
+            globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
           } else {
             // Show which Pokemon was KOed, then start battle against Gimmighoul
             await transitionMysteryEncounterIntroVisuals(true, true, 500);

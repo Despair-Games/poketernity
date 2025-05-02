@@ -1,9 +1,12 @@
 export enum TrainerType {
   UNKNOWN,
 
+  /**
+   * Generic trainers {@linkcode genericTrainerConfigs}
+   */
   ACE_TRAINER,
   ARTIST,
-  BACKERS,
+  BACKERS, // Unused
   BACKPACKER,
   BAKER,
   BEAUTY,
@@ -12,45 +15,49 @@ export enum TrainerType {
   BREEDER,
   CLERK,
   CYCLIST,
-  DANCER,
+  DANCER, // Unused
   DEPOT_AGENT,
-  DOCTOR,
+  DOCTOR, // Unused
   FIREBREATHER,
   FISHERMAN,
   GUITARIST,
-  HARLEQUIN,
+  HARLEQUIN, // Only used for clowning around ME
   HIKER,
-  HOOLIGANS,
-  HOOPSTER,
-  INFIELDER,
-  JANITOR,
-  LINEBACKER,
-  MAID,
-  MUSICIAN,
+  HOOLIGANS, // Unused
+  HOOPSTER, // Unused
+  INFIELDER, // Unused
+  JANITOR, // Unused
+  LINEBACKER, // Unused
+  MAID, // Unused
+  MUSICIAN, // Unused
   HEX_MANIAC,
-  NURSERY_AIDE,
+  NURSERY_AIDE, // Unused
   OFFICER,
   PARASOL_LADY,
-  PILOT,
-  POKEFAN,
-  PRESCHOOLER,
+  PILOT, // Unused
+  POKEFAN, // Unused
+  PRESCHOOLER, // Unused
   PSYCHIC,
   RANGER,
-  RICH,
-  RICH_KID,
+  RICH, // Unused
+  RICH_KID, // Unused
   ROUGHNECK,
   SAILOR,
   SCIENTIST,
-  SMASHER,
+  SMASHER, // Unused
   SNOW_WORKER,
-  STRIKER,
+  STRIKER, // Unused
   SCHOOL_KID,
   SWIMMER,
   TWINS,
   VETERAN,
   WAITER,
   WORKER,
-  YOUNGSTER,
+  YOUNGSTER, // Only appears as the guaranteed battle on floor 5
+
+  /**
+   * Evil team {@linkcode evilTeamTrainerConfigs}
+   */
   ROCKET_GRUNT,
   ARCHER,
   ARIANA,
@@ -84,6 +91,10 @@ export enum TrainerType {
   ATTICUS,
   ORTEGA,
   ERI,
+
+  /**
+   * Evil bosses {@linkcode evilBossTrainerConfigs}
+   */
   ROCKET_BOSS_GIOVANNI_1,
   ROCKET_BOSS_GIOVANNI_2,
   MAXIE,
@@ -104,6 +115,10 @@ export enum TrainerType {
   ROSE_2,
   PENNY,
   PENNY_2,
+
+  /**
+   * ME trainers {@linkcode meTrainerConfigs}
+   */
   BUCK,
   CHERYL,
   MARLEY,
@@ -119,6 +134,9 @@ export enum TrainerType {
   FUTURE_SELF_M,
   FUTURE_SELF_F,
 
+  /**
+   * Gym leaders {@linkcode gymLeaderTrainerConfigs}
+   */
   BROCK = 200,
   MISTY,
   LT_SURGE,
@@ -193,6 +211,10 @@ export enum TrainerType {
   RYME,
   TULIP,
   GRUSHA,
+
+  /**
+   * Elite four members {@linkcode eliteFourTrainerConfigs}
+   */
   LORELEI = 300,
   BRUNO,
   AGATHA,
@@ -234,6 +256,10 @@ export enum TrainerType {
   AMARYS,
   LACEY,
   DRAYTON,
+
+  /**
+   * Champions {@linkcode championTrainerConfigs}
+   */
   BLUE = 350,
   RED,
   LANCE_CHAMPION,
@@ -248,6 +274,10 @@ export enum TrainerType {
   GEETA,
   NEMONA,
   KIERAN,
+
+  /**
+   * Rival fights {@linkcode rivalTrainerConfigs}
+   */
   RIVAL = 400,
   RIVAL_2,
   RIVAL_3,

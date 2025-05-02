@@ -1,13 +1,14 @@
-import { MoveCategory } from "#enums/move-category";
-import type { StatusEffect } from "#enums/status-effect";
+import type { ConfusionOnStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/confusion-on-status-effect-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { Move } from "#app/data/moves/move";
+import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveCategory } from "#enums/move-category";
+import type { StatusEffect } from "#enums/status-effect";
+import i18next from "i18next";
 
 /**
  * Attribute to add a non-volatile status condition to
@@ -37,7 +38,9 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user !== target && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.queueMessage(i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }));
+        globalScene.phaseManager.queueMessagePhase(
+          i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
+        );
       }
       return false;
     }
@@ -55,7 +58,14 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     }
 
     if (pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)) {
-      applyAbAttrs(AbAttrFlag.CONFUSION_ON_STATUS_EFFECT, user, false, target, move, this.effect);
+      applyAbAttrs<ConfusionOnStatusEffectAbAttr>(
+        AbAttrFlag.CONFUSION_ON_STATUS_EFFECT,
+        user,
+        false,
+        target,
+        move,
+        this.effect,
+      );
       return true;
     }
 
@@ -63,7 +73,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, false);
+    const moveChance = this.getMoveChance(user, target, move);
     const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
     const pokemon = this.selfTarget ? user : target;
 

@@ -1,0 +1,94 @@
+import { AbilityId } from "#enums/ability-id";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+
+describe("Moves - Mat Block", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+
+    game.override.battleType("double");
+
+    game.override.moveset([MoveId.MAT_BLOCK, MoveId.SPLASH]);
+
+    game.override.enemySpecies(SpeciesId.SNORLAX);
+    game.override.enemyMoveset([MoveId.TACKLE]);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
+
+    game.override.startingLevel(100);
+    game.override.enemyLevel(100);
+  });
+
+  test("should protect the user and allies from attack moves", async () => {
+    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerField();
+
+    game.move.select(MoveId.MAT_BLOCK);
+
+    await game.phaseInterceptor.to("CommandPhase");
+
+    game.move.select(MoveId.SPLASH, 1);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    leadPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
+  });
+
+  test("should not protect the user and allies from status moves", async () => {
+    game.override.enemyMoveset([MoveId.GROWL]);
+
+    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerField();
+
+    game.move.select(MoveId.MAT_BLOCK);
+
+    await game.phaseInterceptor.to("CommandPhase");
+
+    game.move.select(MoveId.SPLASH, 1);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    leadPokemon.forEach((p) => expect(p.getStatStage(Stat.ATK)).toBe(-2));
+  });
+
+  test("should fail when used after the first turn", async () => {
+    await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
+
+    const leadPokemon = game.scene.getPlayerField();
+
+    game.move.select(MoveId.SPLASH);
+    await game.phaseInterceptor.to("CommandPhase");
+    game.move.select(MoveId.SPLASH, 1);
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    const leadStartingHp = leadPokemon.map((p) => p.hp);
+
+    await game.phaseInterceptor.to("CommandPhase", false);
+    game.move.select(MoveId.MAT_BLOCK);
+    await game.phaseInterceptor.to("CommandPhase");
+    game.move.select(MoveId.MAT_BLOCK, 1);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(leadPokemon.some((p, i) => p.hp < leadStartingHp[i])).toBeTruthy();
+  });
+});

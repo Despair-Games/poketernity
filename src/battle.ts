@@ -1,27 +1,3 @@
-import { globalScene } from "#app/global-scene";
-import { randomString, NumberHolder, randSeedInt, shiftCharCodes, randSeedItem, randInt, isBetween } from "#app/utils";
-import { TrainerVariant } from "#enums/trainer-variant";
-import Trainer from "./field/trainer";
-import type { GameMode } from "./game-mode";
-import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
-import type { PokeballType } from "#enums/pokeball";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { PlayerGender } from "#enums/player-gender";
-import { Species } from "#enums/species";
-import { TrainerType } from "#enums/trainer-type";
-import i18next from "#app/plugins/i18n";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { ModifierTier } from "#enums/modifier-tier";
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { TurnCommandManager } from "./turn-command-manager";
-import { settings } from "./system/settings/settings-manager";
-import { BattleType } from "#enums/battle-type";
 import {
   CHAMPION_WAVE,
   ELITE_FOUR_1_WAVE,
@@ -42,8 +18,36 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "./data/special-waves";
+} from "#app/constants/wave-constants";
+import { getLevelForWaveFunc } from "#app/data/exp";
 import type { Move } from "#app/data/moves/move";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import Trainer from "#app/field/trainer";
+import type { GameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
+import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { CustomModifierSettings } from "#app/modifier/modifier-type";
+import i18next from "#app/plugins/i18n";
+import { settings } from "#app/system/settings/settings-manager";
+import { TurnCommandManager } from "#app/turn-command-manager";
+import { isBetween, NumberHolder } from "#app/utils/common-utils";
+import { randInt, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
+import { shiftCharCodes } from "#app/utils/string-utils";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattleType } from "#enums/battle-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PlayerGender } from "#enums/player-gender";
+import type { PokeballType } from "#enums/pokeball-type";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;
@@ -107,9 +111,23 @@ export default class Battle {
     this.turnManager = new TurnCommandManager();
   }
 
+  /**
+   * Function to get the level of wild Pokemon for a given wave
+   *
+   * This is the function to get the level for a wave:
+   * - The `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
+   * - The base level uses {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
+   * - If the Pokemon is a boss, there is a `1.2` modifier
+   * - If the boss is the final boss of classic mode or an endless boss, this level is rounded up
+   * to the next multiple of 25
+   * - If it's not the final wave then bosses can also have a +/- level fluctuation
+   * of one tenth the adjusted waveIndex
+   *
+   * @returns the level
+   */
   public getLevelForWave(): number {
     const levelWaveIndex = this.gameMode.getWaveForDifficulty(this.waveIndex);
-    const baseLevel = 1 + levelWaveIndex / 2 + Math.pow(levelWaveIndex / 25, 2);
+    const baseLevel = getLevelForWaveFunc(levelWaveIndex);
     const bossMultiplier = 1.2;
 
     if (this.gameMode.isBoss(this.waveIndex)) {
@@ -124,15 +142,29 @@ export default class Battle {
       return ret + levelOffset;
     }
 
+    /**
+     * TODO: Simplify this. Also look into smaller deviations if total level is intended to be lower
+     * for the same number of waves
+     *
+     * Absolute value is not needed since the value is always >= 0
+     * Deviation is a uniform deviation equal ranging from 0 to one tenth the levelWaveIndex
+     */
     let levelOffset = 0;
 
     const deviation = 10 / levelWaveIndex;
-    levelOffset = Math.abs(this.randSeedGaussForLevel(deviation));
+    levelOffset = Math.abs(this.randSeedUniformForLevel(deviation));
 
     return Math.max(Math.round(baseLevel + levelOffset), 1);
   }
 
-  randSeedGaussForLevel(value: number): number {
+  /**
+   * TODO: Remove this and use a simpler way to generate deviation
+   *
+   * Helper function for determining the deviation to add onto a wild Pokemon's level
+   * @param value - The adjusted level wave index
+   * @returns the deviation equal to `Phaser.Math.RND.realInRange(0, 1) * value / 10`
+   */
+  randSeedUniformForLevel(value: number): number {
     let rand = 0;
     for (let i = value; i > 0; i--) {
       rand += Phaser.Math.RND.realInRange(0, 1);
@@ -178,7 +210,7 @@ export default class Battle {
     const moneyAmount = new NumberHolder(globalScene.currentBattle.moneyScattered);
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
 
-    if (globalScene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
+    if (globalScene.arena.hasTag(ArenaTagType.HAPPY_HOUR)) {
       moneyAmount.value *= 2;
     }
 
@@ -187,7 +219,7 @@ export default class Battle {
     const userLocale = navigator.language || "en-US";
     const formattedMoneyAmount = moneyAmount.value.toLocaleString(userLocale);
     const message = i18next.t("battle:moneyPickedUp", { moneyAmount: formattedMoneyAmount });
-    globalScene.queueMessage(message, undefined, true);
+    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
 
     globalScene.currentBattle.moneyScattered = 0;
   }
@@ -240,80 +272,80 @@ export default class Battle {
       }
       if (pokemon.species.isLegendLike()) {
         switch (pokemon.species.speciesId) {
-          case Species.ARTICUNO:
-          case Species.ZAPDOS:
-          case Species.MOLTRES:
-          case Species.MEWTWO:
-          case Species.MEW:
+          case SpeciesId.ARTICUNO:
+          case SpeciesId.ZAPDOS:
+          case SpeciesId.MOLTRES:
+          case SpeciesId.MEWTWO:
+          case SpeciesId.MEW:
             return "battle_legendary_kanto";
-          case Species.RAIKOU:
+          case SpeciesId.RAIKOU:
             return "battle_legendary_raikou";
-          case Species.ENTEI:
+          case SpeciesId.ENTEI:
             return "battle_legendary_entei";
-          case Species.SUICUNE:
+          case SpeciesId.SUICUNE:
             return "battle_legendary_suicune";
-          case Species.LUGIA:
+          case SpeciesId.LUGIA:
             return "battle_legendary_lugia";
-          case Species.HO_OH:
+          case SpeciesId.HO_OH:
             return "battle_legendary_ho_oh";
-          case Species.REGIROCK:
-          case Species.REGICE:
-          case Species.REGISTEEL:
-          case Species.REGIGIGAS:
-          case Species.REGIDRAGO:
-          case Species.REGIELEKI:
+          case SpeciesId.REGIROCK:
+          case SpeciesId.REGICE:
+          case SpeciesId.REGISTEEL:
+          case SpeciesId.REGIGIGAS:
+          case SpeciesId.REGIDRAGO:
+          case SpeciesId.REGIELEKI:
             return "battle_legendary_regis_g6";
-          case Species.GROUDON:
-          case Species.KYOGRE:
+          case SpeciesId.GROUDON:
+          case SpeciesId.KYOGRE:
             return "battle_legendary_gro_kyo";
-          case Species.RAYQUAZA:
+          case SpeciesId.RAYQUAZA:
             return "battle_legendary_rayquaza";
-          case Species.DEOXYS:
+          case SpeciesId.DEOXYS:
             return "battle_legendary_deoxys";
-          case Species.UXIE:
-          case Species.MESPRIT:
-          case Species.AZELF:
+          case SpeciesId.UXIE:
+          case SpeciesId.MESPRIT:
+          case SpeciesId.AZELF:
             return "battle_legendary_lake_trio";
-          case Species.HEATRAN:
-          case Species.CRESSELIA:
-          case Species.DARKRAI:
-          case Species.SHAYMIN:
+          case SpeciesId.HEATRAN:
+          case SpeciesId.CRESSELIA:
+          case SpeciesId.DARKRAI:
+          case SpeciesId.SHAYMIN:
             return "battle_legendary_sinnoh";
-          case Species.DIALGA:
-          case Species.PALKIA:
+          case SpeciesId.DIALGA:
+          case SpeciesId.PALKIA:
             if (pokemon.species.getFormSpriteKey(pokemon.formIndex) === SpeciesFormKey.ORIGIN) {
               return "battle_legendary_origin_forme";
             }
             return "battle_legendary_dia_pal";
-          case Species.GIRATINA:
+          case SpeciesId.GIRATINA:
             return "battle_legendary_giratina";
-          case Species.ARCEUS:
+          case SpeciesId.ARCEUS:
             return "battle_legendary_arceus";
-          case Species.COBALION:
-          case Species.TERRAKION:
-          case Species.VIRIZION:
-          case Species.KELDEO:
-          case Species.TORNADUS:
-          case Species.LANDORUS:
-          case Species.THUNDURUS:
-          case Species.MELOETTA:
-          case Species.GENESECT:
+          case SpeciesId.COBALION:
+          case SpeciesId.TERRAKION:
+          case SpeciesId.VIRIZION:
+          case SpeciesId.KELDEO:
+          case SpeciesId.TORNADUS:
+          case SpeciesId.LANDORUS:
+          case SpeciesId.THUNDURUS:
+          case SpeciesId.MELOETTA:
+          case SpeciesId.GENESECT:
             return "battle_legendary_unova";
-          case Species.KYUREM:
+          case SpeciesId.KYUREM:
             return "battle_legendary_kyurem";
-          case Species.XERNEAS:
-          case Species.YVELTAL:
-          case Species.ZYGARDE:
+          case SpeciesId.XERNEAS:
+          case SpeciesId.YVELTAL:
+          case SpeciesId.ZYGARDE:
             return "battle_legendary_xern_yvel";
-          case Species.TAPU_KOKO:
-          case Species.TAPU_LELE:
-          case Species.TAPU_BULU:
-          case Species.TAPU_FINI:
+          case SpeciesId.TAPU_KOKO:
+          case SpeciesId.TAPU_LELE:
+          case SpeciesId.TAPU_BULU:
+          case SpeciesId.TAPU_FINI:
             return "battle_legendary_tapu";
-          case Species.SOLGALEO:
-          case Species.LUNALA:
+          case SpeciesId.SOLGALEO:
+          case SpeciesId.LUNALA:
             return "battle_legendary_sol_lun";
-          case Species.NECROZMA:
+          case SpeciesId.NECROZMA:
             switch (pokemon.getFormKey()) {
               case "dusk-mane":
               case "dawn-wings":
@@ -323,50 +355,50 @@ export default class Battle {
               default:
                 return "battle_legendary_sol_lun";
             }
-          case Species.NIHILEGO:
-          case Species.PHEROMOSA:
-          case Species.BUZZWOLE:
-          case Species.XURKITREE:
-          case Species.CELESTEELA:
-          case Species.KARTANA:
-          case Species.GUZZLORD:
-          case Species.POIPOLE:
-          case Species.NAGANADEL:
-          case Species.STAKATAKA:
-          case Species.BLACEPHALON:
+          case SpeciesId.NIHILEGO:
+          case SpeciesId.PHEROMOSA:
+          case SpeciesId.BUZZWOLE:
+          case SpeciesId.XURKITREE:
+          case SpeciesId.CELESTEELA:
+          case SpeciesId.KARTANA:
+          case SpeciesId.GUZZLORD:
+          case SpeciesId.POIPOLE:
+          case SpeciesId.NAGANADEL:
+          case SpeciesId.STAKATAKA:
+          case SpeciesId.BLACEPHALON:
             return "battle_legendary_ub";
-          case Species.ZACIAN:
-          case Species.ZAMAZENTA:
+          case SpeciesId.ZACIAN:
+          case SpeciesId.ZAMAZENTA:
             return "battle_legendary_zac_zam";
-          case Species.GLASTRIER:
-          case Species.SPECTRIER:
+          case SpeciesId.GLASTRIER:
+          case SpeciesId.SPECTRIER:
             return "battle_legendary_glas_spec";
-          case Species.CALYREX:
+          case SpeciesId.CALYREX:
             if (pokemon.getFormKey() === "ice" || pokemon.getFormKey() === "shadow") {
               return "battle_legendary_riders";
             }
             return "battle_legendary_calyrex";
-          case Species.GALAR_ARTICUNO:
-          case Species.GALAR_ZAPDOS:
-          case Species.GALAR_MOLTRES:
+          case SpeciesId.GALAR_ARTICUNO:
+          case SpeciesId.GALAR_ZAPDOS:
+          case SpeciesId.GALAR_MOLTRES:
             return "battle_legendary_birds_galar";
-          case Species.WO_CHIEN:
-          case Species.CHIEN_PAO:
-          case Species.TING_LU:
-          case Species.CHI_YU:
+          case SpeciesId.WO_CHIEN:
+          case SpeciesId.CHIEN_PAO:
+          case SpeciesId.TING_LU:
+          case SpeciesId.CHI_YU:
             return "battle_legendary_ruinous";
-          case Species.KORAIDON:
-          case Species.MIRAIDON:
+          case SpeciesId.KORAIDON:
+          case SpeciesId.MIRAIDON:
             return "battle_legendary_kor_mir";
-          case Species.OKIDOGI:
-          case Species.MUNKIDORI:
-          case Species.FEZANDIPITI:
+          case SpeciesId.OKIDOGI:
+          case SpeciesId.MUNKIDORI:
+          case SpeciesId.FEZANDIPITI:
             return "battle_legendary_loyal_three";
-          case Species.OGERPON:
+          case SpeciesId.OGERPON:
             return "battle_legendary_ogerpon";
-          case Species.TERAPAGOS:
+          case SpeciesId.TERAPAGOS:
             return "battle_legendary_terapagos";
-          case Species.PECHARUNT:
+          case SpeciesId.PECHARUNT:
             return "battle_legendary_pecharunt";
           default:
             if (pokemon.species.isLegendary()) {
@@ -418,6 +450,16 @@ export default class Battle {
    */
   isBattleMysteryEncounter(): boolean {
     return this.battleType === BattleType.MYSTERY_ENCOUNTER;
+  }
+
+  /**
+   * @param includeMEs - Whether to count Mystery Encounter trainer battles
+   * @returns `true` if the current battle is a trainer battle
+   */
+  public isTrainerBattle(includeMEs: boolean = false): boolean {
+    const { battleType, mysteryEncounter } = this;
+    const trainerME = includeMEs ? mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE : false;
+    return battleType === BattleType.TRAINER || trainerME;
   }
 }
 

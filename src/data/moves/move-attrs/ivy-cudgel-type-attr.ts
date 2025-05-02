@@ -1,7 +1,7 @@
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
 
@@ -12,7 +12,7 @@ import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-t
  */
 export class IvyCudgelTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (user.species.speciesId === Species.OGERPON) {
+    if (user.species.speciesId === SpeciesId.OGERPON) {
       switch (user.formIndex) {
         case 1: // Wellspring Mask
         case 5: // Wellspring Mask Tera

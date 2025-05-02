@@ -20,7 +20,9 @@ export class InvertStatsAttr extends MoveEffectAttr {
     target.updateInfo();
     user.updateInfo();
 
-    globalScene.queueMessage(i18next.t("moveTriggers:invertStats", { pokemonName: getPokemonNameWithAffix(target) }));
+    globalScene.phaseManager.queueMessagePhase(
+      i18next.t("moveTriggers:invertStats", { pokemonName: getPokemonNameWithAffix(target) }),
+    );
 
     return true;
   }

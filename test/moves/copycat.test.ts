@@ -1,12 +1,12 @@
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -30,12 +30,12 @@ describe("Moves - Copycat", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.COPYCAT, MoveId.SPIKY_SHIELD, MoveId.SWORDS_DANCE, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .starterSpecies(Species.FEEBAS)
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .starterSpecies(SpeciesId.FEEBAS)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -49,7 +49,7 @@ describe("Moves - Copycat", () => {
     game.move.select(MoveId.COPYCAT); // Last successful move should be Swords Dance
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getStatStage(Stat.ATK)).toBe(4);
+    expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(4);
   });
 
   it("should fail when the last move used is not a valid Copycat move", async () => {
@@ -62,7 +62,7 @@ describe("Moves - Copycat", () => {
     game.move.select(MoveId.COPYCAT);
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
   });
 
   it("should copy the called move when the last move successfully calls another", async () => {

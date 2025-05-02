@@ -1,33 +1,33 @@
-import { Biome } from "#enums/biome";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import type BattleScene from "#app/battle-scene";
+import { DancingLessonsEncounter } from "#app/data/mystery-encounters/encounters/dancing-lessons-encounter";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { CommandPhase } from "#app/phases/command-phase";
+import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { BiomeId } from "#enums/biome-id";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PhaseId } from "#enums/phase-id";
+import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import type BattleScene from "#app/battle-scene";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { MoveId } from "#enums/move-id";
-import { DancingLessonsEncounter } from "#app/data/mystery-encounters/encounters/dancing-lessons-encounter";
-import { UiMode } from "#enums/ui-mode";
-import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { CommandPhase } from "#app/phases/command-phase";
-import { type MovePhase } from "#app/phases/move-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { PhaseId } from "#enums/phase-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/dancingLessons";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.PLAINS;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.PLAINS;
 const defaultWave = 45;
 
 describe("Dancing Lessons - Mystery Encounter", () => {
@@ -42,15 +42,12 @@ describe("Dancing Lessons - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [Biome.PLAINS, [MysteryEncounterType.DANCING_LESSONS]],
-        [Biome.SPACE, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+      new Map<BiomeId, MysteryEncounterType[]>([
+        [BiomeId.PLAINS, [MysteryEncounterType.DANCING_LESSONS]],
+        [BiomeId.SPACE, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
       ]),
     );
   });
@@ -76,7 +73,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
   it("should not spawn outside of proper biomes", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.SPACE);
+    game.override.startingBiome(BiomeId.SPACE);
     await game.runToMysteryEncounter();
 
     expect(game.scene.currentBattle.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.DANCING_LESSONS);
@@ -99,7 +96,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
     });
 
     it("should start battle against Oricorio", async () => {
-      const phaseSpy = vi.spyOn(scene, "pushPhase");
+      const phaseSpy = vi.spyOn(scene.phaseManager, "pushPhase");
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       // Make party lead's level arbitrarily high to not get KOed by move
@@ -109,9 +106,9 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(Species.ORICORIO);
+      expect(enemyField[0].species.speciesId).toBe(SpeciesId.ORICORIO);
       expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 0, 0, 0]);
       const moveset = enemyField[0].moveset.map((m) => m.moveId);
       expect(moveset.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
@@ -129,9 +126,9 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       partyLead.calculateStats();
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
@@ -159,7 +156,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
     });
 
     it("Should select a pokemon to learn Revelation Dance", async () => {
-      const phaseSpy = vi.spyOn(scene, "unshiftPhase");
+      const phaseSpy = vi.spyOn(scene.phaseManager, "unshiftPhase");
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [];
@@ -208,7 +205,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       expect(partyCountBefore + 1).toBe(partyCountAfter);
       const oricorio = scene.getPlayerParty()[scene.getPlayerParty().length - 1];
-      expect(oricorio.species.speciesId).toBe(Species.ORICORIO);
+      expect(oricorio.species.speciesId).toBe(SpeciesId.ORICORIO);
       const moveset = oricorio.moveset.map((m) => m.moveId);
       expect(moveset?.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
       expect(moveset?.some((m) => m === MoveId.DRAGON_DANCE)).toBeTruthy();
@@ -218,9 +215,9 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       const partyCountBefore = scene.getPlayerParty().length;
       scene.getPlayerParty().forEach((p) => (p.moveset = []));
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.getCurrentPhase();
+      const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
@@ -230,7 +227,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await runSelectMysteryEncounterOption(game, 3);
       const partyCountAfter = scene.getPlayerParty().length;
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();

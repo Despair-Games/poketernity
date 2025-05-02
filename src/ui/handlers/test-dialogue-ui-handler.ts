@@ -1,0 +1,155 @@
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { isNil } from "#app/utils/common-utils";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import type { AutoCompleteUiHandler } from "./autocomplete-ui-handler";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
+
+export class TestDialogueUiHandler extends FormModalUiHandler {
+  keys: string[];
+
+  constructor(mode: UiMode = UiMode.TEST_DIALOGUE) {
+    super(mode);
+  }
+
+  protected override setup() {
+    super.setup();
+
+    const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
+      return Object.keys(object ?? {})
+        .map((t, i) => {
+          const value = Object.values(object)[i];
+
+          if (typeof value === "object" && !isNil(value)) {
+            // we check for not null or undefined here because if the language json file has a null key, the typeof will still be an object, but that object will be null, causing issues
+            // If the value is an object, execute the same process
+            // si el valor es un objeto ejecuta el mismo proceso
+
+            return flattenKeys(value, topKey ?? t, topKey ? (midleKey ? [...midleKey, t] : [t]) : undefined).filter(
+              (t) => t.length > 0,
+            );
+          } else if (typeof value === "string" || isNil(value)) {
+            // we check for null or undefined here as per above - the typeof is still an object but the value is null so we need to exit out of this and pass the null key
+
+            // Return in the format expected by i18next
+            return midleKey ? `${topKey}:${midleKey.map((m) => m).join(".")}.${t}` : `${topKey}:${t}`;
+          }
+        })
+        .filter((t) => t);
+    };
+
+    const keysInArrays = flattenKeys(i18next.getDataByLanguage(String(i18next.resolvedLanguage))).filter(
+      (t) => t.length > 0,
+    ); // Array of arrays
+    const keys = keysInArrays.flat(Infinity).map(String); // One array of string
+    this.keys = keys;
+  }
+
+  protected override getModalTitle(): string {
+    return "Test Dialogue";
+  }
+
+  protected override getWidth(): number {
+    return 300;
+  }
+
+  protected override getMargin(): [number, number, number, number] {
+    return [0, 0, 48, 0];
+  }
+
+  protected override getButtonLabels(): string[] {
+    return ["Check", "Cancel"];
+  }
+
+  protected override getReadableErrorMessage(error: string): string {
+    const colonIndex = error?.indexOf(":");
+    if (colonIndex > 0) {
+      error = error.slice(0, colonIndex);
+    }
+
+    return super.getReadableErrorMessage(error);
+  }
+
+  protected override getInputFieldConfigs(): InputFieldConfig[] {
+    return [{ label: "Dialogue" }];
+  }
+
+  public override show(config: ModalConfig, prefilledText: string): boolean {
+    const ui = this.getUi();
+    const hasTitle = !!this.getModalTitle();
+    this.updateFields(this.getInputFieldConfigs(), hasTitle);
+    this.updateContainer(config);
+    const input = this.inputs[0];
+    input.setMaxLength(255);
+
+    input.on("keydown", (inputObject, evt: KeyboardEvent) => {
+      if (
+        ["escape", "space"].some((v) => v === evt.key.toLowerCase() || v === evt.code.toLowerCase())
+        && ui.getMode() === UiMode.AUTO_COMPLETE
+      ) {
+        // Delete autocomplete list and recovery focus.
+        inputObject.on("blur", () => inputObject.node.focus(), { once: true });
+        ui.revertMode();
+      }
+    });
+
+    input.on("textchange", (inputObject, evt: InputEvent) => {
+      // Delete autocomplete.
+      if (ui.getMode() === UiMode.AUTO_COMPLETE) {
+        ui.revertMode();
+      }
+
+      let options: OptionSelectItem[] = [];
+      const splitArr = inputObject.text.split(" ");
+      const filteredKeys = this.keys.filter((command) =>
+        command.toLowerCase().includes(splitArr[splitArr.length - 1].toLowerCase()),
+      );
+      if (inputObject.text !== "" && filteredKeys.length > 0) {
+        // if performance is required, you could reduce the number of total results by changing the slice below to not have all ~8000 inputs going
+        options = filteredKeys.slice(0).map((value) => {
+          return {
+            label: value,
+            handler: () => {
+              // this is here to make sure that if you try to backspace then enter, the last known evt.data (backspace) is picked up
+              // this is because evt.data is null for backspace, so without this, the autocomplete windows just closes
+              if (!isNil(evt.data) || evt.inputType?.toLowerCase() === "deletecontentbackward") {
+                const separatedArray = inputObject.text.split(" ");
+                separatedArray[separatedArray.length - 1] = value;
+                inputObject.setText(separatedArray.join(" "));
+              }
+              ui.revertMode();
+              return true;
+            },
+          };
+        });
+      }
+
+      if (options.length > 0) {
+        const modalOpts: OptionSelectModeConfig = {
+          options: options,
+          maxOptions: 5,
+        };
+        ui.setOverlayMode<AutoCompleteUiHandler>(UiMode.AUTO_COMPLETE, modalOpts, this.modalContainer);
+      }
+    });
+
+    if (!super.show(config)) {
+      return false;
+    }
+
+    this.inputs[0].resize(1150, 116);
+    this.inputContainers[0].getAt<Phaser.GameObjects.Container>(0).width = 200;
+    this.inputs[0].text = prefilledText;
+    this.submitAction = (_) => {
+      if (ui.getMode() === UiMode.TEST_DIALOGUE) {
+        this.sanitizeInputs();
+        const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
+        config.buttonActions[0](sanitizedName);
+        return true;
+      }
+      return false;
+    };
+    return true;
+  }
+}

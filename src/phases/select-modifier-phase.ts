@@ -22,10 +22,12 @@ import {
 } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
-import { NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils/common-utils";
 import { FilterItemMaxStacks } from "#app/utils/item-utils";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { ModifierTier } from "#enums/modifier-tier";
@@ -112,11 +114,11 @@ export class SelectModifierPhase extends BattlePhase {
         const skipRewardConfirmOptions: ConfirmModeConfig = {
           yesHandler: () => {
             ui.revertMode();
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
             super.end();
           },
           noHandler: () => {
-            ui.setMode(
+            ui.setMode<ModifierSelectUiHandler>(
               UiMode.MODIFIER_SELECT,
               this.isPlayer(),
               this.typeOptions,
@@ -126,7 +128,7 @@ export class SelectModifierPhase extends BattlePhase {
           },
         };
         ui.showText(i18next.t("battle:skipItemQuestion"), null, () => {
-          ui.setOverlayMode(UiMode.CONFIRM, skipRewardConfirmOptions);
+          ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, skipRewardConfirmOptions);
         });
         return false;
       }
@@ -145,7 +147,7 @@ export class SelectModifierPhase extends BattlePhase {
                 return false;
               } else {
                 globalScene.reroll = true;
-                globalScene.unshiftPhase(
+                globalScene.phaseManager.unshiftPhase(
                   new SelectModifierPhase({
                     rerollCount: this.rerollCount + 1,
                     modifierTiers: this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
@@ -153,7 +155,7 @@ export class SelectModifierPhase extends BattlePhase {
                 );
 
                 ui.clearText();
-                ui.setMode(UiMode.MESSAGE).then(() => super.end());
+                ui.setMessageMode().then(() => super.end());
 
                 if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
                   globalScene.money -= rerollCost;
@@ -164,7 +166,7 @@ export class SelectModifierPhase extends BattlePhase {
               }
               break;
             case 1:
-              ui.setModeWithoutClear(
+              ui.setModeWithoutClear<PartyUiHandler>(
                 UiMode.PARTY,
                 PartyUiMode.MODIFIER_TRANSFER,
                 -1,
@@ -191,7 +193,7 @@ export class SelectModifierPhase extends BattlePhase {
                       false,
                     );
                   } else {
-                    ui.setMode(
+                    ui.setMode<ModifierSelectUiHandler>(
                       UiMode.MODIFIER_SELECT,
                       this.isPlayer(),
                       this.typeOptions,
@@ -204,8 +206,8 @@ export class SelectModifierPhase extends BattlePhase {
               );
               break;
             case 2:
-              ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
-                ui.setMode(
+              ui.setModeWithoutClear<PartyUiHandler>(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
+                ui.setMode<ModifierSelectUiHandler>(
                   UiMode.MODIFIER_SELECT,
                   this.isPlayer(),
                   this.typeOptions,
@@ -232,7 +234,7 @@ export class SelectModifierPhase extends BattlePhase {
         case 1:
           if (this.typeOptions.length === 0) {
             ui.clearText();
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
             super.end();
             return true;
           }
@@ -268,7 +270,7 @@ export class SelectModifierPhase extends BattlePhase {
         // If the player selects either of these, then escapes out of consuming them,
         // they are returned to a shop in the same state.
         if (modifier.type instanceof RememberMoveModifierType || modifier.type instanceof TmModifierType) {
-          globalScene.unshiftPhase(this.copy());
+          globalScene.phaseManager.unshiftPhase(this.copy());
         }
 
         if (cost && !(modifier.type instanceof RememberMoveModifierType)) {
@@ -286,7 +288,7 @@ export class SelectModifierPhase extends BattlePhase {
           }
         } else {
           ui.clearText();
-          ui.setMode(UiMode.MESSAGE);
+          ui.setMessageMode();
           super.end();
         }
       };
@@ -306,13 +308,13 @@ export class SelectModifierPhase extends BattlePhase {
               ? PartyUiMode.REMEMBER_MOVE_MODIFIER
               : PartyUiMode.MODIFIER;
         const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
-        ui.setModeWithoutClear(
+        ui.setModeWithoutClear<PartyUiHandler>(
           UiMode.PARTY,
           partyUiMode,
           -1,
           (slotIndex: number, option: PartyOption) => {
             if (slotIndex < 6) {
-              ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+              ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
                 const modifier = !isMoveModifier
                   ? !isRememberMoveModifier
                     ? modifierType.newModifier(party[slotIndex])
@@ -321,7 +323,7 @@ export class SelectModifierPhase extends BattlePhase {
                 applyModifier(modifier!, true); // TODO: is the bang correct?
               });
             } else {
-              ui.setMode(
+              ui.setMode<ModifierSelectUiHandler>(
                 UiMode.MODIFIER_SELECT,
                 this.isPlayer(),
                 this.typeOptions,
@@ -348,7 +350,7 @@ export class SelectModifierPhase extends BattlePhase {
 
       return !cost;
     };
-    ui.setMode(
+    ui.setMode<ModifierSelectUiHandler>(
       UiMode.MODIFIER_SELECT,
       this.isPlayer(),
       this.typeOptions,
@@ -376,12 +378,12 @@ export class SelectModifierPhase extends BattlePhase {
     if (Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
       return baseValue;
     } else if (lockRarities) {
-      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be part of balance files
+      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be extracted to a const
       for (const opt of this.typeOptions) {
         baseValue += tierValues[opt.type.tier ?? 0];
       }
     } else {
-      baseValue = 250; // TODO: this should be part of balance files
+      baseValue = 250; // TODO: this should be extracted to a const
     }
 
     const baseMultiplier = Math.min(

@@ -1,10 +1,10 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { MoveResult } from "#enums/move-result";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -25,26 +25,27 @@ describe("Abilities - Soundproof", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.SOUNDPROOF)
+      .ability(AbilityId.SOUNDPROOF)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should not provide immunity to the ability holder's own sound moves", async () => {
     game.override.moveset(MoveId.CLANGOROUS_SOUL);
-    await game.classicMode.startBattle([Species.FEEBAS]);
-    const playerPokemon = game.scene.getPlayerPokemon()!;
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const playerPokemon = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.CLANGOROUS_SOUL);
     await game.toEndOfTurn();
 
     const soundMove = allMoves.get(MoveId.CLANGOROUS_SOUL);
-    const lastMove = playerPokemon.getLastXMoves()[0];
 
-    expect(lastMove.result).toBe(MoveResult.SUCCESS);
-    expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon, null)).toBe(true);
+    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(soundMove.hasFlag(MoveFlags.SOUND_MOVE)).toBe(true);
+    expect(soundMove.checkFlag(MoveFlags.SOUND_MOVE, playerPokemon)).toBe(true);
   });
 });

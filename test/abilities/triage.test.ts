@@ -1,12 +1,12 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
+import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { MoveFlags } from "#enums/move-flags";
 
 describe("Abilities - Triage", () => {
   let phaserGame: Phaser.Game;
@@ -26,11 +26,11 @@ describe("Abilities - Triage", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.TRIAGE)
+      .ability(AbilityId.TRIAGE)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -41,12 +41,14 @@ describe("Abilities - Triage", () => {
     { moveId: MoveId.BITTER_BLADE, moveName: "Bitter Blade" },
   ])("should increase the priority of HP-recovery moves by 3", async ({ moveId }) => {
     game.override.moveset(moveId);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const playerPokemon = game.field.getPlayerPokemon();
     const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
-    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(true);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(moveToUse.hasFlag(MoveFlags.TRIAGE_MOVE)).toBe(true);
+    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
   });
 
@@ -59,12 +61,14 @@ describe("Abilities - Triage", () => {
     { moveId: MoveId.PAIN_SPLIT, moveName: "Pain Split" },
   ])("should not increase the priority of $moveName", async ({ moveId }) => {
     game.override.moveset(moveId);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const playerPokemon = game.field.getPlayerPokemon();
     const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
-    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(moveToUse.hasFlag(MoveFlags.TRIAGE_MOVE)).toBe(false);
+    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
   });
 
@@ -74,7 +78,7 @@ describe("Abilities - Triage", () => {
       .battleType("double")
       .startingLevel(10)
       .enemyMoveset(MoveId.QUICK_ATTACK);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.GOLDEEN]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.GOLDEEN]);
 
     const playerPokemon = game.scene.getPlayerField()[0];
 
@@ -84,7 +88,10 @@ describe("Abilities - Triage", () => {
     await game.toEndOfTurn();
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
-    expect(allMoves.get(MoveId.POLLEN_PUFF).checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
+    const pollenPuffMove = allMoves.get(MoveId.POLLEN_PUFF);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(pollenPuffMove.hasFlag(MoveFlags.TRIAGE_MOVE)).toBe(false);
+    expect(pollenPuffMove.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon)).toBe(false);
     expect(playerPokemon.turnData.order).toBeGreaterThanOrEqual(2);
   });
 });

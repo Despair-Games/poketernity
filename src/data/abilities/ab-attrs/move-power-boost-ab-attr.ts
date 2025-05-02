@@ -1,7 +1,7 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils/common-utils";
 import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
 
 export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {

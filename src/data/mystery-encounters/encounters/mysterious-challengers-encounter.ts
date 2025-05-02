@@ -9,12 +9,12 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { globalScene } from "#app/global-scene";
-import { randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils/random-utils";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/mysteriousChallengers";
@@ -43,7 +43,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     const normalConfig = allTrainerConfigs[normalTrainerType].clone();
     let female = false;
     if (normalConfig.hasGenders) {
-      female = !!randSeedInt(2);
+      female = !randSeedInt(2);
     }
     const normalSpriteKey = normalConfig.getSpriteKey(female, normalConfig.doubleOnly);
     encounter.enemyPartyConfigs.push({
@@ -73,7 +73,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     hardConfig.setPartyTemplates(hardTemplate);
     female = false;
     if (hardConfig.hasGenders) {
-      female = !!randSeedInt(2);
+      female = !randSeedInt(2);
     }
     const hardSpriteKey = hardConfig.getSpriteKey(female, hardConfig.doubleOnly);
     encounter.enemyPartyConfigs.push({
@@ -89,11 +89,11 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     const brutalConfig = allTrainerConfigs[brutalTrainerType].clone();
     brutalConfig.title = allTrainerConfigs[brutalTrainerType].title;
     brutalConfig.setPartyTemplates(e4Template);
-    // @ts-ignore
+    // @ts-expect-error - TODO: change the type of `partyTemplateFunc` or change this `null` assignment
     brutalConfig.partyTemplateFunc = null; // Overrides gym leader party template func
     female = false;
     if (brutalConfig.hasGenders) {
-      female = !!randSeedInt(2);
+      female = !randSeedInt(2);
     }
     const brutalSpriteKey = brutalConfig.getSpriteKey(female, brutalConfig.doubleOnly);
     encounter.enemyPartyConfigs.push({

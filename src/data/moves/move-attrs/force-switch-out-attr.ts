@@ -1,21 +1,23 @@
-import { BattleType } from "#enums/battle-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveCategory } from "#enums/move-category";
-import { MoveId } from "#enums/move-id";
-import { SwitchType } from "#enums/switch-type";
-import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { ForceSwitchOutImmunityAbAttr } from "#app/data/abilities/ab-attrs/force-switch-out-immunity-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { BooleanHolder } from "#app/utils";
-import i18next from "i18next";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattleType } from "#enums/battle-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveCategory } from "#enums/move-category";
+import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
+import { SwitchType } from "#enums/switch-type";
+import i18next from "i18next";
 
 /**
  * Attribute to force either the user (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/U-turn_(move) | U-turn})
@@ -36,6 +38,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {
       return false;
@@ -78,13 +81,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
             PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
             PhaseId.MOVE_END,
           );
@@ -92,7 +95,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
       }
       return false;
-    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
+    } else if (battleType !== BattleType.WILD) {
       // Switch out logic for enemy trainers
       // Find indices of off-field Pokemon that are eligible to be switched into
       const eligibleNewIndices: number[] = [];
@@ -110,19 +113,17 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
             PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.prependToPhase(
+          globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(
               this.switchType,
               switchOutTarget.getFieldIndex(),
-              globalScene.currentBattle.trainer
-                ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-                : 0,
+              trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0,
               false,
               false,
             ),
@@ -145,7 +146,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
       }
 
-      if (globalScene.currentBattle.waveIndex % 10 === 0) {
+      if (waveIndex % 10 === 0) {
         return false;
       }
 
@@ -154,9 +155,11 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         return false;
       }
 
+      const allyPokemon = switchOutTarget.getAlly();
+
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
+        globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
           null,
           true,
@@ -164,17 +167,16 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         );
 
         // in double battles redirect potential moves off fled pokemon
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
+        if (double && allyPokemon) {
           globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
         }
       }
 
-      if (!switchOutTarget.getAlly()?.isActive(true)) {
+      if (!allyPokemon?.isActive(true)) {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          globalScene.nextBattle(false);
+          globalScene.phaseManager.queueNextBattle(false);
         }
       }
     }
@@ -189,7 +191,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
   override getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
@@ -217,7 +219,12 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
 
         const blockedByAbility = new BooleanHolder(false);
-        applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+        applyAbAttrs<ForceSwitchOutImmunityAbAttr>(
+          AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
+          target,
+          false,
+          blockedByAbility,
+        );
         return !blockedByAbility.value && !target.isMax();
       }
 

@@ -1,0 +1,84 @@
+import type { EntryHazardTag } from "#app/data/arena-tag";
+import { allMoves } from "#app/data/data-lists";
+import { toDmgValue } from "#app/utils/common-utils";
+import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
+
+describe("Moves - Ceaseless Edge", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override.battleType("single");
+    game.override.enemySpecies(SpeciesId.RATTATA);
+    game.override.enemyAbility(AbilityId.RUN_AWAY);
+    game.override.enemyPassiveAbility(AbilityId.RUN_AWAY);
+    game.override.startingLevel(100);
+    game.override.enemyLevel(100);
+    game.override.moveset([MoveId.CEASELESS_EDGE, MoveId.SPLASH, MoveId.ROAR]);
+    game.override.enemyMoveset(MoveId.SPLASH);
+    vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
+  });
+
+  test("move should hit and apply spikes", async () => {
+    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    const enemyStartingHp = enemyPokemon.hp;
+
+    game.move.select(MoveId.CEASELESS_EDGE);
+
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
+    // Spikes should not have any layers before move effect is applied
+    const tagBefore = game.scene.arena.hasTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY);
+    expect(tagBefore).toBeFalsy();
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+    const tagAfter = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)!;
+    expect(tagAfter).toBeDefined();
+    expect(tagAfter.layers).toBe(1);
+    expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
+  });
+
+  test("trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage", async () => {
+    game.override.startingWave(25).ability(AbilityId.PARENTAL_BOND);
+
+    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
+
+    game.move.select(MoveId.CEASELESS_EDGE);
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
+    // Spikes should not have any layers before move effect is applied
+    const tagBefore = game.scene.arena.hasTag(ArenaTagType.SPIKES, ArenaTagSide.ENEMY);
+    expect(tagBefore).toBeFalsy();
+
+    await game.toNextTurn();
+    const tagAfter = game.scene.arena.findTag<EntryHazardTag>(ArenaTagType.SPIKES, ArenaTagSide.ENEMY);
+    expect(tagAfter).toBeDefined();
+    expect(tagAfter!.layers).toBe(2);
+
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyToSwitch();
+    await game.phaseInterceptor.to("TurnEndPhase", false);
+
+    const switchedInPokemon = game.field.getEnemyPokemon();
+    expect(switchedInPokemon.getInverseHp()).toBe(toDmgValue(switchedInPokemon.getMaxHp() / 6));
+  });
+});

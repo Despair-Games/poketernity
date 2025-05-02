@@ -1,14 +1,13 @@
-import { Stat } from "#enums/stat";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { Abilities } from "#enums/abilities";
-import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Tailwind", () => {
   let phaserGame: Phaser.Game;
@@ -30,13 +29,13 @@ describe("Moves - Tailwind", () => {
       .battleType("double")
       .moveset([MoveId.TAILWIND, MoveId.SPLASH, MoveId.PETAL_BLIZZARD, MoveId.SANDSTORM])
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("doubles the Speed stat of the Pokemon on its side", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.MEOWTH]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MEOWTH]);
     const magikarp = game.scene.getPlayerField()[0];
     const meowth = game.scene.getPlayerField()[1];
 
@@ -49,40 +48,40 @@ describe("Moves - Tailwind", () => {
     game.move.select(MoveId.TAILWIND);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(magikarp.getEffectiveStat(Stat.SPD)).toBe(magikarpSpd * 2);
     expect(meowth.getEffectiveStat(Stat.SPD)).toBe(meowthSpd * 2);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeTruthy();
   });
 
   it("lasts for 4 turns", async () => {
     game.override.battleType("single");
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.TAILWIND);
     await game.toNextTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeTruthy();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeTruthy();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeTruthy();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeFalsy();
   });
 
   it("does not affect the opposing side", async () => {
     game.override.battleType("single");
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const ally = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -92,23 +91,23 @@ describe("Moves - Tailwind", () => {
 
     expect(ally.getEffectiveStat(Stat.SPD)).equal(allySpd);
     expect(enemy.getEffectiveStat(Stat.SPD)).equal(enemySpd);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeFalsy();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeFalsy();
 
     game.move.select(MoveId.TAILWIND);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(ally.getEffectiveStat(Stat.SPD)).toBe(allySpd * 2);
     expect(enemy.getEffectiveStat(Stat.SPD)).equal(enemySpd);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeFalsy();
   });
 
   it("modifies turn order on the turn it is set", async () => {
-    game.override.battleType("double").enemySpecies(Species.EXCADRILL).ability(Abilities.PRANKSTER);
+    game.override.battleType("double").enemySpecies(SpeciesId.EXCADRILL).ability(AbilityId.PRANKSTER);
 
-    await game.classicMode.startBattle([Species.WHIMSICOTT, Species.URSALUNA]);
+    await game.classicMode.startBattle([SpeciesId.WHIMSICOTT, SpeciesId.URSALUNA]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();

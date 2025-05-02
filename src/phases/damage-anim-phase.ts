@@ -1,10 +1,10 @@
-import { type BattlerIndex } from "#enums/battler-index";
-import { type DamageResult } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
+import type { DamageResult } from "#app/@types/DamageResult";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { fixedNumber } from "#app/utils";
 import { settings } from "#app/system/settings/settings-manager";
+import { fixedNumber } from "#app/utils/common-utils";
+import type { BattlerIndex } from "#enums/battler-index";
+import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -70,7 +70,7 @@ export class DamageAnimPhase extends PokemonPhase {
       globalScene.damageNumberHandler.add(this.getPokemon(), this.amount, this.damageResult, this.critical);
     }
 
-    if (this.damageResult !== HitResult.OTHER && this.amount > 0) {
+    if (![HitResult.OTHER, HitResult.SELF_KO].includes(this.damageResult) && this.amount > 0) {
       const flashTimer = globalScene.time.addEvent({
         delay: 100,
         repeat: 5,

@@ -1,33 +1,33 @@
+import type BattleScene from "#app/battle-scene";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
+import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
+import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { CommandPhase } from "#app/phases/command-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
+import { BiomeId } from "#enums/biome-id";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { Nature } from "#enums/nature";
+import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
-import type BattleScene from "#app/battle-scene";
-import { UiMode } from "#enums/ui-mode";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { Nature } from "#enums/nature";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { CommandPhase } from "#app/phases/command-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
-import { MoveId } from "#enums/move-id";
-import { BattleCommand } from "#enums/battle-command";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/funAndGames";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("Fun And Games! - Mystery Encounter", () => {
@@ -42,13 +42,12 @@ describe("Fun And Games! - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]]]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
+    ]);
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.FUN_AND_GAMES]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
@@ -80,7 +79,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
 
   it("should not spawn outside of CIVILIZATIONN biomes", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.FUN_AND_GAMES);
@@ -119,9 +118,9 @@ describe("Fun And Games! - Mystery Encounter", () => {
     it("should NOT be selectable if the player doesn't have enough money", async () => {
       game.scene.money = 0;
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.getCurrentPhase();
+      const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
@@ -130,7 +129,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -142,8 +141,8 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      expect(scene.getEnemyPokemon()?.species.speciesId).toBe(Species.WOBBUFFET);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.getEnemyPokemon()?.species.speciesId).toBe(SpeciesId.WOBBUFFET);
       expect(scene.getEnemyPokemon()?.ivs).toEqual([0, 0, 0, 0, 0, 0]);
       expect(scene.getEnemyPokemon()?.nature).toBe(Nature.MILD);
 
@@ -152,19 +151,19 @@ describe("Fun And Games! - Mystery Encounter", () => {
       });
 
       // Turn 1
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(CommandPhase);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("CommandPhase");
 
       // Turn 2
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(CommandPhase);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("CommandPhase");
 
       // Turn 3
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
     });
 
     it("should have no items in rewards if Wubboffet doesn't take enough damage", async () => {
@@ -172,19 +171,19 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
       // Skip minigame
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
@@ -200,7 +199,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -209,12 +208,12 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.2 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
@@ -231,7 +230,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -240,12 +239,12 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.1 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
@@ -262,7 +261,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -271,12 +270,12 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = 1;
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      (game.scene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
-      await game.phaseInterceptor.run(SelectModifierPhase);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(

@@ -1,29 +1,28 @@
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { PlayerPokemon } from "#app/field/player-pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { AbilityId } from "#enums/ability-id";
+import { BiomeId } from "#enums/biome-id";
+import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { MoveId } from "#enums/move-id";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
+import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import i18next from "i18next";
-import { Abilities } from "#enums/abilities";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/anOfferYouCantRefuse";
 /** Gyarados for Indimidate */
-const defaultParty = [Species.GYARADOS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.GYARADOS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("An Offer You Can't Refuse - Mystery Encounter", () => {
@@ -42,13 +41,13 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
-      .disableTrainerWaves()
-      .ability(Abilities.INTIMIDATE); // Extortion ability
+      .trainerChance(0)
+      .ability(AbilityId.INTIMIDATE); // Extortion ability
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [Biome.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
@@ -80,7 +79,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(
@@ -196,29 +195,31 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
     it("should award EXP to a pokemon with an ability in EXTORTION_ABILITIES", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, defaultParty);
       const party = scene.getPlayerParty();
-      const gyarados = party.find((pkm) => pkm.species.speciesId === Species.GYARADOS)!;
+      const gyarados = party.find((pkm) => pkm.species.speciesId === SpeciesId.GYARADOS)!;
       const expBefore = gyarados.exp;
 
       await runMysteryEncounterToEnd(game, 2);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       expect(gyarados.exp).toBe(
-        expBefore + Math.floor((getPokemonSpecies(Species.LIEPARD).baseExp * defaultWave) / 5 + 1),
+        expBefore + Math.floor((getPokemonSpecies(SpeciesId.LIEPARD).baseExp * defaultWave) / 5 + 1),
       );
     });
 
     it("should award EXP to a pokemon with a move in EXTORTION_MOVES", async () => {
-      game.override.ability(Abilities.SYNCHRONIZE); // Not an extortion ability, so we can test extortion move
-      await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, [Species.ABRA]);
+      game.override.ability(AbilityId.SYNCHRONIZE); // Not an extortion ability, so we can test extortion move
+      await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, [SpeciesId.ABRA]);
       const party = scene.getPlayerParty();
-      const abra = party.find((pkm) => pkm.species.speciesId === Species.ABRA)!;
+      const abra = party.find((pkm) => pkm.species.speciesId === SpeciesId.ABRA)!;
       abra.moveset = [new PokemonMove(MoveId.BEAT_UP)];
       const expBefore = abra.exp;
 
       await runMysteryEncounterToEnd(game, 2);
-      await game.phaseInterceptor.to(SelectModifierPhase, false);
+      await game.phaseInterceptor.to("SelectModifierPhase", false);
 
-      expect(abra.exp).toBe(expBefore + Math.floor((getPokemonSpecies(Species.LIEPARD).baseExp * defaultWave) / 5 + 1));
+      expect(abra.exp).toBe(
+        expBefore + Math.floor((getPokemonSpecies(SpeciesId.LIEPARD).baseExp * defaultWave) / 5 + 1),
+      );
     });
 
     it("Should update the player's money properly", async () => {

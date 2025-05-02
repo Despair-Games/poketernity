@@ -1,19 +1,19 @@
 import { Arena } from "../field/arena";
 import type { ArenaTag } from "../data/arena-tag";
 import { loadArenaTag } from "../data/arena-tag";
-import type { Biome } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { Weather } from "../data/weather";
 import { Terrain } from "#app/data/terrain";
 
 export default class ArenaData {
-  public biome: Biome;
+  public biome: BiomeId;
   public weather: Weather | null;
   public terrain: Terrain | null;
   public tags: ArenaTag[];
 
   constructor(source: Arena | any) {
     const sourceArena = source instanceof Arena ? (source as Arena) : null;
-    this.biome = sourceArena ? sourceArena.biomeType : source.biome;
+    this.biome = sourceArena ? sourceArena.biomeId : source.biome;
     this.weather = sourceArena
       ? sourceArena.weather
       : source.weather

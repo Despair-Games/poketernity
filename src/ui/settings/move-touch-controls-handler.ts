@@ -1,9 +1,9 @@
-import { LS_PREFIX } from "#app/constants";
+import { LS_PREFIX } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import type UI from "#app/ui/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import type { UI } from "#app/ui/ui";
 import { t } from "i18next";
 
 //#region Types
@@ -21,7 +21,7 @@ type ConfigurationEventListeners = {
 /**
  * Handles the dragging of touch controls around the screen.
  */
-export default class MoveTouchControlsHandler {
+export class MoveTouchControlsHandler {
   /** The element that is currently being dragged */
   private draggingElement: HTMLElement | null = null;
 
@@ -109,11 +109,12 @@ export default class MoveTouchControlsHandler {
 
   //#endregion
 
-  public initListeners() {
+  // Note: at the moment we don't need to remove those listeners because only a single instance
+  // of this handler is ever created through the InputController during 'BattleScene.create'.
+  private initListeners() {
     globalScene.scale.on("orientationchange", () => {
       this.updateOrientation();
     });
-
     eventBus.on("touchControls/move/start", () => {
       this.enableConfigurationMode(globalScene.ui);
     });

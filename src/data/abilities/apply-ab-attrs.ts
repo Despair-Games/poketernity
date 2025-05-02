@@ -1,29 +1,28 @@
+import type { AbilityFilterOptions } from "#app/@types/AbilityFilterOptions";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
-import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
-import { queueShowAbility } from "#app/utils/ability-utils";
 import { globalScene } from "#app/global-scene";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { queueShowAbility } from "#app/utils/ability-utils";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 //#region Exports
 
-export function applyAbAttrs<TAttr extends AbAttr>(
+export function applyAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
-  return applyAbAttrsInternal({ canApplyOnly: true }, abAttrFlag, ...params);
+  return applyAbAttrsInternal<TAttr>({ canApplyOnly: true }, abAttrFlag, ...params);
 }
 
 /**
  * Obtains the function to apply abilities corresponding to the given mode
- * @param mode the {@linkcode AbilityApplyMode} determining how abilities are applied:
- * @returns the function to apply abilities based on the mode:
- * - {@linkcode AbilityApplyMode.DEFAULT} applies abilities without restriction
- * (as long as they meet conditions to apply).
- * - {@linkcode AbilityApplyMode.REVEALED} only applies abilities that have
- * previously applied in the current battle.
- * - {@linkcode AbilityApplyMode.IGNORE} does nothing and returns an empty
- * message array.
+ * @param mode - The {@linkcode AbilityApplyMode} determining how abilities are applied
+ * @returns The function to apply abilities based on the mode:
+ * - {@linkcode AbilityApplyMode.DEFAULT} - Applies abilities without restriction
+ *     (as long as they meet conditions to apply).
+ * - {@linkcode AbilityApplyMode.REVEALED} - Only applies abilities that have
+ *     previously applied in the current battle.
+ * - {@linkcode AbilityApplyMode.IGNORE} - Does nothing and returns an empty array.
  */
 export function getAbApplyFunc(mode: AbilityApplyMode) {
   switch (mode) {
@@ -49,7 +48,7 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
  * @returns The message(s) displayed when the ability applies
  * @see {@linkcode AbAttr}
  */
-function applyAbAttrsInternal<TAttr extends AbAttr>(
+function applyAbAttrsInternal<TAttr extends AbAttr = never>(
   abFilterOptions: AbilityFilterOptions,
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
@@ -68,16 +67,16 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
     });
 
     matchingAttrs.forEach((attr) => {
-      globalScene.setPhaseQueueSplice();
+      globalScene.phaseManager.setPhaseQueueSplice();
 
       const result = attr.apply(pokemon, simulated, ...args);
       if (result && !simulated) {
         if (pokemon.summonData && !pokemon.summonData.abilitiesApplied.includes(ability.id)) {
           pokemon.summonData.abilitiesApplied.push(ability.id);
         }
-        if (pokemon.battleData && !pokemon.battleData.abilitiesApplied.includes(ability.id)) {
-          pokemon.battleData.abilitiesApplied.push(ability.id);
-          pokemon.battleData.abilitiesRevealed.push(ability.id);
+        if (pokemon.waveData && !pokemon.waveData.abilitiesApplied.includes(ability.id)) {
+          pokemon.waveData.abilitiesApplied.push(ability.id);
+          pokemon.waveData.abilitiesRevealed.push(ability.id);
         }
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {
@@ -91,24 +90,24 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
         const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
         if (message) {
           if (!simulated) {
-            globalScene.queueMessage(message);
+            globalScene.phaseManager.queueMessagePhase(message);
           }
           messages.push(message);
         }
       }
 
-      globalScene.clearPhaseQueueSplice();
+      globalScene.phaseManager.clearPhaseQueueSplice();
     });
   });
 
   return messages;
 }
 
-function applyRevealedAbAttrs<TAttr extends AbAttr>(
+function applyRevealedAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
-  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
+  return applyAbAttrsInternal<TAttr>({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
 }
 
 //#endregion

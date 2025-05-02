@@ -1,11 +1,11 @@
 import type BattleScene from "#app/battle-scene";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { SpeciesId } from "#enums/species-id";
+import { type MoveChoiceSet, getEnemyMoveChoices } from "#test/ai/utils/enemy-command-utils";
+import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
-import { type MoveChoiceSet, getEnemyMoveChoices } from "./utils/enemy_command_utils";
 
 let globalScene: BattleScene;
 
@@ -27,17 +27,17 @@ describe("Enemy Commands - Priority", () => {
     game = new GameManager(phaserGame);
     globalScene = game.scene;
 
-    game.override.ability(Abilities.BALL_FETCH).enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH).enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("AI should always select priority moves if they KO", async () => {
     game.override
-      .enemySpecies(Species.ETERNATUS)
+      .enemySpecies(SpeciesId.ETERNATUS)
       .enemyMoveset([MoveId.FLAMETHROWER, MoveId.QUICK_ATTACK, MoveId.ETERNABEAM, MoveId.SWORDS_DANCE])
       .enemyLevel(100)
       .startingLevel(1);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     enemyPokemon.aiType = AiType.SMART_RANDOM;

@@ -18,8 +18,8 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const firstMoveType = target.getMoveset()[0].getMove().type;
-    user.summonData.types = [firstMoveType];
-    globalScene.queueMessage(
+    user.setTemporaryTypes(firstMoveType);
+    globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         type: i18next.t(`pokemonInfo:Type.${ElementalType[firstMoveType]}`),

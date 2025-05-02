@@ -1,31 +1,31 @@
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  runMysteryEncounterToEnd,
-  runSelectMysteryEncounterOption,
-} from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon } from "#app/field/pokemon";
-import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
+import { HumanTransitableBiomes } from "#app/data/biome-utils";
 import {
   getSalesmanSpeciesOffer,
   ThePokemonSalesmanEncounter,
 } from "#app/data/mystery-encounters/encounters/the-pokemon-salesman-encounter";
+import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
+import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { PlayerPokemon } from "#app/field/player-pokemon";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { getSpecialSpeciesList } from "#app/utils/pokemon-utils";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesId } from "#enums/species-id";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("The Pokemon Salesman - Mystery Encounter", () => {
@@ -40,15 +40,12 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.override.mysteryEncounterChance(100).startingWave(defaultWave).startingBiome(defaultBiome).trainerChance(0);
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [Biome.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+    HumanTransitableBiomes.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.THE_POKEMON_SALESMAN]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
@@ -81,7 +78,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.ULTRA);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.THE_POKEMON_SALESMAN);
@@ -175,9 +172,9 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     it("should be disabled if player does not have enough money", async () => {
       scene.money = 0;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_POKEMON_SALESMAN, defaultParty);
-      await game.phaseInterceptor.to(MysteryEncounterPhase, false);
+      await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.getCurrentPhase();
+      const encounterPhase = scene.phaseManager.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
@@ -186,7 +183,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(scene.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -194,18 +191,13 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
     it("should not offer any Paradox Pokemon", async () => {
       const NUM_ROLLS = 2000; // As long as this is greater than total number of species, this should cover all possible RNG rolls
-      let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 1
 
-      vi.spyOn(Phaser.Math.RND, "realInRange").mockImplementation((min: number, max: number) => {
-        return rngSweepProgress * (max - min) + min;
-      });
       vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation((arr: any[]) => arr);
 
-      for (let i = 0; i < NUM_ROLLS; i++) {
-        rngSweepProgress = (2 * i + 1) / (2 * NUM_ROLLS);
+      await game.rng.equalSample(NUM_ROLLS, () => {
         const simSpecies = getSalesmanSpeciesOffer().speciesId;
         expect(getSpecialSpeciesList(SpeciesGroups.PARADOX, false)).not.toContain(simSpecies);
-      }
+      });
     });
 
     it("should leave encounter without battle", async () => {

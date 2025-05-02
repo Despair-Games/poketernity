@@ -1,13 +1,13 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import type { NumberHolder } from "#app/utils/common-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
-import type { NumberHolder } from "#app/utils";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Fluffy", () => {
   let phaserGame: Phaser.Game;
@@ -27,29 +27,33 @@ describe("Abilities - Fluffy", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.TACKLE, MoveId.EMBER, MoveId.FIRE_FANG])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.FLUFFY)
+      .enemySpecies(SpeciesId.RATTATA)
+      .enemyAbility(AbilityId.FLUFFY)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should reduce the damage of contact moves by half", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
-    const enemy = game.scene.getEnemyPokemon()!;
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    const tackleMove = allMoves.get(MoveId.TACKLE);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(0.5);
   });
 
   it("should double the damage of a non-contact fire move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
@@ -61,8 +65,9 @@ describe("Abilities - Fluffy", () => {
   });
 
   it("should not alter the damage of a contact-making fire move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
-    const enemy = game.scene.getEnemyPokemon()!;
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.FIRE_FANG);
@@ -70,21 +75,28 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.FIRE_FANG).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    const fireFangMove = allMoves.get(MoveId.FIRE_FANG);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(fireFangMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(fireFangMove.checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 
   it("should not alter the damage of contact moves if the attacker has the ability Long Reach", async () => {
-    game.override.ability(Abilities.LONG_REACH);
-    await game.classicMode.startBattle([Species.FEEBAS]);
-    const enemy = game.scene.getEnemyPokemon()!;
+    game.override.ability(AbilityId.LONG_REACH);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    const tackleMove = allMoves.get(MoveId.TACKLE);
+    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
+    expect(tackleMove.hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(tackleMove.checkFlag(MoveFlags.MAKES_CONTACT, player, enemy)).toBe(false);
     expect(damageMultiplier).toBe(1);
   });
 });

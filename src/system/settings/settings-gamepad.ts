@@ -1,11 +1,13 @@
-import type SettingsGamepadUiHandler from "../../ui/settings/settings-gamepad-ui-handler";
-import { UiMode } from "#enums/ui-mode";
-import { truncateString } from "../../utils";
-import { Button } from "#enums/buttons";
-import { SettingKeyboard } from "#enums/setting-keyboard";
 import { globalScene } from "#app/global-scene";
-import { settings } from "./settings-manager";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
+import type { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
+import { truncateString } from "#app/utils/string-utils";
+import { Button } from "#enums/buttons";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import { SettingKeyboard } from "#enums/setting-keyboard";
+import { UiMode } from "#enums/ui-mode";
+import { settings } from "./settings-manager";
 
 const pressAction = "Press action to assign"; // TODO localize
 
@@ -26,7 +28,7 @@ export const settingGamepadOptions = {
   [SettingGamepad.Button_Cycle_Gender]: [`KEY ${Button.CYCLE_GENDER.toString()}`, pressAction],
   [SettingGamepad.Button_Cycle_Ability]: [`KEY ${Button.CYCLE_ABILITY.toString()}`, pressAction],
   [SettingGamepad.Button_Cycle_Nature]: [`KEY ${Button.CYCLE_NATURE.toString()}`, pressAction],
-  [SettingGamepad.Button_Cycle_Variant]: [`KEY ${Button.V.toString()}`, pressAction],
+  [SettingGamepad.Button_Cycle_Tera]: [`KEY ${Button.CYCLE_TERA.toString()}`, pressAction],
   [SettingGamepad.Button_Speed_Up]: [`KEY ${Button.SPEED_UP.toString()}`, pressAction],
   [SettingGamepad.Button_Slow_Down]: [`KEY ${Button.SLOW_DOWN.toString()}`, pressAction],
   [SettingGamepad.Button_Submit]: [`KEY ${Button.SUBMIT.toString()}`, pressAction],
@@ -48,7 +50,7 @@ export const settingGamepadDefaults = {
   [SettingGamepad.Button_Cycle_Gender]: 0,
   [SettingGamepad.Button_Cycle_Ability]: 0,
   [SettingGamepad.Button_Cycle_Nature]: 0,
-  [SettingGamepad.Button_Cycle_Variant]: 0,
+  [SettingGamepad.Button_Cycle_Tera]: 0,
   [SettingGamepad.Button_Speed_Up]: 0,
   [SettingGamepad.Button_Slow_Down]: 0,
   [SettingGamepad.Button_Submit]: 0,
@@ -76,7 +78,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
     case SettingGamepad.Button_Cycle_Gender:
     case SettingGamepad.Button_Cycle_Ability:
     case SettingGamepad.Button_Cycle_Nature:
-    case SettingGamepad.Button_Cycle_Variant:
+    case SettingGamepad.Button_Cycle_Tera:
     case SettingGamepad.Button_Speed_Up:
     case SettingGamepad.Button_Slow_Down:
     case SettingGamepad.Button_Submit:
@@ -84,13 +86,10 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsGamepadUiHandler).updateBindings();
+            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
             return success;
           };
-          globalScene.ui.setOverlayMode(UiMode.GAMEPAD_BINDING, {
-            target: setting,
-            cancelHandler: cancelHandler,
-          });
+          globalScene.ui.setOverlayMode<GamepadBindingUiHandler>(UiMode.GAMEPAD_BINDING, setting, cancelHandler);
         }
       }
       break;
@@ -100,12 +99,12 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui && gp) {
           const cancelHandler = () => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsGamepadUiHandler).setOptionCursor(
+            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).setOptionCursor(
               Object.values(SettingGamepad).indexOf(SettingGamepad.Controller),
               0,
               true,
             );
-            (globalScene.ui.getHandler() as SettingsGamepadUiHandler).updateBindings();
+            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
             return false;
           };
           const changeGamepadHandler = (gamepad: string, index: number) => {
@@ -114,7 +113,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
             cancelHandler();
             return true;
           };
-          globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
+          globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options: [
               ...gp.map((g: string, index) => ({
                 label: truncateString(g, 30), // Truncate the gamepad name for display

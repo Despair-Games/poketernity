@@ -1,15 +1,15 @@
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { MovePhase } from "#app/phases/move-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { Species } from "#enums/species";
-import { AbAttr } from "./ab-attr";
-import { type SkyDropTag } from "#app/data/battler-tags";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";
+import { PokemonAnimType } from "#enums/pokemon-anim-type";
+import { SpeciesId } from "#enums/species-id";
+import { AbAttr } from "./ab-attr";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -24,10 +24,10 @@ export class CommanderAbAttr extends AbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
+    if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === SpeciesId.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
       // another Pokemon, this effect cannot apply.
-      if (pokemon.getAlly().isFainted() || pokemon.getAlly().getTag(BattlerTagType.COMMANDED)) {
+      if (pokemon.getAlly()?.isFainted() || pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)) {
         return false;
       }
 
@@ -39,7 +39,7 @@ export class CommanderAbAttr extends AbAttr {
         // Play an animation of the source jumping into the ally Dondozo's mouth
         globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo
-        pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
+        pokemon.getAlly()?.addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
         this.cancelQueuedMove(pokemon);
       }
@@ -57,7 +57,9 @@ export class CommanderAbAttr extends AbAttr {
     turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
     // The first move in the turn is already added to the phase queue at this point.
     // If this move is from the source Pokemon, the turn manager needs to queue the next valid move command.
-    if (globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon)) {
+    if (
+      globalScene.phaseManager.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon)
+    ) {
       turnManager.scheduleNextValidCommand();
     }
   }

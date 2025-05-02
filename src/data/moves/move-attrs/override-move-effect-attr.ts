@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils/common-utils";
 
 /**
  * Attribute to apply effects that cancel the standard
