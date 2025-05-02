@@ -1,3 +1,4 @@
+import { globalScene } from "#app/global-scene";
 import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
@@ -44,6 +45,10 @@ export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
       return;
     }
 
-    this.updateOptionValueLabel(settingIndex, 0, isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"));
+    this.updateOptionValueLabel(
+      settingIndex,
+      0,
+      isLandscapeMode(globalScene) ? t("settings:landscape") : t("settings:portrait"),
+    );
   }
 }
