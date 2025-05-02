@@ -86,7 +86,7 @@ export class Arena {
    * @returns `true` if the arena is of the specified biome, `false` otherwise
    */
   public isInBiome(biomeId: BiomeId | BiomeId[]): boolean {
-    return Array.isArray(biomeId) ? biomeId.includes(this.biomeId) : this.biomeId === biomeId;
+    return coerceArray(biomeId).includes(this.biomeId);
   }
 
   /**
@@ -96,7 +96,7 @@ export class Arena {
    */
   public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
     const terrainType = this.getTerrainType();
-    return Array.isArray(terrain) ? terrain.includes(terrainType) : terrainType === terrain;
+    return coerceArray(terrain).includes(terrainType);
   }
 
   /**
@@ -108,7 +108,7 @@ export class Arena {
    */
   public hasWeather(weather: WeatherType | WeatherType[]): boolean {
     const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
-    return Array.isArray(weather) ? weather.includes(weatherType) : weatherType === weather;
+    return coerceArray(weather).includes(weatherType);
   }
 
   /**
@@ -117,7 +117,7 @@ export class Arena {
    * @returns `true` if the arena is of the specified time of day, `false` otherwise
    */
   public isTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
-    return Array.isArray(timeOfDay) ? timeOfDay.includes(this.getTimeOfDay()) : this.getTimeOfDay() === timeOfDay;
+    return coerceArray(timeOfDay).includes(this.getTimeOfDay());
   }
 
   /**
