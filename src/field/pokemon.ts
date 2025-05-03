@@ -63,6 +63,7 @@ import type { RestrictingBattlerTag } from "#app/data/battler-tags/restricting-b
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { TypeImmuneTag } from "#app/data/battler-tags/type-immune-tag";
 import type { UproarTag } from "#app/data/battler-tags/uproar-tag";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { getBattlerTag } from "#app/data/battler-tags/utils/get-battler-tag";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#app/data/data-lists";
@@ -202,20 +203,11 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 
 interface AbilityData {
   ability: Ability;
   passive: boolean;
 }
-
-const defaultWaveData = deepFreeze<PokemonWaveData>({
-  hitCount: 0,
-  berriesEaten: [],
-  abilitiesApplied: [],
-  abilitiesRevealed: [],
-  revealedMoves: new Set(),
-});
 
 const defaultTurnData = deepFreeze<PokemonTurnData>({
   flinched: false,
@@ -4361,7 +4353,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetWaveData(): void {
-    this.waveData = deepCopy<PokemonWaveData>(defaultWaveData);
+    this.waveData = {
+      hitCount: 0,
+      berriesEaten: [],
+      abilitiesApplied: [],
+      abilitiesRevealed: [],
+      revealedMoves: new Set(),
+    };
   }
 
   resetBattleSummonData(): void {

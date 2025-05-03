@@ -39,7 +39,6 @@ import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { isNullOrUndefined } from "util";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
@@ -229,7 +228,7 @@ export class EnemyPokemon extends Pokemon {
    */
   protected getCriticalHitBonus(opponent: Pokemon, move: Move, attackScore?: number) {
     const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
-    if ((isNullOrUndefined(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
+    if ((isNil(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
       const critChance = this.getSimulatedCriticalHitChance(opponent, move);
       /**
        * Only grant a bonus if the calculated critical hit chance is over 10%
