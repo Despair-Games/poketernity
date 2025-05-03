@@ -271,11 +271,9 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
     const summonDataAbility = pokemon.summonData.ability;
     const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== AbilityId.NONE;
 
-    if (globalScene.arena.hasWeather(this.weathers) || isWeatherSuppressed || isAbilitySuppressed || isAbilityChanged) {
-      return true;
-    }
-
-    return false;
+    return (
+      globalScene.arena.hasWeather(this.weathers) || isWeatherSuppressed || isAbilitySuppressed || isAbilityChanged
+    );
   }
 }
 
@@ -289,9 +287,9 @@ export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: Specie
     return i18next.t("battlePokemonForm:primalChange", { pokemonName: pokemon.name });
   }
   if (formChange.isMax()) {
-    return formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1
-      ? i18next.t("battlePokemonForm:gigantamaxChange", { preName, pokemonName: pokemon.name })
-      : i18next.t("battlePokemonForm:eternamaxChange", { preName, pokemonName: pokemon.name });
+    return formChange.formKey === SpeciesFormKey.ETERNAMAX
+      ? i18next.t("battlePokemonForm:eternamaxChange", { preName, pokemonName: pokemon.name })
+      : i18next.t("battlePokemonForm:gigantamaxChange", { preName, pokemonName: pokemon.name });
   }
   if (isRevert) {
     return i18next.t("battlePokemonForm:revertChange", { pokemonName: getPokemonNameWithAffix(pokemon) });

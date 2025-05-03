@@ -3485,9 +3485,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return maxForms.includes(this.getFormKey());
   }
 
-  /**
-   * @returns Whether the pokemon is in a mega form (includes Primals)
-   */
+  /** @returns Whether this Pokemon is of a Mega or Primal form */
   public isMega(): boolean {
     const megaForms: string[] = [
       SpeciesFormKey.MEGA,
