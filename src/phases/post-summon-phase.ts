@@ -4,7 +4,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { MysteryEncounterPostSummonTag } from "#app/data/battler-tags/mystery-encounter-post-summon-tag";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -31,7 +31,7 @@ export class PostSummonPhase extends PokemonPhase {
     // Apply pending heal effects from Healing Wish and Lunar Dance.
     globalScene.arena.applyTags(ArenaTagType.PENDING_HEAL, false, pokemon);
 
-    globalScene.arena.applyTags([...EntryHazardArenaTagTypes], false, pokemon);
+    globalScene.arena.applyTags([...ENTRY_HAZARD_ARENA_TAG_TYPES], false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
     if (

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { MissingTextureKey } from "#app/utils/common-utils";
+import { MissingTextureKey } from "#app/constants/ui-constants";
 import { GAME_WIDTH } from "#app/constants/ui-constants";
 
 export class CharSprite extends Phaser.GameObjects.Container {

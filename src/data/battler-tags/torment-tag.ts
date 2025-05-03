@@ -2,7 +2,7 @@ import { MoveRestrictionBattlerTag } from "#app/data/battler-tags/move-restricti
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -62,7 +62,7 @@ export class TormentTag extends MoveRestrictionBattlerTag {
       lastMoveTurn.move.id === moveId
       && validLastMoveResult
       && lastMoveTurn.move.id !== MoveId.STRUGGLE
-      && !user.getTag(...MoveLockTagTypes)
+      && !user.getTag(...MOVE_LOCK_TAG_TYPES)
     ) {
       return true;
     }

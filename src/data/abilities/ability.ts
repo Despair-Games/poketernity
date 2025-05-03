@@ -1,7 +1,7 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Localizable } from "#app/@types/locales";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
-import type { Constructor } from "#app/utils/common-utils";
+import type { Constructor } from "#app/@types/Constructor";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";

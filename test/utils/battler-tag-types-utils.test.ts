@@ -1,24 +1,24 @@
 import {
-  CritBoostBattlerTagTypes,
-  DamagingTrappedBattlerTagTypes,
-  FireSpinTrappedBattlerTagTypes,
-  GulpMissileBattlerTagTypes,
-  RemoveTypeBattlerTagTypes,
-  SemiInvulnerableBattlerTagTypes,
-  TrappedBattlerTagTypes,
-  VortexTrappedBattlerTagTypes,
-} from "#app/utils/battler-tag-type-utils";
+  CRIT_BOOST_BATTLER_TAG_TYPES,
+  DAMAGING_TRAPPED_BATTLER_TAG_TYPES,
+  FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES,
+  GULP_MISSILE_BATTLER_TAG_TYPES,
+  REMOVE_TYPE_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+  VORTEX_TRAPPED_BATTLER_TAG_TYPES,
+} from "#app/constants/battler-tag-constants";
 import { describe, expect, it } from "vitest";
 
 describe("Utils - Battler Tag Types Utils", () => {
   it("should have all arrays frozen", () => {
-    expect(Object.isFrozen(SemiInvulnerableBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(CritBoostBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(RemoveTypeBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(FireSpinTrappedBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(VortexTrappedBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(DamagingTrappedBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(TrappedBattlerTagTypes)).toBe(true);
-    expect(Object.isFrozen(GulpMissileBattlerTagTypes)).toBe(true);
+    expect(Object.isFrozen(SEMI_INVULNERABLE_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(CRIT_BOOST_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(REMOVE_TYPE_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(VORTEX_TRAPPED_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(DAMAGING_TRAPPED_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(TRAPPED_BATTLER_TAG_TYPES)).toBe(true);
+    expect(Object.isFrozen(GULP_MISSILE_BATTLER_TAG_TYPES)).toBe(true);
   });
 });

@@ -145,12 +145,12 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { BattleInfo } from "#app/ui/components/battle-info";
-import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import {
-  CritBoostBattlerTagTypes,
-  SemiInvulnerableBattlerTagTypes,
-  TrappedBattlerTagTypes,
-} from "#app/utils/battler-tag-type-utils";
+  CRIT_BOOST_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+} from "#app/constants/battler-tag-constants";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import {
   BooleanHolder,
@@ -162,8 +162,8 @@ import {
   getEnumValues,
   isNil,
   toDmgValue,
-  type nil,
 } from "#app/utils/common-utils";
+import type { nil } from "#app/@types/nil";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
@@ -1080,7 +1080,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Applies the effects of the ability 'Super Luck' here
     applyAbAttrs<BonusCritAbAttr>(AbAttrFlag.BONUS_CRIT, source, simulated, critStage);
 
-    const critBoostTag = source.getTag(...CritBoostBattlerTagTypes);
+    const critBoostTag = source.getTag(...CRIT_BOOST_BATTLER_TAG_TYPES);
     if (critBoostTag) {
       if (critBoostTag instanceof DragonCheerTag) {
         critStage.value += critBoostTag.typesOnAdd.includes(ElementalType.DRAGON) ? 2 : 1;
@@ -1782,13 +1782,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
-        && !this.getTag(...SemiInvulnerableBattlerTagTypes)
+        && !this.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
         && !this.getTag(BattlerTagType.SKY_DROP))
     );
   }
 
   public isSemiInvulnerable(): boolean {
-    return this.hasTag(...SemiInvulnerableBattlerTagTypes) || this.hasTag(BattlerTagType.SKY_DROP);
+    return this.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES) || this.hasTag(BattlerTagType.SKY_DROP);
   }
 
   /**
@@ -1830,7 +1830,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
-      || this.hasTag(...TrappedBattlerTagTypes)
+      || this.hasTag(...TRAPPED_BATTLER_TAG_TYPES)
       || globalScene.arena.hasTag(ArenaTagType.FAIRY_LOCK, side)
     );
   }
@@ -3192,7 +3192,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** Critical hits ignore the damage reduction from screens */
     if (!isCritical) {
       globalScene.arena.applyTagsForSide(
-        [...WeakenMoveScreenArenaTagTypes],
+        [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES],
         defendingSide,
         simulated,
         source,
@@ -4069,7 +4069,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.setFrameRate(4);
 
-      const tag = SemiInvulnerableBattlerTagTypes.find((t) => this.getTag(t));
+      const tag = SEMI_INVULNERABLE_BATTLER_TAG_TYPES.find((t) => this.getTag(t));
 
       if (tag) {
         this.removeTag(tag);
