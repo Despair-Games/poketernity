@@ -1,5 +1,5 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
@@ -12,7 +12,6 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getEnumKeys } from "#app/utils/common-utils";
 import { getCookie } from "#app/utils/app-utils";
-import { IS_BETA } from "#app/constants/app-constants";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";

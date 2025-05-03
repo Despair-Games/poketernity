@@ -7,10 +7,10 @@ import type { ElementalType } from "#enums/elemental-type";
 
 import { ArenaTagType } from "#enums/arena-tag-type";
 
-/** All {@linkcode ArenaTagType | ArenaTagTypes} that weaken a {@linkcode Move}'s {@linkcode ElementalType}. */
+/** All {@linkcode ArenaTagType | ArenaTagTypes} that weaken attacks of a certain {@linkcode ElementalType}. */
 export const WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES = Object.freeze([ArenaTagType.MUD_SPORT, ArenaTagType.WATER_SPORT]);
 
-/** All {@linkcode ArenaTagType | ArenaTagTypes} present an entry hazard. */
+/** All {@linkcode ArenaTagType | ArenaTagTypes} that present an entry hazard. */
 export const ENTRY_HAZARD_ARENA_TAG_TYPES = Object.freeze([
   ArenaTagType.SPIKES,
   ArenaTagType.TOXIC_SPIKES,

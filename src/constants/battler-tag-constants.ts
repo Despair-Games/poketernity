@@ -33,13 +33,13 @@ export const MOVE_LOCK_TAG_TYPES = Object.freeze([
   BattlerTagType.BIDE,
 ]);
 
-/** All {@linkcode BattlerTagType | BattlerTagTypes} that boost critical hits. */
+/** All unstackable {@linkcode BattlerTagType | BattlerTagTypes} that boost critical hit rate. */
 export const CRIT_BOOST_BATTLER_TAG_TYPES = Object.freeze([BattlerTagType.CRIT_BOOST, BattlerTagType.DRAGON_CHEER]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that remove an {@linkcode ElementalType}. */
 export const REMOVE_TYPE_BATTLER_TAG_TYPES = Object.freeze([BattlerTagType.BURNED_UP, BattlerTagType.DOUBLE_SHOCKED]);
 
-/** All {@linkcode BattlerTagType | BattlerTagTypes} that trap in a fire spin . */
+/** All {@linkcode BattlerTagType | BattlerTagTypes} that trap in a fire spin. */
 export const FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
   BattlerTagType.FIRE_SPIN,
   BattlerTagType.G_MAX_FIRE_SPIN,
@@ -51,7 +51,7 @@ export const VORTEX_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
   ...FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES,
 ]);
 
-/** All {@linkcode BattlerTagType | BattlerTagTypes} that trapa and deal damage. */
+/** All {@linkcode BattlerTagType | BattlerTagTypes} that trap and deal damage. */
 export const DAMAGING_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
   BattlerTagType.BIND,
   BattlerTagType.WRAP,
