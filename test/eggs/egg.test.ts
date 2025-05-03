@@ -1,6 +1,5 @@
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import { speciesEggTiers } from "#app/data/species-egg-tiers";
-import { isNil } from "#app/utils/common-utils";
 import * as RandomUtils from "#app/utils/random-utils";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
@@ -72,8 +71,9 @@ describe("Egg Generation Tests", () => {
 
   it("should never be allowed to generate Eternatus via the legendary gacha", () => {
     const validLegendaryGachaSpecies = getValidLegendaryGachaSpecies();
-    expect(validLegendaryGachaSpecies.every((s) => speciesEggTiers[s] === EggTier.LEGENDARY)).toBe(true);
-    expect(validLegendaryGachaSpecies.includes(SpeciesId.ETERNATUS)).toBe(false);
+    const onlyLegendaryEggTiers = (input: SpeciesId[]) => input.every((s) => speciesEggTiers[s] === EggTier.LEGENDARY);
+    expect(validLegendaryGachaSpecies).toSatisfy(onlyLegendaryEggTiers);
+    expect(validLegendaryGachaSpecies).not.toContain(SpeciesId.ETERNATUS);
   });
 
   it("should hatch an Arceus. Set from species", () => {
@@ -142,9 +142,9 @@ describe("Egg Generation Tests", () => {
   it("should return an egg with an egg move index of 0, 1, 2 or 3", () => {
     const eggMoveIndex = new Egg({ sourceType: EggSourceType.EVENT }).eggMoveIndex;
 
-    const result = !isNil(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
-
-    expect(result).toBeTruthy();
+    expect(eggMoveIndex).toBeDefined();
+    expect(eggMoveIndex).toBeGreaterThanOrEqual(0);
+    expect(eggMoveIndex).toBeLessThanOrEqual(3);
   });
 
   it("should return an egg with a rare egg move", () => {
@@ -168,7 +168,7 @@ describe("Egg Generation Tests", () => {
   it("should add the egg to the game data", () => {
     new Egg({ sourceType: EggSourceType.GACHA_LEGENDARY, pulled: true });
 
-    expect(game.scene.gameData.eggs.length).toBe(1);
+    expect(game.scene.gameData.eggs).toHaveLength(1);
   });
 
   it("should override the egg tier to what matches the Species", () => {
@@ -226,7 +226,7 @@ describe("Egg Generation Tests", () => {
 
     const egg = new Egg({ sourceType: EggSourceType.GACHA_MOVE, pulled: true, id: 204, tier: EggTier.COMMON });
 
-    expect(egg.isManaphyEgg).toBeTruthy();
+    expect(egg.isManaphyEgg()).toBeTruthy();
     expect(gameStats.manaphyEggsPulled).toBe(startingManaphyEggCount + 1);
   });
 
