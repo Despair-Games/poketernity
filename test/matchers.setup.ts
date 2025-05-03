@@ -10,6 +10,8 @@ import { toHaveTakenDamageMatcher } from "#test/test-utils/matchers/to-have-take
 import { toHaveTerrainMatcher } from "#test/test-utils/matchers/to-have-terrain-matcher";
 import { toHaveUsedMoveMatcher } from "#test/test-utils/matchers/to-have-used-move-matcher";
 import { toHaveWeatherMatcher } from "#test/test-utils/matchers/to-have-weather-matcher";
+import { toNeverSelectMoveMatcher } from "#test/test-utils/matchers/to-never-select-move-matcher";
+import { toPreferSelectingMoveMatcher } from "#test/test-utils/matchers/to-prefer-selecting-move-matcher";
 import { expect } from "vitest";
 
 /**
@@ -30,4 +32,6 @@ expect.extend({
   toHaveStatStage: toHaveStatStageMatcher,
   toHaveBattlerTagType: toHaveBattlerTagTypeMatcher,
   toHaveAbilityApplied: toHaveAbilityAppliedMatcher,
+  toPreferSelectingMove: toPreferSelectingMoveMatcher,
+  toNeverSelectMove: toNeverSelectMoveMatcher,
 });

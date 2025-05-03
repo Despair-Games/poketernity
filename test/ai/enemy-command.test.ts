@@ -1,4 +1,3 @@
-import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
@@ -10,9 +9,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { getEnemyMoveChoices } from "./utils/enemy-command-utils";
 
-let globalScene: BattleScene;
-
-describe("Enemy Commands - Move Selection", () => {
+describe("Enemy Commands - Basic Move Selection", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -28,8 +25,6 @@ describe("Enemy Commands - Move Selection", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    globalScene = game.scene;
-
     game.override.ability(AbilityId.BALL_FETCH).enemyAbility(AbilityId.BALL_FETCH);
   });
 
@@ -45,13 +40,7 @@ describe("Enemy Commands - Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
-
-    enemyPokemon.getMoveset().forEach((mv) => {
-      if (mv?.getMove().category === MoveCategory.STATUS) {
-        expect(moveChoices[mv.moveId]).toBe(0);
-      }
-    });
+    expect(enemyPokemon).toNeverSelectMove((move) => move.isStatusMove());
   });
 
   it("should not select Last Resort if it would fail, even if the move KOs otherwise", async () => {
@@ -66,7 +55,7 @@ describe("Enemy Commands - Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
+    const moveChoices = getEnemyMoveChoices(enemyPokemon);
 
     enemyPokemon.getMoveset().forEach((mv) => {
       if (mv?.getMove().category === MoveCategory.STATUS || mv?.moveId === MoveId.LAST_RESORT) {
@@ -87,10 +76,7 @@ describe("Enemy Commands - Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices = getEnemyMoveChoices(globalScene, enemyPokemon);
-
-    expect(moveChoices[MoveId.SPLASH]).toBe(0);
-    expect(moveChoices[MoveId.COVET]).toBe(0);
+    expect(enemyPokemon).toNeverSelectMove([MoveId.SPLASH, MoveId.COVET]);
   });
 
   it("should not crash from an off-field enemy Pokemon simulating every move", async () => {

@@ -29,14 +29,13 @@ export function initMoveChoiceSet(pokemon: EnemyPokemon): MoveChoiceSet {
 /**
  * Evaluates and reports an enemy Pokemon's move choice in the current battle state
  * over {@linkcode NUM_TRIALS} trials.
- * @param scene - The {@linkcode BattleScene | Scene} where the battle is taking place
  * @param pokemon - The {@linkcode EnemyPokemon} whose move selection is evaluated
  * @returns A {@linkcode MoveChoiceSet} with the total number of times each of the Pokemon's
  * moves are selected across all trials
  */
-export function getEnemyMoveChoices(scene: BattleScene, pokemon: EnemyPokemon): MoveChoiceSet {
+export function getEnemyMoveChoices(pokemon: EnemyPokemon): MoveChoiceSet {
   // Use an unseeded random number generator in place of the mocked-out randBattleSeedInt
-  vi.spyOn(scene, "randBattleSeedInt").mockImplementation((range, min?) => {
+  vi.spyOn(pokemon.scene as BattleScene, "randBattleSeedInt").mockImplementation((range, min?) => {
     return randSeedInt(range, min);
   });
 
