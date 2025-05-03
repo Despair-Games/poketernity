@@ -2744,7 +2744,7 @@ export default class BattleScene extends SceneBase {
   applyPartyExp(
     expValue: number,
     pokemonDefeated: boolean,
-    _useWaveIndexMultiplier?: boolean,
+    useWaveIndexMultiplier?: boolean,
     pokemonParticipantIds?: Set<number>,
   ): void {
     const participantIds = pokemonParticipantIds ?? this.currentBattle.playerParticipantIds;
@@ -2757,10 +2757,13 @@ export default class BattleScene extends SceneBase {
     const nonFaintedPartyMembers = party.filter((p) => p.hp);
     const expPartyMembers = nonFaintedPartyMembers.filter((p) => p.level < this.getMaxExpLevel());
     const partyMemberExp: number[] = [];
-    // EXP value calculation is based off Pokemon.getExpValue
-    // if (useWaveIndexMultiplier) {
-    //   expValue = Math.floor((expValue * this.currentBattle.waveIndex) / 5 + 1);
-    // }
+    /**
+     * Lots of ME code still use this
+     * TODO: Change/remove this
+     */
+    if (useWaveIndexMultiplier) {
+      expValue = Math.floor((expValue * this.currentBattle.waveIndex) / 5 + 1);
+    }
 
     if (participantIds.size > 0) {
       if (
