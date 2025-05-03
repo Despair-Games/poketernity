@@ -85,15 +85,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     const targets = this.getTargets();
 
     const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
-    /** If the user was somehow removed from the field and it's not a delayed attack, end this phase */
-    if (!user.isOnField()) {
-      if (!isDelayedAttack) {
-        return super.end();
-      } else {
-        if (isNil(user.turnData)) {
-          user.resetTurnData();
-        }
-      }
+    // If the user was somehow removed from the field and it's not a delayed attack, end this phase
+    if (!user.isOnField() && !isDelayedAttack) {
+      return super.end();
     }
 
     /**

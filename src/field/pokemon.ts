@@ -156,8 +156,6 @@ import {
   BooleanHolder,
   NumberHolder,
   coerceArray,
-  deepCopy,
-  deepFreeze,
   fixedNumber,
   getEnumValues,
   isNil,
@@ -210,31 +208,6 @@ interface AbilityData {
   passive: boolean;
 }
 
-const defaultWaveData = deepFreeze<PokemonWaveData>({
-  hitCount: 0,
-  berriesEaten: [],
-  abilitiesApplied: [],
-  abilitiesRevealed: [],
-});
-
-const defaultTurnData = deepFreeze<PokemonTurnData>({
-  flinched: false,
-  acted: false,
-  hitCount: 0,
-  hitsLeft: -1,
-  totalDamageDealt: 0,
-  singleHitDamageDealt: 0,
-  damageTaken: 0,
-  attacksReceived: [],
-  order: 0,
-  statStagesIncreased: false,
-  statStagesDecreased: false,
-  moveEffectiveness: null,
-  switchedInThisTurn: false,
-  failedRunAway: false,
-  joinedRound: false,
-});
-
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
   public override name: string;
@@ -274,8 +247,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   private summonDataPrimer: PokemonSummonData | null;
 
   public summonData: PokemonSummonData;
+  // Default data defined in `resetWaveData()`
   public waveData: PokemonWaveData;
   public battleSummonData: PokemonBattleSummonData;
+  // Default data defined in `resetTurnData()`
   public turnData: PokemonTurnData;
   public customPokemonData: CustomPokemonData;
 
@@ -406,6 +381,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!dataSource) {
       this.calculateStats();
     }
+
+    this.resetWaveData();
+    this.resetTurnData();
   }
 
   /**
@@ -1562,7 +1540,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public hasRevealedAbility(abilityId: AbilityId) {
-    return this.waveData?.abilitiesRevealed.includes(abilityId);
+    return this.waveData.abilitiesRevealed.includes(abilityId);
   }
 
   /**
@@ -1869,8 +1847,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     cancelled?: BooleanHolder,
   ): TypeDamageMultiplier {
-    if (!isNil(this.turnData?.moveEffectiveness)) {
-      return this.turnData?.moveEffectiveness;
+    if (!isNil(this.turnData.moveEffectiveness)) {
+      return this.turnData.moveEffectiveness;
     }
 
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
@@ -3378,9 +3356,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     amount = Math.min(amount, this.hp);
     this.hp = this.hp - amount;
-    if (this.turnData) {
-      this.turnData.damageTaken += amount;
-    }
+    this.turnData.damageTaken += amount;
     if (this.isFainted() && !ignoreFaintPhase) {
       globalScene.phaseManager.queueBattlerFaintPhase(this.getBattlerIndex(), { preventEndure });
     }
@@ -4149,7 +4125,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetWaveData(): void {
-    this.waveData = deepCopy<PokemonWaveData>(defaultWaveData);
+    this.waveData = {
+      hitCount: 0,
+      berriesEaten: [],
+      abilitiesApplied: [],
+      abilitiesRevealed: [],
+    };
   }
 
   resetBattleSummonData(): void {
@@ -4163,7 +4144,23 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetTurnData(): void {
-    this.turnData = deepCopy<PokemonTurnData>(defaultTurnData);
+    this.turnData = {
+      flinched: false,
+      acted: false,
+      hitCount: 0,
+      hitsLeft: -1,
+      totalDamageDealt: 0,
+      singleHitDamageDealt: 0,
+      damageTaken: 0,
+      attacksReceived: [],
+      order: 0,
+      statStagesIncreased: false,
+      statStagesDecreased: false,
+      moveEffectiveness: null,
+      switchedInThisTurn: false,
+      failedRunAway: false,
+      joinedRound: false,
+    };
   }
 
   /**
@@ -4175,10 +4172,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   stopMultiHit(): void {
-    if (this.turnData) {
-      this.turnData.hitCount = 1;
-      this.turnData.hitsLeft = 1;
-    }
+    this.turnData.hitCount = 1;
+    this.turnData.hitsLeft = 1;
   }
 
   setFrameRate(frameRate: number) {
