@@ -1,16 +1,16 @@
 import Phaser from "phaser";
 
-// #region Original Functions
-
-const originalPlay = Phaser.GameObjects.Sprite.prototype.play;
-const originalStop = Phaser.GameObjects.Sprite.prototype.stop;
-
-// #endregion
 // #region Types
 
 type GuideObject = Phaser.GameObjects.Components.Origin
   & Phaser.GameObjects.Components.Size
   & Phaser.GameObjects.Components.Transform;
+
+// #endregion
+// #region Original Functions
+
+const originalPlay = Phaser.GameObjects.Sprite.prototype.play;
+const originalStop = Phaser.GameObjects.Sprite.prototype.stop;
 
 // #endregion
 // #region Extensions
