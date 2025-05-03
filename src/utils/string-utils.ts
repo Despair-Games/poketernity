@@ -1,3 +1,4 @@
+import { LARGE_NUMBER_ABBREVIATIONS } from "#app/constants/game-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
 import { MoneyFormat } from "#enums/money-format";
@@ -43,12 +44,6 @@ export function getPlayTimeString(totalSeconds: number): string {
 }
 
 /**
- * Abbreviations from 10^0 to 10^33
- * @todo localize these
- */
-export const AbbreviationsLargeNumber: string[] = ["", "K", "M", "B", "t", "q", "Q", "s", "S", "o", "n", "d"];
-
-/**
  * Return an abbreviated representation of the given number, with up to 2 digits past the decimal point.
  * @example
  * formatLargeNumber(2300); // Output "2.3K"
@@ -61,7 +56,7 @@ export function formatLargeNumber(count: number, threshold: number = 1000): stri
     return count.toString();
   }
   const ret = count.toString();
-  const suffix = AbbreviationsLargeNumber[Math.ceil(ret.length / 3) - 1] ?? "?";
+  const suffix = LARGE_NUMBER_ABBREVIATIONS[Math.ceil(ret.length / 3) - 1] ?? "?";
   const digits = ((ret.length + 2) % 3) + 1;
   let decimalNumber = ret.slice(digits, digits + 2);
   while (decimalNumber.endsWith("0")) {
@@ -86,7 +81,7 @@ export function formatLargeNumberFixedDigits(number: number, fractionDigits: num
   if (number < 1000) {
     exponent = 0;
   } else {
-    const maxExp = AbbreviationsLargeNumber.length - 1;
+    const maxExp = LARGE_NUMBER_ABBREVIATIONS.length - 1;
 
     exponent = Math.floor(Math.log(number) / Math.log(1000));
     exponent = Math.min(exponent, maxExp);
@@ -94,7 +89,7 @@ export function formatLargeNumberFixedDigits(number: number, fractionDigits: num
     number /= Math.pow(1000, exponent);
   }
 
-  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(fractionDigits)}${AbbreviationsLargeNumber[exponent]}`;
+  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(fractionDigits)}${LARGE_NUMBER_ABBREVIATIONS[exponent]}`;
 }
 
 export function formatMoney(format: MoneyFormat, amount: number): string {

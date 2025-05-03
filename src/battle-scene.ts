@@ -123,14 +123,8 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
-import {
-  type AbstractConstructor,
-  BooleanHolder,
-  fixedNumber,
-  getEnumValues,
-  isNil,
-  NumberHolder,
-} from "#app/utils/common-utils";
+import { BooleanHolder, fixedNumber, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
+import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";

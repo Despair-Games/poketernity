@@ -4,11 +4,8 @@ import type { initGameSpeed } from "#app/system/game-speed";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { nil } from "#app/@types/nil";
 import type { Pokemon } from "#app/field/pokemon";
-
-export type nil = null | undefined;
-
-export const MissingTextureKey = "__MISSING";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);
@@ -41,20 +38,6 @@ export function getEnumLength(input: any): number {
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
-
-/**
- * Alias for the constructor of a class.
- * Can be used to build an object of templated type.
- *
- * Use {@linkcode AbstractConstructor} instead if comparing types
- */
-export type Constructor<T> = new (...args: unknown[]) => T;
-
-/**
- * Alias for an abstract constructor of a class.
- * Should be used when comparing types, e.g. with `instanceof`.
- */
-export type AbstractConstructor<T> = abstract new (...args: unknown[]) => T;
 
 export class BooleanHolder {
   public value: boolean;
@@ -119,7 +102,7 @@ export function deepCopy<T>(obj: T): T {
 }
 
 /** @returns Whether the input is `null` or `undefined` */
-export function isNil(obj: any): obj is null | undefined {
+export function isNil(obj: any): obj is nil {
   return null === obj || undefined === obj;
 }
 

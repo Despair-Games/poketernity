@@ -1,7 +1,5 @@
+import { IS_BETA } from "#app/constants/app-constants";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
-
-/** This returns true if the env mode is development or beta. */
-export const isBeta = import.meta.env.MODE === "beta";
 
 export function setCookie(cName: string, cValue: string): void {
   const expiration = new Date();
@@ -10,7 +8,7 @@ export function setCookie(cName: string, cValue: string): void {
 }
 
 export function removeCookie(cName: string): void {
-  if (isBeta) {
+  if (IS_BETA) {
     // we need to remove the cookie from the main domain as well
     document.cookie = `${cName}=;Secure;SameSite=Strict;Domain=poketernity.com;Path=/;Max-Age=-1`;
   }

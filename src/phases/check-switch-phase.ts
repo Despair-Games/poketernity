@@ -6,7 +6,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
@@ -62,7 +62,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...or if any player Pokemon has an effect that prevents the checked Pokemon from switching
     if (
-      pokemon.getTag(...MoveLockTagTypes)
+      pokemon.getTag(...MOVE_LOCK_TAG_TYPES)
       || pokemon.isTrapped()
       || globalScene.getPlayerField().some((p) => p.getTag(BattlerTagType.COMMANDED))
     ) {

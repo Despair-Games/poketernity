@@ -12,7 +12,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -557,7 +557,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
         score /= playerField.length;
         if (forSwitch && !p.isOnField()) {
           globalScene.arena
-            .getTags<EntryHazardTag>((t) => EntryHazardArenaTagTypes.includes(t.tagType), ArenaTagSide.ENEMY)
+            .getTags<EntryHazardTag>((t) => ENTRY_HAZARD_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.ENEMY)
             ?.map((t) => (score *= t.getMatchupScoreMultiplier(p)));
         }
       }

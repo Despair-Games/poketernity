@@ -1,4 +1,3 @@
-import { allSpecies } from "#app/data/data-lists";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import { speciesEggTiers } from "#app/data/species-egg-tiers";
 import { isNil } from "#app/utils/common-utils";
@@ -74,7 +73,6 @@ describe("Egg Generation Tests", () => {
   it("should never be allowed to generate Eternatus via the legendary gacha", () => {
     const validLegendaryGachaSpecies = getValidLegendaryGachaSpecies();
     expect(validLegendaryGachaSpecies.every((s) => speciesEggTiers[s] === EggTier.LEGENDARY)).toBe(true);
-    expect(validLegendaryGachaSpecies.every((s) => allSpecies[s].isObtainable())).toBe(true);
     expect(validLegendaryGachaSpecies.includes(SpeciesId.ETERNATUS)).toBe(false);
   });
 

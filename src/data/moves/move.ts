@@ -33,15 +33,12 @@ import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
-import {
-  BooleanHolder,
-  NumberHolder,
-  type AbstractConstructor,
-  type Constructor,
-  type nil,
-} from "#app/utils/common-utils";
-import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
-import { TypeBoostTagTypes } from "#app/utils/battler-tag-type-utils";
+import { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
+import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
+import type { Constructor } from "#app/@types/Constructor";
+import type { nil } from "#app/@types/nil";
+import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
+import { TYPE_BOOST_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -858,14 +855,14 @@ export abstract class Move implements Localizable {
     power.value *= typeChangeMovePowerMultiplier.value;
 
     const typeBoost = source.findTag<TypeBoostTag>(
-      (t) => t.isType<TypeBoostTag>(...TypeBoostTagTypes) && t.boostedType === this.type,
+      (t) => t.isType<TypeBoostTag>(...TYPE_BOOST_TAG_TYPES) && t.boostedType === this.type,
     );
     if (typeBoost) {
       power.value *= typeBoost.boostValue;
     }
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags([...WeakenMoveTypeArenaTagTypes], simulated, this.type, power);
+      globalScene.arena.applyTags([...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES], simulated, this.type, power);
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 

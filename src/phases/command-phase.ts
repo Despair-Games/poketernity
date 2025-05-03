@@ -14,7 +14,7 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -111,7 +111,7 @@ export class CommandPhase extends FieldPhase {
           (moveIndex > -1 && pokemon.getMoveset()[moveIndex].isUsable(pokemon, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
-          MoveLockTagTypes.forEach((tagType) => pokemon.lapseTag(tagType));
+          MOVE_LOCK_TAG_TYPES.forEach((tagType) => pokemon.lapseTag(tagType));
           this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
           ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
@@ -354,7 +354,7 @@ export class CommandPhase extends FieldPhase {
           showNoEscapeText(trappedAbMessages[0]);
         } else {
           const trapTag =
-            pokemon.getTag<TrappedTag>(...TrappedBattlerTagTypes)
+            pokemon.getTag<TrappedTag>(...TRAPPED_BATTLER_TAG_TYPES)
             ?? pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
           const fairyLockTag = arena.findTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
