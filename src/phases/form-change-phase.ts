@@ -133,9 +133,9 @@ export class FormChangePhase extends FormChangeBasePhase {
    */
   private handleFormChangeComplete(formChangedPokemon: Pokemon): void {
     const { time, tweens, ui, animations } = globalScene;
-    const onFormChangeComplete = (): void => {
-      const preName = getPokemonNameWithAffix(this.pokemon);
+    const preName = getPokemonNameWithAffix(this.pokemon);
 
+    const onFormChangeComplete = (): void => {
       tweens.add({
         targets: this.bgOverlay,
         alpha: 0,
