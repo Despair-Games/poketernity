@@ -1,23 +1,24 @@
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
+import pad_dualshock from "#app/configs/inputs/pad_dualshock";
+import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
+import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
+import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app-constants";
+import { eventBus } from "#app/event-bus";
+import { globalScene } from "#app/global-scene";
+import type { InterfaceConfig } from "#app/inputs-controller";
 import {
   setSettingGamepad,
   settingGamepadBlackList,
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "#app/system/settings/settings-gamepad";
-import { SettingGamepad } from "#enums/setting-gamepad";
-import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
-import pad_dualshock from "#app/configs/inputs/pad_dualshock";
-import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { AbstractControlSettingsUiHandler } from "#app/ui/settings/abstract-control-settings-ui-handler";
-import { Device } from "#enums/devices";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { truncateString } from "#app/utils/string-utils";
-import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
-import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app-constants";
+import { Device } from "#enums/devices";
+import { SettingGamepad } from "#enums/setting-gamepad";
+import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /**
  * Class representing the settings UI handler for gamepads.
@@ -57,6 +58,13 @@ export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
     // Map the 'noGamepads' layout options for easy access.
     this.layout["noGamepads"].optionsContainer = optionsContainer;
     this.layout["noGamepads"].label = label;
+
+    eventBus.on("gamepad/init", this.updateChosenGamepadDisplay, this);
+  }
+
+  protected override tearDown(): void {
+    eventBus.off("gamepad/init", this.updateChosenGamepadDisplay, this);
+    super.tearDown();
   }
 
   /**
@@ -82,7 +90,7 @@ export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
   /**
    * Update the display of the chosen gamepad.
    */
-  public updateChosenGamepadDisplay(): void {
+  private updateChosenGamepadDisplay(): void {
     // Update any bindings that might have changed since the last update.
     this.updateBindings();
     this.resetScroll();

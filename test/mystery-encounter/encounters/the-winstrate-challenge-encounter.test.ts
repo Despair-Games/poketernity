@@ -7,7 +7,8 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -296,12 +297,10 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MYSTERY_ENCOUNTER_MACHO_BRACE");
-    }, 15000);
+    });
   });
 
   describe("Option 2 - Refuse the Challenge", () => {
@@ -338,9 +337,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("RARER_CANDY");
     });
@@ -355,7 +352,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
 async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean = false) {
   game.scene.phaseManager.clearPhaseQueue();
   game.scene.phaseManager.clearPhaseQueueSplice();
-  const commandUiHandler = game.scene.ui.handlers[UiMode.COMMAND];
+  const commandUiHandler = game.scene.ui.getHandler<CommandUiHandler>();
   commandUiHandler.stop();
   game.scene.getEnemyParty().forEach((p) => {
     p.faint();

@@ -98,8 +98,15 @@ export class SummaryUiHandler extends UiHandler {
   private moveCursorBlinkTimer: Phaser.Time.TimerEvent | null;
 
   private pokemon: Pokemon | null;
+
+  /** Whether the summary was accessed from the party menu or not. */
+  private fromPartyMenu: boolean;
+  /**
+   * This is set to false when checking the summary of a freshly caught Pokemon
+   * as it is not part of a player's party yet but still needs to display its items (see PKR#2921)
+   */
   private playerParty: boolean;
-  /**This is set to false when checking the summary of a freshly caught Pokemon as it is not part of a player's party yet but still needs to display its items**/
+
   private newMove: Move | null;
   private moveSelectFunction: MoveSelectCallback | null;
   private transitioning: boolean;
@@ -294,11 +301,12 @@ export class SummaryUiHandler extends UiHandler {
    * If `DEFAULT`, need to provide a {@linkcode SummaryUiPage} and optional {@linkcode ExitCallBack} for when the summary is exited
    * If `LEARN_MOVE`, need to provide a {@linkcode Move} and {@linkcode MoveSelectCallback} for when the move is selected.
    *
-   * @param pokemon - the Pokemon displayed in the Summary-UI
-   * @param mode - the summaryUiMode (defaults to 0)
-   * @param pageOrMove - the start {@linkcode SummaryUiPage} or {@linkcode Move} to show, depending. Default: `Page.PROFILE`
-   * @param callback - the function executed when the user exits out of Summary UI or when a move is selected, depending on the case
-   * @param isPlayerParty - boolean used to determine if the Pokemon is part of the player's party or not. Default: `true` (see PKR#2921)
+   * @param pokemon - The Pokemon displayed in the Summary-UI
+   * @param mode - The summaryUiMode (defaults to 0)
+   * @param pageOrMove - The start {@linkcode SummaryUiPage} or {@linkcode Move} to show, depending. Default: `Page.PROFILE`
+   * @param callback - The function executed when the user exits out of Summary UI or when a move is selected, depending on the case
+   * @param fromPartyMenu - Whether the UI Mode is being accessed from the party menu. Default: `true`
+   * @param isInPlayerParty - Whether the Pokemon is part of the player's party or not. Default: `true`
    * @returns `true` is the UI was initiliazed properly
    */
   public override show(
@@ -306,11 +314,14 @@ export class SummaryUiHandler extends UiHandler {
     mode: SummaryUiMode = SummaryUiMode.DEFAULT,
     pageOrMove?: SummaryUiPage | Move,
     callback?: ExitCallBack | MoveSelectCallback,
-    isPlayerParty: boolean = true,
+    fromPartyMenu: boolean = true,
+    isInPlayerParty: boolean = true,
   ): boolean {
     this.pokemon = pokemon;
     this.summaryUiMode = mode;
-    this.playerParty = isPlayerParty;
+
+    this.fromPartyMenu = fromPartyMenu;
+    this.playerParty = isInPlayerParty;
     globalScene.ui.bringToTop(this.summaryContainer);
 
     this.summaryContainer.setVisible(true);
@@ -453,7 +464,7 @@ export class SummaryUiHandler extends UiHandler {
     }
 
     const ui = this.getUi();
-    const fromPartyMode = ui.handlers[UiMode.PARTY].active;
+
     let success = false;
     let error = false;
 
@@ -549,7 +560,7 @@ export class SummaryUiHandler extends UiHandler {
             selectCallback();
           }
 
-          if (!fromPartyMode) {
+          if (!this.fromPartyMenu) {
             ui.setMessageMode();
           } else {
             ui.setMode<PartyUiHandler>(UiMode.PARTY);
@@ -561,9 +572,7 @@ export class SummaryUiHandler extends UiHandler {
         switch (button) {
           case Button.UP:
           case Button.DOWN:
-            if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
-              break;
-            } else if (!fromPartyMode) {
+            if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE || !this.fromPartyMenu) {
               break;
             }
             const isDown = button === Button.DOWN;

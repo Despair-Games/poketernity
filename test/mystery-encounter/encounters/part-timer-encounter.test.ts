@@ -105,7 +105,7 @@ describe("Part-Timer - Mystery Encounter", () => {
         p.level = 50;
         p.calculateStats();
       });
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 });
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(1), true, false);
       // Expect PP of mon's moves to have been reduced to 2
@@ -125,7 +125,7 @@ describe("Part-Timer - Mystery Encounter", () => {
         p.ivs = [20, 20, 20, 20, 20, 20];
         p.calculateStats();
       });
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 2 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 2 });
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(4), true, false);
       // Expect PP of mon's moves to have been reduced to 2
@@ -139,7 +139,7 @@ describe("Part-Timer - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -170,7 +170,7 @@ describe("Part-Timer - Mystery Encounter", () => {
         p.level = 50;
         p.calculateStats();
       });
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 3 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 3 });
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(1), true, false);
       // Expect PP of mon's moves to have been reduced to 2
@@ -190,7 +190,7 @@ describe("Part-Timer - Mystery Encounter", () => {
         p.ivs = [20, 20, 20, 20, 20, 20];
         p.calculateStats();
       });
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 4 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 4 });
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(4), true, false);
       // Expect PP of mon's moves to have been reduced to 2
@@ -204,7 +204,7 @@ describe("Part-Timer - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -271,7 +271,7 @@ describe("Part-Timer - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
