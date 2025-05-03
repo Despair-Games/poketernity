@@ -7,7 +7,7 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { CommandPhase } from "#app/phases/command-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BattleCommand } from "#enums/battle-command";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -139,7 +139,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.TACKLE]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(scene.getEnemyPokemon()?.species.speciesId).toBe(SpeciesId.WOBBUFFET);
@@ -169,7 +169,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
     it("should have no items in rewards if Wubboffet doesn't take enough damage", async () => {
       scene.money = 20000;
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -186,9 +186,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
@@ -197,7 +195,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -216,9 +214,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("POKEBALL");
     });
@@ -228,7 +224,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -247,9 +243,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("GREAT_BALL");
     });
@@ -259,7 +253,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
@@ -278,9 +272,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("ULTRA_BALL");
     });
