@@ -200,6 +200,10 @@ export abstract class PokemonSpeciesForm {
     return this.baseStats[stat];
   }
 
+  /**
+   * Custom legacy logic to make Megas, Primals, and g-max Pokemon give 1.5x exp
+   * TODO: Do we want to keep this? The function itself can use some refactoring too...
+   */
   getBaseExp(): number {
     let ret = this.baseExp;
     switch (this.getFormSpriteKey()) {

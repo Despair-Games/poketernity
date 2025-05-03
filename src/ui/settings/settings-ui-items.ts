@@ -5,7 +5,7 @@ import type {
   SettingsUiItem,
   SettingUiItemOption,
 } from "#app/@types/Settings";
-import { GAME_SPEEDS } from "#app/constants/app";
+import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";

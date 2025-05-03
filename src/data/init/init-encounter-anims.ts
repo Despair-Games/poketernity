@@ -1,7 +1,7 @@
 import { AnimConfig } from "#app/data/animations/anim-config";
 import { encounterAnims } from "#app/data/animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { getEnumKeys, isNil } from "#app/utils/common-utils";
+import { coerceArray, getEnumKeys, isNil } from "#app/utils/common-utils";
 import { EncounterAnim } from "#enums/encounter-anims";
 
 /**
@@ -9,7 +9,7 @@ import { EncounterAnim } from "#enums/encounter-anims";
  * @param encounterAnim one or more animations to fetch
  */
 export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
-  const anims = Array.isArray(encounterAnim) ? encounterAnim : [encounterAnim];
+  const anims = coerceArray(encounterAnim);
   const encounterAnimNames = getEnumKeys(EncounterAnim);
   const encounterAnimFetches: Promise<Map<EncounterAnim, AnimConfig>>[] = [];
   for (const anim of anims) {

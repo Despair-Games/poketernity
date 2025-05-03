@@ -1,4 +1,4 @@
-import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship";
+import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship-constants";
 import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
@@ -1684,7 +1684,6 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
       globalScene.phaseManager.queuePokemonHealPhase(
-        true,
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
         {
@@ -1789,7 +1788,6 @@ export class HitHealModifier extends PokemonHeldItemModifier {
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
       globalScene.phaseManager.queuePokemonHealPhase(
-        true,
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
         {
@@ -1978,19 +1976,14 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.phaseManager.queuePokemonHealPhase(
-      true,
-      pokemon.getBattlerIndex(),
-      toDmgValue(pokemon.getMaxHp() / 2),
-      {
-        message: i18next.t("modifier:pokemonInstantReviveApply", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          typeName: this.type.name,
-        }),
-        showFullHpMessage: false,
-        revive: true,
-      },
-    );
+    globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
+      message: i18next.t("modifier:pokemonInstantReviveApply", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        typeName: this.type.name,
+      }),
+      showFullHpMessage: false,
+      revive: true,
+    });
 
     // Remove any status the Pokemon had before fainting
     pokemon.resetStatus(false, true);

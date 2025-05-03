@@ -1,4 +1,10 @@
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
+import {
+  EVIL_GRUNT_1_WAVE,
+  EVIL_GRUNT_2_WAVE,
+  EVIL_GRUNT_3_WAVE,
+  EVIL_GRUNT_4_WAVE,
+} from "#app/constants/wave-constants";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
@@ -6,9 +12,10 @@ import type { PersistentModifier } from "#app/modifier/modifier";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { toReadableString } from "#app/utils/string-utils";
-import { randItem, randSeedItem } from "#app/utils/random-utils";
+import { coerceArray } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randItem, randSeedItem } from "#app/utils/random-utils";
+import { toReadableString } from "#app/utils/string-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -26,6 +33,9 @@ const ELITE_FOUR_MINIMUM_BST = 460;
 export interface TrainerTierPools {
   [key: number]: SpeciesId[];
 }
+
+// TODO: Move to own file
+//#region Trainer Party templates
 
 export class TrainerPartyTemplate {
   public size: number;
@@ -170,7 +180,6 @@ export const trainerPartyTemplates = {
   SIX_WEAK_SAME: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, true),
   SIX_WEAK_BALANCED: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, false, true),
 
-  // TODO: adjust gym leader templates
   GYM_LEADER_1: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
@@ -193,6 +202,20 @@ export const trainerPartyTemplates = {
   GYM_LEADER_5: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE),
     new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
+  ),
+  GYM_LEADER_6: new TrainerPartyCompoundTemplate(
+    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
+    new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
+  ),
+  GYM_LEADER_7: new TrainerPartyCompoundTemplate(
+    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
+    new TrainerPartyTemplate(4, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
+  ),
+  GYM_LEADER_8: new TrainerPartyCompoundTemplate(
+    new TrainerPartyTemplate(5, PartyMemberStrength.STRONG),
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
   ),
 
@@ -721,6 +744,9 @@ export class TrainerConfig {
     return this;
   }
 
+  // TODO: Move into own file?
+  //#region Evil team data
+
   /**
    * Returns the pool of species for an evil team admin
    * @param team - The evil team the admin belongs to.
@@ -1136,9 +1162,7 @@ export class TrainerConfig {
     this.speciesPools = this.speciesPoolPerEvilTeamAdmin(poolName);
 
     signatureSpecies.forEach((speciesPool, s) => {
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
 
@@ -1173,9 +1197,7 @@ export class TrainerConfig {
     this.setPartyTemplates(trainerPartyTemplates.ELITE_FOUR);
 
     signatureSpecies.forEach((speciesPool, s) => {
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
     if (specialtyTypes.length) {
@@ -1242,22 +1264,11 @@ export class TrainerConfig {
     }
 
     // Set the function to generate the Gym Leader's party template.
-    this.setPartyTemplateFunc(() =>
-      getWavePartyTemplate(
-        trainerPartyTemplates.GYM_LEADER_1,
-        trainerPartyTemplates.GYM_LEADER_2,
-        trainerPartyTemplates.GYM_LEADER_3,
-        trainerPartyTemplates.GYM_LEADER_4,
-        trainerPartyTemplates.GYM_LEADER_5,
-      ),
-    );
+    this.setPartyTemplateFunc(() => getGymLeaderPartyTemplate());
 
     // Set up party members with their corresponding species.
     signatureSpecies.forEach((speciesPool, s) => {
-      // Ensure speciesPool is an array.
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       // Set a function to get a random party member from the species pool.
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
@@ -1341,10 +1352,7 @@ export class TrainerConfig {
 
     // Set up party members with their corresponding species.
     signatureSpecies.forEach((speciesPool, s) => {
-      // Ensure speciesPool is an array.
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
+      speciesPool = coerceArray(speciesPool);
       // Set a function to get a random party member from the species pool.
       this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
     });
@@ -1616,13 +1624,13 @@ export interface TrainerConfigs {
  */
 export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
   const waveIndex = globalScene.currentBattle?.waveIndex;
-  if (waveIndex < 40) {
+  if (waveIndex <= EVIL_GRUNT_1_WAVE) {
     return trainerPartyTemplates.TWO_AVG;
-  } else if (waveIndex < 63) {
+  } else if (waveIndex <= EVIL_GRUNT_2_WAVE) {
     return trainerPartyTemplates.THREE_AVG;
-  } else if (waveIndex < 65) {
+  } else if (waveIndex <= EVIL_GRUNT_3_WAVE) {
     return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
-  } else if (waveIndex < 112) {
+  } else if (waveIndex < EVIL_GRUNT_4_WAVE) {
     return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
   } else {
     return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
@@ -1648,6 +1656,35 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
   const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? wave, true);
   const targetTemplate = Math.ceil((adjustedWave - offsetWave) / wavesToScale);
   return templates[Phaser.Math.Clamp(targetTemplate, 0, templates.length - 1)];
+}
+
+/**
+ * Gets the correct team template for a gym leader based on the wave
+ * @returns the TrainerPartyTemplate of the correct gym leader
+ */
+export function getGymLeaderPartyTemplate(): TrainerPartyTemplate {
+  const wave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
+  const { currentBattle } = globalScene;
+  const currentWave = currentBattle?.waveIndex ?? wave;
+  // TODO: Need special handling for daily mode
+  switch (currentWave) {
+    case 20:
+      return trainerPartyTemplates.GYM_LEADER_1;
+    case 40:
+      return trainerPartyTemplates.GYM_LEADER_2;
+    case 60:
+      return trainerPartyTemplates.GYM_LEADER_3;
+    case 80:
+      return trainerPartyTemplates.GYM_LEADER_4;
+    case 100:
+      return trainerPartyTemplates.GYM_LEADER_5;
+    case 120:
+      return trainerPartyTemplates.GYM_LEADER_6;
+    case 140:
+      return trainerPartyTemplates.GYM_LEADER_7;
+    default:
+      return trainerPartyTemplates.GYM_LEADER_8;
+  }
 }
 
 /**
@@ -1701,28 +1738,3 @@ export function getSpeciesFilterRandomPartyMemberFunc(
     return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
   };
 }
-
-/**
- * Function to create a {@linkcode PersistentModifier} of applying random tera types to a trainer's team
- * @param party the party
- * @param count how many random teras will be applied
- * @param types an array of possible ElementalTypes to apply the tera
- * @returns a PersistentModifier
- */
-// TODO: remove this when trainer teras are reworked
-// function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
-//   const ret: PersistentModifier[] = [];
-//   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
-//   for (let t = 0; t < Math.min(count, party.length); t++) {
-//     const randomIndex = randSeedItem(partyMemberIndexes);
-//     partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
-//     ret.push(
-//       modifierTypes
-//         .TERA_SHARD()
-//         .generateType([], [randSeedItem(types ? types : party[randomIndex].getTypes())])!
-//         .withIdFromFunc(modifierTypes.TERA_SHARD)
-//         .newModifier(party[randomIndex]) as PersistentModifier,
-//     ); // TODO: is the bang correct?
-//   }
-//   return ret;
-// }

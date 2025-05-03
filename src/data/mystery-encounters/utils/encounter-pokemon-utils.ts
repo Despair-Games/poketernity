@@ -737,6 +737,7 @@ export async function catchPokemon(
                       });
                     },
                     false,
+                    false,
                   );
                   return true;
                 },

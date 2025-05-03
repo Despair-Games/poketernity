@@ -1,4 +1,4 @@
-import { TUTORIAL_BATTLE_WAVE } from "#app/constants/special-waves";
+import { TUTORIAL_BATTLE_WAVE } from "#app/constants/wave-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

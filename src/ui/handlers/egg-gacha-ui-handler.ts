@@ -5,7 +5,7 @@ import Overrides from "#app/overrides";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { getVoucherTypeIcon } from "#app/system/voucher";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getEnumKeys, getEnumValues } from "#app/utils/common-utils";

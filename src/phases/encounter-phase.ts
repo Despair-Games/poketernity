@@ -5,8 +5,8 @@ import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
-import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounters";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
+import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
 import type { SyncEncounterNatureAbAttr } from "#app/data/abilities/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";

@@ -1,8 +1,8 @@
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";

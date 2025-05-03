@@ -26,8 +26,6 @@ export class FlinchedTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
-
-    applyAbAttrs<FlinchEffectAbAttr>(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
   }
 
   /**
@@ -38,10 +36,14 @@ export class FlinchedTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
+      globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
       globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:flinchedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
+
+      applyAbAttrs<FlinchEffectAbAttr>(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
+
+      return true;
     }
 
     return super.lapse(pokemon, lapseType);

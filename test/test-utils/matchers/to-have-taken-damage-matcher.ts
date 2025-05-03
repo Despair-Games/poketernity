@@ -1,3 +1,4 @@
+import { getPokemonNameWithAffix } from "#app/messages";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
@@ -22,11 +23,13 @@ export function toHaveTakenDamageMatcher(
   const actualDamageTaken = received.getInverseHp();
   const pass = actualDamageTaken === expectedDamageTaken;
 
+  const pkmName = getPokemonNameWithAffix(received);
+
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} to NOT have taken ${expectedDamageTaken} damage, but it did!`
-        : `Expected ${received.name} to have taken ${expectedDamageTaken} damage, but got ${actualDamageTaken}.`,
+        ? `Expected ${pkmName} to NOT have taken ${expectedDamageTaken} damage, but it did!`
+        : `Expected ${pkmName} to have taken ${expectedDamageTaken} damage, but got ${actualDamageTaken}.`,
   };
 }

@@ -39,18 +39,16 @@ describe("Moves - Court Change", () => {
     game.move.select(MoveId.SAFEGUARD);
     await game.toNextTurn();
 
-    const tag1 = game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER);
-    expect(tag1?.tagType).toBe(ArenaTagType.SAFEGUARD);
-    expect(tag1?.turnCount).toBe(4);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeUndefined();
+    const tag1 = game.scene.arena.findTag(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)!;
+    expect(tag1.turnCount).toBe(4);
+    expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeFalsy();
 
     game.move.select(MoveId.COURT_CHANGE);
     await game.toNextTurn();
 
-    const tag2 = game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY);
-    expect(tag2?.tagType).toBe(ArenaTagType.SAFEGUARD);
-    expect(tag2?.turnCount).toBe(3);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)).toBeUndefined();
+    const tag2 = game.scene.arena.findTag(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)!;
+    expect(tag2.turnCount).toBe(3);
+    expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)).toBeFalsy();
   });
 
   test("should not miss", async () => {
@@ -63,17 +61,13 @@ describe("Moves - Court Change", () => {
     game.move.select(MoveId.SAFEGUARD);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)?.tagType).toBe(
-      ArenaTagType.SAFEGUARD,
-    );
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeFalsy();
 
     game.move.select(MoveId.COURT_CHANGE);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)?.tagType).toBe(
-      ArenaTagType.SAFEGUARD,
-    );
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)).toBeUndefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)).toBeFalsy();
   });
 });

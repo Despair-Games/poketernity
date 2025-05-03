@@ -1,6 +1,6 @@
 import type { Localizable } from "#app/@types/locales";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game-constants";
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
 import type { ChangeMovePriorityAbAttr } from "#app/data/abilities/ab-attrs/change-move-priority-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
@@ -767,7 +767,7 @@ export abstract class Move implements Localizable {
       moveAccuracy.value = Math.floor(moveAccuracy.value * FOG_ACCURACY_MULTIPLIER);
     }
 
-    if (!isOhko && globalScene.arena.getTag(ArenaTagType.GRAVITY)) {
+    if (!isOhko && globalScene.arena.hasTag(ArenaTagType.GRAVITY)) {
       moveAccuracy.value = Math.floor(moveAccuracy.value * 1.67);
     }
 

@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
 import { TextStyle } from "#enums/text-style";
 import { getTextStyle } from "#app/ui/text/text-style";
-import { TEXT_SCALE } from "#app/constants/ui";
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 
 interface CustomTextStyleOptions {
   scale: number;

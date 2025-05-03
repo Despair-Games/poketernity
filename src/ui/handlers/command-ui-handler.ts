@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerastallizeAccessModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
-import { TEXT_SCALE } from "#app/constants/ui";
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
@@ -95,7 +95,10 @@ export class CommandUiHandler extends UiHandler {
       i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
       0,
     );
-    if (this.getCursor() === BattleCommand.POKEMON) {
+
+    // If this is the first turn of battle, default to the fight command. TODO: add setting to disable this behavior
+    const isFirstAction = !this.active && globalScene.currentBattle.turn === 1;
+    if (isFirstAction || this.getCursor() === BattleCommand.POKEMON) {
       this.setCursor(BattleCommand.FIGHT);
     } else {
       this.setCursor(this.getCursor());

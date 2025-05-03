@@ -12,7 +12,7 @@ import {
   KIERAN_CHAMPION_THEME,
   NEMONA_CHAMPION_THEME,
   SINNOH_CHAMPION_THEME,
-} from "#app/constants/music";
+} from "#app/constants/music-constants";
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { PokeballType } from "#enums/pokeball-type";
@@ -390,7 +390,8 @@ export const championTrainerConfigs: TrainerConfigs = {
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
       }),
-    ),
+    )
+    .setInstantTera(4),
   [TrainerType.KIERAN]: new TrainerConfig(++t)
     .initForChampion(TrainerVariant.DEFAULT, [KIERAN_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED]))

@@ -1,5 +1,5 @@
 import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allSpecies } from "#app/data/data-lists";
 import { getLevelTotalExp } from "#app/data/exp";

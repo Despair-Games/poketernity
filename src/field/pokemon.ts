@@ -13,7 +13,7 @@ import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game-constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -50,7 +50,6 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/ab
 import type { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight-multiplier-ab-attr";
 import type { Ability } from "#app/data/abilities/ability";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
-import { NoCritTag } from "#app/data/arena-tag";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";
@@ -156,6 +155,7 @@ import { applyChallenges } from "#app/utils/challenge-utils";
 import {
   BooleanHolder,
   NumberHolder,
+  coerceArray,
   deepCopy,
   deepFreeze,
   fixedNumber,
@@ -1183,10 +1183,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case Stat.SPD:
         const side = this.getArenaTagSide();
-        if (globalScene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
+        if (globalScene.arena.hasTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
-        if (globalScene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
+        if (globalScene.arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
           ret >>= 2;
         }
 
@@ -1364,9 +1364,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let overrideArray: MoveId | Array<MoveId> = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
       : Overrides.ENEMY_MOVESET_OVERRIDE;
-    if (!Array.isArray(overrideArray)) {
-      overrideArray = [overrideArray];
-    }
+
+    overrideArray = coerceArray(overrideArray);
     if (overrideArray.length > 0) {
       if (!this.isPlayer()) {
         this.moveset = [];
@@ -1515,9 +1514,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isTerastallized) {
       return;
     }
-    if (!Array.isArray(types)) {
-      types = [types];
-    }
+    types = coerceArray(types);
     this.summonData.types = types;
   }
 
@@ -1826,7 +1823,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return (
       trappedByAbility.value
       || this.hasTag(...TrappedBattlerTagTypes)
-      || !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
+      || globalScene.arena.hasTag(ArenaTagType.FAIRY_LOCK, side)
     );
   }
 
@@ -3317,7 +3314,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
-    const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
+    const noCritTag = globalScene.arena.hasTag(ArenaTagType.NO_CRIT, defendingSide);
     if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
     }
@@ -3872,9 +3869,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     includeConfusion: boolean = false,
     ignoreMockAbility: boolean = false,
   ): boolean {
-    if (!Array.isArray(statusList)) {
-      statusList = [statusList];
-    }
+    statusList = coerceArray(statusList);
     if (
       statusList.includes(this.getStatusEffect(ignoreMockAbility))
       || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
@@ -4116,7 +4111,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   isSafeguarded(attacker: Pokemon): boolean {
     const defendingSide = this.getArenaTagSide();
-    if (globalScene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
+    if (globalScene.arena.hasTag(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
         applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, false, bypassed);
@@ -4183,6 +4178,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.turnData = deepCopy<PokemonTurnData>(defaultTurnData);
   }
 
+  /**
+   * Custom legacy exp formula to multiply the base exp (along with form modifiers) by level/5 +1
+   */
   getExpValue(): number {
     // Logic to factor in victor level has been removed for balancing purposes, so the player doesn't have to focus on EXP maxxing
     return (this.getSpeciesForm().getBaseExp() * this.level) / 5 + 1;

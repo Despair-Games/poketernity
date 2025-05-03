@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { PendingHealTag } from "#app/data/arena-tag";
 import type { Move } from "#app/data/moves/move";
 import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { PendingHealTag } from "#app/data/arena-tag";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon
@@ -28,15 +28,13 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     globalScene.arena.addTag(ArenaTagType.PENDING_HEAL, 0);
 
-    const tag = globalScene.arena.getTag(ArenaTagType.PENDING_HEAL) as PendingHealTag;
-    if (tag) {
-      tag.queueHeal(user.getBattlerIndex(), {
-        sourceId: user.id,
-        moveId: move.id,
-        restorePP: this.restorePP,
-        healMessageKey: this.moveTriggerMessage,
-      });
-    }
+    const tag = globalScene.arena.findTag<PendingHealTag>(ArenaTagType.PENDING_HEAL);
+    tag?.queueHeal(user.getBattlerIndex(), {
+      sourceId: user.id,
+      moveId: move.id,
+      restorePP: this.restorePP,
+      healMessageKey: this.moveTriggerMessage,
+    });
 
     return super.applyEffect(user, target, move);
   }

@@ -30,6 +30,7 @@ export function toHaveWeatherMatcher(
   }
 
   const pass = received.scene.arena.hasWeather(expectedWeatherType);
+
   const weatherStr = toWeatherStr(expectedWeatherType);
   const actualWeatherStr = toWeatherStr(received.scene.arena.weather?.weatherType);
 

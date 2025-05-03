@@ -18,7 +18,7 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "#app/constants/special-waves";
+} from "#app/constants/wave-constants";
 import { getLevelForWaveFunc } from "#app/data/exp";
 import type { Move } from "#app/data/moves/move";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -210,7 +210,7 @@ export default class Battle {
     const moneyAmount = new NumberHolder(globalScene.currentBattle.moneyScattered);
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
 
-    if (globalScene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
+    if (globalScene.arena.hasTag(ArenaTagType.HAPPY_HOUR)) {
       moneyAmount.value *= 2;
     }
 
@@ -450,6 +450,16 @@ export default class Battle {
    */
   isBattleMysteryEncounter(): boolean {
     return this.battleType === BattleType.MYSTERY_ENCOUNTER;
+  }
+
+  /**
+   * @param includeMEs - Whether to count Mystery Encounter trainer battles
+   * @returns `true` if the current battle is a trainer battle
+   */
+  public isTrainerBattle(includeMEs: boolean = false): boolean {
+    const { battleType, mysteryEncounter } = this;
+    const trainerME = includeMEs ? mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE : false;
+    return battleType === BattleType.TRAINER || trainerME;
   }
 }
 
