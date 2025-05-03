@@ -1,13 +1,11 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
-import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { getEnemyMoveChoices } from "./utils/enemy-command-utils";
 
 describe("Enemy Commands - Basic Move Selection", () => {
   let phaserGame: Phaser.Game;
@@ -55,13 +53,7 @@ describe("Enemy Commands - Basic Move Selection", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.aiType = AiType.SMART_RANDOM;
 
-    const moveChoices = getEnemyMoveChoices(enemyPokemon);
-
-    enemyPokemon.getMoveset().forEach((mv) => {
-      if (mv?.getMove().category === MoveCategory.STATUS || mv?.moveId === MoveId.LAST_RESORT) {
-        expect(moveChoices[mv.moveId]).toBe(0);
-      }
-    });
+    expect(enemyPokemon).toNeverSelectMove([MoveId.LAST_RESORT, MoveId.SPLASH, MoveId.SWORDS_DANCE]);
   });
 
   it("should avoid attacks that have no effect on the target", async () => {
