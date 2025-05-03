@@ -1,13 +1,13 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { BattlerIndex } from "#enums/battler-index";
+import { CommonAnim } from "#enums/common-anim";
+import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Applies a status effect to a pokemon
@@ -38,9 +38,10 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
 
   public override start(): void {
     const pokemon = this.getPokemon();
-    if (pokemon && !pokemon.status) {
+    if (pokemon && !pokemon.hasNonVolatileStatusEffect(false, true)) {
       if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon)) {
         if (this.turnsRemaining) {
+          // @ts-expect-error - `Pokemon#status` is protected; TODO: change this
           pokemon.status!.sleepTurnsRemaining = this.turnsRemaining;
         }
         pokemon.updateInfo(true);

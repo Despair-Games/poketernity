@@ -176,6 +176,6 @@ describe("Reload", () => {
 
     const newPokemon = game.field.getPlayerPokemon();
     expect(newPokemon.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
-    expect(newPokemon.status?.toxicTurnCount).toBe(2);
+    expect(newPokemon.toxicTurnCount).toBe(2);
   });
 });

@@ -405,7 +405,8 @@ export class PokemonHpRestoreModifierType extends PokemonModifierType {
           if (
             !pokemon.hp
             || (pokemon.isFullHp()
-              && (!this.healStatus || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))))
+              && (!this.healStatus
+                || (!pokemon.hasNonVolatileStatusEffect(false, true) && !pokemon.getTag(BattlerTagType.CONFUSED))))
           ) {
             return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
           }
@@ -472,7 +473,10 @@ export class PokemonStatusHealModifierType extends PokemonModifierType {
       iconImage,
       (_type, args) => new PokemonStatusHealModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
-        if (!pokemon.hp || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))) {
+        if (
+          !pokemon.hp
+          || (!pokemon.hasNonVolatileStatusEffect(false, true) && !pokemon.getTag(BattlerTagType.CONFUSED))
+        ) {
           return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;

@@ -1,5 +1,4 @@
 import {
-  Status,
   getStatusEffectActivationText,
   getStatusEffectDescriptor,
   getStatusEffectHealText,
@@ -369,7 +368,8 @@ describe("Status Effects", () => {
       await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
       const player = game.scene.getPlayerPokemon()!;
-      player.status = new Status(StatusEffect.SLEEP, 0, 4);
+      // @ts-expect-error - `Pokemon#setStatus` is protected
+      player.setStatus(StatusEffect.SLEEP, { sleepTurnsRemaining: 4 });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();

@@ -9,7 +9,6 @@ import {
   getCandyProgressRequirement,
   speciesStarterCosts,
 } from "#app/data/starters";
-import { Status } from "#app/data/status-effect";
 import { reverseCompatibleTms, tmSpecies } from "#app/data/tms";
 import type { Variant } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
@@ -63,7 +62,7 @@ export class PlayerPokemon extends Pokemon {
     super(106, 148, species, level, abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource);
 
     if (Overrides.STATUS_OVERRIDE) {
-      this.status = new Status(Overrides.STATUS_OVERRIDE, 0, 4);
+      this.setStatus(Overrides.STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
     }
 
     if (Overrides.SHINY_OVERRIDE) {
