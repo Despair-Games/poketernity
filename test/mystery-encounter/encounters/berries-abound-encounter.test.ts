@@ -6,7 +6,7 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import type { BerryModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -151,9 +151,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(5);
       for (const option of modifierSelectHandler.options) {
         expect(option.modifierTypeOption.type.id).toContain("BERRY");
@@ -236,9 +234,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(5);
       for (const option of modifierSelectHandler.options) {
         expect(option.modifierTypeOption.type.id).toContain("BERRY");

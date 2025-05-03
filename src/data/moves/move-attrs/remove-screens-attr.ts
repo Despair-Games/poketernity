@@ -1,4 +1,4 @@
-import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { RemoveArenaTagsAttr } from "./remove-arena-tags-attr";
@@ -12,7 +12,7 @@ import { RemoveArenaTagsAttr } from "./remove-arena-tags-attr";
 export class RemoveScreensAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {
     super(
-      [...WeakenMoveScreenArenaTagTypes],
+      [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES],
       targetBothSides ? ArenaTagRelativeSide.ALL : ArenaTagRelativeSide.TARGET,
       MoveEffectTrigger.PRE_APPLY,
     );

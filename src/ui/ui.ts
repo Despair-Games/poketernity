@@ -115,7 +115,7 @@ const DEFAULT_MODE = UiMode.MESSAGE;
 export class UI extends Phaser.GameObjects.Container {
   private mode: UiMode;
   private modeChain: UiMode[];
-  public handlers: UiHandler[];
+  private handlers: UiHandler[];
   private overlay: Phaser.GameObjects.Rectangle;
   public achvBar: AchvBar;
   public bgmBar: BgmBar;

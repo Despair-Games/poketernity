@@ -153,6 +153,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
         ui.setMode<MessageUiHandler>(this.messageMode).then(() => this.learnMove(moveIndex, move, pokemon, fullText));
       },
+      false,
     );
   }
 

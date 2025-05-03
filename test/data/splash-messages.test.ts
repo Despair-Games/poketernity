@@ -1,6 +1,6 @@
 import { getSplashMessages } from "#app/data/splash-messages";
 import { describe, expect, it, vi, afterEach, beforeEach } from "vitest";
-import * as Constants from "#app/constants/app-constants";
+import * as appConstants from "#app/constants/app-constants";
 
 describe("Data - Splash Messages", () => {
   it("should contain at least 15 splash messages", () => {
@@ -15,7 +15,7 @@ describe("Data - Splash Messages", () => {
 
   describe("Seasonal", () => {
     beforeEach(() => {
-      vi.spyOn(Constants, "USE_SEASONAL_SPLASH_MESSAGES", "get").mockReturnValue(true);
+      vi.spyOn(appConstants, "USE_SEASONAL_SPLASH_MESSAGES", "get").mockReturnValue(true);
     });
 
     afterEach(() => {

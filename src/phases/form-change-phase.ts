@@ -65,11 +65,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     this.pokemon.getPossibleForm(this.formChange).then((formChangedPokemon) => {
       [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
         const spriteKey = formChangedPokemon.getSpriteKey(true);
-        try {
-          sprite.play(spriteKey);
-        } catch (err: unknown) {
-          console.error(`Failed to play animation for ${spriteKey}`, err);
-        }
+        sprite.play(spriteKey);
 
         sprite.setPipelineData("ignoreTimeTint", true);
         sprite.setPipelineData("spriteKey", formChangedPokemon.getSpriteKey());
@@ -133,9 +129,9 @@ export class FormChangePhase extends FormChangeBasePhase {
    */
   private handleFormChangeComplete(formChangedPokemon: Pokemon): void {
     const { time, tweens, ui, animations } = globalScene;
-    const onFormChangeComplete = (): void => {
-      const preName = getPokemonNameWithAffix(this.pokemon);
+    const preName = getPokemonNameWithAffix(this.pokemon);
 
+    const onFormChangeComplete = (): void => {
       tweens.add({
         targets: this.bgOverlay,
         alpha: 0,

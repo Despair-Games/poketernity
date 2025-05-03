@@ -64,11 +64,7 @@ export class QuietFormChangePhase extends BattlePhase {
       sprite.setOrigin(0.5, 1);
 
       const spriteKey = this.pokemon.getBattleSpriteKey();
-      try {
-        sprite.play(spriteKey).stop();
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey).stop();
 
       sprite.setPipeline(spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
@@ -115,11 +111,7 @@ export class QuietFormChangePhase extends BattlePhase {
           pokemonFormTintSprite.setScale(0.01);
 
           const spriteKey = this.pokemon.getBattleSpriteKey();
-          try {
-            pokemonFormTintSprite.play(spriteKey).stop();
-          } catch (err: unknown) {
-            console.error(`Failed to play animation for ${spriteKey}`, err);
-          }
+          pokemonFormTintSprite.play(spriteKey).stop();
 
           pokemonFormTintSprite.setVisible(true);
 

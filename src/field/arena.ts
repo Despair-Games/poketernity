@@ -18,7 +18,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { coerceArray, getEnumValues } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#app/utils/random-utils";
@@ -799,7 +799,7 @@ export class Arena {
     if (existingTag) {
       existingTag.onOverlap(this);
 
-      if (EntryHazardArenaTagTypes.includes(existingTag.tagType)) {
+      if (ENTRY_HAZARD_ARENA_TAG_TYPES.includes(existingTag.tagType)) {
         const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
         this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
       }
@@ -813,7 +813,7 @@ export class Arena {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);
 
-      const { layers = 0, maxLayers = 0 } = EntryHazardArenaTagTypes.includes(newTag.tagType)
+      const { layers = 0, maxLayers = 0 } = ENTRY_HAZARD_ARENA_TAG_TYPES.includes(newTag.tagType)
         ? (newTag as EntryHazardTag)
         : {};
 

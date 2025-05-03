@@ -684,7 +684,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     starterBoxContainer.add(this.cursorObj);
 
     for (const species of allSpecies) {
-      if (!speciesStarterCosts.hasOwnProperty(species.speciesId) || !species.isObtainable()) {
+      if (!speciesStarterCosts.hasOwnProperty(species.speciesId)) {
         continue;
       }
 

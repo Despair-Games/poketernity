@@ -1,5 +1,5 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { settings } from "#app/system/settings/settings-manager";
@@ -36,7 +36,7 @@ export class LoginPhase extends Phase {
     const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
     ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
-    executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
+    executeIf(BYPASS_LOGIN || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
       if (!success) {
@@ -110,7 +110,7 @@ export class LoginPhase extends Phase {
         return null;
       } else {
         gameData.loadSystem().then((success) => {
-          if (success || bypassLogin) {
+          if (success || BYPASS_LOGIN) {
             this.end();
           } else {
             ui.setMessageMode();

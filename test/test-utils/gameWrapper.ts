@@ -1,5 +1,5 @@
 import BattleScene from "#app/battle-scene";
-import * as constants from "#app/constants/app-constants";
+import * as appConstants from "#app/constants/app-constants";
 import { MoveAnim } from "#app/data/animations/move-anim";
 import { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -33,7 +33,7 @@ export class GameWrapper {
     Phaser.Math.RND.sow(["test"]);
     // vi.spyOn(Utils, "apiFetch", "get").mockReturnValue(fetch);
     if (bypassLoginMockTrue) {
-      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(true);
+      vi.spyOn(appConstants, "BYPASS_LOGIN", "get").mockReturnValue(true);
     }
     this.game = phaserGame;
     MoveAnim.prototype.getAnim = () =>
