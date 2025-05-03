@@ -1665,28 +1665,23 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
 export function getGymLeaderPartyTemplate(): TrainerPartyTemplate {
   const { currentBattle } = globalScene;
   const currentWave = currentBattle?.waveIndex ?? Overrides.STARTING_WAVE_OVERRIDE;
-  // TODO: Need special handling for daily mode
-  switch (currentWave) {
-    case 19:
-    case 20:
+  // MEs can trigger a gym leader on any floor so this handles those cases
+  const gymLeaderNumber = Math.min(Math.ceil(currentWave / 20), 8);
+  // TODO: Need special balancing for daily mode
+  switch (gymLeaderNumber) {
+    case 1:
       return trainerPartyTemplates.GYM_LEADER_1;
-    case 39:
-    case 40:
+    case 2:
       return trainerPartyTemplates.GYM_LEADER_2;
-    case 59:
-    case 60:
+    case 3:
       return trainerPartyTemplates.GYM_LEADER_3;
-    case 79:
-    case 80:
+    case 4:
       return trainerPartyTemplates.GYM_LEADER_4;
-    case 99:
-    case 100:
+    case 5:
       return trainerPartyTemplates.GYM_LEADER_5;
-    case 119:
-    case 120:
+    case 6:
       return trainerPartyTemplates.GYM_LEADER_6;
-    case 139:
-    case 140:
+    case 7:
       return trainerPartyTemplates.GYM_LEADER_7;
     default:
       return trainerPartyTemplates.GYM_LEADER_8;
