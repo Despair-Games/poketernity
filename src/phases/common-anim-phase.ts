@@ -1,8 +1,8 @@
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -29,9 +29,7 @@ export class CommonAnimPhase extends PokemonPhase {
 
   public override start(): void {
     const user = this.getPokemon();
-    const target = globalScene.getFieldPokemonByBattlerIndex(this.targetIndex) ?? user;
-    new CommonBattleAnim(this.anim, user, target).play(false, () => {
-      this.end();
-    });
+    const target = this.targetIndex ? globalScene.getPokemonByBattlerIndex(this.targetIndex) : user;
+    new CommonBattleAnim(this.anim, user, target ?? user).play(false, () => this.end());
   }
 }

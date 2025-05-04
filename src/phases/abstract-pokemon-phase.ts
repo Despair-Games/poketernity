@@ -1,7 +1,7 @@
-import { BattlerIndex } from "#enums/battler-index";
+import type { nil } from "#app/@types/nil";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { nil } from "#app/@types/nil";
+import { BattlerIndex } from "#enums/battler-index";
 import { FieldPhase } from "./abstract-field-phase";
 
 /**
@@ -37,7 +37,7 @@ export abstract class PokemonPhase extends FieldPhase {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       pokemon = globalScene.getPokemonById(this.battlerIndex);
     } else {
-      pokemon = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
+      pokemon = globalScene.getPokemonByBattlerIndex(this.battlerIndex);
     }
     // TODO: Remove this bang
     return pokemon!;

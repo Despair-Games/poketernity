@@ -105,9 +105,9 @@ export abstract class MoveLockTag extends BattlerTag {
       }
 
       // Note: this assumes the locked move is single-target
-      const lastTarget = globalScene.getFieldPokemonByBattlerIndex(this.lastTargets[0]);
+      const lastTarget = globalScene.getPokemonByBattlerIndex(this.lastTargets[0]);
       const adjacentIndex = this.lastTargets[0] + (this.lastTargets[0] % 2 === 0 ? 1 : -1);
-      const adjacentTarget = globalScene.getFieldPokemonByBattlerIndex(adjacentIndex);
+      const adjacentTarget = globalScene.getPokemonByBattlerIndex(adjacentIndex);
 
       if (
         !lastTarget?.isActive(true)

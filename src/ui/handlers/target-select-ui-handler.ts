@@ -133,22 +133,24 @@ export class TargetSelectUiHandler extends UiHandler {
 
   /** @returns all valid target {@linkcode Pokemon} for the current target selection */
   protected getTargetsByIndex(): Pokemon[] {
-    return this.targets.map((index) => globalScene.getFieldPokemonByBattlerIndex(index)).filter((p) => !isNil(p));
+    return this.targets.map((index) => globalScene.getPokemonByBattlerIndex(index)).filter((p) => !isNil(p));
   }
 
   /** @returns the {@linkcode Pokemon} to highlight based on the move's targeting */
   protected getHighlightedPokemon(cursor: number): Pokemon[] {
     if (this.targets.includes(BattlerIndex.BOTH_SIDES)) {
       return globalScene.getField(true);
-    } else if (this.targets.includes(BattlerIndex.ENEMY_SIDE)) {
-      return globalScene.getEnemyField().filter((p) => p.isActive(true));
-    } else if (this.targets.includes(BattlerIndex.PLAYER_SIDE)) {
-      return globalScene.getPlayerField().filter((p) => p.isActive(true));
-    } else if (this.isMultipleTargets) {
-      return this.getTargetsByIndex();
-    } else {
-      return [globalScene.getFieldPokemonByBattlerIndex(cursor)!];
     }
+    if (this.targets.includes(BattlerIndex.ENEMY_SIDE)) {
+      return globalScene.getEnemyField().filter((p) => p.isActive(true));
+    }
+    if (this.targets.includes(BattlerIndex.PLAYER_SIDE)) {
+      return globalScene.getPlayerField().filter((p) => p.isActive(true));
+    }
+    if (this.isMultipleTargets) {
+      return this.getTargetsByIndex();
+    }
+    return [globalScene.getPokemonByBattlerIndex(cursor)!];
   }
 
   public override setCursor(cursor: number): boolean {

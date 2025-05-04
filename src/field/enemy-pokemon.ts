@@ -1,4 +1,5 @@
 import type { TurnMove } from "#app/@types/TurnMove";
+import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
@@ -17,7 +18,6 @@ import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import { EnemyBattleInfo } from "#app/ui/components/battle-info";
-import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isBetween, isNil, toDmgValue } from "#app/utils/common-utils";
 import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -255,7 +255,7 @@ export class EnemyPokemon extends Pokemon {
             }
 
             const moveTargets = getMoveTargets(this, move.id)
-              .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
+              .targets.map((ind) => globalScene.getPokemonByBattlerIndex(ind))
               .filter((p) => !isNil(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
             const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
@@ -297,7 +297,7 @@ export class EnemyPokemon extends Pokemon {
                 break;
               }
 
-              const target = globalScene.getFieldPokemonByBattlerIndex(mt)!;
+              const target = globalScene.getPokemonByBattlerIndex(mt)!;
               /**
                * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
                * If the target is an ally, the target benefit score is multiplied by -1.

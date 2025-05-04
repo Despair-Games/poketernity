@@ -606,7 +606,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      * due to a quirk where `getFirstTarget()` returns `undefined` if the target is fainted.
      */
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
-      const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
+      const ogTarget = globalScene.getPokemonByBattlerIndex(this.targets[0]);
       const allyPokemon = ogTarget?.getAlly();
       if (ogTarget?.isFainted() && allyPokemon?.isActive(true) && allyPokemon.id !== this.getUserPokemon()?.id) {
         this.targets = [allyPokemon.getBattlerIndex()];
