@@ -1,5 +1,5 @@
 import { initLoggedInUser } from "#app/account";
-import { SESSION_ID_COOKIE } from "#app/constants/app";
+import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { allMoves } from "#app/data/data-lists";
 import { initEggMoves } from "#app/data/egg-moves";
 import { initAbilities } from "#app/data/init/init-abilities";

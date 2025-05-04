@@ -2,7 +2,7 @@ import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -30,7 +30,7 @@ export class GroundedTag extends BattlerTag {
       pokemon.isOfType(ElementalType.FLYING, true, true)
       || pokemon.hasAbility(AbilityId.LEVITATE)
       || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(...SemiInvulnerableBattlerTagTypes);
+      || pokemon.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.phaseManager.queueMessagePhase(

@@ -1,7 +1,7 @@
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { allMoves } from "#app/data/data-lists";
 import type { CommandPhase } from "#app/phases/command-phase";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -190,7 +190,7 @@ describe("Moves - Substitute", () => {
     await game.toNextTurn();
 
     expect(leadPokemon.getMoveEffectiveness).not.toHaveReturnedWith(0);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.PLAYER)).toBeTruthy();
   });
 
   it("shouldn't block the opponent from setting hazards", async () => {
@@ -206,7 +206,7 @@ describe("Moves - Substitute", () => {
     await game.toNextTurn();
 
     expect(leadPokemon.getMoveEffectiveness).not.toHaveReturnedWith(0);
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.STEALTH_ROCK, ArenaTagSide.PLAYER)).toBeTruthy();
   });
 
   it("shouldn't block moves that target both sides of the field", async () => {
@@ -225,8 +225,8 @@ describe("Moves - Substitute", () => {
     await game.toNextTurn();
 
     pokemon.forEach((p) => expect(p.getMoveEffectiveness).not.toHaveReturnedWith(0));
-    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeDefined();
-    expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.TRICK_ROOM)).toBeTruthy();
+    expect(game.scene.arena.hasTag(ArenaTagType.GRAVITY)).toBeTruthy();
   });
 
   it("should protect the user from flinching", async () => {
@@ -261,7 +261,7 @@ describe("Moves - Substitute", () => {
 
     await game.toEndOfTurn();
 
-    expect(leadPokemon.getTag(...TrappedBattlerTagTypes)).toBeUndefined();
+    expect(leadPokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES)).toBeUndefined();
   });
 
   it("should prevent the user's stats from being lowered", async () => {

@@ -3,7 +3,7 @@ import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -30,7 +30,7 @@ export class TrappedTag extends BattlerTag {
     const move = allMoves.get(this.sourceMoveId);
 
     const isGhost = pokemon.isOfType(ElementalType.GHOST);
-    const isTrapped = pokemon.getTag(...TrappedBattlerTagTypes);
+    const isTrapped = pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
     return !isTrapped && !isGhost && (this.sourceMoveId === MoveId.G_MAX_TERROR || !hasSubstitute);

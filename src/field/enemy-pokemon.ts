@@ -1,5 +1,5 @@
 import type { TurnMove } from "#app/@types/TurnMove";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
@@ -17,7 +17,7 @@ import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import { EnemyBattleInfo } from "#app/ui/components/battle-info";
-import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isBetween, isNil, toDmgValue } from "#app/utils/common-utils";
 import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -206,7 +206,7 @@ export class EnemyPokemon extends Pokemon {
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
-          MoveLockTagTypes.forEach((tagType) => this.lapseTag(tagType));
+          MOVE_LOCK_TAG_TYPES.forEach((tagType) => this.lapseTag(tagType));
           return queuedMove;
         } else {
           this.getMoveQueue().shift();

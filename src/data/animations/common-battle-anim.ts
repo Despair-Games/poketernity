@@ -1,4 +1,4 @@
-import type { AnimConfig } from "#app/data/animations/anim-config";
+import type { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import { BattleAnim } from "./battle-anims";
 import { commonAnims } from "#app/data/animations/common-anims";
 import type { Pokemon } from "#app/field/pokemon";
@@ -21,7 +21,7 @@ export class CommonBattleAnim extends BattleAnim {
     this.commonAnim = commonAnim;
   }
 
-  getAnim(): AnimConfig | null {
+  getAnim(): LegacyAnimConfig | null {
     return this.commonAnim ? (commonAnims.get(this.commonAnim) ?? null) : null;
   }
 

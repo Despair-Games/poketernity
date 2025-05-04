@@ -1,7 +1,7 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -47,7 +47,7 @@ describe("Arena - Gravity", () => {
     game.move.select(MoveId.GRAVITY);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.GRAVITY)).toBeTruthy();
 
     // Use non-OHKO move on second turn
     await game.toNextTurn();
@@ -68,7 +68,7 @@ describe("Arena - Gravity", () => {
     game.move.select(MoveId.GRAVITY);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+    expect(game.scene.arena.hasTag(ArenaTagType.GRAVITY)).toBeTruthy();
 
     // Use OHKO move on second turn
     await game.toNextTurn();
@@ -98,7 +98,7 @@ describe("Arena - Gravity", () => {
       game.move.select(MoveId.GRAVITY);
       await game.toEndOfTurn();
 
-      expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+      expect(game.scene.arena.hasTag(ArenaTagType.GRAVITY)).toBeTruthy();
 
       // Use ground move on 3rd turn
       await game.toNextTurn();
@@ -120,7 +120,7 @@ describe("Arena - Gravity", () => {
       game.move.select(MoveId.GRAVITY);
       await game.toEndOfTurn();
 
-      expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
+      expect(game.scene.arena.hasTag(ArenaTagType.GRAVITY)).toBeTruthy();
 
       // Use electric move on 2nd turn
       await game.toNextTurn();

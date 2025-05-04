@@ -1,4 +1,4 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";

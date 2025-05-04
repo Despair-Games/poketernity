@@ -43,15 +43,15 @@ export function toHaveMoveResultMatcher(
   const pass = move?.result === expectedResult;
 
   const moveIndexStr = index === 0 ? "latest move" : `move no. ${index}`;
+  const expectedResultStr = `${MoveResult[expectedResult]} (=${expectedResult})`;
+  const actualResultStr = move.result ? `${MoveResult[move.result]} (=${move.result})` : "undefined";
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${moveIndexStr} NOT to have result: ${MoveResult[expectedResult]} (=${expectedResult}), but it did.`
-        : `Expected ${moveIndexStr} to have result: ${MoveResult[expectedResult]} (=${expectedResult}), but got: ${
-            move?.result ? `${MoveResult[move.result]} (=${move.result})` : "undefined"
-          }`,
+        ? `Expected ${moveIndexStr} NOT to have result: ${expectedResultStr}, but it did.`
+        : `Expected ${moveIndexStr} to have result: ${expectedResultStr}, but got: ${actualResultStr}.`,
   };
 }
 

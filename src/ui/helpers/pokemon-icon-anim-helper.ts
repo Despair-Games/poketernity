@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils/common-utils";
+import { coerceArray, fixedNumber } from "#app/utils/common-utils";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
@@ -67,9 +67,7 @@ export class PokemonIconAnimHelper {
    * @param mode - The {@linkcode PokemonIconAnimMode} to use for the icon(s).
    */
   public addOrUpdate(icons: PokemonIcon | PokemonIcon[], mode: PokemonIconAnimMode): void {
-    if (!Array.isArray(icons)) {
-      icons = [icons];
-    }
+    icons = coerceArray(icons);
     for (const i of icons) {
       if (this.icons.has(i) && this.icons.get(i) === mode) {
         continue;
@@ -89,9 +87,7 @@ export class PokemonIconAnimHelper {
    * @param icons - The {@linkcode PokemonIcon}(s) to remove.
    */
   public remove(icons: PokemonIcon | PokemonIcon[]): void {
-    if (!Array.isArray(icons)) {
-      icons = [icons];
-    }
+    icons = coerceArray(icons);
     for (const i of icons) {
       if (this.toggled) {
         const icon = this.icons.get(i);

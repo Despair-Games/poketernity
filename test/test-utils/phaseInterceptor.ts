@@ -166,7 +166,6 @@ export class PhaseInterceptor {
   private promptInterval: NodeJS.Timeout;
   private intervalRun: NodeJS.Timeout;
   private prompts: PromptHandler[];
-  private phaseFrom: PhaseInterceptorPhase | null;
   private inProgress?: InProgressStub;
   private originalSetMode: UI["setMode"];
   private originalSuperEnd: Phase["end"];
@@ -210,17 +209,6 @@ export class PhaseInterceptor {
   }
 
   /**
-   * Method to set the starting phase.
-   * @param phaseFrom - The phase to start from.
-   * @returns The instance of the PhaseInterceptor.
-   * @deprecated Is this necessary any more?
-   */
-  protected runFrom(phaseFrom: PhaseInterceptorPhase): PhaseInterceptor {
-    this.phaseFrom = phaseFrom;
-    return this;
-  }
-
-  /**
    * Method to transition to a target phase.
    * @param phaseTo - The phase to transition to.
    * @param runTarget - Whether or not to run the target phase.
@@ -229,10 +217,6 @@ export class PhaseInterceptor {
   public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
     return new Promise(async (resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
-      if (this.phaseFrom) {
-        await this.run(this.phaseFrom).catch((e) => reject(e));
-        this.phaseFrom = null;
-      }
       const targetName = this.getPhaseName(phaseTo);
       this.intervalRun = setInterval(async () => {
         const currentPhase = this.onHold?.length && this.onHold[0];
@@ -291,24 +275,6 @@ export class PhaseInterceptor {
             onError: (error) => reject(error),
           };
           this.phases[currentPhase.name].start.call(this.scene.phaseManager.getCurrentPhase());
-        }
-      });
-    });
-  }
-
-  /** @deprecated Use `to("Phase", false)`? */
-  protected whenAboutToRun(
-    phaseTarget: PhaseInterceptorPhase,
-    _skipFn?: (className: PhaseClass) => boolean,
-  ): Promise<void> {
-    const targetName = this.getPhaseName(phaseTarget);
-    return new Promise(async (resolve, _reject) => {
-      ErrorInterceptor.getInstance().add(this);
-      const interval = setInterval(async () => {
-        const currentPhase = this.onHold[0];
-        if (currentPhase?.name === targetName) {
-          clearInterval(interval);
-          resolve();
         }
       });
     });

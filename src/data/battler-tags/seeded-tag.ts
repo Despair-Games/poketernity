@@ -20,7 +20,7 @@ import i18next from "i18next";
  * to the Pokemon in the position of the original user.
  * @extends BattlerTag
  */
-export class SeedTag extends BattlerTag {
+export class SeededTag extends BattlerTag {
   private sourceIndex: number;
 
   constructor(sourceId: number) {
@@ -67,7 +67,6 @@ export class SeedTag extends BattlerTag {
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
           globalScene.phaseManager.queuePokemonHealPhase(
-            true,
             source.getBattlerIndex(),
             !reverseDrain ? damage : damage * -1,
             {

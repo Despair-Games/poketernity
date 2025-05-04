@@ -8,8 +8,11 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils/common-utils";
-import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
-import { ProtectionBattlerTagTypes, SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
+import {
+  PROTECTION_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+} from "#app/constants/battler-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
@@ -90,7 +93,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
       || target.hasTag(BattlerTagType.ALWAYS_GET_HIT);
 
     const semiInvulnerableTag =
-      target.getTag(...SemiInvulnerableBattlerTagTypes) ?? target.getTag(BattlerTagType.SKY_DROP);
+      target.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES) ?? target.getTag(BattlerTagType.SKY_DROP);
     /** Should the move miss due to the target's semi-invulnerability? */
     const targetIsSemiInvulnerable =
       !!semiInvulnerableTag
@@ -112,7 +115,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
       globalScene.arena.applyTagsForSide(
-        [...ConditionalProtectArenaTagTypes],
+        [...CONDITIONAL_PROTECT_ARENA_TAG_TYPES],
         targetSide,
         simulated,
         hasConditionalProtectApplied,
@@ -125,7 +128,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** Is the target protected by Protect, etc. or a relevant conditional protection effect? */
     const isProtected =
       hasConditionalProtectApplied.value
-      || applyBattlerTags<ProtectedTag>(ProtectionBattlerTagTypes, target, simulated, user, move);
+      || applyBattlerTags<ProtectedTag>(PROTECTION_BATTLER_TAG_TYPES, target, simulated, user, move);
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];

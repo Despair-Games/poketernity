@@ -1,3 +1,6 @@
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { globalScene } from "#app/global-scene";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
 
@@ -63,7 +66,7 @@ const expLevels = [
 ];
 
 /**
- * Custom value derived by Sam so that Pokemon with slower leveling rates would be better.
+ * Custom legacy value so that Pokemon with slower leveling rates would be better.
  *
  * TODO: See if this needs tweaking (or is needed at all) and then update the above hardcoded
  * arrays for more optimization
@@ -186,6 +189,116 @@ export function getGrowthRateColor(growthRate: GrowthRate) {
     case GrowthRate.FLUCTUATING:
       return CommonColor.VIBRANT_PURPLE;
   }
+}
+
+/**
+ * Function to get the exp given from a defeated Pokemon from gen 1-4
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ */
+export function genOneThroughFourExpFormula(defeatedPokemon: EnemyPokemon): number {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const enemyLevel = defeatedPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 7;
+
+  const expGained = baseExpGain * expShareMultiplier * luckyEggBonus * trainerExpBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 5
+ *
+ * BW2 has a cap of 100,000 but that is ignored here.
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ * - Exp Power Point bonus
+ */
+export function genFiveExpFormula(defeatedPokemon: EnemyPokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const playerLevel = playerPokemon.level;
+  const enemyLevel = defeatedPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 5;
+
+  const levelScalingNumerator = Math.floor(
+    Math.round(Math.sqrt(2 * enemyLevel + 10)) * Math.pow(2 * enemyLevel + 10, 2),
+  );
+  const levelScalingDenominator = Math.floor(
+    Math.round(Math.sqrt(playerLevel + enemyLevel + 10)) * Math.pow(playerLevel + enemyLevel + 10, 2),
+  );
+  const levelScalingFactor = levelScalingNumerator / levelScalingDenominator;
+
+  const gainedExp = (baseExpGain * expShareMultiplier * trainerExpBonus * levelScalingFactor + 1) * luckyEggBonus;
+  return Math.floor(gainedExp);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 6
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ * - O-Power bonus
+ */
+export function genSixExpFormula(defeatedPokemon: EnemyPokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const enemyLevel = defeatedPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+  const friendshipBonus = playerPokemon.friendship >= 220 ? 1.2 : 1;
+  // If the player Pokemon is past the level it can normally evolve this should be 1.2, currently unused
+  // TODO: use this?
+  const canEvolveBonus = 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 7;
+
+  const expGained =
+    baseExpGain * expShareMultiplier * luckyEggBonus * trainerExpBonus * friendshipBonus * canEvolveBonus;
+  return Math.floor(expGained);
+}
+
+/**
+ * Function to get the exp given to a Pokemon from a defeated Pokemon in gen 7+
+ *
+ * Not included from the mainline formula:
+ * - Original Trainer bonus
+ * - Rotom Power bonus
+ */
+export function genSevenPlusExpFormula(defeatedPokemon: EnemyPokemon, playerPokemon: PlayerPokemon) {
+  const baseExp = defeatedPokemon.species.baseExp;
+  const enemyLevel = defeatedPokemon.level;
+  const playerLevel = playerPokemon.level;
+  // The Exp share multiplier is handled elsewhere (TODO: change that?)
+  const expShareMultiplier = 1;
+  // The Lucky Egg bonus is handled elsewhere (TODO: change that?)
+  const luckyEggBonus = 1;
+  const trainerExpBonus = globalScene.currentBattle.isTrainerBattle(true) ? 1.5 : 1;
+  const friendshipBonus = playerPokemon.friendship >= 220 ? 1.2 : 1;
+  // If the player Pokemon is past the level it can normally evolve this should be 1.2, currently unused
+  // TODO: use this?
+  const canEvolveBonus = 1;
+
+  const baseExpGain = (baseExp * enemyLevel) / 5;
+  const levelScalingFactor = Math.pow((2 * enemyLevel + 10) / (playerLevel + enemyLevel + 10), 2.5);
+  const innerTerm = baseExpGain * levelScalingFactor * expShareMultiplier + 1;
+
+  const expGained = innerTerm * luckyEggBonus * trainerExpBonus * friendshipBonus * canEvolveBonus;
+  return Math.floor(expGained);
 }
 
 /**

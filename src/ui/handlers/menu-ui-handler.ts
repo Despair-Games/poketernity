@@ -1,17 +1,17 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants/app";
+import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { BgmBar } from "#app/ui/components/bgm-bar";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getEnumKeys } from "#app/utils/common-utils";
-import { getCookie, isBeta } from "#app/utils/app-utils";
+import { getCookie } from "#app/utils/app-utils";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
@@ -72,7 +72,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         excluded: globalScene.phaseManager.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER) ?? false,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
-      { excluded: bypassLogin, options: [MenuOptions.LOG_OUT] },
+      { excluded: BYPASS_LOGIN, options: [MenuOptions.LOG_OUT] },
       { excluded: !globalScene.currentBattle, options: [MenuOptions.SAVE_AND_QUIT] },
     ];
   }
@@ -226,7 +226,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     };
     // Import Session
-    if (api.isLocal || isBeta) {
+    if (api.isLocal || IS_BETA) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importSession"),
         handler: () => {
@@ -284,7 +284,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       keepOpen: true,
     });
     // Import Data
-    if (api.isLocal || isBeta) {
+    if (api.isLocal || IS_BETA) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importData"),
         handler: () => {
@@ -323,7 +323,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     );
 
     // TODO: fully remove test dialogue option and related handlers
-    if (api.isLocal || isBeta) {
+    if (api.isLocal || IS_BETA) {
       // this should make sure we don't have this option in live
       manageDataOptions.push({
         label: "Test Dialogue",
@@ -454,7 +454,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (!bypassLogin && loggedInUser?.hasAdminRole) {
+    if (!BYPASS_LOGIN && loggedInUser?.hasAdminRole) {
       communityOptions.push({
         label: "Admin",
         handler: () => {
@@ -556,7 +556,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         break;
       case MenuOptions.MANAGE_DATA:
         if (
-          !bypassLogin
+          !BYPASS_LOGIN
           && !this.manageDataConfig.options.some(
             (o) =>
               o.label === i18next.t("menuUiHandler:linkDiscord")

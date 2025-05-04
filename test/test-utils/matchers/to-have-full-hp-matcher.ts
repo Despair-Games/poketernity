@@ -1,3 +1,4 @@
+import { getPokemonNameWithAffix } from "#app/messages";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
@@ -15,13 +16,15 @@ export function toHaveFullHpMatcher(this: MatcherState, received: unknown): Sync
   }
 
   const pass = received.isFullHp() === true;
+
   const ofHpStr = `${received.getInverseHp()}/${received.getMaxHp()} HP`;
+  const pkmName = getPokemonNameWithAffix(received);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${received.name} to NOT have full hp (${ofHpStr}), but it did!`
-        : `Expected ${received.name} to have full hp, but found ${ofHpStr}.`,
+        ? `Expected ${pkmName} to NOT have full hp (${ofHpStr}), but it did!`
+        : `Expected ${pkmName} to have full hp, but found ${ofHpStr}.`,
   };
 }

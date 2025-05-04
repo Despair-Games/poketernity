@@ -1,5 +1,5 @@
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
-import { CANVAS_SCALE } from "#app/constants/ui";
+import { CANVAS_SCALE } from "#app/constants/ui-constants";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH

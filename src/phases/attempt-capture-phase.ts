@@ -1,4 +1,4 @@
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import {
   doPokeballBounceAnim,
@@ -144,10 +144,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                   }
                 },
                 onRepeat: (): void => {
-                  if (!pokemon.species.isObtainable()) {
-                    shakeCounter.stop();
-                    this.failCatch();
-                  } else if (shakeCount++ < (isCritical ? 1 : 3)) {
+                  if (shakeCount++ < (isCritical ? 1 : 3)) {
                     // Shake check (skip check for critical or guaranteed captures, but still play the sound)
                     if (
                       pokeballMultiplier === -1
@@ -329,6 +326,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                           promptRelease();
                         });
                       },
+                      false,
                       false,
                     );
                     return true;

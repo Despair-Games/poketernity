@@ -1,5 +1,5 @@
 import type { UpdateAllSavedataRequest } from "#app/@types/SavedataApi";
-import { MAX_INT_ATTR_VALUE } from "#app/constants/game";
+import { MAX_INT_ATTR_VALUE } from "#app/constants/game-constants";
 import { ApiBase } from "#app/plugins/api/api-base";
 import { SessionSavedataApi } from "#app/plugins/api/session-savedata-api";
 import { SystemSavedataApi } from "#app/plugins/api/system-savedata-api";

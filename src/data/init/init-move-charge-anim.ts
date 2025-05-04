@@ -1,5 +1,5 @@
 import { chargeAnims } from "../animations/charge-anims";
-import { AnimConfig } from "../animations/anim-config";
+import { LegacyAnimConfig } from "../animations/anim-config";
 import { globalScene } from "#app/global-scene";
 import { ChargeAnim } from "#enums/charge-anim";
 
@@ -40,12 +40,12 @@ export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
 //#region Helpers
 
 function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any) {
-  const moveChargeAnim = new AnimConfig(animSource);
+  const moveChargeAnim = new LegacyAnimConfig(animSource);
   if (chargeAnims.get(chargeAnim) === null) {
     chargeAnims.set(chargeAnim, moveChargeAnim);
     return;
   }
-  chargeAnims.set(chargeAnim, [chargeAnims.get(chargeAnim) as AnimConfig, moveChargeAnim]);
+  chargeAnims.set(chargeAnim, [chargeAnims.get(chargeAnim) as LegacyAnimConfig, moveChargeAnim]);
 }
 
 //#endregion

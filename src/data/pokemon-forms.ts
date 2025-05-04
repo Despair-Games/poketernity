@@ -18,7 +18,8 @@ import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { AbstractConstructor, nil } from "#app/utils/common-utils";
+import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
+import type { nil } from "#app/@types/nil";
 import { AbilityId } from "#enums/ability-id";
 import { FormChangeItem } from "#enums/form-change-item";
 import { MoveCategory } from "#enums/move-category";
@@ -131,6 +132,28 @@ export class SpeciesFormChange {
 
     return trigger;
   }
+
+  /** @returns `true` if the form change is to a Mega Evolution (excludes Primals) */
+  public isMega(): boolean {
+    const megaForms: string[] = [SpeciesFormKey.MEGA, SpeciesFormKey.MEGA_X, SpeciesFormKey.MEGA_Y];
+    return megaForms.includes(this.formKey);
+  }
+
+  /** @returns Whether the form change is to a Primal form */
+  public isPrimal(): boolean {
+    return this.formKey === SpeciesFormKey.PRIMAL;
+  }
+
+  /** @returns `true` if the form change is to a G-Max/E-Max form */
+  public isMax(): boolean {
+    const maxForms: string[] = [
+      SpeciesFormKey.GIGANTAMAX,
+      SpeciesFormKey.GIGANTAMAX_RAPID,
+      SpeciesFormKey.GIGANTAMAX_SINGLE,
+      SpeciesFormKey.ETERNAMAX,
+    ];
+    return maxForms.includes(this.formKey);
+  }
 }
 
 export class SpeciesFormChangeCondition {
@@ -240,43 +263,39 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
    * @returns `true` if the Pokemon will revert to its original form, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
-    if (pokemon.hasAbility(this.ability, false, true)) {
-      const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();
-      const isAbilitySuppressed = pokemon.summonData.abilitySuppressed;
-      const summonDataAbility = pokemon.summonData.ability;
-      const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== AbilityId.NONE;
-
-      if (
-        globalScene.arena.hasWeather(this.weathers)
-        || isWeatherSuppressed
-        || isAbilitySuppressed
-        || isAbilityChanged
-      ) {
-        return true;
-      }
+    if (!pokemon.hasAbility(this.ability, false, true)) {
+      return false;
     }
-    return false;
+
+    const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();
+    const isAbilitySuppressed = pokemon.summonData.abilitySuppressed;
+    const summonDataAbility = pokemon.summonData.ability;
+    const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== AbilityId.NONE;
+
+    return (
+      globalScene.arena.hasWeather(this.weathers) || isWeatherSuppressed || isAbilitySuppressed || isAbilityChanged
+    );
   }
 }
 
 export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: SpeciesFormChange, preName: string): string {
-  const isMega = formChange.formKey.indexOf(SpeciesFormKey.MEGA) > -1;
-  const isGmax = formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1;
-  const isEmax = formChange.formKey.indexOf(SpeciesFormKey.ETERNAMAX) > -1;
+  const isMega = formChange.isMega();
   const isRevert = !isMega && formChange.formKey === pokemon.species.forms[0].formKey;
   if (isMega) {
     return i18next.t("battlePokemonForm:megaChange", { preName, pokemonName: pokemon.name });
   }
-  if (isGmax) {
-    return i18next.t("battlePokemonForm:gigantamaxChange", { preName, pokemonName: pokemon.name });
+  if (formChange.isPrimal()) {
+    return i18next.t("battlePokemonForm:primalChange", { pokemonName: pokemon.name });
   }
-  if (isEmax) {
-    return i18next.t("battlePokemonForm:eternamaxChange", { preName, pokemonName: pokemon.name });
+  if (formChange.isMax()) {
+    return formChange.formKey === SpeciesFormKey.ETERNAMAX
+      ? i18next.t("battlePokemonForm:eternamaxChange", { preName, pokemonName: pokemon.name })
+      : i18next.t("battlePokemonForm:gigantamaxChange", { preName, pokemonName: pokemon.name });
   }
   if (isRevert) {
     return i18next.t("battlePokemonForm:revertChange", { pokemonName: getPokemonNameWithAffix(pokemon) });
   }
-  if (pokemon.getAbility().id === AbilityId.DISGUISE) {
+  if (pokemon.hasAbility(AbilityId.DISGUISE, false)) {
     return i18next.t("battlePokemonForm:disguiseChange");
   }
   return i18next.t("battlePokemonForm:formChange", { preName });
