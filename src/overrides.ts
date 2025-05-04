@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
 import type { Arena } from "#app/field/arena";
@@ -25,6 +24,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
