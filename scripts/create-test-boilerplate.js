@@ -10,19 +10,24 @@ import inquirer from "inquirer";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Get the directory name of the current module file
+//#region Constants
+
 const version = "2.0.0";
+// Get the directory name of the current module file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.join(__dirname, "..");
 const choices = [
   { label: "Move", dir: "moves" },
-  { label: "Ability", dir: "mystery-encounter/encounters" },
+  { label: "Ability", dir: "abilities" },
   { label: "Item", dir: "items" },
-  { label: "Mystery Encounter", dir: "mystery-encounter" },
+  { label: "Mystery Encounter", dir: "mystery-encounter/encounters" },
   { label: "Utils", dir: "utils" },
   { label: "UI", dir: "ui" },
 ];
+
+//#endregion
+//#region Functions
 
 /**
  * Get the path to a given folder in the test directory
@@ -86,25 +91,27 @@ async function promptFileName(selectedType) {
  */
 async function runInteractive() {
   console.group(chalk.grey(`Create Test - v${version}\n`));
-  const typeAnswer = await promptTestType();
-  const fileNameAnswer = await promptFileName(typeAnswer.selectedOption.label);
 
-  const type = typeAnswer.selectedOption;
-  // Convert fileName from snake_case or camelCase to kebab-case
-  const fileName = fileNameAnswer.userInput
-    .replace(/_+/g, "-") // Convert snake_case (underscore) to kebab-case (dashes)
-    .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
-    .replace(/\s+/g, "-") // Replace spaces with dashes
-    .toLowerCase(); // Ensure all lowercase
-  // Format the description for the test case
+  try {
+    const typeAnswer = await promptTestType();
+    const fileNameAnswer = await promptFileName(typeAnswer.selectedOption.label);
 
-  const formattedName = fileName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
-  // Determine the directory based on the type
-  const dir = getTestFolderPath(type.dir);
-  const description = `${type.label} - ${formattedName}`;
+    const type = typeAnswer.selectedOption;
+    // Convert fileName from snake_case or camelCase to kebab-case
+    const fileName = fileNameAnswer.userInput
+      .replace(/_+/g, "-") // Convert snake_case (underscore) to kebab-case (dashes)
+      .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
+      .replace(/\s+/g, "-") // Replace spaces with dashes
+      .toLowerCase(); // Ensure all lowercase
+    // Format the description for the test case
 
-  // Define the content template
-  const content = `import { AbilityId } from "#enums/ability-id";
+    const formattedName = fileName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    // Determine the directory based on the type
+    const dir = getTestFolderPath(type.dir);
+    const description = `${type.label} - ${formattedName}`;
+
+    // Define the content template
+    const content = `import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -150,24 +157,32 @@ describe("${description}", () => {
 });
 `;
 
-  // Ensure the directory exists
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+    // Ensure the directory exists
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Create the file with the given name
+    const filePath = path.join(dir, `${fileName}.test.ts`);
+
+    if (fs.existsSync(filePath)) {
+      console.error(chalk.red.bold(`\n✗ File "${fileName}.test.ts" already exists!\n`));
+      process.exit(1);
+    }
+
+    // Write the template content to the file
+    fs.writeFileSync(filePath, content, "utf8");
+
+    console.log(chalk.green.bold(`\n✔ File created at: test/${type.dir}/${fileName}.test.ts\n`));
+    console.groupEnd();
+  } catch (err) {
+    console.error(chalk.red("✗ Error: ", err.message));
   }
-
-  // Create the file with the given name
-  const filePath = path.join(dir, `${fileName}.test.ts`);
-
-  if (fs.existsSync(filePath)) {
-    console.error(chalk.red.bold(`\n✗ File ${fileName}.test.ts" already exists!\n`));
-    process.exit(1);
-  }
-
-  // Write the template content to the file
-  fs.writeFileSync(filePath, content, "utf8");
-
-  console.log(chalk.green.bold(`\n✔ File created at: ${filePath}\n`));
-  console.groupEnd();
 }
 
+//#endregion
+//#region Run
+
 runInteractive();
+
+//#endregion
