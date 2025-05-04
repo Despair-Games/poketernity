@@ -427,10 +427,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this._teraType = value;
   }
 
+  /**
+   * Toxic damage is `1/16 max HP * toxicTurnCount`; increases by 1 per turn.
+   * Ignored if the effect is not {@linkcode StatusEffect.TOXIC}
+   * @defaultValue 0
+   */
   public get toxicTurnCount(): number {
     return this.status?.toxicTurnCount ?? 0;
   }
 
+  /**
+   * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
+   * Ignored if the effect is not sleep.
+   * @defaultValue 0
+   */
   public get sleepTurnsRemaining(): number {
     return this.status?.sleepTurnsRemaining ?? 0;
   }
@@ -4086,6 +4096,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
+  /** If the pokemon is statused, reset {@linkcode toxicTurnCount} to 0 */
   public resetToxicTurnCounter(): void {
     if (!this.status) {
       return;
