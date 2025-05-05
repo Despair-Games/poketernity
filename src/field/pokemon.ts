@@ -4317,6 +4317,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       berriesEaten: [],
       abilitiesApplied: [],
       abilitiesRevealed: [],
+      revealedMoves: new Set(),
     };
   }
 

@@ -1,5 +1,4 @@
 import type { TurnMove } from "#app/@types/TurnMove";
-import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
@@ -40,7 +39,6 @@ import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { isNullOrUndefined } from "util";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
@@ -461,7 +459,7 @@ export class EnemyPokemon extends Pokemon {
      * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
      * can legally be targeted with this move.
      */
-    const activeTargets = targets.filter((bi) => !isNil(globalScene.getFieldPokemonByBattlerIndex(bi)));
+    const activeTargets = targets.filter((bi) => !isNil(globalScene.getPokemonByBattlerIndex(bi)));
     if (activeTargets.length === 0) {
       /** Moves with no valid targets are given a "fail penalty" of (-5). */
       return {
@@ -476,7 +474,7 @@ export class EnemyPokemon extends Pokemon {
      * move against the Pokemon at that index.
      */
     const targetScores = activeTargets.map(
-      (bi) => [bi, this.getMoveScore(globalScene.getFieldPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
+      (bi) => [bi, this.getMoveScore(globalScene.getPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
     );
 
     if (multiple) {
