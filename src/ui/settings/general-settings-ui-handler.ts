@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
+import { AbstractSettingsUiHandler } from "#app/ui/settings/abstract-settings-ui-handler";
 import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
 import Phaser from "phaser";
-import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
 export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
   /** Buffer to be able to unsubscribe on {@linkcode tearDown} */
