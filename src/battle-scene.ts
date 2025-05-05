@@ -831,7 +831,7 @@ export default class BattleScene extends SceneBase {
   /**
    * Returns the Pokemon currently on the field that has a certain battler index, or `undefined` if no such Pokemon exists.
    * This function is allowed to return non-active (e.g., fainted) Pokemon.
-   * @param battlerIndex - The battler index to search for.
+   * @param battlerIndex - The {@linkcode BattlerIndex} to search for.
    */
   public getPokemonByBattlerIndex(battlerIndex: BattlerIndex): Pokemon | undefined {
     return this.getField().find((p) => p.getBattlerIndex() === battlerIndex);
