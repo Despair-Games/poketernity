@@ -46,7 +46,7 @@ import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNil } from "#app/utils/common-utils";
+import { coerceArray, isNil } from "#app/utils/common-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { randomString, randSeedInt } from "#app/utils/random-utils";
 import type { AiType } from "#enums/ai-type";
@@ -473,7 +473,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
  * @param moveIds The move or moves the Pokemon uses at the start of the encounter
  */
 export function loadCustomMovesForEncounter(moveIds: MoveId | MoveId[]) {
-  moveIds = Array.isArray(moveIds) ? moveIds : [moveIds];
+  moveIds = coerceArray(moveIds);
   return Promise.all(moveIds.map((moveId) => initMoveAnim(moveId))).then(() => loadMoveAnimAssets(moveIds));
 }
 
@@ -823,7 +823,7 @@ export function setEncounterRewards(
  * @param useWaveIndex - set to false when directly passing the the full exp value instead of baseExpValue
  */
 export function setEncounterExp(participantId: number | number[], baseExpValue: number, useWaveIndex: boolean = true) {
-  const participantIds = Array.isArray(participantId) ? participantId : [participantId];
+  const participantIds = coerceArray(participantId);
 
   globalScene.currentBattle.mysteryEncounter!.doEncounterExp = () => {
     globalScene.phaseManager.unshiftPhase(new PartyExpPhase(baseExpValue, useWaveIndex, new Set(participantIds)));

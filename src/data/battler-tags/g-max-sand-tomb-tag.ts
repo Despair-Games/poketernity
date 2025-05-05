@@ -1,6 +1,6 @@
 import { SandTombTag } from "#app/data/battler-tags/sand-tomb-tag";
 import type { Pokemon } from "#app/field/pokemon";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 
@@ -21,6 +21,6 @@ export class GMaxSandTombTag extends SandTombTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TrappedBattlerTagTypes);
+    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
   }
 }

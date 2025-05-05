@@ -8,7 +8,7 @@ import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -131,9 +131,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(3); // Should fill remaining
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toContain("BATON");
     });
@@ -160,7 +158,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [];
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof LearnMovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
@@ -172,7 +170,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [];
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -200,7 +198,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       const partyCountBefore = scene.getPlayerParty().length;
       scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.DRAGON_DANCE)];
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
       const partyCountAfter = scene.getPlayerParty().length;
 
       expect(partyCountBefore + 1).toBe(partyCountAfter);
@@ -239,7 +237,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.DRAGON_DANCE)];
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });

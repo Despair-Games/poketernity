@@ -7,6 +7,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 
 import { settings } from "#app/system/settings/settings-manager";
 import { windowStyleDependantAtlases } from "#app/ui/ui-theme";
+import { coerceArray } from "#app/utils/common-utils";
 import { getLocalizedFilename } from "#app/utils/string-utils";
 import { ImagesFolder } from "#enums/images-folders";
 
@@ -113,9 +114,7 @@ export class SceneBase extends Phaser.Scene {
     } else {
       folder += "/";
     }
-    if (!Array.isArray(filenames)) {
-      filenames = [filenames];
-    }
+    filenames = coerceArray(filenames);
     for (const f of filenames as string[]) {
       this.load.audio(folder + key, this.getCachedUrl(`audio/${folder}${f}`));
     }

@@ -1,3 +1,4 @@
+import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
 import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move, MoveAttrFilter } from "#app/data/moves/move";
@@ -6,7 +7,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, getEnumKeys, toDmgValue, type AbstractConstructor } from "#app/utils/common-utils";
+import { BooleanHolder, getEnumKeys, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
@@ -87,9 +88,6 @@ export function getMaxMoveList(): MoveId[] {
   }
   return ret;
 }
-
-/** Returns a (frozen) list of all Pledge Moves */
-export const PledgeMoves = Object.freeze([MoveId.GRASS_PLEDGE, MoveId.FIRE_PLEDGE, MoveId.WATER_PLEDGE]);
 
 //#endregion
 //#region Helpers

@@ -75,9 +75,7 @@ export class TurnCommandManager {
    */
   public addCommand(turnCommand: TurnCommand) {
     const { pokemon } = turnCommand;
-    if (pokemon.turnData) {
-      pokemon.turnData.turnCommand = turnCommand;
-    }
+    pokemon.turnData.turnCommand = turnCommand;
     // Remove any existing commands by the Pokemon before adding
     this.tryRemoveCommand((tc) => tc.pokemon === pokemon);
     this.turnCommands.push(turnCommand);

@@ -1,6 +1,6 @@
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
-import { RemoveTypeBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { REMOVE_TYPE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -60,7 +60,7 @@ export class RoostedTag extends BattlerTag {
       if (this.isBasePureFlying && !isCurrentlyDualType) {
         modifiedTypes = [ElementalType.NORMAL];
       } else {
-        if (pokemon.hasTag(...RemoveTypeBattlerTagTypes) && isOriginallyDualType && !isCurrentlyDualType) {
+        if (pokemon.hasTag(...REMOVE_TYPE_BATTLER_TAG_TYPES) && isOriginallyDualType && !isCurrentlyDualType) {
           modifiedTypes = [ElementalType.UNKNOWN];
         } else {
           modifiedTypes = currentTypes.filter((type) => type !== ElementalType.FLYING);

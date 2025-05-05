@@ -33,4 +33,4 @@ export const easeFunctions = [
   "Bounce.easeInOut",
   "Elastic",
   "Stepped",
-];
+] as const;

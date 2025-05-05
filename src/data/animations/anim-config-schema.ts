@@ -1,74 +1,126 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { AnimConfig, AnimTimedAddBgEvent, AnimTimedSoundEvent } from "#app/data/animations/anim-config";
-import type { MoveAnim } from "#app/data/animations/move-anim";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
-
+import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#app/data/animations/anim-config";
 import { easeFunctions } from "#app/data/animations/ease-functions";
+import { getEnumValues } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
+import { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import { MoveId } from "#enums/move-id";
-import type { Schema } from "ajv";
+import type { JSONSchemaType } from "ajv";
+
+/** JSON Schema properties applicable to keyframes for any animation property. */
+const keyframeOptions = {
+  /** The duration (in frames) of the tween played for this keyframe */
+  duration: {
+    type: "integer",
+    minimum: 0,
+    nullable: true,
+  },
+
+  /**
+   * The time (in frames) between when the previous keyframe's tween
+   * ends and this keyframe's tween begins
+   */
+  delay: {
+    type: "integer",
+    minimum: 0,
+    nullable: true,
+  },
+} as const;
 
 /**
- * Constructs a {@linkcode Schema} for an array of keyframes
- * with the provided specification for `value`
- * @param valueSpec - An object containing the JSON Schema specification for a
- * `value` property, e.g.
- * ```ts
+ * JSON Schema property for the easing specification available for most
+ * number-based animation properties.
+ */
+const easeOption = {
+  /**
+   * The easing function used to interpolate intermediate values during the tween.
+   * @see {@linkcode easeFunctions}
+   */
+  ease: {
+    type: "string",
+    enum: easeFunctions,
+    nullable: true,
+  },
+} as const;
+
+/**
+ * Generates a JSON Schema for an array of keyframes with number values.
+ * @param valueSpec The JSON Schema specification for the "value" property, e.g.
+ * ```
  * {
  *   type: "number",
- *   minimum: 0
+ *   minimum: 0,
  * }
  * ```
- * @param easeable - Does this property have intermediate values that are interpolated
- * with an {@linkcode easeFunctions | ease function}? (default `true`)
+ * @returns the {@linkcode JSONSchemaType | Schema} object for the keyframe set
  */
-function getKeyFrameSetSchema(valueSpec: Schema, easeable: boolean = true): Schema {
-  const keyframeOptions = {
-    /** The duration (in frames) of the tween played for this keyframe */
-    duration: {
-      type: "integer",
-      minimum: 0,
-    },
-
-    /**
-     * The time (in frames) between when the previous keyframe's tween
-     * ends and this keyframe's tween begins
-     */
-    delay: {
-      type: "integer",
-      minimum: 0,
-    },
-  };
-
-  const easeOption = {
-    /**
-     * The easing function used to interpolate intermediate values during the tween.
-     * @see {@linkcode easeFunctions}
-     */
-    ease: { enum: easeFunctions },
-  };
-  const ease = easeable ? easeOption : {};
-
+function getNumberKeyFrameSetSchema(valueSpec: JSONSchemaType<number>): JSONSchemaType<AnimKeyFrame<number>[]> {
   return {
     type: "array",
     items: {
       type: "object",
-      properties: { value: valueSpec, ...keyframeOptions, ...ease },
+      properties: { value: valueSpec, ...keyframeOptions, ...easeOption },
+      additionalProperties: false,
       required: ["value"],
     },
-    nullable: true,
+    minItems: 1,
+  } as const;
+}
+
+/**
+ * Generates a JSON Schema for an array of keyframes with boolean values.
+ * @param valueSpec The JSON Schema specification for the "value" property, e.g.
+ * ```
+ * {
+ *   type: "boolean",
+ * }
+ * ```
+ * @returns the {@linkcode JSONSchemaType | Schema} object for the keyframe set
+ */
+function getBooleanKeyFrameSetSchema(valueSpec: JSONSchemaType<boolean>): JSONSchemaType<AnimKeyFrame<boolean>[]> {
+  return {
+    type: "array",
+    items: {
+      type: "object",
+      /** @todo Remove `easeOption` from this */
+      properties: { value: valueSpec, ...keyframeOptions, ...easeOption },
+      additionalProperties: false,
+      required: ["value"],
+    },
+    minItems: 1,
+  } as const;
+}
+
+/**
+ * Generates a JSON Schema for an array of keyframes with number array values.
+ * @param valueSpec The JSON Schema specification for the "value" property, e.g.
+ * ```
+ * {
+ *   type: "array",
+ *   items: { type: "number" },
+ *   minItems: 1,
+ * }
+ * ```
+ * @returns the {@linkcode JSONSchemaType | Schema} object for the keyframe set
+ */
+function getNumberArrayKeyFrameSetSchema(
+  valueSpec: JSONSchemaType<number[]>,
+): JSONSchemaType<AnimKeyFrame<number[]>[]> {
+  return {
+    type: "array",
+    items: {
+      type: "object",
+      properties: { value: valueSpec, ...keyframeOptions, ...easeOption },
+      additionalProperties: false,
+      required: ["value"],
+    },
   };
 }
 
 /**
- * Schema for a single property of an animated object.
- * This specifies the property's {@linkcode AnimFrameTargets | focus}
- * and contains the {@linkcode keyFrameSchema | keyframes} applied
- * to the focus.
+ * Schema containing the properties of an asset in an animation.
+ * Each individual property is defined with a {@linkcode getKeyFrameSetSchema | set of keyframes}.
  */
-const animPropSchema: Schema = {
+const animPropSchema: JSONSchemaType<AnimProp> = {
   type: "object",
   properties: {
     /**
@@ -78,14 +130,14 @@ const animPropSchema: Schema = {
      * the origin point is away from the source. If `u = 0`, then the origin point is
      * the source; if `u = 1`, then the origin point is the target.
      */
-    u: getKeyFrameSetSchema({
+    u: getNumberKeyFrameSetSchema({
       type: "number",
       minimum: 0,
       maximum: 1,
     }),
 
     /** The horizontal coordinate relative to the keyframe's origin point. */
-    x: getKeyFrameSetSchema({
+    x: getNumberKeyFrameSetSchema({
       type: "number",
     }),
 
@@ -93,28 +145,37 @@ const animPropSchema: Schema = {
      * The vertical coordinate relative to the keyframe's origin point.
      * An increase in `y` will move the sprite downward.
      */
-    y: getKeyFrameSetSchema({
+    y: getNumberKeyFrameSetSchema({
       type: "number",
     }),
 
     /** Horizontal scale factor (%) */
-    scaleX: getKeyFrameSetSchema({
-      type: "number",
-      minimum: 0,
-    }),
+    scaleX: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: 0,
+      }),
+      nullable: true,
+    },
 
     /** Vertical scale factor (%) */
-    scaleY: getKeyFrameSetSchema({
-      type: "number",
-      minimum: 0,
-    }),
+    scaleY: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: 0,
+      }),
+      nullable: true,
+    },
 
     /** The alpha value for the animated sprite, in the range [0, 255] */
-    alpha: getKeyFrameSetSchema({
-      type: "number",
-      minimum: 0,
-      maximum: 255,
-    }),
+    alpha: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: 0,
+        maximum: 255,
+      }),
+      nullable: true,
+    },
 
     /**
      * The rotation angle of the sprite in degrees.
@@ -122,48 +183,63 @@ const animPropSchema: Schema = {
      * 90 is down, and -90 is up. The value of this should be in the interval
      * [-180, 180].
      */
-    angle: getKeyFrameSetSchema({
-      type: "number",
-      minimum: -180,
-      maximum: 180,
-    }),
+    angle: {
+      ...getNumberKeyFrameSetSchema({
+        type: "number",
+        minimum: -180,
+        maximum: 180,
+      }),
+      nullable: true,
+    },
 
     /** If `true`, flips the sprite horizontally */
-    mirror: getKeyFrameSetSchema({ type: "boolean" }, false),
+    mirror: {
+      ...getBooleanKeyFrameSetSchema({ type: "boolean" }),
+      nullable: true,
+    },
 
     /** If `false`, hides the sprite */
-    visible: getKeyFrameSetSchema({ type: "boolean" }, false),
+    visible: {
+      ...getBooleanKeyFrameSetSchema({ type: "boolean" }),
+      nullable: true,
+    },
 
     /**
      * The blend mode to specify how the sprite is rendered on the canvas
      * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
-     * @todo
-     * - Is this still required?
-     * - Should it be a keyframe property?
      */
-    blendType: getKeyFrameSetSchema({ enum: Object.values(AnimBlendType) }, false),
+    blendType: {
+      ...getNumberKeyFrameSetSchema({
+        type: "integer",
+        enum: getEnumValues(AnimBlendType),
+      }),
+      nullable: true,
+    },
 
     /**
      * If this keyframe is for a graphic, specifies the tile index used
      * for the graphic during the tween. This is only relevant for VFX
      * properties.
      */
-    graphicFrame: getKeyFrameSetSchema({ type: "integer" }, false),
+    graphicFrame: {
+      ...getNumberKeyFrameSetSchema({ type: "integer" }),
+      nullable: true,
+    },
 
-    /** A tone to pipeline over the animated sprite (RGBA) */
-    tone: getKeyFrameSetSchema(
-      {
+    /** A tone to pipeline over the animated sprite (RGBA, normalized) */
+    tone: {
+      ...getNumberArrayKeyFrameSetSchema({
         type: "array",
         items: {
           type: "number",
           minimum: 0,
-          maximum: 255,
+          maximum: 1,
         },
         minItems: 3,
         maxItems: 4,
-      },
-      false,
-    ),
+      }),
+      nullable: true,
+    },
 
     /**
      * The z-depth of the animated sprite during the tween
@@ -172,26 +248,36 @@ const animPropSchema: Schema = {
      * - 3 is on top of both fields
      * - 5 is on top of player sprite
      */
-    priority: getKeyFrameSetSchema({ enum: [0, 1, 3, 5] }, false),
+    priority: {
+      ...getNumberKeyFrameSetSchema({
+        type: "integer",
+        enum: [0, 1, 3, 5],
+      }),
+      nullable: true,
+    },
   },
-};
+  required: ["u", "x", "y"],
+  additionalProperties: false,
+  nullable: true,
+} as const;
 
 /**
  * Schema for a timed event to play during an animation.
  * This may include a {@linkcode AnimTimedSoundEvent | sound effect}
  * or an {@linkcode AnimTimedAddBgEvent | update to the background image}
  */
-const animTimedEventSchema: Schema = {
+const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
   type: "object",
   properties: {
     // Required fields
 
     /** The type of event to execute. */
     eventType: {
-      enum: ["AnimTimedSoundEvent", "AnimTimedAddBgEvent", "AnimTimedUpdateBgEvent"],
+      type: "string",
+      enum: Object.values(AnimTimedEventType),
     },
 
-    /** The delay from the start of the animation to the given event (ms) */
+    /** The delay from the start of the animation to the given event (in frames) */
     time: {
       type: "number",
       minimum: 0,
@@ -208,6 +294,8 @@ const animTimedEventSchema: Schema = {
     volume: {
       type: "number",
       default: 100,
+      minimum: 0,
+      nullable: true,
     },
 
     /**
@@ -217,6 +305,8 @@ const animTimedEventSchema: Schema = {
     pitch: {
       type: "number",
       default: 100,
+      minimum: 0,
+      nullable: true,
     },
 
     // Background Image Event fields
@@ -225,32 +315,36 @@ const animTimedEventSchema: Schema = {
     bgX: {
       type: "number",
       default: 0,
+      nullable: true,
     },
 
     /** The y-coordinate of the background image */
     bgY: {
       type: "number",
       default: 0,
+      nullable: true,
     },
 
-    /** The amount of time the image is displayed (ms) */
+    /** The duration the image is displayed (in frames) */
     duration: {
       type: "number",
-      /** @todo Should this default be kept? */
-      default: 0,
+      nullable: true,
     },
 
     /** Scale factor (%) for the background image */
     scale: {
       type: "number",
       default: 100,
+      nullable: true,
     },
   },
-  required: ["time", "resourceName"],
-  if: { properties: { eventType: { enum: ["AnimTimedSoundEvent"] } } },
+  nullable: true,
+  additionalProperties: false,
+  required: ["eventType", "time", "resourceName"],
+  if: { properties: { eventType: { const: "AnimTimedSoundEvent" } } },
   then: { required: ["volume", "pitch"] },
   else: { required: ["bgX", "bgY", "duration", "scale"] },
-};
+} as const;
 
 /**
  * Schema for the config of a battle animation.
@@ -259,7 +353,7 @@ const animTimedEventSchema: Schema = {
  * the given set of {@linkcode keyFrameSchema | keyframes}.
  * @see {@linkcode AnimConfig}
  */
-export const animConfigSchema: Schema = {
+export const animConfigSchema: JSONSchemaType<AnimConfig> = {
   type: "object",
   properties: {
     /**
@@ -267,33 +361,34 @@ export const animConfigSchema: Schema = {
      * associated with the anim (if applicable).
      * This is required for all {@linkcode MoveAnim | MoveAnims}.
      */
-    id: { enum: Object.values(MoveId) },
+    moveId: {
+      type: "integer",
+      enum: getEnumValues(MoveId),
+      nullable: true,
+    },
 
-    /**
-     * The name of the tileset used for the animation.
-     * @todo Should this be required?
-     */
-    graphic: { type: "string" },
+    /** The name of the tileset used for the animation. */
+    graphic: { type: "string", nullable: true },
 
     /**
      * Contains all properties applied to the sprite of the
      * "source" object (e.g. the {@linkcode Pokemon} using a move)
      * @see {@linkcode animPropSchema}
      */
-    sourceProperties: animPropSchema,
+    sourceProperties: { ...animPropSchema, nullable: true },
 
     /**
      * Contains all properties applied to the sprite of the
      * "target" object (e.g. the {@linkcode Pokemon} attacked by a move)
      * @see {@linkcode animPropSchema}
      */
-    targetProperties: animPropSchema,
+    targetProperties: { ...animPropSchema, nullable: true },
 
     /**
      * Contains all properties applied to the animation's VFX
      * @see {@linkcode animPropSchema}
      */
-    vfxProperties: animPropSchema,
+    vfxProperties: { ...animPropSchema, nullable: true },
 
     /**
      * Contains all timed events played during the animation.
@@ -303,7 +398,9 @@ export const animConfigSchema: Schema = {
       type: "array",
       items: animTimedEventSchema,
       minItems: 1,
+      nullable: true,
     },
   },
-  required: ["props"],
-};
+  additionalProperties: false,
+  required: [],
+} as const;

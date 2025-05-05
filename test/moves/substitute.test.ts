@@ -1,7 +1,7 @@
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { allMoves } from "#app/data/data-lists";
 import type { CommandPhase } from "#app/phases/command-phase";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -261,7 +261,7 @@ describe("Moves - Substitute", () => {
 
     await game.toEndOfTurn();
 
-    expect(leadPokemon.getTag(...TrappedBattlerTagTypes)).toBeUndefined();
+    expect(leadPokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES)).toBeUndefined();
   });
 
   it("should prevent the user's stats from being lowered", async () => {

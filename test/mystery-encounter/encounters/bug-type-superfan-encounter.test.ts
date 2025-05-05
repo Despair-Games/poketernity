@@ -8,7 +8,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -367,7 +367,10 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await skipBattleRunMysteryEncounterRewardsPhase(game, false);
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterRewardsPhase.name);
-      game.phaseInterceptor["prompts"] = []; // Clear out prompt handlers
+
+      // Clear out prompt handlers created by `runMysteryEncounterToEnd`.
+      // TODO: refactor the prompt handler queue to add this handler at the front of the queue instead.
+      game.phaseInterceptor["prompts"] = [];
       game.onNextPrompt("MysteryEncounterRewardsPhase", UiMode.OPTION_SELECT, () => {
         game.phaseInterceptor.superEndPhase();
       });
@@ -425,9 +428,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(2);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("SUPER_LURE");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("GREAT_BALL");
@@ -444,9 +445,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("QUICK_CLAW");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MAX_LURE");
@@ -466,9 +465,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("GRIP_CLAW");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MAX_LURE");
@@ -490,9 +487,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(4);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MASTER_BALL");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MEGA_BRACELET");
@@ -560,15 +555,13 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const gripClawCountBefore =
         scene.findModifier((m) => m instanceof ContactHeldItemTransferChanceModifier)?.stackCount ?? 0;
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(2);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MYSTERY_ENCOUNTER_GOLDEN_BUG_NET");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("REVIVER_SEED");
@@ -583,7 +576,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(encounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [SpeciesId.BUTTERFREE]);
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });

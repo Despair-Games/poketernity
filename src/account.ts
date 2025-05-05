@@ -1,5 +1,5 @@
 import type { UserInfo } from "#app/@types/UserInfo";
-import { bypassLogin } from "#app/constants/app-constants";
+import { BYPASS_LOGIN } from "#app/constants/app-constants";
 import { api } from "#app/plugins/api/api";
 import { randomString } from "#app/utils/random-utils";
 
@@ -16,7 +16,7 @@ export function initLoggedInUser(): void {
 export function updateUserInfo(): Promise<[boolean, number]> {
   return new Promise<[boolean, number]>((resolve) => {
     // Offline
-    if (bypassLogin) {
+    if (BYPASS_LOGIN) {
       loggedInUser = {
         username: OFFLINE_USERNAME,
         lastSessionSlot: -1,

@@ -1,4 +1,5 @@
 import type { TurnMove } from "#app/@types/TurnMove";
+import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
@@ -229,7 +230,7 @@ export class EnemyPokemon extends Pokemon {
    */
   protected getCriticalHitBonus(opponent: Pokemon, move: Move, attackScore?: number) {
     const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
-    if ((isNullOrUndefined(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
+    if ((isNil(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
       const critChance = this.getSimulatedCriticalHitChance(opponent, move);
       /**
        * Only grant a bonus if the calculated critical hit chance is over 10%

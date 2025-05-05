@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { TimeOfDayWidget } from "#app/ui/components/time-of-day-widget";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { EntryHazardArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { toCamelCaseString, toTitleCase } from "#app/utils/string-utils";
 import { ArenaEventType } from "#enums/arena-event-type";
@@ -280,7 +280,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         }
 
         const isEntryHazardTag =
-          EntryHazardArenaTagTypes.includes(tagAddedEvent.arenaTagType)
+          ENTRY_HAZARD_ARENA_TAG_TYPES.includes(tagAddedEvent.arenaTagType)
           && globalScene.arena.hasTag(tagAddedEvent.arenaTagType);
         let arenaEffectType: ArenaEffectType;
 

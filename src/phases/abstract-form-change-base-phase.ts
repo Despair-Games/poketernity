@@ -1,8 +1,8 @@
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 
@@ -99,11 +99,7 @@ export abstract class FormChangeBasePhase extends Phase {
       [this.pokemonSprite, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map(
         (sprite) => {
           const spriteKey = this.pokemon.getSpriteKey(true);
-          try {
-            sprite.play(spriteKey);
-          } catch (err: unknown) {
-            console.error(`Failed to play animation for ${spriteKey}`, err);
-          }
+          sprite.play(spriteKey);
 
           sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],
