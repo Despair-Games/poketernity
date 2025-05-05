@@ -1,12 +1,12 @@
-import { allMoves } from "#app/data/data-lists";
 import { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import { BattleAnim } from "./battle-anims";
 import { moveAnims } from "#app/data/animations/move-anims";
+import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
+import { BattleAnim } from "./battle-anims";
 
 /**
  * Animation for effects during the use of a move.
@@ -17,7 +17,7 @@ export class MoveAnim extends BattleAnim {
   public moveId: MoveId;
 
   constructor(move: MoveId, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
+    super(user, globalScene.getPokemonByBattlerIndex(targetIndex), playOnEmptyField);
 
     this.moveId = move;
   }

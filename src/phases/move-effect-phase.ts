@@ -85,15 +85,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     const targets = this.getTargets();
 
     const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
-    /** If the user was somehow removed from the field and it's not a delayed attack, end this phase */
-    if (!user.isOnField()) {
-      if (!isDelayedAttack) {
-        return super.end();
-      } else {
-        if (isNil(user.turnData)) {
-          user.resetTurnData();
-        }
-      }
+    // If the user was somehow removed from the field and it's not a delayed attack, end this phase
+    if (!user.isOnField() && !isDelayedAttack) {
+      return super.end();
     }
 
     /**
@@ -606,7 +600,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      * due to a quirk where `getFirstTarget()` returns `undefined` if the target is fainted.
      */
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
-      const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
+      const ogTarget = globalScene.getPokemonByBattlerIndex(this.targets[0]);
       const allyPokemon = ogTarget?.getAlly();
       if (ogTarget?.isFainted() && allyPokemon?.isActive(true) && allyPokemon.id !== this.getUserPokemon()?.id) {
         this.targets = [allyPokemon.getBattlerIndex()];

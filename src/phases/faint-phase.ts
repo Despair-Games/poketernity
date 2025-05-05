@@ -164,7 +164,7 @@ export class FaintPhase extends PokemonPhase {
     );
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
 
-    if (this.source && pokemon.turnData?.attacksReceived?.length) {
+    if (this.source && pokemon.turnData.attacksReceived.length > 0) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
       applyAbAttrs<PostFaintAbAttr>(
         AbAttrFlag.POST_FAINT,
@@ -180,7 +180,7 @@ export class FaintPhase extends PokemonPhase {
 
     const alivePlayField = globalScene.getField(true);
     alivePlayField.forEach((p) => applyAbAttrs<PostKnockOutAbAttr>(AbAttrFlag.POST_KNOCK_OUT, p, false, pokemon));
-    if (pokemon.turnData?.attacksReceived?.length) {
+    if (pokemon.turnData.attacksReceived.length > 0) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
         applyAbAttrs<PostVictoryAbAttr>(AbAttrFlag.POST_VICTORY, defeatSource, false);

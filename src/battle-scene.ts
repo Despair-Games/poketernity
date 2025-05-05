@@ -1,3 +1,4 @@
+import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
 import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import type { Localizable } from "#app/@types/locales";
 import type { ModifierPredicate } from "#app/@types/ModifierPredicate";
@@ -13,8 +14,8 @@ import {
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants/mystery-encounter-constants";
-import { ELITE_FOUR_1_WAVE } from "#app/constants/wave-constants";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { ELITE_FOUR_1_WAVE } from "#app/constants/wave-constants";
 import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
@@ -124,7 +125,6 @@ import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
 import { BooleanHolder, fixedNumber, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
-import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
@@ -820,7 +820,7 @@ export default class BattleScene extends SceneBase {
 
   /**
    * Returns a list of all Pokemon currently on the field, potentially including fainted ones.
-   * @param activeOnly If `true`, only return Pokemon which are active (e.g., not fainted). Default `false`.
+   * @param activeOnly - (Default `false`) If `true`, only return Pokemon which are active (e.g., not fainted).
    */
   public getField(activeOnly: boolean = false): Pokemon[] {
     let ret: Pokemon[] = this.getPlayerField();
@@ -831,9 +831,9 @@ export default class BattleScene extends SceneBase {
   /**
    * Returns the Pokemon currently on the field that has a certain battler index, or `undefined` if no such Pokemon exists.
    * This function is allowed to return non-active (e.g., fainted) Pokemon.
-   * @param battlerIndex The battler index to search for.
+   * @param battlerIndex - The {@linkcode BattlerIndex} to search for.
    */
-  public getFieldPokemonByBattlerIndex(battlerIndex?: BattlerIndex): Pokemon | undefined {
+  public getPokemonByBattlerIndex(battlerIndex: BattlerIndex): Pokemon | undefined {
     return this.getField().find((p) => p.getBattlerIndex() === battlerIndex);
   }
 

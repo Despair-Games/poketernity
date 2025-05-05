@@ -1,3 +1,4 @@
+import { CANVAS_SCALE } from "#app/constants/ui-constants";
 import type { PostStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-stat-stage-change-ab-attr";
 import type { ProtectStatAbAttr } from "#app/data/abilities/ab-attrs/protect-stat-ab-attr";
 import type { ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
@@ -11,7 +12,6 @@ import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { CANVAS_SCALE } from "#app/constants/ui-constants";
 import { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -177,16 +177,8 @@ export class StatStageChangePhase extends PokemonPhase {
 
       for (const s of filteredStats) {
         if (stages.value > 0 && pokemon.getStatStage(s) < 6) {
-          if (!pokemon.turnData) {
-            // Temporary fix for missing turn data struct on turn 1
-            pokemon.resetTurnData();
-          }
           pokemon.turnData.statStagesIncreased = true;
         } else if (stages.value < 0 && pokemon.getStatStage(s) > -6) {
-          if (!pokemon.turnData) {
-            // Temporary fix for missing turn data struct on turn 1
-            pokemon.resetTurnData();
-          }
           pokemon.turnData.statStagesDecreased = true;
         }
 

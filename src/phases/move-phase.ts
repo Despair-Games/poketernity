@@ -439,7 +439,7 @@ export class MovePhase extends BattlePhase {
           targets.push(...globalScene.getField(true));
           break;
         default:
-          const target = globalScene.getFieldPokemonByBattlerIndex(t);
+          const target = globalScene.getPokemonByBattlerIndex(t);
           if (!isNil(target)) {
             targets.push(target);
           }
@@ -763,7 +763,7 @@ export class MovePhase extends BattlePhase {
       if (this.pokemon.turnData.attacksReceived.length) {
         this.targets[0] = this.pokemon.turnData.attacksReceived[0].sourceBattlerIndex;
         const [target] = this.targets;
-        const targetPkm = globalScene.getFieldPokemonByBattlerIndex(target);
+        const targetPkm = globalScene.getPokemonByBattlerIndex(target);
 
         // account for metal burst and comeuppance hitting remaining targets in double battles
         // counterattack will redirect to remaining ally if original attacker faints
