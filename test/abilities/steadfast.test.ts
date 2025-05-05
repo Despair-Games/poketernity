@@ -47,7 +47,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -69,7 +69,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -87,12 +87,12 @@ describe("Abilities - Steadfast", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.FAKE_OUT);
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
     await phaseInterceptor.to("MessagePhase", false);
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -124,7 +124,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -164,7 +164,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 

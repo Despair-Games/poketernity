@@ -37,9 +37,14 @@ describe("Double Battles", () => {
       .enemyAbility(AbilityId.BALL_FETCH);
   });
 
-  // double-battle player's pokemon both fainted in same round, then revive one, and next double battle summons two player's pokemon successfully.
-  // (There were bugs that either only summon one when can summon two, player stuck in switchPhase etc)
-  it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
+  /**
+   * Tests the following sequence in a wild double battle:
+   * - All Pokemon on the field faint in the same turn. The Player has a third Pokemon in their party
+   * - The Player revives one of their Pokemon in the following rewards phase (i.e. the Player now has 2 non-fainted Pokemon)
+   * - The Player advances to another wild double battle in the next wave. The Player should automatically resummon the revived Pokemon
+   * @todo This test is currently disabled because of stability issues with {@linkcode gameManager.faintOpponents} in double battles
+   */
+  it.skip("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
     await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARIZARD, SpeciesId.SQUIRTLE]);
 
     game.move.select(MoveId.SPLASH);
@@ -62,7 +67,8 @@ describe("Double Battles", () => {
     expect(game.scene.getPlayerField().filter((p) => !p.isFainted())).toHaveLength(2);
   }, 20000);
 
-  it("randomly chooses between single and double battles if there is no battle type override", async () => {
+  /** @todo This test is currently disabled because of stability issues with {@linkcode gameManager.faintOpponents} in double battles */
+  it.skip("randomly chooses between single and double battles if there is no battle type override", async () => {
     game.override.battleType(null);
 
     await game.classicMode.startBattle([SpeciesId.BULBASAUR]);

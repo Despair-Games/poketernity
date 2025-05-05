@@ -22,6 +22,7 @@ import { LoginPhase } from "#app/phases/login-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
@@ -95,6 +96,7 @@ const PHASES = [
   CommandPhase,
   EnemyCommandPhase,
   TurnStartPhase,
+  MoveHeaderPhase,
   MovePhase,
   MoveEffectPhase,
   DamageAnimPhase,
