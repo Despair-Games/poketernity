@@ -47,7 +47,7 @@ describe("Moves - Toxic", () => {
     game.move.select(MoveId.TOXIC);
     await game.toEndOfTurn();
 
-    expect(game.field.getEnemyPokemon().hasNonVolatileStatusEffect(false, true)).toBeFalsy();
+    expect(game.field.getEnemyPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("should hit semi-invulnerable targets if user is Poison-type", async () => {
@@ -71,7 +71,7 @@ describe("Moves - Toxic", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(game.field.getEnemyPokemon().hasNonVolatileStatusEffect(false, true)).toBeFalsy();
+    expect(game.field.getEnemyPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("moves other than Toxic should not hit semi-invulnerable targets even if user is Poison-type", async () => {

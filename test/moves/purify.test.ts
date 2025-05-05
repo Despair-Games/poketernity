@@ -43,7 +43,7 @@ describe("Moves - Purify", () => {
 
     playerPokemon.hp = playerPokemon.getMaxHp() - 1;
     enemyPokemon.trySetStatus(StatusEffect.BURN);
-    expect(enemyPokemon.hasStatusEffect(StatusEffect.BURN)).toBeTruthy();
+    expect(enemyPokemon).toHaveStatusEffect(StatusEffect.BURN);
 
     game.move.select(MoveId.PURIFY);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

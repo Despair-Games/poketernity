@@ -214,7 +214,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       const party = scene.getPlayerParty();
       const lapras = party.find((pkm) => pkm.species.speciesId === SpeciesId.LAPRAS)!;
       lapras.trySetStatus(StatusEffect.POISON);
-      expect(lapras.hasStatusEffect(StatusEffect.POISON)).toBeTruthy();
+      expect(lapras).toHaveStatusEffect(StatusEffect.POISON);
       const abra = party.find((pkm) => pkm.species.speciesId === SpeciesId.ABRA)!;
       vi.spyOn(abra, "isAllowedInBattle").mockReturnValue(false);
 
