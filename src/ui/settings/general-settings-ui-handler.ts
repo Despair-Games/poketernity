@@ -2,10 +2,12 @@ import { globalScene } from "#app/global-scene";
 import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
+import Phaser from "phaser";
 import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
 export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
-  private onWindowResizeEvent = () => this.updateMoveTouchControlsSettingsLabel();
+  /** Buffer to be able to unsubscribe on {@linkcode tearDown} */
+  private onOrientationChange = () => this.updateMoveTouchControlsSettingsLabel();
 
   constructor() {
     super("general", generalSettingsUiItems);
@@ -15,15 +17,12 @@ export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
     super.setup();
 
     if (hasTouchscreen()) {
-      // TODO: we should user Phaser's scale 'orientationchange' event instead
-      window.addEventListener("resize", this.onWindowResizeEvent);
+      globalScene.scale.on(Phaser.Scale.Events.ORIENTATION_CHANGE, this.onOrientationChange);
     }
   }
 
   protected override tearDown(): void {
-    if (hasTouchscreen()) {
-      window.removeEventListener("resize", this.onWindowResizeEvent);
-    }
+    globalScene.scale.off(Phaser.Scale.Events.ORIENTATION_CHANGE, this.onOrientationChange); // Always remove listener. No error is thrown if listener was never present
     super.tearDown();
   }
 
