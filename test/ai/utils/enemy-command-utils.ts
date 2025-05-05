@@ -42,8 +42,8 @@ export function getEnemyMoveChoices(pokemon: EnemyPokemon): MoveChoiceSet {
   const moveChoices = initMoveChoiceSet(pokemon);
   for (let i = 0; i < NUM_TRIALS; i++) {
     const queuedMove = pokemon.getNextMove();
-    /** @todo Is there a way to show this is defined after {@linkcode initMoveChoiceSet} without the bang? */
-    moveChoices[queuedMove.move.id]!++;
+    const prev = moveChoices[queuedMove.move.id] ?? 0;
+    moveChoices[queuedMove.move.id] = prev + 1;
   }
 
   for (const [key, count] of Object.entries(moveChoices)) {
