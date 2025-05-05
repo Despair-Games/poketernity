@@ -4006,6 +4006,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return true;
   }
 
+  /** @todo Refactor this */
   trySetStatus(
     effect: StatusEffect,
     asPhase: boolean = false,

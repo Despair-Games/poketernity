@@ -39,24 +39,25 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
   public override start(): void {
     const pokemon = this.getPokemon();
     if (pokemon && !pokemon.hasNonVolatileStatusEffect(false, true)) {
-      if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon)) {
-        if (this.turnsRemaining) {
-          // @ts-expect-error - `Pokemon#status` is protected; TODO: change this
-          pokemon.status!.sleepTurnsRemaining = this.turnsRemaining;
-        }
+      if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon, this.turnsRemaining, this.sourceText)) {
         pokemon.updateInfo(true);
-        new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect! - 1), pokemon).play(false, () => {
-          globalScene.phaseManager.queueMessagePhase(
-            getStatusEffectObtainText(this.statusEffect, getPokemonNameWithAffix(pokemon), this.sourceText),
+        new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect - 1), pokemon).play(false, () => {
+          const effectObtainText = getStatusEffectObtainText(
+            this.statusEffect,
+            getPokemonNameWithAffix(pokemon),
+            this.sourceText,
           );
+          globalScene.phaseManager.queueMessagePhase(effectObtainText);
           this.end();
         });
         return;
       }
     } else if (pokemon.getStatusEffect(true) === this.statusEffect) {
-      globalScene.phaseManager.queueMessagePhase(
-        getStatusEffectOverlapText(this.statusEffect ?? StatusEffect.NONE, getPokemonNameWithAffix(pokemon)),
+      const effectOverlapText = getStatusEffectOverlapText(
+        this.statusEffect ?? StatusEffect.NONE,
+        getPokemonNameWithAffix(pokemon),
       );
+      globalScene.phaseManager.queueMessagePhase(effectOverlapText);
     }
     this.end();
   }
