@@ -1,6 +1,7 @@
 import type { Move } from "#app/data/moves/move";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { coerceArray } from "#app/utils/common-utils";
 import { MoveId } from "#enums/move-id";
 import { getEnemyMoveChoices } from "#test/ai/utils/enemy-command-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
@@ -68,7 +69,5 @@ function getExpectedUnusedMoveIds(pokemon: EnemyPokemon, qualifier: MoveQualifie
   if (typeof qualifier === "function") {
     return enemyMoveset.filter((mv) => qualifier(mv.getMove())).map((mv) => mv.moveId);
   }
-
-  /** @todo replace with `coerceArray` util */
-  return Array.isArray(qualifier) ? [...qualifier] : [qualifier];
+  return coerceArray(qualifier);
 }
