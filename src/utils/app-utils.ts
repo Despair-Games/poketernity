@@ -55,10 +55,12 @@ export function hasTouchscreen(): boolean {
 }
 
 /**
- * @returns `true` if the device window's `width > height`, and `false` otherwise
+ * Checks if the orientation of the scene is landscape
+ * @param scene - The scene/game to check (Must have a `scale: Phaser.Scale.ScaleManager` property)
+ * @returns `true` if the game is running in landscape mode (Primary or Secondary), otherwise `false`.
  */
-export function isLandscapeMode(): boolean {
-  // TODO: we should user Phaser's scale 'orientation' field instead
-  const { width, height } = window.screen;
-  return width > height;
+export function isLandscapeMode(scene: { scale: Phaser.Scale.ScaleManager }): boolean {
+  return [Phaser.Scale.Orientation.LANDSCAPE, Phaser.Scale.Orientation.LANDSCAPE_SECONDARY].includes(
+    scene.scale.orientation,
+  );
 }
