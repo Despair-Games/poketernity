@@ -267,10 +267,6 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     };
   }
 
-  override isObtainable() {
-    return super.isObtainable();
-  }
-
   hasVariants() {
     let variantDataIndex: string | number = this.speciesId;
     if (this.forms.length > 0) {

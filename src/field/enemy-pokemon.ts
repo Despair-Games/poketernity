@@ -459,7 +459,7 @@ export class EnemyPokemon extends Pokemon {
      * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
      * can legally be targeted with this move.
      */
-    const activeTargets = targets.filter((bi) => !isNil(globalScene.getFieldPokemonByBattlerIndex(bi)));
+    const activeTargets = targets.filter((bi) => !isNil(globalScene.getPokemonByBattlerIndex(bi)));
     if (activeTargets.length === 0) {
       /** Moves with no valid targets are given a "fail penalty" of (-5). */
       return {
@@ -474,7 +474,7 @@ export class EnemyPokemon extends Pokemon {
      * move against the Pokemon at that index.
      */
     const targetScores = activeTargets.map(
-      (bi) => [bi, this.getMoveScore(globalScene.getFieldPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
+      (bi) => [bi, this.getMoveScore(globalScene.getPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
     );
 
     if (multiple) {

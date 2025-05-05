@@ -2,7 +2,7 @@ import type { RechargingTag } from "#app/data/battler-tags/recharging-tag";
 import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerable-tag";
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
@@ -51,10 +51,10 @@ describe("Moves - Metronome", () => {
     game.move.select(MoveId.METRONOME);
     await game.toNextTurn();
 
-    expect(player.getTag<SemiInvulnerableTag>(...SemiInvulnerableBattlerTagTypes)).toBeTruthy();
+    expect(player.getTag<SemiInvulnerableTag>(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)).toBeTruthy();
 
     await game.toNextTurn();
-    expect(player.getTag<SemiInvulnerableTag>(...SemiInvulnerableBattlerTagTypes)).toBeFalsy();
+    expect(player.getTag<SemiInvulnerableTag>(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)).toBeFalsy();
     expect(enemy.isFullHp()).toBeFalsy();
   });
 

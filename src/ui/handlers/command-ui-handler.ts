@@ -95,7 +95,10 @@ export class CommandUiHandler extends UiHandler {
       i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
       0,
     );
-    if (this.getCursor() === BattleCommand.POKEMON) {
+
+    // If this is the first turn of battle, default to the fight command. TODO: add setting to disable this behavior
+    const isFirstAction = !this.active && globalScene.currentBattle.turn === 1;
+    if (isFirstAction || this.getCursor() === BattleCommand.POKEMON) {
       this.setCursor(BattleCommand.FIGHT);
     } else {
       this.setCursor(this.getCursor());

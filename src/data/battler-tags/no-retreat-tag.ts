@@ -1,6 +1,6 @@
 import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import type { Pokemon } from "#app/field/pokemon";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -18,6 +18,6 @@ export class NoRetreatTag extends TrappedTag {
 
   /** overrides {@linkcode TrappedTag.apply}, removing the Ghost-type condition */
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TrappedBattlerTagTypes);
+    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
   }
 }

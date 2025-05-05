@@ -203,7 +203,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(sitrusMod, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1, optionNumber: 1 });
 
       const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
@@ -224,7 +224,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1, optionNumber: 1 });
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
       const berryPouchAfter = scene.findModifier((m) => m.isPreserveBerryModifier());
@@ -250,7 +250,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(sitrusMod, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1, optionNumber: 1 });
 
       const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
@@ -279,7 +279,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1, optionNumber: 1 });
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
       const healingCharmAfter = scene.findModifier((m) => m.isPreserveBerryModifier());
@@ -331,7 +331,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -365,7 +365,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
       const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
@@ -386,7 +386,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
       const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
@@ -412,7 +412,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
       const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
@@ -465,7 +465,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       scene.addModifier(modifier, true, false, false, true);
       await scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });

@@ -7,7 +7,7 @@ import { generateModifierType } from "#app/data/mystery-encounters/utils/encount
 import { PokemonNatureWeightModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import * as RandomUtils from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -105,7 +105,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
 
       const speciesBefore = scene.getPlayerParty()[0].species.speciesId;
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1, optionNumber: 1 });
 
       const speciesAfter = scene.getPlayerParty().at(-1)?.species.speciesId;
 
@@ -118,7 +118,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
 
       const speciesBefore = scene.getPlayerParty()[1].species.speciesId;
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 2, optionNo: 2 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 2, optionNumber: 2 });
 
       const speciesAfter = scene.getPlayerParty().at(-1)?.species.speciesId;
 
@@ -131,7 +131,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
 
       const speciesBefore = scene.getPlayerParty()[2].species.speciesId;
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 3, optionNo: 3 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 3, optionNumber: 3 });
 
       const speciesAfter = scene.getPlayerParty().at(-1)?.species.speciesId;
 
@@ -144,7 +144,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
-      await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 1, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -165,7 +165,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
 
       const speciesBefore = scene.getPlayerParty()[2].species.speciesId;
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       const speciesAfter = scene.getPlayerParty().at(-1)?.species.speciesId;
 
@@ -182,7 +182,7 @@ describe("Global Trade System - Mystery Encounter", () => {
 
       vi.spyOn(RandomUtils, "randSeedInt").mockReturnValue(1); // force shiny on reroll
 
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 1 });
 
       const receivedPokemon = scene.getPlayerParty().at(-1)!;
 
@@ -195,7 +195,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
-      await runMysteryEncounterToEnd(game, 2, { pokemonNo: 2 });
+      await runMysteryEncounterToEnd(game, 2, { partySlot: 2 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });
@@ -222,16 +222,14 @@ describe("Global Trade System - Mystery Encounter", () => {
       const modifier = soulDew.newModifier(scene.getPlayerParty()[0]) as PokemonNatureWeightModifier;
       modifier.stackCount = 2;
       scene.addModifier(modifier, true, false, false, true);
-      await scene.updateModifiers(true);
+      scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(
-        (h) => h instanceof ModifierSelectUiHandler,
-      ) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.tier).toBe(ModifierTier.MASTER);
       const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
@@ -249,9 +247,9 @@ describe("Global Trade System - Mystery Encounter", () => {
       const modifier = soulDew.newModifier(scene.getPlayerParty()[0]) as PokemonNatureWeightModifier;
       modifier.stackCount = 1;
       scene.addModifier(modifier, true, false, false, true);
-      await scene.updateModifiers(true);
+      scene.updateModifiers(true);
 
-      await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
+      await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
     });

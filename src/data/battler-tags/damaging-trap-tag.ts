@@ -7,7 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -44,7 +44,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TrappedBattlerTagTypes) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {

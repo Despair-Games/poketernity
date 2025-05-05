@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import * as account from "#app/account";
-import * as constants from "#app/constants/app-constants";
+import * as appConstants from "#app/constants/app-constants";
 import { api } from "#app/plugins/api/api";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,13 +26,13 @@ describe("System - Game Data", () => {
 
   describe("tryClearSession", () => {
     beforeEach(() => {
-      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(false);
+      vi.spyOn(appConstants, "BYPASS_LOGIN", "get").mockReturnValue(false);
       vi.spyOn(game.scene.gameData, "getSessionSaveData").mockReturnValue({} as SessionSaveData);
       vi.spyOn(account, "updateUserInfo").mockImplementation(async () => [true, 1]);
     });
 
     it("should return [true, true] if bypassLogin is true", async () => {
-      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(true);
+      vi.spyOn(appConstants, "BYPASS_LOGIN", "get").mockReturnValue(true);
 
       const result = await game.scene.gameData.tryClearSession(0);
 

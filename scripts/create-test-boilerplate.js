@@ -4,15 +4,30 @@
  * @example npm run test:create
  */
 
+import chalk from "chalk";
 import fs from "fs";
 import inquirer from "inquirer";
 import path from "path";
 import { fileURLToPath } from "url";
 
+//#region Constants
+
+const version = "2.0.0";
 // Get the directory name of the current module file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const typeChoices = ["Move", "Ability", "Item", "Mystery Encounter"];
+const projectRoot = path.join(__dirname, "..");
+const choices = [
+  { label: "Move", dir: "moves" },
+  { label: "Ability", dir: "abilities" },
+  { label: "Item", dir: "items" },
+  { label: "Mystery Encounter", dir: "mystery-encounter/encounters" },
+  { label: "Utils", dir: "utils" },
+  { label: "UI", dir: "ui" },
+];
+
+//#endregion
+//#region Functions
 
 /**
  * Get the path to a given folder in the test directory
@@ -20,12 +35,12 @@ const typeChoices = ["Move", "Ability", "Item", "Mystery Encounter"];
  * @returns {string} the path to the requested folder
  */
 function getTestFolderPath(...folders) {
-  return path.join(__dirname, "test", ...folders);
+  return path.join(projectRoot, "test", ...folders);
 }
 
 /**
  * Prompts the user to select a type via list.
- * @returns {Promise<{selectedOption: string}>} the selected type
+ * @returns {Promise<{selectedOption: {label: string, dir: string}}>} the selected type
  */
 async function promptTestType() {
   const typeAnswer = await inquirer.prompt([
@@ -33,15 +48,15 @@ async function promptTestType() {
       type: "list",
       name: "selectedOption",
       message: "What type of test would you like to create:",
-      choices: [...typeChoices, "EXIT"],
+      choices: [...choices.map((choice) => ({ name: choice.label, value: choice })), "EXIT"],
     },
   ]);
 
   if (typeAnswer.selectedOption === "EXIT") {
     console.log("Exiting...");
     return process.exit();
-  } else if (!typeChoices.includes(typeAnswer.selectedOption)) {
-    console.error(`Please provide a valid type (${typeChoices.join(", ")})!`);
+  } else if (!choices.some((choice) => choice.dir === typeAnswer.selectedOption.dir)) {
+    console.error(`Please provide a valid type: (${choices.map((choice) => choice.label).join(", ")})!`);
     return await promptTestType();
   }
 
@@ -75,46 +90,28 @@ async function promptFileName(selectedType) {
  * @returns {Promise<void>}
  */
 async function runInteractive() {
-  const typeAnswer = await promptTestType();
-  const fileNameAnswer = await promptFileName(typeAnswer.selectedOption);
+  console.group(chalk.grey(`Create Test - v${version}\n`));
 
-  const type = typeAnswer.selectedOption.toLowerCase();
-  // Convert fileName from snake_case or camelCase to kebab-case
-  const fileName = fileNameAnswer.userInput
-    .replace(/_+/g, "-") // Convert snake_case (underscore) to kebab-case (dashes)
-    .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
-    .replace(/\s+/g, "-") // Replace spaces with dashes
-    .toLowerCase(); // Ensure all lowercase
-  // Format the description for the test case
+  try {
+    const typeAnswer = await promptTestType();
+    const fileNameAnswer = await promptFileName(typeAnswer.selectedOption.label);
 
-  const formattedName = fileName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
-  // Determine the directory based on the type
-  let dir;
-  let description;
-  switch (type) {
-    case "move":
-      dir = getTestFolderPath("moves");
-      description = `Moves - ${formattedName}`;
-      break;
-    case "ability":
-      dir = getTestFolderPath("abilities");
-      description = `Abilities - ${formattedName}`;
-      break;
-    case "item":
-      dir = getTestFolderPath("items");
-      description = `Items - ${formattedName}`;
-      break;
-    case "mystery encounter":
-      dir = getTestFolderPath("mystery-encounter", "encounters");
-      description = `Mystery Encounter - ${formattedName}`;
-      break;
-    default:
-      console.error(`Invalid type. Please use one of the following: ${typeChoices.join(", ")}.`);
-      process.exit(1);
-  }
+    const type = typeAnswer.selectedOption;
+    // Convert fileName from snake_case or camelCase to kebab-case
+    const fileName = fileNameAnswer.userInput
+      .replace(/_+/g, "-") // Convert snake_case (underscore) to kebab-case (dashes)
+      .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
+      .replace(/\s+/g, "-") // Replace spaces with dashes
+      .toLowerCase(); // Ensure all lowercase
+    // Format the description for the test case
 
-  // Define the content template
-  const content = `import { AbilityId } from "#enums/ability-id";
+    const formattedName = fileName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    // Determine the directory based on the type
+    const dir = getTestFolderPath(type.dir);
+    const description = `${type.label} - ${formattedName}`;
+
+    // Define the content template
+    const content = `import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -160,23 +157,32 @@ describe("${description}", () => {
 });
 `;
 
-  // Ensure the directory exists
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+    // Ensure the directory exists
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Create the file with the given name
+    const filePath = path.join(dir, `${fileName}.test.ts`);
+
+    if (fs.existsSync(filePath)) {
+      console.error(chalk.red.bold(`\n✗ File "${fileName}.test.ts" already exists!\n`));
+      process.exit(1);
+    }
+
+    // Write the template content to the file
+    fs.writeFileSync(filePath, content, "utf8");
+
+    console.log(chalk.green.bold(`\n✔ File created at: test/${type.dir}/${fileName}.test.ts\n`));
+    console.groupEnd();
+  } catch (err) {
+    console.error(chalk.red("✗ Error: ", err.message));
   }
-
-  // Create the file with the given name
-  const filePath = path.join(dir, `${fileName}.test.ts`);
-
-  if (fs.existsSync(filePath)) {
-    console.error(`File "${fileName}.test.ts" already exists.`);
-    process.exit(1);
-  }
-
-  // Write the template content to the file
-  fs.writeFileSync(filePath, content, "utf8");
-
-  console.log(`File created at: ${filePath}`);
 }
 
+//#endregion
+//#region Run
+
 runInteractive();
+
+//#endregion

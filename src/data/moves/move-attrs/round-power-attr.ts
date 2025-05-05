@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#app/data/moves/move";
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import type { NumberHolder } from "#app/utils/common-utils";
 
 /**
  * Variable Power attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
@@ -10,7 +10,7 @@ import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-att
  */
 export class RoundPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    if (user.turnData?.joinedRound) {
+    if (user.turnData.joinedRound) {
       power.value *= 2;
       return true;
     }

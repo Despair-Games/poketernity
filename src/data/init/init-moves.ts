@@ -238,8 +238,8 @@ import { userSleptOrComatoseCondition } from "#app/data/moves/move-conditions/us
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
-import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isNil } from "#app/utils/common-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -1496,7 +1496,7 @@ export function initMoves() {
       .attr(RemoveBattlerTagAttr, [BattlerTagType.PROTECTED])
       .attr(
         RemoveArenaTagsAttr,
-        [...ConditionalProtectArenaTagTypes],
+        [...CONDITIONAL_PROTECT_ARENA_TAG_TYPES],
         ArenaTagRelativeSide.TARGET,
         MoveEffectTrigger.PRE_APPLY,
       )
@@ -2253,7 +2253,7 @@ export function initMoves() {
       .target(MoveTarget.ALL)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, false, {
         condition: (_user, target, _move) =>
-          target.getTypes().includes(ElementalType.GRASS) && !target.getTag(...SemiInvulnerableBattlerTagTypes),
+          target.getTypes().includes(ElementalType.GRASS) && !target.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES),
       }),
     new StatusMove(MoveId.GRASSY_TERRAIN, ElementalType.GRASS, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.GRASSY)
@@ -2802,7 +2802,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true)
       .snatchable() // Custom
       .attr(AddBattlerTagAttr, BattlerTagType.NO_RETREAT, true)
-      .condition((user, _target, _move) => user.getTag(...TrappedBattlerTagTypes)?.sourceMoveId !== MoveId.NO_RETREAT),
+      .condition((user, _target, _move) => user.getTag(...TRAPPED_BATTLER_TAG_TYPES)?.sourceMoveId !== MoveId.NO_RETREAT),
     new StatusMove(MoveId.TAR_SHOT, ElementalType.ROCK, 100, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
       .attr(AddBattlerTagAttr, BattlerTagType.TAR_SHOT, false)

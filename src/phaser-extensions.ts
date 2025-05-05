@@ -1,24 +1,34 @@
 import Phaser from "phaser";
 
-//#region Types
+// #region Types
 
-type GuideObject = Phaser.GameObjects.Components.Origin &
-  Phaser.GameObjects.Components.Size &
-  Phaser.GameObjects.Components.Transform;
+type GuideObject = Phaser.GameObjects.Components.Origin
+  & Phaser.GameObjects.Components.Size
+  & Phaser.GameObjects.Components.Transform;
 
-//#endregion
-//#region Extensions
+// #endregion
+// #region Original Functions
+
+const originalPlay = Phaser.GameObjects.Sprite.prototype.play;
+const originalStop = Phaser.GameObjects.Sprite.prototype.stop;
+
+// #endregion
+// #region Extensions
 
 Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.Container>;
-Phaser.GameObjects.Container.prototype.getByType = getByType;
 Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.Sprite>;
 Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.Image>;
 Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.NineSlice>;
 Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.Text>;
 Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative<Phaser.GameObjects.Rectangle>;
 
-//#endregion
-//#region Utility Functions
+Phaser.GameObjects.Container.prototype.getByType = getByType;
+
+Phaser.GameObjects.Sprite.prototype.play = play;
+Phaser.GameObjects.Sprite.prototype.stop = stop;
+
+// #endregion
+// #region Utility Functions
 
 /**
  * Positions this object relative to the {@linkcode guideObject}.
@@ -53,4 +63,26 @@ function getByType<T extends Phaser.GameObjects.GameObject>(
   return (Phaser.Utils.Array.GetFirst(this.list, "type", type) as T) ?? null;
 }
 
-//#endregion
+function play<T extends Phaser.GameObjects.Sprite>(
+  this: T,
+  key: string | Phaser.Animations.Animation | Phaser.Types.Animations.PlayAnimationConfig,
+  ignoreIfPlaying?: boolean,
+): Phaser.GameObjects.Sprite {
+  try {
+    return originalPlay.apply(this, [key, ignoreIfPlaying]);
+  } catch (err: unknown) {
+    console.error(`Failed to play animation for ${key}!`, err);
+    return this;
+  }
+}
+
+function stop<T extends Phaser.GameObjects.Sprite>(this: T): Phaser.GameObjects.Sprite {
+  try {
+    return originalStop.apply(this);
+  } catch (err: unknown) {
+    console.error("Failed to stop animation!", err);
+    return this;
+  }
+}
+
+// #endregion
