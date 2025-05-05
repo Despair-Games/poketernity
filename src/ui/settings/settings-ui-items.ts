@@ -188,7 +188,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     options: [
       {
         value: 0,
-        /** Replaced with the actual label in {@link GeneralSettingsUiHandler.updateMoveTouchControlsSettingsLabel} */
+        /** Replaced with the actual label in {@linkcode GeneralSettingsUiHandler.updateMoveTouchControlsSettingsLabel} */
         label: "ORIENTATION",
       },
       {
