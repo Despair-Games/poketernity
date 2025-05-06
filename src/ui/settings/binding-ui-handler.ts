@@ -1,6 +1,6 @@
-import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
-import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { globalScene } from "#app/global-scene";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";

@@ -33,7 +33,7 @@ const DEFAULT_TEXT_STYLE = TextStyle.WINDOW;
  *
  * @template T the specifc type of {@linkcode OptionSelectItem} that this handler displays
  */
-export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
+export abstract class SelectionMenuUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
   private config: OptionSelectModeConfig<T> | null;
   private options: (UIOptionSelectItem & T)[];
   private maxOptions: number;
@@ -52,7 +52,7 @@ export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> 
 
   protected readonly scale: number = 1 / TEXT_SCALE;
 
-  constructor(mode: UiMode = UiMode.OPTION_SELECT) {
+  constructor(mode: UiMode) {
     super(mode);
     this.optionSelectIcons = [];
   }

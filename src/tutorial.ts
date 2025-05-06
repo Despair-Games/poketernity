@@ -4,7 +4,7 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { MessageUiHandler } from "./ui/handlers/message-ui-handler";
 

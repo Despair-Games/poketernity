@@ -22,7 +22,7 @@ import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";

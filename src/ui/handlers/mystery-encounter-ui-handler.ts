@@ -18,8 +18,8 @@ import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { UiHandler } from "./abstract-ui-handler";
 import type { PartyUiHandler } from "./party-ui-handler";
+import { UiHandler } from "./ui-handler";
 
 const DESCRIPTION_WINDOW_WIDTH = 150;
 const DESCRIPTION_WINDOW_HEIGHT = 105;

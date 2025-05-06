@@ -1,11 +1,11 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AbstractOptionSelectUiHandler } from "#app/ui/handlers/abstract-option-select-ui-handler";
+import { SelectionMenuUiHandler } from "#app/ui/handlers/selection-menu-ui-handler";
 // -- end tsdoc imports --
 import type { OptionSelectItem } from "./option-select-config";
 
 /**
- * Used internally by {@linkcode AbstractOptionSelectUiHandler} to keep track
+ * Used internally by {@linkcode SelectionMenuUiHandler} to keep track
  * of whether a menu item has been processed and is ready to be displayed.
  */
 export interface UIOptionSelectItem extends OptionSelectItem {

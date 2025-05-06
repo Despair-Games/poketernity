@@ -1,8 +1,8 @@
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { getSplashMessages } from "#app/data/splash-messages";
 import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
 import { timedEventManager } from "#app/timed-event-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
