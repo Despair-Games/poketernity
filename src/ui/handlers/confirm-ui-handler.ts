@@ -2,13 +2,13 @@ import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { SelectionMenuUiHandler } from "./selection-menu-ui-handler";
+import { BaseOptionSelectUiHandler } from "./base-option-select-ui-handler";
 
 /**
  * Handler that displays a simple Yes/No menu.
- * @extends SelectionMenuUiHandler
+ * @extends BaseOptionSelectUiHandler
  */
-export class ConfirmUiHandler extends SelectionMenuUiHandler<OptionSelectItem> {
+export class ConfirmUiHandler extends BaseOptionSelectUiHandler<OptionSelectItem> {
   constructor() {
     super(UiMode.CONFIRM);
   }

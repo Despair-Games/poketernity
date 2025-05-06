@@ -22,7 +22,7 @@ import i18next from "i18next";
 import { MessageUiHandler } from "./message-ui-handler";
 
 /**
- * TODO: this should extend AbstractOptionSelectUiHandler
+ * TODO: This should extend (Base)OptionSelectUiHandler
  */
 export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;

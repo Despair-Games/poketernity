@@ -49,8 +49,6 @@ export abstract class BindingUiHandler extends UiHandler {
   protected target;
 
   /**
-   * Constructor for the AbstractBindingUiHandler.
-   *
    * @param mode - The UI mode.
    */
   constructor(mode: UiMode | null = null) {

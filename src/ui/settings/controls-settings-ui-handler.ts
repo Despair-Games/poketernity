@@ -72,8 +72,6 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
   abstract setSetting(setting, value: number): boolean;
 
   /**
-   * Constructor for the AbstractSettingsUiHandler.
-   *
    * @param mode - The UI mode.
    */
   constructor(mode: UiMode | null = null) {

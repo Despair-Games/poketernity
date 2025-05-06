@@ -12,7 +12,7 @@ import type { CommandUiHandler } from "./command-ui-handler";
 import { UiHandler } from "./ui-handler";
 
 /**
- * TODO: This should extend AbstractOptionSelectUiHandler
+ * TODO: This should extend (Base)OptionSelectUiHandler
  */
 export class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
