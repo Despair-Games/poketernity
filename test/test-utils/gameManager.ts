@@ -265,7 +265,7 @@ export class GameManager {
       "EncounterPhase",
       UiMode.MESSAGE,
       () => {
-        const handler = this.scene.ui.getHandler() as BattleMessageUiHandler;
+        const handler = this.scene.ui.getCurrentHandler() as BattleMessageUiHandler;
         handler.processInput(Button.ACTION);
       },
       () => this.isCurrentPhase("MysteryEncounterPhase"),
@@ -328,7 +328,7 @@ export class GameManager {
       "SelectModifierPhase",
       UiMode.MODIFIER_SELECT,
       () => {
-        const handler = this.scene.ui.getHandler() as ModifierSelectUiHandler;
+        const handler = this.scene.ui.getCurrentHandler() as ModifierSelectUiHandler;
         handler.processInput(Button.CANCEL);
       },
       () =>
@@ -342,7 +342,7 @@ export class GameManager {
       "SelectModifierPhase",
       UiMode.CONFIRM,
       () => {
-        const handler = this.scene.ui.getHandler() as ModifierSelectUiHandler;
+        const handler = this.scene.ui.getCurrentHandler() as ModifierSelectUiHandler;
         handler.processInput(Button.ACTION);
       },
       () =>
@@ -473,8 +473,8 @@ export class GameManager {
    */
   switchPokemon(pokemonIndex: number): void {
     this.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      (this.scene.ui.getHandler() as CommandUiHandler).setCursor(2);
-      (this.scene.ui.getHandler() as CommandUiHandler).processInput(Button.ACTION);
+      (this.scene.ui.getCurrentHandler() as CommandUiHandler).setCursor(2);
+      (this.scene.ui.getCurrentHandler() as CommandUiHandler).processInput(Button.ACTION);
     });
 
     this.selectPartyPokemon(pokemonIndex, "CommandPhase");
@@ -502,7 +502,7 @@ export class GameManager {
    */
   selectPartyPokemon(slot: number, inPhase = "SwitchPhase"): void {
     this.onNextPrompt(inPhase, UiMode.PARTY, () => {
-      const partyHandler = this.scene.ui.getHandler() as PartyUiHandler;
+      const partyHandler = this.scene.ui.getCurrentHandler() as PartyUiHandler;
 
       partyHandler.setCursor(slot);
       partyHandler.processInput(Button.ACTION); // select party slot

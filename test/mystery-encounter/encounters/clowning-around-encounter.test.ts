@@ -222,13 +222,13 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       // Select "Yes" on train ability
       game.onNextPrompt("PostMysteryEncounterPhase", UiMode.CONFIRM, () => {
-        game.scene.ui.getHandler().processInput(Button.ACTION);
+        game.scene.ui.getCurrentHandler().processInput(Button.ACTION);
       });
 
       // Select first pokemon in party to train
       game.onNextPrompt("PostMysteryEncounterPhase", UiMode.PARTY, () => {
-        game.scene.ui.getHandler().processInput(Button.ACTION); // open Pokemon sub menu
-        game.scene.ui.getHandler().processInput(Button.ACTION); // 'Select'
+        game.scene.ui.getCurrentHandler().processInput(Button.ACTION); // open Pokemon sub menu
+        game.scene.ui.getCurrentHandler().processInput(Button.ACTION); // 'Select'
       });
 
       game.endPhase();

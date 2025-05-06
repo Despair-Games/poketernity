@@ -297,7 +297,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MYSTERY_ENCOUNTER_MACHO_BRACE");
     });
@@ -337,7 +337,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("RARER_CANDY");
     });
@@ -352,7 +352,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
 async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean = false) {
   game.scene.phaseManager.clearPhaseQueue();
   game.scene.phaseManager.clearPhaseQueueSplice();
-  const commandUiHandler = game.scene.ui.getHandler<CommandUiHandler>();
+  const commandUiHandler = game.scene.ui.getCurrentHandler<CommandUiHandler>();
   commandUiHandler.stop();
   game.scene.getEnemyParty().forEach((p) => {
     p.faint();

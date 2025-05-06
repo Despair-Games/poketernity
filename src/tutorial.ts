@@ -127,7 +127,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
     return false;
   }
 
-  const handler = globalScene.ui.getHandler();
+  const handler = globalScene.ui.getCurrentHandler();
   const isMenuDisabled = globalScene.disableMenu;
 
   // starting tutorial, disable menu

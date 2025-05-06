@@ -337,7 +337,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
               ui.playSelect();
               const dialogueTestName = sanitizedName;
               const dialogueName = decodeURIComponent(escape(atob(dialogueTestName)));
-              const handler = ui.getHandler() as AwaitableUiHandler;
+              const handler = ui.getCurrentHandler() as AwaitableUiHandler;
               handler.tutorialActive = true;
               const interpolatorOptions: any = {};
               const splitArr = dialogueName.split(" "); // this splits our inputted text into words to cycle through later

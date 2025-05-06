@@ -428,7 +428,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(2);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("SUPER_LURE");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("GREAT_BALL");
@@ -445,7 +445,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("QUICK_CLAW");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MAX_LURE");
@@ -465,7 +465,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("GRIP_CLAW");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MAX_LURE");
@@ -487,7 +487,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(4);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MASTER_BALL");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MEGA_BRACELET");
@@ -561,7 +561,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(2);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MYSTERY_ENCOUNTER_GOLDEN_BUG_NET");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("REVIVER_SEED");

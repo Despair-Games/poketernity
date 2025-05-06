@@ -218,7 +218,7 @@ export class MoveHelper extends GameManagerHelper {
       "SelectTargetPhase",
       UiMode.TARGET_SELECT,
       () => {
-        const handler = this.game.scene.ui.getHandler() as TargetSelectUiHandler;
+        const handler = this.game.scene.ui.getCurrentHandler() as TargetSelectUiHandler;
         const move = (this.game.scene.phaseManager.getCurrentPhase() as SelectTargetPhase)
           .getPokemon()
           .getMoveset()

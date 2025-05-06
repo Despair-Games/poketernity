@@ -375,7 +375,7 @@ export class PhaseInterceptor {
         const expireFn = actionForNextPrompt.expireFn && actionForNextPrompt.expireFn();
         const currentMode = this.scene.ui.getMode();
         const currentPhase = this.scene.phaseManager.getCurrentPhase()?.constructor.name;
-        const currentHandler = this.scene.ui.getHandler();
+        const currentHandler = this.scene.ui.getCurrentHandler();
         if (expireFn) {
           this.prompts.shift();
         } else if (
