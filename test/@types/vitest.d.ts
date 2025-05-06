@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -17,6 +18,7 @@ import type { ToHaveMoveResultMatcherOptions } from "#test/test-utils/matchers/t
 import type { ToHaveStatMatcherOptions } from "#test/test-utils/matchers/to-have-stat-matcher";
 import type { ToHaveStatusEffectMatcherOptions } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
+import type { MoveQualifier } from "#test/test-utils/matchers/to-never-select-move-matcher";
 import "vitest";
 
 declare module "vitest" {
@@ -113,5 +115,23 @@ declare module "vitest" {
      * @param expectedAbilityId - The expected {@linkcode AbilityId}.
      */
     toHaveAbilityApplied(expectedAbilityId: AbilityId): void;
+
+    /**
+     * Matcher to check if an {@linkcode EnemyPokemon} selects a specific move
+     * in the current game state a majority of the time.
+     * @param expectedMoveId - The expected {@linkcode MoveId}
+     */
+    toPreferSelectingMove(expectedMoveId: MoveId): void;
+
+    /**
+     * Matcher to check if an {@linkcode EnemyPokemon} never selects
+     * a move or set of moves in the current game state.
+     * @param qualifier - Can be any of the following:
+     * - A {@linkcode MoveId} to expect a single move to never be used
+     * - A {@linkcode MoveId} array to expect all moves in the array to never be used
+     * - A condition function to expect all moves that meet the condition in
+     * the enemy's moveset to never be used
+     */
+    toNeverSelectMove(qualifier: MoveQualifier): void;
   }
 }

@@ -1,13 +1,13 @@
 import { allMoves } from "#app/data/data-lists";
+import type { Move } from "#app/data/moves/move";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Move } from "#app/data/moves/move";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Fusion Flare and Fusion Bolt", () => {
   let phaserGame: Phaser.Game;
@@ -178,7 +178,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     vi.spyOn(enemyParty[1], "stats", "get").mockReturnValue(
       stats.enemy[1].map((val, i) => (i === Stat.SPATK ? 1 : val)),
     );
-    vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[0].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
+    vi.spyOn(party[0], "stats", "get").mockReturnValue(stats.player[0].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
     vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[1].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
 
     game.move.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
@@ -232,7 +232,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     vi.spyOn(enemyParty[1], "stats", "get").mockReturnValue(
       stats.enemy[1].map((val, i) => (i === Stat.SPATK ? 1 : val)),
     );
-    vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[0].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
+    vi.spyOn(party[0], "stats", "get").mockReturnValue(stats.player[0].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
     vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[1].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
 
     game.move.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
@@ -243,22 +243,22 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect((game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(fusionBolt.id);
-    await game.phaseInterceptor.to("DamageAnimPhase", false);
+    await game.phaseInterceptor.to("MoveEndPhase", false);
     expect(fusionBolt.calculateBattlePower).toHaveLastReturnedWith(100);
 
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect((game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(fusionFlare.id);
-    await game.phaseInterceptor.to("DamageAnimPhase", false);
+    await game.phaseInterceptor.to("MoveEndPhase", false);
     expect(fusionFlare.calculateBattlePower).toHaveLastReturnedWith(200);
 
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect((game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(fusionBolt.id);
-    await game.phaseInterceptor.to("DamageAnimPhase", false);
+    await game.phaseInterceptor.to("MoveEndPhase", false);
     expect(fusionBolt.calculateBattlePower).toHaveLastReturnedWith(200);
 
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect((game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(fusionFlare.id);
-    await game.phaseInterceptor.to("DamageAnimPhase", false);
+    await game.phaseInterceptor.to("MoveEndPhase", false);
     expect(fusionFlare.calculateBattlePower).toHaveLastReturnedWith(200);
   }, 20000);
 });
