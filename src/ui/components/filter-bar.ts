@@ -1,12 +1,12 @@
-import type { DropDown } from "./drop-down";
-import { DropDownType } from "#enums/drop-down-type";
-import type { StarterContainer } from "./starter-container";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
-import { WindowVariant } from "#enums/window-variant";
 import { globalScene } from "#app/global-scene";
+import type { DropDown } from "#app/ui/components/drop-down";
+import type { StarterContainer } from "#app/ui/components/starter-container";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
 import type { DropDownColumn } from "#enums/drop-down-column";
+import { DropDownType } from "#enums/drop-down-type";
+import { TextStyle } from "#enums/text-style";
+import { WindowVariant } from "#enums/window-variant";
 
 export class FilterBar extends Phaser.GameObjects.Container {
   private window: Phaser.GameObjects.NineSlice;

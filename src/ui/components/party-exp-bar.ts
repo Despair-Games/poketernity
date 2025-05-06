@@ -1,9 +1,9 @@
-import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Pokemon } from "../../field/pokemon";
+import { settings } from "#app/system/settings/settings-manager";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 
 export class PartyExpBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.NineSlice;

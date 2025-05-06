@@ -1,12 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import i18next from "i18next";
-import { SortDirection } from "#enums/sort-direction";
+import { addWindow } from "#app/ui/ui-theme";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownType } from "#enums/drop-down-type";
+import { SortDirection } from "#enums/sort-direction";
+import { TextStyle } from "#enums/text-style";
+import { WindowVariant } from "#enums/window-variant";
+import i18next from "i18next";
 
 export class DropDownLabel {
   public state: DropDownState;

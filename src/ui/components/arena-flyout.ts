@@ -1,3 +1,4 @@
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import type { ArenaEvent } from "#app/events/arena";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { TurnEndEvent } from "#app/events/battle-scene";
@@ -5,7 +6,6 @@ import { globalScene } from "#app/global-scene";
 import { TimeOfDayWidget } from "#app/ui/components/time-of-day-widget";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { toCamelCaseString, toTitleCase } from "#app/utils/string-utils";
 import { ArenaEventType } from "#enums/arena-event-type";
