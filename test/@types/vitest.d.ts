@@ -118,7 +118,7 @@ declare module "vitest" {
 
     /**
      * Matcher to check if an {@linkcode EnemyPokemon} selects a specific move
-     * in the current game state a plurality of the time.
+     * in the current game state a majority of the time.
      * @param expectedMoveId - The expected {@linkcode MoveId}
      */
     toPreferSelectingMove(expectedMoveId: MoveId): void;
