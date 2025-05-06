@@ -21,7 +21,11 @@ import {
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
 } from "#app/constants/battler-tag-constants";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game-constants";
+import {
+  DEFAULT_MAX_SLEEP_DURATION,
+  DEFAULT_MIN_SLEEP_DURATION,
+  DYNAMAX_DAMAGE_TAKEN_FACTOR,
+} from "#app/constants/game-constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -4042,7 +4046,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const sleepTurnsRemaining: NumberHolder = new NumberHolder(0);
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining.value = turnsRemaining !== 0 ? turnsRemaining : this.randSeedIntRange(2, 4);
+      sleepTurnsRemaining.value =
+        turnsRemaining !== 0
+          ? turnsRemaining
+          : this.randSeedIntRange(DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION);
 
       this.setFrameRate(4);
 
