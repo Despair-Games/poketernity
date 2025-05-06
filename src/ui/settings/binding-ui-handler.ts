@@ -14,7 +14,7 @@ type CancelFn = (succes?: boolean) => boolean;
 /**
  * Abstract class for handling UI elements related to button bindings.
  */
-export abstract class AbstractBindingUiHandler extends UiHandler {
+export abstract class BindingUiHandler extends UiHandler {
   // Containers for different segments of the UI.
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected actionsContainer: Phaser.GameObjects.Container;

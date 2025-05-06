@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { AbstractSettingsUiHandler } from "#app/ui/settings/abstract-settings-ui-handler";
+import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
 import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
 import { t } from "i18next";
 import Phaser from "phaser";
 
-export class GeneralSettingsUiHandler extends AbstractSettingsUiHandler {
+export class GeneralSettingsUiHandler extends SettingsUiHandler {
   /** Buffer to be able to unsubscribe on {@linkcode tearDown} */
   private onOrientationChange = () => this.updateMoveTouchControlsSettingsLabel();
 

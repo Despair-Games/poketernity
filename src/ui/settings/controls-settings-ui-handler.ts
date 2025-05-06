@@ -30,7 +30,7 @@ export interface LayoutConfig {
 /**
  * Abstract class for handling UI elements related to control settings.
  */
-export abstract class AbstractControlSettingsUiHandler extends UiHandler {
+export abstract class ControlsSettingsUiHandler extends UiHandler {
   protected settingsContainer: Phaser.GameObjects.Container;
   protected optionsContainer: Phaser.GameObjects.Container;
   protected navigationContainer: NavigationMenu;

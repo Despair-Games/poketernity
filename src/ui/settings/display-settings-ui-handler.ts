@@ -8,9 +8,9 @@ import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
+import { SettingsUiHandler } from "./settings-ui-handler";
 
-export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
+export class DisplaySettingsUiHandler extends SettingsUiHandler {
   constructor() {
     super("display", displaySettingUiItems);
   }
