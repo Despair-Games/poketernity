@@ -1,4 +1,5 @@
 import type { AnySound } from "#app/audio-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import type { Egg } from "#app/data/egg";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
@@ -6,7 +7,6 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
@@ -339,11 +339,7 @@ export class EggHatchPhase extends Phase {
     this.eggContainer.setVisible(false);
 
     const spriteKey = this.pokemon.getSpriteKey(true);
-    try {
-      this.pokemonSprite.play(spriteKey);
-    } catch (err: unknown) {
-      console.error(`Failed to play animation for ${spriteKey}`, err);
-    }
+    this.pokemonSprite.play(spriteKey);
 
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());

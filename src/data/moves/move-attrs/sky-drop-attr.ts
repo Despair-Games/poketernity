@@ -4,7 +4,7 @@ import type { Move } from "#app/data/moves/move";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { failOnGravityCondition } from "../move-conditions/fail-on-gravity-condition";
 import { MoveEffectAttr } from "./move-effect-attr";
-import { MoveLockTagTypes, SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MOVE_LOCK_TAG_TYPES, SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 
 /**
  * Attribute implementing the charging phase effects of {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}.
@@ -21,7 +21,7 @@ export class SkyDropAttr extends MoveEffectAttr {
     // Clear the target's move queue
     target.getMoveQueue().splice(0, target.getMoveQueue().length);
     // Cancel any effects that force consecutive move use
-    target.findAndRemoveTags((tag) => MoveLockTagTypes.includes(tag.tagType));
+    target.findAndRemoveTags((tag) => MOVE_LOCK_TAG_TYPES.includes(tag.tagType));
     return true;
   }
 
@@ -41,7 +41,7 @@ export class SkyDropAttr extends MoveEffectAttr {
       && target.isPlayer() !== user.isPlayer()
       && target.species.weight < 200
       && !target.getTag(BattlerTagType.SUBSTITUTE)
-      && !target.getTag(...SemiInvulnerableBattlerTagTypes)
+      && !target.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
       && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon()?.id !== target.id
       && (!target.getTag(BattlerTagType.SKY_DROP) || target.getTag(BattlerTagType.SKY_DROP)?.sourceId === user.id);
   }

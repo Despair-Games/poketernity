@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
@@ -15,7 +15,7 @@ export class JawLockAttr extends AddBattlerTagAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If either the user or the target already has the tag, do not apply
-    if (user.getTag(...TrappedBattlerTagTypes) || target.getTag(...TrappedBattlerTagTypes)) {
+    if (user.getTag(...TRAPPED_BATTLER_TAG_TYPES) || target.getTag(...TRAPPED_BATTLER_TAG_TYPES)) {
       return false;
     }
 

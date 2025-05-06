@@ -23,7 +23,7 @@ export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
 export const TUTORIALS_LS_KEY = `${LS_PREFIX}/seenTutorials`;
 
 /** Value used for byapssing login values */
-export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
+export const BYPASS_LOGIN = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
 /** Key for the local storage item storing the settings. */
 export const SETTINGS_LS_KEY = `${LS_PREFIX}/settings`;
@@ -39,3 +39,6 @@ export const GAME_SPEEDS = Object.freeze([1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
 
 /** The maximum number of runs stored in the run history. */
 export const RUN_HISTORY_LIMIT: number = 25;
+
+/** Whether the app is running in beta (or development) mode. */
+export const IS_BETA = import.meta.env.MODE === "beta";

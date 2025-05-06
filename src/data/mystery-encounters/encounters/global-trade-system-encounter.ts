@@ -610,11 +610,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
 
     [tradedPokemonSprite, tradedPokemonTintSprite].map((sprite) => {
       const spriteKey = tradedPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
@@ -633,11 +629,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
 
     [receivedPokemonSprite, receivedPokemonTintSprite].map((sprite) => {
       const spriteKey = receivedPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],

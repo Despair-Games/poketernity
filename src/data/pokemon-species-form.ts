@@ -161,14 +161,6 @@ export abstract class PokemonSpeciesForm {
   }
 
   /**
-   * Deprecated function created to slowly introduce Pokemon into the game generation by generation
-   * @todo remove this function as it will always return true
-   */
-  isObtainable(): boolean {
-    return this.generation <= 9 || pokemonPreEvolutions.hasOwnProperty(this.speciesId);
-  }
-
-  /**
    * Checks if this Pokemon appears in {@linkcode noRandomSpeciesSpawn}
    * @returns whether or not this Pokemon can spawn as a random species
    */

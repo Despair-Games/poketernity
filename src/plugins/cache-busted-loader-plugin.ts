@@ -1,3 +1,5 @@
+import { coerceArray } from "#app/utils/common-utils";
+
 let manifest: object;
 
 export default class CacheBustedLoaderPlugin extends Phaser.Loader.LoaderPlugin {
@@ -14,10 +16,7 @@ export default class CacheBustedLoaderPlugin extends Phaser.Loader.LoaderPlugin 
   }
 
   override addFile(file): void {
-    if (!Array.isArray(file)) {
-      file = [file];
-    }
-
+    file = coerceArray(file);
     file.forEach((item) => {
       if (manifest) {
         const timestamp = manifest[`/${item.url.replace(/\/\//g, "/")}`];

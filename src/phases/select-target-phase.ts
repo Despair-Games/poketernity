@@ -29,8 +29,8 @@ export class SelectTargetPhase extends PokemonPhase {
     const targetSelectedCallback = (targets: BattlerIndex[]) => {
       ui.setMessageMode();
 
-      const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
-      const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);
+      const user = globalScene.getPokemonByBattlerIndex(this.fieldIndex);
+      const firstTarget = globalScene.getPokemonByBattlerIndex(targets[0]);
       const moveObject = allMoves.get(moveId);
 
       // TODO: Resolve bang

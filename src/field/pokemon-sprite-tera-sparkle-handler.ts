@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils/common-utils";
+import { coerceArray, fixedNumber } from "#app/utils/common-utils";
 import { randInt } from "#app/utils/random-utils";
 import type Phaser from "phaser";
 
@@ -63,9 +63,7 @@ export default class PokemonSpriteTeraSparkleHandler {
   }
 
   add(sprites: Phaser.GameObjects.Sprite | Phaser.GameObjects.Sprite[]): void {
-    if (!Array.isArray(sprites)) {
-      sprites = [sprites];
-    }
+    sprites = coerceArray(sprites);
     for (const s of sprites) {
       if (this.sprites.has(s)) {
         continue;
@@ -75,9 +73,7 @@ export default class PokemonSpriteTeraSparkleHandler {
   }
 
   remove(sprites: Phaser.GameObjects.Sprite | Phaser.GameObjects.Sprite[]): void {
-    if (!Array.isArray(sprites)) {
-      sprites = [sprites];
-    }
+    sprites = coerceArray(sprites);
     for (const s of sprites) {
       this.sprites.delete(s);
     }

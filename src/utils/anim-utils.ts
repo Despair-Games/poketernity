@@ -5,14 +5,14 @@ import type { initEncounterAnims } from "#app/data/init/init-encounter-anims";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { AnimConfig } from "#app/data/animations/anim-config";
+import type { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import { commonAnims } from "#app/data/animations/common-anims";
 import { encounterAnims } from "#app/data/animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { ImagesFolder } from "#enums/images-folders";
 import Phaser from "phaser";
 
-export function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promise<void> {
+export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
     const backgrounds = new Set<string>();
     const sounds = new Set<string>();

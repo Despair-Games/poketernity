@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PostMoveUsedAbAttr } from "./post-move-used-ab-attr";
 
@@ -20,7 +20,7 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
     // The move to replicate cannot come from the Dancer
     if (
       source.getBattlerIndex() !== pokemon.getBattlerIndex()
-      && !pokemon.summonData.tags.some((tag) => SemiInvulnerableBattlerTagTypes.includes(tag.tagType))
+      && !pokemon.summonData.tags.some((tag) => SEMI_INVULNERABLE_BATTLER_TAG_TYPES.includes(tag.tagType))
     ) {
       if (!simulated) {
         if (move.getMove().isSelfStatusMove()) {

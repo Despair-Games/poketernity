@@ -1,5 +1,5 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getTypeRgb } from "#app/data/type";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 
@@ -60,11 +60,7 @@ export function doPokemonTransformationSequence(
 
     [pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = previousPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
@@ -83,11 +79,7 @@ export function doPokemonTransformationSequence(
 
     [pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = transformPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", transformPokemon.getSpriteKey());

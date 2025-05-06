@@ -1,4 +1,4 @@
-import type { AnimConfig } from "#app/data/animations/anim-config";
+import type { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import type { Pokemon } from "#app/field/pokemon";
 import type { EncounterAnim } from "#enums/encounter-anims";
 import { BattleAnim } from "./battle-anims";
@@ -22,7 +22,7 @@ export class EncounterBattleAnim extends BattleAnim {
     this.oppAnim = oppAnim ?? false;
   }
 
-  getAnim(): AnimConfig | null {
+  getAnim(): LegacyAnimConfig | null {
     return encounterAnims.get(this.encounterAnim) ?? null;
   }
 
