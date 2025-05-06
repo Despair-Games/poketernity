@@ -4066,7 +4066,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   protected setStatus(
     effect: StatusEffect,
-    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: { toxicTurnCount?: number; sleepTurnsRemaining?: number },
+    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
   ): void {
     this.status = {
       effect,
@@ -4093,6 +4093,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           break;
         }
         this.status.sleepTurnsRemaining--;
+        break;
+      default:
+        // intentionally left blank
         break;
     }
   }
