@@ -1,3 +1,4 @@
+import type { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ab-attrs/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
@@ -130,7 +131,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   }
 
   /** Secret Power ignores the move chance bonus from the Water + Fire Pledge combo effect */
-  override getMoveChance(user: Pokemon, _target: Pokemon, move: Move, showAbility: boolean = false): number {
+  override getMoveChance(user: Pokemon, target: Pokemon, move: Move, showAbility: boolean = false): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
@@ -141,6 +142,8 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       move,
       showAbility,
     );
+
+    applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
 
     return moveChance.value;
   }
