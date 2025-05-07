@@ -25,7 +25,7 @@ export function toPreferSelectingMoveMatcher(
 
   const moveChoices = getEnemyMoveChoices(received);
   const preferredMoveId = Object.entries(moveChoices).reduce((prefMoveId, [moveId, count]) => {
-    if (count > moveChoices[prefMoveId]!) {
+    if (count > (moveChoices[prefMoveId] ?? 0)) {
       return parseInt(moveId);
     }
     return prefMoveId;

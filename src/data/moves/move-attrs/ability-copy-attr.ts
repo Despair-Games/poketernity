@@ -1,13 +1,14 @@
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { detrimentalAbilities } from "#app/utils/ability-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import i18next from "i18next";
 
 /**
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
@@ -80,8 +81,9 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     }
 
     const affectedPokemon: Pokemon[] = [user];
-    if (this.copyToPartner && user.getAlly()?.isActive(true)) {
-      affectedPokemon.push(user.getAlly());
+    const ally = user.getAlly();
+    if (this.copyToPartner && ally?.isActive(true)) {
+      affectedPokemon.push(ally);
     }
 
     const numBenefit = affectedPokemon.filter((p) => detrimentalAbilities.includes(p.getAbility().id)).length;

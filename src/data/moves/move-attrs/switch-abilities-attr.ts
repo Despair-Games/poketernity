@@ -1,13 +1,14 @@
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { detrimentalAbilities } from "#app/utils/ability-utils";
-import { Abilities } from "#enums/abilities";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
+import i18next from "i18next";
 
 /**
  * Attribute to swap the user and target's abilities (if both are swappable).
@@ -47,7 +48,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
      * - Desolate Land and Primordial Sea are symmetrical effects
      * - Wonder Guard cannot be swapped
      */
-    const highValueSwappableAbilities = [Abilities.HUGE_POWER, Abilities.PURE_POWER, Abilities.CONTRARY];
+    const highValueSwappableAbilities = [AbilityId.HUGE_POWER, AbilityId.PURE_POWER, AbilityId.CONTRARY];
 
     const targetHasHighValueAbility = target
       .getAbilities({ revealedOnly: true })
