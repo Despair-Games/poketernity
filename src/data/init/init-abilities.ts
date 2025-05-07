@@ -185,8 +185,8 @@ import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { getWeatherCondition, normalTypeMoveConversionCondition } from "#app/utils/ability-utils";
+import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -1683,10 +1683,6 @@ function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
  */
 function getSheerForceHitDisableAbCondition(): AbAttrCondition {
   return (pokemon: Pokemon) => {
-    if (!pokemon.turnData) {
-      return true;
-    }
-
     const lastReceivedAttack = pokemon.turnData.attacksReceived[0];
     if (!lastReceivedAttack) {
       return true;
@@ -1714,7 +1710,7 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
  */
 function getOncePerBattleCondition(ability: AbilityId): AbAttrCondition {
   return (pokemon: Pokemon) => {
-    return !pokemon.waveData?.abilitiesApplied.includes(ability);
+    return !pokemon.waveData.abilitiesApplied.includes(ability);
   };
 }
 

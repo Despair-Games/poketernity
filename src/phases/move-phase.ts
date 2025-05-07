@@ -252,7 +252,7 @@ export class MovePhase extends BattlePhase {
       !this.followUp
       && this.pokemon.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.PARALYSIS, StatusEffect.FREEZE], false, true)
     ) {
-      this.pokemon.status!.incrementTurn();
+      this.pokemon.advanceStatusCounter();
       let activated = false;
       let healed = false;
 
@@ -265,21 +265,8 @@ export class MovePhase extends BattlePhase {
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
-          const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
-          applyAbAttrs<ReduceSleepDurationAbAttr>(
-            AbAttrFlag.REDUCE_SLEEP_DURATION,
-            this.pokemon,
-            false,
-            statusEffect,
-            turnsRemaining,
-          );
-          if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
-            turnsRemaining.value = Math.max(turnsRemaining.value, 1);
-          } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
-            turnsRemaining.value = 0;
-          }
-          this.pokemon.status!.sleepTurnsRemaining = turnsRemaining.value;
-          healed = this.pokemon.status!.sleepTurnsRemaining <= 0;
+          applyAbAttrs<ReduceSleepDurationAbAttr>(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect);
+          healed = this.pokemon.sleepTurnsRemaining <= 0;
           activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
           break;
         case StatusEffect.FREEZE:
@@ -436,7 +423,7 @@ export class MovePhase extends BattlePhase {
           targets.push(...globalScene.getField(true));
           break;
         default:
-          const target = globalScene.getFieldPokemonByBattlerIndex(t);
+          const target = globalScene.getPokemonByBattlerIndex(t);
           if (!isNil(target)) {
             targets.push(target);
           }
@@ -748,7 +735,7 @@ export class MovePhase extends BattlePhase {
       if (this.pokemon.turnData.attacksReceived.length) {
         this.targets[0] = this.pokemon.turnData.attacksReceived[0].sourceBattlerIndex;
         const [target] = this.targets;
-        const targetPkm = globalScene.getFieldPokemonByBattlerIndex(target);
+        const targetPkm = globalScene.getPokemonByBattlerIndex(target);
 
         // account for metal burst and comeuppance hitting remaining targets in double battles
         // counterattack will redirect to remaining ally if original attacker faints

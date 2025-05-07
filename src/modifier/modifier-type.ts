@@ -61,7 +61,6 @@ import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import { formatMoney, leftPad } from "#app/utils/string-utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -404,8 +403,7 @@ export class PokemonHpRestoreModifierType extends PokemonModifierType {
         || ((pokemon: PlayerPokemon) => {
           if (
             !pokemon.hp
-            || (pokemon.isFullHp()
-              && (!this.healStatus || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))))
+            || (pokemon.isFullHp() && (!this.healStatus || !pokemon.hasNonVolatileStatusEffect(true, true)))
           ) {
             return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
           }
@@ -472,7 +470,7 @@ export class PokemonStatusHealModifierType extends PokemonModifierType {
       iconImage,
       (_type, args) => new PokemonStatusHealModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
-        if (!pokemon.hp || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))) {
+        if (!pokemon.hp || !pokemon.hasNonVolatileStatusEffect(true, true)) {
           return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;

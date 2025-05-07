@@ -1,12 +1,12 @@
 import type { FightCommand } from "#app/@types/FightCommand";
 import type { InfoToggle } from "#app/battle-scene";
+import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
@@ -139,7 +139,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     messageHandler.movesWindowContainer.setVisible(true);
 
     const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
-    if (pokemon.battleSummonData?.turnCount > 1) {
+    if (pokemon.summonData?.turnCount > 1) {
       this.setCursor(this.getCursor());
     } else {
       this.setCursor(0);

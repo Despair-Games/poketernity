@@ -9,11 +9,23 @@ import type { FaintPhase } from "#app/phases/faint-phase";
 import type { AbilityFilterOptions } from "#app/@types/AbilityFilterOptions";
 import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
 import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
+import type { nil } from "#app/@types/nil";
 import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
+import type { Status } from "#app/@types/Status";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game-constants";
+import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
+import {
+  CRIT_BOOST_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+} from "#app/constants/battler-tag-constants";
+import {
+  DEFAULT_MAX_SLEEP_DURATION,
+  DEFAULT_MIN_SLEEP_DURATION,
+  DYNAMAX_DAMAGE_TAKEN_FACTOR,
+} from "#app/constants/game-constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -114,7 +126,7 @@ import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-tr
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import { SpeciesFormChangeStatusEffectTrigger } from "#app/data/species-form-change-triggers/species-form-change-status-effect-trigger";
-import { Status, getNonVolatileStatusEffects } from "#app/data/status-effect";
+import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { tmPoolTiers, tmSpecies } from "#app/data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
 import { variantData, type Variant } from "#app/data/variant";
@@ -145,25 +157,16 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { BattleInfo } from "#app/ui/components/battle-info";
-import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import {
-  CRIT_BOOST_BATTLER_TAG_TYPES,
-  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
-  TRAPPED_BATTLER_TAG_TYPES,
-} from "#app/constants/battler-tag-constants";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import {
   BooleanHolder,
   NumberHolder,
   coerceArray,
-  deepCopy,
-  deepFreeze,
   fixedNumber,
   getEnumValues,
   isNil,
   toDmgValue,
 } from "#app/utils/common-utils";
-import type { nil } from "#app/@types/nil";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
@@ -210,31 +213,6 @@ interface AbilityData {
   passive: boolean;
 }
 
-const defaultWaveData = deepFreeze<PokemonWaveData>({
-  hitCount: 0,
-  berriesEaten: [],
-  abilitiesApplied: [],
-  abilitiesRevealed: [],
-});
-
-const defaultTurnData = deepFreeze<PokemonTurnData>({
-  flinched: false,
-  acted: false,
-  hitCount: 0,
-  hitsLeft: -1,
-  totalDamageDealt: 0,
-  singleHitDamageDealt: 0,
-  damageTaken: 0,
-  attacksReceived: [],
-  order: 0,
-  statStagesIncreased: false,
-  statStagesDecreased: false,
-  moveEffectiveness: null,
-  switchedInThisTurn: false,
-  failedRunAway: false,
-  joinedRound: false,
-});
-
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
   public override name: string;
@@ -256,7 +234,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public ivs: number[];
   public nature: Nature;
   public moveset: PokemonMove[];
-  public status: Status | null;
+  protected status: Status | null = null;
   public friendship: number;
   public metLevel: number;
   public metBiome: BiomeId | -1;
@@ -271,11 +249,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public isTerastallized: boolean = false; // TODO: put this in battle (wave) data if arena reset behavior is changed
   public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle (wave) data if arena reset behavior is changed
 
+  /** @todo Remove this */
   private summonDataPrimer: PokemonSummonData | null;
 
   public summonData: PokemonSummonData;
+  // Default data defined in `resetWaveData()`
   public waveData: PokemonWaveData;
-  public battleSummonData: PokemonBattleSummonData;
+  // Default data defined in `resetTurnData()`
   public turnData: PokemonTurnData;
   public customPokemonData: CustomPokemonData;
 
@@ -348,7 +328,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
       this.moveset = dataSource.moveset;
-      this.status = dataSource.status!; // TODO: is this bang correct?
+      // @ts-expect-error - `Pokemon#status` is protected
+      this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
       this.luck = dataSource.luck;
@@ -406,6 +387,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!dataSource) {
       this.calculateStats();
     }
+
+    this.resetWaveData();
+    this.resetTurnData();
   }
 
   /**
@@ -445,6 +429,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   public set teraType(value: ElementalType) {
     this._teraType = value;
+  }
+
+  /**
+   * Toxic damage is `1/16 max HP * toxicTurnCount`; increases by 1 per turn.
+   * Ignored if the effect is not {@linkcode StatusEffect.TOXIC}
+   * @defaultValue 0
+   */
+  public get toxicTurnCount(): number {
+    return this.status?.toxicTurnCount ?? 0;
+  }
+
+  /**
+   * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
+   * Ignored if the effect is not sleep.
+   * @defaultValue 0
+   */
+  public get sleepTurnsRemaining(): number {
+    return this.status?.sleepTurnsRemaining ?? 0;
   }
 
   /**
@@ -1562,7 +1564,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public hasRevealedAbility(abilityId: AbilityId) {
-    return this.waveData?.abilitiesRevealed.includes(abilityId);
+    return this.waveData.abilitiesRevealed.includes(abilityId);
   }
 
   /**
@@ -1869,8 +1871,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     cancelled?: BooleanHolder,
   ): TypeDamageMultiplier {
-    if (!isNil(this.turnData?.moveEffectiveness)) {
-      return this.turnData?.moveEffectiveness;
+    if (!isNil(this.turnData.moveEffectiveness)) {
+      return this.turnData.moveEffectiveness;
     }
 
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
@@ -3378,9 +3380,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     amount = Math.min(amount, this.hp);
     this.hp = this.hp - amount;
-    if (this.turnData) {
-      this.turnData.damageTaken += amount;
-    }
+    this.turnData.damageTaken += amount;
     if (this.isFainted() && !ignoreFaintPhase) {
       globalScene.phaseManager.queueBattlerFaintPhase(this.getBattlerIndex(), { preventEndure });
     }
@@ -3722,7 +3722,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public getMoveHistory(): TurnMove[] {
-    return this.battleSummonData.moveHistory;
+    return this.summonData.moveHistory;
   }
 
   public pushMoveHistory(turnMove: TurnMove): void {
@@ -3885,7 +3885,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
     const statusEffect = new NumberHolder(StatusEffect.NONE);
     if (this.status) {
-      statusEffect.value = this.status.statusEffect;
+      statusEffect.value = this.status.effect;
     }
     if (!ignoreMockAbility) {
       applyAbAttrs<MockStatusEffectAbAttr>(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
@@ -3909,7 +3909,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (overrideStatus ? this.status?.statusEffect === effect : this.status) {
+    if (overrideStatus ? this.status?.effect === effect : this.status) {
       return false;
     }
     if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
@@ -4010,6 +4010,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return true;
   }
 
+  /** @todo Refactor this */
   trySetStatus(
     effect: StatusEffect,
     asPhase: boolean = false,
@@ -4042,10 +4043,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    let sleepTurnsRemaining: NumberHolder;
+    const sleepTurnsRemaining: NumberHolder = new NumberHolder(0);
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new NumberHolder(turnsRemaining !== 0 ? turnsRemaining : this.randSeedIntRange(2, 4));
+      sleepTurnsRemaining.value =
+        turnsRemaining !== 0
+          ? turnsRemaining
+          : this.randSeedIntRange(DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION);
 
       this.setFrameRate(4);
 
@@ -4057,8 +4061,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    sleepTurnsRemaining = sleepTurnsRemaining!; // tell TS compiler it's defined
-    this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
+    this.setStatus(effect, { sleepTurnsRemaining: sleepTurnsRemaining.value });
 
     globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
     if (sourcePokemon) {
@@ -4066,6 +4069,50 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return true;
+  }
+
+  protected setStatus(
+    effect: StatusEffect,
+    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
+  ): void {
+    this.status = {
+      effect,
+      toxicTurnCount,
+      sleepTurnsRemaining,
+    };
+  }
+
+  public advanceStatusCounter(): void {
+    if (!this.status) {
+      return;
+    }
+    switch (this.status.effect) {
+      case StatusEffect.TOXIC:
+        this.status.toxicTurnCount++;
+        break;
+      case StatusEffect.SLEEP:
+        if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
+          this.status.sleepTurnsRemaining = Math.max(this.status.sleepTurnsRemaining, 1);
+          break;
+        }
+        if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
+          this.status.sleepTurnsRemaining = 0;
+          break;
+        }
+        this.status.sleepTurnsRemaining--;
+        break;
+      default:
+        // intentionally left blank
+        break;
+    }
+  }
+
+  /** If the pokemon is statused, reset {@linkcode toxicTurnCount} to 0 */
+  public resetToxicTurnCounter(): void {
+    if (!this.status) {
+      return;
+    }
+    this.status.toxicTurnCount = 0;
   }
 
   /**
@@ -4122,7 +4169,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.waveData) {
       this.resetWaveData();
     }
-    this.resetBattleSummonData();
+    // TODO: why is this here?
+    if (this.getTag(BattlerTagType.SEEDED)) {
+      this.lapseTag(BattlerTagType.SEEDED);
+    }
+    if (globalScene) {
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
+    }
     if (this.summonDataPrimer) {
       for (const k of Object.keys(this.summonData)) {
         if (this.summonDataPrimer[k]) {
@@ -4149,21 +4202,32 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetWaveData(): void {
-    this.waveData = deepCopy<PokemonWaveData>(defaultWaveData);
-  }
-
-  resetBattleSummonData(): void {
-    this.battleSummonData = new PokemonBattleSummonData();
-    if (this.getTag(BattlerTagType.SEEDED)) {
-      this.lapseTag(BattlerTagType.SEEDED);
-    }
-    if (globalScene) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
-    }
+    this.waveData = {
+      hitCount: 0,
+      berriesEaten: [],
+      abilitiesApplied: [],
+      abilitiesRevealed: [],
+    };
   }
 
   resetTurnData(): void {
-    this.turnData = deepCopy<PokemonTurnData>(defaultTurnData);
+    this.turnData = {
+      flinched: false,
+      acted: false,
+      hitCount: 0,
+      hitsLeft: -1,
+      totalDamageDealt: 0,
+      singleHitDamageDealt: 0,
+      damageTaken: 0,
+      attacksReceived: [],
+      order: 0,
+      statStagesIncreased: false,
+      statStagesDecreased: false,
+      moveEffectiveness: null,
+      switchedInThisTurn: false,
+      failedRunAway: false,
+      joinedRound: false,
+    };
   }
 
   /**
@@ -4175,10 +4239,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   stopMultiHit(): void {
-    if (this.turnData) {
-      this.turnData.hitCount = 1;
-      this.turnData.hitsLeft = 1;
-    }
+    this.turnData.hitCount = 1;
+    this.turnData.hitsLeft = 1;
   }
 
   setFrameRate(frameRate: number) {
@@ -4291,7 +4353,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.resetTurnData();
     if (clearEffects) {
       this.destroySubstitute();
-      this.resetSummonData(); // this also calls `resetBattleSummonData`
+      this.resetSummonData();
     }
     if (hideInfo) {
       this.hideInfo();
@@ -4362,17 +4424,4 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
   }
-}
-
-/** @todo Move these fields into {@linkcode PokemonSummonData} */
-export class PokemonBattleSummonData {
-  /** The number of turns the pokemon has passed since entering the battle */
-  public turnCount: number = 0;
-  /**
-   * The number of turns the pokemon has passed since the start of the wave.
-   * @todo Remove this
-   */
-  public waveTurnCount: number = 0;
-  /** The list of moves the pokemon has used since entering the battle */
-  public moveHistory: TurnMove[] = [];
 }

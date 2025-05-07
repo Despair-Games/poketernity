@@ -1,5 +1,4 @@
 import {
-  Status,
   getStatusEffectActivationText,
   getStatusEffectDescriptor,
   getStatusEffectHealText,
@@ -369,28 +368,29 @@ describe("Status Effects", () => {
       await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
       const player = game.scene.getPlayerPokemon()!;
-      player.status = new Status(StatusEffect.SLEEP, 0, 4);
+      player.trySetStatus(StatusEffect.SLEEP, false, undefined, 4);
+      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
+      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
+      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
+      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
       expect(player).toHaveMoveResult(MoveResult.FAIL);
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.getStatusEffect(true)).toBe(StatusEffect.NONE);
+      expect(player).toHaveStatusEffect(StatusEffect.NONE, { ignoreMockAbility: true });
       expect(player).toHaveMoveResult(MoveResult.SUCCESS);
     });
   });

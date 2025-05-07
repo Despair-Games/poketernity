@@ -310,7 +310,7 @@ describe("Abilities - Magic Bounce", () => {
     // Turn 1 - thunder wave immunity test
     game.move.use(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
 
     // Turn 2 - soundproof immunity test
     game.move.use(MoveId.GROWL);
@@ -336,7 +336,7 @@ describe("Abilities - Magic Bounce", () => {
     vi.spyOn(opponent, "getAccuracyMultiplier").mockReturnValue(0);
     game.move.use(MoveId.SPORE);
     await game.toEndOfTurn();
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("should always apply the leftmost available target's magic bounce when bouncing moves like sticky webs in doubles", async () => {
@@ -371,7 +371,7 @@ describe("Abilities - Magic Bounce", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
     expect(game.field.getEnemyPokemon().getStatusEffect()).toBe(StatusEffect.TOXIC);
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
 
     game.override.ability(AbilityId.NO_GUARD);
     game.move.use(MoveId.CHARM);

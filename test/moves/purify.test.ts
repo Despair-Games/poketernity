@@ -1,4 +1,3 @@
-import { Status } from "#app/data/status-effect";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { BattlerIndex } from "#enums/battler-index";
@@ -43,7 +42,8 @@ describe("Moves - Purify", () => {
     const playerPokemon: PlayerPokemon = game.scene.getPlayerPokemon()!;
 
     playerPokemon.hp = playerPokemon.getMaxHp() - 1;
-    enemyPokemon.status = new Status(StatusEffect.BURN);
+    enemyPokemon.trySetStatus(StatusEffect.BURN);
+    expect(enemyPokemon).toHaveStatusEffect(StatusEffect.BURN);
 
     game.move.select(MoveId.PURIFY);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

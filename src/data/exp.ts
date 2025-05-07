@@ -1,5 +1,6 @@
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
@@ -197,7 +198,7 @@ export function getGrowthRateColor(growthRate: GrowthRate) {
  * Not included from the mainline formula:
  * - Original Trainer bonus
  */
-export function genOneThroughFourExpFormula(defeatedPokemon: EnemyPokemon): number {
+export function genOneThroughFourExpFormula(defeatedPokemon: Pokemon): number {
   const baseExp = defeatedPokemon.species.baseExp;
   const enemyLevel = defeatedPokemon.level;
   // The Exp share multiplier is handled elsewhere (TODO: change that?)

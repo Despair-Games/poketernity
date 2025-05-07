@@ -1,3 +1,4 @@
+import { genOneThroughFourExpFormula } from "#app/data/exp";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
@@ -38,7 +39,7 @@ export class PostKnockoutPhase extends PokemonPhase {
       gameData.gameStats.pokemonDefeated++;
     }
 
-    const expValue = this.getPokemon().getExpValue();
+    const expValue = genOneThroughFourExpFormula(this.getPokemon());
     globalScene.applyPartyExp(expValue, true);
 
     if (isMysteryEncounter) {
