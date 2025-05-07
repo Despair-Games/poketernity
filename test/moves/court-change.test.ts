@@ -27,10 +27,10 @@ describe("Moves - Court Change", () => {
 
     game.override
       .battleType("single")
-      .enemySpecies(SpeciesId.NINJASK)
       .startingLevel(100)
-      .enemyLevel(100)
       .ability(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.NINJASK)
+      .enemyLevel(100)
       .enemyAbility(AbilityId.BALL_FETCH);
   });
 
