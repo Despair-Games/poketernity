@@ -6,7 +6,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { detrimentalAbilities, highValueAbilities } from "#app/utils/ability-utils";
+import { DETRIMENTAL_ABILITIES, HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 
@@ -37,19 +37,19 @@ export class AbilityGiveAttr extends MoveEffectAttr {
   }
 
   /**
-   * If the user has a {@link detrimentalAbilities | detrimental ability}, or
-   * the target has a {@link highValueAbilities | high-value ability},
+   * If the user has a {@link DETRIMENTAL_ABILITIES | detrimental ability}, or
+   * the target has a {@link HIGH_VALUE_ABILITIES | high-value ability},
    * grants (+1) with a 50% chance of additional (+1) to effect score.
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    if (highValueAbilities.includes(user.getAbility().id)) {
+    if (HIGH_VALUE_ABILITIES.includes(user.getAbility().id)) {
       return -5;
     }
 
-    const userHasDetrimentalAbility = detrimentalAbilities.includes(user.getAbility().id);
+    const userHasDetrimentalAbility = DETRIMENTAL_ABILITIES.includes(user.getAbility().id);
     const targetHasHighValueAbility = target
       .getAbilities({ revealedOnly: true })
-      .some((ab) => !ab.passive && highValueAbilities.includes(ab.ability.id));
+      .some((ab) => !ab.passive && HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
     return userHasDetrimentalAbility || targetHasHighValueAbility ? 1 + this.getRandomScore(user, 50) : 0;
   }

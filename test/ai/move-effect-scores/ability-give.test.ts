@@ -1,4 +1,4 @@
-import { detrimentalAbilities, highValueAbilities } from "#app/utils/ability-utils";
+import { DETRIMENTAL_ABILITIES, HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
@@ -34,7 +34,7 @@ describe("Move Effect Scores - Ability Give", () => {
   });
 
   it.each(
-    highValueAbilities.map((abId) => {
+    HIGH_VALUE_ABILITIES.map((abId) => {
       return { abilityName: AbilityId[abId], abilityId: abId };
     }),
   )("Enemy should prefer selecting Entrainment when the opponent has $abilityName", async ({ abilityId }) => {
@@ -50,7 +50,7 @@ describe("Move Effect Scores - Ability Give", () => {
   });
 
   it.each(
-    detrimentalAbilities.map((abId) => {
+    DETRIMENTAL_ABILITIES.map((abId) => {
       return { abilityName: AbilityId[abId], abilityId: abId };
     }),
   )("Enemy should prefer selecting Entrainment when it has $abilityName", async ({ abilityId }) => {

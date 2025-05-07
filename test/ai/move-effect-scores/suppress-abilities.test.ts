@@ -1,4 +1,4 @@
-import { highValueAbilities } from "#app/utils/ability-utils";
+import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
@@ -34,7 +34,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
   });
 
   it.each(
-    highValueAbilities.map((abId) => {
+    HIGH_VALUE_ABILITIES.map((abId) => {
       return { abilityName: AbilityId[abId], abilityId: abId };
     }),
   )("Enemy should prefer selecting Gastro Acid if the opponent has $abilityName", async ({ abilityId }) => {

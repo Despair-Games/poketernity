@@ -5,7 +5,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { highValueAbilities } from "#app/utils/ability-utils";
+import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 
@@ -34,13 +34,13 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
   }
 
   /**
-   * If the target has a {@link highValueAbilities | high-value ability}, grants (+2)
+   * If the target has a {@link HIGH_VALUE_ABILITIES | high-value ability}, grants (+2)
    * effect score. Otherwise, this has a 60% chance to grant (+1).
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const targetHasHighValueAbility = target
       .getAbilities({ revealedOnly: true })
-      .some((ab) => !ab.passive && highValueAbilities.includes(ab.ability.id));
+      .some((ab) => !ab.passive && HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
     return targetHasHighValueAbility ? 2 : this.getRandomScore(user, 60);
   }

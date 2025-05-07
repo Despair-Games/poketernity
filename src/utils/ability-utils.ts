@@ -44,23 +44,3 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
 export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
   move?.type === ElementalType.NORMAL
   && (!move.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized));
-
-/** Abilities perceived by the Enemy AI to have high value */
-export const highValueAbilities: Readonly<AbilityId[]> = [
-  AbilityId.WONDER_GUARD,
-  AbilityId.DESOLATE_LAND,
-  AbilityId.PRIMORDIAL_SEA,
-  AbilityId.HUGE_POWER,
-  AbilityId.PURE_POWER,
-  AbilityId.CONTRARY,
-];
-
-/** Abilities perceived by the Enemy AI to have a detrimental effect on the source */
-export const detrimentalAbilities: Readonly<AbilityId[]> = [
-  AbilityId.TRUANT,
-  AbilityId.WIMP_OUT,
-  AbilityId.EMERGENCY_EXIT,
-  AbilityId.DEFEATIST,
-  AbilityId.KLUTZ,
-  AbilityId.SLOW_START,
-];

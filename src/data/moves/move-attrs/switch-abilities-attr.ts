@@ -5,7 +5,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { detrimentalAbilities } from "#app/utils/ability-utils";
+import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
@@ -39,12 +39,12 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
   }
 
   /**
-   * If the user has a {@link detrimentalAbilities | detrimental ability}, or the target
+   * If the user has a {@link DETRIMENTAL_ABILITIES | detrimental ability}, or the target
    * has one of Huge Power, Pure Power, or Contrary, grants a (+2) effect score bonus
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     /**
-     * Note: this only uses a subset of {@linkcode highValueAbilities} since
+     * Note: this only uses a subset of {@linkcode HIGH_VALUE_ABILITIES} since
      * - Desolate Land and Primordial Sea are symmetrical effects
      * - Wonder Guard cannot be swapped
      */
@@ -54,7 +54,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
       .getAbilities({ revealedOnly: true })
       .some((ab) => !ab.passive && highValueSwappableAbilities.includes(ab.ability.id));
 
-    if (detrimentalAbilities.includes(user.getAbility().id) || targetHasHighValueAbility) {
+    if (DETRIMENTAL_ABILITIES.includes(user.getAbility().id) || targetHasHighValueAbility) {
       return 2;
     }
     return 0;

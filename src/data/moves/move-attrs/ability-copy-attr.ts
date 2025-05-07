@@ -6,7 +6,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { detrimentalAbilities } from "#app/utils/ability-utils";
+import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
 
@@ -71,12 +71,12 @@ export class AbilityCopyAttr extends MoveEffectAttr {
    * If the target's ability is detrimental, grants a (-5) penalty.
    * Otherwise, grants (+2) effect score if one Pokemon's detrimental ability is overridden
    * by this effect, and (+3) if more than one Pokemon's detrimental ability is overridden.
-   * @see {@linkcode detrimentalAbilities}
+   * @see {@linkcode DETRIMENTAL_ABILITIES}
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const targetRevealedAbilityId = target.getAbilities({ revealedOnly: true }).find((ab) => !ab.passive)?.ability.id;
 
-    if (!targetRevealedAbilityId || detrimentalAbilities.includes(targetRevealedAbilityId)) {
+    if (!targetRevealedAbilityId || DETRIMENTAL_ABILITIES.includes(targetRevealedAbilityId)) {
       return -5;
     }
 
@@ -86,7 +86,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
       affectedPokemon.push(ally);
     }
 
-    const numBenefit = affectedPokemon.filter((p) => detrimentalAbilities.includes(p.getAbility().id)).length;
+    const numBenefit = affectedPokemon.filter((p) => DETRIMENTAL_ABILITIES.includes(p.getAbility().id)).length;
     return Math.min(numBenefit * 2, 3);
   }
 }

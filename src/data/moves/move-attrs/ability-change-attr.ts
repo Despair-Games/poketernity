@@ -7,7 +7,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { highValueAbilities } from "#app/utils/ability-utils";
+import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
@@ -52,13 +52,13 @@ export class AbilityChangeAttr extends MoveEffectAttr {
   /**
    * If the target is an opponent and is known to have a high-value ability,
    * grants (+2) effect score.
-   * @see {@linkcode highValueAbilities}
+   * @see {@linkcode HIGH_VALUE_ABILITIES}
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const hasHighValueAbility = target
       .getAbilities({ canApplyOnly: true, revealedOnly: true })
       .filter((ab) => !ab.passive) // Remove this if passives are made to be overwritten
-      .some((ab) => highValueAbilities.includes(ab.ability.id));
+      .some((ab) => HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
     return hasHighValueAbility && user.isOpponent(target) ? 2 : 0;
   }
