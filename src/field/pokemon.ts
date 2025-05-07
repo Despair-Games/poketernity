@@ -131,7 +131,7 @@ import { WeatherType } from "#enums/weather-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import { PokemonSummonData } from "#field/pokemon-summon-data";
+import type { PokemonSummonData } from "#field/pokemon-summon-data";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
@@ -390,6 +390,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     this.resetWaveData();
     this.resetTurnData();
+    this.resetSummonData();
   }
 
   /**
@@ -4169,15 +4170,26 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetSummonData(): void {
+    // TODO: is this necessary?
     if (this.summonData?.speciesForm) {
-      this.summonData.speciesForm = null;
+      this.summonData.speciesForm = undefined;
     }
-    this.summonData = new PokemonSummonData();
+    this.summonData = {
+      statStages: [0, 0, 0, 0, 0, 0, 0],
+      moveQueue: [],
+      tags: [],
+      abilitySuppressed: false,
+      abilitiesApplied: [],
+      ability: AbilityId.NONE,
+      passiveAbility: AbilityId.NONE,
+      stats: [0, 0, 0, 0, 0, 0],
+      types: [],
+      turnCount: 0,
+      waveTurnCount: 0,
+      moveHistory: [],
+    };
     this.setSwitchOutStatus(false);
-    if (!this.waveData) {
-      this.resetWaveData();
-    }
-    // TODO: why is this here?
+    // TODO: why is this here? is it safe to remove this?
     if (this.getTag(BattlerTagType.SEEDED)) {
       this.lapseTag(BattlerTagType.SEEDED);
     }

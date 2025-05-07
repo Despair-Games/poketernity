@@ -13,7 +13,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import { PokemonSummonData } from "#field/pokemon-summon-data";
+import type { PokemonSummonData } from "#field/pokemon-summon-data";
 import type { Status } from "#types/Status";
 import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -64,6 +64,8 @@ export default class PokemonData {
   /**
    * @param source - The typing of `source` as `PokemonData` (approximately?) matches the typing of
    * the `json` object passed in to it in `GameData#parseSessionData`
+   * @todo Improve typing situation
+   * @todo Determine if any of the `??` are necessary
    */
   constructor(source: Pokemon | PokemonData) {
     this.id = source.id;
@@ -89,7 +91,7 @@ export default class PokemonData {
     this.metBiome = source.metBiome ?? -1;
     this.metSpecies = source.metSpecies;
     this.metWave = source.metWave ?? (this.metBiome === -1 ? -1 : 0);
-    this.luck = (source.luck ?? source.shiny) ? source.variant + 1 : 0;
+    this.luck = source.luck ?? (source.shiny ? source.variant + 1 : 0);
     this.pauseEvolutions = source.pauseEvolutions;
     this.evoCounter = source.evoCounter ?? 0;
     this.pokerus = source.pokerus;
@@ -102,37 +104,23 @@ export default class PokemonData {
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
-    if (Object.hasOwn(source, "bossSegments")) {
-      // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
-      this.boss = source.bossSegments > 0;
-      // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
+    if (!isPokemon(source) || source.isEnemy()) {
+      this.boss = (source.bossSegments ?? 0) > 0;
       this.bossSegments = source.bossSegments;
     }
 
     if (isPokemon(source)) {
       this.moveset = source.moveset;
-      if (this.player) {
-        this.summonData = source.summonData;
-      }
+      this.summonData = source.summonData;
       return;
     }
 
-    this.moveset = (source.moveset || [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.GROWL)]).map(
-      (m) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride),
-    );
+    this.moveset = source.moveset.map((m) => PokemonMove.loadMove(m)) ?? [
+      new PokemonMove(MoveId.TACKLE),
+      new PokemonMove(MoveId.GROWL),
+    ];
 
-    this.summonData = new PokemonSummonData();
-    if (!source.summonData) {
-      return;
-    }
-    this.summonData.stats = source.summonData.stats;
-    this.summonData.statStages = source.summonData.statStages;
-    this.summonData.moveQueue = source.summonData.moveQueue;
-    this.summonData.abilitySuppressed = source.summonData.abilitySuppressed;
-    this.summonData.abilitiesApplied = source.summonData.abilitiesApplied;
-    this.summonData.ability = source.summonData.ability;
-    this.summonData.types = source.summonData.types;
-
+    this.summonData = source.summonData;
     this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
     this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
   }
@@ -169,9 +157,7 @@ export default class PokemonData {
           false,
           this,
         );
-    if (this.summonData) {
-      ret.primeSummonData(this.summonData);
-    }
+    ret.primeSummonData(this.summonData);
     return ret;
   }
 }

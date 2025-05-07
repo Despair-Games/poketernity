@@ -1,6 +1,12 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Pokemon } from "#app/field/pokemon";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports
+
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
-import { AbilityId } from "#enums/ability-id";
+import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 import type { PokemonMove } from "#field/pokemon-move";
@@ -9,36 +15,41 @@ import type { TurnMove } from "#types/TurnMove";
 /**
  * Data that resets whenever a Pokemon is switched out.
  *
- * Currently all fields in this class are stored in save data.
+ * Currently all fields in {@linkcode Pokemon.summonData} are stored in save data.
  * @todo Rework save data to be more efficient
- * @todo Change this to an interface
  */
-export class PokemonSummonData {
+export interface PokemonSummonData {
   /**
-   * [Atk, Def, SpAtk, SpDef, Spd, Acc, Eva]
-   * @todo Change this to an object so it's easier to work with
+   * `[Atk, Def, SpAtk, SpDef, Spd, Acc, Eva]`
+   * @todo Change this to an object (e.g. `statStages.atk` etc)?
    */
-  public statStages: number[] = [0, 0, 0, 0, 0, 0, 0];
-  public moveQueue: TurnMove[] = [];
-  public tags: BattlerTag[] = [];
-  public abilitySuppressed: boolean = false;
-  public abilitiesApplied: AbilityId[] = [];
-  public speciesForm: PokemonSpeciesForm | null;
-  public ability: AbilityId = AbilityId.NONE;
-  public passiveAbility: AbilityId = AbilityId.NONE;
-  public gender: Gender;
-  public stats: number[] = [0, 0, 0, 0, 0, 0];
-  public moveset: PokemonMove[];
+  statStages: number[];
+  moveQueue: TurnMove[];
+  tags: BattlerTag[];
+  abilitySuppressed: boolean;
+  abilitiesApplied: AbilityId[];
+  speciesForm?: PokemonSpeciesForm;
+  ability: AbilityId;
+  passiveAbility: AbilityId;
+  // this had no default value before
+  gender?: Gender;
+  /**
+   * `[Hp, Atk, Def, SpAtk, SpDef, Spd]` <-- needs confirmation
+   * @todo Change this to an object (e.g. `stats.atk` etc)?
+   */
+  stats: number[];
+  // this had no default value before
+  moveset?: PokemonMove[];
   // If not initialized this value will not be populated from save data.
-  public types: ElementalType[] = [];
-  public addedType: ElementalType | null = null;
+  types: ElementalType[];
+  addedType?: ElementalType;
   /** The number of turns the pokemon has passed since entering the field */
-  public turnCount: number = 0;
+  turnCount: number;
   /**
    * The number of turns the pokemon has passed since the start of the wave.
-   * @todo Remove this when each wave is considered its own battle
+   * @todo Remove this
    */
-  public waveTurnCount: number = 0;
+  waveTurnCount: number;
   /** The list of moves the pokemon has used since entering the field */
-  public moveHistory: TurnMove[] = [];
+  moveHistory: TurnMove[];
 }
