@@ -31,14 +31,12 @@ export interface PokemonSummonData {
   speciesForm?: PokemonSpeciesForm;
   ability: AbilityId;
   passiveAbility: AbilityId;
-  // this had no default value before
   gender?: Gender;
   /**
    * `[Hp, Atk, Def, SpAtk, SpDef, Spd]` <-- needs confirmation
    * @todo Change this to an object (e.g. `stats.atk` etc)?
    */
   stats: number[];
-  // this had no default value before
   moveset?: PokemonMove[];
   // If not initialized this value will not be populated from save data.
   types: ElementalType[];

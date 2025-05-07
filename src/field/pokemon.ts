@@ -184,7 +184,6 @@ import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";
 import type { DamageCalculationResult } from "#types/DamageCalculationResult";
 import type { DamageFunctionOptions } from "#types/DamageFunctionOptions";
-import type { nil } from "#types/nil";
 import type { PokemonTurnData } from "#types/PokemonTurnData";
 import type { PokemonWaveData } from "#types/PokemonWaveData";
 import type { Status } from "#types/Status";
@@ -781,7 +780,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getSpeciesForm(ignoreOverride?: boolean): PokemonSpeciesForm {
-    if (!ignoreOverride && this.summonData?.speciesForm) {
+    if (!ignoreOverride && this.summonData.speciesForm) {
       return this.summonData.speciesForm;
     }
     if (this.species.forms && this.species.forms.length > 0) {
@@ -985,7 +984,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the numeric values of the {@linkcode Pokemon}'s stats
    */
   getStats(bypassSummonData: boolean = true): number[] {
-    if (!bypassSummonData && this.summonData?.stats) {
+    if (!bypassSummonData && this.summonData.stats) {
       return this.summonData.stats;
     }
     return this.stats;
@@ -998,7 +997,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the numeric value of the desired {@linkcode Stat}
    */
   getStat(stat: PermanentStat, bypassSummonData: boolean = true): number {
-    if (!bypassSummonData && this.summonData && this.summonData.stats[stat] !== 0) {
+    if (!bypassSummonData && this.summonData.stats[stat] !== 0) {
       return this.summonData.stats[stat];
     }
     return this.stats[stat];
@@ -1014,7 +1013,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   setStat(stat: PermanentStat, value: number, bypassSummonData: boolean = true): void {
     if (value >= 0) {
-      if (!bypassSummonData && this.summonData) {
+      if (!bypassSummonData) {
         this.summonData.stats[stat] = value;
       } else {
         this.stats[stat] = value;
@@ -1027,7 +1026,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the numeric values of the {@linkcode Pokemon}'s in-battle stat stages if available, a fresh stat stage array otherwise
    */
   getStatStages(): number[] {
-    return this.summonData ? this.summonData.statStages : [0, 0, 0, 0, 0, 0, 0];
+    return this.summonData.statStages;
   }
 
   /**
@@ -1036,7 +1035,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the stage of the desired {@linkcode BattleStat} if available, 0 otherwise
    */
   getStatStage(stat: BattleStat): number {
-    return this.summonData ? this.summonData.statStages[stat - 1] : 0;
+    return this.summonData.statStages[stat - 1];
   }
 
   /**
@@ -1047,9 +1046,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param value the desired numeric value
    */
   setStatStage(stat: BattleStat, value: number): void {
-    if (this.summonData) {
-      this.summonData.statStages[stat - 1] = clamp(value, MIN_STAT_STAGE, MAX_STAT_STAGE);
-    }
+    this.summonData.statStages[stat - 1] = clamp(value, MIN_STAT_STAGE, MAX_STAT_STAGE);
+
   }
 
   /**
@@ -1330,7 +1328,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getGender(ignoreOverride?: boolean): Gender {
-    if (!ignoreOverride && this.summonData?.gender !== undefined) {
+    if (!ignoreOverride && this.summonData.gender !== undefined) {
       return this.summonData.gender;
     }
     return this.gender;
@@ -1356,7 +1354,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   abstract getBossSegmentIndex(): number;
 
   getMoveset(baseOnly?: boolean): PokemonMove[] {
-    const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
+    const ret = !baseOnly && this.summonData.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
@@ -1364,17 +1362,17 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       : Overrides.ENEMY_MOVESET_OVERRIDE;
 
     overrideArray = coerceArray(overrideArray);
-    if (overrideArray.length > 0) {
-      if (!this.isPlayer()) {
-        this.moveset = [];
-      }
-      overrideArray.forEach((moveId: MoveId, index: number) => {
-        const ppUsed = this.moveset[index]?.ppUsed ?? 0;
-        this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
-      });
+    if (overrideArray.length === 0) {
+      return ret;
     }
-
-    return ret;
+    if (!this.isPlayer()) {
+      this.moveset = [];
+    }
+    overrideArray.forEach((moveId: MoveId, index: number) => {
+      const ppUsed = this.moveset[index]?.ppUsed ?? 0;
+      this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
+    });
+    return this.moveset;
   }
 
   /**
@@ -1440,7 +1438,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     if (!types.length || !includeTeraType) {
-      if (!baseOnly && this.summonData?.types && this.summonData.types.length > 0) {
+      if (!baseOnly && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
       } else if (this.customPokemonData.types && this.customPokemonData.types.length > 0) {
         // "Permanent" override for a Pokemon's normal types, currently only used by Mystery Encounters
@@ -1474,7 +1472,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // the type added to Pokemon from moves like Forest's Curse or Trick Or Treat
-    if (!baseOnly && this.summonData && this.summonData.addedType && !types.includes(this.summonData.addedType)) {
+    if (!baseOnly && !isNil(this.summonData.addedType) && !types.includes(this.summonData.addedType)) {
       types.push(this.summonData.addedType);
     }
 
@@ -1525,7 +1523,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The non-passive {@linkcode Ability} of the pokemon
    */
   public getAbility(baseOnly: boolean = false): Ability {
-    if (!baseOnly && this.summonData?.ability) {
+    if (!baseOnly && this.summonData.ability) {
       return allAbilities[this.summonData.ability];
     }
     if (Overrides.ABILITY_OVERRIDE && this.isPlayer()) {
@@ -1675,7 +1673,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
-    if (this.summonData?.abilitySuppressed && !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
+    if (this.summonData.abilitySuppressed && !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
       return false;
     }
     if (this.isOnField() && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {
@@ -2218,7 +2216,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     const move = new PokemonMove(moveId);
     this.moveset[moveIndex] = move;
-    if (this.summonData?.moveset) {
+    // TODO: should this also be modifying the summon data moveset?
+    if (this.summonData.moveset) {
       this.summonData.moveset[moveIndex] = move;
     }
   }
@@ -2671,12 +2670,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isPlayer() !== target.isPlayer();
   }
 
-  getOpponent(targetIndex: number): Pokemon | null {
-    const ret = this.getOpponents()[targetIndex];
-    if (ret.summonData) {
-      return ret;
-    }
-    return null;
+  getOpponent(targetIndex: number): Pokemon | undefined {
+    return this.getOpponents()[targetIndex];
   }
 
   getOpponents(): Pokemon[] {
@@ -3541,10 +3536,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | nil {
-    if (!this.summonData) {
-      return null;
-    }
+  getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | undefined {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
@@ -3554,30 +3546,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the Pokemon has at least one of the battler tags, `false` otherwise
    */
   public hasTag(...tagTypes: BattlerTagType[]): boolean {
-    if (!this.summonData) {
-      return false;
-    }
     return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
   }
 
-  findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | nil {
-    if (!this.summonData) {
-      return null;
-    }
+  findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | undefined {
     return this.summonData.tags.find((t) => tagFilter(t)) as T | undefined;
   }
 
   findTags(tagFilter: (tag: BattlerTag) => boolean): BattlerTag[] {
-    if (!this.summonData) {
-      return [];
-    }
     return this.summonData.tags.filter((t) => tagFilter(t));
   }
 
   lapseTag(tagType: BattlerTagType): boolean {
-    if (!this.summonData) {
-      return false;
-    }
     const tags = this.summonData.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag && !tag.lapse(this, BattlerTagLapseType.CUSTOM)) {
@@ -3588,9 +3568,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   lapseTags(lapseType: BattlerTagLapseType): void {
-    if (!this.summonData) {
-      return;
-    }
     const tags = this.summonData.tags;
     tags
       .filter(
@@ -3605,9 +3582,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   removeTag(tagType: BattlerTagType): boolean {
-    if (!this.summonData) {
-      return false;
-    }
     const tags = this.summonData.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag) {
@@ -3618,9 +3592,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   findAndRemoveTags(tagFilter: (tag: BattlerTag) => boolean): boolean {
-    if (!this.summonData) {
-      return false;
-    }
     const tags = this.summonData.tags;
     const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
@@ -3636,9 +3607,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   transferTagsBySourceId(sourceId: number, newSourceId: number): void {
-    if (!this.summonData) {
-      return;
-    }
     const tags = this.summonData.tags;
     tags.filter((t) => t.sourceId === sourceId).forEach((t) => (t.sourceId = newSourceId));
   }

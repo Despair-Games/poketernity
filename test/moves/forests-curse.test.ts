@@ -35,13 +35,13 @@ describe("Moves - Forest's Curse", () => {
   it("will replace the added type from Trick Or Treat", async () => {
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     game.move.select(MoveId.TRICK_OR_TREAT);
     await game.toEndOfTurn();
-    expect(enemyPokemon!.summonData.addedType).toBe(ElementalType.GHOST);
+    expect(enemyPokemon.summonData.addedType).toBe(ElementalType.GHOST);
 
     game.move.select(MoveId.FORESTS_CURSE);
     await game.toEndOfTurn();
-    expect(enemyPokemon?.summonData.addedType).toBe(ElementalType.GRASS);
+    expect(enemyPokemon.summonData.addedType).toBe(ElementalType.GRASS);
   });
 });

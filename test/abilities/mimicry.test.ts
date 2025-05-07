@@ -74,7 +74,7 @@ describe("Abilities - Mimicry", () => {
     await game.move.forceEnemyMove(MoveId.GRASSY_TERRAIN);
     await game.toEndOfTurn();
 
-    expect(feebas.summonData.addedType).toBeNull();
+    expect(feebas.summonData.addedType).toBeUndefined();
     expect(feebas.getTypes()).toEqual([ElementalType.GRASS]);
   });
 });
