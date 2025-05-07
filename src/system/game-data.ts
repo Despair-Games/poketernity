@@ -104,15 +104,15 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
 }
 
 export function encrypt(data: string, bypassLogin: boolean): string {
-  return (bypassLogin ? (data: string) => btoa(data) : (data: string) => AES.encrypt(data, saveKey))(
-    data,
-  ) as unknown as string; // TODO: is this correct?
+  const localFunc = (data: string): string => btoa(encodeURIComponent(data));
+  const serverFunc = (data: string): string => AES.encrypt(data, saveKey) as unknown as string; // TODO: is this correct?
+  return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
 export function decrypt(data: string, bypassLogin: boolean): string {
-  return (bypassLogin ? (data: string) => atob(data) : (data: string) => AES.decrypt(data, saveKey).toString(enc.Utf8))(
-    data,
-  );
+  const localFunc = (data: string): string => decodeURIComponent(atob(data));
+  const serverFunc = (data: string): string => AES.decrypt(data, saveKey).toString(enc.Utf8);
+  return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
 /**

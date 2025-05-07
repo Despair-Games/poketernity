@@ -32,7 +32,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       return this.end();
     }
 
-    pokemon.status!.incrementTurn();
+    pokemon.advanceStatusCounter();
 
     const cancelled = new BooleanHolder(false);
     applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
@@ -52,7 +52,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         damage.value = pokemon.getMaxHp() / 8;
         break;
       case StatusEffect.TOXIC:
-        damage.value = (pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount;
+        damage.value = (pokemon.getMaxHp() / 16) * pokemon.toxicTurnCount;
         break;
       case StatusEffect.BURN:
         damage.value = pokemon.getMaxHp() / 16;

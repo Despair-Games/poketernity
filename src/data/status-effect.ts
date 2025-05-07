@@ -2,30 +2,6 @@ import { StatusEffect } from "#enums/status-effect";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
-export class Status {
-  protected effect: StatusEffect;
-  /** Toxic damage is `1/16 max HP * toxicTurnCount` */
-  public toxicTurnCount: number = 0;
-  public sleepTurnsRemaining?: number;
-
-  constructor(effect: StatusEffect, toxicTurnCount: number = 0, sleepTurnsRemaining?: number) {
-    this.effect = effect;
-    this.toxicTurnCount = toxicTurnCount;
-    this.sleepTurnsRemaining = sleepTurnsRemaining;
-  }
-
-  get statusEffect(): StatusEffect {
-    return this.effect;
-  }
-
-  incrementTurn(): void {
-    this.toxicTurnCount++;
-    if (this.sleepTurnsRemaining) {
-      this.sleepTurnsRemaining--;
-    }
-  }
-}
-
 function getStatusEffectMessageKey(statusEffect: StatusEffect | undefined): string {
   switch (statusEffect) {
     case StatusEffect.POISON:

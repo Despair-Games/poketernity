@@ -255,7 +255,7 @@ export class MovePhase extends BattlePhase {
       !this.followUp
       && this.pokemon.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.PARALYSIS, StatusEffect.FREEZE], false, true)
     ) {
-      this.pokemon.status!.incrementTurn();
+      this.pokemon.advanceStatusCounter();
       let activated = false;
       let healed = false;
 
@@ -268,21 +268,8 @@ export class MovePhase extends BattlePhase {
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
-          const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
-          applyAbAttrs<ReduceSleepDurationAbAttr>(
-            AbAttrFlag.REDUCE_SLEEP_DURATION,
-            this.pokemon,
-            false,
-            statusEffect,
-            turnsRemaining,
-          );
-          if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
-            turnsRemaining.value = Math.max(turnsRemaining.value, 1);
-          } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
-            turnsRemaining.value = 0;
-          }
-          this.pokemon.status!.sleepTurnsRemaining = turnsRemaining.value;
-          healed = this.pokemon.status!.sleepTurnsRemaining <= 0;
+          applyAbAttrs<ReduceSleepDurationAbAttr>(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect);
+          healed = this.pokemon.sleepTurnsRemaining <= 0;
           activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
           break;
         case StatusEffect.FREEZE:

@@ -1,11 +1,11 @@
+import { allMoves } from "#app/data/data-lists";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { StatusEffect } from "#enums/status-effect";
-import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/data-lists";
 
 describe("Moves - Toxic", () => {
   let phaserGame: Phaser.Game;
@@ -47,7 +47,7 @@ describe("Moves - Toxic", () => {
     game.move.select(MoveId.TOXIC);
     await game.toEndOfTurn();
 
-    expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
+    expect(game.field.getEnemyPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("should hit semi-invulnerable targets if user is Poison-type", async () => {
@@ -71,7 +71,7 @@ describe("Moves - Toxic", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
+    expect(game.field.getEnemyPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("moves other than Toxic should not hit semi-invulnerable targets even if user is Poison-type", async () => {
