@@ -2813,6 +2813,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param target {@linkcode Pokemon} - The target Pokémon against which the move is used.
    * @param sourceMove {@linkcode Move}  - The move being used by the user.
    * @returns The calculated accuracy multiplier.
+   *
+   * | For ACC and EVA  | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
+   * |------------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+   * | Stage (EVA)      | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
+   * | Gen V+           | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
    */
   getAccuracyMultiplier(target: Pokemon, sourceMove: Move): number {
     const isOhko = sourceMove.hasAttr(OneHitKOAccuracyAttr);
@@ -2850,13 +2856,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (target.findTag((t) => t instanceof ExposedTag)) {
       targetEvaStage.value = Math.min(0, targetEvaStage.value);
     }
-
     const accuracyMultiplier = new NumberHolder(1);
     if (userAccStage.value !== targetEvaStage.value) {
       accuracyMultiplier.value =
         userAccStage.value > targetEvaStage.value
-          ? (3 + Math.min(userAccStage.value - targetEvaStage.value, 6)) / 3
-          : 3 / (3 + Math.min(targetEvaStage.value - userAccStage.value, 6));
+          ? (3 + Math.min(userAccStage.value - targetEvaStage.value, MAX_STAT_STAGE)) / 3
+          : 3 / (3 + Math.min(targetEvaStage.value - userAccStage.value, MAX_STAT_STAGE));
     }
 
     applyAbAttrs<StatMultiplierAbAttr>(
