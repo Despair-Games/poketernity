@@ -119,7 +119,7 @@ async function initFonts(language: string | undefined) {
  * @returns a money formatted string
  */
 function i18nMoneyFormatter(amount: any): string {
-  if (isNaN(Number(amount))) {
+  if (Number.isNaN(Number(amount))) {
     console.warn(`i18nMoneyFormatter: value "${amount}" is not a number!`);
   }
 
