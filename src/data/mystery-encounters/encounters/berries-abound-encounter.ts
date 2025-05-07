@@ -247,33 +247,32 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           await showEncounterText(`${namespace}:option.2.selected_bad`);
           await initBattleWithEnemyConfig(config);
           return;
-        } else {
-          // Gains 1 berry for every 10% faster the player's pokemon is than the enemy, up to a max of numBerries, minimum of 2
-          const numBerriesGrabbed = Math.max(Math.min(Math.round((speedDiff - 1) / 0.08), numBerries), 2);
-          encounter.setDialogueToken("numBerries", String(numBerriesGrabbed));
-          const doFasterBerryRewards = () => {
-            const berryText = i18next.t(`${namespace}:berries`);
-
-            globalScene.audioManager.playSound("item_fanfare");
-            queueEncounterMessage(
-              i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerriesGrabbed }),
-            );
-
-            // Generate a random berry and give it to the first Pokemon with room for it (trying to give to fastest first)
-            for (let i = 0; i < numBerriesGrabbed; i++) {
-              tryGiveBerry(fastestPokemon);
-            }
-          };
-
-          setEncounterExp(fastestPokemon.id, encounter.enemyPartyConfigs[0].pokemonConfigs![0].species.baseExp);
-          setEncounterRewards(
-            { guaranteedModifierTypeOptions: shopOptions, fillRemaining: false },
-            undefined,
-            doFasterBerryRewards,
-          );
-          await showEncounterText(`${namespace}:option.2.selected`);
-          leaveEncounterWithoutBattle();
         }
+        // Gains 1 berry for every 10% faster the player's pokemon is than the enemy, up to a max of numBerries, minimum of 2
+        const numBerriesGrabbed = Math.max(Math.min(Math.round((speedDiff - 1) / 0.08), numBerries), 2);
+        encounter.setDialogueToken("numBerries", String(numBerriesGrabbed));
+        const doFasterBerryRewards = () => {
+          const berryText = i18next.t(`${namespace}:berries`);
+
+          globalScene.audioManager.playSound("item_fanfare");
+          queueEncounterMessage(
+            i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerriesGrabbed }),
+          );
+
+          // Generate a random berry and give it to the first Pokemon with room for it (trying to give to fastest first)
+          for (let i = 0; i < numBerriesGrabbed; i++) {
+            tryGiveBerry(fastestPokemon);
+          }
+        };
+
+        setEncounterExp(fastestPokemon.id, encounter.enemyPartyConfigs[0].pokemonConfigs![0].species.baseExp);
+        setEncounterRewards(
+          { guaranteedModifierTypeOptions: shopOptions, fillRemaining: false },
+          undefined,
+          doFasterBerryRewards,
+        );
+        await showEncounterText(`${namespace}:option.2.selected`);
+        leaveEncounterWithoutBattle();
       })
       .build(),
   )
@@ -296,7 +295,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
   .build();
 
 function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
-  const berryType = randSeedInt(Object.keys(BerryType).filter((s) => !isNaN(Number(s))).length) as BerryType;
+  const berryType = randSeedInt(Object.keys(BerryType).filter((s) => !Number.isNaN(Number(s))).length) as BerryType;
   const berry = generateModifierType(modifierTypes.BERRY, [berryType]) as BerryModifierType;
 
   const party = globalScene.getPlayerParty();

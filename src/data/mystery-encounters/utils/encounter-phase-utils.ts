@@ -554,7 +554,7 @@ export function generateModifierTypeOption(
  * @param selectablePokemonFilter - A filter for which Pokemon are allowed
  */
 export function selectPokemonForOption(
-  onPokemonSelected: (pokemon: PlayerPokemon) => void | OptionSelectItem[],
+  onPokemonSelected: (pokemon: PlayerPokemon) => undefined | OptionSelectItem[],
   onPokemonNotSelected?: () => void,
   selectablePokemonFilter?: PokemonSelectFilter,
 ): Promise<boolean> {
@@ -885,7 +885,8 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   if (encounter.continuousEncounter || doNotContinue) {
     return;
-  } else if (encounter.encounterMode === MysteryEncounterMode.NO_BATTLE) {
+  }
+  if (encounter.encounterMode === MysteryEncounterMode.NO_BATTLE) {
     globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
     globalScene.phaseManager.pushPhase(new EggLapsePhase());
   } else if (
@@ -930,7 +931,8 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   if (encounter.continuousEncounter || doNotContinue) {
     return;
-  } else if (encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE) {
+  }
+  if (encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE) {
     globalScene.phaseManager.pushPhase(new BattleEndPhase(false));
   }
 
@@ -1013,7 +1015,7 @@ export function handleMysteryEncounterTurnStartEffects(): boolean {
 export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
-  const biomes = Object.keys(BiomeId).filter((key) => isNaN(Number(key)));
+  const biomes = Object.keys(BiomeId).filter((key) => Number.isNaN(Number(key)));
   const alwaysPickTheseBiomes = [
     BiomeId.ISLAND,
     BiomeId.ABYSS,
@@ -1208,7 +1210,7 @@ export function calculateRareSpawnAggregateStats(luckValue: number) {
       // Roll boss tier
       // luck influences encounter rarity
       let luckModifier = 0;
-      if (!isNaN(luckValue)) {
+      if (!Number.isNaN(luckValue)) {
         luckModifier = luckValue * 0.5;
       }
       const tierValue = randSeedInt(64 - luckModifier);

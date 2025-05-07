@@ -57,13 +57,12 @@ export class CanLearnMoveRequirement extends EncounterPokemonRequirement {
         // every required move should be included
         this.requiredMoves.every((requiredMove) => this.getAllPokemonMoves(pokemon).includes(requiredMove)),
       );
-    } else {
-      return partyPokemon.filter(
-        (pokemon) =>
-          // none of the "required" moves should be included
-          !this.requiredMoves.some((requiredMove) => this.getAllPokemonMoves(pokemon).includes(requiredMove)),
-      );
     }
+    return partyPokemon.filter(
+      (pokemon) =>
+        // none of the "required" moves should be included
+        !this.requiredMoves.some((requiredMove) => this.getAllPokemonMoves(pokemon).includes(requiredMove)),
+    );
   }
 
   override getDialogueToken(__pokemon?: PlayerPokemon): [string, string] {

@@ -304,14 +304,13 @@ function handleNextTurn() {
 
     // Skip remainder of TurnInitPhase
     return true;
-  } else {
-    if (encounter.misc.turnsRemaining < 3) {
-      // Display charging messages on turns that aren't the initial turn
-      queueEncounterMessage(`${namespace}:charging_continue`);
-    }
-    queueEncounterMessage(`${namespace}:turn_remaining_${encounter.misc.turnsRemaining}`);
-    encounter.misc.turnsRemaining--;
   }
+  if (encounter.misc.turnsRemaining < 3) {
+    // Display charging messages on turns that aren't the initial turn
+    queueEncounterMessage(`${namespace}:charging_continue`);
+  }
+  queueEncounterMessage(`${namespace}:turn_remaining_${encounter.misc.turnsRemaining}`);
+  encounter.misc.turnsRemaining--;
 
   // Don't skip remainder of TurnInitPhase
   return false;

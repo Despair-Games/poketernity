@@ -202,7 +202,7 @@ export function initMysteryEncounters() {
 
   // Add ANY biome encounters to biome map
   // eslint-disable-next-line
-  let encounterBiomeTableLog = "";
+  let _encounterBiomeTableLog = "";
   mysteryEncountersByBiome.forEach((biomeEncounters, biome) => {
     anyBiomeEncounters.forEach((encounter) => {
       if (!biomeEncounters.includes(encounter)) {
@@ -210,7 +210,7 @@ export function initMysteryEncounters() {
       }
     });
 
-    encounterBiomeTableLog += `${getBiomeName(biome).toUpperCase()}: [${biomeEncounters
+    _encounterBiomeTableLog += `${getBiomeName(biome).toUpperCase()}: [${biomeEncounters
       .map((type) => MysteryEncounterType[type].toString().toLowerCase())
       .sort()
       .join(", ")}]\n`;

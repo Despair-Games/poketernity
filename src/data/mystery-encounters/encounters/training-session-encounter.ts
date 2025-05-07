@@ -383,6 +383,4 @@ function getEnemyConfig(playerPokemon: PlayerPokemon, segments: number, modifier
 
 class ModifiersHolder {
   public value: PokemonHeldItemModifier[] = [];
-
-  constructor() {}
 }
