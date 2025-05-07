@@ -25,6 +25,8 @@ import {
   DEFAULT_MAX_SLEEP_DURATION,
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  MAX_STAT_STAGE,
+  MIN_STAT_STAGE,
 } from "#app/constants/game-constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
@@ -1040,9 +1042,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   setStatStage(stat: BattleStat, value: number): void {
     if (this.summonData) {
       if (value >= -6) {
-        this.summonData.statStages[stat - 1] = Math.min(value, 6);
+        this.summonData.statStages[stat - 1] = Math.min(value, MAX_STAT_STAGE);
       } else {
-        this.summonData.statStages[stat - 1] = Math.max(value, -6);
+        this.summonData.statStages[stat - 1] = Math.max(value, MIN_STAT_STAGE);
       }
     }
   }
@@ -2842,7 +2844,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), Stat.ACC, userAccStage);
 
-    userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, 6);
+    userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, MAX_STAT_STAGE);
     targetEvaStage.value = ignoreEvaStatStage.value ? 0 : targetEvaStage.value;
 
     if (target.findTag((t) => t instanceof ExposedTag)) {
