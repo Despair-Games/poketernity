@@ -46,7 +46,8 @@ export abstract class ArenaTag {
   public get i18nSideKey(): string {
     if (this.side === ArenaTagSide.PLAYER) {
       return "Player";
-    } else if (this.side === ArenaTagSide.ENEMY) {
+    }
+    if (this.side === ArenaTagSide.ENEMY) {
       return "Enemy";
     }
     return "";

@@ -412,7 +412,8 @@ export class Egg {
        */
       const rand = randSeedInt(MANAPHY_EGG_MANAPHY_RATE) !== 1;
       return rand ? SpeciesId.PHIONE : SpeciesId.MANAPHY;
-    } else if (this.tier === EggTier.LEGENDARY && this._sourceType === EggSourceType.GACHA_LEGENDARY) {
+    }
+    if (this.tier === EggTier.LEGENDARY && this._sourceType === EggSourceType.GACHA_LEGENDARY) {
       if (!randSeedInt(2)) {
         return getLegendaryGachaSpeciesForTimestamp(this.timestamp);
       }
@@ -540,11 +541,11 @@ export class Egg {
     const rand = randSeedInt(10);
     if (rand >= SHINY_VARIANT_CHANCE) {
       return VariantTier.STANDARD; // 6/10
-    } else if (rand >= SHINY_EPIC_CHANCE) {
-      return VariantTier.RARE; // 3/10
-    } else {
-      return VariantTier.EPIC; // 1/10
     }
+    if (rand >= SHINY_EPIC_CHANCE) {
+      return VariantTier.RARE; // 3/10
+    }
+    return VariantTier.EPIC; // 1/10
   }
 
   private checkForPityTierOverrides(): void {

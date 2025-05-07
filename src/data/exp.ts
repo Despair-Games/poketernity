@@ -145,31 +145,37 @@ export function getLevelForWaveFunc(wave: number): number {
   if (wave < 11) {
     // Level cap of 10 * 1.2 = 12 at wave 10
     return wave;
-  } else if (wave < 21) {
+  }
+  if (wave < 21) {
     // Level cap of 15 * 1.2 = 18 at wave 20
     return Math.floor(0.5 * wave + 5);
-  } else if (wave < 71) {
+  }
+  if (wave < 71) {
     // Level cap of 30 * 1.2 = 36 at wave 70
     return Math.floor(0.3 * wave + 9);
-  } else if (wave < 101) {
+  }
+  if (wave < 101) {
     // Level cap of 50 * 1.2 = 48 at wave 100
     return Math.floor(0.366 * wave + 4.33);
-  } else if (wave < 171) {
+  }
+  if (wave < 171) {
     // Level cap of 65 * 1.2 = 78 at wave 170
     return Math.floor(0.371 * wave + 2.86);
-  } else if (wave < 181) {
+  }
+  if (wave < 181) {
     // Level cap of 70 * 1.2 = 84 at wave 180
     return Math.floor(0.5 * wave - 20);
-  } else if (wave < 191) {
+  }
+  if (wave < 191) {
     // Level cap of 79 * 1.2 = 95 at wave 190
     return Math.floor(0.9 * wave - 92);
-  } else if (wave < 201) {
+  }
+  if (wave < 201) {
     // Level cap of 83 * 1.2 = 100 at wave 200
     return Math.floor(0.4 * wave + 3);
-  } else {
-    // Temporary scaling value for now
-    return Math.floor(0.5 * wave);
   }
+  // Temporary scaling value for now
+  return Math.floor(0.5 * wave);
 }
 
 /**
