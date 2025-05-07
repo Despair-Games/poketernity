@@ -6,6 +6,7 @@ import Overrides from "#app/overrides";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { getVoucherTypeIcon } from "#app/system/voucher";
 import { handleTutorial } from "#app/tutorial";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getEnumKeys, getEnumValues } from "#app/utils/common-utils";
@@ -19,7 +20,6 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
-import { MessageUiHandler } from "./message-ui-handler";
 
 /**
  * TODO: This should extend (Base)OptionSelectUiHandler

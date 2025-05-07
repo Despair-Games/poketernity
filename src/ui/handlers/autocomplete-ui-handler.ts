@@ -1,6 +1,6 @@
+import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { Button } from "#enums/buttons";
-import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
 export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   private modalContainer?: Phaser.GameObjects.Container;

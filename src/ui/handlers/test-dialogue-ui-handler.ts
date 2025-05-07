@@ -1,10 +1,10 @@
+import type { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
+import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNil } from "#app/utils/common-utils";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { AutoCompleteUiHandler } from "./autocomplete-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 export class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];

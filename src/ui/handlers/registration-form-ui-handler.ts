@@ -1,12 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
+import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
 
 export class RegistrationFormUiHandler extends FormModalUiHandler {
   constructor() {

@@ -4,6 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
 import { timedEventManager } from "#app/timed-event-manager";
 import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
+import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { fixedNumber } from "#app/utils/common-utils";
@@ -12,7 +13,6 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { version } from "../../../package.json";
-import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
 export class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */

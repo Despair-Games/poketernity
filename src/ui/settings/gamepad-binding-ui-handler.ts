@@ -1,11 +1,11 @@
 import { getIconWithSettingName, getKeyWithKeycode } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
+import { BindingUiHandler } from "#app/ui/settings/binding-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { Device } from "#enums/devices";
 import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { BindingUiHandler } from "./binding-ui-handler";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
   constructor(mode: UiMode | null = null) {
