@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports
 
@@ -33,7 +33,7 @@ export interface PokemonSummonData {
   passiveAbility: AbilityId;
   gender?: Gender;
   /**
-   * `[Hp, Atk, Def, SpAtk, SpDef, Spd]` <-- needs confirmation
+   * `[Hp, Atk, Def, SpAtk, SpDef, Spd]`
    * @todo Change this to an object (e.g. `stats.atk` etc)?
    */
   stats: number[];
