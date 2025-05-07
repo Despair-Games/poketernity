@@ -1,3 +1,4 @@
+import { WEATHER_DAMAGE_RATIO } from "#app/constants/weather-constants";
 import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
 import type { PostWeatherLapseAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-ab-attr";
 import type { PreWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/pre-weather-damage-ab-attr";
@@ -121,7 +122,7 @@ export class WeatherEffectPhase extends FieldPhase {
       return;
     }
 
-    const damage = toDmgValue(pokemon.getMaxHp() / 16);
+    const damage = toDmgValue(pokemon.getMaxHp() * WEATHER_DAMAGE_RATIO);
 
     globalScene.phaseManager.queueMessagePhase(getWeatherDamageMessage(weather.weatherType, pokemon) ?? "");
     pokemon.damageAndUpdate(damage, { result: HitResult.EFFECTIVE, preventEndure: true });

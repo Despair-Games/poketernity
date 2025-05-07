@@ -14,5 +14,8 @@ export const PRIMAL_WEATHER_TYPES = Object.freeze([
 /** Weather types that are associated with the sunny weather. */
 export const SUNNY_WEATHER_TYPES = Object.freeze([WeatherType.SUNNY, WeatherType.HARSH_SUN]);
 
-/** The defualt duration of a freshly applied weather (in turns). */
+/** The default duration of a freshly applied weather (in turns). */
 export const DEFAULT_NEW_WEATHER_DURATION = 5;
+
+/** The max HP ratio dealt as damage by Sandstorm and Hail */
+export const WEATHER_DAMAGE_RATIO = 1 / 16;
