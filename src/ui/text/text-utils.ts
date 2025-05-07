@@ -5,7 +5,7 @@ import { EggTier } from "#enums/egg-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { TextStyle } from "#enums/text-style";
 import type Phaser from "phaser";
-import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 
 interface CustomTextStyleOptions {

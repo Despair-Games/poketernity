@@ -56,7 +56,7 @@ describe("Abilities - Flower Gift", () => {
     const cherrimAtkStat = cherrim.getEffectiveStat(Stat.ATK);
     const cherrimSpDefStat = cherrim.getEffectiveStat(Stat.SPDEF);
 
-    // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);;
+    // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);
     // const magikarpSpDefStat = magikarp.getEffectiveStat(Stat.SPDEF);
 
     game.move.select(MoveId.SUNNY_DAY, 0);

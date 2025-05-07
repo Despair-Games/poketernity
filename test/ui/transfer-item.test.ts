@@ -46,7 +46,7 @@ describe("UI - Transfer Items", () => {
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(ModifierSelectUiHandler);
 
-      const handler = game.scene.ui.getCurrentHandler() as ModifierSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       handler.setCursor(1);
       handler.processInput(Button.ACTION);
 
@@ -60,7 +60,7 @@ describe("UI - Transfer Items", () => {
     game.onNextPrompt("SelectModifierPhase", UiMode.PARTY, () => {
       expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(PartyUiHandler);
 
-      const handler = game.scene.ui.getCurrentHandler() as PartyUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<PartyUiHandler>();
       handler.processInput(Button.ACTION);
 
       expect(
@@ -85,7 +85,7 @@ describe("UI - Transfer Items", () => {
     game.onNextPrompt("SelectModifierPhase", UiMode.PARTY, () => {
       expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(PartyUiHandler);
 
-      const handler = game.scene.ui.getCurrentHandler() as PartyUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<PartyUiHandler>();
       handler.processInput(Button.ACTION); // select Pokemon
       handler.processInput(Button.ACTION); // select held item (Sitrus Berry)
 

@@ -10,7 +10,7 @@ import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;
