@@ -163,17 +163,17 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
       const speciesB = b.pokemon.species;
       if (getEggTierForSpecies(speciesA) < getEggTierForSpecies(speciesB)) {
         return -1;
-      } else if (getEggTierForSpecies(speciesA) > getEggTierForSpecies(speciesB)) {
-        return 1;
-      } else {
-        if (speciesA.speciesId < speciesB.speciesId) {
-          return -1;
-        } else if (speciesA.speciesId > speciesB.speciesId) {
-          return 1;
-        } else {
-          return 0;
-        }
       }
+      if (getEggTierForSpecies(speciesA) > getEggTierForSpecies(speciesB)) {
+        return 1;
+      }
+      if (speciesA.speciesId < speciesB.speciesId) {
+        return -1;
+      }
+      if (speciesA.speciesId > speciesB.speciesId) {
+        return 1;
+      }
+      return 0;
     });
 
     this.getUi().bringToTop(this.summaryContainer);

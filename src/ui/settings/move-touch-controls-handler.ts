@@ -207,7 +207,9 @@ export class MoveTouchControlsHandler {
   private createToolbar() {
     this.touchControlsEl?.prepend(this.createToolbarElement());
 
-    if (!this.configToolbarEl) return;
+    if (!this.configToolbarEl) {
+      return;
+    }
 
     this.saveBtn.addEventListener("click", () => {
       this.saveCurrentPositions();

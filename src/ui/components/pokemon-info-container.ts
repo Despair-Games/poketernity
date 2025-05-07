@@ -321,7 +321,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       const baseVariant = pokemon.getVariant();
 
-      this.pokemonShinyIcon.setTexture(`shiny_star`);
+      this.pokemonShinyIcon.setTexture("shiny_star");
       this.pokemonShinyIcon.setVisible(pokemon.isShiny());
       this.pokemonShinyIcon.setTint(getVariantTint(baseVariant));
       if (this.pokemonShinyIcon.visible) {

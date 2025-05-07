@@ -108,16 +108,16 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
           switch (this.uiMode) {
             case SaveSlotUiMode.LOAD:
               this.saveSlotSelectCallback = null;
-              originalCallback && originalCallback(cursor);
+              originalCallback?.(cursor);
               break;
-            case SaveSlotUiMode.SAVE:
+            case SaveSlotUiMode.SAVE: {
               const saveAndCallback = () => {
                 const originalCallback = this.saveSlotSelectCallback;
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
                 ui.setMessageMode();
-                originalCallback && originalCallback(cursor);
+                originalCallback?.(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
                 const overwriteDataOptions: ConfirmModeConfig = {
@@ -147,12 +147,13 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                 return false;
               }
               break;
+            }
           }
           success = true;
         }
       } else {
         this.saveSlotSelectCallback = null;
-        originalCallback && originalCallback(-1);
+        originalCallback?.(-1);
         success = true;
       }
     } else {

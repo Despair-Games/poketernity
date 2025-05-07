@@ -271,7 +271,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
     let foundIndex: number;
     switch (arenaEffectChangedEvent.constructor) {
-      case TagAddedEvent:
+      case TagAddedEvent: {
         const tagAddedEvent = arenaEffectChangedEvent as TagAddedEvent;
 
         const excludedTagTypes = [ArenaTagType.DELAYED_ATTACK, ArenaTagType.PENDING_HEAL];
@@ -304,7 +304,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
             const layers = tagAddedEvent.arenaTagMaxLayers > 1 ? ` (${tagAddedEvent.arenaTagLayers})` : "";
             this.fieldEffectInfo[existingEntryHazardIndex].name = `${name}${layers}`;
             break;
-          } else if (tagAddedEvent.arenaTagMaxLayers > 1) {
+          }
+          if (tagAddedEvent.arenaTagMaxLayers > 1) {
             name = `${name} (${tagAddedEvent.arenaTagLayers})`;
           }
         }
@@ -317,7 +318,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           tagType: tagAddedEvent.arenaTagType,
         });
         break;
-      case TagRemovedEvent:
+      }
+      case TagRemovedEvent: {
         const tagRemovedEvent = arenaEffectChangedEvent as TagRemovedEvent;
         foundIndex = this.fieldEffectInfo.findIndex((info) => info.tagType === tagRemovedEvent.arenaTagType);
 
@@ -326,8 +328,9 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           this.fieldEffectInfo.splice(foundIndex, 1);
         }
         break;
+      }
 
-      case WeatherChangedEvent:
+      case WeatherChangedEvent: {
         const weatherEvent = arenaEffectChangedEvent as WeatherChangedEvent;
         const oldWeatherName = getFieldEffectText(WeatherType[weatherEvent.oldWeatherType]);
         const newWeatherName = getFieldEffectText(WeatherType[weatherEvent.newWeatherType]);
@@ -339,7 +342,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         };
         this.insertFieldEffectInfo(newWeatherInfo, oldWeatherName);
         break;
-      case TerrainChangedEvent:
+      }
+      case TerrainChangedEvent: {
         const terrainEvent = arenaEffectChangedEvent as TerrainChangedEvent;
         const oldTerrainName = getFieldEffectText(TerrainType[terrainEvent.oldTerrainType]);
         const newTerrainName = getFieldEffectText(TerrainType[terrainEvent.newTerrainType]);
@@ -352,6 +356,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         };
         this.insertFieldEffectInfo(newTerrainInfo, oldTerrainName);
         break;
+      }
     }
     this.updateFieldText();
   }

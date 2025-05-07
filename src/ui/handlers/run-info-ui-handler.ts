@@ -553,7 +553,7 @@ export class RunInfoUiHandler extends UiHandler {
       case GameModes.DAILY:
         modeText.appendText(`${i18next.t("gameMode:dailyRun")}`, false);
         break;
-      case GameModes.CHALLENGE:
+      case GameModes.CHALLENGE: {
         modeText.appendText(`${i18next.t("gameMode:challenge")}`, false);
         modeText.appendText(`${i18next.t("runHistory:challengeRules")}: `);
         modeText.setWrapMode("word");
@@ -568,6 +568,7 @@ export class RunInfoUiHandler extends UiHandler {
           }
         }
         break;
+      }
       case GameModes.ENDLESS:
         modeText.appendText(`${i18next.t("gameMode:endless")}`, false);
         break;
@@ -663,7 +664,7 @@ export class RunInfoUiHandler extends UiHandler {
           case Challenges.SINGLE_GENERATION:
             rules.push(i18next.t(`runHistory:challengeMonoGen${this.runInfo.challenges[i].value}`));
             break;
-          case Challenges.SINGLE_TYPE:
+          case Challenges.SINGLE_TYPE: {
             const typeRule = ElementalType[this.runInfo.challenges[i].value - 1];
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
             const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
@@ -671,16 +672,18 @@ export class RunInfoUiHandler extends UiHandler {
               typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`)! + "[/color]" + "[/shadow]";
             rules.push(typeText);
             break;
+          }
           case Challenges.INVERSE_BATTLE:
             rules.push(i18next.t("challenges:inverseBattle.shortName"));
             break;
-          default:
+          default: {
             const localisationKey = Challenges[this.runInfo.challenges[i].id]
               .split("_")
               .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
               .join("");
             rules.push(i18next.t(`challenges:${localisationKey}.name`));
             break;
+          }
         }
       }
     }
@@ -785,7 +788,7 @@ export class RunInfoUiHandler extends UiHandler {
       // Shiny
       const marksContainer = globalScene.add.container(0, 0);
       if (pokemon.isShiny()) {
-        const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
+        const shinyStar = globalScene.add.image(0, 0, "shiny_star_small");
         shinyStar.setOrigin(0, 0);
         shinyStar.setScale(0.65);
         shinyStar.setPositionRelative(pokeInfoTextContainer, 28, 0);

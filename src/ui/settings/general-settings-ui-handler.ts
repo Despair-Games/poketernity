@@ -36,7 +36,9 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
   }
 
   private updateMoveTouchControlsSettingsLabel() {
-    if (!hasTouchscreen()) return;
+    if (!hasTouchscreen()) {
+      return;
+    }
 
     const settingIndex = this.uiItems.findIndex((uiItem) => uiItem.key === "moveTouchControls");
     if (settingIndex === -1) {

@@ -42,7 +42,8 @@ export class AutoCompleteUiHandler extends OptionSelectUiHandler {
         ui.playError();
       }
       return true;
-    } else if (button !== Button.CANCEL && button !== Button.ACTION) {
+    }
+    if (button !== Button.CANCEL && button !== Button.ACTION) {
       return super.processInput(button);
     }
     return false;

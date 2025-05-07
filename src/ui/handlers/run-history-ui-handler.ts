@@ -122,11 +122,10 @@ export class RunHistoryUiHandler extends MessageUiHandler {
         }
         success = true;
         return success;
-      } else {
-        this.runSelectCallback = null;
-        success = true;
-        globalScene.ui.revertMode();
       }
+      this.runSelectCallback = null;
+      success = true;
+      globalScene.ui.revertMode();
     } else if (this.runs.length > 0) {
       switch (button) {
         case Button.UP:

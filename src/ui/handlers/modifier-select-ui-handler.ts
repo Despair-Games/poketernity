@@ -623,9 +623,8 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     if (rerollDisabled) {
       this.rerollCostText.setVisible(false);
       return;
-    } else {
-      this.rerollCostText.setVisible(true);
     }
+    this.rerollCostText.setVisible(true);
     const canReroll = globalScene.money >= this.rerollCost;
 
     const formattedMoney = formatMoney(settings.display.moneyFormat, this.rerollCost);

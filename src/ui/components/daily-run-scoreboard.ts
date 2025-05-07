@@ -152,10 +152,11 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       entryContainer.add(scoreLabel);
 
       switch (this.category) {
-        case ScoreboardCategory.DAILY:
+        case ScoreboardCategory.DAILY: {
           const waveLabel = addTextObject(68, 0, wave, TextStyle.WINDOW_SMALL);
           entryContainer.add(waveLabel);
           break;
+        }
         case ScoreboardCategory.WEEKLY:
           scoreLabel.x -= 16;
           break;

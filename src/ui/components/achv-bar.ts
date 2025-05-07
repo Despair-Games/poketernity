@@ -73,7 +73,7 @@ export class AchvBar extends Phaser.GameObjects.Container {
       return;
     }
 
-    this.bg.setTexture(`achv_bar`);
+    this.bg.setTexture("achv_bar");
     this.icon.setFrame(achv.iconImage);
     this.titleText.setText(achv.name);
     this.scoreText.setVisible(achv instanceof Achievement);

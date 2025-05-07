@@ -123,7 +123,7 @@ export abstract class BindingUiHandler extends UiHandler {
       if (this.timeLeftAutoClose >= 0) {
         this.manageAutoCloseTimer();
       } else {
-        this.cancelFn && this.cancelFn();
+        this.cancelFn?.();
       }
     }, 1000);
   }
@@ -185,19 +185,20 @@ export abstract class BindingUiHandler extends UiHandler {
     let success = false;
     switch (button) {
       case Button.LEFT:
-      case Button.RIGHT:
+      case Button.RIGHT: {
         // Toggle between action and cancel options.
         const cursor = this.cursor ? 0 : 1;
         success = this.setCursor(cursor);
         break;
+      }
       case Button.ACTION:
         // Process actions based on current cursor position.
         if (this.cursor === 0) {
-          this.cancelFn && this.cancelFn();
+          this.cancelFn?.();
         } else {
           success = this.swapAction();
           NavigationManager.getInstance().updateIcons();
-          this.cancelFn && this.cancelFn(success);
+          this.cancelFn?.(success);
         }
         break;
     }

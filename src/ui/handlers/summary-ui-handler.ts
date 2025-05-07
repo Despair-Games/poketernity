@@ -396,7 +396,7 @@ export class SummaryUiHandler extends UiHandler {
     const baseVariant = this.pokemon.getVariant();
 
     this.shinyIcon.setPositionRelative(this.nameText, this.nameText.displayWidth + 1, 3);
-    this.shinyIcon.setTexture(`shiny_star`);
+    this.shinyIcon.setTexture("shiny_star");
     this.shinyIcon.setVisible(this.pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
@@ -468,7 +468,7 @@ export class SummaryUiHandler extends UiHandler {
       if (button === Button.ACTION) {
         if (this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
           if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
-            this.moveSelectFunction && this.moveSelectFunction(this.moveCursor);
+            this.moveSelectFunction?.(this.moveCursor);
           } else {
             if (this.selectedMoveIndex === -1) {
               this.selectedMoveIndex = this.moveCursor;
@@ -523,11 +523,10 @@ export class SummaryUiHandler extends UiHandler {
               this.destroyBlinkCursor();
               success = true;
               break;
-            } else {
-              this.hideMoveSelect();
-              success = true;
-              break;
             }
+            this.hideMoveSelect();
+            success = true;
+            break;
         }
       }
     } else {
@@ -567,7 +566,7 @@ export class SummaryUiHandler extends UiHandler {
         const pages = getEnumValues(SummaryUiPage);
         switch (button) {
           case Button.UP:
-          case Button.DOWN:
+          case Button.DOWN: {
             if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE || !this.fromPartyMenu) {
               break;
             }
@@ -580,6 +579,7 @@ export class SummaryUiHandler extends UiHandler {
               this.show(party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page);
             }
             break;
+          }
           case Button.LEFT:
             if (this.cursor) {
               success = this.setCursor(this.cursor - 1);
@@ -748,7 +748,7 @@ export class SummaryUiHandler extends UiHandler {
     }
 
     switch (page) {
-      case SummaryUiPage.PROFILE:
+      case SummaryUiPage.PROFILE: {
         const profileContainer = globalScene.add.container(0, -pageBg.height);
         pageContainer.add(profileContainer);
 
@@ -913,7 +913,8 @@ export class SummaryUiHandler extends UiHandler {
         memoText.setOrigin(0, 0);
         profileContainer.add(memoText);
         break;
-      case SummaryUiPage.STATS:
+      }
+      case SummaryUiPage.STATS: {
         const statsContainer = globalScene.add.container(0, -pageBg.height);
         pageContainer.add(statsContainer);
 
@@ -1004,7 +1005,8 @@ export class SummaryUiHandler extends UiHandler {
 
         expOverlay.setMask(expMask);
         break;
-      case SummaryUiPage.MOVES:
+      }
+      case SummaryUiPage.MOVES: {
         this.movesContainer = globalScene.add.container(5, -pageBg.height + 26);
         pageContainer.add(this.movesContainer);
 
@@ -1097,6 +1099,7 @@ export class SummaryUiHandler extends UiHandler {
 
         this.moveDescriptionText.setMask(moveDescriptionTextMask);
         break;
+      }
     }
   }
 
@@ -1133,7 +1136,8 @@ export class SummaryUiHandler extends UiHandler {
 
     if (this.moveCursor < 4 && this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
       return this.pokemon.moveset[this.moveCursor].getMove();
-    } else if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.moveCursor === 4) {
+    }
+    if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.moveCursor === 4) {
       return this.newMove;
     }
     return null;
@@ -1149,7 +1153,7 @@ export class SummaryUiHandler extends UiHandler {
 
   hideMoveSelect() {
     if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
-      this.moveSelectFunction && this.moveSelectFunction(4);
+      this.moveSelectFunction?.(4);
       return;
     }
 

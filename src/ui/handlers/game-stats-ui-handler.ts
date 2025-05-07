@@ -324,7 +324,7 @@ export class GameStatsUiHandler extends UiHandler {
       const stat = displayStats[key] as DisplayStat;
       const value = stat.sourceFunc!(globalScene.gameData); // TODO: is this bang correct?
       this.statLabels[s].setText(
-        !stat.hidden || isNaN(Number.parseInt(value)) || Number.parseInt(value)
+        !stat.hidden || Number.isNaN(Number.parseInt(value)) || Number.parseInt(value)
           ? i18next.t(`gameStatsUiHandler:${stat.label_key}`)
           : "???",
       );

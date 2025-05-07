@@ -369,19 +369,19 @@ export class DropDown extends Phaser.GameObjects.Container {
       cursor = 0;
       this.cursorObj.setVisible(false);
       return false;
-    } else if (cursor >= this.options.length) {
+    }
+    if (cursor >= this.options.length) {
       cursor = this.options.length - 1;
       this.cursorObj.y = this.options[cursor].y + 3.5;
       this.cursorObj.setVisible(true);
       return false;
-    } else {
-      this.cursorObj.y = this.options[cursor].y + 3.5;
-      this.cursorObj.setVisible(true);
-      // If hydrid type, we need to update the filters when going up/down in the list
-      if (this.dropDownType === DropDownType.HYBRID) {
-        this.lastCursor = cursor;
-        this.onChange();
-      }
+    }
+    this.cursorObj.y = this.options[cursor].y + 3.5;
+    this.cursorObj.setVisible(true);
+    // If hydrid type, we need to update the filters when going up/down in the list
+    if (this.dropDownType === DropDownType.HYBRID) {
+      this.lastCursor = cursor;
+      this.onChange();
     }
     return true;
   }
@@ -454,7 +454,8 @@ export class DropDown extends Phaser.GameObjects.Container {
   getVals(): any[] {
     if (this.dropDownType === DropDownType.MULTI) {
       return this.options.filter((option, i) => i > 0 && option.state === DropDownState.ON).map((option) => option.val);
-    } else if (this.dropDownType === DropDownType.HYBRID) {
+    }
+    if (this.dropDownType === DropDownType.HYBRID) {
       const selected = this.options
         .filter((option, i) => i > 0 && option.state === DropDownState.ON)
         .map((option) => option.val);
@@ -467,17 +468,17 @@ export class DropDown extends Phaser.GameObjects.Container {
       }
       // if nothing is selected and a single option is hovered, return that one
       return [this.options[this.cursor].val];
-    } else if (this.dropDownType === DropDownType.RADIAL) {
+    }
+    if (this.dropDownType === DropDownType.RADIAL) {
       return this.options.map((option) => {
         return { val: option.val, state: option.state };
       });
-    } else {
-      return this.options
-        .filter((option) => option.state === DropDownState.ON)
-        .map((option) => {
-          return { val: option.val, dir: option.dir };
-        });
     }
+    return this.options
+      .filter((option) => option.state === DropDownState.ON)
+      .map((option) => {
+        return { val: option.val, dir: option.dir };
+      });
   }
 
   /**

@@ -257,7 +257,7 @@ export class SettingsUiHandler extends MessageUiHandler {
         console.warn(
           `Could not find index for ${uiItem.key}.`,
           `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
-          `\nAvailable values:`,
+          "\nAvailable values:",
           uiItem.options,
         );
       }
@@ -599,7 +599,7 @@ export class SettingsUiHandler extends MessageUiHandler {
       noHandler: () => {
         globalScene.ui.revertMode();
         this.showText("", 0);
-        onCancel && onCancel();
+        onCancel?.();
       },
     };
     this.showText(text, undefined, () => {
