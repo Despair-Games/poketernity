@@ -16,7 +16,7 @@ export function initPokemonPreEvolutions(): void {
       if (ev.evoFormKey && megaFormKeys.indexOf(ev.evoFormKey) > -1) {
         continue;
       }
-      pokemonPreEvolutions[ev.speciesId] = parseInt(pk) as SpeciesId;
+      pokemonPreEvolutions[ev.speciesId] = Number.parseInt(pk) as SpeciesId;
     }
   });
 }

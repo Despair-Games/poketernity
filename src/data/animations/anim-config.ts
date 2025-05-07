@@ -225,7 +225,7 @@ export class LegacyAnimConfig {
 
           timedEvent && timedEvents.push(timedEvent);
         }
-        this.frameTimedEvents.set(parseInt(fte), timedEvents);
+        this.frameTimedEvents.set(Number.parseInt(fte), timedEvents);
       }
 
       this.position = source.position;

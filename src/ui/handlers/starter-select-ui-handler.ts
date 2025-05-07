@@ -3905,7 +3905,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.starterSelectCallback = null;
         originalStarterSelectCallback
           && originalStarterSelectCallback(
-            new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
+            new Array(this.starterSpecies.length).fill(0).map((_, i) => {
               const starterSpecies = thisObj.starterSpecies[i];
               return {
                 species: starterSpecies,

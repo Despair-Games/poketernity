@@ -72,7 +72,7 @@ export class RunInfoUiHandler extends UiHandler {
   private hallofFameContainer: Phaser.GameObjects.Container;
   private endCardContainer: Phaser.GameObjects.Container;
 
-  private partyVisibility: Boolean;
+  private partyVisibility: boolean;
   private modifiersModule: any;
 
   constructor() {

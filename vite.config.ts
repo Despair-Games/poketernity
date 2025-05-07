@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv, Rollup, UserConfig } from "vite";
+import { defineConfig, loadEnv, type Rollup, type UserConfig } from "vite";
 import ViteTsconfigPaths from "vite-tsconfig-paths";
 import { minifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-public-json-files";
 

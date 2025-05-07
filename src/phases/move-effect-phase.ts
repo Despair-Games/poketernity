@@ -454,7 +454,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     const isCritical = target.getCriticalHitResult(user, move, false);
 
-    const { result: result, damage: dmg } = target.getAttackDamage(
+    const { result, damage: dmg } = target.getAttackDamage(
       user,
       move,
       AbilityApplyMode.DEFAULT,

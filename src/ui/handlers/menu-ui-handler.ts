@@ -152,7 +152,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   getMenuOptionsConfig(): OptionSelectModeConfig {
     const validOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
+      .map((m) => Number.parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
         return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));
       });

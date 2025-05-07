@@ -18,14 +18,14 @@ export function getCurrentTime(): number {
 
 export function getEnumKeys(enumType: any): string[] {
   return Object.values(enumType)
-    .filter((v) => isNaN(parseInt(v!.toString())))
+    .filter((v) => isNaN(Number.parseInt(v!.toString())))
     .map((v) => v!.toString());
 }
 
 export function getEnumValues(enumType: any): number[] {
   return Object.values(enumType)
-    .filter((v) => !isNaN(parseInt(v!.toString())))
-    .map((v) => parseInt(v!.toString()));
+    .filter((v) => !isNaN(Number.parseInt(v!.toString())))
+    .map((v) => Number.parseInt(v!.toString()));
 }
 
 /**

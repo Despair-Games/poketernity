@@ -47,10 +47,9 @@ export class GameWrapper {
     };
 
     Pokemon.prototype.damageAndUpdate = function (...args) {
-      const pokemon: Pokemon = this;
-      const ret = GameWrapper.originalDamageAndUpdate.apply(pokemon, args);
+      const ret = GameWrapper.originalDamageAndUpdate.apply(this, args);
 
-      const side = pokemon.isPlayer() ? "Player" : "Enemy";
+      const side = this.isPlayer() ? "Player" : "Enemy";
       const lowHpMoves = [MoveId.FALSE_SWIPE, MoveId.HARD_PRESS];
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
       let moveName = "N/A";
@@ -73,12 +72,12 @@ export class GameWrapper {
        */
       if (
         ret > 0
-        && pokemon.getHpRatio() < 0.2
-        && !pokemon.isFainted()
-        && !pokemon.getTag(BattlerTagType.ENDURING)
+        && this.getHpRatio() < 0.2
+        && !this.isFainted()
+        && !this.getTag(BattlerTagType.ENDURING)
         && !isLowHpMove
       ) {
-        const line1 = `Caution: ${side} ${pokemon.name} was damaged to low HP (${pokemon.hp}/${pokemon.getMaxHp()}) by the move ${moveName}!\n`;
+        const line1 = `Caution: ${side} ${this.name} was damaged to low HP (${this.hp}/${this.getMaxHp()}) by the move ${moveName}!\n`;
         const line2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
         MockConsole.queuePostTestWarning(line1 + line2);
         console.warn(line1 + line2);

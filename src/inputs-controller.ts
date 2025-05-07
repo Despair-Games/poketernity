@@ -82,7 +82,7 @@ export class InputsController {
   public gamepadSupport: boolean = true;
   public selectedDevice;
 
-  private disconnectedGamepads: Array<String> = new Array();
+  private disconnectedGamepads: Array<string> = new Array();
 
   public lastSource: string = "keyboard";
   private inputInterval: NodeJS.Timeout[] = new Array();
@@ -212,7 +212,7 @@ export class InputsController {
    * @param gamepad - The identifier of the gamepad to set as chosen.
    * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
-  setChosenGamepad(gamepad: String, emitInitEvent: boolean = true): void {
+  setChosenGamepad(gamepad: string, emitInitEvent: boolean = true): void {
     this.deactivatePressedKey();
     this.initChosenGamepad(gamepad, emitInitEvent);
   }
@@ -222,7 +222,7 @@ export class InputsController {
    *
    * @param layoutKeyboard - The identifier of the keyboard layout to set as chosen.
    */
-  setChosenKeyboardLayout(layoutKeyboard: String): void {
+  setChosenKeyboardLayout(layoutKeyboard: string): void {
     this.deactivatePressedKey();
     this.initChosenLayoutKeyboard(layoutKeyboard);
   }
@@ -231,7 +231,7 @@ export class InputsController {
    * Retrieves the identifiers of all connected gamepads, excluding any that are currently marked as disconnected.
    * @returns Array<String> An array of strings representing the IDs of the connected gamepads.
    */
-  getGamepadsName(): Array<String> {
+  getGamepadsName(): Array<string> {
     return this.gamepads.filter((g) => !this.disconnectedGamepads.includes(g.id)).map((g) => g.id);
   }
 
@@ -241,7 +241,7 @@ export class InputsController {
    * @param gamepadName - Optional parameter to specify the name of the gamepad to initialize as chosen.
    * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
-  initChosenGamepad(gamepadName?: String, emitInitEvent: boolean = true): void {
+  initChosenGamepad(gamepadName?: string, emitInitEvent: boolean = true): void {
     if (gamepadName) {
       this.selectedDevice[Device.GAMEPAD] = gamepadName.toLowerCase();
     }
@@ -255,7 +255,7 @@ export class InputsController {
    * If a layout name is provided, it uses that as the chosen layout; otherwise, it defaults to the currently chosen layout.
    * @param layoutKeyboard Optional parameter to specify the name of the keyboard layout to initialize as chosen.
    */
-  initChosenLayoutKeyboard(layoutKeyboard?: String): void {
+  initChosenLayoutKeyboard(layoutKeyboard?: string): void {
     if (layoutKeyboard) {
       this.selectedDevice[Device.KEYBOARD] = layoutKeyboard.toLowerCase();
     }
@@ -334,10 +334,7 @@ export class InputsController {
    */
   refreshGamepads(): void {
     // Sometimes, gamepads are undefined. For some reason.
-    this.gamepads =
-      globalScene.input.gamepad?.gamepads.filter(function (el) {
-        return el !== null;
-      }) ?? [];
+    this.gamepads = globalScene.input.gamepad?.gamepads.filter((el) => el !== null) ?? [];
 
     for (const [index, thisGamepad] of this.gamepads.entries()) {
       thisGamepad.index = index; // Overwrite the gamepad index, in case we had undefined gamepads earlier

@@ -314,7 +314,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       messages.push(
-        i18next.t(getStatStageChangeDescriptionKey(Math.abs(parseInt(rl)), stages >= 1), {
+        i18next.t(getStatStageChangeDescriptionKey(Math.abs(Number.parseInt(rl)), stages >= 1), {
           pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
           stats: statsFragment,
           count: relStageStats.length,

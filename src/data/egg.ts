@@ -444,7 +444,7 @@ export class Egg {
 
     let speciesPool = Object.keys(speciesEggTiers)
       .filter((s) => speciesEggTiers[s] === this.tier)
-      .map((s) => parseInt(s) as SpeciesId)
+      .map((s) => Number.parseInt(s) as SpeciesId)
       .filter((s) => !pokemonPreEvolutions.hasOwnProperty(s) && ignoredSpecies.indexOf(s) === -1);
 
     // If this is the 10th egg without unlocking something new, attempt to force it.
@@ -600,7 +600,7 @@ export class Egg {
 export function getValidLegendaryGachaSpecies(): SpeciesId[] {
   return Object.entries(speciesEggTiers)
     .filter((s) => s[1] === EggTier.LEGENDARY)
-    .map((s) => parseInt(s[0]))
+    .map((s) => Number.parseInt(s[0]))
     .filter((s) => s !== SpeciesId.ETERNATUS);
 }
 

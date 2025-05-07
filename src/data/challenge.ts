@@ -406,7 +406,7 @@ export class SingleGenerationChallenge extends Challenge {
     return false;
   }
 
-  override applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
+  override applyFixedBattle(waveIndex: number, battleConfig: FixedBattleConfig): boolean {
     let trainerTypes: TrainerType[] = [];
     switch (waveIndex) {
       case 182:

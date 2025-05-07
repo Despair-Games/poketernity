@@ -1158,14 +1158,13 @@ export default class BattleScene extends SceneBase {
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
-          .map((mp) =>
+          .flatMap((mp) =>
             Object.values(mp)
               .flat()
               .map((mt) => mt.modifierType)
               .filter((mt) => "localize" in mt)
               .map((lpb) => lpb as unknown as Localizable),
-          )
-          .flat(),
+          ),
       ];
       for (const item of localizable) {
         item.localize();

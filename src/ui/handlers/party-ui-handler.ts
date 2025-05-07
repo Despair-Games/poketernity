@@ -659,7 +659,7 @@ export class PartyUiHandler extends MessageUiHandler {
     }
 
     for (const p in party) {
-      const slotIndex = parseInt(p);
+      const slotIndex = Number.parseInt(p);
       const partySlot = new PartySlot(slotIndex, party[p], this.iconAnimHandler, this.partyUiMode, this.tmMoveId);
       globalScene.add.existing(partySlot);
       this.partySlotsContainer.add(partySlot);

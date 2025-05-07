@@ -104,8 +104,6 @@ export class ModifierBar extends Phaser.GameObjects.Container {
       ? nonPokemonSpecificModifiers
       : nonPokemonSpecificModifiers.concat(pokemonSpecificModifiers);
 
-    const thisArg = this;
-
     sortedVisibleIconModifiers.forEach((modifier: PersistentModifier, i: number) => {
       const icon = modifier.getIcon();
       if (i >= iconOverflowIndex) {
@@ -117,13 +115,13 @@ export class ModifierBar extends Phaser.GameObjects.Container {
       icon.on("pointerover", () => {
         globalScene.ui.showTooltip(modifier.type.name, modifier.type.getDescription());
         if (this.modifierCache && this.modifierCache.length > iconOverflowIndex) {
-          thisArg.updateModifierOverflowVisibility(true);
+          this.updateModifierOverflowVisibility(true);
         }
       });
       icon.on("pointerout", () => {
         globalScene.ui.hideTooltip();
         if (this.modifierCache && this.modifierCache.length > iconOverflowIndex) {
-          thisArg.updateModifierOverflowVisibility(false);
+          this.updateModifierOverflowVisibility(false);
         }
       });
     });

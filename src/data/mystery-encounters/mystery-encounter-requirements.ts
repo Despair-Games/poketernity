@@ -775,8 +775,7 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
       && pokemonFormChanges[pokemon.species.speciesId]
         .filter((fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger))
         // Returns true if any form changes match this item
-        .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
-        .flat()
+        .flatMap((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
         .flatMap((fc) => fc.item)
         .includes(formChangeItem)
     ) {

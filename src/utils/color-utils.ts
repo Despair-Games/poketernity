@@ -24,9 +24,9 @@ export function deltaRgb(rgb1: number[], rgb2: number[]): number {
 export function rgbHexToRgba(hex: string): { r: number; g: number; b: number; a: number } {
   const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i) ?? ["000000", "00", "00", "00"];
   return {
-    r: parseInt(color[1], 16),
-    g: parseInt(color[2], 16),
-    b: parseInt(color[3], 16),
+    r: Number.parseInt(color[1], 16),
+    g: Number.parseInt(color[2], 16),
+    b: Number.parseInt(color[3], 16),
     a: 255,
   };
 }

@@ -1588,7 +1588,7 @@ export class TrainerConfig {
 
     if (this.partyMemberFuncs) {
       Object.keys(this.partyMemberFuncs).forEach((index) => {
-        clone = clone.setPartyMemberFunc(parseInt(index, 10), this.partyMemberFuncs[index]);
+        clone = clone.setPartyMemberFunc(Number.parseInt(index, 10), this.partyMemberFuncs[index]);
       });
     }
 

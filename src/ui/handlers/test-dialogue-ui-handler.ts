@@ -42,7 +42,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     const keysInArrays = flattenKeys(i18next.getDataByLanguage(String(i18next.resolvedLanguage))).filter(
       (t) => t.length > 0,
     ); // Array of arrays
-    const keys = keysInArrays.flat(Infinity).map(String); // One array of string
+    const keys = keysInArrays.flat(Number.POSITIVE_INFINITY).map(String); // One array of string
     this.keys = keys;
   }
 

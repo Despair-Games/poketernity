@@ -56,7 +56,7 @@ describe("check if every variant's sprite are correctly set", () => {
           for (const key of Object.keys(data)) {
             if (mlist[name][key] !== 1) {
               // if 2, json should NOT be there
-              const urlSpriteJsonFile = `${dirpath}${name}_${parseInt(key, 10) + 1}.json`;
+              const urlSpriteJsonFile = `${dirpath}${name}_${Number.parseInt(key, 10) + 1}.json`;
               if (fs.existsSync(urlSpriteJsonFile)) {
                 errors.push(`[${name}] [${mlist[name]}] - Remove json file ${key} - ${trimmedFilePath}`);
               }
@@ -79,7 +79,7 @@ describe("check if every variant's sprite are correctly set", () => {
         } else if (elm === 1) {
           errors.push(` masterlist value should be 2 for ${key} - ${dirPath}`);
         } else if (elm === 2) {
-          url = `${key}_${parseInt(index, 10) + 1}.png`;
+          url = `${key}_${Number.parseInt(index, 10) + 1}.png`;
           const filePath = `${dirPath}${url}`;
           if (!fs.existsSync(filePath)) {
             errors.push(filePath);

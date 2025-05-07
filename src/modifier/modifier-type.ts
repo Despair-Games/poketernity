@@ -740,7 +740,8 @@ enum AttackTypeBoosterItem {
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   public moveType: ElementalType;
   public boostPercent: number;
 
@@ -780,7 +781,8 @@ export type SpeciesStatBoosterItem = keyof typeof SpeciesStatBoosterModifierType
  */
 export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private key: SpeciesStatBoosterItem;
 
   constructor(key: SpeciesStatBoosterItem) {
@@ -837,7 +839,8 @@ export class AllPokemonLevelIncrementModifierType extends ModifierType {
 
 export class BaseStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private stat: PermanentStat;
   private key: string;
 
@@ -869,7 +872,8 @@ export class BaseStatBoosterModifierType
  */
 export class PokemonBaseStatTotalModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: number;
 
   constructor(statModifier: number) {
@@ -907,7 +911,8 @@ export class PokemonBaseStatTotalModifierType
  */
 export class PokemonBaseStatFlatModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: number;
   private readonly stats: Stat[];
 
@@ -1136,8 +1141,7 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
               (fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger) && fc.preFormKey === pokemon.getFormKey(),
             )
             // Returns true if any form changes match this item
-            .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
-            .flat()
+            .flatMap((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
             .flatMap((fc) => fc.item)
             .includes(this.formChangeItem)
         ) {
@@ -1171,15 +1175,13 @@ export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerato
         return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, 20);
       }
 
-      const attackMoveTypes = party
-        .map((p) =>
-          p
-            .getMoveset()
-            .map((m) => m.getMove())
-            .filter((m) => m.isAttackMove())
-            .map((m) => m.type),
-        )
-        .flat();
+      const attackMoveTypes = party.flatMap((p) =>
+        p
+          .getMoveset()
+          .map((m) => m.getMove())
+          .filter((m) => m.isAttackMove())
+          .map((m) => m.type),
+      );
       if (!attackMoveTypes.length) {
         return null;
       }
@@ -1420,7 +1422,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
         ...new Set(
           party
             .filter((p) => pokemonFormChanges.hasOwnProperty(p.species.speciesId))
-            .map((p) => {
+            .flatMap((p) => {
               const formChanges = pokemonFormChanges[p.species.speciesId];
               let formChangeItemTriggers = formChanges
                 .filter(
@@ -1473,8 +1475,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                 }
               }
               return formChangeItemTriggers;
-            })
-            .flat(),
+            }),
         ),
       ]
         .flat()
@@ -1668,7 +1669,7 @@ export function regenerateModifierPoolThresholds(
             const outputWeight = useMaxWeightForOutput ? weightedModifierType.maxWeight : weight;
             modifierTableData[modifierId] = {
               weight: outputWeight,
-              tier: parseInt(t),
+              tier: Number.parseInt(t),
               tierPercent: 0,
               totalPercent: 0,
             };
@@ -2061,11 +2062,11 @@ function getNewModifierTypeOption(
   }
 
   const tierThresholds = Object.keys(thresholds[tier]);
-  const totalWeight = parseInt(tierThresholds[tierThresholds.length - 1]);
+  const totalWeight = Number.parseInt(tierThresholds[tierThresholds.length - 1]);
   const value = randSeedInt(totalWeight);
   let index: number | undefined;
   for (const t of tierThresholds) {
-    const threshold = parseInt(t);
+    const threshold = Number.parseInt(t);
     if (value < threshold) {
       index = thresholds[tier][threshold];
       break;
