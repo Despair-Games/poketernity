@@ -95,7 +95,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
       }
       return false;
-    } else if (battleType !== BattleType.WILD) {
+    }
+    if (battleType !== BattleType.WILD) {
       // Switch out logic for enemy trainers
       // Find indices of off-field Pokemon that are eligible to be switched into
       const eligibleNewIndices: number[] = [];

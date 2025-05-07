@@ -15,9 +15,8 @@ export class WeatherInstantChargeAttr extends InstantChargeAttr {
 
       if (isNil(currentWeather?.weatherType)) {
         return false;
-      } else {
-        return !currentWeather?.isEffectSuppressed() && weatherTypes.includes(currentWeather?.weatherType);
       }
+      return !currentWeather?.isEffectSuppressed() && weatherTypes.includes(currentWeather?.weatherType);
     });
   }
 }

@@ -23,17 +23,16 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
 
     if (target.hasNonVolatileStatusEffect()) {
       return false;
-    } else {
-      const canSetStatus = target.canSetStatus(statusToApply, true, false, user);
-      const trySetStatus = canSetStatus ? target.trySetStatus(statusToApply, true, user) : false;
-
-      if (trySetStatus && user.hasNonVolatileStatusEffect()) {
-        // PsychoShiftTag is added to the user if move succeeds so that the user is healed of its status effect after its move
-        user.addTag(BattlerTagType.PSYCHO_SHIFT);
-      }
-
-      return trySetStatus;
     }
+    const canSetStatus = target.canSetStatus(statusToApply, true, false, user);
+    const trySetStatus = canSetStatus ? target.trySetStatus(statusToApply, true, user) : false;
+
+    if (trySetStatus && user.hasNonVolatileStatusEffect()) {
+      // PsychoShiftTag is added to the user if move succeeds so that the user is healed of its status effect after its move
+      user.addTag(BattlerTagType.PSYCHO_SHIFT);
+    }
+
+    return trySetStatus;
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {

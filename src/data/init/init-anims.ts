@@ -76,7 +76,7 @@ export async function populateAnims() {
       const fieldName = field.slice(0, field.indexOf(":"));
       const fieldData = field.slice(fieldName.length + 1, field.lastIndexOf("\n")).trim();
       switch (fieldName) {
-        case "array":
+        case "array": {
           const framesData = fieldData.split("  - - - ").slice(1);
           for (let fd = 0; fd < framesData.length; fd++) {
             anim.frames.push([]);
@@ -115,11 +115,13 @@ export async function populateAnims() {
             }
           }
           break;
-        case "graphic":
+        }
+        case "graphic": {
           const graphic = fieldData !== "''" ? fieldData : "";
           anim.graphic = graphic.indexOf(".") > -1 ? graphic.slice(0, fieldData.indexOf(".")) : graphic;
           break;
-        case "timing":
+        }
+        case "timing": {
           const timingEntries = fieldData.split("- !ruby/object:PBAnimTiming ").slice(1);
           for (let t = 0; t < timingEntries.length; t++) {
             const timingData = timingEntries[t]
@@ -201,6 +203,7 @@ export async function populateAnims() {
             anim.frameTimedEvents.get(frameIndex)!.push(timedEvent); // TODO: is this bang correct?
           }
           break;
+        }
         case "position":
           anim.position = Number.parseInt(fieldData);
           break;

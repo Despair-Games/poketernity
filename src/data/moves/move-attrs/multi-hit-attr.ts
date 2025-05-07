@@ -81,13 +81,14 @@ export class MultiHitAttr extends MoveAttr {
         applyAbAttrs<MaxMultiHitAbAttr>(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
         if (hitValue.value >= 13) {
           return 2;
-        } else if (hitValue.value >= 6) {
-          return 3;
-        } else if (hitValue.value >= 3) {
-          return 4;
-        } else {
-          return 5;
         }
+        if (hitValue.value >= 6) {
+          return 3;
+        }
+        if (hitValue.value >= 3) {
+          return 4;
+        }
+        return 5;
       }
       case MultiHitType._2:
         return 2;
@@ -95,12 +96,13 @@ export class MultiHitAttr extends MoveAttr {
         return 3;
       case MultiHitType._10:
         return 10;
-      case MultiHitType.BEAT_UP:
+      case MultiHitType.BEAT_UP: {
         const party = user.getParty();
         // No status means the ally pokemon can contribute to Beat Up
         return party.reduce((total, pokemon) => {
           return total + (pokemon.id === user.id ? 1 : pokemon.getStatusEffect(true) ? 0 : 1);
         }, 0);
+      }
     }
   }
 }

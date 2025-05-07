@@ -10,10 +10,6 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
  * @extends VariableAtkAttr
  */
 export class TargetAtkUserAtkAttr extends VariableAtkAttr {
-  constructor() {
-    super();
-  }
-
   override getStatOverride(user: Pokemon, target: Pokemon, move: Move, isCritical: boolean) {
     return target.getStageMultipliedStat(Stat.ATK, user, move, AbilityApplyMode.DEFAULT, isCritical);
   }

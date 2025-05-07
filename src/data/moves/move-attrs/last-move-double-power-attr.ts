@@ -50,9 +50,8 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
         if (lastMove?.result === MoveResult.SUCCESS && lastMove?.move.id === this.moveId) {
           power.value *= 2;
           return true;
-        } else {
-          break;
         }
+        break;
       }
     }
 
