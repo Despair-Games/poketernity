@@ -82,3 +82,6 @@ export const GULP_MISSILE_BATTLER_TAG_TYPES = Object.freeze([
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that boost an {@linkcode ElementalType}. */
 export const TYPE_BOOST_TAG_TYPES = Object.freeze([BattlerTagType.FIRE_BOOST, BattlerTagType.CHARGED]);
+
+/** All {@linkcode BattlerTagType | BattlerTagTypes} that make a pokemon "exposed". */
+export const EXPOSED_TAG_TYPES = Object.freeze([BattlerTagType.IGNORE_GHOST, BattlerTagType.IGNORE_DARK]);

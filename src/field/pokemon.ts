@@ -18,6 +18,7 @@ import type { AnySound } from "#app/audio-manager";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
+  EXPOSED_TAG_TYPES,
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
 } from "#app/constants/battler-tag-constants";
@@ -2853,7 +2854,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, MAX_STAT_STAGE);
     targetEvaStage.value = ignoreEvaStatStage.value ? 0 : targetEvaStage.value;
 
-    if (target.findTag((t) => t instanceof ExposedTag)) {
+    if (target.hasTag(...EXPOSED_TAG_TYPES)) {
       targetEvaStage.value = Math.min(0, targetEvaStage.value);
     }
     const accuracyMultiplier = new NumberHolder(1);
