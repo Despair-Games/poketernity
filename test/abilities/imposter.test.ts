@@ -23,25 +23,19 @@ describe("Abilities - Imposter", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
-      .battleType("single")
-      .enemySpecies(SpeciesId.MEW)
-      .enemyLevel(200)
-      .enemyAbility(AbilityId.BEAST_BOOST)
-      .enemyPassiveAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(MoveId.SPLASH)
-      .ability(AbilityId.IMPOSTER)
-      .moveset(MoveId.SPLASH);
+    game.override.battleType("single").enemySpecies(SpeciesId.MAGIKARP).ability(AbilityId.IMPOSTER).enemyLevel(200);
   });
 
   it("should copy species, ability, gender, all stats except HP, all stat stages, moveset, and types of target", async () => {
-    await game.classicMode.startBattle([SpeciesId.DITTO]);
+    await game.classicMode.runToSummon([SpeciesId.DITTO]);
 
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    game.move.changeMoveset(player, MoveId.CALM_MIND);
+    game.move.changeMoveset(enemy, MoveId.SPLASH);
+
+    await game.phaseInterceptor.to("CommandPhase");
 
     expect(player.getSpeciesForm().speciesId).toBe(enemy.getSpeciesForm().speciesId);
     expect(player.getAbility()).toBe(enemy.getAbility());
@@ -61,7 +55,7 @@ describe("Abilities - Imposter", () => {
 
     expect(playerMoveset.length).toBe(enemyMoveset.length);
     for (let i = 0; i < playerMoveset.length && i < enemyMoveset.length; i++) {
-      expect(playerMoveset[i]?.moveId).toBe(enemyMoveset[i]?.moveId);
+      expect(playerMoveset[i].moveId).toBe(enemyMoveset[i].moveId);
     }
 
     const playerTypes = player.getTypes();
@@ -74,18 +68,21 @@ describe("Abilities - Imposter", () => {
   });
 
   it("should copy in-battle overridden stats", async () => {
-    game.override.enemyMoveset([MoveId.POWER_SPLIT]);
+    await game.classicMode.runToSummon([SpeciesId.DITTO]);
 
-    await game.classicMode.startBattle([SpeciesId.DITTO]);
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    game.move.changeMoveset(player, MoveId.SPLASH);
+    game.move.changeMoveset(enemy, MoveId.POWER_SPLIT);
+
+    await game.phaseInterceptor.to("CommandPhase");
 
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.move.select(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);
     expect(enemy.getStat(Stat.ATK, false)).toBe(avgAtk);
@@ -95,24 +92,27 @@ describe("Abilities - Imposter", () => {
   });
 
   it("should set each move's pp to a maximum of 5", async () => {
-    game.override.enemyMoveset([MoveId.SWORDS_DANCE, MoveId.GROWL, MoveId.SKETCH, MoveId.RECOVER]);
+    await game.classicMode.runToSummon([SpeciesId.DITTO]);
 
-    await game.classicMode.startBattle([SpeciesId.DITTO]);
-    const player = game.scene.getPlayerPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.move.changeMoveset(player, MoveId.SPLASH);
+    game.move.changeMoveset(enemy, [MoveId.SWORDS_DANCE, MoveId.GROWL, MoveId.SKETCH, MoveId.RECOVER]);
 
-    player.getMoveset().forEach((move) => {
+    await game.phaseInterceptor.to("CommandPhase");
+
+    const moveset = player.getMoveset();
+    expect(moveset).toHaveLength(4);
+
+    for (const move of moveset) {
       // Should set correct maximum PP without touching `ppUp`
-      if (move) {
-        if (move.moveId === MoveId.SKETCH) {
-          expect(move.getMovePp()).toBe(1);
-        } else {
-          expect(move.getMovePp()).toBe(5);
-        }
-        expect(move.ppUp).toBe(0);
+      if (move.moveId === MoveId.SKETCH) {
+        expect(move.getMovePp()).toBe(1);
+      } else {
+        expect(move.getMovePp()).toBe(5);
       }
-    });
+      expect(move.ppUp).toBe(0);
+    }
   });
 });
