@@ -5,7 +5,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 
 /**
@@ -19,16 +18,6 @@ import { MoveId } from "#enums/move-id";
  * @implements `RestrictingBattlerTag`
  */
 export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
-  constructor(
-    tagType: BattlerTagType,
-    lapseType: BattlerTagLapseType | BattlerTagLapseType[],
-    turnCount: number,
-    sourceMoveId?: MoveId,
-    sourceId?: number,
-  ) {
-    super(tagType, lapseType, turnCount, sourceMoveId, sourceId);
-  }
-
   /** @override */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {

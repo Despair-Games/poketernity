@@ -48,8 +48,7 @@ export class GrudgeTag extends BattlerTag {
         }
       }
       return false;
-    } else {
-      return super.lapse(pokemon, lapseType);
     }
+    return super.lapse(pokemon, lapseType);
   }
 }

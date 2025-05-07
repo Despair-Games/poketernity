@@ -72,8 +72,7 @@ export class PowderTag extends BattlerTag {
         }
       }
       return true;
-    } else {
-      return super.lapse(pokemon, lapseType);
     }
+    return super.lapse(pokemon, lapseType);
   }
 }
