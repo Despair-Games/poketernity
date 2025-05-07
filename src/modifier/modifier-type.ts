@@ -193,7 +193,8 @@ export class ModifierType {
           if (weight > 0) {
             this.tier = modifier.modifierType.tier;
             return this;
-          } else if (isNil(defaultTier)) {
+          }
+          if (isNil(defaultTier)) {
             // If weight is 0, keep track of the first tier where the item was found
             defaultTier = modifier.modifierType.tier;
           }
@@ -210,7 +211,7 @@ export class ModifierType {
   }
 
   newModifier(...args: any[]): Modifier | null {
-    return this.newModifierFunc && this.newModifierFunc(this, args);
+    return this.newModifierFunc?.(this, args);
   }
 
   isPokemonHeldItemModifierType(): this is PokemonHeldItemModifierType {
@@ -1441,8 +1442,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                 .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
                 .filter(
                   (t) =>
-                    t
-                    && t.active
+                    t?.active
                     && !globalScene.findModifier(
                       (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === p.id && m.formChangeItem === t.item,
                     ),
@@ -1610,13 +1610,13 @@ let modifierPoolThresholds = {};
 let ignoredPoolIndexes = {};
 
 let dailyStarterModifierPoolThresholds = {};
-let ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 let enemyModifierPoolThresholds = {};
-let enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 let enemyBuffModifierPoolThresholds = {};
-let enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 const tierWeights = [768 / 1024, 195 / 1024, 48 / 1024, 12 / 1024, 1 / 1024];
 /**
@@ -1710,15 +1710,15 @@ export function regenerateModifierPoolThresholds(
     case ModifierPoolType.WILD:
     case ModifierPoolType.TRAINER:
       enemyModifierPoolThresholds = thresholds;
-      enemyIgnoredPoolIndexes = ignoredIndexes;
+      _enemyIgnoredPoolIndexes = ignoredIndexes;
       break;
     case ModifierPoolType.ENEMY_BUFF:
       enemyBuffModifierPoolThresholds = thresholds;
-      enemyBuffIgnoredPoolIndexes = ignoredIndexes;
+      _enemyBuffIgnoredPoolIndexes = ignoredIndexes;
       break;
     case ModifierPoolType.DAILY_STARTER:
       dailyStarterModifierPoolThresholds = thresholds;
-      ignoredDailyStarterPoolIndexes = ignoredIndexes;
+      _ignoredDailyStarterPoolIndexes = ignoredIndexes;
       break;
   }
 }
