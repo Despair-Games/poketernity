@@ -54,12 +54,14 @@ export class AbilityChangeAttr extends MoveEffectAttr {
    * grants (+2) effect score.
    * @see {@linkcode HIGH_VALUE_ABILITIES}
    */
-  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  override getEffectScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const maxScoreBonus = 2;
+
     const hasHighValueAbility = target
       .getAbilities({ canApplyOnly: true, revealedOnly: true })
       .filter((ab) => !ab.passive) // Remove this if passives are made to be overwritten
       .some((ab) => HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
-    return hasHighValueAbility && user.isOpponent(target) ? 2 : 0;
+    return hasHighValueAbility ? maxScoreBonus : 0;
   }
 }

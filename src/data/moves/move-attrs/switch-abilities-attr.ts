@@ -43,6 +43,8 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
    * has one of Huge Power, Pure Power, or Contrary, grants a (+2) effect score bonus
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /** Bonus for if the user would benefit greatly from swapping abilities with the target */
+    const favorableSwapBonus = 2;
     /**
      * Note: this only uses a subset of {@linkcode HIGH_VALUE_ABILITIES} since
      * - Desolate Land and Primordial Sea are symmetrical effects
@@ -55,7 +57,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
       .some((ab) => !ab.passive && highValueSwappableAbilities.includes(ab.ability.id));
 
     if (DETRIMENTAL_ABILITIES.includes(user.getAbility().id) || targetHasHighValueAbility) {
-      return 2;
+      return favorableSwapBonus;
     }
     return 0;
   }

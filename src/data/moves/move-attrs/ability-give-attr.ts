@@ -42,8 +42,19 @@ export class AbilityGiveAttr extends MoveEffectAttr {
    * grants (+1) with a 50% chance of additional (+1) to effect score.
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /**
+     * Penalty for if the user has a {@link HIGH_VALUE_ABILITIES | high-value ability}
+     * that shouldn't be given to an opponent
+     */
+    const userHasHighValueAbilityPenalty = -5;
+    /**
+     * Bonus for if the user has a {@link DETRIMENTAL_ABILITIES | detrimental ability}
+     * to give to the target opponent
+     */
+    const favorableOverrideBonus = 1 + this.getRandomScore(user, 50);
+
     if (HIGH_VALUE_ABILITIES.includes(user.getAbility().id)) {
-      return -5;
+      return userHasHighValueAbilityPenalty;
     }
 
     const userHasDetrimentalAbility = DETRIMENTAL_ABILITIES.includes(user.getAbility().id);
@@ -51,6 +62,10 @@ export class AbilityGiveAttr extends MoveEffectAttr {
       .getAbilities({ revealedOnly: true })
       .some((ab) => !ab.passive && HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
-    return userHasDetrimentalAbility || targetHasHighValueAbility ? 1 + this.getRandomScore(user, 50) : 0;
+    if (userHasDetrimentalAbility || targetHasHighValueAbility) {
+      return favorableOverrideBonus;
+    } else {
+      return 0;
+    }
   }
 }

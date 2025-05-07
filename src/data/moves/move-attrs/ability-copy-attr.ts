@@ -74,10 +74,17 @@ export class AbilityCopyAttr extends MoveEffectAttr {
    * @see {@linkcode DETRIMENTAL_ABILITIES}
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /** Penalty for if the target is known to have a detrimental ability */
+    const unfavorableCopyPenalty = -5;
+    /** Bonus granted for each affected ally with a detrimental ability */
+    const perBenefitBonus = 2;
+    /** The maximum total bonus this effect can grant */
+    const maxScoreBonus = 3;
+
     const targetRevealedAbilityId = target.getAbilities({ revealedOnly: true }).find((ab) => !ab.passive)?.ability.id;
 
-    if (!targetRevealedAbilityId || DETRIMENTAL_ABILITIES.includes(targetRevealedAbilityId)) {
-      return -5;
+    if (targetRevealedAbilityId && DETRIMENTAL_ABILITIES.includes(targetRevealedAbilityId)) {
+      return unfavorableCopyPenalty;
     }
 
     const affectedPokemon: Pokemon[] = [user];
@@ -87,6 +94,6 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     }
 
     const numBenefit = affectedPokemon.filter((p) => DETRIMENTAL_ABILITIES.includes(p.getAbility().id)).length;
-    return Math.min(numBenefit * 2, 3);
+    return Math.min(numBenefit * perBenefitBonus, maxScoreBonus);
   }
 }

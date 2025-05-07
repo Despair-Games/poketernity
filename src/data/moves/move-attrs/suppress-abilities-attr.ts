@@ -38,10 +38,15 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
    * effect score. Otherwise, this has a 60% chance to grant (+1).
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /** Total score if the target opponent has a {@link HIGH_VALUE_ABILITIES | high-value ability} */
+    const highValueSuppressScore = 2;
+    /** Total score if the target opponent does not have a high-value ability */
+    const baseScore = this.getRandomScore(user, 60);
+
     const targetHasHighValueAbility = target
       .getAbilities({ revealedOnly: true })
       .some((ab) => !ab.passive && HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
-    return targetHasHighValueAbility ? 2 : this.getRandomScore(user, 60);
+    return targetHasHighValueAbility ? highValueSuppressScore : baseScore;
   }
 }
