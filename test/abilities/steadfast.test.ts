@@ -34,7 +34,7 @@ describe("Abilities - Steadfast", () => {
       .enemyLevel(100);
   });
 
-  it(`should boost SPD +1 after flinching`, async () => {
+  it("should boost SPD +1 after flinching", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -56,7 +56,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
   });
 
-  it(`should NOT boost SPD when Pokemon does NOT flinch`, async () => {
+  it("should NOT boost SPD when Pokemon does NOT flinch", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -78,7 +78,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
-  it(`should NOT boost SPD if flinching occured after owner acted`, async () => {
+  it("should NOT boost SPD if flinching occured after owner acted", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -150,7 +150,7 @@ describe("Abilities - Steadfast", () => {
       abilityName: "Turboblaze",
       abilityId: AbilityId.TURBOBLAZE,
     },
-  ])(`should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability`, async ({ abilityId }) => {
+  ])("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
     await classicMode.startBattle([SpeciesId.FEEBAS]);

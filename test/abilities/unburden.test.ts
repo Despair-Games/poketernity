@@ -23,9 +23,8 @@ describe("Abilities - Unburden", () => {
     const stackCounts = pokemon.getHeldItems().map((m) => m.getStackCount());
     if (stackCounts.length) {
       return stackCounts.reduce((a, b) => a + b);
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   beforeAll(() => {

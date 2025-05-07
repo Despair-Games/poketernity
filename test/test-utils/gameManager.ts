@@ -61,7 +61,7 @@ import { MockFetch } from "#test/test-utils/mocks/mockFetch";
 import { PhaseInterceptor, type PhaseInterceptorPhase } from "#test/test-utils/phaseInterceptor";
 import { TextInterceptor } from "#test/test-utils/TextInterceptor";
 import { AES, enc } from "crypto-js";
-import fs from "fs";
+import fs from "node:fs";
 import { expect, vi } from "vitest";
 
 /**

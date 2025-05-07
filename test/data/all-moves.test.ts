@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
-import { resolve } from "path";
-import { readFileSync } from "fs";
+import { resolve } from "node:path";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";

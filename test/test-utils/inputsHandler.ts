@@ -3,7 +3,7 @@ import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import type { InputsController } from "#app/inputs-controller";
 import TouchControl from "#app/touch-controls";
 import { holdOn } from "#test/test-utils/gameManagerUtils";
-import fs from "fs";
+import fs from "node:fs";
 import { JSDOM } from "jsdom";
 import Phaser from "phaser";
 import { RESOURCES_FOLDER_PATH } from "#test/test-utils/testUtils";

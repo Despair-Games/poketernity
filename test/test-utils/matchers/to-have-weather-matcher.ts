@@ -53,9 +53,8 @@ export function toHaveWeatherMatcher(
 function toWeatherStr(weatherType?: WeatherType) {
   if (isNil(weatherType)) {
     return "undefined";
-  } else {
-    return capitalizeString(WeatherType[weatherType], "_", false, true);
   }
+  return capitalizeString(WeatherType[weatherType], "_", false, true);
 }
 
 //#endregion

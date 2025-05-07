@@ -96,11 +96,12 @@ export class MockText implements MockGameObject {
   showDialogue(
     keyOrText: string,
     name: string | undefined,
-    delay: number | null = 0,
+    delay: number | null,
     callback: Function,
     callbackDelay?: number,
     promptDelay?: number,
   ) {
+    delay = delay ?? 0;
     this.scene.messageWrapper.showDialogue(keyOrText, name, delay, callback, callbackDelay, promptDelay);
     if (callback) {
       callback();

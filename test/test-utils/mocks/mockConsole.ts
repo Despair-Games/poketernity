@@ -1,4 +1,4 @@
-const util = require("util");
+import util from "node:util";
 
 const originalLog = console.log;
 const originalError = console.error;

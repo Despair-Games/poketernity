@@ -52,9 +52,8 @@ export function toHaveTerrainMatcher(
 function toTerrainStr(terrainType?: TerrainType) {
   if (isNil(terrainType)) {
     return "undefined";
-  } else {
-    return capitalizeString(TerrainType[terrainType], "_", false, true);
   }
+  return capitalizeString(TerrainType[terrainType], "_", false, true);
 }
 
 //#endregion

@@ -12,7 +12,7 @@ import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { MockGameObjectCreator } from "#test/test-utils/mocks/mockGameObjectCreator";
 import { MockLoader } from "#test/test-utils/mocks/mockLoader";
 import { MockTextureManager } from "#test/test-utils/mocks/mockTextureManager";
-import fs from "fs";
+import fs from "node:fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
 import { version } from "../../package.json";
@@ -43,7 +43,9 @@ export class GameWrapper {
     Pokemon.prototype.enableMask = () => null;
     Pokemon.prototype.cry = () => null as any;
     Pokemon.prototype.faintCry = (cb) => {
-      if (cb) cb();
+      if (cb) {
+        cb();
+      }
     };
 
     Pokemon.prototype.damageAndUpdate = function (...args) {
@@ -78,7 +80,7 @@ export class GameWrapper {
         && !isLowHpMove
       ) {
         const line1 = `Caution: ${side} ${this.name} was damaged to low HP (${this.hp}/${this.getMaxHp()}) by the move ${moveName}!\n`;
-        const line2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
+        const line2 = "Make sure that the test cannot break from the Pokemon accidentally fainting!";
         MockConsole.queuePostTestWarning(line1 + line2);
         console.warn(line1 + line2);
       }
@@ -91,7 +93,7 @@ export class GameWrapper {
   setScene(scene: BattleScene) {
     this.scene = scene;
     this.injectMandatory();
-    this.scene.preload && this.scene.preload();
+    this.scene.preload?.();
     this.scene.create();
   }
 
