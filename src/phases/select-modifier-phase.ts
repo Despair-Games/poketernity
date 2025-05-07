@@ -145,25 +145,24 @@ export class SelectModifierPhase extends BattlePhase {
               if (rerollCost < 0 || money < rerollCost) {
                 ui.playError();
                 return false;
-              } else {
-                globalScene.reroll = true;
-                globalScene.phaseManager.unshiftPhase(
-                  new SelectModifierPhase({
-                    rerollCount: this.rerollCount + 1,
-                    modifierTiers: this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
-                  }),
-                );
-
-                ui.clearText();
-                ui.setMessageMode().then(() => super.end());
-
-                if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
-                  globalScene.money -= rerollCost;
-                  globalScene.updateMoneyText();
-                  globalScene.animateMoneyChanged(false);
-                }
-                globalScene.audioManager.playSound("se/buy");
               }
+              globalScene.reroll = true;
+              globalScene.phaseManager.unshiftPhase(
+                new SelectModifierPhase({
+                  rerollCount: this.rerollCount + 1,
+                  modifierTiers: this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
+                }),
+              );
+
+              ui.clearText();
+              ui.setMessageMode().then(() => super.end());
+
+              if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
+                globalScene.money -= rerollCost;
+                globalScene.updateMoneyText();
+                globalScene.animateMoneyChanged(false);
+              }
+              globalScene.audioManager.playSound("se/buy");
               break;
             case 1:
               ui.setModeWithoutClear<PartyUiHandler>(
@@ -216,7 +215,7 @@ export class SelectModifierPhase extends BattlePhase {
                 );
               });
               break;
-            case 3:
+            case 3: {
               if (rerollCost < 0) {
                 // Reroll lock button is also disabled when reroll is disabled
                 ui.playError();
@@ -229,6 +228,7 @@ export class SelectModifierPhase extends BattlePhase {
               uiHandler.updateLockRaritiesText();
               uiHandler.updateRerollCostText();
               return false;
+            }
           }
           return true;
         case 1:
@@ -243,7 +243,7 @@ export class SelectModifierPhase extends BattlePhase {
             modifierType = this.typeOptions[cursor].type;
           }
           break;
-        default:
+        default: {
           const shopOptions = getPlayerShopModifierTypeOptionsForWave(waveIndex, globalScene.getWaveMoneyAmount(1));
           const shopOption =
             shopOptions[
@@ -257,6 +257,7 @@ export class SelectModifierPhase extends BattlePhase {
           globalScene.applyModifier(HealShopCostModifier, true, healingItemCost);
           cost = healingItemCost.value;
           break;
+        }
       }
 
       if (cost && money < cost && !Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
@@ -377,7 +378,8 @@ export class SelectModifierPhase extends BattlePhase {
     let baseValue = 0;
     if (Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
       return baseValue;
-    } else if (lockRarities) {
+    }
+    if (lockRarities) {
       const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be extracted to a const
       for (const opt of this.typeOptions) {
         baseValue += tierValues[opt.type.tier ?? 0];

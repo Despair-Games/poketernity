@@ -10,17 +10,12 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;
-
-  constructor(battlerIndex: BattlerIndex) {
-    super(battlerIndex);
-  }
 
   public override start(): void {
     const pokemon = this.getPokemon();

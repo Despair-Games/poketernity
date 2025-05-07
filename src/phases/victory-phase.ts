@@ -17,7 +17,6 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -32,10 +31,6 @@ import { PhaseId } from "#enums/phase-id";
  */
 export class VictoryPhase extends PokemonPhase {
   override readonly id = PhaseId.VICTORY;
-
-  constructor(battlerIndex: BattlerIndex | number) {
-    super(battlerIndex);
-  }
 
   public override start(): void {
     super.start();

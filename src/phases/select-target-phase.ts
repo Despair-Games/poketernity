@@ -12,10 +12,6 @@ import { CommandPhase } from "./command-phase";
 export class SelectTargetPhase extends PokemonPhase {
   override readonly id = PhaseId.SELECT_TARGET;
 
-  constructor(fieldIndex: number) {
-    super(fieldIndex);
-  }
-
   public override start(): void {
     super.start();
 

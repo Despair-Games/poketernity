@@ -96,9 +96,10 @@ export class PokemonHealPhase extends CommonAnimPhase {
     if (healBlock && this.hpHealed > 0) {
       globalScene.phaseManager.queueMessagePhase(healBlock.onActivation(pokemon));
       // TODO: is this necessary?
-      delete this.message;
+      this.message = undefined;
       return super.end();
-    } else if (healOrDamage) {
+    }
+    if (healOrDamage) {
       const hpRestoreMultiplier = new NumberHolder(1);
       if (!this.revive) {
         globalScene.applyModifiers(HealingBoosterModifier, this.isPlayer, hpRestoreMultiplier);

@@ -21,10 +21,6 @@ export class AttemptRunPhase extends PokemonPhase {
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override
 
-  constructor(fieldIndex: number) {
-    super(fieldIndex);
-  }
-
   public override start(): void {
     super.start();
 

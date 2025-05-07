@@ -155,7 +155,7 @@ export class StatStageChangePhase extends PokemonPhase {
           : Math.max(pokemon.getStatStage(s) + stages.value, -6)) - pokemon.getStatStage(s),
     );
 
-    this.onChange && this.onChange(filteredStats, relLevels, this.getPokemon());
+    this.onChange?.(filteredStats, relLevels, this.getPokemon());
 
     const end = (): void => {
       if (this.showMessage) {

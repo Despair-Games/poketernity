@@ -108,16 +108,15 @@ export class LoginPhase extends Phase {
           super.end();
         }
         return null;
-      } else {
-        gameData.loadSystem().then((success) => {
-          if (success || BYPASS_LOGIN) {
-            this.end();
-          } else {
-            ui.setMessageMode();
-            ui.showText(i18next.t("menu:failedToLoadSaveData"));
-          }
-        });
       }
+      gameData.loadSystem().then((success) => {
+        if (success || BYPASS_LOGIN) {
+          this.end();
+        } else {
+          ui.setMessageMode();
+          ui.showText(i18next.t("menu:failedToLoadSaveData"));
+        }
+      });
     });
   }
 

@@ -7,10 +7,6 @@ import { PhaseId } from "#enums/phase-id";
 export class SummonMissingPhase extends SummonPhase {
   override readonly id = PhaseId.SUMMON_MISSING;
 
-  constructor(fieldIndex: number) {
-    super(fieldIndex);
-  }
-
   protected override preSummon(): void {
     globalScene.ui.showText(
       i18next.t("battle:sendOutPokemon", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }),

@@ -13,7 +13,7 @@ export abstract class PokemonPhase extends FieldPhase {
   public isPlayer: boolean;
   public fieldIndex: number;
 
-  constructor(battlerIndex?: BattlerIndex | number) {
+  constructor(battlerIndex: BattlerIndex | number) {
     super();
 
     battlerIndex =

@@ -17,6 +17,7 @@ export class CommonAnimPhase extends PokemonPhase {
   private readonly targetIndex?: BattlerIndex;
 
   constructor(anim: CommonAnim, battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex) {
+    // @ts-expect-error - TODO: refactor `PokemonPhase`
     super(battlerIndex);
 
     this.anim = anim;
