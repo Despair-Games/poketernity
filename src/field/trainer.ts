@@ -142,7 +142,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
     if (this.config.hasDouble && this.config.spriteNameLeft && this.config.spriteNameRight) {
       if (trainerSlot === TrainerSlot.TRAINER) {
         return this.config.name;
-      } else if (trainerSlot === TrainerSlot.TRAINER_PARTNER) {
+      }
+      if (trainerSlot === TrainerSlot.TRAINER_PARTNER) {
         return this.config.nameFemale;
       }
     }
