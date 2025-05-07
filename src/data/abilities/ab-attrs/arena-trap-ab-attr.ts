@@ -43,7 +43,8 @@ export class ArenaTrapAbAttr extends AbAttr {
       ) {
         trapped.value = false;
         return false;
-      } else if (trappedPokemon.hasAbility(AbilityId.RUN_AWAY)) {
+      }
+      if (trappedPokemon.hasAbility(AbilityId.RUN_AWAY)) {
         trapped.value = false;
         return false;
       }

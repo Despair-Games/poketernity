@@ -1,9 +1,7 @@
-import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Move } from "#app/data/moves/move";
 import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#app/data/moves/move-attrs/neutral-damage-against-flying-type-multiplier-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
-import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
@@ -15,10 +13,6 @@ import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
  * @extends TypeImmunityAbAttr
  */
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
-  constructor(immuneType: ElementalType, condition?: AbAttrCondition) {
-    super(immuneType, condition);
-  }
-
   override apply(
     pokemon: Pokemon,
     simulated: boolean,

@@ -30,9 +30,8 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
 
     if (this.itemType === "EATEN_BERRIES") {
       return this.createEatenBerry(pokemon, simulated);
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**

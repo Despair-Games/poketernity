@@ -71,10 +71,12 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
         if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        } else if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(AbilityId.SHEER_FORCE)) {
+        }
+        if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(AbilityId.SHEER_FORCE)) {
           return false;
           // Activate only after the last hit of multistrike moves
-        } else if (source.turnData.hitsLeft > 1) {
+        }
+        if (source.turnData.hitsLeft > 1) {
           return false;
         }
         if (source.turnData.hitCount > 1) {
@@ -93,12 +95,10 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
           }
         }
         return this.helper.switchOutLogic(pokemon);
-      } else {
-        return false;
       }
-    } else {
       return false;
     }
+    return false;
   }
 
   public getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
