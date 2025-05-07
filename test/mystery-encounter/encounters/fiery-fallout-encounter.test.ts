@@ -3,7 +3,6 @@ import * as InitMoveAnim from "#app/data/init/init-move-anim";
 import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { Status } from "#app/data/status-effect";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
@@ -214,7 +213,8 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
       const party = scene.getPlayerParty();
       const lapras = party.find((pkm) => pkm.species.speciesId === SpeciesId.LAPRAS)!;
-      lapras.status = new Status(StatusEffect.POISON);
+      lapras.trySetStatus(StatusEffect.POISON);
+      expect(lapras).toHaveStatusEffect(StatusEffect.POISON);
       const abra = party.find((pkm) => pkm.species.speciesId === SpeciesId.ABRA)!;
       vi.spyOn(abra, "isAllowedInBattle").mockReturnValue(false);
 

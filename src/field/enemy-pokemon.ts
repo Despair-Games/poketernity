@@ -9,7 +9,6 @@ import { CritOnlyAttr } from "#app/data/moves/move-attrs/crit-only-attr";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import { Status } from "#app/data/status-effect";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -75,7 +74,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     if (Overrides.ENEMY_STATUS_OVERRIDE) {
-      this.status = new Status(Overrides.ENEMY_STATUS_OVERRIDE, 0, 4);
+      this.setStatus(Overrides.ENEMY_STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
     }
 
     if (Overrides.ENEMY_GENDER_OVERRIDE) {

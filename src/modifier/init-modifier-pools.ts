@@ -108,7 +108,7 @@ export function initModifierPools() {
           party.filter(
             (p) =>
               p.hp
-              && !!p.status
+              && p.hasNonVolatileStatusEffect(false, true)
               && !p.getHeldItems().some((i) => {
                 if (i instanceof TurnStatusEffectModifier) {
                   return (i as TurnStatusEffectModifier).getStatusEffect() === p.getStatusEffect(true);
@@ -174,7 +174,7 @@ export function initModifierPools() {
           party.filter(
             (p) =>
               p.hp
-              && !!p.status
+              && p.hasNonVolatileStatusEffect(false, true)
               && !p.getHeldItems().some((i) => {
                 if (i instanceof TurnStatusEffectModifier) {
                   return (i as TurnStatusEffectModifier).getStatusEffect() === p.getStatusEffect(true);
