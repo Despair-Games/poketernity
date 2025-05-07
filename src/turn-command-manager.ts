@@ -319,7 +319,8 @@ export class TurnCommandManager {
       if (a.command !== b.command) {
         if (a.command === BattleCommand.FIGHT) {
           return 1;
-        } else if (b.command === BattleCommand.FIGHT) {
+        }
+        if (b.command === BattleCommand.FIGHT) {
           return -1;
         }
       } else if (a.command === BattleCommand.FIGHT) {

@@ -40,10 +40,9 @@ export function updateUserInfo(): Promise<[boolean, number]> {
       if (!accountInfo) {
         resolve([false, status]);
         return;
-      } else {
-        loggedInUser = accountInfo;
-        resolve([true, 200]);
       }
+      loggedInUser = accountInfo;
+      resolve([true, 200]);
     });
   });
 }

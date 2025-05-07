@@ -307,9 +307,8 @@ export class GameMode implements GameModeConfig {
     const challengeConfig = new FixedBattleConfig();
     if (applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, challengeConfig)) {
       return challengeConfig;
-    } else {
-      return this.battleConfig[waveIndex];
     }
+    return this.battleConfig[waveIndex];
   }
 
   getClearScoreBonus(): number {

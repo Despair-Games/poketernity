@@ -492,11 +492,14 @@ export class InputsController {
 
     if (id.includes("081f") && id.includes("e401")) {
       return pad_unlicensedSNES;
-    } else if (id.includes("xbox") && id.includes("360")) {
+    }
+    if (id.includes("xbox") && id.includes("360")) {
       return pad_xbox360;
-    } else if (id.includes("054c")) {
+    }
+    if (id.includes("054c")) {
       return pad_dualshock;
-    } else if (id.includes("057e") && id.includes("2009")) {
+    }
+    if (id.includes("057e") && id.includes("2009")) {
       return pad_procon;
     }
 
@@ -550,9 +553,8 @@ export class InputsController {
   getLastSourceDevice(): Device {
     if (this.lastSource === "gamepad") {
       return Device.GAMEPAD;
-    } else {
-      return Device.KEYBOARD;
     }
+    return Device.KEYBOARD;
   }
 
   getLastSourceConfig() {
@@ -613,8 +615,7 @@ export class InputsController {
     this.deactivatePressedKey();
     if (config.padType === "keyboard") {
       return assign(config, settingName, pressedButton);
-    } else {
-      return swap(config, settingName, pressedButton);
     }
+    return swap(config, settingName, pressedButton);
   }
 }

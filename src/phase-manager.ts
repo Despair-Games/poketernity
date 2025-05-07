@@ -252,9 +252,8 @@ export class PhaseManager {
   ): P | undefined {
     if (checkPrepend) {
       return (this.phaseQueuePrepend.find(phaseFilter) ?? this.phaseQueue.find(phaseFilter)) as P;
-    } else {
-      return this.phaseQueue.find(phaseFilter) as P;
     }
+    return this.phaseQueue.find(phaseFilter) as P;
   }
 
   /**
@@ -267,9 +266,8 @@ export class PhaseManager {
   public hasPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean, checkPrepend: boolean = false): boolean {
     if (checkPrepend) {
       return this.phaseQueuePrepend.some(phaseFilter) || this.phaseQueue.some(phaseFilter);
-    } else {
-      return this.phaseQueue.some(phaseFilter);
     }
+    return this.phaseQueue.some(phaseFilter);
   }
 
   public tryRemovePhase(phaseFilter: (phase: Phase) => boolean): boolean {
@@ -309,10 +307,9 @@ export class PhaseManager {
     if (targetIndex !== -1) {
       this.phaseQueue.splice(targetIndex, 0, phase);
       return true;
-    } else {
-      this.unshiftPhase(phase);
-      return false;
     }
+    this.unshiftPhase(phase);
+    return false;
   }
 
   /**
@@ -329,10 +326,9 @@ export class PhaseManager {
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
       this.phaseQueue.splice(targetIndex + 1, 0, phase);
       return true;
-    } else {
-      this.unshiftPhase(phase);
-      return false;
     }
+    this.unshiftPhase(phase);
+    return false;
   }
 
   /**
