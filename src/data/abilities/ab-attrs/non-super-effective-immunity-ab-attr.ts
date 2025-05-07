@@ -12,7 +12,7 @@ import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
  */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(condition?: AbAttrCondition) {
-    super(null, condition);
+    super(null!, condition);
   }
 
   override apply(

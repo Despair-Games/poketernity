@@ -554,7 +554,8 @@ export function generateModifierTypeOption(
  * @param selectablePokemonFilter - A filter for which Pokemon are allowed
  */
 export function selectPokemonForOption(
-  onPokemonSelected: (pokemon: PlayerPokemon) => undefined | OptionSelectItem[],
+  // biome-ignore lint/suspicious/noConfusingVoidType: TODO: refactor this?
+  onPokemonSelected: (pokemon: PlayerPokemon) => void | OptionSelectItem[],
   onPokemonNotSelected?: () => void,
   selectablePokemonFilter?: PokemonSelectFilter,
 ): Promise<boolean> {

@@ -211,7 +211,7 @@ export class ModifierType {
   }
 
   newModifier(...args: any[]): Modifier | null {
-    return this.newModifierFunc?.(this, args);
+    return this.newModifierFunc?.(this, args) ?? null; // using `| null` instead of making a param optional... ugh
   }
 
   isPokemonHeldItemModifierType(): this is PokemonHeldItemModifierType {

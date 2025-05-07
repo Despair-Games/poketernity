@@ -2701,7 +2701,7 @@ export default class BattleScene extends SceneBase {
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.audioManager.fadeOutBgm(fixedNumber(2000), false);
-      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
+      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, null, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,
         ) as TurnHeldItemTransferModifier;
