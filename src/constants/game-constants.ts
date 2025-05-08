@@ -89,8 +89,8 @@ export const DEFAULT_MIN_SLEEP_DURATION = 2;
  */
 export const DEFAULT_MAX_SLEEP_DURATION = 4;
 
-/** The maximum stage a {@linkcode BattleStat} can have. */
-export const MAX_STAT_STAGE = 6;
-
 /** The minimum stage a {@linkcode BattleStat} can have. */
 export const MIN_STAT_STAGE = -6;
+
+/** The maximum stage a {@linkcode BattleStat} can have. */
+export const MAX_STAT_STAGE = 6;
