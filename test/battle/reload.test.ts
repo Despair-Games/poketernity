@@ -55,7 +55,7 @@ describe("Reload", () => {
     game.move.select(MoveId.SPLASH);
     game.onNextPrompt("SelectBiomePhase", UiMode.OPTION_SELECT, () => {
       // Input first option for Map
-      game.scene.ui.getHandler().processInput(Button.ACTION);
+      game.scene.ui.getCurrentHandler().processInput(Button.ACTION);
     });
     await game.faintOpponents();
     await game.toNextWave();

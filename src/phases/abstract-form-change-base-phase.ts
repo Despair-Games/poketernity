@@ -50,7 +50,7 @@ export abstract class FormChangeBasePhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
-      this.handler = ui.getHandler() as FormChangeSceneUiHandler;
+      this.handler = ui.getCurrentHandler<FormChangeSceneUiHandler>();
 
       this.container = this.handler.container;
 

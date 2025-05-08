@@ -9,6 +9,7 @@ import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
+import { AwaitableUiHandler } from "#app/ui/handlers/awaitable-ui-handler";
 import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
 import { isNil, NumberHolder } from "#app/utils/common-utils";
 import { formatMoney } from "#app/utils/string-utils";
@@ -21,7 +22,6 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import Phaser from "phaser";
-import { AwaitableUiHandler } from "./awaitable-ui-handler";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;

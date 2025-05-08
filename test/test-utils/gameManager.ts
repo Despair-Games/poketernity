@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { TurnStartPhase } from "#app/phases/turn-start-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -22,7 +23,7 @@ import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
@@ -265,7 +266,7 @@ export class GameManager {
       "EncounterPhase",
       UiMode.MESSAGE,
       () => {
-        const handler = this.scene.ui.getHandler() as BattleMessageUiHandler;
+        const handler = this.scene.ui.getCurrentHandler<BattleMessageUiHandler>();
         handler.processInput(Button.ACTION);
       },
       () => this.isCurrentPhase("MysteryEncounterPhase"),
@@ -314,7 +315,11 @@ export class GameManager {
     console.log("==================[New Turn]==================");
   }
 
-  /** Faint all opponents currently on the field */
+  /**
+   * Faint all opponents currently on the field
+   * @todo This is currently bugged for double battles and can cause multiple waves
+   * to be cleared at once, especially if called before a turn's {@linkcode TurnStartPhase}
+   */
   async faintOpponents() {
     await this.faintPokemon(this.scene.currentBattle.enemyParty[0]);
     if (this.scene.currentBattle.double) {
@@ -328,7 +333,7 @@ export class GameManager {
       "SelectModifierPhase",
       UiMode.MODIFIER_SELECT,
       () => {
-        const handler = this.scene.ui.getHandler() as ModifierSelectUiHandler;
+        const handler = this.scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
         handler.processInput(Button.CANCEL);
       },
       () =>
@@ -342,7 +347,7 @@ export class GameManager {
       "SelectModifierPhase",
       UiMode.CONFIRM,
       () => {
-        const handler = this.scene.ui.getHandler() as ModifierSelectUiHandler;
+        const handler = this.scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
         handler.processInput(Button.ACTION);
       },
       () =>
@@ -459,9 +464,9 @@ export class GameManager {
    * await game.faintPokemon(enemyPkmn);
    */
   async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
+    await new Promise<void>(async (resolve, reject) => {
       pokemon.faint();
-      this.scene.phaseManager.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
+      this.scene.phaseManager.unshiftPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
       await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
       resolve();
     });
@@ -473,8 +478,8 @@ export class GameManager {
    */
   switchPokemon(pokemonIndex: number): void {
     this.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      (this.scene.ui.getHandler() as CommandUiHandler).setCursor(2);
-      (this.scene.ui.getHandler() as CommandUiHandler).processInput(Button.ACTION);
+      this.scene.ui.getCurrentHandler<CommandUiHandler>().setCursor(2);
+      this.scene.ui.getCurrentHandler<CommandUiHandler>().processInput(Button.ACTION);
     });
 
     this.selectPartyPokemon(pokemonIndex, "CommandPhase");
@@ -502,7 +507,7 @@ export class GameManager {
    */
   selectPartyPokemon(slot: number, inPhase = "SwitchPhase"): void {
     this.onNextPrompt(inPhase, UiMode.PARTY, () => {
-      const partyHandler = this.scene.ui.getHandler() as PartyUiHandler;
+      const partyHandler = this.scene.ui.getCurrentHandler<PartyUiHandler>();
 
       partyHandler.setCursor(slot);
       partyHandler.processInput(Button.ACTION); // select party slot
@@ -511,7 +516,8 @@ export class GameManager {
   }
 
   /**
-   * Mocks the game's {@linkcode TurnCommandManager} to set a certain turn order for future turns.
+   * Mocks the game's {@linkcode TurnCommandManager} to set the specified turn order for future turns.
+   * Commands will execute in the given order regardless of command type, move priority, etc.
    * @param order The turn order to set
    * @example
    * ```ts

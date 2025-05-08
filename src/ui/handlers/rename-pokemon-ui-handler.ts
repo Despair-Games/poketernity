@@ -1,8 +1,8 @@
 import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 export class RenamePokemonUiHandler extends FormModalUiHandler {
   constructor() {

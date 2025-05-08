@@ -135,7 +135,7 @@ export function setSettingKeyboard(setting: SettingKeyboard, value: number): boo
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as KeyboardSettingsUiHandler).updateBindings();
+            globalScene.ui.getCurrentHandler<KeyboardSettingsUiHandler>().updateBindings();
             return success;
           };
           globalScene.ui.setOverlayMode<KeyboardBindingUiHandler>(UiMode.KEYBOARD_BINDING, setting, cancelHandler);

@@ -93,7 +93,7 @@ describe("Form Change Phase", () => {
     await game.phaseInterceptor.to("FormChangePhase", false);
 
     // Repeatedly press "Cancel" to attempt to cancel form change
-    const pressCancelInterval = setInterval(() => game.scene.ui.getHandler().processInput(Button.CANCEL));
+    const pressCancelInterval = setInterval(() => game.scene.ui.getCurrentHandler().processInput(Button.CANCEL));
 
     await game.toNextTurn();
     clearInterval(pressCancelInterval);

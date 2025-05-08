@@ -231,7 +231,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("SOUL_DEW");
     });

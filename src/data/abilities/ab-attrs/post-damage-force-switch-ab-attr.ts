@@ -151,7 +151,7 @@ class ForceSwitchOutHelper {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         globalScene.phaseManager.prependToPhase(
           new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-          PhaseId.MOVE_END,
+          PhaseId.POST_ACTION,
         );
         return true;
       }
@@ -168,7 +168,7 @@ class ForceSwitchOutHelper {
         const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
         globalScene.phaseManager.prependToPhase(
           new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
-          PhaseId.MOVE_END,
+          PhaseId.POST_ACTION,
         );
         return true;
       }

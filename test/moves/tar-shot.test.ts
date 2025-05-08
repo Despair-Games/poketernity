@@ -50,7 +50,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
 
@@ -78,7 +78,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
 
@@ -100,7 +100,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
   });
 
@@ -124,7 +124,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
 });

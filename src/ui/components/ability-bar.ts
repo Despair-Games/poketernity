@@ -1,10 +1,10 @@
-import { getPokemonNameWithAffix } from "#app/messages";
-import { globalScene } from "#app/global-scene";
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
-import { TEXT_SCALE } from "#app/constants/ui-constants";
 
 const hiddenX = -118;
 const shownX = 0;

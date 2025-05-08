@@ -30,7 +30,7 @@ export class DailyModeHelper extends GameManagerHelper {
     });
 
     this.game.onNextPrompt("TitlePhase", UiMode.SAVE_SLOT, () => {
-      const uihandler = this.game.scene.ui.getHandler<SaveSlotSelectUiHandler>();
+      const uihandler = this.game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
       uihandler.processInput(Button.ACTION); // select first slot. that's fine
     });
 

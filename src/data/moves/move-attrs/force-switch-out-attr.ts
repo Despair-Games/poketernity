@@ -83,13 +83,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
-            PhaseId.MOVE_END,
+            PhaseId.POST_ACTION,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
           globalScene.phaseManager.prependToPhase(
             new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-            PhaseId.MOVE_END,
+            PhaseId.POST_ACTION,
           );
           return true;
         }
@@ -115,7 +115,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
-            PhaseId.MOVE_END,
+            PhaseId.POST_ACTION,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
@@ -127,7 +127,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
               false,
               false,
             ),
-            PhaseId.MOVE_END,
+            PhaseId.POST_ACTION,
           );
         }
       }

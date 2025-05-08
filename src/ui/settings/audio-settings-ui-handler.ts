@@ -1,7 +1,7 @@
+import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
 import { audioSettingsUiItems } from "#app/ui/settings/settings-ui-items";
-import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export class AudioSettingsUiHandler extends AbstractSettingsUiHandler {
+export class AudioSettingsUiHandler extends SettingsUiHandler {
   constructor() {
     super("audio", audioSettingsUiItems);
   }

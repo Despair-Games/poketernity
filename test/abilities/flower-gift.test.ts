@@ -56,7 +56,7 @@ describe("Abilities - Flower Gift", () => {
     const cherrimAtkStat = cherrim.getEffectiveStat(Stat.ATK);
     const cherrimSpDefStat = cherrim.getEffectiveStat(Stat.SPDEF);
 
-    // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);;
+    // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);
     // const magikarpSpDefStat = magikarp.getEffectiveStat(Stat.SPDEF);
 
     game.move.select(MoveId.SUNNY_DAY, 0);
@@ -102,10 +102,10 @@ describe("Abilities - Flower Gift", () => {
     await game.phaseInterceptor.to("TurnStartPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(cherrim.formIndex).toBe(OVERCAST_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
   });
 

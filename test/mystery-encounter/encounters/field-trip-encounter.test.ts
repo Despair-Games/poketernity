@@ -89,7 +89,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
@@ -99,7 +99,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(5);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.name).toBe(
         i18next.t("modifierType:TempStatStageBoosterItem.x_attack"),
@@ -146,7 +146,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
@@ -156,7 +156,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(5);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.name).toBe(
         i18next.t("modifierType:TempStatStageBoosterItem.x_sp_atk"),
@@ -203,7 +203,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
@@ -214,7 +214,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(5);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.name).toBe(
         i18next.t("modifierType:TempStatStageBoosterItem.x_accuracy"),

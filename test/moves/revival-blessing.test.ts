@@ -50,7 +50,7 @@ describe("Moves - Revival Blessing", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.selectPartyPokemon(1, "RevivalBlessingPhase");
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     const revivedPokemon = game.scene.getPlayerParty()[1];
     expect(revivedPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
@@ -70,7 +70,7 @@ describe("Moves - Revival Blessing", () => {
     game.move.select(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.REVIVAL_BLESSING);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     const revivedPokemon = game.scene.getEnemyParty()[1];
     expect(revivedPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
@@ -82,7 +82,7 @@ describe("Moves - Revival Blessing", () => {
 
     game.move.select(MoveId.REVIVAL_BLESSING);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     const player = game.scene.getPlayerPokemon()!;
     expect(player).toHaveMoveResult(MoveResult.FAIL);
@@ -104,8 +104,8 @@ describe("Moves - Revival Blessing", () => {
     await game.move.forceEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(feebas.isFainted()).toBe(true);
 

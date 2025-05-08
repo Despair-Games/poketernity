@@ -1,7 +1,8 @@
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import type { Challenge } from "#app/data/challenge";
 import { globalScene } from "#app/global-scene";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addBBCodeTextObject, addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
@@ -11,7 +12,6 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * Handles all the UI for choosing optional challenges.

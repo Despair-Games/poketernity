@@ -208,10 +208,10 @@ describe("Abilities - Forecast", () => {
     game.move.select(MoveId.SKILL_SWAP, 1, BattlerIndex.PLAYER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(castform.formIndex).toBe(NORMAL_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(castform.formIndex).toBe(RAINY_FORM);
 
     await game.toNextTurn();
@@ -219,7 +219,7 @@ describe("Abilities - Forecast", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.WORRY_SEED, 1, BattlerIndex.PLAYER);
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(castform.formIndex).toBe(NORMAL_FORM);
   });

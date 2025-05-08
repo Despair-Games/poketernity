@@ -9,7 +9,7 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#app/system/settings/settings-keyboard";
-import { AbstractControlSettingsUiHandler } from "#app/ui/settings/abstract-control-settings-ui-handler";
+import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { truncateString } from "#app/utils/string-utils";
@@ -22,9 +22,9 @@ import i18next from "i18next";
 /**
  * Class representing the settings UI handler for keyboards.
  *
- * @extends AbstractControlSettingsUiHandler
+ * @extends ControlsSettingsUiHandler
  */
-export class KeyboardSettingsUiHandler extends AbstractControlSettingsUiHandler {
+export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;
   private homeKey: Phaser.Input.Keyboard.Key | undefined;
 

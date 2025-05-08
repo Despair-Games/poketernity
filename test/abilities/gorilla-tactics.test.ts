@@ -74,7 +74,7 @@ describe("Abilities - Gorilla Tactics", () => {
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(darmanitan.hp).toBeLessThan(darmanitan.getMaxHp());
   });
 });

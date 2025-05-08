@@ -63,7 +63,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       return this.end();
     }
 
-    this.messageMode = ui.getHandler() instanceof FormChangeSceneUiHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
+    const uiHandler = ui.getCurrentHandler();
+    this.messageMode = uiHandler instanceof FormChangeSceneUiHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
     ui.setMode<MessageUiHandler>(this.messageMode);
 
     // If the Pokemon has less than 4 moves, the new move is added to the largest empty moveset index

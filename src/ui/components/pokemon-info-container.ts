@@ -1,23 +1,23 @@
-import { getVariantTint } from "#app/data/variant";
-import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { globalScene } from "#app/global-scene";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { Gender } from "#enums/gender";
-import { getNatureName } from "../../data/nature";
-import { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "../../field/pokemon";
-import i18next from "i18next";
-import { DexAttr } from "#app/data/dex-attributes";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterDataEntry } from "#app/@types/StarterData";
+import { DexAttr } from "#app/data/dex-attributes";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
+import { getNatureName } from "#app/data/nature";
+import { getVariantTint } from "#app/data/variant";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import { IVGraph } from "#app/ui/components/iv-graph";
+import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils/common-utils";
 import { capitalizeString } from "#app/utils/string-utils";
-import { IVGraph } from "./iv-graph";
-import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
+import { ElementalType } from "#enums/elemental-type";
+import { Gender } from "#enums/gender";
 import { SpeciesId } from "#enums/species-id";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import { TextStyle } from "#enums/text-style";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 interface LanguageSetting {
   infoContainerTextSize: string;

@@ -43,7 +43,7 @@ describe("Moves - Astonish", () => {
 
     game.move.select(MoveId.ASTONISH);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeDefined();
 

@@ -16,3 +16,6 @@ export const SUNNY_WEATHER_TYPES = Object.freeze([WeatherType.SUNNY, WeatherType
 
 /** The default duration of a freshly applied weather (in turns). */
 export const DEFAULT_NEW_WEATHER_DURATION = 5;
+
+/** The max HP ratio dealt as damage by Sandstorm and Hail */
+export const WEATHER_DAMAGE_RATIO = 1 / 16;

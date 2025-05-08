@@ -44,9 +44,9 @@ describe("UI - Transfer Items", () => {
     game.move.select(MoveId.DRAGON_CLAW);
 
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
-      expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
+      expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(ModifierSelectUiHandler);
 
-      const handler = game.scene.ui.getHandler() as ModifierSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       handler.setCursor(1);
       handler.processInput(Button.ACTION);
 
@@ -58,9 +58,9 @@ describe("UI - Transfer Items", () => {
 
   it("check red tint for held item limit in transfer menu", async () => {
     game.onNextPrompt("SelectModifierPhase", UiMode.PARTY, () => {
-      expect(game.scene.ui.getHandler()).toBeInstanceOf(PartyUiHandler);
+      expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(PartyUiHandler);
 
-      const handler = game.scene.ui.getHandler() as PartyUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<PartyUiHandler>();
       handler.processInput(Button.ACTION);
 
       expect(
@@ -83,9 +83,9 @@ describe("UI - Transfer Items", () => {
 
   it("check transfer option for pokemon to transfer to", async () => {
     game.onNextPrompt("SelectModifierPhase", UiMode.PARTY, () => {
-      expect(game.scene.ui.getHandler()).toBeInstanceOf(PartyUiHandler);
+      expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(PartyUiHandler);
 
-      const handler = game.scene.ui.getHandler() as PartyUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<PartyUiHandler>();
       handler.processInput(Button.ACTION); // select Pokemon
       handler.processInput(Button.ACTION); // select held item (Sitrus Berry)
 

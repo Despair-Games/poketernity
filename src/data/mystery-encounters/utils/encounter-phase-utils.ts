@@ -41,7 +41,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";

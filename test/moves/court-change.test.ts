@@ -66,7 +66,7 @@ describe("Moves - Court Change", () => {
     expect(game.scene.arena.hasTag(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeFalsy();
 
     game.move.use(MoveId.COURT_CHANGE);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(game.field.getEnemyPokemon().hasTag(BattlerTagType.FLYING)).toBeTruthy();
     await game.toNextTurn();
 

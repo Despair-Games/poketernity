@@ -1,13 +1,13 @@
 import { updateUserInfo } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
+import { ModalUiHandler } from "#app/ui/handlers/modal-ui-handler";
 import type { ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { removeCookie } from "#app/utils/app-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { ModalUiHandler } from "./modal-ui-handler";
 
 export class UnavailableModalUiHandler extends ModalUiHandler {
   private reconnectTimer: NodeJS.Timeout | null;

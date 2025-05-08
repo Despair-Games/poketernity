@@ -1,24 +1,24 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui-constants";
 import { getLevelRelExp } from "#app/data/exp";
-import { fixedNumber } from "#app/utils/common-utils";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { Gender } from "#enums/gender";
-import { StatusEffect } from "#enums/status-effect";
-import { globalScene } from "#app/global-scene";
 import { getTypeRgb } from "#app/data/type";
-import { ElementalType } from "#enums/elemental-type";
 import { getVariantTint } from "#app/data/variant";
-import { Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 import { BattleFlyout } from "#app/ui/components/battle-flyout";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
+import { fixedNumber } from "#app/utils/common-utils";
+import { ElementalType } from "#enums/elemental-type";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { Gender } from "#enums/gender";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
-import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui-constants";
 
 export class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
