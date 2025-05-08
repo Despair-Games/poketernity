@@ -92,7 +92,7 @@ describe("Moves - Uproar", () => {
     game.move.use(MoveId.UPROAR, 0);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     enemyPokemon.forEach((p) => expect(p.getStatusEffect()).toBe(StatusEffect.NONE));
   });
 

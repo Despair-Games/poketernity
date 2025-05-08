@@ -7,7 +7,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
 
 /**
@@ -39,8 +38,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
       pokemon: target,
       targets: moveTargets,
       move: movesetMove,
-      when: "after",
-      phaseId: PhaseId.MOVE_END,
+      when: "eager",
     });
     return true;
   }

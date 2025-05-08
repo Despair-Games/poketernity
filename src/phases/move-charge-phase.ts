@@ -10,7 +10,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import i18next from "i18next";
 import { HitCheckPhase } from "./hit-check-phase";
-import { MoveEndPhase } from "./move-end-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -72,10 +71,6 @@ export class MoveChargePhase extends HitCheckPhase {
       applyMoveChargeAttrs(InstantChargeAttr, user, null, move, instantCharge);
 
       if (instantCharge.value) {
-        // this MoveEndPhase will be duplicated by the queued MovePhase if not removed
-        globalScene.phaseManager.tryRemovePhase(
-          (phase) => phase instanceof MoveEndPhase && phase.getPokemon() === user,
-        );
         // queue a new MovePhase for this move's attack phase
         globalScene.phaseManager.queueMovePhase({
           pokemon: user,

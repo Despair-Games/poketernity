@@ -22,7 +22,7 @@ import { LoginPhase } from "#app/phases/login-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
@@ -34,6 +34,7 @@ import { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
@@ -95,6 +96,7 @@ const PHASES = [
   CommandPhase,
   EnemyCommandPhase,
   TurnStartPhase,
+  MoveHeaderPhase,
   MovePhase,
   MoveEffectPhase,
   DamageAnimPhase,
@@ -108,7 +110,7 @@ const PHASES = [
   NewBattlePhase,
   VictoryPhase,
   LearnMovePhase,
-  MoveEndPhase,
+  PostActionPhase,
   StatStageChangePhase,
   ShinySparklePhase,
   SelectTargetPhase,

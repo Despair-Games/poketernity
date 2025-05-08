@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { TurnStartPhase } from "#app/phases/turn-start-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -314,7 +315,11 @@ export class GameManager {
     console.log("==================[New Turn]==================");
   }
 
-  /** Faint all opponents currently on the field */
+  /**
+   * Faint all opponents currently on the field
+   * @todo This is currently bugged for double battles and can cause multiple waves
+   * to be cleared at once, especially if called before a turn's {@linkcode TurnStartPhase}
+   */
   async faintOpponents() {
     await this.faintPokemon(this.scene.currentBattle.enemyParty[0]);
     if (this.scene.currentBattle.double) {
@@ -459,9 +464,9 @@ export class GameManager {
    * await game.faintPokemon(enemyPkmn);
    */
   async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
+    await new Promise<void>(async (resolve, reject) => {
       pokemon.faint();
-      this.scene.phaseManager.pushPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
+      this.scene.phaseManager.unshiftPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
       await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
       resolve();
     });
@@ -511,7 +516,8 @@ export class GameManager {
   }
 
   /**
-   * Mocks the game's {@linkcode TurnCommandManager} to set a certain turn order for future turns.
+   * Mocks the game's {@linkcode TurnCommandManager} to set the specified turn order for future turns.
+   * Commands will execute in the given order regardless of command type, move priority, etc.
    * @param order The turn order to set
    * @example
    * ```ts

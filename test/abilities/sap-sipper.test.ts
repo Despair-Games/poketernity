@@ -116,7 +116,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(playerPokemon.getTag(BattlerTagType.SPIKY_SHIELD)).toBeDefined();
 

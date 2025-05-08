@@ -48,12 +48,12 @@ describe("Flinch", () => {
 
     expect(player1).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(player1).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(player1).toHaveBattlerTagType(BattlerTagType.FLINCHED);
     await game.toEndOfTurn();

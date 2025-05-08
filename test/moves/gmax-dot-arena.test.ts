@@ -40,7 +40,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
     game.move.select(MoveId.SPLASH, 1);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
     const enemyStartingHp = enemyParty.map((p) => p.hp);
@@ -59,7 +59,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
     game.move.select(MoveId.SPLASH, 1);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
     const enemyStartingHp = enemyParty.map((p) => p.hp);
@@ -79,7 +79,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
     game.move.select(MoveId.SPLASH, 1);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
     const enemyStartingHp = enemyParty.map((p) => p.hp);

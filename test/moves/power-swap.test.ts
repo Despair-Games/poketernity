@@ -41,7 +41,7 @@ describe("Moves - Power Swap", () => {
 
     game.move.select(MoveId.POWER_SWAP);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     for (const s of BATTLE_STATS) {
       expect(player.getStatStage(s)).toBe(0);

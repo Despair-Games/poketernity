@@ -50,7 +50,7 @@ describe.todo("Items - Multi Lens", () => {
       game.move.select(MoveId.TACKLE);
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
       const damageResults = spy.mock.results.map((result) => result.value?.damage);
 
       expect(damageResults).toHaveLength(1 + stackCount);
@@ -69,7 +69,7 @@ describe.todo("Items - Multi Lens", () => {
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon.turnData.hitCount).toBe(3);
   });
 
@@ -107,7 +107,7 @@ describe.todo("Items - Multi Lens", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(magikarp.turnData.hitCount).toBe(1);
   });
@@ -123,7 +123,7 @@ describe.todo("Items - Multi Lens", () => {
     game.move.select(MoveId.SEISMIC_TOSS);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     const damageResults = spy.mock.results.map((result) => result.value?.damage);
 
     expect(damageResults).toHaveLength(2);
@@ -144,7 +144,7 @@ describe.todo("Items - Multi Lens", () => {
 
     game.move.select(MoveId.SUPER_FANG);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.5, 5);
   });
 
@@ -162,7 +162,7 @@ describe.todo("Items - Multi Lens", () => {
 
     game.move.select(MoveId.SUPER_FANG);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.5, 5);
   });
 
@@ -181,7 +181,7 @@ describe.todo("Items - Multi Lens", () => {
 
     game.move.select(MoveId.SUPER_FANG);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.25, 5);
   });
 

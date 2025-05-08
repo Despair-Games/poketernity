@@ -94,7 +94,7 @@ describe("Evolution Phase", () => {
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
     game.move.use(MoveId.SPLASH);
-    await game.faintOpponents();
+    await game.move.forceEnemyMove(MoveId.MEMENTO);
     await game.phaseInterceptor.to("EvolutionPhase", false);
 
     // Cancel the evolution

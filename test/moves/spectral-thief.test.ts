@@ -46,7 +46,7 @@ describe("Moves - Spectral Thief", () => {
     game.move.select(MoveId.SPECTRAL_THIEF);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     const preEffectDamage = enemy.getAttackDamage(player, allMoves.get(MoveId.SPECTRAL_THIEF)).damage;
 
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -68,7 +68,7 @@ describe("Moves - Spectral Thief", () => {
     game.move.select(MoveId.SPECTRAL_THIEF);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     [Stat.ATK, Stat.SPATK, Stat.SPD].forEach((stat: BattleStat) => {
@@ -93,7 +93,7 @@ describe("Moves - Spectral Thief", () => {
     game.move.select(MoveId.SPECTRAL_THIEF);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(player.getStatStage(Stat.DEF)).toBe(2);
@@ -117,7 +117,7 @@ describe("Moves - Spectral Thief", () => {
       game.move.select(MoveId.SPECTRAL_THIEF);
       game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
       await game.phaseInterceptor.to("MoveEffectPhase");
 
       expect(player.getStatStage(Stat.DEF)).toBe(2 * multiplier);
@@ -136,7 +136,7 @@ describe("Moves - Spectral Thief", () => {
     game.move.select(MoveId.SPECTRAL_THIEF);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(player.getStatStage(Stat.DEF)).toBe(2);

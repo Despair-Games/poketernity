@@ -66,7 +66,7 @@ export const G_MAX_FORM_KEYS = Object.freeze<string[]>([
 /** Default amount of money the player starts with. Same for all game modes. */
 export const DEFAULT_STARTING_MONEY = 1000;
 
-/** The defualt duration of a freshly applied terrain (in turns). */
+/** The default duration of a freshly applied terrain (in turns). */
 export const DEFAULT_NEW_TERRAIN_DURATION = 5;
 
 /** Abbreviations from 10^0 to 10^33 @todo localize these */

@@ -51,7 +51,7 @@ describe("Moves - Tidy Up", () => {
     expect(game.scene.arena.hasTag(tagType, ArenaTagSide.PLAYER)).toBeTruthy();
     expect(game.scene.arena.hasTag(tagType, ArenaTagSide.ENEMY)).toBeTruthy();
     game.move.use(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(game.scene.arena.hasTag(tagType)).toBeFalsy();
   });
 
@@ -64,7 +64,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.SUBSTITUTE);
     await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
     pokemon.forEach((p) => {

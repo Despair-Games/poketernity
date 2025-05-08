@@ -173,7 +173,7 @@ describe("Moves - Safeguard", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon[1].isFainted()).toBe(true);
 
     await game.toNextTurn();

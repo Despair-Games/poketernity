@@ -52,7 +52,7 @@ describe("Moves - Scale Shot", () => {
     expect(minccino.getStatStage(Stat.SPD)).toBe(0);
 
     //check that stats changed on last hit
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(minccino.getStatStage(Stat.DEF)).toBe(-1);
     expect(minccino.getStatStage(Stat.SPD)).toBe(1);
   });

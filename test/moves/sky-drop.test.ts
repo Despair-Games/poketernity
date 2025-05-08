@@ -168,7 +168,7 @@ describe("Moves - Sky Drop", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon[0].isFullHp()).toBeFalsy();
   });
 
@@ -216,7 +216,7 @@ describe("Moves - Sky Drop", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(player1).toHaveMoveResult(MoveResult.FAIL);
     [player1, player2].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
@@ -234,7 +234,7 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(player).toHaveMoveResult(MoveResult.FAIL);
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
@@ -309,18 +309,18 @@ describe("Moves - Sky Drop", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // player 1 uses Sky Drop
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
 
     // player 2 uses Gravity
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
     expect(player1.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(player1.getMoveQueue().length).toBe(0);
 
     // enemy uses Splash (if still in Sky Drop, this would be skipped)
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy1.turnData.acted).toBeTruthy();
   });
 
@@ -369,12 +369,12 @@ describe("Moves - Sky Drop", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     [tatsugiri, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
 
     game.selectPartyPokemon(2, "SwitchPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     [tatsugiri, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
     expect(tatsugiri.getMoveQueue().length).toBe(0);

@@ -46,10 +46,10 @@ describe("Moves - Me First", () => {
     game.move.use(MoveId.ME_FIRST);
     await game.move.forceEnemyMove(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(tackle.calculateBattlePower).toHaveReturnedWith(60);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(tackle.calculateBattlePower).toHaveReturnedWith(40);
   });
 
@@ -65,12 +65,12 @@ describe("Moves - Me First", () => {
     await game.move.forceEnemyMove(MoveId.OUTRAGE);
 
     // Player uses Me First - should call Outrage with increased power
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(180);
     expect(game.field.getPlayerPokemon().getTag(BattlerTagType.FRENZY)).toBeDefined();
 
     // Enemy uses Outrage - should have base power
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
     expect(game.field.getEnemyPokemon().getTag(BattlerTagType.FRENZY)).toBeDefined();
 
@@ -79,10 +79,10 @@ describe("Moves - Me First", () => {
     await game.toNextTurn();
 
     // Me First should not boost subsequent uses of Outrage
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
   });
 
@@ -155,7 +155,7 @@ describe("Moves - Me First", () => {
     game.move.use(MoveId.ME_FIRST);
     await game.move.forceEnemyMove(moveId);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(player).toHaveMoveResult(MoveResult.FAIL);
   });

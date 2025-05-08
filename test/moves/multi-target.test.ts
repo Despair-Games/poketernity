@@ -43,12 +43,12 @@ describe("Multi-target damage reduction", () => {
     game.move.select(MoveId.DAZZLING_GLEAM);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const gleam1 = enemy1.getMaxHp() - enemy1.hp;
     enemy1.hp = enemy1.getMaxHp();
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const tackle1 = enemy1.getMaxHp() - enemy1.hp;
     enemy1.hp = enemy1.getMaxHp();
@@ -60,12 +60,12 @@ describe("Multi-target damage reduction", () => {
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const gleam2 = enemy1.getMaxHp() - enemy1.hp;
     enemy1.hp = enemy1.getMaxHp();
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     const tackle2 = enemy1.getMaxHp() - enemy1.hp;
 
     // Single target moves don't get reduced
@@ -85,7 +85,7 @@ describe("Multi-target damage reduction", () => {
     game.move.select(MoveId.SPLASH, 1);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const damagePlayer2Turn1 = player2.getMaxHp() - player2.hp;
     const damageEnemy1Turn1 = enemy1.getMaxHp() - enemy1.hp;
@@ -100,7 +100,7 @@ describe("Multi-target damage reduction", () => {
     game.move.select(MoveId.SPLASH, 1);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const damagePlayer2Turn2 = player2.getMaxHp() - player2.hp;
     const damageEnemy1Turn2 = enemy1.getMaxHp() - enemy1.hp;
@@ -118,7 +118,7 @@ describe("Multi-target damage reduction", () => {
     game.move.select(MoveId.EARTHQUAKE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const damageEnemy1Turn3 = enemy1.getMaxHp() - enemy1.hp;
     // Turn 3: 1 target, should be no damage reduction

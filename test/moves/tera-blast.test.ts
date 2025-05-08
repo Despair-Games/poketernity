@@ -110,7 +110,7 @@ describe("Moves - Tera Blast", () => {
 
     game.move.select(MoveId.TERA_BLAST);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(player.getStatStage(Stat.SPATK)).toBe(-1);
     expect(player.getStatStage(Stat.ATK)).toBe(-1);

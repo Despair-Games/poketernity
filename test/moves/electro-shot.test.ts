@@ -76,7 +76,7 @@ describe("Moves - Electro Shot", () => {
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);

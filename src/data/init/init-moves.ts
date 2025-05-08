@@ -1,3 +1,5 @@
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
 import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
@@ -238,8 +240,6 @@ import { userSleptOrComatoseCondition } from "#app/data/moves/move-conditions/us
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isNil } from "#app/utils/common-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -2831,7 +2831,8 @@ export function initMoves() {
       .attr(SwapArenaTagsAttr, courtChangeArenaTags)
       .condition((_user, _target, _move) =>
         globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
-      ),
+      )
+      .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.MAX_FLARE, ElementalType.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented(),

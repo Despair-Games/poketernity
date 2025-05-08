@@ -97,7 +97,7 @@ describe("Moves - Baton Pass", () => {
 
     game.move.select(MoveId.BATON_PASS);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(player1.findTag((t) => t.tagType === BattlerTagType.SALT_CURED)).toBeTruthy();
     game.selectPartyPokemon(1);
     await game.toNextTurn();

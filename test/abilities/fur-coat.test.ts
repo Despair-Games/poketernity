@@ -39,7 +39,7 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF] * 2);
   });
@@ -50,7 +50,7 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(MoveId.PSYSHOCK);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF) * 2);
   });
@@ -64,8 +64,8 @@ describe("Abilities - Fur Coat", () => {
     game.move.select(MoveId.SWEET_KISS);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
@@ -79,7 +79,7 @@ describe("Abilities - Fur Coat", () => {
     game.move.select(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
