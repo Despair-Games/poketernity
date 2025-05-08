@@ -1354,7 +1354,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
-    let overrideArray: MoveId | Array<MoveId> = this.isPlayer()
+    let overrideArray: MoveId | MoveId[] = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
       : Overrides.ENEMY_MOVESET_OVERRIDE;
 

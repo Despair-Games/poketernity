@@ -56,7 +56,8 @@
         "useNodejsImportProtocol": "error",
         "useTemplate": "off", // string concatenation is faster: https://stackoverflow.com/questions/29055518/are-es6-template-literals-faster-than-string-concatenation
         "noNamespaceImport": "error",
-        "noInferrableTypes": "off" // Explicit > Implicit
+        "noInferrableTypes": "off", // Explicit > Implicit
+        "useConsistentArrayType": "error" // Standardize on `T[]`
       },
       "suspicious": {
         "noDoubleEquals": "error",

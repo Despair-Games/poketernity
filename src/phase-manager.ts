@@ -79,7 +79,7 @@ export class PhaseManager {
   private phaseQueuePrepend: Phase[] = [];
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
-  private conditionalQueue: Array<[() => boolean, Phase]> = [];
+  private conditionalQueue: [() => boolean, Phase][] = [];
 
   private currentPhase: Phase | null = null;
   private standbyPhase: Phase | null = null;

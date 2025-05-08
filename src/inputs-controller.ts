@@ -70,7 +70,7 @@ const repeatInputDelayMillis = 250;
  * providing a unified interface for all input-related interactions.
  */
 export class InputsController {
-  private gamepads: Array<Phaser.Input.Gamepad.Gamepad> = new Array();
+  private gamepads: Phaser.Input.Gamepad.Gamepad[] = new Array();
   public events: Phaser.Events.EventEmitter;
 
   private buttonLock: Button[] = new Array();
@@ -82,7 +82,7 @@ export class InputsController {
   public gamepadSupport: boolean = true;
   public selectedDevice;
 
-  private disconnectedGamepads: Array<string> = new Array();
+  private disconnectedGamepads: string[] = new Array();
 
   public lastSource: string = "keyboard";
   private inputInterval: NodeJS.Timeout[] = new Array();
@@ -231,7 +231,7 @@ export class InputsController {
    * Retrieves the identifiers of all connected gamepads, excluding any that are currently marked as disconnected.
    * @returns Array<String> An array of strings representing the IDs of the connected gamepads.
    */
-  getGamepadsName(): Array<string> {
+  getGamepadsName(): string[] {
     return this.gamepads.filter((g) => !this.disconnectedGamepads.includes(g.id)).map((g) => g.id);
   }
 

@@ -16,7 +16,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
   protected override setup() {
     super.setup();
 
-    const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
+    const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): any[] => {
       return Object.keys(object ?? {})
         .map((t, i) => {
           const value = Object.values(object)[i];
