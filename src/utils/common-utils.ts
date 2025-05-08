@@ -5,7 +5,9 @@ import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
 
 import type { nil } from "#app/@types/nil";
+import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#app/constants/game-constants";
 import type { Pokemon } from "#app/field/pokemon";
+import Phaser from "phaser";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);
@@ -162,4 +164,35 @@ export function isPokemon(data: any): data is Pokemon {
 export function coerceArray<T>(input: T | readonly T[]): T[];
 export function coerceArray<T>(input: T | T[]): T[] {
   return Array.isArray(input) ? [...input] : [input];
+}
+
+/**
+ * Calculates the accuracy multiplier
+ * based on the user's accuracy stage and the target's evasion stage.
+ *
+ * *Both stages are clamped to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].*
+ *
+ * @param userAccuracyStage - The user' accuracy stage
+ * @param targetEvasionStage - The target's evasion stage
+ * @returns The accuracy multiplier based on the Gen V+ accuracy formula
+ *
+ * | Stage ACC | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
+ * |-----------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+ * | Stage EVA | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
+ * | Gen V+    | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
+ */
+export function calcAccuracyMultiplier(userAccuracyStage: number, targetEvasionStage: number): number {
+  const userAcc = Phaser.Math.Clamp(userAccuracyStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
+  const targetEva = Phaser.Math.Clamp(targetEvasionStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
+
+  if (userAcc === targetEva) {
+    return 1;
+  } else if (userAcc > targetEva) {
+    const diff = userAcc - targetEva;
+    return (3 + diff) / 3;
+  } else {
+    const diff = targetEva - userAcc;
+    return 3 / (3 + diff);
+  }
 }

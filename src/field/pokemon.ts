@@ -164,6 +164,7 @@ import { applyChallenges } from "#app/utils/challenge-utils";
 import {
   BooleanHolder,
   NumberHolder,
+  calcAccuracyMultiplier,
   coerceArray,
   fixedNumber,
   getEnumValues,
@@ -2857,13 +2858,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (target.hasTag(...EXPOSED_TAG_TYPES)) {
       targetEvaStage.value = Math.min(0, targetEvaStage.value);
     }
-    const accuracyMultiplier = new NumberHolder(1);
-    if (userAccStage.value !== targetEvaStage.value) {
-      accuracyMultiplier.value =
-        userAccStage.value > targetEvaStage.value
-          ? (3 + Math.min(userAccStage.value - targetEvaStage.value, MAX_STAT_STAGE)) / 3
-          : 3 / (3 + Math.min(targetEvaStage.value - userAccStage.value, MAX_STAT_STAGE));
-    }
+
+    const accuracyMultiplier = new NumberHolder(calcAccuracyMultiplier(userAccStage.value, targetEvaStage.value));
 
     applyAbAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,
