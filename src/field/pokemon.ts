@@ -1328,7 +1328,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getGender(ignoreOverride?: boolean): Gender {
-    if (!ignoreOverride && this.summonData.gender !== undefined) {
+    if (!ignoreOverride && !isNil(this.summonData.gender)) {
       return this.summonData.gender;
     }
     return this.gender;
@@ -1354,7 +1354,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   abstract getBossSegmentIndex(): number;
 
   getMoveset(baseOnly?: boolean): PokemonMove[] {
-    const ret = !baseOnly && this.summonData.moveset ? this.summonData.moveset : this.moveset;
+    const ret = !baseOnly && this.summonData.moveset.length ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
@@ -2217,7 +2217,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const move = new PokemonMove(moveId);
     this.moveset[moveIndex] = move;
     // TODO: should this also be modifying the summon data moveset?
-    if (this.summonData.moveset) {
+    if (this.summonData.moveset.length) {
       this.summonData.moveset[moveIndex] = move;
     }
   }
@@ -4138,19 +4138,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   resetSummonData(): void {
-    // TODO: is this necessary?
-    if (this.summonData?.speciesForm) {
-      this.summonData.speciesForm = undefined;
-    }
     this.summonData = {
       statStages: [0, 0, 0, 0, 0, 0, 0],
       moveQueue: [],
       tags: [],
       abilitySuppressed: false,
       abilitiesApplied: [],
+      speciesForm: null,
       ability: AbilityId.NONE,
       passiveAbility: AbilityId.NONE,
+      gender: null,
       stats: [0, 0, 0, 0, 0, 0],
+      moveset: [],
       types: [],
       addedType: null,
       turnCount: 0,

@@ -13,10 +13,10 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { PokemonSummonData } from "#field/pokemon-summon-data";
+import type { PokemonSummonData } from "#types/PokemonSummonData";
 import type { Status } from "#types/Status";
 import { clamp, isPokemon } from "#utils/common-utils";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 export default class PokemonData {
   public id: number;
@@ -126,6 +126,13 @@ export default class PokemonData {
     this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
     // This is required because the full class object doesn't exist in save data
     this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
+    if (source.summonData.speciesForm) {
+      this.summonData.speciesForm = getPokemonSpeciesForm(
+        source.summonData.speciesForm.speciesId,
+        // @ts-expect-error - `_formIndex` is protected but we can't use `.formIndex` because it's a getter and the class data is lost
+        source.summonData.speciesForm._formIndex,
+      );
+    }
   }
 
   toPokemon(battleType?: BattleType, partyMemberIndex: number = 0, double: boolean = false): Pokemon {

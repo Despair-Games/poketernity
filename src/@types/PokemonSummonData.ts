@@ -28,16 +28,16 @@ export interface PokemonSummonData {
   tags: BattlerTag[];
   abilitySuppressed: boolean;
   abilitiesApplied: AbilityId[];
-  speciesForm?: PokemonSpeciesForm;
+  speciesForm: PokemonSpeciesForm | null;
   ability: AbilityId;
   passiveAbility: AbilityId;
-  gender?: Gender;
+  gender: Gender | null;
   /**
    * `[Hp, Atk, Def, SpAtk, SpDef, Spd]`
    * @todo Change this to an object (e.g. `stats.atk` etc)?
    */
   stats: number[];
-  moveset?: PokemonMove[];
+  moveset: PokemonMove[];
   // If not initialized this value will not be populated from save data.
   types: ElementalType[];
   addedType: ElementalType | null;

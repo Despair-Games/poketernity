@@ -1,5 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, EFFECTIVE_STATS, Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -113,5 +114,43 @@ describe("Moves - Transform", () => {
       }
       expect(move.ppUp).toBe(0);
     }
+  });
+
+  it("should persist transformed attributes across reloads", async () => {
+    game.override.enemySpecies(SpeciesId.UNOWN).enemyForms({ [SpeciesId.UNOWN]: 5 });
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(player, MoveId.TRANSFORM);
+    game.move.changeMoveset(enemy, MoveId.MEMENTO);
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.select(MoveId.TRANSFORM);
+    await game.move.selectEnemyMove(MoveId.MEMENTO);
+    await game.toNextWave();
+
+    expect(game.scene.phaseManager.getCurrentPhase()?.id).toBe(PhaseId.COMMAND);
+    expect(game.scene.currentBattle.waveIndex).toBe(2);
+
+    await game.reload.reloadSession();
+
+    const playerReloaded = game.field.getPlayerPokemon();
+    const moveset = playerReloaded.getMoveset();
+    const speciesForm = playerReloaded.getSpeciesForm();
+
+    expect(speciesForm.speciesId).toBe(enemy.getSpeciesForm().speciesId);
+    expect(speciesForm.formIndex).toBe(enemy.getSpeciesForm().formIndex);
+    expect(playerReloaded.getAbility()).toBe(enemy.getAbility());
+    expect(playerReloaded.getGender()).toBe(enemy.getGender());
+
+    expect(playerReloaded.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
+    for (const s of EFFECTIVE_STATS) {
+      expect(playerReloaded.getStat(s, false)).toBe(enemy.getStat(s, false));
+    }
+
+    expect(moveset).toHaveLength(1);
+    expect(moveset[0]?.moveId).toBe(MoveId.MEMENTO);
   });
 });
