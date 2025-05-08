@@ -36,20 +36,20 @@ describe("Moves - Focus Punch", () => {
   it("should deal damage at the end of turn if uninterrupted", async () => {
     await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to("MoveHeaderPhase");
 
-    expect(enemy.isFullHp()).toBeTruthy();
-    expect(player.getMoveHistory().length).toBe(0);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(0);
 
     await game.toEndOfTurn();
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
-    expect(player.getMoveHistory().length).toBe(1);
+    expect(player.getMoveHistory()).toHaveLength(1);
     expect(player.turnData.totalDamageDealt).toBe(enemy.getMaxHp() - enemy.hp);
   });
 
@@ -58,20 +58,20 @@ describe("Moves - Focus Punch", () => {
 
     await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to("MoveHeaderPhase");
 
-    expect(enemy.isFullHp()).toBeTruthy();
-    expect(player.getMoveHistory().length).toBe(0);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(0);
 
     await game.toEndOfTurn();
 
-    expect(enemy.isFullHp()).toBeTruthy();
-    expect(player.getMoveHistory().length).toBe(1);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(1);
     expect(player.turnData.totalDamageDealt).toBe(0);
   });
 
@@ -80,18 +80,18 @@ describe("Moves - Focus Punch", () => {
 
     await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to("MoveHeaderPhase");
 
-    expect(player.getMoveHistory().length).toBe(0);
+    expect(player.getMoveHistory()).toHaveLength(0);
 
     await game.toEndOfTurn();
 
-    expect(player.getMoveHistory().length).toBe(1);
+    expect(player.getMoveHistory()).toHaveLength(1);
     expect(enemy.hp).toBe(enemy.getMaxHp());
   });
 
