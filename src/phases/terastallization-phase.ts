@@ -22,12 +22,6 @@ export class TerastallizationPhase extends BattlePhase {
   public override start(): void {
     super.start();
 
-    // Failsafe to prevent a crash if the pokemon faints before the phase runs
-    // TODO: remove this when Tera phase timing is fixed
-    if (this.pokemon.isFainted()) {
-      return super.end();
-    }
-
     new CommonBattleAnim(CommonAnim.TERASTALLIZE, this.pokemon).play(false, () => {
       globalScene.phaseManager.queueMessagePhase(
         i18next.t("battle:pokemonTerastallized", {
