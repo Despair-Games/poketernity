@@ -7,7 +7,6 @@ import type { initGameSpeed } from "#app/system/game-speed";
 import type { nil } from "#app/@types/nil";
 import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#app/constants/game-constants";
 import type { Pokemon } from "#app/field/pokemon";
-import Phaser from "phaser";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);
