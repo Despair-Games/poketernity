@@ -36,6 +36,7 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 
+/** Lower number = lower priority */
 const COMMAND_PRIORITY_MAP = {
   [BattleCommand.FIGHT]: 0,
   [BattleCommand.TERA]: 1,
@@ -426,6 +427,13 @@ export class TurnCommandManager {
     }
   }
 
+  /**
+   * Validates a given {@linkcode BattleCommand.TERA | Tera} command and
+   * schedules a {@linkcode TerastallizationPhase} if valid.
+   * Then queues a new {@linkcode BattleCommand.FIGHT | Fight} command.
+   * @param turnCommand - The {@linkcode TurnCommand} to validate
+   * @returns Whether the command was successful
+   */
   private handleTeraCommand(turnCommand: TurnCommand): boolean {
     const { pokemon } = turnCommand;
     if (!pokemon.isActive(true)) {
