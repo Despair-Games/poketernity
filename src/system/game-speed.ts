@@ -1,9 +1,10 @@
-import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import type BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { FixedNumber } from "#app/utils/common-utils";
 import type FadeIn from "phaser3-rex-plugins/plugins/audio/fade/FadeIn";
 import type FadeOut from "phaser3-rex-plugins/plugins/audio/fade/FadeOut";
-import { globalScene } from "#app/global-scene";
-import { FixedNumber } from "#app/utils/common-utils";
-import { settings } from "#app/system/settings/settings-manager";
+import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 //#region Types
 
@@ -12,7 +13,7 @@ type FadeOut = typeof FadeOut;
 
 //#endregion
 
-export function initGameSpeed() {
+export function initGameSpeed(this: BattleScene) {
   /**
    * Adjusts the given value based on the game speed or returns it as is.
    * @param num - The value to be evaluated. Can be either a `number` or an instance of {@linkcode FixedNumber}.

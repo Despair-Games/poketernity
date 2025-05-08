@@ -5,10 +5,20 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "noImplicitOverride": true,
     "sourceMap": false,
+    // #region `strict` options
     "strict": false,
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictBuiltinIteratorReturn": true,
+    "strictFunctionTypes": false, // TODO: refactor so this can be true
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false, // TODO: refactor so this can be true
+    "noImplicitAny": false, // TODO: refactor so this can be true
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": false, // TODO: refactor so this can be true
+    // #endregion
     "rootDir": ".",
     "baseUrl": "./src",
     "paths": {
