@@ -8,6 +8,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
 
 /**
  * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
@@ -38,15 +39,10 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
    * effect score. Otherwise, this has a 60% chance to grant (+1).
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    /** Total score if the target opponent has a {@link HIGH_VALUE_ABILITIES | high-value ability} */
-    const highValueSuppressScore = 2;
-    /** Total score if the target opponent does not have a high-value ability */
-    const baseScore = this.getRandomScore(user, 60);
-
     const targetHasHighValueAbility = target
       .getAbilities({ revealedOnly: true })
       .some((ab) => !ab.passive && HIGH_VALUE_ABILITIES.includes(ab.ability.id));
 
-    return targetHasHighValueAbility ? highValueSuppressScore : baseScore;
+    return targetHasHighValueAbility ? MAJOR_EFFECT_SCORE_BONUS : this.getRandomScore(user, 60);
   }
 }

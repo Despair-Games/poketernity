@@ -9,6 +9,7 @@ import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
 
 /**
  * Attribute to swap the user and target's abilities (if both are swappable).
@@ -43,8 +44,6 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
    * has one of Huge Power, Pure Power, or Contrary, grants a (+2) effect score bonus
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    /** Bonus for if the user would benefit greatly from swapping abilities with the target */
-    const favorableSwapBonus = 2;
     /**
      * Note: this only uses a subset of {@linkcode HIGH_VALUE_ABILITIES} since
      * - Desolate Land and Primordial Sea are symmetrical effects
@@ -57,7 +56,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
       .some((ab) => !ab.passive && highValueSwappableAbilities.includes(ab.ability.id));
 
     if (DETRIMENTAL_ABILITIES.includes(user.getAbility().id) || targetHasHighValueAbility) {
-      return favorableSwapBonus;
+      return MAJOR_EFFECT_SCORE_BONUS;
     }
     return 0;
   }

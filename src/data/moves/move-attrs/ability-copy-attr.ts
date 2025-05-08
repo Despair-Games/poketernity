@@ -9,6 +9,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
+import { BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT } from "#app/constants/ai-constants";
 
 /**
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
@@ -74,17 +75,10 @@ export class AbilityCopyAttr extends MoveEffectAttr {
    * @see {@linkcode DETRIMENTAL_ABILITIES}
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    /** Penalty for if the target is known to have a detrimental ability */
-    const unfavorableCopyPenalty = -5;
-    /** Bonus granted for each affected ally with a detrimental ability */
-    const perBenefitBonus = 2;
-    /** The maximum total bonus this effect can grant */
-    const maxScoreBonus = 3;
-
     const targetRevealedAbilityId = target.getAbilities({ revealedOnly: true }).find((ab) => !ab.passive)?.ability.id;
 
     if (targetRevealedAbilityId && DETRIMENTAL_ABILITIES.includes(targetRevealedAbilityId)) {
-      return unfavorableCopyPenalty;
+      return BAD_MOVE_PENALTY;
     }
 
     const affectedPokemon: Pokemon[] = [user];
@@ -94,6 +88,6 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     }
 
     const numBenefit = affectedPokemon.filter((p) => DETRIMENTAL_ABILITIES.includes(p.getAbility().id)).length;
-    return Math.min(numBenefit * perBenefitBonus, maxScoreBonus);
+    return Math.min(numBenefit * MAJOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT);
   }
 }
