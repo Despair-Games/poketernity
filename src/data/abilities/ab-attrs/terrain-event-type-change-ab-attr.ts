@@ -38,7 +38,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     const typeChange = this.determineTypeChange(currentTerrain);
     if (typeChange !== ElementalType.UNKNOWN) {
       if (pokemon.summonData.addedType === typeChange) {
-        pokemon.summonData.addedType = undefined;
+        pokemon.summonData.addedType = null;
       }
       pokemon.setTemporaryTypes(typeChange);
       pokemon.updateInfo();

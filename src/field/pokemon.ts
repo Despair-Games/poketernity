@@ -4152,6 +4152,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       passiveAbility: AbilityId.NONE,
       stats: [0, 0, 0, 0, 0, 0],
       types: [],
+      addedType: null,
       turnCount: 0,
       waveTurnCount: 0,
       moveHistory: [],
@@ -4186,7 +4187,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.summonDataPrimer = null;
     }
-    this.updateInfo();
+    if (this.battleInfo) {
+      this.updateInfo();
+    }
   }
 
   resetWaveData(): void {

@@ -40,7 +40,7 @@ export interface PokemonSummonData {
   moveset?: PokemonMove[];
   // If not initialized this value will not be populated from save data.
   types: ElementalType[];
-  addedType?: ElementalType;
+  addedType: ElementalType | null;
   /** The number of turns the pokemon has passed since entering the field */
   turnCount: number;
   /**
