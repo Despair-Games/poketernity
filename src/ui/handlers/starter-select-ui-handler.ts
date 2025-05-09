@@ -1,6 +1,7 @@
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
+import { loggedInUser } from "#app/account";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
@@ -33,7 +34,6 @@ import Overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
-import { StarterPrefs } from "#app/system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { handleTutorial } from "#app/tutorial";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
@@ -176,6 +176,36 @@ function findClosestStarterRow(index: number, numberOfRows: number) {
     }
   }
   return closestRowIndex;
+}
+
+// the latest data saved/loaded for the Starter Preferences. Required to reduce read/writes. Initialize as "{}", since this is the default value and no data needs to be stored if present.
+// if they ever add private static variables, move this into StarterPrefs
+const StarterPrefers_DEFAULT: string = "{}";
+let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
+
+// StarterPreferences...
+// - don't need to be loaded on startup
+// - isn't stored with other data
+// - don't require to be encrypted
+// - shouldn't require calls outside of the starter selection
+
+/** called on starter selection show once */
+function loadStarterPrefs(): StarterPreferences {
+  return JSON.parse(
+    (StarterPrefers_private_latest =
+      localStorage.getItem(`starterPrefs_${loggedInUser?.username}`) || StarterPrefers_DEFAULT),
+  );
+}
+
+/** called on starter selection clear, always */
+function saveStarterPrefs(prefs: StarterPreferences): void {
+  const pStr: string = JSON.stringify(prefs);
+  if (pStr !== StarterPrefers_private_latest) {
+    // something changed, store the update
+    localStorage.setItem(`starterPrefs_${loggedInUser?.username}`, pStr);
+    // update the latest prefs
+    StarterPrefers_private_latest = pStr;
+  }
 }
 
 interface SpeciesDetails {
@@ -1052,7 +1082,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   public override show(selectedStarterCallback?: StarterSelectCallback): boolean {
     if (!this.starterPreferences || Object.keys(this.starterPreferences).length === 0) {
       // starterPreferences haven't been loaded yet
-      this.starterPreferences = StarterPrefs.load();
+      this.starterPreferences = loadStarterPrefs();
     }
     this.pokerusSpecies = getPokerusStarters();
 
@@ -4139,7 +4169,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   protected override clear(): void {
-    StarterPrefs.save(this.starterPreferences);
+    saveStarterPrefs(this.starterPreferences);
     this.cursor = -1;
     this.hideInstructions();
     this.activeTooltip = undefined;
