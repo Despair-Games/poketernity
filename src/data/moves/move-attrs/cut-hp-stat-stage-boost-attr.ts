@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";

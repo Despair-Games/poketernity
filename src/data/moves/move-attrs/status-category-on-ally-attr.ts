@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import type { NumberHolder } from "#utils/common-utils";

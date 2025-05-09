@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MovePowerMultiplierAttr } from "#moves/move-power-multiplier-attr";
 import type { TurnMove } from "#types/TurnMove";

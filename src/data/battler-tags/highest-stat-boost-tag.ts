@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
@@ -8,6 +7,7 @@ import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**

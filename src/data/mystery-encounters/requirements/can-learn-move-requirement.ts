@@ -1,7 +1,7 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { MoveId } from "#enums/move-id";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { EncounterPokemonRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { coerceArray, isNil } from "#utils/common-utils";
 

@@ -1,11 +1,11 @@
 import type BattleScene from "#app/battle-scene";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { GameManager } from "#test/test-utils/gameManager";
 import { randSeedInt } from "#utils/random-utils";
 import Phaser from "phaser";

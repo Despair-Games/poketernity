@@ -1,7 +1,7 @@
 import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#moves/neutral-damage-against-flying-type-multiplier-attr";
 import type { AbAttrCondition } from "#types/AbAttrCondition";

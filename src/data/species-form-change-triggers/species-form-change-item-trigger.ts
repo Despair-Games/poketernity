@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { FormChangeItem } from "#enums/form-change-item";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 
 export class SpeciesFormChangeItemTrigger extends SpeciesFormChangeTrigger {

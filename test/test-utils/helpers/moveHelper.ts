@@ -1,5 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { BattleCommand } from "#enums/battle-command";
@@ -7,6 +5,8 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { getMoveTargets } from "#moves/move";
 import type { CommandPhase } from "#phases/command-phase";
 import type { EnemyCommandPhase } from "#phases/enemy-command-phase";

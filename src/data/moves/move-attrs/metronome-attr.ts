@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { allMoves } from "#data/data-lists";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
 import { getEnumValues, type BooleanHolder } from "#utils/common-utils";

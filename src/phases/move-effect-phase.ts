@@ -4,7 +4,6 @@ import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { MoveAnim } from "#animations/move-anim";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -31,6 +30,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
 import { FlinchAttr } from "#moves/flinch-attr";

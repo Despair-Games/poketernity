@@ -1,11 +1,11 @@
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import i18next from "i18next";
 

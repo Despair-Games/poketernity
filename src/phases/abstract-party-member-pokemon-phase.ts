@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/abstract-field-phase";
 
 // TODO: Delete this class and replace its uses with `PokemonPhase`

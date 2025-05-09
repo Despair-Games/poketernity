@@ -1,6 +1,5 @@
 import { api } from "#api/api";
 import { clientSessionId } from "#app/account";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { getCharVariantFromDialogue } from "#data/dialogue";
@@ -12,6 +11,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
+import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";

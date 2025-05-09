@@ -1,6 +1,3 @@
-import { getBiomeKey } from "#app/field/arena";
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
@@ -15,6 +12,9 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { getBiomeKey } from "#field/arena";
+import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

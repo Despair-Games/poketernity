@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
@@ -6,6 +5,7 @@ import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
 import { TextStyle } from "#enums/text-style";
 import type { BerryUsedEvent, MoveUsedEvent } from "#events/battle-scene";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { addTextObject } from "#ui/text-utils";
 import { fixedNumber } from "#utils/common-utils";

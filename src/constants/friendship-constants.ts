@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { PokemonLevelIncrementModifier } from "#app/modifier/modifier";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import type { FaintPhase } from "#phases/faint-phase";
 import type { LevelUpPhase } from "#phases/level-up-phase";
 import type { NextEncounterPhase } from "#phases/next-encounter-phase";

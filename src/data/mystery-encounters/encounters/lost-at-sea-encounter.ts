@@ -1,4 +1,3 @@
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { MoveId } from "#enums/move-id";
@@ -6,6 +5,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { PokemonMove } from "#field/pokemon-move";
 import { leaveEncounterWithoutBattle, setEncounterExp } from "#mystery-encounters/encounter-phase-utils";
 import { applyDamageToPokemon } from "#mystery-encounters/encounter-pokemon-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";

@@ -1,8 +1,8 @@
 import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveFlags } from "#enums/move-flags";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
 /**

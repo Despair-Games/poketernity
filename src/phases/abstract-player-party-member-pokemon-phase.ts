@@ -1,4 +1,4 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
 
 // TODO: Delete this phase and replace it with PokemonPhase

@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 import type { NumberHolder } from "#utils/common-utils";

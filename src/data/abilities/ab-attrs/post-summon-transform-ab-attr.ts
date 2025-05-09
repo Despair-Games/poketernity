@@ -1,7 +1,7 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { Pokemon } from "#field/pokemon";
 import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";

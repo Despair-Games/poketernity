@@ -1,5 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import {
@@ -16,6 +14,8 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   generateModifierType,

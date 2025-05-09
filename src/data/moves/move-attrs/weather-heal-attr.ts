@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { HealAttr } from "#moves/heal-attr";
 import type { Move } from "#moves/move";
 

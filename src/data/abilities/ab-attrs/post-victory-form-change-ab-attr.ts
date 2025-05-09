@@ -1,6 +1,6 @@
 import { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 
 export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {

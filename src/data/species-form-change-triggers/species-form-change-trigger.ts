@@ -1,4 +1,4 @@
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { AbstractConstructor } from "#types/AbstractConstructor";
 
 export abstract class SpeciesFormChangeTrigger {

@@ -1,6 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -29,6 +26,9 @@ import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import {
   getEncounterText,
   queueEncounterMessage,

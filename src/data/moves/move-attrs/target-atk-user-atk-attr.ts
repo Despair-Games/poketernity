@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableAtkAttr } from "#moves/variable-atk-attr";
 

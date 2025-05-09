@@ -2,11 +2,11 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IntimidateImmunityAbAttr } from "#abilities/intimidate-immunity-ab-attr";
 import type { PostIntimidateStatStageChangeAbAttr } from "#abilities/post-intimidate-stat-stage-change-ab-attr";
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { BooleanHolder } from "#utils/common-utils";
 

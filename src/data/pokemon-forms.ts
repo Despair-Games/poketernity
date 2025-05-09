@@ -6,7 +6,6 @@ import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allMoves } from "#data/data-lists";
@@ -17,6 +16,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { MeloettaFormChangePostMoveTrigger } from "#form-change-triggers/meloetta-form-change-post-move-trigger";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { SpeciesFormChangeCompoundTrigger } from "#form-change-triggers/species-form-change-compound-trigger";

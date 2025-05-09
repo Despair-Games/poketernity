@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BiomeId } from "#enums/biome-id";
 import { ElementalType } from "#enums/elemental-type";
@@ -10,6 +9,7 @@ import { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { randSeedInt } from "#utils/random-utils";
 
 /**

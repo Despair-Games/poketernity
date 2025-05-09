@@ -1,6 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { HumanTransitableBiomes } from "#data/biome-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
@@ -9,6 +7,8 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { AnOfferYouCantRefuseEncounter } from "#mystery-encounters/an-offer-you-cant-refuse-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";

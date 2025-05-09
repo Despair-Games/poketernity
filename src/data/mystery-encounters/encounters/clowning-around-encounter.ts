@@ -1,7 +1,5 @@
 import { Ability } from "#abilities/ability";
 import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -25,6 +23,8 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { showEncounterDialogue, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

@@ -1,10 +1,10 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { BooleanHolder } from "#utils/common-utils";

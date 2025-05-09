@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 import { coerceArray } from "#utils/common-utils";
 

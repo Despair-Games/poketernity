@@ -1,7 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type {
@@ -36,6 +34,8 @@ import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTL
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { VoucherType } from "#enums/voucher-type";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvolutionPhase } from "#phases/evolution-phase";

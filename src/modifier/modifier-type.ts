@@ -1,7 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -62,6 +58,10 @@ import { SpeciesId } from "#enums/species-id";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import type { VoucherType } from "#enums/voucher-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";

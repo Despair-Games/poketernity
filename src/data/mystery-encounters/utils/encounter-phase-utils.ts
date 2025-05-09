@@ -1,9 +1,4 @@
 import type Battle from "#app/battle";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
-import Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -46,6 +41,11 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
+import Trainer from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";

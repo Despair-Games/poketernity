@@ -1,9 +1,9 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

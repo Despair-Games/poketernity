@@ -176,7 +176,6 @@ import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boo
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allAbilities, allMoves } from "#data/data-lists";
@@ -193,6 +192,7 @@ import { type EffectiveStat, EFFECTIVE_STATS, getStatKey, Stat } from "#enums/st
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";

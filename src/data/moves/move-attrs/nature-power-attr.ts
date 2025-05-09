@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { TerrainType } from "#enums/terrain-type";
+import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
 import type { BooleanHolder } from "#utils/common-utils";

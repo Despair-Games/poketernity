@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -10,6 +9,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";

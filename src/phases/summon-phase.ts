@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
@@ -8,6 +7,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";

@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { AddArenaTagAttr } from "#moves/add-arena-tag-attr";
 import type { Move } from "#moves/move";
 

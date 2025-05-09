@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { CommandedTag } from "#battler-tags/commanded-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { type EffectiveStat, Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";

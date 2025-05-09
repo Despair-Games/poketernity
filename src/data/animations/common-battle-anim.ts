@@ -1,8 +1,8 @@
 import type { LegacyAnimConfig } from "#animations/anim-config";
 import { BattleAnim } from "#animations/battle-anims";
 import { commonAnims } from "#animations/common-anims";
-import type { Pokemon } from "#app/field/pokemon";
 import type { CommonAnim } from "#enums/common-anim";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Animation for common battle effects that are (usually)

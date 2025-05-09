@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";

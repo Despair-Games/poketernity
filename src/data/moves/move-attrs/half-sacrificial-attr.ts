@@ -1,11 +1,11 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";

@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT } from "#constants/ui-constants";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -6,6 +5,7 @@ import { CommonColor, ShadowColor } from "#enums/color";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { HitResult } from "#enums/hit-result";
 import { TextStyle } from "#enums/text-style";
+import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
 import type { DamageResult } from "#types/DamageResult";
 import { addTextObject } from "#ui/text-utils";

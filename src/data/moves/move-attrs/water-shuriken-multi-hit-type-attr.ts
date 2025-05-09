@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { AbilityId } from "#enums/ability-id";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { SpeciesId } from "#enums/species-id";
+import type { Pokemon } from "#field/pokemon";
 import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
 import type { Move } from "#moves/move";
 import type { NumberHolder } from "#utils/common-utils";

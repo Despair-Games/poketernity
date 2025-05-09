@@ -1,4 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -17,6 +16,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   handleMysteryEncounterBattleFailed,

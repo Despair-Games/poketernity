@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { MOVE_LOCK_TAG_TYPES, SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
 import { failOnGravityCondition } from "#moves/fail-on-gravity-condition";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";

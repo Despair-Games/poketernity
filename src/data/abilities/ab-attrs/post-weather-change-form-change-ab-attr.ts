@@ -1,9 +1,9 @@
 import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
 import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Triggers weather-based form change when weather changes.

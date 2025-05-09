@@ -1,9 +1,9 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import i18next from "i18next";
 

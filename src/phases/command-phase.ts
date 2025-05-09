@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
@@ -22,6 +21,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
 import { FieldPhase } from "#phases/abstract-field-phase";
 import type { FightCommand } from "#types/FightCommand";

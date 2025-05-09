@@ -1,11 +1,11 @@
 import type { FixedBattleConfig } from "#app/battle";
-import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import type PokemonSpecies from "#data/pokemon-species";
 import { ChallengeType } from "#enums/challenge-type";
 import type { MoveId } from "#enums/move-id";
 import type { MoveSourceType } from "#enums/move-source-type";
 import type { SpeciesId } from "#enums/species-id";
+import type { Pokemon } from "#field/pokemon";
 import type { DexAttrProps } from "#system/game-data";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 

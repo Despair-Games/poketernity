@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 
 /**

@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
 import { Challenges } from "#enums/challenges";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 
 export class MeloettaFormChangePostMoveTrigger extends SpeciesFormChangePostMoveTrigger {

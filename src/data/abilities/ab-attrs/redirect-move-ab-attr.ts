@@ -1,9 +1,9 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { allMoves } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
 import type { NumberHolder } from "#utils/common-utils";
 
 export class RedirectMoveAbAttr extends AbAttr {

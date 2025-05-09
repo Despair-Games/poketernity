@@ -1,6 +1,3 @@
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { type BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
@@ -17,6 +14,9 @@ import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

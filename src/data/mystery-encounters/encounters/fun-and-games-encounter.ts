@@ -1,5 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -13,6 +11,8 @@ import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {

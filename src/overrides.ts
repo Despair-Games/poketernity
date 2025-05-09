@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { PokeballCounts } from "#app/battle-scene";
-import type { Arena } from "#app/field/arena";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
@@ -25,6 +24,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
+import type { Arena } from "#field/arena";
 
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports

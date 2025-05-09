@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleCommand } from "#enums/battle-command";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { BooleanHolder } from "#utils/common-utils";
 

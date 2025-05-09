@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { FireSpinTag } from "#battler-tags/fire-spin-tag";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Used for G-Max Centiferno that leaves a fire spin

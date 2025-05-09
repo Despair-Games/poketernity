@@ -1,7 +1,3 @@
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
@@ -31,6 +27,10 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   leaveEncounterWithoutBattle,

@@ -1,5 +1,5 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import type { DexEntry } from "#types/DexData";
 import type { StarterDataEntry } from "#types/StarterData";
 

@@ -1,4 +1,4 @@
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
 import type { NumberHolder } from "#utils/common-utils";

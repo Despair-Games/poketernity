@@ -1,4 +1,4 @@
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 
 export class SpeciesFormChangeManualTrigger extends SpeciesFormChangeTrigger {

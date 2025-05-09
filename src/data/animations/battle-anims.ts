@@ -1,11 +1,11 @@
 import type { AnimFrame, LegacyAnimConfig } from "#animations/anim-config";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
 import type { nil } from "#types/nil";
 import { getEnumValues, getFrameMs, isNil } from "#utils/common-utils";

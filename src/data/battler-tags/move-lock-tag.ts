@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { allMoves } from "#data/data-lists";
@@ -8,6 +7,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
 import { type Move, getMoveTargets } from "#moves/move";
 
 /**

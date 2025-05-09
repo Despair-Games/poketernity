@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MoveLockTag } from "#battler-tags/move-lock-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type Move } from "#moves/move";
 
 /**

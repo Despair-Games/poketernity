@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";

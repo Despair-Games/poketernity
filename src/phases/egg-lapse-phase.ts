@@ -1,4 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
@@ -8,6 +7,7 @@ import { EggHatchData } from "#data/egg-hatch-data";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { EggHatchPhase } from "#phases/egg-hatch-phase";
 import { EggSummaryPhase } from "#phases/egg-summary-phase";
 import { settings } from "#system/settings-manager";

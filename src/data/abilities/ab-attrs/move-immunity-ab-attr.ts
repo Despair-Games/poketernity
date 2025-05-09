@@ -1,7 +1,7 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PreDefendAbAttrCondition } from "#types/PreDefendAbAttrCondition";
 import type { BooleanHolder } from "#utils/common-utils";

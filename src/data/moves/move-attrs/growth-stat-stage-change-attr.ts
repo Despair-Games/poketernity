@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 
 /**

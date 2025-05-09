@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
+import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { isNil } from "#utils/common-utils";
 

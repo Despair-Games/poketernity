@@ -1,7 +1,7 @@
 import { MoveImmunityAbAttr } from "#abilities/move-immunity-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type { PreDefendAbAttrCondition } from "#types/PreDefendAbAttrCondition";

@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { DamageProtectedTag } from "#battler-tags/damage-protected-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
 /**

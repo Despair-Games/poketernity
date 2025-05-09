@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { getFrameMs } from "#utils/common-utils";
 
 /**

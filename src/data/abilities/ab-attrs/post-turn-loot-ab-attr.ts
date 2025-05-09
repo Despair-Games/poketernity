@@ -1,9 +1,9 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryModifierType } from "#app/modifier/modifier-type";
+import type { Pokemon } from "#field/pokemon";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 

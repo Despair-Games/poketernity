@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
@@ -13,6 +12,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";

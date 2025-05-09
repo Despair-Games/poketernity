@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -8,6 +7,7 @@ import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
 import type { Move } from "#moves/move";

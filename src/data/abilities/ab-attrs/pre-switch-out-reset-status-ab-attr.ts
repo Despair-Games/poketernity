@@ -1,5 +1,5 @@
 import { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 
 export class PreSwitchOutResetStatusAbAttr extends PreSwitchOutAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

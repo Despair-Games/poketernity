@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";

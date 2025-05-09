@@ -1,6 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
@@ -27,6 +24,9 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerType } from "#enums/trainer-type";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   generateModifierType,

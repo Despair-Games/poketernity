@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { TERA_MOVES } from "#constants/move-constants";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import type { AbAttrCondition } from "#types/AbAttrCondition";

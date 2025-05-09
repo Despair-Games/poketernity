@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BideTag } from "#battler-tags/bide-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import { CommonAnimPhase } from "#phases/common-anim-phase";

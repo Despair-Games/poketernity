@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 

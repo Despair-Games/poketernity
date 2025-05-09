@@ -1,5 +1,3 @@
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
@@ -15,6 +13,8 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

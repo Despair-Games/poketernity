@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**

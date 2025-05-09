@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import {
   DoubleBattleChanceBoosterModifier,
@@ -22,6 +21,7 @@ import { MoveId } from "#enums/move-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Unlockables } from "#enums/unlockables";
+import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { isNil } from "#utils/common-utils";
 

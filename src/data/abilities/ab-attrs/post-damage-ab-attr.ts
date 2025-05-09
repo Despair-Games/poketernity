@@ -1,6 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Triggers after the Pokemon takes any damage

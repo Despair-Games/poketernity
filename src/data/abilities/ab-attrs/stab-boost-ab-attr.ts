@@ -5,9 +5,9 @@ import type { AbilityId } from "#enums/ability-id";
 // -- end tsdoc imports --
 
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { NumberHolder } from "#utils/common-utils";
 

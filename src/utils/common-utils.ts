@@ -4,7 +4,7 @@ import type { initGameSpeed } from "#system/game-speed";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { nil } from "#types/nil";
 
 export function getFrameMs(frameCount: number): number {

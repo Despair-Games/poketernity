@@ -1,4 +1,3 @@
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
@@ -12,6 +11,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { PokemonMove } from "#field/pokemon-move";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig, EnemyPokemonConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

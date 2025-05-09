@@ -1,7 +1,7 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 import { TurnInitEvent } from "#events/battle-scene";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,

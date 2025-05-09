@@ -1,4 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
@@ -20,6 +19,7 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#utils/random-utils";

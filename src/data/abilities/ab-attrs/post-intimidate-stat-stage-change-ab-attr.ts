@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 export class PostIntimidateStatStageChangeAbAttr extends AbAttr {

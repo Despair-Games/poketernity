@@ -7,14 +7,14 @@ import type { VictoryPhase } from "#phases/victory-phase";
 // -- end tsdoc imports --
 
 import { MoveChargeAnim } from "#animations/move-charge-anim";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Phase } from "#app/phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import { BattleEndPhase } from "#phases/battle-end-phase";
 import { FaintPhase } from "#phases/faint-phase";
 import { GameOverPhase } from "#phases/game-over-phase";

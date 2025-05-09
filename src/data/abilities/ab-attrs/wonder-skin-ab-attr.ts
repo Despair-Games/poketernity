@@ -1,7 +1,7 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { NumberHolder } from "#utils/common-utils";
 

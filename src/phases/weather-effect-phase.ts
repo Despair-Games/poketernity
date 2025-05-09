@@ -4,7 +4,6 @@ import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-at
 import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { WEATHER_DAMAGE_RATIO } from "#constants/weather-constants";
 import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#data/weather";
@@ -14,6 +13,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/abstract-field-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 

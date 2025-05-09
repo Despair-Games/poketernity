@@ -1,6 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import * as messages from "#app/messages";
 import { BindTag } from "#battler-tags/bind-tag";
 import { SubstituteTag } from "#battler-tags/substitute-tag";
@@ -11,6 +9,8 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import { AttackMove } from "#moves/move";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/gameManager";

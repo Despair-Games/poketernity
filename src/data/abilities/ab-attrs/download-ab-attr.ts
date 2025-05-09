@@ -1,8 +1,8 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { type BattleStat, Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**

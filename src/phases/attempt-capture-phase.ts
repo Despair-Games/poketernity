@@ -1,4 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
@@ -21,6 +20,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { achvs } from "#system/achievements";

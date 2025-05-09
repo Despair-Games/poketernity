@@ -1,9 +1,9 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { CanLearnMoveRequirementOptions } from "#mystery-encounters/can-learn-move-requirement";
 import { CanLearnMoveRequirement } from "#mystery-encounters/can-learn-move-requirement";
 import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";

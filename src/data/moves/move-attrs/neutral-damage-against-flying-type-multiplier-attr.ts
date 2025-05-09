@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
 import type { NumberHolder } from "#utils/common-utils";

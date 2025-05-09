@@ -1,6 +1,5 @@
 import { api } from "#api/api";
 import { loggedInUser } from "#app/account";
-import { getBiomeKey } from "#app/field/arena";
 import { GameMode, getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import type { Modifier } from "#app/modifier/modifier";
@@ -16,6 +15,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
+import { getBiomeKey } from "#field/arena";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";
 import { EncounterPhase } from "#phases/encounter-phase";
 import { SelectChallengePhase } from "#phases/select-challenge-phase";

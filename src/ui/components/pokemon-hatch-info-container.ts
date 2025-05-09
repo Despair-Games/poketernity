@@ -1,4 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import { getEggTierForSpecies } from "#data/egg";
@@ -9,6 +8,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { PokemonInfoContainer } from "#ui/pokemon-info-container";
 import { addTextObject } from "#ui/text-utils";
 import { rgbHexToRgba } from "#utils/color-utils";

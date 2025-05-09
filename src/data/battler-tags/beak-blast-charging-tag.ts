@@ -1,5 +1,4 @@
 import { MoveChargeAnim } from "#animations/move-charge-anim";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -10,6 +9,7 @@ import { ChargeAnim } from "#enums/charge-anim";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**

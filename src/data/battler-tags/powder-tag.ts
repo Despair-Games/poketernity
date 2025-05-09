@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -12,6 +11,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MovePhase } from "#phases/move-phase";
 import { BooleanHolder } from "#utils/common-utils";

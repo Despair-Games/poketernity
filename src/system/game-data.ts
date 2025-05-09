@@ -1,8 +1,5 @@
 import { api } from "#api/api";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
@@ -50,6 +47,9 @@ import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { ReloadSessionPhase } from "#phases/reload-session-phase";
 import { achvs } from "#system/achievements";

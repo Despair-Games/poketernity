@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
 

@@ -1,8 +1,3 @@
-import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
-import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { Challenges } from "#enums/challenges";
@@ -13,6 +8,11 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { StatusEffect } from "#enums/status-effect";
+import type { MysteryEncounterSpriteConfig } from "#field/mystery-encounter-intro";
+import MysteryEncounterIntroVisuals from "#field/mystery-encounter-intro";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounterDialogue from "#mystery-encounters/mystery-encounter-dialogue";
 import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";

@@ -43,10 +43,6 @@ import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-ba
 import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
 import {
   BaseStatModifier,
@@ -143,6 +139,10 @@ import {
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";

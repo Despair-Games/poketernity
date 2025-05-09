@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { NumberHolder } from "#utils/common-utils";

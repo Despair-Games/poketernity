@@ -1,6 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
@@ -14,6 +11,9 @@ import { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
 import type { Status } from "#types/Status";
 import { isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";

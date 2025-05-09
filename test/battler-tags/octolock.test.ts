@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { OctolockTag } from "#battler-tags/octolock-tag";
 import { TrappedTag } from "#battler-tags/trapped-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";

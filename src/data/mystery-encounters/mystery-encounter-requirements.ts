@@ -1,5 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { allAbilities } from "#data/data-lists";
 import { pokemonFormChanges } from "#data/pokemon-forms";
@@ -15,6 +13,8 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { coerceArray, isNil } from "#utils/common-utils";

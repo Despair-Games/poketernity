@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
 import type { AttackMoveResult } from "#types/AttackMoveResult";

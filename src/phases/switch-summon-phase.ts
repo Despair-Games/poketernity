@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
@@ -11,6 +10,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PostSummonPhase } from "#phases/post-summon-phase";
 import { SummonPhase } from "#phases/summon-phase";

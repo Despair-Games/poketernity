@@ -1,8 +1,8 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";
+import type { Pokemon } from "#field/pokemon";
 import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";

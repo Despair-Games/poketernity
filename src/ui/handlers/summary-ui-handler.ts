@@ -1,7 +1,5 @@
 import type { Ability } from "#abilities/ability";
 import { loggedInUser } from "#app/account";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { CANVAS_SCALE, TEXT_SCALE } from "#constants/ui-constants";
@@ -25,6 +23,8 @@ import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import type { Move } from "#moves/move";
 import { settings } from "#system/settings-manager";
 import type { PartyUiHandler } from "#ui/party-ui-handler";

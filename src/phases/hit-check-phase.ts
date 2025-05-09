@@ -1,5 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { ProtectedTag } from "#battler-tags/protected-tag";
@@ -14,6 +12,8 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import { BideEffectAttr } from "#moves/bide-effect-attr";
 import { HitsTagAttr } from "#moves/hits-tag-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";

@@ -1,9 +1,9 @@
 import { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { isNil, type NumberHolder } from "#utils/common-utils";
 

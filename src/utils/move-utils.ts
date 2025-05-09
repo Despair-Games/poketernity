@@ -1,13 +1,13 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import type { AbstractConstructor } from "#types/AbstractConstructor";

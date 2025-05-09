@@ -1,6 +1,5 @@
 import Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon } from "#app/field/player-pokemon";
 import { getGameMode } from "#app/game-mode";
 import { getDailyRunStarters } from "#data/daily-run";
 import { BattleType } from "#enums/battle-type";
@@ -8,6 +7,7 @@ import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
+import { PlayerPokemon } from "#field/player-pokemon";
 import type { StarterConfig } from "#types/StarterConfig";
 import type { StarterMoveset } from "#types/StarterData";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";

@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -10,6 +9,7 @@ import { CommonAnim } from "#enums/common-anim";
 import type { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
+import type { Pokemon } from "#field/pokemon";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MovePhase } from "#phases/move-phase";
 import { isNil, toDmgValue } from "#utils/common-utils";

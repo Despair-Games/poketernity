@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";

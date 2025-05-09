@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -8,6 +7,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.

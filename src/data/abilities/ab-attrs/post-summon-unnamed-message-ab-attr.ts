@@ -1,6 +1,6 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Displays the message for Cloud Nine and Air Lock.

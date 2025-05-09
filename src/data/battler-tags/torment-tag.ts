@@ -1,4 +1,3 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
@@ -7,6 +6,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
+import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**

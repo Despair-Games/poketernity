@@ -1,6 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -29,6 +26,9 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { achvs } from "#system/achievements";

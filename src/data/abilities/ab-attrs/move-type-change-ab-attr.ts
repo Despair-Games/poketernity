@@ -1,7 +1,7 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
 import type { NumberHolder } from "#utils/common-utils";

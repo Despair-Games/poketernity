@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
+import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
 import { addTextObject } from "#ui/text-utils";
 

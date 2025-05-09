@@ -1,6 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import type { EncoreTag } from "#battler-tags/encore-tag";
@@ -22,6 +19,9 @@ import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";

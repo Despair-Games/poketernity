@@ -1,5 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
 export abstract class PreDefendAbAttr extends AbAttr {

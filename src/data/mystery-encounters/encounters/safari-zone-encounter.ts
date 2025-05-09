@@ -1,4 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
@@ -12,6 +11,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   initSubsequentOptionSelect,

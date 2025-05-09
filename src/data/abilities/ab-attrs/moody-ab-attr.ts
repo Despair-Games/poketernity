@@ -1,7 +1,7 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { EFFECTIVE_STATS } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**

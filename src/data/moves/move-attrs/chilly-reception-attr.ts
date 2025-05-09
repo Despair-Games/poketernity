@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";

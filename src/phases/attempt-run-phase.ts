@@ -1,13 +1,13 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";

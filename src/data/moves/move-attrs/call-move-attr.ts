@@ -7,11 +7,11 @@ import type { RandomMovesetMoveAttr } from "#moves/random-moveset-move-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
 import { type Move, getMoveTargets } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import { LoadMoveAnimPhase } from "#phases/load-move-anim-phase";

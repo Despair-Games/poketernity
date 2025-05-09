@@ -1,7 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -11,6 +9,8 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { SwitchPhase } from "#phases/switch-phase";

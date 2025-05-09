@@ -1,7 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import Trainer from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -41,6 +37,10 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import Trainer from "#field/trainer";
 import type { Move } from "#moves/move";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";

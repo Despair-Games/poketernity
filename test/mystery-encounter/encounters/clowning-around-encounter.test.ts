@@ -1,6 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -18,6 +16,8 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import * as InitMoveAnim from "#init/init-move-anim";
 import { ClowningAroundEncounter } from "#mystery-encounters/clowning-around-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";

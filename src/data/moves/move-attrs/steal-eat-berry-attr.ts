@@ -1,9 +1,9 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
 import { EatBerryAttr } from "#moves/eat-berry-attr";
 import type { Move } from "#moves/move";
 import { BooleanHolder } from "#utils/common-utils";

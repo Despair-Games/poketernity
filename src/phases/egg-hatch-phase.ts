@@ -1,5 +1,4 @@
 import type { AnySound } from "#app/audio-manager";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
@@ -9,6 +8,7 @@ import type { EggHatchData } from "#data/egg-hatch-data";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { EggCountChangedEvent } from "#events/egg";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import type { EggLapsePhase } from "#phases/egg-lapse-phase";
 import { EggCounterContainer } from "#ui/egg-counter-container";
 import type { EggHatchSceneUiHandler } from "#ui/egg-hatch-scene-ui-handler";

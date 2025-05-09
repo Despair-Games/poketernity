@@ -1,6 +1,5 @@
 import type { FixedBattleConfigs } from "#app/battle";
 import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
-import type { Arena } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { DEFAULT_STARTING_MONEY } from "#constants/game-constants";
@@ -17,6 +16,7 @@ import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";
 import { GameModes } from "#enums/game-modes";
 import { SpeciesId } from "#enums/species-id";
+import type { Arena } from "#field/arena";
 import { applyChallenges } from "#utils/challenge-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";

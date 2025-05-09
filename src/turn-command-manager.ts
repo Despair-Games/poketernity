@@ -7,8 +7,6 @@ import type { MovePhase } from "#phases/move-phase";
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -20,6 +18,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
 import { AttemptCapturePhase } from "#phases/attempt-capture-phase";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";

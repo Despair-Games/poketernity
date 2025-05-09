@@ -1,7 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -9,6 +8,7 @@ import { BiomeId } from "#enums/biome-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
+import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";

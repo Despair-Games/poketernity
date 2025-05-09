@@ -1,5 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import type PokemonSpecies from "#data/pokemon-species";
@@ -11,6 +9,8 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import { PlayerPokemon } from "#field/player-pokemon";
 import { showEncounterDialogue } from "#mystery-encounters/encounter-dialogue-utils";
 import { leaveEncounterWithoutBattle, updatePlayerMoney } from "#mystery-encounters/encounter-phase-utils";
 import {

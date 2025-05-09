@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Arena } from "#app/field/arena";
+import type { Arena } from "#field/arena";
 import { GameManager } from "#test/test-utils/gameManager";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --

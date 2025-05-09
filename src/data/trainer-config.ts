@@ -1,4 +1,3 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
@@ -15,6 +14,7 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";

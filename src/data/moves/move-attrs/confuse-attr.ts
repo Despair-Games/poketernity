@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
 import i18next from "i18next";

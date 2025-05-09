@@ -4,7 +4,6 @@ import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 
 import { api } from "#api/api";
-import { getBiomeHasProps } from "#app/field/arena";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
@@ -21,6 +20,7 @@ import { CommonColor } from "#enums/color";
 import { GachaType } from "#enums/gacha-types";
 import { ImagesFolder } from "#enums/images-folders";
 import { WindowVariant } from "#enums/window-variant";
+import { getBiomeHasProps } from "#field/arena";
 import { initAbilities } from "#init/init-abilities";
 import { initBiomes } from "#init/init-biomes";
 import { initMoves } from "#init/init-moves";

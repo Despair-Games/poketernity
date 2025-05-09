@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
 import type { Move } from "#moves/move";
 

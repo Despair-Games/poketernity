@@ -1,8 +1,8 @@
 import { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon switching out.

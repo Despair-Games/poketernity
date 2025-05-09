@@ -1,5 +1,3 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -22,6 +20,8 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";

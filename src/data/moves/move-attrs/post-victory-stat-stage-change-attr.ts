@@ -1,5 +1,5 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";

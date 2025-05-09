@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { NumberHolder } from "#utils/common-utils";

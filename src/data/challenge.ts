@@ -1,7 +1,4 @@
 import type { FixedBattleConfig } from "#app/battle";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import Trainer from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
 import { defaultStarterSpecies } from "#data/default-starters";
 import { pokemonFormChanges } from "#data/pokemon-forms";
@@ -17,6 +14,9 @@ import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import Trainer from "#field/trainer";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { DexAttrProps, GameData } from "#system/game-data";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";

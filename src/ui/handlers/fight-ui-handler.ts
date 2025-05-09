@@ -1,6 +1,4 @@
 import type { InfoToggle } from "#app/battle-scene";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { getTypeDamageMultiplierColor } from "#data/type";
@@ -12,6 +10,8 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 import type { CommandPhase } from "#phases/command-phase";
 import { settings } from "#system/settings-manager";
 import type { FightCommand } from "#types/FightCommand";
