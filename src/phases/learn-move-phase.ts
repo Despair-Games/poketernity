@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -19,6 +18,7 @@ import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {

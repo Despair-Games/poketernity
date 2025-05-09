@@ -1,10 +1,10 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockOneHitKOAbAttr } from "#abilities/block-one-hit-ko-ab-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 
 /**

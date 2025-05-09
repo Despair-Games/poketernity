@@ -178,7 +178,6 @@ import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { allAbilities, allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -199,6 +198,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import { FlinchAttr } from "#moves/flinch-attr";
+import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import i18next from "i18next";
 

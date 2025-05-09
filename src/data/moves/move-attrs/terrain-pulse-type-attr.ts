@@ -1,9 +1,9 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
+import type { Move } from "#moves/move";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 
 /**

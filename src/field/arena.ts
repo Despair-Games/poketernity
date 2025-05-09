@@ -8,7 +8,6 @@ import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constan
 import { getArenaTag, type ArenaTag, type EntryHazardTag } from "#app/data/arena-tag";
 import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
 import { allBiomes } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
@@ -37,6 +36,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
+import type { Move } from "#moves/move";
 
 export class Arena {
   public biomeId: BiomeId;

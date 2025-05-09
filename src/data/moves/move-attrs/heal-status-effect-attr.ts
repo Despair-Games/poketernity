@@ -1,4 +1,3 @@
-import { type Move, getMoveTargets } from "#app/data/moves/move";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -6,6 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
+import { type Move, getMoveTargets } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**

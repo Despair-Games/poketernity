@@ -1,4 +1,3 @@
-import { getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ModifierBar } from "#app/modifier/modifier";
@@ -10,6 +9,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Button } from "#enums/buttons";
 import type { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
+import { getMoveTargets } from "#moves/move";
 
 export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 

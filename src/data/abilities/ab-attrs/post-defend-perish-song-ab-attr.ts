@@ -1,9 +1,9 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

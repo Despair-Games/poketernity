@@ -1,10 +1,10 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {

@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
@@ -15,6 +14,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
+import { getMoveTargets } from "#moves/move";
 import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { vi } from "vitest";

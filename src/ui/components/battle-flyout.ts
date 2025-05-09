@@ -1,4 +1,3 @@
-import type { Move } from "#app/data/moves/move";
 import type { BerryUsedEvent, MoveUsedEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -9,6 +8,7 @@ import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
 import { TextStyle } from "#enums/text-style";
+import type { Move } from "#moves/move";
 
 /** Container for info about a {@linkcode Move} */
 interface MoveInfo {

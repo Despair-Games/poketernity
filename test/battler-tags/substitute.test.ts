@@ -2,7 +2,6 @@ import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#app/data/data-lists";
-import { AttackMove } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import * as messages from "#app/messages";
@@ -15,6 +14,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
+import { AttackMove } from "#moves/move";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils/common-utils";
@@ -7,6 +6,7 @@ import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { TerrainType } from "#enums/terrain-type";
 import { CallMoveAttr } from "#moves/call-move-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute to invoke another move based on the current biome

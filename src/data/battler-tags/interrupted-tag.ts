@@ -1,4 +1,3 @@
-import { SelfStatusMove } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
@@ -8,6 +7,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
+import { SelfStatusMove } from "#moves/move";
 
 /**
  * Tag to represent when the source's {@linkcode BattlerTagType.FLYING | flying} action

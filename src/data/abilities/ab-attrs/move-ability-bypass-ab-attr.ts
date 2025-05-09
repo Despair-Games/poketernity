@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Move } from "#moves/move";
 
 export class MoveAbilityBypassAbAttr extends AbAttr {
   private readonly moveIgnoreFunc: (pokemon: Pokemon, move: Move) => boolean;

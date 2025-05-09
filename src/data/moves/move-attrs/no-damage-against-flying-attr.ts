@@ -1,7 +1,7 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute for moves that deal no damage to Flying-type Pokemon.

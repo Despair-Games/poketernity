@@ -1,5 +1,4 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -9,6 +8,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

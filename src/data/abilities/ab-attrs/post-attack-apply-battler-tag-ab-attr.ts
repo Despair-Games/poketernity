@@ -1,9 +1,9 @@
 import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
+import type { Move } from "#moves/move";
 
 /**
  * Ability attribute that applies a battler tag to the target after an attack

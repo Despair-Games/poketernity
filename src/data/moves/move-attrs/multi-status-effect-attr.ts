@@ -1,7 +1,7 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { randSeedItem } from "#app/utils/random-utils";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Move } from "#moves/move";
 import { StatusEffectAttr } from "#moves/status-effect-attr";
 
 /**

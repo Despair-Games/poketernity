@@ -3,11 +3,11 @@
 import type { MovePhase } from "#app/phases/move-phase";
 // -- end tsdoc imports
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

@@ -4,7 +4,6 @@ import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import type { Move } from "#app/data/moves/move";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { starterColors } from "#app/data/starter-colors";
@@ -33,6 +32,7 @@ import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { Move } from "#moves/move";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 

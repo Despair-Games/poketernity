@@ -5,10 +5,10 @@ import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-
 
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Move } from "#moves/move";
 
 /**
  * Class for abilities that boost the damage of moves

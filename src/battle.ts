@@ -20,7 +20,6 @@ import {
   TUTORIAL_BATTLE_WAVE,
 } from "#app/constants/wave-constants";
 import { getLevelForWaveFunc } from "#app/data/exp";
-import type { Move } from "#app/data/moves/move";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
@@ -48,6 +47,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { Move } from "#moves/move";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

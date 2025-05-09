@@ -1,5 +1,4 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -7,6 +6,7 @@ import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { toDmgValue } from "#app/utils/common-utils";
 import { SwitchType } from "#enums/switch-type";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
 

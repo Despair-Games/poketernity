@@ -1,9 +1,9 @@
 import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesId } from "#enums/species-id";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**

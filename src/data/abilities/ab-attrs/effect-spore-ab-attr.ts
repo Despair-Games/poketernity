@@ -1,11 +1,11 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveFlags } from "#enums/move-flags";
 import { StatusEffect } from "#enums/status-effect";
+import type { Move } from "#moves/move";
 
 /**
  * Effect Spore's ability attribute

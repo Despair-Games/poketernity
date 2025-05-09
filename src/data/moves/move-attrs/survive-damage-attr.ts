@@ -1,7 +1,7 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute to restrict damage to leave the target at at least 1 HP.

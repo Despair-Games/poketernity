@@ -1,9 +1,9 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
 

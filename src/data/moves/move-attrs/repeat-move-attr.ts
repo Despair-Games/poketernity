@@ -1,11 +1,11 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveId } from "#enums/move-id";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
 

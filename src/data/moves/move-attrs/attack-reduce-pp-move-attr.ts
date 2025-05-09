@@ -1,6 +1,6 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
+import type { Move } from "#moves/move";
 import { ReducePpMoveAttr } from "#moves/reduce-pp-move-attr";
 
 /**

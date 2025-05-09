@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils/common-utils";
+import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import i18next from "i18next";
 

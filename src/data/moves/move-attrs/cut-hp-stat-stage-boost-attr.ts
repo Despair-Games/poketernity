@@ -1,9 +1,9 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils/common-utils";
 import { HitResult } from "#enums/hit-result";
 import type { BattleStat } from "#enums/stat";
+import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 
 /**

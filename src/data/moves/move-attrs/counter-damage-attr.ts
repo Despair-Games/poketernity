@@ -1,10 +1,10 @@
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import type { Move } from "#moves/move";
 
 type MoveFilter = (moveId: MoveId) => boolean;
 

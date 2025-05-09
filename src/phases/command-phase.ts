@@ -3,7 +3,6 @@ import type { TurnMove } from "#app/@types/TurnMove";
 import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { FairyLockTag } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, type MoveTargetSet } from "#app/data/moves/move";
 import { speciesStarterCosts } from "#app/data/starters";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -30,6 +29,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
+import { getMoveTargets, type MoveTargetSet } from "#moves/move";
 import i18next from "i18next";
 
 /**

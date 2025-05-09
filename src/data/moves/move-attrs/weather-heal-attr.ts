@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { WeatherType } from "#enums/weather-type";
 import { HealAttr } from "#moves/heal-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute to restore the user's HP.

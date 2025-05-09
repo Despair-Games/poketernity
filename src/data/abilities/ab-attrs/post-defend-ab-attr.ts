@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Move } from "#moves/move";
 
 export abstract class PostDefendAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

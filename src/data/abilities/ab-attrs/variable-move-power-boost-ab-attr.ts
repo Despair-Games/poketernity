@@ -1,7 +1,7 @@
 import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
+import type { Move } from "#moves/move";
 
 /**
  * Abilities which cause a variable amount of power increase.

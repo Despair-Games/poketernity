@@ -17,8 +17,6 @@ import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#app/constants/arena-tag-const
 import { TYPE_BOOST_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game-constants";
 import { allMoves } from "#app/data/data-lists";
-import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
-import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
@@ -41,6 +39,8 @@ import { MoveTarget } from "#enums/move-target";
 import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
+import type { ChargingAttackMove } from "#moves/charging-attack-move";
+import type { ChargingSelfStatusMove } from "#moves/charging-self-status-move";
 import { GMaxPowerAttr } from "#moves/gmax-power-attr";
 import { IncrementMovePriorityAttr } from "#moves/increment-move-priority-attr";
 import type { MoveAttr } from "#moves/move-attr";

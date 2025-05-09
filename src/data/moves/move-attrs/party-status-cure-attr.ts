@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import type { AbilityId } from "#enums/ability-id";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**

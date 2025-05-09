@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { PhaseId } from "#enums/phase-id";
+import type { Move } from "#moves/move";
 
 /**
  * Helper function to verify that the current phase is a MoveEffectPhase and provide quick access to commonly used fields

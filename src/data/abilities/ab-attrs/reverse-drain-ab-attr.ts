@@ -1,10 +1,10 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitHealAttr } from "#moves/hit-heal-attr";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

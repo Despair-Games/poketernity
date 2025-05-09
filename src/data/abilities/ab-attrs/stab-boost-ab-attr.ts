@@ -5,11 +5,11 @@ import type { AbilityId } from "#enums/ability-id";
 // -- end tsdoc imports --
 
 import { AbAttr } from "#abilities/ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
+import type { Move } from "#moves/move";
 
 /**
  * Increases the STAB multiplier by `+0.5` if the move type is the same as one of the pokemon's types.

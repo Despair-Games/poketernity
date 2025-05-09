@@ -1,10 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { WeatherType } from "#enums/weather-type";
+import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 
 /**

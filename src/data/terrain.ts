@@ -1,9 +1,9 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
+import type { Move } from "#moves/move";
 import { ProtectAttr } from "#moves/protect-attr";
 import i18next from "i18next";
 

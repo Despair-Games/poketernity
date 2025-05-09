@@ -1,9 +1,9 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
+import type { Move } from "#moves/move";
 
 /**
  * Reduces the accuracy of status moves used against the Pokémon with this ability to 50%.

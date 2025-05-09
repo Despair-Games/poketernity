@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import { type Move, getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -9,6 +8,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
+import { type Move, getMoveTargets } from "#moves/move";
 
 /**
  * Locks the source into using a move consecutively for `turnCount - 1` turns. If the move fails or is interrupted

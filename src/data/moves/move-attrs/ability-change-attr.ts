@@ -1,12 +1,12 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allAbilities } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
 

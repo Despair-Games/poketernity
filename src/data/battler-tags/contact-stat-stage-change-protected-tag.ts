@@ -1,4 +1,3 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -8,6 +7,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { BattleStat } from "#enums/stat";
+import type { Move } from "#moves/move";
 
 /**
  * Tag used to block damaging moves and change the attacker's stats if the move makes contact.

@@ -1,12 +1,12 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import type { Move } from "#moves/move";
 import { MoveEffectAttr, type MoveEffectAttrOptions } from "#moves/move-effect-attr";
 
 export interface ChanceBasedMoveEffectAttrOptions extends MoveEffectAttrOptions {

@@ -1,4 +1,3 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
@@ -7,6 +6,7 @@ import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-ta
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Move } from "#moves/move";
 
 /**
  * Base class for tags that restrict the usage of moves. This effect is generally referred to as "disabling" a move

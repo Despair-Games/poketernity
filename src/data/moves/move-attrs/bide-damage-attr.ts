@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BideTag } from "#battler-tags/bide-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute to modify damage according to Bide's "stored energy."
