@@ -47,7 +47,7 @@ const eslintRules = {
   "@typescript-eslint/no-import-type-side-effects": "error", // Typescript turns `import { type X } from Y` into `import {} from Y` but completely removes `import type { X } from Y`
   "@typescript-eslint/ban-ts-comment": ["error", { "ts-check": false, "ts-expect-error": "allow-with-description" }], // Disallow usage of `@ts-ignore`
   "no-relative-import-paths/no-relative-import-paths": [
-    // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#moves/call-move-attr")
+    // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
     "error",
     { rootDir: "src", prefix: "#app" },
   ],
