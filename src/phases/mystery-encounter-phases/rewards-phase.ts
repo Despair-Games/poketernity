@@ -1,13 +1,13 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PhaseId } from "#enums/phase-id";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 
 /**
  * Will handle (in order):

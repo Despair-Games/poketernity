@@ -1,12 +1,4 @@
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import {
-  AbilityRequirement,
-  CombinationPokemonRequirement,
-  MoveRequirement,
-} from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -23,6 +15,14 @@ import {
   updatePlayerMoney,
 } from "#mystery-encounters/encounter-phase-utils";
 import { getHighestStatTotalPlayerPokemon } from "#mystery-encounters/encounter-pokemon-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import {
+  AbilityRequirement,
+  CombinationPokemonRequirement,
+  MoveRequirement,
+} from "#mystery-encounters/mystery-encounter-requirements";
 import { EXTORTION_ABILITIES, EXTORTION_MOVES } from "#mystery-encounters/requirement-groups";
 import i18next from "i18next";
 

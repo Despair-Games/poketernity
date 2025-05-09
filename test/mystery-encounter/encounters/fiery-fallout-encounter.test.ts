@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
@@ -22,6 +21,7 @@ import { StatusEffect } from "#enums/status-effect";
 import * as InitMoveAnim from "#init/init-move-anim";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FieryFalloutEncounter } from "#mystery-encounters/fiery-fallout-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

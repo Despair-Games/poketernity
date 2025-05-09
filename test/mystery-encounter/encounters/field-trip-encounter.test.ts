@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -10,6 +9,7 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FieldTripEncounter } from "#mystery-encounters/field-trip-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import i18next from "i18next";

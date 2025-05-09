@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";
@@ -9,6 +8,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { LostAtSeaEncounter } from "#mystery-encounters/lost-at-sea-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

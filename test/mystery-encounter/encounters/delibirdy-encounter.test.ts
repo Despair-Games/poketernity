@@ -1,6 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import {
   type BerryModifier,
   HealingBoosterModifier,
@@ -21,6 +19,8 @@ import { SpeciesId } from "#enums/species-id";
 import { DelibirdyEncounter } from "#mystery-encounters/delibirdy-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
+import type { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -29,6 +28,7 @@ import * as InitMoveAnim from "#init/init-move-anim";
 import { ClowningAroundEncounter } from "#mystery-encounters/clowning-around-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

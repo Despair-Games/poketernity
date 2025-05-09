@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
@@ -18,6 +17,7 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import * as InitMoveAnim from "#init/init-move-anim";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TrashToTreasureEncounter } from "#mystery-encounters/trash-to-treasure-encounter";
 import {
   runMysteryEncounterToEnd,

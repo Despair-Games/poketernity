@@ -2,9 +2,6 @@ import type { Ability } from "#abilities/ability";
 import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { allAbilities } from "#app/data/data-lists";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { getNatureName } from "#app/data/nature";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -28,6 +25,9 @@ import {
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { isPokemonValidForEncounterOptionSelection } from "#mystery-encounters/encounter-pokemon-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import i18next from "i18next";
 
 /** The i18n namespace for the encounter */

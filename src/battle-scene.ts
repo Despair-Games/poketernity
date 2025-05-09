@@ -25,9 +25,6 @@ import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { getLevelForWaveFunc } from "#app/data/exp";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -157,6 +154,9 @@ import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-for
 import { populateAnims } from "#init/init-anims";
 import { initCommonAnims } from "#init/init-common-anims";
 import { initMoveAnim } from "#init/init-move-anim";
+import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
+import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";
 import i18next from "i18next";
 import Phaser from "phaser";
 

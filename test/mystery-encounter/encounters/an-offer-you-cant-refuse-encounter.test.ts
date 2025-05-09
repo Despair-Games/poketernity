@@ -1,6 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
@@ -13,6 +12,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { AnOfferYouCantRefuseEncounter } from "#mystery-encounters/an-offer-you-cant-refuse-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";

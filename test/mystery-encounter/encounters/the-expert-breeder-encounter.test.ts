@@ -1,8 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship-constants";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { BiomeId } from "#enums/biome-id";
@@ -13,6 +11,8 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
+import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheExpertPokemonBreederEncounter } from "#mystery-encounters/the-expert-pokemon-breeder-encounter";
 import {
   runMysteryEncounterToEnd,

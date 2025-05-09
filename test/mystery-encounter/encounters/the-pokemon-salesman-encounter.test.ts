@@ -1,6 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { getSpecialSpeciesList } from "#app/utils/pokemon-utils";
@@ -11,6 +10,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import {
   getSalesmanSpeciesOffer,
   ThePokemonSalesmanEncounter,

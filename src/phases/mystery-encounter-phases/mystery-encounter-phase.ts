@@ -1,12 +1,10 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type MysteryEncounterDialogue from "#app/data/mystery-encounters/mystery-encounter-dialogue";
-import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import type MysteryEncounterDialogue from "#mystery-encounters/mystery-encounter-dialogue";
+import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { SeenEncounterData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
@@ -16,6 +14,8 @@ import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
+import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import { SeenEncounterData } from "#mystery-encounters/mystery-encounter-save-data";
 
 /**
  * Will handle (in order):

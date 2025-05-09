@@ -1,8 +1,5 @@
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import type { EggOptions } from "#app/data/egg";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { speciesStarterCosts } from "#app/data/starters";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
@@ -30,6 +27,9 @@ import {
   setEncounterRewards,
   type EnemyPartyConfig,
 } from "#mystery-encounters/encounter-phase-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

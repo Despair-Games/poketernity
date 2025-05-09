@@ -19,7 +19,6 @@ import { defaultStarterSpecies } from "#app/data/default-starters";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import type { Egg } from "#app/data/egg";
 import { speciesEggMoves } from "#app/data/egg-moves";
-import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import {
@@ -77,6 +76,7 @@ import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
+import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 

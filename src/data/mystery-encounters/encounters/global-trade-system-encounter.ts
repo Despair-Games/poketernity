@@ -2,9 +2,6 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-enc
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allSpecies } from "#app/data/data-lists";
 import { getGenderSymbol } from "#app/data/gender";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { getNatureName } from "#app/data/nature";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -46,6 +43,9 @@ import {
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/encounter-pokemon-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

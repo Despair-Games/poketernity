@@ -1,6 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { CommandPhase } from "#app/phases/command-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -13,6 +12,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { ATrainersTestEncounter } from "#mystery-encounters/a-trainers-test-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,

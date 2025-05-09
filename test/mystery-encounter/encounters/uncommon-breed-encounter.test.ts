@@ -1,6 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { speciesEggMoves } from "#app/data/egg-moves";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -21,6 +20,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { UncommonBreedEncounter } from "#mystery-encounters/uncommon-breed-encounter";
 import {
   runMysteryEncounterToEnd,

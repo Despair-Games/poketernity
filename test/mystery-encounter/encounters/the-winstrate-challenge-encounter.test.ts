@@ -1,7 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { CommandPhase } from "#app/phases/command-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
@@ -19,6 +17,8 @@ import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheWinstrateChallengeEncounter } from "#mystery-encounters/the-winstrate-challenge-encounter";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { speciesStarterCosts } from "#app/data/starters";
 import { MessagePhase } from "#app/phases/message-phase";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
@@ -18,6 +17,7 @@ import {
   getRandomSpeciesByStarterCost,
   koPlayerPokemon,
 } from "#mystery-encounters/encounter-pokemon-utils";
+import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import Phaser from "phaser";
