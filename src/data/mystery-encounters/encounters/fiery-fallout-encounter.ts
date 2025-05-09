@@ -10,22 +10,6 @@ import {
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { FIRE_RESISTANT_ABILITIES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  generateModifierType,
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  loadCustomMovesForEncounter,
-  setEncounterExp,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  applyAbilityOverrideToPokemon,
-  applyDamageToPokemon,
-  applyModifierTypeToPlayerPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
@@ -48,6 +32,22 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import {
+  generateModifierType,
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  loadCustomMovesForEncounter,
+  setEncounterExp,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import {
+  applyAbilityOverrideToPokemon,
+  applyDamageToPokemon,
+  applyModifierTypeToPlayerPokemon,
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fieryFallout";

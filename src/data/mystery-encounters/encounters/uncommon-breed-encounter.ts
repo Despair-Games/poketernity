@@ -7,19 +7,6 @@ import {
   PersistentModifierRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { CHARMING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  setEncounterExp,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  catchPokemon,
-  getHighestLevelPlayerPokemon,
-  getSpriteKeysFromPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -39,6 +26,19 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import {
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  setEncounterExp,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import {
+  catchPokemon,
+  getHighestLevelPlayerPokemon,
+  getSpriteKeysFromPokemon,
+} from "#mystery-encounters/encounter-pokemon-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/uncommonBreed";

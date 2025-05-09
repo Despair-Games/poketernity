@@ -1,15 +1,27 @@
-import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species-id";
-import { globalScene } from "#app/global-scene";
-import { StatusEffect } from "#enums/status-effect";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import type { EnemyPartyConfig, EnemyPokemonConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { PartyHealPhase } from "#app/phases/party-heal-phase";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { AiType } from "#enums/ai-type";
+import { BattlerIndex } from "#enums/battler-index";
+import { BerryType } from "#enums/berry-type";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
+import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig, EnemyPokemonConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
   generateModifierType,
   initBattleWithEnemyConfig,
@@ -17,19 +29,7 @@ import {
   loadCustomMovesForEncounter,
   setEncounterExp,
   setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { MoveId } from "#enums/move-id";
-import { BattlerIndex } from "#enums/battler-index";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { AiType } from "#enums/ai-type";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { BerryType } from "#enums/berry-type";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+} from "#mystery-encounters/encounter-phase-utils";
 
 /** i18n namespace for the encounter */
 const namespace = "mysteryEncounters/slumberingSnorlax";

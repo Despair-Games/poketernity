@@ -4,20 +4,6 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { PersistentModifierRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  generateModifierType,
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  applyModifierTypeToPlayerPokemon,
-  catchPokemon,
-  getHighestLevelPlayerPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -26,8 +12,8 @@ import { type BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { randInt } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randInt } from "#app/utils/random-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";
@@ -39,6 +25,20 @@ import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import {
+  generateModifierType,
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import {
+  applyModifierTypeToPlayerPokemon,
+  catchPokemon,
+  getHighestLevelPlayerPokemon,
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

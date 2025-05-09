@@ -1,7 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { DancingLessonsEncounter } from "#app/data/mystery-encounters/encounters/dancing-lessons-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { CommandPhase } from "#app/phases/command-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
@@ -17,6 +16,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

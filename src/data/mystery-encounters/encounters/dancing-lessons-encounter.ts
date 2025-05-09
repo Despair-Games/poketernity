@@ -6,19 +6,6 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { DANCING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import { getEncounterText, queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  selectPokemonForOption,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  catchPokemon,
-  getEncounterPokemonLevelForWave,
-  STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -41,6 +28,19 @@ import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { getEncounterText, queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import {
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  selectPokemonForOption,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import {
+  catchPokemon,
+  getEncounterPokemonLevelForWave,
+  STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
+} from "#mystery-encounters/encounter-pokemon-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

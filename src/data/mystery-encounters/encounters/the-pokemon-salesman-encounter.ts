@@ -3,16 +3,6 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  leaveEncounterWithoutBattle,
-  updatePlayerMoney,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  catchPokemon,
-  getRandomSpeciesByStarterCost,
-  getSpriteKeysFromPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/starters";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
@@ -29,7 +19,14 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
+import { showEncounterDialogue } from "#mystery-encounters/encounter-dialogue-utils";
+import { leaveEncounterWithoutBattle, updatePlayerMoney } from "#mystery-encounters/encounter-phase-utils";
+import {
+  catchPokemon,
+  getRandomSpeciesByStarterCost,
+  getSpriteKeysFromPokemon,
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/thePokemonSalesman";

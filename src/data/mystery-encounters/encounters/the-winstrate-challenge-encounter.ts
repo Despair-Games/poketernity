@@ -3,16 +3,6 @@ import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  generateModifierType,
-  generateModifierTypeOption,
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  setEncounterRewards,
-  type EnemyPartyConfig,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -35,6 +25,16 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerType } from "#enums/trainer-type";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
+import { showEncounterDialogue, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import {
+  generateModifierType,
+  generateModifierTypeOption,
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  setEncounterRewards,
+  type EnemyPartyConfig,
+} from "#mystery-encounters/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

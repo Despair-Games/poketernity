@@ -3,13 +3,6 @@ import type { EggOptions } from "#app/data/egg";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  handleMysteryEncounterBattleFailed,
-  initBattleWithEnemyConfig,
-  setEncounterRewards,
-  type EnemyPartyConfig,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { speciesStarterCosts } from "#app/data/starters";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
@@ -17,8 +10,8 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { randSeedShuffle } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedShuffle } from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
@@ -30,6 +23,13 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
+import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import {
+  handleMysteryEncounterBattleFailed,
+  initBattleWithEnemyConfig,
+  setEncounterRewards,
+  type EnemyPartyConfig,
+} from "#mystery-encounters/encounter-phase-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

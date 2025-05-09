@@ -4,10 +4,10 @@ import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-en
 // -- end tsdoc imports --
 
 import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PhaseId } from "#enums/phase-id";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 
 /**
  * Will handle (in order):

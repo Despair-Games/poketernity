@@ -9,7 +9,6 @@ import { biomeLinks } from "#app/data/biome-links";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#app/data/egg";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getNatureName } from "#app/data/nature";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { TrainerConfig } from "#app/data/trainer-config";
@@ -69,6 +68,7 @@ import type { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import { initMoveAnim } from "#init/init-move-anim";
+import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import i18next from "i18next";
 
 /**

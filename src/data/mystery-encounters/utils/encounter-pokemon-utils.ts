@@ -1,10 +1,5 @@
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import {
-  getEncounterText,
-  queueEncounterMessage,
-  showEncounterText,
-} from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
   doPokeballBounceAnim,
   getPokeballAtlasKey,
   getPokeballCatchMultiplier,
@@ -44,6 +39,11 @@ import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
+import {
+  getEncounterText,
+  queueEncounterMessage,
+  showEncounterText,
+} from "#mystery-encounters/encounter-dialogue-utils";
 import i18next from "i18next";
 
 /** Will give +1 level every 10 waves */

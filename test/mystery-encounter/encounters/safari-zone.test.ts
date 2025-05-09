@@ -5,7 +5,6 @@ import {
 } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";
@@ -14,6 +13,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

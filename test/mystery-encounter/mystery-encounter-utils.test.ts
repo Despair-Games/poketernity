@@ -1,24 +1,24 @@
 import type BattleScene from "#app/battle-scene";
-import { speciesStarterCosts } from "#app/data/starters";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { speciesStarterCosts } from "#app/data/starters";
+import { MessagePhase } from "#app/phases/message-phase";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { ElementalType } from "#enums/elemental-type";
+import { SpeciesId } from "#enums/species-id";
 import {
   getEncounterText,
   queueEncounterMessage,
   showEncounterDialogue,
   showEncounterText,
-} from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+} from "#mystery-encounters/encounter-dialogue-utils";
 import {
   getHighestLevelPlayerPokemon,
   getLowestLevelPlayerPokemon,
   getRandomPlayerPokemon,
   getRandomSpeciesByStarterCost,
   koPlayerPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { ElementalType } from "#enums/elemental-type";
-import { MessagePhase } from "#app/phases/message-phase";
+} from "#mystery-encounters/encounter-pokemon-utils";
 import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species-id";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

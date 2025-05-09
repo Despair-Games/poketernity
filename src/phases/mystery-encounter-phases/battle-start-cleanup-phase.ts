@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import type { handleMysteryEncounterBattleStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import type { TurnEndPhase } from "#app/phases/turn-end-phase";
+import type { handleMysteryEncounterBattleStartEffects } from "#mystery-encounters/encounter-phase-utils";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 

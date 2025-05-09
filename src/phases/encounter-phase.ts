@@ -10,9 +10,6 @@ import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getNatureName } from "#app/data/nature";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
@@ -55,6 +52,9 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
 import { initEncounterAnims } from "#init/init-encounter-anims";
+import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
+import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import i18next from "i18next";
 
 /**

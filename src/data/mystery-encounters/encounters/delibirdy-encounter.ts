@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -7,18 +7,9 @@ import {
   HeldItemRequirement,
   MoneyRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  generateModifierType,
-  leaveEncounterWithoutBattle,
-  selectPokemonForOption,
-  updatePlayerMoney,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import {
   type BerryModifier,
@@ -31,10 +22,19 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import i18next from "#app/plugins/i18n";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import {
+  generateModifierType,
+  leaveEncounterWithoutBattle,
+  selectPokemonForOption,
+  updatePlayerMoney,
+} from "#mystery-encounters/encounter-phase-utils";
+import { applyModifierTypeToPlayerPokemon } from "#mystery-encounters/encounter-pokemon-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/delibirdy";

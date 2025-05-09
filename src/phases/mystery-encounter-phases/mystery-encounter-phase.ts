@@ -7,15 +7,15 @@ import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-enc
 
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { SeenEncounterData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
 import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
-import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
+import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 
 /**
  * Will handle (in order):

@@ -1,20 +1,17 @@
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  initBattleWithEnemyConfig,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { TrainerPartyCompoundTemplate, TrainerPartyTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
-import { ModifierTier } from "#enums/modifier-tier";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PartyMemberStrength } from "#enums/party-member-strength";
-import { globalScene } from "#app/global-scene";
-import { randSeedInt } from "#app/utils/random-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { TrainerPartyCompoundTemplate, TrainerPartyTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
+import { globalScene } from "#app/global-scene";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { randSeedInt } from "#app/utils/random-utils";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PartyMemberStrength } from "#enums/party-member-strength";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import { initBattleWithEnemyConfig, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/mysteriousChallengers";

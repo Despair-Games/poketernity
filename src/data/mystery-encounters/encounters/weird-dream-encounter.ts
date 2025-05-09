@@ -6,17 +6,6 @@ import { getLevelTotalExp } from "#app/data/exp";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  generateModifierType,
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  setEncounterRewards,
-  type EnemyPartyConfig,
-  type EnemyPokemonConfig,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { doPokemonTransformationSequence } from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { TrainerPartyTemplate } from "#app/data/trainer-config";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
@@ -48,6 +37,17 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerType } from "#enums/trainer-type";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
+import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import {
+  generateModifierType,
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  setEncounterRewards,
+  type EnemyPartyConfig,
+  type EnemyPokemonConfig,
+} from "#mystery-encounters/encounter-phase-utils";
+import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/encounter-pokemon-utils";
+import { doPokemonTransformationSequence } from "#mystery-encounters/encounter-transformation-sequence";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";

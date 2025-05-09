@@ -1,4 +1,3 @@
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
@@ -11,6 +10,7 @@ import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import type { GameManager } from "#test/test-utils/gameManager";
 import { vi } from "vitest";
 

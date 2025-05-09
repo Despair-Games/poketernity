@@ -1,4 +1,16 @@
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type MysteryEncounterDialogue from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
+import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import {
+  EncounterPokemonRequirement,
+  EncounterSceneRequirement,
+  HealthRatioRequirement,
+  PartySizeRequirement,
+  StatusEffectRequirement,
+  WaveRangeRequirement,
+} from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
@@ -17,19 +29,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { StatusEffect } from "#enums/status-effect";
-import type MysteryEncounterDialogue from "#app/data/mystery-encounters/mystery-encounter-dialogue";
-import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
-import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import {
-  EncounterPokemonRequirement,
-  EncounterSceneRequirement,
-  HealthRatioRequirement,
-  PartySizeRequirement,
-  StatusEffectRequirement,
-  WaveRangeRequirement,
-} from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 
 export interface EncounterStartOfBattleEffect {
   sourcePokemon?: Pokemon;

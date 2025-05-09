@@ -1,13 +1,4 @@
-import {
-  generateModifierType,
-  leaveEncounterWithoutBattle,
-  setEncounterExp,
-  updatePlayerMoney,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species-id";
-import { globalScene } from "#app/global-scene";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -16,14 +7,23 @@ import {
   CombinationPokemonRequirement,
   MoveRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { getHighestStatTotalPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { EXTORTION_ABILITIES, EXTORTION_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { speciesStarterCosts } from "#app/data/starters";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { globalScene } from "#app/global-scene";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
+import {
+  generateModifierType,
+  leaveEncounterWithoutBattle,
+  setEncounterExp,
+  updatePlayerMoney,
+} from "#mystery-encounters/encounter-phase-utils";
+import { getHighestStatTotalPlayerPokemon } from "#mystery-encounters/encounter-pokemon-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

@@ -4,12 +4,12 @@ import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-en
 // -- end tsdoc imports --
 
 import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
+import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 /**
  * Will handle (in order):
  * - {@linkcode MysteryEncounterOption.onPostOptionPhase} logic (based on an option that was selected)

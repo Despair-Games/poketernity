@@ -1,7 +1,5 @@
 import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
@@ -18,6 +16,8 @@ import { PokeballType } from "#enums/pokeball-type";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
+import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
