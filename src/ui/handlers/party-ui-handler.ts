@@ -8,7 +8,6 @@ import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { getVariantTint } from "#app/data/variant";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -47,6 +46,7 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

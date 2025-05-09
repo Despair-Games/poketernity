@@ -5,7 +5,6 @@ import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -45,6 +44,7 @@ import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTL
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { VoucherType } from "#enums/voucher-type";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import i18next from "i18next";
 
 const iconOverflowIndex = 24;

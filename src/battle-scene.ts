@@ -34,9 +34,6 @@ import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/myster
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
-import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import { resetStarterColors, starterColors } from "#app/data/starter-colors";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { getTypeRgb } from "#app/data/type";
@@ -157,6 +154,9 @@ import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
+import { SpeciesFormChangeTimeOfDayTrigger } from "#form-change-triggers/species-form-change-time-of-day-trigger";
+import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 import i18next from "i18next";
 import Phaser from "phaser";
 

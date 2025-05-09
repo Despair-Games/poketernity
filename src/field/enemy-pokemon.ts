@@ -7,7 +7,6 @@ import { CounterDamageAttr } from "#app/data/moves/move-attrs/counter-damage-att
 import { CritOnlyAttr } from "#app/data/moves/move-attrs/crit-only-attr";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -32,6 +31,7 @@ import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;

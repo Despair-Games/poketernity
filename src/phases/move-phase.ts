@@ -12,7 +12,6 @@ import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
 import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#app/data/moves/move-attrs/variable-move-message-attr";
-import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
@@ -45,6 +44,7 @@ import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
 import i18next from "i18next";
 
 /**

@@ -14,7 +14,6 @@ import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants/friendship-constan
 import { allMoves } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -38,6 +37,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import i18next from "i18next";
 
 /**

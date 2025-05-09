@@ -1,7 +1,7 @@
-import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { coerceArray } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
+import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 
 export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigger {
   public statusEffects: StatusEffect[];

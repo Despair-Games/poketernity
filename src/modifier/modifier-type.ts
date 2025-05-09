@@ -6,7 +6,6 @@ import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
 import { pokemonFormChanges, SpeciesFormChangeCondition } from "#app/data/pokemon-forms";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { tmPoolTiers, tmSpecies } from "#app/data/tms";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
@@ -75,6 +74,7 @@ import { SpeciesId } from "#enums/species-id";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import type { VoucherType } from "#enums/voucher-type";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import i18next from "i18next";
 
 const outputModifierData = false;

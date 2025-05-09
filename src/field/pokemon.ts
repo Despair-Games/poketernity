@@ -107,10 +107,6 @@ import {
   SHINY_EPIC_CHANCE,
   SHINY_VARIANT_CHANCE,
 } from "#app/data/rates";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
-import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
-import { SpeciesFormChangeStatusEffectTrigger } from "#app/data/species-form-change-triggers/species-form-change-status-effect-trigger";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { tmPoolTiers, tmSpecies } from "#app/data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
@@ -206,6 +202,10 @@ import {
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
+import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
+import { SpeciesFormChangeStatusEffectTrigger } from "#form-change-triggers/species-form-change-status-effect-trigger";
 import i18next from "i18next";
 
 interface AbilityData {

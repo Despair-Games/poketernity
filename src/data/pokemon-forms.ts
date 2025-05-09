@@ -6,20 +6,12 @@ import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
+import type { nil } from "#app/@types/nil";
 import { allMoves } from "#app/data/data-lists";
-import { MeloettaFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/meloetta-form-change-post-move-trigger";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import { SpeciesFormChangeCompoundTrigger } from "#app/data/species-form-change-triggers/species-form-change-compound-trigger";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
-import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
-import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
-import type { nil } from "#app/@types/nil";
 import { AbilityId } from "#enums/ability-id";
 import { FormChangeItem } from "#enums/form-change-item";
 import { MoveCategory } from "#enums/move-category";
@@ -27,6 +19,14 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
+import { MeloettaFormChangePostMoveTrigger } from "#form-change-triggers/meloetta-form-change-post-move-trigger";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { SpeciesFormChangeCompoundTrigger } from "#form-change-triggers/species-form-change-compound-trigger";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
+import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
+import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 import i18next from "i18next";
 
 export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;

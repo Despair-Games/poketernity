@@ -15,7 +15,6 @@ import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
 import { NoEffectAttr } from "#app/data/moves/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
-import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -46,6 +45,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
+import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
