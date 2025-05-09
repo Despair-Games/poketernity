@@ -141,6 +141,11 @@ class DefaultOverrides {
    * - Infatuated: set to `true` to force its activation, set to `false` to do the opposite
    */
   readonly STATUS_ACTIVATION_OVERRIDE: boolean | null = null;
+  /**
+   * If `true`, every enemy Pokemon Terastallizes on the first turn that it decides to use a move.
+   * If `false`, this override is ignored.
+   */
+  readonly FORCE_ENEMY_TERA_OVERRIDE: boolean = false;
 
   // ----------------
   // PLAYER OVERRIDES

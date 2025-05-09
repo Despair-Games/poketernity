@@ -527,6 +527,15 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
+   * @param forceTera (Default `true`) If `true`, forces every enemy Pokemon to Terastallize. If `false`, disables this override.
+   */
+  public forceEnemyTera(forceTera: boolean = true): this {
+    vi.spyOn(Overrides, "FORCE_ENEMY_TERA_OVERRIDE", "get").mockReturnValue(forceTera);
+    this.log(`Enemy Pokemon are ${forceTera ? "" : "no longer "}forced to Terastallize!`);
+    return this;
+  }
+
+  /**
    * Override the encounter chance for a mystery encounter.
    * @param percentage the encounter chance in %
    * @returns `this`
