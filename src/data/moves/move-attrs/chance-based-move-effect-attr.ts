@@ -50,17 +50,10 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * @param user the {@linkcode Pokemon} using this move
    * @param target the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being used
-   * @param selfEffect `true` if move targets user.
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
-  public getMoveChance(
-    user: Pokemon,
-    target: Pokemon,
-    move: Move,
-    selfEffect: boolean,
-    showAbility: boolean = false,
-  ): number {
+  public getMoveChance(user: Pokemon, target: Pokemon, move: Move, showAbility: boolean = false): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
@@ -75,7 +68,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     const userSide = user.getArenaTagSide();
     globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
-    if (!selfEffect) {
+    if (!this.selfTarget) {
       applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
