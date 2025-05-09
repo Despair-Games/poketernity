@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { globalScene } from "#app/global-scene";
-import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
+import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { getOricorioFormIndexForBiome } from "#app/data/biome-utils";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -19,18 +19,18 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { TrainerSlot } from "#enums/trainer-slot";
+import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { MoveId } from "#enums/move-id";
@@ -40,8 +40,8 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { TrainerSlot } from "#enums/trainer-slot";
 import i18next from "i18next";
-import { getOricorioFormIndexForBiome } from "#app/data/biome-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/dancingLessons";

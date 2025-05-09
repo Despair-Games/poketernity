@@ -1,14 +1,14 @@
 import {
-  LegacyAnimConfig,
   AnimFrame,
-  type LegacyAnimTimedEvent,
-  AnimTimedSoundEvent,
   AnimTimedAddBgEvent,
+  AnimTimedSoundEvent,
   AnimTimedUpdateBgEvent,
-} from "#app/data/animations/anim-config";
-import { commonAnims } from "#app/data/animations/common-anims";
-import { chargeAnims } from "#app/data/animations/charge-anims";
-import { moveAnims } from "#app/data/animations/move-anims";
+  LegacyAnimConfig,
+  type LegacyAnimTimedEvent,
+} from "#animations/anim-config";
+import { chargeAnims } from "#animations/charge-anims";
+import { commonAnims } from "#animations/common-anims";
+import { moveAnims } from "#animations/move-anims";
 import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";

@@ -3,7 +3,7 @@ import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-dam
 import type { BlockStatusDamageAbAttr } from "#abilities/block-status-damage-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

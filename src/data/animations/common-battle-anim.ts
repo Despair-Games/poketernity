@@ -1,6 +1,6 @@
-import type { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import { BattleAnim } from "#app/data/animations/battle-anims";
-import { commonAnims } from "#app/data/animations/common-anims";
+import type { LegacyAnimConfig } from "#animations/anim-config";
+import { BattleAnim } from "#animations/battle-anims";
+import { commonAnims } from "#animations/common-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import type { CommonAnim } from "#enums/common-anim";
 

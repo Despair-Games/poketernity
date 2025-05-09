@@ -6,7 +6,7 @@ import type { ChargeAnim } from "#enums/charge-anim";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
+import { MoveChargeAnim } from "#animations/move-charge-anim";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
 import type { Pokemon } from "#app/field/pokemon";

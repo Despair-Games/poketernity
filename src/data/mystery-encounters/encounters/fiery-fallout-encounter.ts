@@ -1,6 +1,6 @@
 import { Ability } from "#abilities/ability";
+import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";

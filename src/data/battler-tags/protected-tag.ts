@@ -1,4 +1,4 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";

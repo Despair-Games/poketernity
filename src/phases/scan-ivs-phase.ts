@@ -1,6 +1,7 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -11,7 +12,6 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 
 export class ScanIvsPhase extends PokemonPhase {
   override readonly id = PhaseId.SCAN_IVS;

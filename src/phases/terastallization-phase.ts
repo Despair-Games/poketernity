@@ -1,4 +1,4 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

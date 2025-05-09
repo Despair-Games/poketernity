@@ -1,5 +1,5 @@
-import { chargeAnims } from "#app/data/animations/charge-anims";
-import { moveAnims } from "#app/data/animations/move-anims";
+import { chargeAnims } from "#animations/charge-anims";
+import { moveAnims } from "#animations/move-anims";
 import { allMoves } from "#app/data/data-lists";
 import type { ChargingMove } from "#app/data/moves/move";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";

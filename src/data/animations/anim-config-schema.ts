@@ -1,5 +1,5 @@
-import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#app/data/animations/anim-config";
-import { easeFunctions } from "#app/data/animations/ease-functions";
+import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#animations/anim-config";
+import { easeFunctions } from "#animations/ease-functions";
 import { getEnumValues } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimTimedEventType } from "#enums/anim-timed-event-type";

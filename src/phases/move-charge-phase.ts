@@ -1,16 +1,16 @@
-import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
-import { applyMoveChargeAttrs } from "#app/utils/move-utils";
+import { MoveChargeAnim } from "#animations/move-charge-anim";
 import { InstantChargeAttr } from "#app/data/moves/move-attrs/instant-charge-attr";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import { BooleanHolder } from "#app/utils/common-utils";
+import { applyMoveChargeAttrs } from "#app/utils/move-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
-import i18next from "i18next";
-import { HitCheckPhase } from "#app/phases/hit-check-phase";
+import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
+import i18next from "i18next";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).

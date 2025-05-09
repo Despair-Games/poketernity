@@ -1,12 +1,12 @@
-import { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import { moveAnims } from "#app/data/animations/move-anims";
+import { LegacyAnimConfig } from "#animations/anim-config";
+import { BattleAnim } from "#animations/battle-anims";
+import { moveAnims } from "#animations/move-anims";
 import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
-import { BattleAnim } from "#app/data/animations/battle-anims";
 
 /**
  * Animation for effects during the use of a move.

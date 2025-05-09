@@ -4,7 +4,9 @@ import type { Pokemon } from "#app/field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { easeFunctions } from "#app/data/animations/ease-functions";
+import type { BattleAnim } from "#animations/battle-anims";
+import type { easeFunctions } from "#animations/ease-functions";
+import type { MoveAnim } from "#animations/move-anim";
 import { globalScene } from "#app/global-scene";
 import { getFrameMs, isNil } from "#app/utils/common-utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
@@ -13,8 +15,6 @@ import { AnimFrameTarget } from "#enums/anim-frame-target";
 import type { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import type { MoveId } from "#enums/move-id";
 import type Phaser from "phaser";
-import type { BattleAnim } from "#app/data/animations/battle-anims";
-import type { MoveAnim } from "#app/data/animations/move-anim";
 
 export interface AnimConfig {
   /**

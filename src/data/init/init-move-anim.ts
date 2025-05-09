@@ -1,7 +1,7 @@
+import { LegacyAnimConfig } from "#animations/anim-config";
+import { chargeAnims } from "#animations/charge-anims";
+import { moveAnims } from "#animations/move-anims";
 import { allMoves } from "#app/data/data-lists";
-import { chargeAnims } from "#app/data/animations/charge-anims";
-import { moveAnims } from "#app/data/animations/move-anims";
-import { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import { initMoveChargeAnim } from "#app/data/init/init-move-charge-anim";
 import type { ChargingMove } from "#app/data/moves/move";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";

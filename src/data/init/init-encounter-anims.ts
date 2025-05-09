@@ -1,5 +1,5 @@
-import { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import { encounterAnims } from "#app/data/animations/encounter-anims";
+import { LegacyAnimConfig } from "#animations/anim-config";
+import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { coerceArray, getEnumKeys, isNil } from "#app/utils/common-utils";
 import { EncounterAnim } from "#enums/encounter-anims";

@@ -1,6 +1,6 @@
-import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
-import { getMoveEffectPhaseData } from "#app/data/battler-tags/utils/get-move-effect-phase-data";
+import { MoveChargeAnim } from "#animations/move-charge-anim";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import { getMoveEffectPhaseData } from "#app/data/battler-tags/utils/get-move-effect-phase-data";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

@@ -1,6 +1,6 @@
+import { MoveAnim } from "#animations/move-anim";
 import BattleScene from "#app/battle-scene";
 import * as appConstants from "#app/constants/app-constants";
-import { MoveAnim } from "#app/data/animations/move-anim";
 import { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
