@@ -1,6 +1,5 @@
 import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
 import type { Stat } from "#enums/stat";
@@ -9,6 +8,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
 import { MessageUiHandler } from "#ui/message-ui-handler";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

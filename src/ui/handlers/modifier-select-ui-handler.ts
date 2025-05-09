@@ -7,7 +7,6 @@ import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
-import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
 import { isNil, NumberHolder } from "#app/utils/common-utils";
 import { formatMoney } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
@@ -20,6 +19,7 @@ import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
+import { addTextObject, getModifierTierTextTint, setTextColor } from "#ui/text-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
 

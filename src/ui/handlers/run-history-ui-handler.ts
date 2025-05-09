@@ -1,6 +1,5 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
 import { getPokemonLevelText } from "#app/utils/string-utils";
@@ -18,6 +17,7 @@ import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import type { RunInfoUiHandler } from "#ui/run-info-ui-handler";
+import { addTextObject } from "#ui/text-utils";
 import i18next from "i18next";
 
 type RunSelectCallback = (cursor: number) => void;

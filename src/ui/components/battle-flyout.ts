@@ -2,13 +2,13 @@ import type { BerryUsedEvent, MoveUsedEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { addTextObject } from "#app/ui/text/text-utils";
 import { fixedNumber } from "#app/utils/common-utils";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#moves/move";
+import { addTextObject } from "#ui/text-utils";
 
 /** Container for info about a {@linkcode Move} */
 interface MoveInfo {

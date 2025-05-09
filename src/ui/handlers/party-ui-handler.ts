@@ -14,7 +14,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { BooleanHolder, isNil } from "#app/utils/common-utils";
@@ -47,6 +46,7 @@ import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { PokemonIconAnimHelper } from "#ui/pokemon-icon-anim-helper";
 import type { RenamePokemonUiHandler } from "#ui/rename-pokemon-ui-handler";
 import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

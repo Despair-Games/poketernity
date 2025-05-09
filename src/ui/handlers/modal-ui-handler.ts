@@ -1,12 +1,12 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import type { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import type { ModalConfig } from "#ui/modal-config";
+import { addTextObject } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 
 export abstract class ModalUiHandler extends UiHandler {

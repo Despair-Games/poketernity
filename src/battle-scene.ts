@@ -96,7 +96,6 @@ import InvertPostFX from "#app/pipelines/invert";
 import SpritePipeline from "#app/pipelines/sprite";
 import { SceneBase } from "#app/scene-base";
 import { UiInputs } from "#app/ui-inputs";
-import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
@@ -157,6 +156,7 @@ import { CharSprite } from "#ui/char-sprite";
 import { PartyExpBar } from "#ui/party-exp-bar";
 import { PokeballTray } from "#ui/pokeball-tray";
 import { PokemonInfoContainer } from "#ui/pokemon-info-container";
+import { addTextObject } from "#ui/text-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
 

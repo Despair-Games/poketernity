@@ -1,6 +1,5 @@
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { executeIf } from "#app/utils/common-utils";
 import type { Button } from "#enums/buttons";
@@ -53,6 +52,7 @@ import { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import { SummaryUiHandler } from "#ui/summary-ui-handler";
 import { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
+import { addTextObject } from "#ui/text-utils";
 import { TitleUiHandler } from "#ui/title-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
