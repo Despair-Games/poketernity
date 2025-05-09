@@ -1324,7 +1324,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegmentIndex(): number;
 
-  getMoveset(baseOnly?: boolean): PokemonMove[] {
+  getMoveset(baseOnly: boolean = false): PokemonMove[] {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
@@ -1344,6 +1344,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return ret;
+  }
+
+  public hasMove(moveId: MoveId, revealedOnly: boolean = false): boolean {
+    return revealedOnly
+      ? this.waveData.revealedMoves.has(moveId)
+      : this.getMoveset().some((mv) => mv.moveId === moveId);
   }
 
   /**
