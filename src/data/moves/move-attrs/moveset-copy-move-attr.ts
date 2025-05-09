@@ -1,11 +1,11 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
-import { targetMoveCopiableCondition } from "#app/data/moves/move-conditions/target-move-copiable-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import { targetMoveCopiableCondition } from "#moves/target-move-copiable-condition";
 import i18next from "i18next";
 
 /**
