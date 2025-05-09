@@ -6,12 +6,6 @@ import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { MoveAnim } from "#animations/move-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  ContactHeldItemTransferChanceModifier,
-  DamageMoneyRewardModifier,
-  FlinchChanceModifier,
-  HitHealModifier,
-} from "#app/modifier/modifier";
 import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -32,6 +26,12 @@ import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
+import {
+  ContactHeldItemTransferChanceModifier,
+  DamageMoneyRewardModifier,
+  FlinchChanceModifier,
+  HitHealModifier,
+} from "#modifier/modifier";
 import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
 import { FlinchAttr } from "#moves/flinch-attr";
 import { MissEffectAttr } from "#moves/miss-effect-attr";

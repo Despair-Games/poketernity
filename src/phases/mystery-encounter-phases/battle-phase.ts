@@ -4,13 +4,13 @@ import type { PostSummonPhase } from "#phases/post-summon-phase";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import { IvScannerModifier } from "#app/modifier/modifier";
 import { Phase } from "#app/phase";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { IvScannerModifier } from "#modifier/modifier";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";
 import { ReturnPhase } from "#phases/return-phase";
 import { ScanIvsPhase } from "#phases/scan-ivs-phase";

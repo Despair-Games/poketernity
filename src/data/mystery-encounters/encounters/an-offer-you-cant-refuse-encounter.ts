@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { speciesStarterCosts } from "#data/starters";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { modifierTypes } from "#modifier/modifier-types";
 import {
   generateModifierType,
   leaveEncounterWithoutBattle,

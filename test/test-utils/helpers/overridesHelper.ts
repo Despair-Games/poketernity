@@ -5,7 +5,6 @@ import { GameManager } from "#test/test-utils/gameManager";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
@@ -21,6 +20,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { TrainerType } from "#enums/trainer-type";
 import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
+import type { ModifierOverride } from "#modifier/modifier-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import type { TimedEvent } from "#types/TimedEvent";
 import { coerceArray } from "#utils/common-utils";

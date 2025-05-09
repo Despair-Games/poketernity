@@ -1,9 +1,9 @@
-import { DoubleBattleChanceBoosterModifier } from "#app/modifier/modifier";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { DoubleBattleChanceBoosterModifier } from "#modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import Phaser from "phaser";

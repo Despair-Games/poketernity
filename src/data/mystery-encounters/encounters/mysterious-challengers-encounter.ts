@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate, trainerPartyTemplates } from "#data/trainer-config";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
+import { modifierTypes } from "#modifier/modifier-types";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import { initBattleWithEnemyConfig, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";

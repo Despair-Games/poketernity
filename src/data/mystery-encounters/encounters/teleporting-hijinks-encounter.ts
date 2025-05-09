@@ -1,7 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getPartyLuckValue } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { TeleportingHijinksBiomeCandidates } from "#data/biome-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -15,6 +13,8 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { getBiomeKey } from "#field/arena";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import { getPartyLuckValue } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

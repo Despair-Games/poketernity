@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -8,6 +7,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import { AbsoluteAvariceEncounter } from "#mystery-encounters/absolute-avarice-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";

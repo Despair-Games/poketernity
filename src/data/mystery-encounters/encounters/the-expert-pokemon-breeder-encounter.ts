@@ -1,6 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import type { EggOptions } from "#data/egg";
 import { getPokeballTintColor } from "#data/pokeball";
@@ -17,6 +15,8 @@ import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   handleMysteryEncounterBattleFailed,

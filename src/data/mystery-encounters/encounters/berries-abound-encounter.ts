@@ -1,9 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BerryModifier } from "#app/modifier/modifier";
-import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -17,6 +13,10 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import type { BerryModifier } from "#modifier/modifier";
+import type { BerryModifierType, ModifierTypeOption } from "#modifier/modifier-type";
+import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

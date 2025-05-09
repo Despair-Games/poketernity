@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { getNatureName } from "#data/nature";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -9,6 +8,7 @@ import type { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText, queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   generateModifierType,

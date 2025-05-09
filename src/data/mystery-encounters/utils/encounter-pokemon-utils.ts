@@ -1,8 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import {
   doPokeballBounceAnim,
@@ -29,6 +26,9 @@ import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import {
   getEncounterText,
   queueEncounterMessage,

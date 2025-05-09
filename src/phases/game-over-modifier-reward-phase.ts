@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { PhaseId } from "#enums/phase-id";
+import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
 

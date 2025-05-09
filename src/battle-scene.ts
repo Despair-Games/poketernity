@@ -12,34 +12,6 @@ import { initGlobalScene } from "#app/global-scene";
 import { InputsController } from "#app/inputs-controller";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger } from "#app/loggers";
-import {
-  ConsumableModifier,
-  ConsumablePokemonModifier,
-  DoubleBattleChanceBoosterModifier,
-  ExpBalanceModifier,
-  ExpShareModifier,
-  HealingBoosterModifier,
-  type Modifier,
-  ModifierBar,
-  MultipleParticipantExpBonusModifier,
-  type PersistentModifier,
-  PokemonExpBoosterModifier,
-  type PokemonFormChangeItemModifier,
-  type PokemonHeldItemModifier,
-  PokemonHpRestoreModifier,
-  PokemonIncrementingStatModifier,
-  RememberMoveModifier,
-  type TurnHeldItemTransferModifier,
-} from "#app/modifier/modifier";
-import {
-  getDefaultModifierTypeForTier,
-  getEnemyModifierTypesForWave,
-  getLuckString,
-  getLuckTextTint,
-  getPartyLuckValue,
-  PokemonHeldItemModifierType,
-} from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
@@ -104,6 +76,34 @@ import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-for
 import { populateAnims } from "#init/init-anims";
 import { initCommonAnims } from "#init/init-common-anims";
 import { initMoveAnim } from "#init/init-move-anim";
+import {
+  ConsumableModifier,
+  ConsumablePokemonModifier,
+  DoubleBattleChanceBoosterModifier,
+  ExpBalanceModifier,
+  ExpShareModifier,
+  HealingBoosterModifier,
+  type Modifier,
+  ModifierBar,
+  MultipleParticipantExpBonusModifier,
+  type PersistentModifier,
+  PokemonExpBoosterModifier,
+  type PokemonFormChangeItemModifier,
+  type PokemonHeldItemModifier,
+  PokemonHpRestoreModifier,
+  PokemonIncrementingStatModifier,
+  RememberMoveModifier,
+  type TurnHeldItemTransferModifier,
+} from "#modifier/modifier";
+import {
+  getDefaultModifierTypeForTier,
+  getEnemyModifierTypesForWave,
+  getLuckString,
+  getLuckTextTint,
+  getPartyLuckValue,
+  PokemonHeldItemModifierType,
+} from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";

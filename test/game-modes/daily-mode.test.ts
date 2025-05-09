@@ -1,9 +1,9 @@
 import { api } from "#api/api";
-import { MapModifier } from "#app/modifier/modifier";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { MapModifier } from "#modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
 import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

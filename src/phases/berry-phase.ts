@@ -3,11 +3,11 @@ import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-a
 import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier } from "#app/modifier/modifier";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { BerryUsedEvent } from "#events/battle-scene";
+import { BerryModifier } from "#modifier/modifier";
 import { FieldPhase } from "#phases/abstract-field-phase";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder } from "#utils/common-utils";

@@ -1,13 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import {
-  BypassSpeedChanceModifier,
-  ContactHeldItemTransferChanceModifier,
-  GigantamaxAccessModifier,
-  MegaEvolutionAccessModifier,
-} from "#app/modifier/modifier";
-import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
@@ -25,6 +16,15 @@ import { TrainerType } from "#enums/trainer-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import {
+  BypassSpeedChanceModifier,
+  ContactHeldItemTransferChanceModifier,
+  GigantamaxAccessModifier,
+  MegaEvolutionAccessModifier,
+} from "#modifier/modifier";
+import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText, showEncounterDialogue } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

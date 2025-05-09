@@ -2,7 +2,6 @@ import { api } from "#api/api";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import {
   APP_ABBREVIATION,
@@ -50,6 +49,7 @@ import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import * as Modifier from "#modifier/modifier";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { ReloadSessionPhase } from "#phases/reload-session-phase";
 import { achvs } from "#system/achievements";

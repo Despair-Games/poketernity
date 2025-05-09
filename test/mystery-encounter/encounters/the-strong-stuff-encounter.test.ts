@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -15,6 +14,7 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonMove } from "#field/pokemon-move";
 import * as InitMoveAnim from "#init/init-move-anim";
+import { PokemonBaseStatTotalModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheStrongStuffEncounter } from "#mystery-encounters/the-strong-stuff-encounter";

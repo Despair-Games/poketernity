@@ -1,8 +1,8 @@
-import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { SpeciesStatBoosterModifier } from "#modifier/modifier";
+import { modifierTypes } from "#modifier/modifier-types";
 import { GameManager } from "#test/test-utils/gameManager";
 import { NumberHolder } from "#utils/common-utils";
 import Phase from "phaser";

@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { PhaseId } from "#enums/phase-id";
+import { ExpBoosterModifier } from "#modifier/modifier";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";
 import { settings } from "#system/settings-manager";

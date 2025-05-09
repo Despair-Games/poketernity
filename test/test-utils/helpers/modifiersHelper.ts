@@ -1,7 +1,7 @@
-import { expect } from "vitest";
+import type { ModifierTypeKeys } from "#modifier/modifier-type";
+import { itemPoolChecks } from "#modifier/modifier-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
-import type { ModifierTypeKeys } from "#app/modifier/modifier-type";
-import { itemPoolChecks } from "#app/modifier/modifier-type";
+import { expect } from "vitest";
 
 export class ModifierHelper extends GameManagerHelper {
   /**

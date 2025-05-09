@@ -1,9 +1,9 @@
-import { TempCritBoosterModifier } from "#app/modifier/modifier";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { TempCritBoosterModifier } from "#modifier/modifier";
 import { CommandPhase } from "#phases/command-phase";
 import { NewBattlePhase } from "#phases/new-battle-phase";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -4,8 +4,6 @@ import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 
 import { api } from "#api/api";
-import { initModifierPools } from "#app/modifier/init-modifier-pools";
-import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
 import { timedEventManager } from "#app/timed-event-manager";
@@ -26,6 +24,8 @@ import { initBiomes } from "#init/init-biomes";
 import { initMoves } from "#init/init-moves";
 import { initSpecies } from "#init/init-species";
 import { initTrainerTypeDialogue } from "#init/init-trainer-type-dialogue";
+import { initModifierPools } from "#modifier/init-modifier-pools";
+import { initModifierTypes } from "#modifier/init-modifier-types";
 import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
 import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";

@@ -2,19 +2,6 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type {
-  AttackTypeBoosterModifierType,
-  DoubleBattleChanceBoosterModifierType,
-  EvolutionItemModifierType,
-  FormChangeItemModifierType,
-  ModifierOverride,
-  ModifierType,
-  PokemonBaseStatTotalModifierType,
-  PokemonExpBoosterModifierType,
-  PokemonFriendshipBoosterModifierType,
-  TmModifierType,
-} from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
 import { FRIENDSHIP_GAIN_FROM_CANDY } from "#constants/friendship-constants";
 import { getBerryEffectFunc, getBerryPredicate } from "#data/berry";
@@ -38,6 +25,19 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import type {
+  AttackTypeBoosterModifierType,
+  DoubleBattleChanceBoosterModifierType,
+  EvolutionItemModifierType,
+  FormChangeItemModifierType,
+  ModifierOverride,
+  ModifierType,
+  PokemonBaseStatTotalModifierType,
+  PokemonExpBoosterModifierType,
+  PokemonFriendshipBoosterModifierType,
+  TmModifierType,
+} from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { EvolutionPhase } from "#phases/evolution-phase";
 import { LearnMovePhase } from "#phases/learn-move-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";

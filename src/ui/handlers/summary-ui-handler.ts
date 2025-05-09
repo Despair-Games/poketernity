@@ -1,7 +1,6 @@
 import type { Ability } from "#abilities/ability";
 import { loggedInUser } from "#app/account";
 import { globalScene } from "#app/global-scene";
-import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { CANVAS_SCALE, TEXT_SCALE } from "#constants/ui-constants";
 import { getBiomeName } from "#data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#data/exp";
@@ -25,6 +24,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
+import { modifierSortFunc, type PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
 import { settings } from "#system/settings-manager";
 import type { PartyUiHandler } from "#ui/party-ui-handler";

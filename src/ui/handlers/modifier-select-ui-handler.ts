@@ -1,7 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { HealShopCostModifier, LockModifierTiersModifier } from "#app/modifier/modifier";
-import type { ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -14,6 +11,9 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
+import { HealShopCostModifier, LockModifierTiersModifier } from "#modifier/modifier";
+import type { ModifierTypeOption } from "#modifier/modifier-type";
+import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#modifier/modifier-type";
 import { settings } from "#system/settings-manager";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";

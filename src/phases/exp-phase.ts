@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { PhaseId } from "#enums/phase-id";
+import { ExpBoosterModifier } from "#modifier/modifier";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";
 import { NumberHolder } from "#utils/common-utils";

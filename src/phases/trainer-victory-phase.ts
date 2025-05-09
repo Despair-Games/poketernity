@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { timedEventManager } from "#app/timed-event-manager";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import { MoneyRewardPhase } from "#phases/money-reward-phase";

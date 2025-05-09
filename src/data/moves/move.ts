@@ -9,7 +9,6 @@ import type { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-mo
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { MeFirstPowerBoostTag } from "#battler-tags/me-first-power-boost-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -32,6 +31,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
+import { AttackTypeBoosterModifier } from "#modifier/modifier";
 import type { ChargingAttackMove } from "#moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#moves/charging-self-status-move";
 import { GMaxPowerAttr } from "#moves/gmax-power-attr";

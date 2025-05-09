@@ -1,6 +1,5 @@
 import type { Ability } from "#abilities/ability";
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { allAbilities } from "#data/data-lists";
 import { getNatureName } from "#data/nature";
@@ -12,6 +11,7 @@ import type { Nature } from "#enums/nature";
 import { getStatKey } from "#enums/stat";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

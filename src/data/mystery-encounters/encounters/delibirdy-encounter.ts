@@ -1,13 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
-import {
-  type BerryModifier,
-  HealingBoosterModifier,
-  LevelIncrementBoosterModifier,
-  MoneyMultiplierModifier,
-} from "#app/modifier/modifier";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -16,6 +7,15 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#modifier/modifier";
+import {
+  type BerryModifier,
+  HealingBoosterModifier,
+  LevelIncrementBoosterModifier,
+  MoneyMultiplierModifier,
+} from "#modifier/modifier";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   generateModifierType,

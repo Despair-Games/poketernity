@@ -1,6 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { PokemonNatureWeightModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CivilizationEncounterBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -9,6 +7,8 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { PokemonNatureWeightModifier } from "#modifier/modifier";
+import { modifierTypes } from "#modifier/modifier-types";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
 import { GlobalTradeSystemEncounter } from "#mystery-encounters/global-trade-system-encounter";

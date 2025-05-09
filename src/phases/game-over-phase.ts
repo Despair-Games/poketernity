@@ -1,7 +1,6 @@
 import { api } from "#api/api";
 import { clientSessionId } from "#app/account";
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import type PokemonSpecies from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
@@ -13,6 +12,7 @@ import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { modifierTypes } from "#modifier/modifier-types";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";
 import { EncounterPhase } from "#phases/encounter-phase";

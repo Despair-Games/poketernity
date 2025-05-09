@@ -1,6 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
@@ -14,6 +12,8 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {

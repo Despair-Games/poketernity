@@ -1,7 +1,5 @@
 import { manageListeners } from "#app/../test/test-utils/listenersManager";
 import { initLoggedInUser } from "#app/account";
-import { initModifierPools } from "#app/modifier/init-modifier-pools";
-import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import "#app/phaser-extensions";
 import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { allMoves } from "#data/data-lists";
@@ -12,6 +10,8 @@ import { initAbilities } from "#init/init-abilities";
 import { initBiomes } from "#init/init-biomes";
 import { initMoves } from "#init/init-moves";
 import { initSpecies } from "#init/init-species";
+import { initModifierPools } from "#modifier/init-modifier-pools";
+import { initModifierTypes } from "#modifier/init-modifier-types";
 import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
 import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";

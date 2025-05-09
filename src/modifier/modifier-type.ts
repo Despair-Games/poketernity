@@ -1,5 +1,32 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import Overrides from "#app/overrides";
+import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
+import { allMoves } from "#data/data-lists";
+import { getNatureName, getNatureStatMultiplier } from "#data/nature";
+import { getPokeballCatchMultiplier, getPokeballName } from "#data/pokeball";
+import { pokemonFormChanges, SpeciesFormChangeCondition } from "#data/pokemon-forms";
+import { tmPoolTiers, tmSpecies } from "#data/tms";
+import { BerryType } from "#enums/berry-type";
+import { ElementalType } from "#enums/elemental-type";
+import { EvolutionItem } from "#enums/evolution-item";
+import { FormChangeItem } from "#enums/form-change-item";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MoveId } from "#enums/move-id";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball-type";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
+import type { PermanentStat, TempBattleStat } from "#enums/stat";
+import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import type { VoucherType } from "#enums/voucher-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import {
   AddPokeballModifier,
   AddVoucherModifier,
@@ -34,36 +61,9 @@ import {
   TurnHeldItemTransferModifier,
   type Modifier,
   type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
-import { modifierPool } from "#app/modifier/modifier-pools";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import Overrides from "#app/overrides";
-import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
-import { allMoves } from "#data/data-lists";
-import { getNatureName, getNatureStatMultiplier } from "#data/nature";
-import { getPokeballCatchMultiplier, getPokeballName } from "#data/pokeball";
-import { pokemonFormChanges, SpeciesFormChangeCondition } from "#data/pokemon-forms";
-import { tmPoolTiers, tmSpecies } from "#data/tms";
-import { BerryType } from "#enums/berry-type";
-import { ElementalType } from "#enums/elemental-type";
-import { EvolutionItem } from "#enums/evolution-item";
-import { FormChangeItem } from "#enums/form-change-item";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { ModifierTier } from "#enums/modifier-tier";
-import { MoveId } from "#enums/move-id";
-import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball-type";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import { SpeciesId } from "#enums/species-id";
-import type { PermanentStat, TempBattleStat } from "#enums/stat";
-import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
-import type { VoucherType } from "#enums/voucher-type";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { PlayerPokemon } from "#field/player-pokemon";
-import type { Pokemon } from "#field/pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
-import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
-import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+} from "#modifier/modifier";
+import { modifierPool } from "#modifier/modifier-pools";
+import { modifierTypes } from "#modifier/modifier-types";
 import { settings } from "#system/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
 import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";

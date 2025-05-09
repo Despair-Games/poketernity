@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { TerastallizeAccessModifier } from "#app/modifier/modifier";
 import { TEXT_SCALE } from "#constants/ui-constants";
 import { getTypeRgb } from "#data/type";
 import { BattleCommand } from "#enums/battle-command";
@@ -10,6 +9,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { TerastallizeAccessModifier } from "#modifier/modifier";
 import { CommandPhase } from "#phases/command-phase";
 import type { BallUiHandler } from "#ui/ball-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";

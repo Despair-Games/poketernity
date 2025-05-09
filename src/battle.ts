@@ -1,7 +1,5 @@
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
 import { TurnCommandManager } from "#app/turn-command-manager";
 import {
@@ -41,6 +39,8 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import Trainer from "#field/trainer";
+import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
+import type { CustomModifierSettings } from "#modifier/modifier-type";
 import type { Move } from "#moves/move";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";

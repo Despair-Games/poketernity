@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
@@ -13,6 +12,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import * as InitMoveAnim from "#init/init-move-anim";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FieryFalloutEncounter } from "#mystery-encounters/fiery-fallout-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";

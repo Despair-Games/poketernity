@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { MoveCategory } from "#enums/move-category";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -8,6 +7,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Stat } from "#enums/stat";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
+import { modifierTypes } from "#modifier/modifier-types";
 import {
   generateModifierTypeOption,
   leaveEncounterWithoutBattle,

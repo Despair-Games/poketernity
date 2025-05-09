@@ -2,14 +2,6 @@ import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
-  ModifierTypeGenerator,
-  ModifierTypeOption,
-  regenerateModifierPoolThresholds,
-  type CustomModifierSettings,
-  type ModifierType,
-} from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import {
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#constants/mystery-encounter-constants";
@@ -47,6 +39,14 @@ import { PokemonMove } from "#field/pokemon-move";
 import { PokemonSummonData } from "#field/pokemon-summon-data";
 import Trainer from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
+import {
+  ModifierTypeGenerator,
+  ModifierTypeOption,
+  regenerateModifierPoolThresholds,
+  type CustomModifierSettings,
+  type ModifierType,
+} from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { BattleEndPhase } from "#phases/battle-end-phase";

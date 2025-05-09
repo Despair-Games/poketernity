@@ -6,7 +6,6 @@ import type { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-cop
 import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { handleTutorial } from "#app/tutorial";
 import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -16,6 +15,7 @@ import { PhaseId } from "#enums/phase-id";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
 import type { Pokemon } from "#field/pokemon";
+import { ResetNegativeStatStageModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";

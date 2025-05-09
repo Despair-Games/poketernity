@@ -9,14 +9,6 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  BoostBugSpawnModifier,
-  IvScannerModifier,
-  overrideHeldItems,
-  overrideModifiers,
-  TurnHeldItemTransferModifier,
-} from "#app/modifier/modifier";
-import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
@@ -39,6 +31,14 @@ import { Tutorial } from "#enums/tutorial";
 import { EncounterPhaseEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import { initEncounterAnims } from "#init/init-encounter-anims";
+import {
+  BoostBugSpawnModifier,
+  IvScannerModifier,
+  overrideHeldItems,
+  overrideModifiers,
+  TurnHeldItemTransferModifier,
+} from "#modifier/modifier";
+import { regenerateModifierPoolThresholds } from "#modifier/modifier-type";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";

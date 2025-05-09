@@ -44,20 +44,6 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
-import {
-  BaseStatModifier,
-  HiddenAbilityRateBoosterModifier,
-  PokemonBaseStatFlatModifier,
-  PokemonBaseStatTotalModifier,
-  PokemonIncrementingStatModifier,
-  PokemonNatureWeightModifier,
-  ShinyRateBoosterModifier,
-  StatBoosterModifier,
-  SurviveDamageModifier,
-  TempCritBoosterModifier,
-  TempStatStageBoosterModifier,
-  type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
@@ -149,6 +135,20 @@ import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-
 import { SpeciesFormChangeStatusEffectTrigger } from "#form-change-triggers/species-form-change-status-effect-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import {
+  BaseStatModifier,
+  HiddenAbilityRateBoosterModifier,
+  PokemonBaseStatFlatModifier,
+  PokemonBaseStatTotalModifier,
+  PokemonIncrementingStatModifier,
+  PokemonNatureWeightModifier,
+  ShinyRateBoosterModifier,
+  StatBoosterModifier,
+  SurviveDamageModifier,
+  TempCritBoosterModifier,
+  TempStatStageBoosterModifier,
+  type PokemonHeldItemModifier,
+} from "#modifier/modifier";
 import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";

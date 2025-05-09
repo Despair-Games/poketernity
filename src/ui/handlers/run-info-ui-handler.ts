@@ -1,6 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
-import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { getBiomeName } from "#data/biome-utils";
@@ -23,6 +21,8 @@ import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+import * as Modifier from "#modifier/modifier";
+import { getLuckString, getLuckTextTint } from "#modifier/modifier-type";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";

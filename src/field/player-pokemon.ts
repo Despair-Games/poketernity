@@ -1,10 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  EvoTrackerModifier,
-  PokemonFriendshipBoosterModifier,
-  type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
@@ -30,6 +25,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";

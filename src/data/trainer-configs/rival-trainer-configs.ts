@@ -1,4 +1,3 @@
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import {
@@ -13,6 +12,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { modifierTypes } from "#modifier/modifier-types";
 
 let t = TrainerType.RIVAL;
 export const rivalTrainerConfigs: TrainerConfigs = {

@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
@@ -24,6 +23,7 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#modifier/modifier";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { CommandPhase } from "#phases/command-phase";
 import type { SelectModifierPhase } from "#phases/select-modifier-phase";

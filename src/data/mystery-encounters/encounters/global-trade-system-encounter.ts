@@ -1,12 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import {
-  HiddenAbilityRateBoosterModifier,
-  ShinyRateBoosterModifier,
-  SpeciesStatBoosterModifier,
-} from "#app/modifier/modifier";
-import type { ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { timedEventManager } from "#app/timed-event-manager";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -31,6 +23,14 @@ import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import {
+  HiddenAbilityRateBoosterModifier,
+  ShinyRateBoosterModifier,
+  SpeciesStatBoosterModifier,
+} from "#modifier/modifier";
+import type { ModifierTypeOption } from "#modifier/modifier-type";
+import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#modifier/modifier-type";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   leaveEncounterWithoutBattle,

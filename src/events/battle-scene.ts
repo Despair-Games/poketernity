@@ -1,5 +1,5 @@
-import type { BerryModifier } from "#app/modifier/modifier";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
+import type { BerryModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
 
 /**
