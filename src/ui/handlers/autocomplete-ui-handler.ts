@@ -1,5 +1,5 @@
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { Button } from "#enums/buttons";
+import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 
 export class AutoCompleteUiHandler extends OptionSelectUiHandler {

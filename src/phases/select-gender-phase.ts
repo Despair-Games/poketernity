@@ -1,10 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import i18next from "i18next";
 

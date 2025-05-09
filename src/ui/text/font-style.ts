@@ -1,5 +1,5 @@
 import { FontStyle } from "#enums/font-style";
-import type { FontStyleOptions } from "#app/ui/interfaces/font-style-options";
+import type { FontStyleOptions } from "#ui/font-style-options";
 
 /**
  * Object linking each {@linkcode FontStyle} to {@linkcode FontStyleOptions}.

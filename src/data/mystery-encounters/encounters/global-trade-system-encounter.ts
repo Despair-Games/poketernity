@@ -21,7 +21,6 @@ import {
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { timedEventManager } from "#app/timed-event-manager";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { NumberHolder, isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
@@ -46,6 +45,7 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import PokemonData from "#system/pokemon-data";
+import type { OptionSelectItem } from "#ui/option-select-config";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

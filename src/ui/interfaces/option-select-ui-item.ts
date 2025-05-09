@@ -3,7 +3,7 @@
 import { BaseOptionSelectUiHandler } from "#ui/base-option-select-ui-handler";
 // -- end tsdoc imports --
 
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectItem } from "#ui/option-select-config";
 
 /**
  * Used internally by {@linkcode BaseOptionSelectUiHandler} to keep track

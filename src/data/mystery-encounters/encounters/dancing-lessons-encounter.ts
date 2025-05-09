@@ -9,7 +9,6 @@ import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -41,6 +40,7 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { MoveRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { DANCING_MOVES } from "#mystery-encounters/requirement-groups";
 import PokemonData from "#system/pokemon-data";
+import type { OptionSelectItem } from "#ui/option-select-config";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

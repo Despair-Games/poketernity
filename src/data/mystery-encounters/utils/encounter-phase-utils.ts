@@ -36,7 +36,6 @@ import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phas
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { coerceArray, isNil } from "#app/utils/common-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { randomString, randSeedInt } from "#app/utils/random-utils";
@@ -66,6 +65,7 @@ import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils"
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import type PokemonData from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";

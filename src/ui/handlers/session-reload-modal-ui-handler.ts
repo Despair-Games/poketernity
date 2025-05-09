@@ -1,7 +1,7 @@
-import type { ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import type { ModalConfig } from "#ui/modal-config";
 import { ModalUiHandler } from "#ui/modal-ui-handler";
 
 export class SessionReloadModalUiHandler extends ModalUiHandler {

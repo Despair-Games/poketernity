@@ -1,5 +1,4 @@
 import type { SupportedLanguageKey } from "#app/@types/Language";
-import type { TextStyleOptions } from "#app/ui/interfaces/text-style-options";
 import { allTextFormats } from "#app/ui/text/font-style";
 import { allTextColors } from "#app/ui/text/text-color";
 import { TextColor } from "#enums/color";
@@ -8,6 +7,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiTheme } from "#enums/ui-theme";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { TextStyleOptions } from "#ui/text-style-options";
 import i18next from "i18next";
 
 interface ModularTextStyleOptions {

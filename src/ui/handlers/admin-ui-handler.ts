@@ -1,6 +1,5 @@
 import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { setTextColor } from "#app/ui/text/text-utils";
 import { toTitleCase } from "#app/utils/string-utils";
 import { AdminMode } from "#enums/admin-mode";
@@ -9,6 +8,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
 import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { InputFieldConfig, ModalConfig } from "#ui/modal-config";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";

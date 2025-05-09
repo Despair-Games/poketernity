@@ -3,7 +3,6 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MoveCategory } from "#enums/move-category";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -19,6 +18,7 @@ import {
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import type { OptionSelectItem } from "#ui/option-select-config";
 import i18next from "i18next";
 
 /** i18n namespace for the encounter */

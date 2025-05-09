@@ -33,13 +33,6 @@ import Overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
 import { handleTutorial } from "#app/tutorial";
-import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type {
-  OptionSelectIconConfig,
-  OptionSelectItem,
-  OptionSelectModeConfig,
-} from "#app/ui/interfaces/option-select-config";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { applyChallenges } from "#app/utils/challenge-utils";
@@ -72,13 +65,16 @@ import { UiMode } from "#enums/ui-mode";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { StarterPrefs } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";
 import { FilterBar } from "#ui/filter-bar";
 import { IVGraph } from "#ui/iv-graph";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
+import type { OptionSelectIconConfig, OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { PokemonIconAnimHelper } from "#ui/pokemon-icon-anim-helper";
 import type { RenamePokemonUiHandler } from "#ui/rename-pokemon-ui-handler";
 import { ScrollBar } from "#ui/scroll-bar";
 import { StarterContainer } from "#ui/starter-container";

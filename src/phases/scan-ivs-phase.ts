@@ -2,7 +2,6 @@ import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor } from "#enums/color";
 import { CommonAnim } from "#enums/common-anim";
@@ -10,6 +9,7 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 

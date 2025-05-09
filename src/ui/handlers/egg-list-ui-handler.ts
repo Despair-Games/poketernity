@@ -1,7 +1,5 @@
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
-import { ScrollableGridController } from "#app/ui/helpers/scrollable-grid-controller";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
@@ -9,7 +7,9 @@ import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { MessageUiHandler } from "#ui/message-ui-handler";
+import { PokemonIconAnimHelper } from "#ui/pokemon-icon-anim-helper";
 import { ScrollBar } from "#ui/scroll-bar";
+import { ScrollableGridController } from "#ui/scrollable-grid-controller";
 import i18next from "i18next";
 
 export class EggListUiHandler extends MessageUiHandler {

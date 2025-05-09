@@ -5,11 +5,11 @@ import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { SwitchBiomePhase } from "#app/phases/switch-biome-phase";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { randSeedInt } from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 
 export class SelectBiomePhase extends BattlePhase {

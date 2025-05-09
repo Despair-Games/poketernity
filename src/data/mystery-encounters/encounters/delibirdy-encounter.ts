@@ -13,7 +13,6 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import i18next from "#app/plugins/i18n";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -35,6 +34,7 @@ import {
   HeldItemRequirement,
   MoneyRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
+import type { OptionSelectItem } from "#ui/option-select-config";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/delibirdy";
