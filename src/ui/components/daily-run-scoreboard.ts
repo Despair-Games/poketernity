@@ -1,12 +1,12 @@
 import { api } from "#api/api";
 import type { RankingEntry } from "#app/@types/RankingEntry";
 import { globalScene } from "#app/global-scene";
-import { addWindow } from "#app/ui/ui-theme";
 import { executeIf, getEnumKeys } from "#app/utils/common-utils";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
 import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
 import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {

@@ -9,7 +9,6 @@ import { getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
-import { addWindow } from "#app/ui/ui-theme";
 import { isNil } from "#app/utils/common-utils";
 import {
   formatLargeNumberFixedDigits,
@@ -37,6 +36,7 @@ import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 

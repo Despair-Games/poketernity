@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
@@ -8,6 +7,7 @@ import { WindowVariant } from "#enums/window-variant";
 import type { FormModalConfig, InputFieldConfig, ModalConfig } from "#ui/modal-config";
 import { ModalUiHandler } from "#ui/modal-ui-handler";
 import { addTextInputObject, addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 
 export abstract class FormModalUiHandler extends ModalUiHandler {

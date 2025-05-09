@@ -6,7 +6,6 @@ import { getNatureName } from "#app/data/nature";
 import { getVariantTint } from "#app/data/variant";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils/common-utils";
 import { capitalizeString } from "#app/utils/string-utils";
 import { ElementalType } from "#enums/elemental-type";
@@ -16,6 +15,7 @@ import { TextStyle } from "#enums/text-style";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { IVGraph } from "#ui/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

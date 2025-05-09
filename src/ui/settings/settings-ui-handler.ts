@@ -2,7 +2,6 @@ import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { addWindow } from "#app/ui/ui-theme";
 import { hasTouchscreen } from "#app/utils/app-utils";
 import { isNil } from "#app/utils/common-utils";
 import { capitalizeFirstLetter } from "#app/utils/string-utils";
@@ -17,6 +16,7 @@ import { MessageUiHandler } from "#ui/message-ui-handler";
 import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addTextObject, setTextColor } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 
 /**

@@ -59,9 +59,9 @@ import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { UnavailablePhase } from "#app/phases/unavailable-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { UI } from "#app/ui/ui";
 import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
+import { UI } from "#ui/ui";
 import { expect } from "vitest";
 
 export interface PromptHandler {

@@ -16,7 +16,6 @@ import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
-import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor } from "#enums/color";
@@ -32,6 +31,7 @@ import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
 import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import { getWindowVariantSuffix } from "#ui/ui-theme";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
