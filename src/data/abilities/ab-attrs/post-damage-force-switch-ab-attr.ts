@@ -1,5 +1,5 @@
-import type { ForceSwitchOutImmunityAbAttr } from "#app/data/abilities/ab-attrs/force-switch-out-immunity-ab-attr";
-import { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
+import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
+import { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";

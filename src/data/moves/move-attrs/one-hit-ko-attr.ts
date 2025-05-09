@@ -1,5 +1,5 @@
+import type { BlockOneHitKOAbAttr } from "#abilities/block-one-hit-ko-ab-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { BlockOneHitKOAbAttr } from "#app/data/abilities/ab-attrs/block-one-hit-ko-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";

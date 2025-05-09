@@ -1,4 +1,4 @@
-import type { HealFromBerryUseAbAttr } from "#app/data/abilities/ab-attrs/heal-from-berry-use-ab-attr";
+import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBerryEffectFunc } from "#app/data/berry";
 import type { Move } from "#app/data/moves/move";

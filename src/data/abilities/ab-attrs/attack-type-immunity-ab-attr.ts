@@ -1,3 +1,4 @@
+import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Move } from "#app/data/moves/move";
 import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#app/data/moves/move-attrs/neutral-damage-against-flying-type-multiplier-attr";
@@ -5,7 +6,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
-import { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
 
 /**
  * Applies immunity if the move used is not a status move.

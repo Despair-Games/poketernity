@@ -6,10 +6,10 @@ import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
+import type { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
+import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants/friendship-constants";
-import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
-import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
-import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";

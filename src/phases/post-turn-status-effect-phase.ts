@@ -1,7 +1,7 @@
-import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
-import type { BlockStatusDamageAbAttr } from "#app/data/abilities/ab-attrs/block-status-damage-ab-attr";
-import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
-import type { ReduceBurnDamageAbAttr } from "#app/data/abilities/ab-attrs/reduce-burn-damage-ab-attr";
+import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
+import type { BlockStatusDamageAbAttr } from "#abilities/block-status-damage-ab-attr";
+import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
+import type { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";

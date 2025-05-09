@@ -1,7 +1,7 @@
+import { PostBiomeChangeAbAttr } from "#abilities/post-biome-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { TerrainType } from "#enums/terrain-type";
-import { PostBiomeChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-ab-attr";
 
 export class PostBiomeChangeTerrainChangeAbAttr extends PostBiomeChangeAbAttr {
   private readonly terrainType: TerrainType;

@@ -1,7 +1,7 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 /**
  * Ability attribute that provides bonus critical hit rate stages to the ability holder

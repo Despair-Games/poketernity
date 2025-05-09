@@ -1,8 +1,8 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Ability } from "#app/data/abilities/ability";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 export class SuppressFieldAbilitiesAbAttr extends AbAttr {
   constructor() {

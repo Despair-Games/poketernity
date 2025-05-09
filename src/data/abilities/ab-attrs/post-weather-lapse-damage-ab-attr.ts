@@ -1,4 +1,4 @@
-import { PostWeatherLapseAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-ab-attr";
+import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
 import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

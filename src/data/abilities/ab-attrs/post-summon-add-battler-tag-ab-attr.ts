@@ -1,6 +1,6 @@
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
   private readonly tagType: BattlerTagType;

@@ -1,11 +1,11 @@
+import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import type { PreDefendAbAttrCondition } from "#app/@types/PreDefendAbAttrCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils/common-utils";
-import i18next from "i18next";
-import { PreDefendAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import i18next from "i18next";
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {
   private readonly immuneCondition: PreDefendAbAttrCondition;

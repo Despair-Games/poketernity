@@ -1,4 +1,5 @@
-import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
+import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
@@ -7,7 +8,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
-import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

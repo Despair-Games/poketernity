@@ -1,8 +1,8 @@
+import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PreAttackAbAttr } from "#app/data/abilities/ab-attrs/pre-attack-ab-attr";
 
 export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
   constructor(showAbility: boolean = true) {

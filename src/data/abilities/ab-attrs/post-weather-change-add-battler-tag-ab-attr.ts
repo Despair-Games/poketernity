@@ -1,7 +1,7 @@
+import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
-import { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
 
 export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAttr {
   private readonly tagType: BattlerTagType;

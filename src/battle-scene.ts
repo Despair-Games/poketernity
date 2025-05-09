@@ -1,3 +1,7 @@
+import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
+import type { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-attr";
+import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
+import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
 import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import type { Localizable } from "#app/@types/locales";
@@ -16,10 +20,6 @@ import {
 } from "#app/constants/mystery-encounter-constants";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { ELITE_FOUR_1_WAVE } from "#app/constants/wave-constants";
-import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
-import type { DoubleBattleChanceAbAttr } from "#app/data/abilities/ab-attrs/double-battle-chance-ab-attr";
-import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
-import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";

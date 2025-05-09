@@ -4,7 +4,7 @@ import type { AbilityId } from "#enums/ability-id";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
+import { AbAttr } from "#abilities/ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";

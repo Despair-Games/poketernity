@@ -1,8 +1,8 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveCategory } from "#enums/move-category";
 
 export abstract class PostAttackAbAttr extends AbAttr {
   /** Whether it only applies to attack moves. */

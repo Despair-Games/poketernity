@@ -1,9 +1,9 @@
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StatusEffect } from "#enums/status-effect";
-import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 /**
  * Removes supplied status effects from the user's field. Used by Pastel Veil.

@@ -1,9 +1,9 @@
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { getPokeballName } from "#app/data/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 
 /**
  * Attribute to add the last used Pokeball in the current battle

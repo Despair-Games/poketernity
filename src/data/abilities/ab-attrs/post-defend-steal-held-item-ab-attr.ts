@@ -1,12 +1,12 @@
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import i18next from "i18next";
-import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { MoveCategory } from "#enums/move-category";
+import i18next from "i18next";
 
 export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
   private readonly condition?: PokemonDefendCondition;

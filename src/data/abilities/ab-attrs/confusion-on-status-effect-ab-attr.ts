@@ -1,9 +1,9 @@
+import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { StatusEffect } from "#enums/status-effect";
-import { PostAttackAbAttr } from "#app/data/abilities/ab-attrs/post-attack-ab-attr";
 
 /**
  * This attribute applies confusion to the target whenever the user

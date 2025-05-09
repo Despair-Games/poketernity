@@ -1,7 +1,7 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 /**
  * Causes Pokemon to take reduced damage from the {@linkcode StatusEffect.BURN | Burn} status

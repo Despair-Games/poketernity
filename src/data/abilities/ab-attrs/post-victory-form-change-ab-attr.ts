@@ -1,7 +1,7 @@
+import { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 
 export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
   private readonly formFunc: (p: Pokemon) => integer;

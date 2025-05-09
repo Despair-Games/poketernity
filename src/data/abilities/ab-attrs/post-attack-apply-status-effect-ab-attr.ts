@@ -1,9 +1,9 @@
+import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { StatusEffect } from "#enums/status-effect";
-import { PostAttackAbAttr } from "#app/data/abilities/ab-attrs/post-attack-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveFlags } from "#enums/move-flags";
+import type { StatusEffect } from "#enums/status-effect";
 
 /**
  * Ability attribute that inflicts a status on a Pokemon that gets hit by the ability user's attacks.

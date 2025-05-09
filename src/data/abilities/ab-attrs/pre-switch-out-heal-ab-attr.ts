@@ -1,6 +1,6 @@
+import { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils/common-utils";
-import { PreSwitchOutAbAttr } from "#app/data/abilities/ab-attrs/pre-switch-out-ab-attr";
 
 export class PreSwitchOutHealAbAttr extends PreSwitchOutAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

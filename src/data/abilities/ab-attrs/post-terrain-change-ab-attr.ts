@@ -1,7 +1,7 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { TerrainType } from "#enums/terrain-type";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 export abstract class PostTerrainChangeAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

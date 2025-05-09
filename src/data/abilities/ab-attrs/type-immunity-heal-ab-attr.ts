@@ -1,3 +1,4 @@
+import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -5,7 +6,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { type BooleanHolder, type NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
-import { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
   constructor(immuneType: ElementalType) {

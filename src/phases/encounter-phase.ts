@@ -5,9 +5,9 @@ import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
-import type { SyncEncounterNatureAbAttr } from "#app/data/abilities/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { initEncounterAnims } from "#app/data/init/init-encounter-anims";
@@ -30,6 +30,7 @@ import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
@@ -39,8 +40,8 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
+import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -55,7 +56,6 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
 import i18next from "i18next";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by

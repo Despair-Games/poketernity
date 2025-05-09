@@ -1,4 +1,4 @@
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
+import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

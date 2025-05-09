@@ -1,4 +1,4 @@
-import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";

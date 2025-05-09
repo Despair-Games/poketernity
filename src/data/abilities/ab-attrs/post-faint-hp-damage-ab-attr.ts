@@ -1,4 +1,4 @@
-import { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
+import { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";

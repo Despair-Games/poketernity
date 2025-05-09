@@ -1,8 +1,8 @@
+import { PreWeatherEffectAbAttr } from "#abilities/pre-weather-effect-ab-attr";
+import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { Weather } from "#app/data/weather";
-import { PreWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/pre-weather-effect-ab-attr";
 
 export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
   constructor(showAbility: boolean = false) {

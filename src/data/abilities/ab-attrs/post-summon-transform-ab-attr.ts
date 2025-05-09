@@ -1,10 +1,10 @@
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { randSeedItem } from "#app/utils/random-utils";
 import i18next from "i18next";
-import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 /**
  * Used by Imposter

@@ -1,9 +1,9 @@
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
-import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 
 export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
   private readonly weatherType: WeatherType;

@@ -1,10 +1,10 @@
+import { AbAttr } from "#abilities/ab-attr";
 import { allMoves } from "#app/data/data-lists";
-import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { MoveId } from "#enums/move-id";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { MoveId } from "#enums/move-id";
+import { MoveTarget } from "#enums/move-target";
 
 export class RedirectMoveAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

@@ -1,4 +1,4 @@
-import type { PreSwitchOutAbAttr } from "#app/data/abilities/ab-attrs/pre-switch-out-ab-attr";
+import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#app/data/pokeball";

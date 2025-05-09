@@ -1,9 +1,9 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 /**
  * Guarantees a critical hit according to the given condition, except if target prevents critical hits. ie. Merciless

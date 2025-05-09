@@ -1,8 +1,8 @@
-import type { PokemonTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/pokemon-type-change-ab-attr";
-import type { PostMoveUsedAbAttr } from "#app/data/abilities/ab-attrs/post-move-used-ab-attr";
-import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
-import type { ReduceSleepDurationAbAttr } from "#app/data/abilities/ab-attrs/reduce-sleep-duration-ab-attr";
-import type { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
+import type { PokemonTypeChangeAbAttr } from "#abilities/pokemon-type-change-ab-attr";
+import type { PostMoveUsedAbAttr } from "#abilities/post-move-used-ab-attr";
+import type { RedirectMoveAbAttr } from "#abilities/redirect-move-ab-attr";
+import type { ReduceSleepDurationAbAttr } from "#abilities/reduce-sleep-duration-ab-attr";
+import type { ReflectMovesAbAttr } from "#abilities/reflect-moves-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";

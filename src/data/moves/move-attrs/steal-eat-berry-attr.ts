@@ -1,5 +1,5 @@
-import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
-import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
+import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
+import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { EatBerryAttr } from "#app/data/moves/move-attrs/eat-berry-attr";

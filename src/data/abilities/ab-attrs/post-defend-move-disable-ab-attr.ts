@@ -1,8 +1,8 @@
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
+import { MoveFlags } from "#enums/move-flags";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
   private readonly chance: number;

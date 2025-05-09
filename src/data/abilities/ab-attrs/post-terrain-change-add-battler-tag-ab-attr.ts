@@ -1,7 +1,7 @@
+import { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
-import { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
 
 export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAttr {
   private readonly tagType: BattlerTagType;

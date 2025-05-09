@@ -1,6 +1,6 @@
+import { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
 
 /**
  * Applies a Battler Tag to the Pokemon after it loses or consumes item

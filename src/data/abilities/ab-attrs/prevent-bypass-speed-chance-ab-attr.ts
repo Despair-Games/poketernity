@@ -1,10 +1,10 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { BattleCommand } from "#enums/battle-command";
 import type { BooleanHolder } from "#app/utils/common-utils";
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattleCommand } from "#enums/battle-command";
 
 /**
  * This attribute checks if a Pokemon's move meets a provided condition to determine if the Pokemon can use Quick Claw

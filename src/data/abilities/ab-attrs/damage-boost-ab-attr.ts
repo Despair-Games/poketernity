@@ -1,13 +1,13 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
+import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 // -- end tsdoc imports --
 
+import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import { PreAttackAbAttr } from "#app/data/abilities/ab-attrs/pre-attack-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

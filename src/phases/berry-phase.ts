@@ -1,5 +1,5 @@
-import type { HealFromBerryUseAbAttr } from "#app/data/abilities/ab-attrs/heal-from-berry-use-ab-attr";
-import type { PreventBerryUseAbAttr } from "#app/data/abilities/ab-attrs/prevent-berry-use-ab-attr";
+import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-attr";
+import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { BerryUsedEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";

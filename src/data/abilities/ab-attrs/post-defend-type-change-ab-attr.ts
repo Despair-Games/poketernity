@@ -1,10 +1,10 @@
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
-import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { MoveCategory } from "#enums/move-category";
+import i18next from "i18next";
 
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {

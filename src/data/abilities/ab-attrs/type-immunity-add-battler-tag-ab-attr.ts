@@ -1,10 +1,10 @@
+import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
-import { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private readonly tagType: BattlerTagType;

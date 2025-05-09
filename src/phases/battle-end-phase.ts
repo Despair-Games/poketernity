@@ -1,4 +1,4 @@
-import type { PostBattleAbAttr } from "#app/data/abilities/ab-attrs/post-battle-ab-attr";
+import type { PostBattleAbAttr } from "#abilities/post-battle-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";

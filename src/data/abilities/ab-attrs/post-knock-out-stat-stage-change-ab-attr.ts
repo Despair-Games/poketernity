@@ -1,8 +1,8 @@
+import { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
-import { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
 
 export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
   private readonly stat: BattleStat | ((p: Pokemon) => BattleStat);

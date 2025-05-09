@@ -1,4 +1,4 @@
-import type { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
+import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
