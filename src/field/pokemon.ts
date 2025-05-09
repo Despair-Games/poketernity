@@ -1047,7 +1047,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   setStatStage(stat: BattleStat, value: number): void {
     this.summonData.statStages[stat - 1] = clamp(value, MIN_STAT_STAGE, MAX_STAT_STAGE);
-
   }
 
   /**
@@ -1354,7 +1353,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   abstract getBossSegmentIndex(): number;
 
   getMoveset(baseOnly?: boolean): PokemonMove[] {
-    const ret = !baseOnly && this.summonData.moveset.length ? this.summonData.moveset : this.moveset;
+    const ret = !baseOnly && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
@@ -1365,7 +1364,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (overrideArray.length === 0) {
       return ret;
     }
-    if (!this.isPlayer()) {
+    if (this.isEnemy()) {
       this.moveset = [];
     }
     overrideArray.forEach((moveId: MoveId, index: number) => {
@@ -2217,7 +2216,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const move = new PokemonMove(moveId);
     this.moveset[moveIndex] = move;
     // TODO: should this also be modifying the summon data moveset?
-    if (this.summonData.moveset.length) {
+    if (this.summonData.moveset.length > 0) {
       this.summonData.moveset[moveIndex] = move;
     }
   }
@@ -2670,10 +2669,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isPlayer() !== target.isPlayer();
   }
 
-  getOpponent(targetIndex: number): Pokemon | undefined {
-    return this.getOpponents()[targetIndex];
-  }
-
+  /**
+   * @returns An array containing the active, on field pokemon on the team opposing this pokemon.
+   * @todo Add `| undefined` to return type hint
+   */
   getOpponents(): Pokemon[] {
     return this.getOpposingField().filter((p) => p.isActive(true));
   }
@@ -4137,6 +4136,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.summonDataPrimer = summonDataPrimer;
   }
 
+  /**
+   * Resets {@linkcode Pokemon.summonData} to the default values.
+   *
+   * @todo This currently checks for the existence of {@linkcode Pokemon.summonDataPrimer} and
+   * applies its values to `summonData` if it exists. `summonDataPrimer` should be removed.
+   */
   resetSummonData(): void {
     this.summonData = {
       statStages: [0, 0, 0, 0, 0, 0, 0],
