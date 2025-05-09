@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
+import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -23,15 +23,6 @@ import {
 } from "#app/modifier/modifier";
 import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { ReturnPhase } from "#app/phases/return-phase";
-import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
-import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { handleTutorial } from "#app/tutorial";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
@@ -51,6 +42,15 @@ import { initEncounterAnims } from "#init/init-encounter-anims";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { CheckSwitchPhase } from "#phases/check-switch-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { PostSummonPhase } from "#phases/post-summon-phase";
+import { ReturnPhase } from "#phases/return-phase";
+import { ScanIvsPhase } from "#phases/scan-ivs-phase";
+import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
+import { SummonPhase } from "#phases/summon-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";

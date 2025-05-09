@@ -1,8 +1,8 @@
 import { PostStatStageChangeAbAttr } from "#abilities/post-stat-stage-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute to increase some of the user's stats in response to negative stat changes inflicted by an opponent.

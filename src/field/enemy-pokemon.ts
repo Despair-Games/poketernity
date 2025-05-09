@@ -8,7 +8,6 @@ import { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { EncoreTag } from "#battler-tags/encore-tag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
@@ -27,6 +26,7 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type PokemonData from "#system/pokemon-data";
 import type { TurnMove } from "#types/TurnMove";
 import { EnemyBattleInfo } from "#ui/battle-info";

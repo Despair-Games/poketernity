@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { GameOverPhase } from "#app/phases/game-over-phase";
-import type { MovePhase } from "#app/phases/move-phase";
 import type { BattlerTag } from "#battler-tags/battler-tag";
+import type { GameOverPhase } from "#phases/game-over-phase";
+import type { MovePhase } from "#phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -18,12 +18,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import { SwitchPhase } from "#app/phases/switch-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
@@ -37,6 +31,12 @@ import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { DamageAnimPhase } from "#phases/damage-anim-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import { SwitchPhase } from "#phases/switch-phase";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 

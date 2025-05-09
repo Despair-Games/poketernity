@@ -1,11 +1,11 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**

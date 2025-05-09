@@ -3,7 +3,6 @@ import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import type { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import type { MysteryEncounterPostSummonTag } from "#battler-tags/mystery-encounter-post-summon-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -11,6 +10,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 export class PostSummonPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_SUMMON;

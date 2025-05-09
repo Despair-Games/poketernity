@@ -2,11 +2,11 @@ import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship-constant
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import { EvolutionPhase } from "#app/phases/evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { ExpNotification } from "#enums/exp-notification";
 import { PhaseId } from "#enums/phase-id";
+import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import { EvolutionPhase } from "#phases/evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 

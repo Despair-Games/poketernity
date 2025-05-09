@@ -1,11 +1,11 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { BideTag } from "#battler-tags/bide-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import type { BooleanHolder } from "#utils/common-utils";
 

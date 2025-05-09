@@ -5,8 +5,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
-import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -14,6 +12,8 @@ import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { PostSummonPhase } from "#phases/post-summon-phase";
+import { SummonPhase } from "#phases/summon-phase";
 import i18next from "i18next";
 
 export class SwitchSummonPhase extends SummonPhase {

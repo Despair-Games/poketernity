@@ -1,13 +1,13 @@
 import { MoveChargeAnim } from "#animations/move-charge-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { HitCheckPhase } from "#phases/hit-check-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import { applyMoveChargeAttrs } from "#utils/move-utils";
 import i18next from "i18next";

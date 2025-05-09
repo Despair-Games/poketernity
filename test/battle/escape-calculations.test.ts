@@ -1,8 +1,8 @@
-import type { AttemptRunPhase } from "#app/phases/attempt-run-phase";
-import type { CommandPhase } from "#app/phases/command-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { SpeciesId } from "#enums/species-id";
+import type { AttemptRunPhase } from "#phases/attempt-run-phase";
+import type { CommandPhase } from "#phases/command-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import { NumberHolder } from "#utils/common-utils";
 import Phaser from "phaser";

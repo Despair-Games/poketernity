@@ -4,12 +4,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#app/modifier/modifier";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { PhaseId } from "#enums/phase-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TurnEndEvent } from "#events/battle-scene";
+import { FieldPhase } from "#phases/abstract-field-phase";
 import i18next from "i18next";
 
 export class TurnEndPhase extends FieldPhase {

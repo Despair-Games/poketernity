@@ -2,7 +2,6 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-enc
 import type { EggOptions } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -20,6 +19,7 @@ import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { PartyHealPhase } from "#phases/party-heal-phase";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";

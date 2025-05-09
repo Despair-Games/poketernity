@@ -1,8 +1,8 @@
 import type BattleScene from "#app/battle-scene";
-import { LoginPhase } from "#app/phases/login-phase";
-import { TitlePhase } from "#app/phases/title-phase";
-import { UnavailablePhase } from "#app/phases/unavailable-phase";
 import { UiMode } from "#enums/ui-mode";
+import { LoginPhase } from "#phases/login-phase";
+import { TitlePhase } from "#phases/title-phase";
+import { UnavailablePhase } from "#phases/unavailable-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

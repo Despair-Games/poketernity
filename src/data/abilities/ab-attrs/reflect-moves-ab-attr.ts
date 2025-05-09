@@ -1,6 +1,6 @@
 // -- start tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#phases/move-phase";
 // -- end tsdoc imports
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";

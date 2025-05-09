@@ -1,9 +1,9 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
 import type { Move } from "#moves/move";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
 
 export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {

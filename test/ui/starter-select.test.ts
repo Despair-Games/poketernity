@@ -1,5 +1,4 @@
 import { allSpecies } from "#app/data/data-lists";
-import type { TitlePhase } from "#app/phases/title-phase";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { GameModes } from "#enums/game-modes";
@@ -7,6 +6,7 @@ import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import type { TitlePhase } from "#phases/title-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import type { OptionSelectItem } from "#ui/option-select-config";

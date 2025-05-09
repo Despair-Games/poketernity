@@ -1,8 +1,8 @@
-import { CommandPhase } from "#app/phases/command-phase";
-import { UiMode } from "#enums/ui-mode";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { UiMode } from "#enums/ui-mode";
+import { CommandPhase } from "#phases/command-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

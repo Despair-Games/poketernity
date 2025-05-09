@@ -1,7 +1,6 @@
 import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
-import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { Button } from "#enums/buttons";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -13,6 +12,7 @@ import { WindowVariant } from "#enums/window-variant";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";

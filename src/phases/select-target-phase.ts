@@ -1,11 +1,11 @@
 import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { CommandPhase } from "#app/phases/command-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { CommandPhase } from "#phases/command-phase";
 import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import i18next from "i18next";
 

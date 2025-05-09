@@ -4,10 +4,10 @@ import type { PostIntimidateStatStageChangeAbAttr } from "#abilities/post-intimi
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { BooleanHolder } from "#utils/common-utils";
 
 export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {

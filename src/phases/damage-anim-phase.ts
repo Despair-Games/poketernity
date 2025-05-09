@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import type { DamageResult } from "#types/DamageResult";
 import { fixedNumber } from "#utils/common-utils";

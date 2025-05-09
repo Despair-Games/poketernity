@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import i18next from "i18next";
 
 /**

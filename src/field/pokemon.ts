@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
-import type { FaintPhase } from "#app/phases/faint-phase";
+import type { FaintPhase } from "#phases/faint-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -97,9 +97,6 @@ import {
   type PokemonHeldItemModifier,
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { timedEventManager } from "#app/timed-event-manager";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
@@ -181,6 +178,9 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
+import { DamageAnimPhase } from "#phases/damage-anim-phase";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
+import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";

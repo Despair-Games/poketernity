@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
+import { BattlePhase } from "#phases/abstract-battle-phase";
 import { settings } from "#system/settings-manager";
 
 export class ShowTrainerPhase extends BattlePhase {

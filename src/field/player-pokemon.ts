@@ -20,7 +20,6 @@ import {
   type PokemonHeldItemModifier,
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { timedEventManager } from "#app/timed-event-manager";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -35,6 +34,7 @@ import { SpeciesId } from "#enums/species-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/StarterData";

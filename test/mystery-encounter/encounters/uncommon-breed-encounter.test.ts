@@ -3,10 +3,6 @@ import { speciesEggMoves } from "#app/data/egg-moves";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -21,6 +17,10 @@ import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils"
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { UncommonBreedEncounter } from "#mystery-encounters/uncommon-breed-encounter";
+import { CommandPhase } from "#phases/command-phase";
+import type { MovePhase } from "#phases/move-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

@@ -1,7 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -11,6 +10,7 @@ import { SpeciesId } from "#enums/species-id";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { PartTimerEncounter } from "#mystery-encounters/part-timer-encounter";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

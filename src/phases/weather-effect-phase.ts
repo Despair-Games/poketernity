@@ -8,13 +8,13 @@ import { WEATHER_DAMAGE_RATIO } from "#app/constants/weather-constants";
 import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
+import { FieldPhase } from "#phases/abstract-field-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**

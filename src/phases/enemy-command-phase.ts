@@ -6,11 +6,11 @@ import type { Pokemon } from "#app/field/pokemon";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import { FieldPhase } from "#phases/abstract-field-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.

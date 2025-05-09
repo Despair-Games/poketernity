@@ -1,8 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import { CommandPhase } from "#app/phases/command-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -16,6 +13,9 @@ import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils"
 import { FunAndGamesEncounter } from "#mystery-encounters/fun-and-games-encounter";
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { CommandPhase } from "#phases/command-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

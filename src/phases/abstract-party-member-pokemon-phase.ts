@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
+import { FieldPhase } from "#phases/abstract-field-phase";
 
 // TODO: Delete this class and replace its uses with `PokemonPhase`
 export abstract class PartyMemberPokemonPhase extends FieldPhase {

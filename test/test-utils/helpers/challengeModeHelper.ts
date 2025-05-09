@@ -1,13 +1,13 @@
 import type { Challenge } from "#app/data/challenge";
 import overrides from "#app/overrides";
-import { CommandPhase } from "#app/phases/command-phase";
-import { EncounterPhase } from "#app/phases/encounter-phase";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { BattleStyle } from "#enums/battle-style";
 import type { Challenges } from "#enums/challenges";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { CommandPhase } from "#phases/command-phase";
+import { EncounterPhase } from "#phases/encounter-phase";
+import { SelectStarterPhase } from "#phases/select-starter-phase";
+import { TurnInitPhase } from "#phases/turn-init-phase";
 import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";

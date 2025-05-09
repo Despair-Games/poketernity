@@ -3,13 +3,13 @@ import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-dam
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 

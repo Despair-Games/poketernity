@@ -1,6 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { CommandPhase } from "#app/phases/command-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { BiomeId } from "#enums/biome-id";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -12,6 +10,8 @@ import { UiMode } from "#enums/ui-mode";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { WeirdDreamEncounter } from "#mystery-encounters/weird-dream-encounter";
+import { CommandPhase } from "#phases/command-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,

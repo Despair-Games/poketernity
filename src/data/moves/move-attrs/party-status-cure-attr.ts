@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import type { AbilityId } from "#enums/ability-id";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { ShowAbilityPhase } from "#phases/show-ability-phase";
 
 /**
  * Cures the user's party of non-volatile status conditions, ie. Heal Bell, Aromatherapy

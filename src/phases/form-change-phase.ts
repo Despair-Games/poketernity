@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { EvolutionPhase } from "#app/phases/evolution-phase";
+import type { EvolutionPhase } from "#phases/evolution-phase";
 // -- end tsdoc imports --
 
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -9,13 +9,13 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { FormChangeBasePhase } from "#app/phases/abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
+import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
+import { EndEvolutionPhase } from "#phases/end-evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
 import { achvs } from "#system/achievements";
 import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";

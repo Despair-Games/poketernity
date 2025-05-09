@@ -1,16 +1,16 @@
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { CommandPhase } from "#app/phases/command-phase";
-import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { PhaseId } from "#enums/phase-id";
 import { TurnInitEvent } from "#events/battle-scene";
 import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,
 } from "#mystery-encounters/encounter-phase-utils";
+import { FieldPhase } from "#phases/abstract-field-phase";
+import { CommandPhase } from "#phases/command-phase";
+import { EnemyCommandPhase } from "#phases/enemy-command-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { TurnStartPhase } from "#phases/turn-start-phase";
 import i18next from "i18next";
 
 export class TurnInitPhase extends FieldPhase {

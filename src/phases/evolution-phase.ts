@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { FormChangePhase } from "#app/phases/form-change-phase";
+import type { FormChangePhase } from "#phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
@@ -10,12 +10,12 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { FormChangeBasePhase } from "#app/phases/abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { PhaseId } from "#enums/phase-id";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
+import { EndEvolutionPhase } from "#phases/end-evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { BooleanHolder, fixedNumber } from "#utils/common-utils";

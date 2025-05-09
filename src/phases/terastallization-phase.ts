@@ -3,10 +3,10 @@ import { SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { PhaseId } from "#enums/phase-id";
+import { BattlePhase } from "#phases/abstract-battle-phase";
 import i18next from "i18next";
 
 export class TerastallizationPhase extends BattlePhase {

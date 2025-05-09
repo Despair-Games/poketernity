@@ -2,9 +2,6 @@ import type BattleScene from "#app/battle-scene";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
-import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -21,6 +18,9 @@ import * as InitMoveAnim from "#init/init-move-anim";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheStrongStuffEncounter } from "#mystery-encounters/the-strong-stuff-encounter";
+import { CommandPhase } from "#phases/command-phase";
+import type { MovePhase } from "#phases/move-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,

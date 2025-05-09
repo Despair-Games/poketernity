@@ -15,8 +15,6 @@ import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/da
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -34,6 +32,8 @@ import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import type { Move } from "#moves/move";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { coerceArray, getEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";

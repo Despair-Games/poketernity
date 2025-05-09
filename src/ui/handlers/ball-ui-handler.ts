@@ -1,11 +1,11 @@
 import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getPokeballName } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
-import type { CommandPhase } from "#app/phases/command-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { CommandPhase } from "#phases/command-phase";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";

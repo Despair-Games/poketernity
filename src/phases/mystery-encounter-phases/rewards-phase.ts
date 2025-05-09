@@ -5,9 +5,9 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PhaseId } from "#enums/phase-id";
+import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 
 /**
  * Will handle (in order):

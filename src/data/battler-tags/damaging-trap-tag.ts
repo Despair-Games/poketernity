@@ -4,7 +4,6 @@ import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants"
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { TrappedTag } from "#battler-tags/trapped-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -12,6 +11,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { CommonAnim } from "#enums/common-anim";
 import type { MoveId } from "#enums/move-id";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 

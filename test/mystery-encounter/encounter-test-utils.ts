@@ -1,11 +1,11 @@
-import { CommandPhase } from "#app/phases/command-phase";
-import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import { CommandPhase } from "#phases/command-phase";
+import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
+import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import type { GameManager } from "#test/test-utils/gameManager";
 import type { MessageUiHandler } from "#ui/message-ui-handler";
 import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";

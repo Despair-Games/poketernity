@@ -14,7 +14,6 @@ import {
   FlinchChanceModifier,
   HitHealModifier,
 } from "#app/modifier/modifier";
-import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -41,6 +40,7 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
 import { NoEffectAttr } from "#moves/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import { HitCheckPhase } from "#phases/hit-check-phase";
 import type { AttackMoveResult } from "#types/AttackMoveResult";
 import type { DamageResult } from "#types/DamageResult";
 import type { TurnMove } from "#types/TurnMove";

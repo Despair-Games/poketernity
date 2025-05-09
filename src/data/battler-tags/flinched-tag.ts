@@ -3,12 +3,12 @@ import type { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { MovePhase } from "#app/phases/move-phase";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
+import type { MovePhase } from "#phases/move-phase";
 import i18next from "i18next";
 
 /**

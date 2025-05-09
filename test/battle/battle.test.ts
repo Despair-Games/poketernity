@@ -1,7 +1,5 @@
 import { allSpecies } from "#app/data/data-lists";
 import { getGameMode } from "#app/game-mode";
-import { EncounterPhase } from "#app/phases/encounter-phase";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { GameModes } from "#enums/game-modes";
@@ -10,6 +8,8 @@ import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
+import { EncounterPhase } from "#phases/encounter-phase";
+import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
 import { GameManager } from "#test/test-utils/gameManager";
 import { generateStarter } from "#test/test-utils/gameManagerUtils";

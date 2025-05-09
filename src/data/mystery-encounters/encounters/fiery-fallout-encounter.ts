@@ -6,7 +6,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -46,6 +45,7 @@ import {
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
 import { FIRE_RESISTANT_ABILITIES } from "#mystery-encounters/requirement-groups";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 

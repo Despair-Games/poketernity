@@ -10,11 +10,11 @@ import { getTypeRgb } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import type { MovePhase } from "#app/phases/move-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import type { MovePhase } from "#phases/move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
   override readonly id = PhaseId.QUIET_FORM_CHANGE;

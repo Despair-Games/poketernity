@@ -1,9 +1,9 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostBiomeChangeAbAttr } from "#abilities/post-biome-change-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
+import { NextEncounterPhase } from "#phases/next-encounter-phase";
 
 /**
  * Triggers the first encounter of a new biome

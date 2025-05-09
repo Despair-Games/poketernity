@@ -7,7 +7,6 @@ import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { ProtectedTag } from "#battler-tags/protected-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -22,6 +21,7 @@ import { BideEffectAttr } from "#moves/bide-effect-attr";
 import { HitsTagAttr } from "#moves/hits-tag-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#moves/toxic-accuracy-attr";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { BooleanHolder } from "#utils/common-utils";
 
 //#region Types

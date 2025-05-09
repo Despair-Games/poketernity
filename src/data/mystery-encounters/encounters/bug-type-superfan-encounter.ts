@@ -15,7 +15,6 @@ import {
 } from "#app/modifier/modifier";
 import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
@@ -48,6 +47,7 @@ import {
   HeldItemRequirement,
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
+import { LearnMovePhase } from "#phases/learn-move-phase";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import type { OptionSelectItem } from "#ui/option-select-config";

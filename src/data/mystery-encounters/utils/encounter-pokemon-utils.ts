@@ -16,7 +16,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
@@ -35,6 +34,7 @@ import {
   queueEncounterMessage,
   showEncounterText,
 } from "#mystery-encounters/encounter-dialogue-utils";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";

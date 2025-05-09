@@ -2,7 +2,6 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-enc
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { Challenges } from "#enums/challenges";
 import type { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -16,6 +15,7 @@ import { getRandomPlayerPokemon, getRandomSpeciesByStarterCost } from "#mystery-
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import { isNil } from "#utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";

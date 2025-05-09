@@ -11,7 +11,6 @@ import {
 } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import i18next from "#app/plugins/i18n";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -33,6 +32,7 @@ import {
   HeldItemRequirement,
   MoneyRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 

@@ -1,12 +1,12 @@
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { toDmgValue } from "#utils/common-utils";
 import { PartyFilterFainted } from "#utils/party-ui-utils";

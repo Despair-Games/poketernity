@@ -3,8 +3,6 @@ import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-dam
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import type { MovePhase } from "#app/phases/move-phase";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -14,6 +12,8 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import type { MovePhase } from "#phases/move-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

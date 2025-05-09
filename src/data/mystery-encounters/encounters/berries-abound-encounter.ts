@@ -8,7 +8,6 @@ import type { BerryModifier } from "#app/modifier/modifier";
 import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -38,6 +37,7 @@ import {
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import PokemonData from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 

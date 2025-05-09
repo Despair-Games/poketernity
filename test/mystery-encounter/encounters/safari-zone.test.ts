@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -10,6 +9,7 @@ import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils"
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { getSafariSpeciesSpawn, SafariZoneEncounter } from "#mystery-encounters/safari-zone-encounter";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

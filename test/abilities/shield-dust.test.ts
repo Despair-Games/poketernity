@@ -1,13 +1,13 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import { NumberHolder } from "#utils/common-utils";
 import Phaser from "phaser";
