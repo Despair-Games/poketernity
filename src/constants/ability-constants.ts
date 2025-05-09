@@ -19,3 +19,9 @@ export const DETRIMENTAL_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
   AbilityId.KLUTZ,
   AbilityId.SLOW_START,
 ]);
+
+export const ELECTRIC_IMMUNE_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
+  AbilityId.VOLT_ABSORB,
+  AbilityId.LIGHTNING_ROD,
+  AbilityId.MOTOR_DRIVE,
+]);

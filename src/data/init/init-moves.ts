@@ -1,3 +1,5 @@
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
 import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
@@ -8,7 +10,6 @@ import { AbilityChangeAttr } from "#app/data/moves/move-attrs/ability-change-att
 import { AbilityCopyAttr } from "#app/data/moves/move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "#app/data/moves/move-attrs/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#app/data/moves/move-attrs/acupressure-stat-stage-change-attr";
-import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
 import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "#app/data/moves/move-attrs/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "#app/data/moves/move-attrs/add-battler-tag-if-boosted-attr";
@@ -43,6 +44,7 @@ import { CombinedPledgePowerAttr } from "#app/data/moves/move-attrs/combined-ple
 import { CombinedPledgeStabBoostAttr } from "#app/data/moves/move-attrs/combined-pledge-stab-boost-attr";
 import { CombinedPledgeTypeAttr } from "#app/data/moves/move-attrs/combined-pledge-type-attr";
 import { CompareWeightPowerAttr } from "#app/data/moves/move-attrs/compare-weight-power-attr";
+import { ConditionalProtectAttr } from "#app/data/moves/move-attrs/conditional-protect-attr";
 import { ConfuseAttr } from "#app/data/moves/move-attrs/confuse-attr";
 import { ConsecutiveUseDoublePowerAttr } from "#app/data/moves/move-attrs/consecutive-use-double-power-attr";
 import { ConsecutiveUseMultiBasePowerAttr } from "#app/data/moves/move-attrs/consecutive-use-multi-base-power-attr";
@@ -71,6 +73,7 @@ import { ElectroBallPowerAttr } from "#app/data/moves/move-attrs/electro-ball-po
 import { EncoreAttr } from "#app/data/moves/move-attrs/encore-attr";
 import { ExposedMoveAttr } from "#app/data/moves/move-attrs/exposed-move-attr";
 import { FaintCountdownAttr } from "#app/data/moves/move-attrs/faint-countdown-attr";
+import { FairyLockAttr } from "#app/data/moves/move-attrs/fairy-lock-attr";
 import { FirstAttackDoublePowerAttr } from "#app/data/moves/move-attrs/first-attack-double-power-attr";
 import { FirstMoveTypeAttr } from "#app/data/moves/move-attrs/first-move-type-attr";
 import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
@@ -81,10 +84,12 @@ import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-
 import { FormChangeItemTypeAttr } from "#app/data/moves/move-attrs/form-change-item-type-attr";
 import { FreezeDryAttr } from "#app/data/moves/move-attrs/freeze-dry-attr";
 import { FriendshipPowerAttr } from "#app/data/moves/move-attrs/friendship-power-attr";
+import { GravityAttr } from "#app/data/moves/move-attrs/gravity-attr";
 import { GrowthStatStageChangeAttr } from "#app/data/moves/move-attrs/growth-stat-stage-change-attr";
 import { GulpMissileTagAttr } from "#app/data/moves/move-attrs/gulp-missile-tag-attr";
 import { GyroBallPowerAttr } from "#app/data/moves/move-attrs/gyro-ball-power-attr";
 import { HalfSacrificialAttr } from "#app/data/moves/move-attrs/half-sacrificial-attr";
+import { HappyHourAttr } from "#app/data/moves/move-attrs/happy-hour-attr";
 import { HealAttr } from "#app/data/moves/move-attrs/heal-attr";
 import { HealOnAllyAttr } from "#app/data/moves/move-attrs/heal-on-ally-attr";
 import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
@@ -103,6 +108,7 @@ import { IgnoreOpponentStatStagesAttr } from "#app/data/moves/move-attrs/ignore-
 import { IgnoreWeatherTypeDebuffAttr } from "#app/data/moves/move-attrs/ignore-weather-type-debuff-attr";
 import { IncrementMovePriorityAttr } from "#app/data/moves/move-attrs/increment-move-priority-attr";
 import { InvertStatsAttr } from "#app/data/moves/move-attrs/invert-stats-attr";
+import { IonDelugeAttr } from "#app/data/moves/move-attrs/ion-deluge-attr";
 import { IvyCudgelTypeAttr } from "#app/data/moves/move-attrs/ivy-cudgel-type-attr";
 import { JawLockAttr } from "#app/data/moves/move-attrs/jaw-lock-attr";
 import { LastMoveDoublePowerAttr } from "#app/data/moves/move-attrs/last-move-double-power-attr";
@@ -119,6 +125,7 @@ import { MessageHeaderAttr } from "#app/data/moves/move-attrs/message-header-att
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { MirrorMoveAttr } from "#app/data/moves/move-attrs/mirror-move-attr";
 import { MissEffectAttr } from "#app/data/moves/move-attrs/miss-effect-attr";
+import { MistAttr } from "#app/data/moves/move-attrs/mist-attr";
 import { MoneyAttr } from "#app/data/moves/move-attrs/money-attr";
 import { MovePowerMultiplierAttr } from "#app/data/moves/move-attrs/move-power-multiplier-attr";
 import { MovesetCopyMoveAttr } from "#app/data/moves/move-attrs/moveset-copy-move-attr";
@@ -173,6 +180,7 @@ import { RoundPowerAttr } from "#app/data/moves/move-attrs/round-power-attr";
 import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
 import { SacrificialFullRestoreAttr } from "#app/data/moves/move-attrs/sacrificial-full-restore-attr";
 import { SandHealAttr } from "#app/data/moves/move-attrs/sand-heal-attr";
+import { ScreenAttr } from "#app/data/moves/move-attrs/screen-attr";
 import { SecretPowerAttr } from "#app/data/moves/move-attrs/secret-power-attr";
 import { SemiInvulnerableAttr } from "#app/data/moves/move-attrs/semi-invulnerable-attr";
 import { SheerColdAccuracyAttr } from "#app/data/moves/move-attrs/sheer-cold-accuracy-attr";
@@ -197,6 +205,7 @@ import { courtChangeArenaTags, SwapArenaTagsAttr } from "#app/data/moves/move-at
 import { SwapStatAttr } from "#app/data/moves/move-attrs/swap-stat-attr";
 import { SwapStatStagesAttr } from "#app/data/moves/move-attrs/swap-stat-stages-attr";
 import { SwitchAbilitiesAttr } from "#app/data/moves/move-attrs/switch-abilities-attr";
+import { TailwindAttr } from "#app/data/moves/move-attrs/tailwind-attr";
 import { TargetAtkUserAtkAttr } from "#app/data/moves/move-attrs/target-atk-user-atk-attr";
 import { TargetHalfHpDamageAttr } from "#app/data/moves/move-attrs/target-half-hp-damage-attr";
 import { TechnoBlastTypeAttr } from "#app/data/moves/move-attrs/techno-blast-type-attr";
@@ -210,17 +219,21 @@ import { ThunderAccuracyAttr } from "#app/data/moves/move-attrs/thunder-accuracy
 import { ToxicAccuracyAttr } from "#app/data/moves/move-attrs/toxic-accuracy-attr";
 import { TransformAttr } from "#app/data/moves/move-attrs/transform-attr";
 import { TrapAttr } from "#app/data/moves/move-attrs/trap-attr";
+import { TrickRoomAttr } from "#app/data/moves/move-attrs/trick-room-attr";
 import { TurnDamagedDoublePowerAttr } from "#app/data/moves/move-attrs/turn-damaged-double-power-attr";
+import { TypeImmuneDamageOverTimeAttr } from "#app/data/moves/move-attrs/type-immune-damage-over-time-attr";
 import { TypelessAttr } from "#app/data/moves/move-attrs/typeless-attr";
 import { UseHigherAttackingStatAttr } from "#app/data/moves/move-attrs/use-higher-attacking-stat-attr";
 import { UserHpDamageAttr } from "#app/data/moves/move-attrs/user-hp-damage-attr";
 import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
 import { WaterShurikenMultiHitTypeAttr } from "#app/data/moves/move-attrs/water-shuriken-multi-hit-type-attr";
 import { WaterShurikenPowerAttr } from "#app/data/moves/move-attrs/water-shuriken-power-attr";
+import { WeakenMoveTypeAttr } from "#app/data/moves/move-attrs/weaken-move-type-attr";
 import { WeatherBallTypeAttr } from "#app/data/moves/move-attrs/weather-ball-type-attr";
 import { WeatherChangeAttr } from "#app/data/moves/move-attrs/weather-change-attr";
 import { WeatherInstantChargeAttr } from "#app/data/moves/move-attrs/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#app/data/moves/move-attrs/weight-power-attr";
+import { WishAttr } from "#app/data/moves/move-attrs/wish-attr";
 import { failIfDampCondition } from "#app/data/moves/move-conditions/fail-if-damp-condition";
 import { failIfGhostTypeCondition } from "#app/data/moves/move-conditions/fail-if-ghost-type-condition";
 import { failIfLastCondition } from "#app/data/moves/move-conditions/fail-if-last-condition";
@@ -238,8 +251,6 @@ import { userSleptOrComatoseCondition } from "#app/data/moves/move-conditions/us
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isNil } from "#app/utils/common-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -427,7 +438,7 @@ export function initMoves() {
     new AttackMove(MoveId.FLAMETHROWER, ElementalType.FIRE, MoveCategory.SPECIAL, 90, 100, 15, 10, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.BURN),
     new StatusMove(MoveId.MIST, ElementalType.ICE, -1, 30, -1, 0, 1)
-      .attr(AddArenaTagAttr, ArenaTagType.MIST, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
+      .attr(MistAttr)
       .snatchable()
       .target(MoveTarget.USER_SIDE),
     new AttackMove(MoveId.WATER_GUN, ElementalType.WATER, MoveCategory.SPECIAL, 40, 100, 25, -1, 0, 1),
@@ -606,17 +617,14 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.DEF], 2, true)
       .snatchable(),
     new StatusMove(MoveId.LIGHT_SCREEN, ElementalType.PSYCHIC, -1, 30, -1, 0, 1)
-      .attr(AddArenaTagAttr, ArenaTagType.LIGHT_SCREEN, ArenaTagRelativeSide.USER, {
-        turnCount: 5,
-        failOnOverlap: true,
-      })
+      .attr(ScreenAttr, ArenaTagType.LIGHT_SCREEN)
       .snatchable()
       .target(MoveTarget.USER_SIDE),
     new SelfStatusMove(MoveId.HAZE, ElementalType.ICE, -1, 30, -1, 0, 1)
       .ignoresSubstitute()
       .attr(ResetStatsAttr, true),
     new StatusMove(MoveId.REFLECT, ElementalType.PSYCHIC, -1, 20, -1, 0, 1)
-      .attr(AddArenaTagAttr, ArenaTagType.REFLECT, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
+      .attr(ScreenAttr, ArenaTagType.REFLECT)
       .snatchable()
       .target(MoveTarget.USER_SIDE),
     new SelfStatusMove(MoveId.FOCUS_ENERGY, ElementalType.NORMAL, -1, 30, -1, 0, 1)
@@ -975,7 +983,7 @@ export function initMoves() {
       .attr(FriendshipPowerAttr, true),
     new StatusMove(MoveId.SAFEGUARD, ElementalType.NORMAL, -1, 25, -1, 0, 2)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.SAFEGUARD, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
+      .attr(ScreenAttr, ArenaTagType.SAFEGUARD)
       .snatchable(),
     new StatusMove(MoveId.PAIN_SPLIT, ElementalType.NORMAL, -1, 20, -1, 0, 2)
       .attr(HpSplitAttr)
@@ -1170,9 +1178,9 @@ export function initMoves() {
       .ignoresSubstitute()
       .attr(AbilityCopyAttr),
     new SelfStatusMove(MoveId.WISH, ElementalType.NORMAL, -1, 10, -1, 0, 3)
+      .attr(WishAttr)
       .triageMove()
-      .snatchable()
-      .attr(AddArenaTagAttr, ArenaTagType.WISH, ArenaTagRelativeSide.USER, { turnCount: 2, failOnOverlap: true }),
+      .snatchable(),
     new SelfStatusMove(MoveId.ASSIST, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(RandomMovesetMoveAttr, invalidAssistMoves, true),
     new SelfStatusMove(MoveId.INGRAIN, ElementalType.GRASS, -1, 20, -1, 0, 3)
@@ -1263,7 +1271,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN),
     new StatusMove(MoveId.MUD_SPORT, ElementalType.GROUND, -1, 15, -1, 0, 3)
       .ignoresProtect()
-      .attr(AddArenaTagAttr, ArenaTagType.MUD_SPORT, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .attr(WeakenMoveTypeAttr, ArenaTagType.MUD_SPORT)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.ICE_BALL, ElementalType.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.ROLLING, true)
@@ -1424,7 +1432,7 @@ export function initMoves() {
     new AttackMove(MoveId.MAGICAL_LEAF, ElementalType.GRASS, MoveCategory.SPECIAL, 60, -1, 20, -1, 0, 3),
     new StatusMove(MoveId.WATER_SPORT, ElementalType.WATER, -1, 15, -1, 0, 3)
       .ignoresProtect()
-      .attr(AddArenaTagAttr, ArenaTagType.WATER_SPORT, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .attr(WeakenMoveTypeAttr, ArenaTagType.WATER_SPORT)
       .target(MoveTarget.BOTH_SIDES),
     new SelfStatusMove(MoveId.CALM_MIND, ElementalType.PSYCHIC, -1, 20, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF], 1, true)
@@ -1464,7 +1472,7 @@ export function initMoves() {
       .snatchable(),
     new StatusMove(MoveId.GRAVITY, ElementalType.PSYCHIC, -1, 5, -1, 0, 4)
       .ignoresProtect()
-      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .attr(GravityAttr)
       .target(MoveTarget.BOTH_SIDES)
       .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new StatusMove(MoveId.MIRACLE_EYE, ElementalType.PSYCHIC, -1, 40, -1, 0, 4)
@@ -1505,9 +1513,9 @@ export function initMoves() {
     new AttackMove(MoveId.PLUCK, ElementalType.FLYING, MoveCategory.PHYSICAL, 60, 100, 20, -1, 0, 4)
       .attr(StealEatBerryAttr),
     new StatusMove(MoveId.TAILWIND, ElementalType.FLYING, -1, 15, -1, 0, 4)
+      .attr(TailwindAttr)
       .windMove()
       .snatchable()
-      .attr(AddArenaTagAttr, ArenaTagType.TAILWIND, ArenaTagRelativeSide.USER, { turnCount: 4, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ACUPRESSURE, ElementalType.NORMAL, -1, 30, -1, 0, 4)
       .attr(AcupressureStatStageChangeAttr)
@@ -1553,7 +1561,7 @@ export function initMoves() {
       .attr(SuppressAbilitiesAttr)
       .bounceable(),
     new StatusMove(MoveId.LUCKY_CHANT, ElementalType.NORMAL, -1, 30, -1, 0, 4)
-      .attr(AddArenaTagAttr, ArenaTagType.NO_CRIT, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
+      .attr(ScreenAttr, ArenaTagType.NO_CRIT)
       .snatchable()
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ME_FIRST, ElementalType.NORMAL, -1, 20, -1, 0, 4)
@@ -1718,7 +1726,7 @@ export function initMoves() {
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET)
       .bounceable(),
     new StatusMove(MoveId.TRICK_ROOM, ElementalType.PSYCHIC, -1, 5, -1, -7, 4)
-      .attr(AddArenaTagAttr, ArenaTagType.TRICK_ROOM, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .attr(TrickRoomAttr)
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.DRACO_METEOR, ElementalType.DRAGON, MoveCategory.SPECIAL, 130, 90, 5, -1, 0, 4)
@@ -1823,7 +1831,7 @@ export function initMoves() {
       .snatchable(),
     new StatusMove(MoveId.WIDE_GUARD, ElementalType.ROCK, -1, 10, -1, 3, 5)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.WIDE_GUARD, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true })
+      .attr(ConditionalProtectAttr, ArenaTagType.WIDE_GUARD)
       .snatchable()
       .condition(failIfLastCondition),
     new StatusMove(MoveId.GUARD_SPLIT, ElementalType.PSYCHIC, -1, 10, -1, 0, 5)
@@ -1953,7 +1961,7 @@ export function initMoves() {
       .attr(PositiveStatStagePowerAttr),
     new StatusMove(MoveId.QUICK_GUARD, ElementalType.FIGHTING, -1, 15, -1, 3, 5)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.QUICK_GUARD, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true })
+      .attr(ConditionalProtectAttr, ArenaTagType.QUICK_GUARD)
       .snatchable()
       .condition(failIfLastCondition),
     new SelfStatusMove(MoveId.ALLY_SWITCH, ElementalType.PSYCHIC, -1, 15, -1, 2, 5)
@@ -2176,7 +2184,7 @@ export function initMoves() {
       .condition(failOnGravityCondition),
     new StatusMove(MoveId.MAT_BLOCK, ElementalType.FIGHTING, -1, 10, -1, 0, 6)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.MAT_BLOCK, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true })
+      .attr(ConditionalProtectAttr, ArenaTagType.MAT_BLOCK)
       .snatchable()
       .condition(new FirstMoveCondition())
       .condition(failIfLastCondition),
@@ -2211,7 +2219,7 @@ export function initMoves() {
       .soundMove()
       .bounceable(),
     new StatusMove(MoveId.ION_DELUGE, ElementalType.ELECTRIC, -1, 25, -1, 1, 6)
-      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 })
+      .attr(IonDelugeAttr)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.PARABOLIC_CHARGE, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 65, 100, 20, -1, 0, 6)
       .attr(HitHealAttr)
@@ -2244,10 +2252,7 @@ export function initMoves() {
       .triageMove(),
     new StatusMove(MoveId.CRAFTY_SHIELD, ElementalType.FAIRY, -1, 10, -1, 3, 6)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.CRAFTY_SHIELD, ArenaTagRelativeSide.USER, {
-        turnCount: 1,
-        failOnOverlap: true,
-      })
+      .attr(ConditionalProtectAttr, ArenaTagType.CRAFTY_SHIELD)
       .condition(failIfLastCondition),
     new StatusMove(MoveId.FLOWER_SHIELD, ElementalType.FAIRY, -1, 10, -1, 0, 6)
       .target(MoveTarget.ALL)
@@ -2276,7 +2281,7 @@ export function initMoves() {
       .ignoresSubstitute()
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES)
-      .attr(AddArenaTagAttr, ArenaTagType.FAIRY_LOCK, ArenaTagRelativeSide.ALL, { turnCount: 2, failOnOverlap: true }),
+      .attr(FairyLockAttr),
     new SelfStatusMove(MoveId.KINGS_SHIELD, ElementalType.STEEL, -1, 10, -1, 4, 6)
       .attr(ProtectAttr, BattlerTagType.KINGS_SHIELD)
       .condition(failIfLastCondition),
@@ -2345,7 +2350,7 @@ export function initMoves() {
             .some((p) => [AbilityId.PLUS, AbilityId.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new StatusMove(MoveId.HAPPY_HOUR, ElementalType.NORMAL, -1, 30, -1, 0, 6) // No animation
-      .attr(AddArenaTagAttr, ArenaTagType.HAPPY_HOUR, ArenaTagRelativeSide.USER, { failOnOverlap: true })
+      .attr(HappyHourAttr)
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ELECTRIC_TERRAIN, ElementalType.ELECTRIC, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.ELECTRIC)
@@ -2618,12 +2623,12 @@ export function initMoves() {
     new AttackMove(MoveId.BRUTAL_SWING, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 20, -1, 0, 7)
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new StatusMove(MoveId.AURORA_VEIL, ElementalType.ICE, -1, 20, -1, 0, 7)
+      .attr(ScreenAttr, ArenaTagType.AURORA_VEIL)
       .condition(
         (_user, _target, _move) =>
           globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW])
           && !globalScene.arena.weather?.isEffectSuppressed(),
       )
-      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE)
       .snatchable(),
     // #region Signature Z-Moves (unused)
@@ -2711,7 +2716,7 @@ export function initMoves() {
       .attr(HalfSacrificialAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(MoveId.PLASMA_FISTS, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 100, 100, 15, -1, 0, 7)
-      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 })
+      .attr(IonDelugeAttr)
       .punchingMove(),
     new AttackMove(MoveId.PHOTON_GEYSER, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 7)
       .attr(UseHigherAttackingStatAttr)
@@ -2760,9 +2765,9 @@ export function initMoves() {
     new AttackMove(MoveId.SIZZLY_SLIDE, ElementalType.FIRE, MoveCategory.PHYSICAL, 60, 100, 20, 100, 0, 7)
       .attr(StatusEffectAttr, StatusEffect.BURN),
     new AttackMove(MoveId.GLITZY_GLOW, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 95, 15, -1, 0, 7)
-      .attr(AddArenaTagAttr, ArenaTagType.LIGHT_SCREEN, ArenaTagRelativeSide.USER, { turnCount: 5 }),
+      .attr(ScreenAttr, ArenaTagType.LIGHT_SCREEN, false),
     new AttackMove(MoveId.BADDY_BAD, ElementalType.DARK, MoveCategory.SPECIAL, 80, 95, 15, -1, 0, 7)
-      .attr(AddArenaTagAttr, ArenaTagType.REFLECT, ArenaTagRelativeSide.USER, { turnCount: 5 }),
+      .attr(ScreenAttr, ArenaTagType.REFLECT, false),
     new AttackMove(MoveId.SAPPY_SEED, ElementalType.GRASS, MoveCategory.PHYSICAL, 100, 90, 10, -1, 0, 7)
       .attr(LeechSeedAttr)
       .makesContact(false),
@@ -3160,7 +3165,7 @@ export function initMoves() {
       .snatchable(), // Custom
     new AttackMove(MoveId.G_MAX_WILDFIRE, ElementalType.FIRE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.CHARIZARD)
-      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
+      .attr(TypeImmuneDamageOverTimeAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(MoveId.G_MAX_BEFUDDLE, ElementalType.BUG, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.BUTTERFREE)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
@@ -3179,7 +3184,7 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
     new AttackMove(MoveId.G_MAX_RESONANCE, ElementalType.ICE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.LAPRAS)
-      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5 }),
+      .attr(ScreenAttr, ArenaTagType.AURORA_VEIL, false),
     new AttackMove(MoveId.G_MAX_CUDDLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.EEVEE)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED),
@@ -3210,11 +3215,11 @@ export function initMoves() {
       .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.ORBEETLE)
-      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .attr(GravityAttr)
       .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.COALOSSAL)
-      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
+      .attr(TypeImmuneDamageOverTimeAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(MoveId.G_MAX_SANDBLAST, ElementalType.GROUND, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.SANDACONDA)
       .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
@@ -3245,10 +3250,10 @@ export function initMoves() {
       .attr(TrapAttr, BattlerTagType.G_MAX_FIRE_SPIN),
     new AttackMove(MoveId.G_MAX_VINE_LASH, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.VENUSAUR)
-      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
+      .attr(TypeImmuneDamageOverTimeAttr, ArenaTagType.G_MAX_VINE_LASH),
     new AttackMove(MoveId.G_MAX_CANNONADE, ElementalType.WATER, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.BLASTOISE)
-      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
+      .attr(TypeImmuneDamageOverTimeAttr, ArenaTagType.G_MAX_CANNONADE),
     new AttackMove(MoveId.G_MAX_DRUM_SOLO, ElementalType.GRASS, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.RILLABOOM)
       .ignoresAbilities(),

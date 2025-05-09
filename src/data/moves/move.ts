@@ -59,7 +59,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { ALLY_TARGET_PENALTY, COMMANDING_TARGET_PENALTY } from "#app/constants/ai-constants";
+import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, COMMANDING_TARGET_PENALTY } from "#app/constants/ai-constants";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -913,7 +913,7 @@ export abstract class Move implements Localizable {
     const userSpd = user.getEffectiveStat(Stat.SPD);
     const targetSpd = target.getEffectiveStat(Stat.SPD, undefined, undefined, AbilityApplyMode.REVEALED);
     if (target.isSemiInvulnerable() && userSpd > targetSpd) {
-      return -5;
+      return BAD_MOVE_PENALTY;
     }
 
     const accuracy = this.calculateBattleAccuracy(user, target, true);
