@@ -1,17 +1,30 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
 import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { BgmBar } from "#app/ui/components/bgm-bar";
+import type { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
+import type { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
+import { getAdminModeName } from "#app/ui/handlers/admin-ui-handler";
+import type { AwaitableUiHandler } from "#app/ui/handlers/awaitable-ui-handler";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
+import type { EggGachaUiHandler } from "#app/ui/handlers/egg-gacha-ui-handler";
+import type { EggListUiHandler } from "#app/ui/handlers/egg-list-ui-handler";
+import type { GameStatsUiHandler } from "#app/ui/handlers/game-stats-ui-handler";
+import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
+import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
+import type { RunHistoryUiHandler } from "#app/ui/handlers/run-history-ui-handler";
+import type { TestDialogueUiHandler } from "#app/ui/handlers/test-dialogue-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getEnumKeys } from "#app/utils/common-utils";
 import { getCookie } from "#app/utils/app-utils";
+import { fixedNumber, getEnumKeys } from "#app/utils/common-utils";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
@@ -20,19 +33,6 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
-import type { AchievementsUiHandler } from "./achievements-ui-handler";
-import type { AdminUiHandler } from "./admin-ui-handler";
-import { getAdminModeName } from "./admin-ui-handler";
-import type { AwaitableUiHandler } from "./awaitable-ui-handler";
-import type { ConfirmUiHandler } from "./confirm-ui-handler";
-import type { EggGachaUiHandler } from "./egg-gacha-ui-handler";
-import type { EggListUiHandler } from "./egg-list-ui-handler";
-import type { GameStatsUiHandler } from "./game-stats-ui-handler";
-import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
-import { OptionSelectUiHandler } from "./option-select-ui-handler";
-import type { RunHistoryUiHandler } from "./run-history-ui-handler";
-import type { TestDialogueUiHandler } from "./test-dialogue-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -337,7 +337,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
               ui.playSelect();
               const dialogueTestName = sanitizedName;
               const dialogueName = decodeURIComponent(escape(atob(dialogueTestName)));
-              const handler = ui.getHandler() as AwaitableUiHandler;
+              const handler = ui.getCurrentHandler<AwaitableUiHandler>();
               handler.tutorialActive = true;
               const interpolatorOptions: any = {};
               const splitArr = dialogueName.split(" "); // this splits our inputted text into words to cycle through later

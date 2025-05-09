@@ -101,7 +101,7 @@ export class EggHatchPhase extends Phase {
 
       // TODO: the hatch phase and ui handler should not be intertwined in this way;
       // the phase also should not be the one creating the graphical objects
-      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
+      this.eggHatchHandler = globalScene.ui.getCurrentHandler<EggHatchSceneUiHandler>();
 
       this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
 

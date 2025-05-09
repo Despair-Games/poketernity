@@ -1,10 +1,9 @@
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { AchvBar } from "#app/ui/components/achv-bar";
 import type { BgmBar } from "#app/ui/components/bgm-bar";
 import { SavingIcon } from "#app/ui/components/saving-icon";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
 import { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
 import { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
@@ -15,8 +14,8 @@ import { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { EggGachaUiHandler } from "#app/ui/handlers/egg-gacha-ui-handler";
 import { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
-import { EggListUiHandler } from "#app/ui/handlers/egg-list-ui-handler";
 import { EggHatchSummaryUiHandler } from "#app/ui/handlers/egg-hatch-summary-ui-handler";
+import { EggListUiHandler } from "#app/ui/handlers/egg-list-ui-handler";
 import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { GameStatsUiHandler } from "#app/ui/handlers/game-stats-ui-handler";
@@ -39,15 +38,16 @@ import { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
 import { TestDialogueUiHandler } from "#app/ui/handlers/test-dialogue-ui-handler";
 import { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import { UnavailableModalUiHandler } from "#app/ui/handlers/unavailable-modal-ui-handler";
-import { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
-import { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
-import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
 import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
+import { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
-import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
 import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
+import { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
+import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
+import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { executeIf } from "#app/utils/common-utils";
@@ -210,7 +210,7 @@ export class UI extends Phaser.GameObjects.Container {
    */
   public resetHandlers(): void {
     this.mode = DEFAULT_MODE;
-    const currentHandler = this.getHandler();
+    const currentHandler = this.getCurrentHandler();
     for (const handler of this.handlers.filter((h) => h.active && h !== currentHandler)) {
       handler.stop();
     }
@@ -259,7 +259,7 @@ export class UI extends Phaser.GameObjects.Container {
     globalScene.uiContainer.add(this.tooltipContainer);
   }
 
-  getHandler<H extends UiHandler = UiHandler>(): H {
+  getCurrentHandler<H extends UiHandler = UiHandler>(): H {
     return this.handlers[this.mode] as H;
   }
 
@@ -268,7 +268,7 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   getCurrentMessageHandler(): MessageUiHandler {
-    const handler = this.getHandler();
+    const handler = this.getCurrentHandler();
     if (handler instanceof MessageUiHandler && handler.message) {
       return handler;
     } else {
@@ -294,7 +294,7 @@ export class UI extends Phaser.GameObjects.Container {
       return false;
     }
 
-    const handler = this.getHandler();
+    const handler = this.getCurrentHandler();
 
     if (handler.isAwaitableUiHandler() && handler.tutorialActive) {
       return handler.processTutorialInput(button);
@@ -465,7 +465,7 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   setCursor(cursor: number): boolean {
-    const changed = this.getHandler().setCursor(cursor);
+    const changed = this.getCurrentHandler().setCursor(cursor);
     if (changed) {
       this.playSelect();
     }
@@ -565,8 +565,8 @@ export class UI extends Phaser.GameObjects.Container {
       }
       const doSetMode = () => {
         if (this.mode !== mode) {
-          if (clear && this.getHandler().active) {
-            this.getHandler().stop();
+          if (clear && this.getCurrentHandler().active) {
+            this.getCurrentHandler().stop();
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -577,9 +577,9 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getHandler().start(...params);
-        } else if (!this.getHandler().active) {
-          this.getHandler().start(...params);
+          this.getCurrentHandler().start(...params);
+        } else if (!this.getCurrentHandler().active) {
+          this.getCurrentHandler().start(...params);
         }
         resolve();
       };
@@ -611,7 +611,7 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.getHandler().stop();
+        this.getCurrentHandler().stop();
         this.mode = this.modeChain.pop()!; // TODO: is this bang correct?
         globalScene.updateGameInfo();
         const touchControls = document.getElementById("touchControls");

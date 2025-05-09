@@ -1,3 +1,4 @@
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import type { EggOptions } from "#app/data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
@@ -5,12 +6,12 @@ import Overrides from "#app/overrides";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { getVoucherTypeIcon } from "#app/system/voucher";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getEnumKeys, getEnumValues } from "#app/utils/common-utils";
-import { randSeedShuffle } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedShuffle } from "#app/utils/random-utils";
 import { Button } from "#enums/buttons";
 import { EggTier } from "#enums/egg-type";
 import { GachaType } from "#enums/gacha-types";
@@ -19,10 +20,9 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
-import { MessageUiHandler } from "./message-ui-handler";
 
 /**
- * TODO: this should extend AbstractOptionSelectUiHandler
+ * TODO: This should extend (Base)OptionSelectUiHandler
  */
 export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;

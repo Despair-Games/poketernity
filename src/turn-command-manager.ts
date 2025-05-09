@@ -1,3 +1,10 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Phase } from "#app/phase";
+import type { MovePhase } from "#app/phases/move-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { TurnCommandFilter } from "#app/@types/TurnCommandFilter";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
@@ -9,10 +16,14 @@ import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { AttemptCapturePhase } from "#app/phases/attempt-capture-phase";
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
+import { BerryPhase } from "#app/phases/berry-phase";
+import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
 import { MoveHeaderPhase } from "#app/phases/move-header-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TerastallizationPhase } from "#app/phases/terastallization-phase";
+import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { WeatherEffectPhase } from "#app/phases/weather-effect-phase";
 import { BooleanHolder, isNil } from "#app/utils/common-utils";
 import { randSeedShuffle } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -63,7 +74,10 @@ export class TurnCommandManager {
    * of accessing this array directly.
    */
   public turnCommands: TurnCommand[] = [];
+  /** Tracks how many pending turn commands are currently in the phase queue */
+  public commandsInProgress: number = 0;
   private orderIndex: number = 0;
+  private appliedMoveHeaders = false;
 
   // #region Public Methods
 
@@ -165,92 +179,68 @@ export class TurnCommandManager {
   }
 
   /**
-   * Dequeues the next turn command and unshifts a {@linkcode Phase} based on
-   * that command.
-   * @returns `true` if a phase was queued as a result of this call.
-   */
-  public shiftNextCommand(): boolean {
-    const nextCommand = this.turnCommands.shift();
-    if (!nextCommand) {
-      return false;
-    }
-
-    switch (nextCommand.command) {
-      case BattleCommand.TERA:
-      case BattleCommand.FIGHT:
-        return this.handleFightCommand(nextCommand);
-      case BattleCommand.BALL:
-        return this.handleBallCommand(nextCommand);
-      case BattleCommand.POKEMON:
-        return this.handlePokemonCommand(nextCommand);
-      case BattleCommand.RUN:
-        return this.handleRunCommand(nextCommand);
-    }
-  }
-
-  /**
-   * Schedules the next valid turn command, unshifting a {@linkcode Phase}
-   * based on that commmand. This is usually preferred over
-   * {@linkcode shiftNextCommand} when phases need to be scheduled in-turn
-   * since it skips over invalid commands in the queue.
+   * Schedules the next valid {@linkcode TurnCommand}, adding the command's
+   * corresponding phases to {@linkcode globalScene}'s phase queue.
+   * If no valid command is found, this ends the current turn.
    */
   public scheduleNextValidCommand(): void {
-    while (!this.isEmpty() && !this.shiftNextCommand());
+    while (!this.isEmpty()) {
+      if (!this.appliedMoveHeaders && this.turnCommands.every((tc) => tc.command === BattleCommand.FIGHT)) {
+        this.applyMoveHeaderAttrs();
+      }
+
+      if (this.shiftNextCommand()) {
+        return;
+      }
+    }
+    this.endTurn();
   }
 
   /**
-   * Schedules the execution of a {@linkcode Command.FIGHT | FIGHT} command
+   * Schedules the execution of a {@linkcode TurnCommand}
    * immediately, possibly out of turn order.
-   * This should not be used when command types other than `FIGHT`
-   * are present in the turn command queue.
-   * @param commandFilter
+   * @param commandFilter the {@linkcode TurnCommandFilter} to determine
+   * which command to schedule
+   * @returns `true` if a command is found and scheduled for execution
+   */
+  public preemptCommand(commandFilter: TurnCommandFilter): boolean {
+    const turnCommand = this.tryRemoveCommand(commandFilter);
+    return !!turnCommand && this.handleCommand(turnCommand);
+  }
+
+  /**
+   * Schedules the execution of a {@linkcode BattleCommand.FIGHT | FIGHT} command
+   * immediately, possibly out of turn order.
+   * @param commandFilter the {@linkcode TurnCommandFilter} to determine
+   * which command to schedule
    * @returns `true` if a command is found and scheduled for execution
    */
   public preemptFightCommand(commandFilter: TurnCommandFilter): boolean {
-    if (this.turnCommands.some((tc) => tc.command !== BattleCommand.FIGHT)) {
-      console.warn("Found non-FIGHT commands in the turn command queue when trying to preempt a FIGHT command");
-      return false;
-    }
-
-    const turnCommand = this.tryRemoveCommand((tc) => tc.command === BattleCommand.FIGHT && commandFilter(tc));
-
-    if (turnCommand) {
-      const { pokemon, cursor, turnMove: turnMove, targets } = turnCommand;
-      if (!pokemon.isActive(true) || !turnMove) {
-        return false;
-      }
-
-      pokemon.turnData.order = this.orderIndex++;
-
-      const move =
-        pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
-        ?? new PokemonMove(turnMove.move.id);
-
-      globalScene.phaseManager.appendToPhase(
-        new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
-        PhaseId.MOVE_END,
-      );
-
-      return true;
-    }
-    return false;
+    return this.preemptCommand((tc) => tc.command === BattleCommand.FIGHT && commandFilter(tc));
   }
 
-  /** Schedules all turn commands to be run at the start of the turn. */
+  /**
+   * Prepares the start-of-turn sequence after all {@linkcode TurnCommand}s
+   * are collected for the turn, then schedules the first turn action.
+   */
   public startTurn(): void {
+    // Reset the flag indicating move header attributes have been checked and applied this turn
+    this.appliedMoveHeaders = false;
     // Apply speed-bypassing effects for all remaining Pokemon
-    /** @todo Find a way to apply this after non-FIGHT commands are processed */
     this.applyBypassSpeedEffects();
     // Shuffle and sort turn commands by speed, command type, priority, etc.
     this.setTurnOrder(false);
-    // Add all commands that aren't using moves to the phase queue
-    this.shiftNonFightCommands();
-    // Add all move header effects to the phase queue
-    this.applyMoveHeaderAttrs();
-    // Add the first valid move command to the phase queue.
-    // This loop ensures that skipped and invalid commands do not
-    // freeze the turn sequence.
+    // Add the first valid command to the phase queue.
     this.scheduleNextValidCommand();
+  }
+
+  /** Schedules all phases for the game's end-of-turn sequence */
+  public endTurn(): void {
+    const { phaseManager } = globalScene;
+    phaseManager.unshiftPhase(new WeatherEffectPhase());
+    phaseManager.unshiftPhase(new BerryPhase());
+    phaseManager.unshiftPhase(new CheckStatusEffectPhase());
+    phaseManager.unshiftPhase(new TurnEndPhase());
   }
 
   public isEmpty(): boolean {
@@ -360,14 +350,85 @@ export class TurnCommandManager {
     });
   }
 
+  /**
+   * Dequeues the next turn command and pushes a {@linkcode Phase} based on
+   * that command.
+   * @returns `true` if a phase was queued as a result of this call.
+   */
+  private shiftNextCommand(): boolean {
+    const nextCommand = this.turnCommands.shift();
+    return !!nextCommand && this.handleCommand(nextCommand);
+  }
+
+  /**
+   * Validates the given {@linkcode TurnCommand}, then schedules its
+   * corresponding phases in {@linkcode globalScene}'s phase queue
+   * if the command is valid.
+   * @param turnCommand the {@linkcode TurnCommand} to schedule
+   * @returns `true` if the turn command is scheduled successfully
+   */
+  private handleCommand(turnCommand: TurnCommand): boolean {
+    let success: boolean = false;
+    switch (turnCommand.command) {
+      case BattleCommand.TERA:
+      case BattleCommand.FIGHT:
+        success = this.handleFightCommand(turnCommand);
+        break;
+      case BattleCommand.BALL:
+        success = this.handleBallCommand(turnCommand);
+        break;
+      case BattleCommand.POKEMON:
+        success = this.handlePokemonCommand(turnCommand);
+        break;
+      case BattleCommand.RUN:
+        success = this.handleRunCommand(turnCommand);
+        break;
+    }
+
+    if (success) {
+      turnCommand.pokemon.turnData.order = this.orderIndex++;
+
+      const forMove = turnCommand.command === BattleCommand.FIGHT;
+      globalScene.phaseManager.appendToPhase(
+        new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove),
+        this.getNextTurnCommandPhaseId(turnCommand),
+      );
+      this.commandsInProgress++;
+    }
+
+    return success;
+  }
+
+  /**
+   * Obtains the ID for the Phase corresponding to the scheduled turn command.
+   * @param turnCommand the scheduled {@linkcode TurnCommand}
+   * @returns the {@linkcode PhaseId} for the {@linkcode Phase} to handle the turn command
+   */
+  private getNextTurnCommandPhaseId(turnCommand: TurnCommand): PhaseId {
+    switch (turnCommand.command) {
+      case BattleCommand.TERA:
+      case BattleCommand.FIGHT:
+        return PhaseId.MOVE;
+      case BattleCommand.BALL:
+        return PhaseId.ATTEMPT_CAPTURE;
+      case BattleCommand.POKEMON:
+        return PhaseId.SWITCH_SUMMON;
+      case BattleCommand.RUN:
+        return PhaseId.ATTEMPT_RUN;
+    }
+  }
+
+  /**
+   * Validates a given {@linkcode BattleCommand.FIGHT | FIGHT} command
+   * and, if valid, schedules a {@linkcode MovePhase} for the command.
+   * @param turnCommand the {@linkcode TurnCommand} to schedule
+   * @returns `true` if the turn command is scheduled successfully
+   */
   private handleFightCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, turnMove, targets, command } = turnCommand;
     if (!pokemon.isActive(true) || !turnMove) {
-      console.warn(`${BattleCommand[command]} command from ${pokemon?.name} is invalid`);
       return false;
     }
-
-    pokemon.turnData.order = this.orderIndex++;
 
     const move =
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
@@ -377,12 +438,24 @@ export class TurnCommandManager {
       globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
     }
 
-    globalScene.phaseManager.unshiftPhase(
-      new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
-    );
+    globalScene.phaseManager.queueMovePhase({
+      pokemon,
+      targets: targets ?? turnMove.targets,
+      move,
+      ignorePp: cursor !== -1 && turnMove.ignorePP,
+      when: "after",
+      phaseId: PhaseId.POST_ACTION,
+    });
+
     return true;
   }
 
+  /**
+   * Validates a given {@linkcode BattleCommand.BALL | BALL} command
+   * and, if valid, schedules an {@linkcode AttemptCapturePhase} for the command.
+   * @param turnCommand the {@linkcode TurnCommand} to schedule
+   * @returns `true` if the turn command is scheduled successfully
+   */
   private handleBallCommand(turnCommand: TurnCommand): boolean {
     const { cursor, targets } = turnCommand;
 
@@ -392,25 +465,38 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.phaseManager.unshiftPhase(new AttemptCapturePhase(targets[0] % 2, cursor));
+    globalScene.phaseManager.appendToPhase(new AttemptCapturePhase(targets[0] % 2, cursor), PhaseId.POST_ACTION);
     return true;
   }
 
+  /**
+   * Validates a given {@linkcode BattleCommand.POKEMON | POKEMON} command
+   * and, if valid, schedules a {@linkcode SwitchSummonPhase} for the command.
+   * @param turnCommand the {@linkcode TurnCommand} to schedule
+   * @returns `true` if the turn command is scheduled successfully
+   */
   private handlePokemonCommand(turnCommand: TurnCommand): boolean {
-    const { pokemon, cursor } = turnCommand;
+    const { pokemon, cursor, args } = turnCommand;
     if (isNil(cursor)) {
       console.error("Error encountered when trying to switch Pokemon!");
       console.error(turnCommand);
       return false;
     }
 
-    const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-    globalScene.phaseManager.unshiftPhase(
+    const switchType = args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
+    globalScene.phaseManager.appendToPhase(
       new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
+      PhaseId.POST_ACTION,
     );
     return true;
   }
 
+  /**
+   * Validates a given {@linkcode BattleCommand.RUN | RUN} command
+   * and, if valid, schedules a {@linkcode AttemptRunPhase} for the command.
+   * @param turnCommand the {@linkcode TurnCommand} to schedule
+   * @returns `true` if the turn command is scheduled successfully
+   */
   private handleRunCommand(turnCommand: TurnCommand): boolean {
     let runningPokemon = turnCommand.pokemon;
     if (globalScene.currentBattle.double) {
@@ -423,20 +509,8 @@ export class TurnCommandManager {
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.phaseManager.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
+    globalScene.phaseManager.appendToPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()), PhaseId.POST_ACTION);
     return true;
-  }
-
-  /**
-   * Shifts all {@linkcode BattleCommand.BALL | BALL}, {@linkcode BattleCommand.POKEMON | POKEMON},
-   * and {@linkcode BattleCommand.RUN | RUN} commands in the queue.
-   * Turn commands in the queue should be sorted with {@linkcode setTurnOrder}
-   * before this function is called.
-   */
-  private shiftNonFightCommands(): void {
-    while (this.turnCommands[0] && this.turnCommands[0].command !== BattleCommand.FIGHT) {
-      this.shiftNextCommand();
-    }
   }
 
   /**
@@ -482,5 +556,7 @@ export class TurnCommandManager {
         globalScene.phaseManager.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
       }
     });
+
+    this.appliedMoveHeaders = true;
   }
 }

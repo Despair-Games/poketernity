@@ -1,13 +1,13 @@
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerastallizeAccessModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
-import { TEXT_SCALE } from "#app/constants/ui-constants";
-import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { BattleCommand } from "#enums/battle-command";

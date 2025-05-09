@@ -1,18 +1,18 @@
+import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getPokeballName } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { UiHandler } from "./abstract-ui-handler";
-import type { CommandUiHandler } from "./command-ui-handler";
 
 /**
- * TODO: This should extend AbstractOptionSelectUiHandler
+ * TODO: This should extend (Base)OptionSelectUiHandler
  */
 export class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;

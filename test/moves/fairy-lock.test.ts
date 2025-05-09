@@ -147,6 +147,9 @@ describe("Moves - Fairy Lock", () => {
   it("should apply even if the field is empty", async () => {
     await game.classicMode.startBattle([SpeciesId.KLEFKI, SpeciesId.GUZZLORD, SpeciesId.TYRUNT, SpeciesId.ZYGARDE]);
 
+    const playerPokemon = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+
     game.move.use(MoveId.FAIRY_LOCK);
     game.move.use(MoveId.MEMENTO, 1, BattlerIndex.PLAYER);
     await game.move.selectEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
@@ -155,12 +158,10 @@ describe("Moves - Fairy Lock", () => {
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 
     // Allow all 3 targets to use Memento
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
-    const playerPokemon = game.scene.getPlayerField();
-    const enemyPokemon = game.scene.getEnemyField();
     expect(playerPokemon[1].isFainted()).toBe(true);
     expect(enemyPokemon[0].isFainted()).toBe(true);
     expect(enemyPokemon[1].isFainted()).toBe(true);

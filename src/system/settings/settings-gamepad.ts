@@ -86,7 +86,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
+            globalScene.ui.getCurrentHandler<GamepadSettingsUiHandler>().updateBindings();
             return success;
           };
           globalScene.ui.setOverlayMode<GamepadBindingUiHandler>(UiMode.GAMEPAD_BINDING, setting, cancelHandler);
@@ -99,12 +99,9 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui && gp) {
           const cancelHandler = () => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).setOptionCursor(
-              Object.values(SettingGamepad).indexOf(SettingGamepad.Controller),
-              0,
-              true,
-            );
-            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
+            const handler = globalScene.ui.getCurrentHandler<GamepadSettingsUiHandler>();
+            handler.setOptionCursor(Object.values(SettingGamepad).indexOf(SettingGamepad.Controller), 0, true);
+            handler.updateBindings();
             return false;
           };
           const changeGamepadHandler = (gamepad: string, index: number) => {

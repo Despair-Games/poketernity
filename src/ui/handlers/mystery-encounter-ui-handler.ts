@@ -5,6 +5,8 @@ import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/en
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
@@ -18,8 +20,6 @@ import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { UiHandler } from "./abstract-ui-handler";
-import type { PartyUiHandler } from "./party-ui-handler";
 
 const DESCRIPTION_WINDOW_WIDTH = 150;
 const DESCRIPTION_WINDOW_HEIGHT = 105;

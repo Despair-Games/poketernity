@@ -1,13 +1,13 @@
-import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
-import { getEnumKeys, executeIf } from "#app/utils/common-utils";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "#app/ui/ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import { api } from "#app/plugins/api/api";
-import { ScoreboardCategory } from "#enums/scoreboard-category";
 import type { RankingEntry } from "#app/@types/RankingEntry";
+import { globalScene } from "#app/global-scene";
+import { api } from "#app/plugins/api/api";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { executeIf, getEnumKeys } from "#app/utils/common-utils";
+import { ScoreboardCategory } from "#enums/scoreboard-category";
+import { TextStyle } from "#enums/text-style";
+import { WindowVariant } from "#enums/window-variant";
+import i18next from "i18next";
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   private loadingLabel: Phaser.GameObjects.Text;

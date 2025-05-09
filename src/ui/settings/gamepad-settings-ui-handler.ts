@@ -11,7 +11,7 @@ import {
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "#app/system/settings/settings-gamepad";
-import { AbstractControlSettingsUiHandler } from "#app/ui/settings/abstract-control-settings-ui-handler";
+import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { truncateString } from "#app/utils/string-utils";
 import { Device } from "#enums/devices";
@@ -23,9 +23,9 @@ import i18next from "i18next";
 /**
  * Class representing the settings UI handler for gamepads.
  *
- * @extends AbstractControlSettingsUiHandler
+ * @extends ControlsSettingsUiHandler
  */
-export class GamepadSettingsUiHandler extends AbstractControlSettingsUiHandler {
+export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
   constructor() {
     super(UiMode.SETTINGS_GAMEPAD);
     this.titleSelected = "Gamepad";

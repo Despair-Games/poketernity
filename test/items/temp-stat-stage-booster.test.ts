@@ -138,7 +138,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
       "SelectModifierPhase",
       UiMode.MODIFIER_SELECT,
       () => {
-        const handler = game.scene.ui.getHandler() as ModifierSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
         // Traverse to first modifier slot
         handler.setCursor(0);
         handler.setRowCursor(ShopCursorTarget.REWARDS);

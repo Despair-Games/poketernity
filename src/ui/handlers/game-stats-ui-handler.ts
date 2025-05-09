@@ -3,7 +3,7 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
 import type { GameData } from "#app/system/game-data";
-import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { formatLargeNumberFixedDigits, getPlayTimeString } from "#app/utils/string-utils";

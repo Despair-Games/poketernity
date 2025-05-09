@@ -224,7 +224,7 @@ export class SelectModifierPhase extends BattlePhase {
               }
 
               globalScene.lockModifierTiers = !globalScene.lockModifierTiers;
-              const uiHandler = ui.getHandler<ModifierSelectUiHandler>();
+              const uiHandler = ui.getCurrentHandler<ModifierSelectUiHandler>();
               uiHandler.setRerollCost(this.getRerollCost(globalScene.lockModifierTiers));
               uiHandler.updateLockRaritiesText();
               uiHandler.updateRerollCostText();
@@ -282,7 +282,7 @@ export class SelectModifierPhase extends BattlePhase {
             }
 
             globalScene.audioManager.playSound("se/buy");
-            ui.getHandler<ModifierSelectUiHandler>().updateCostText();
+            ui.getCurrentHandler<ModifierSelectUiHandler>().updateCostText();
           } else {
             ui.playError();
           }

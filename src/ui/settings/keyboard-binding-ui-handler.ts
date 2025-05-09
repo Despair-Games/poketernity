@@ -1,13 +1,13 @@
 import { getKeyWithKeycode } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
+import { BindingUiHandler } from "#app/ui/settings/binding-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { Device } from "#enums/devices";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { AbstractBindingUiHandler } from "./abstract-binding-ui-handler";
 
-export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
+export class KeyboardBindingUiHandler extends BindingUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
   }

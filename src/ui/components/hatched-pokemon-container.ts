@@ -1,10 +1,10 @@
-import type { EggHatchData } from "#app/data/egg-hatch-data";
-import { Gender } from "#enums/gender";
-import { getVariantTint } from "#app/data/variant";
 import { DexAttr } from "#app/data/dex-attributes";
-import { globalScene } from "#app/global-scene";
+import type { EggHatchData } from "#app/data/egg-hatch-data";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import type { PokemonIconAnimHelper } from "../helpers/pokemon-icon-anim-helper";
+import { getVariantTint } from "#app/data/variant";
+import { globalScene } from "#app/global-scene";
+import type { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
+import { Gender } from "#enums/gender";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 /**

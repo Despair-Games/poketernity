@@ -7,7 +7,7 @@ import { ScrollBar } from "#app/ui/components/scroll-bar";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
+import type { InputsIcons } from "#app/ui/settings/controls-settings-ui-handler";
 import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -22,7 +22,7 @@ import i18next from "i18next";
 /**
  * Abstract class for handling UI elements related to settings.
  */
-export class AbstractSettingsUiHandler extends MessageUiHandler {
+export class SettingsUiHandler extends MessageUiHandler {
   private settingsContainer: Phaser.GameObjects.Container;
   private optionsContainer: Phaser.GameObjects.Container;
   private messageBoxContainer: Phaser.GameObjects.Container;

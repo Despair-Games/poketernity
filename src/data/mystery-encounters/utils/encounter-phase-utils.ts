@@ -13,7 +13,6 @@ import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-en
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getNatureName } from "#app/data/nature";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { Status } from "#app/data/status-effect";
 import type { TrainerConfig } from "#app/data/trainer-config";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { Variant } from "#app/data/variant";
@@ -42,7 +41,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
@@ -269,7 +268,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
     // Make sure basic data is clean
     enemyPokemon.hp = enemyPokemon.getMaxHp();
-    enemyPokemon.status = null;
+    enemyPokemon.resetStatus();
     enemyPokemon.passive = false;
 
     if (e < (doubleBattle ? 2 : 1)) {
@@ -350,7 +349,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
           : statusEffects === StatusEffect.SLEEP
             ? 3
             : undefined;
-        enemyPokemon.status = new Status(status, 0, cureTurn);
+        // @ts-expect-error - `Pokemon#setStatus` is protected; TODO: change this?
+        enemyPokemon.setStatus(status, { sleepTurnsRemaining: cureTurn });
       }
 
       // Set summon data fields

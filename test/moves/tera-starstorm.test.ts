@@ -76,11 +76,11 @@ describe("Moves - Tera Starstorm", () => {
     const enemyField = game.scene.getEnemyField();
 
     // Pokemon other than Terapagos should not be affected - only hits one target
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyField.some((pokemon) => pokemon.isFullHp())).toBe(true);
 
     // Terapagos in Stellar Form should hit both targets
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyField.every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
 });

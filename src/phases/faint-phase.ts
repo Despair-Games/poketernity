@@ -174,7 +174,7 @@ export class FaintPhase extends PokemonPhase {
         allMoves.get(lastAttack.moveId),
       );
     } else {
-      //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
+      // If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
       applyAbAttrs<PostFaintAbAttr>(AbAttrFlag.POST_FAINT, pokemon, false);
     }
 

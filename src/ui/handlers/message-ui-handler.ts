@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
+import { AwaitableUiHandler } from "#app/ui/handlers/awaitable-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { getFrameMs, isNil } from "#app/utils/common-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { AwaitableUiHandler } from "./awaitable-ui-handler";
 
 export abstract class MessageUiHandler extends AwaitableUiHandler {
   protected textTimer: Phaser.Time.TimerEvent | null;

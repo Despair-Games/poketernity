@@ -29,7 +29,7 @@ export class EggCounterContainer extends Phaser.GameObjects.Container {
     super(globalScene, 0, 0);
     this.eggCount = eggCount;
 
-    this.eventTarget = globalScene.ui.getHandler<EggHatchSceneUiHandler>().eventTarget;
+    this.eventTarget = globalScene.ui.getCurrentHandler<EggHatchSceneUiHandler>().eventTarget;
     this.eventTarget.addEventListener(EggEventType.EGG_COUNT_CHANGED, this.onEggCountChangedEvent);
 
     this.setup();

@@ -289,7 +289,7 @@ describe("Moves - Magic Coat", () => {
     // Turn 1 - thunder wave immunity test
     game.move.use(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
 
     // Turn 2 - soundproof immunity test
     game.move.use(MoveId.GROWL);
@@ -315,7 +315,7 @@ describe("Moves - Magic Coat", () => {
     vi.spyOn(opponent, "getAccuracyMultiplier").mockReturnValue(0);
     game.move.use(MoveId.SPORE);
     await game.toEndOfTurn();
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("should always apply the leftmost available target's Magic Coat when bouncing moves like sticky webs in doubles", async () => {

@@ -33,7 +33,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.use(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const eiscue = game.field.getEnemyPokemon();
 
@@ -62,7 +62,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue).not.toHaveFullHp();
     expect(eiscue.formIndex).toBe(noiceForm);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(eiscue).not.toHaveFullHp();
     expect(eiscue.formIndex).toBe(noiceForm);
@@ -74,7 +74,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.use(MoveId.ICE_BEAM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const eiscue = game.field.getEnemyPokemon();
 
@@ -88,7 +88,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.use(MoveId.TOXIC_THREAD);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const eiscue = game.field.getEnemyPokemon();
 
@@ -103,7 +103,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.use(MoveId.QUICK_ATTACK);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const eiscue = game.field.getEnemyPokemon();
 
@@ -111,7 +111,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.formIndex).toBe(noiceForm);
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).toBeUndefined();
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).not.toBeNull();
     expect(eiscue.formIndex).toBe(icefaceForm);

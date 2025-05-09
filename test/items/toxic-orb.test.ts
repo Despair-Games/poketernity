@@ -52,6 +52,6 @@ describe("Items - Toxic orb", () => {
     expect(i18next.t).toHaveBeenCalledWith("statusEffect:toxic.obtainSource", expect.anything());
 
     expect(player.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
-    expect(player.status?.toxicTurnCount).toBe(0);
+    expect(player.toxicTurnCount).toBe(0);
   });
 });

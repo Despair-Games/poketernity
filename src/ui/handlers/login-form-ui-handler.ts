@@ -1,7 +1,10 @@
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
@@ -11,9 +14,6 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import JSZip from "jszip";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
-import type { OptionSelectUiHandler } from "./option-select-ui-handler";
 
 interface BuildInteractableImageOpts {
   scale?: number;

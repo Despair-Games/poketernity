@@ -152,7 +152,7 @@ export class UiInputs {
 
   buttonGoToFilter(button: Button): void {
     const whitelist = [StarterSelectUiHandler];
-    const uiHandler = globalScene.ui?.getHandler();
+    const uiHandler = globalScene.ui?.getCurrentHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {
       globalScene.ui.processInput(button);
     } else {
@@ -178,7 +178,7 @@ export class UiInputs {
     }
     switch (globalScene.ui?.getMode()) {
       case UiMode.MESSAGE:
-        const messageHandler = globalScene.ui.getHandler<MessageUiHandler>();
+        const messageHandler = globalScene.ui.getCurrentHandler<MessageUiHandler>();
         if (!messageHandler.pendingPrompt || messageHandler.isTextAnimationInProgress()) {
           return;
         }
@@ -210,7 +210,7 @@ export class UiInputs {
       GamepadSettingsUiHandler,
       KeyboardSettingsUiHandler,
     ];
-    const uiHandler = globalScene.ui?.getHandler();
+    const uiHandler = globalScene.ui?.getCurrentHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {
       globalScene.ui.processInput(button);
     } else if (button === Button.CYCLE_TERA) {

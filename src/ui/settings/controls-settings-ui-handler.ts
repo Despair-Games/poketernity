@@ -1,10 +1,10 @@
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
-import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -30,7 +30,7 @@ export interface LayoutConfig {
 /**
  * Abstract class for handling UI elements related to control settings.
  */
-export abstract class AbstractControlSettingsUiHandler extends UiHandler {
+export abstract class ControlsSettingsUiHandler extends UiHandler {
   protected settingsContainer: Phaser.GameObjects.Container;
   protected optionsContainer: Phaser.GameObjects.Container;
   protected navigationContainer: NavigationMenu;
@@ -72,8 +72,6 @@ export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   abstract setSetting(setting, value: number): boolean;
 
   /**
-   * Constructor for the AbstractSettingsUiHandler.
-   *
    * @param mode - The UI mode.
    */
   constructor(mode: UiMode | null = null) {

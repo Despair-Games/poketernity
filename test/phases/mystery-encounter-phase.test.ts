@@ -75,14 +75,14 @@ describe("Mystery Encounter Phases", () => {
       ]);
 
       game.onNextPrompt("MysteryEncounterPhase", UiMode.MESSAGE, () => {
-        const handler = game.scene.ui.getHandler() as MessageUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<MessageUiHandler>();
         handler.processInput(Button.ACTION);
       });
 
       await game.phaseInterceptor.to("MysteryEncounterPhase");
 
       // Select option 1 for encounter
-      const handler = game.scene.ui.getHandler() as MysteryEncounterUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<MysteryEncounterUiHandler>();
       handler.unblockInput();
       handler.processInput(Button.ACTION);
 

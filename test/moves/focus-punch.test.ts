@@ -1,7 +1,6 @@
-import { MoveHeaderPhase } from "#app/phases/move-header-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -35,83 +34,82 @@ describe("Moves - Focus Punch", () => {
   });
 
   it("should deal damage at the end of turn if uninterrupted", async () => {
-    await game.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-
-    const enemyStartingHp = enemyPokemon.hp;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
-    await game.phaseInterceptor.to("MessagePhase");
+    await game.phaseInterceptor.to("MoveHeaderPhase");
 
-    expect(enemyPokemon.hp).toBe(enemyStartingHp);
-    expect(leadPokemon.getMoveHistory().length).toBe(0);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(0);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
-    expect(leadPokemon.getMoveHistory().length).toBe(1);
-    expect(leadPokemon.turnData.totalDamageDealt).toBe(enemyStartingHp - enemyPokemon.hp);
+    expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(1);
+    expect(player.turnData.totalDamageDealt).toBe(enemy.getMaxHp() - enemy.hp);
   });
 
   it("should fail if the user is hit", async () => {
     game.override.enemyMoveset([MoveId.TACKLE]);
 
-    await game.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-
-    const enemyStartingHp = enemyPokemon.hp;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
-    await game.phaseInterceptor.to("MessagePhase");
+    await game.phaseInterceptor.to("MoveHeaderPhase");
 
-    expect(enemyPokemon.hp).toBe(enemyStartingHp);
-    expect(leadPokemon.getMoveHistory().length).toBe(0);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(0);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.hp).toBe(enemyStartingHp);
-    expect(leadPokemon.getMoveHistory().length).toBe(1);
-    expect(leadPokemon.turnData.totalDamageDealt).toBe(0);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(1);
+    expect(player.turnData.totalDamageDealt).toBe(0);
   });
 
   it("should be cancelled if the user falls asleep mid-turn", async () => {
     game.override.enemyMoveset([MoveId.SPORE]);
 
-    await game.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
-    const leadPokemon = game.scene.getPlayerPokemon()!;
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
-    await game.phaseInterceptor.to("MessagePhase"); // Header message
+    await game.phaseInterceptor.to("MoveHeaderPhase");
 
-    expect(leadPokemon.getMoveHistory().length).toBe(0);
+    expect(player.getMoveHistory()).toHaveLength(0);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(leadPokemon.getMoveHistory().length).toBe(1);
-    expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
+    expect(player.getMoveHistory()).toHaveLength(1);
+    expect(enemy.hp).toBe(enemy.getMaxHp());
   });
 
   it("should not queue its pre-move message before an enemy switches", async () => {
     /** Guarantee a Trainer battle with multiple enemy Pokemon */
     game.override.startingWave(25);
 
-    await game.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     game.forceEnemyToSwitch();
     game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to("TurnStartPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase() instanceof SwitchSummonPhase).toBeTruthy();
-    expect(game.scene.phaseManager["phaseQueue"].find((phase) => phase instanceof MoveHeaderPhase)).toBeDefined();
+    expect(game.scene.phaseManager.getCurrentPhase()).toMatchObject({ id: PhaseId.SWITCH_SUMMON });
+
+    await game.phaseInterceptor.to("PostActionPhase");
+
+    expect(game.scene.phaseManager.getCurrentPhase()).toMatchObject({ id: PhaseId.MOVE_HEADER });
   });
 });

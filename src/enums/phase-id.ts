@@ -35,13 +35,13 @@ import type { MoneyRewardPhase } from "#app/phases/money-reward-phase";
 import type { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { MoveChargePhase } from "#app/phases/move-charge-phase";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import type { MoveEndPhase } from "#app/phases/move-end-phase";
 import type { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import type { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import type { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
 import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
+import type { PostActionPhase } from "#app/phases/post-action-phase";
 import type { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import type { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import type { NewBattlePhase } from "#app/phases/new-battle-phase";
@@ -176,8 +176,8 @@ export enum PhaseId {
   MOVE_CHARGE,
   /** {@linkcode MoveEffectPhase} */
   MOVE_EFFECT,
-  /** {@linkcode MoveEndPhase} */
-  MOVE_END,
+  /** {@linkcode PostActionPhase} */
+  POST_ACTION,
   /** {@linkcode MoveHeaderPhase} */
   MOVE_HEADER,
   /** {@linkcode NewBattlePhase} */

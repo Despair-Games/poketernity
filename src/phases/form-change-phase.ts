@@ -210,7 +210,7 @@ export class FormChangePhase extends FormChangeBasePhase {
       // If the form change was triggered via the "Check Team" UI, go back to the "Check Team" UI without learning new moves.
       ui.revertMode().then(() => {
         if (ui.getMode() === UiMode.PARTY) {
-          const partyUiHandler = ui.getHandler() as PartyUiHandler;
+          const partyUiHandler = ui.getCurrentHandler<PartyUiHandler>();
           partyUiHandler.clearPartySlots();
           partyUiHandler.populatePartySlots();
         }

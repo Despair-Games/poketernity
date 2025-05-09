@@ -1,6 +1,6 @@
-import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -68,7 +68,7 @@ describe("Abilities - Early Bird", () => {
     await game.toNextTurn();
 
     expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
-    expect(player.status?.sleepTurnsRemaining).toBe(1);
+    expect(player.sleepTurnsRemaining).toBe(1);
   });
 
   it("reduces 1-turn sleep to 0 turns", async () => {

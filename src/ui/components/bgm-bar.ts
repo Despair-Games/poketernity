@@ -1,10 +1,10 @@
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import i18next from "i18next";
-import { toTitleCase } from "#app/utils/string-utils";
+import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { TEXT_SCALE } from "#app/constants/ui-constants";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { toTitleCase } from "#app/utils/string-utils";
+import { TextStyle } from "#enums/text-style";
+import i18next from "i18next";
 
 const hiddenX = -150;
 const shownX = 0;

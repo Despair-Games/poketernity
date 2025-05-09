@@ -64,7 +64,7 @@ describe("Abilities - Sand Veil", () => {
 
     await game.phaseInterceptor.to("MoveEffectPhase", false);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(leadPokemon[0].isFullHp()).toBe(true);
     expect(leadPokemon[1].hp).toBeLessThan(leadPokemon[1].getMaxHp());

@@ -1,13 +1,13 @@
-import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH } from "#app/constants/ui-constants";
-import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
+import { globalScene } from "#app/global-scene";
+import type { InputsIcons } from "#app/ui/settings/controls-settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { GeneralSettingsUiHandler } from "./general-settings-ui-handler";
 
 const LEFT = "LEFT";
 const RIGHT = "RIGHT";

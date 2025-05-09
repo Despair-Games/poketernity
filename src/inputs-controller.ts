@@ -134,26 +134,18 @@ export class InputsController {
     });
 
     if (typeof globalScene.input.gamepad !== "undefined") {
-      globalScene.input.gamepad?.on(
-        "connected",
-        function (thisGamepad) {
-          if (!thisGamepad) {
-            return;
-          }
-          this.refreshGamepads();
-          this.setupGamepad(thisGamepad);
-          this.onReconnect(thisGamepad);
-        },
-        this,
-      );
+      const connectedListenerFunc = (thisGamepad: Phaser.Input.Gamepad.Gamepad) => {
+        if (!thisGamepad) {
+          return;
+        }
+        this.refreshGamepads();
+        this.setupGamepad(thisGamepad);
+        this.onReconnect(thisGamepad);
+      };
+      globalScene.input.gamepad?.on("connected", connectedListenerFunc, this);
 
-      globalScene.input.gamepad?.on(
-        "disconnected",
-        function (thisGamepad) {
-          this.onDisconnect(thisGamepad); // when a gamepad is disconnected
-        },
-        this,
-      );
+      const disconnectedListenerFunc = (thisGamepad: Phaser.Input.Gamepad.Gamepad) => this.onDisconnect(thisGamepad);
+      globalScene.input.gamepad?.on("disconnected", disconnectedListenerFunc, this);
 
       // Check to see if the gamepad has already been setup by the browser
       globalScene.input.gamepad?.refreshPads();
