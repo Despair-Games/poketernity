@@ -1,9 +1,9 @@
-import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
-import { getKeyWithKeycode, getKeyWithSettingName } from "#app/configs/inputs/configHandler";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import cfg_keyboard_qwerty from "#inputs/cfg_keyboard_qwerty";
+import { getKeyWithKeycode, getKeyWithSettingName } from "#inputs/configHandler";
 import { InGameManip } from "#test/settings/helpers/inGameManip";
 import { MenuManip } from "#test/settings/helpers/menuManip";
 import { deepCopy } from "#utils/common-utils";

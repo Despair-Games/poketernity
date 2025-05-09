@@ -1,12 +1,12 @@
 import type BattleScene from "#app/battle-scene";
-import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import type { InputsController } from "#app/inputs-controller";
 import TouchControl from "#app/touch-controls";
+import pad_xbox360 from "#inputs/pad_xbox360";
 import { holdOn } from "#test/test-utils/gameManagerUtils";
+import { RESOURCES_FOLDER_PATH } from "#test/test-utils/testUtils";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import Phaser from "phaser";
-import { RESOURCES_FOLDER_PATH } from "#test/test-utils/testUtils";
 
 interface LogEntry {
   type: string;

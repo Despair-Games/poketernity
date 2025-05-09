@@ -1,4 +1,3 @@
-import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -6,6 +5,7 @@ import { Button } from "#enums/buttons";
 import type { Device } from "#enums/devices";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import { getIconWithSettingName } from "#inputs/configHandler";
 import { settings } from "#system/settings-manager";
 import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
