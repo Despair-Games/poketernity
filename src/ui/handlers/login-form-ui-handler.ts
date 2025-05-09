@@ -1,7 +1,7 @@
+import { api } from "#api/api";
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
 import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
 import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";

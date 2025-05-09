@@ -1,5 +1,5 @@
+import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
 import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
 import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";

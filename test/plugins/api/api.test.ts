@@ -1,5 +1,5 @@
+import { api } from "#api/api";
 import type { TitleStatsResponse } from "#app/@types/Api";
-import { api } from "#app/plugins/api/api";
 import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import { http, HttpResponse } from "msw";

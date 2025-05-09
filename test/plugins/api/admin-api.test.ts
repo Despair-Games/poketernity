@@ -1,3 +1,4 @@
+import { AdminApi } from "#api/admin-api";
 import type {
   LinkAccountToDiscordIdRequest,
   LinkAccountToGoogledIdRequest,
@@ -6,7 +7,6 @@ import type {
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
 } from "#app/@types/AdminApi";
-import { AdminApi } from "#app/plugins/api/admin-api";
 import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import { http, HttpResponse } from "msw";

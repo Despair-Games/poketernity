@@ -1,6 +1,6 @@
+import { api } from "#api/api";
 import type { RankingEntry } from "#app/@types/RankingEntry";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { executeIf, getEnumKeys } from "#app/utils/common-utils";

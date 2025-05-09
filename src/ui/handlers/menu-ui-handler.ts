@@ -1,9 +1,9 @@
+import { api } from "#api/api";
 import { loggedInUser, updateUserInfo } from "#app/account";
 import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
 import { BgmBar } from "#app/ui/components/bgm-bar";
 import type { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";

@@ -1,3 +1,4 @@
+import { api } from "#api/api";
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import type { StarterData } from "#app/@types/StarterData";
@@ -5,12 +6,12 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import {
   APP_ABBREVIATION,
+  BYPASS_LOGIN,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
-  BYPASS_LOGIN,
 } from "#app/constants/app-constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { allMoves, allSpecies } from "#app/data/data-lists";
@@ -39,7 +40,6 @@ import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import { api } from "#app/plugins/api/api";
 import { achvs } from "#app/system/achievements";
 import ArenaData from "#app/system/arena-data";
 import ChallengeData from "#app/system/challenge-data";

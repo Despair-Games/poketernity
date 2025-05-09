@@ -1,3 +1,4 @@
+import { api } from "#api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
@@ -16,7 +17,6 @@ import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
 import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
-import { api } from "#app/plugins/api/api";
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";

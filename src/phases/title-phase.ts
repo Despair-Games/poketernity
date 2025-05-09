@@ -1,3 +1,4 @@
+import { api } from "#api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { loggedInUser } from "#app/account";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#app/data/daily-run";
@@ -8,7 +9,11 @@ import type { Modifier } from "#app/modifier/modifier";
 import { getDailyRunStarterModifiers, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { Phase } from "#app/phase";
-import { api } from "#app/plugins/api/api";
+import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
+import { EncounterPhase } from "#app/phases/encounter-phase";
+import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
+import { SelectStarterPhase } from "#app/phases/select-starter-phase";
+import { SummonPhase } from "#app/phases/summon-phase";
 import { vouchers } from "#app/system/voucher";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
@@ -24,11 +29,6 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import i18next from "i18next";
-import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { EncounterPhase } from "#app/phases/encounter-phase";
-import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
 
 export class TitlePhase extends Phase {
   override readonly id = PhaseId.TITLE;

@@ -1,3 +1,4 @@
+import { ApiBase } from "#api/api-base";
 import type {
   LinkAccountToDiscordIdRequest,
   LinkAccountToGoogledIdRequest,
@@ -6,7 +7,6 @@ import type {
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
 } from "#app/@types/AdminApi";
-import { ApiBase } from "#app/plugins/api/api-base";
 
 export class AdminApi extends ApiBase {
   public readonly ERR_USERNAME_NOT_FOUND: string = "Username not found!";

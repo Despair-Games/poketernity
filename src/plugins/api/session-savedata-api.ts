@@ -1,3 +1,5 @@
+import { ApiBase } from "#api/api-base";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import type {
   ClearSessionSavedataRequest,
   ClearSessionSavedataResponse,
@@ -6,8 +8,6 @@ import type {
   NewClearSessionSavedataRequest,
   UpdateSessionSavedataRequest,
 } from "#app/@types/SessionSavedataApi";
-import { ApiBase } from "#app/plugins/api/api-base";
-import type { SessionSaveData } from "#app/@types/SessionData";
 
 /**
  * A wrapper for session savedata API requests.

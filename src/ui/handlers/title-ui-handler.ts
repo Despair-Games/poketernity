@@ -1,7 +1,7 @@
+import { api } from "#api/api";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { getSplashMessages } from "#app/data/splash-messages";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
 import { timedEventManager } from "#app/timed-event-manager";
 import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
 import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
