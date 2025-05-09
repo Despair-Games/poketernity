@@ -5,9 +5,6 @@ import { Phase } from "#app/phase";
 import { SelectGenderPhase } from "#app/phases/select-gender-phase";
 import { UnavailablePhase } from "#app/phases/unavailable-phase";
 import { handleTutorial } from "#app/tutorial";
-import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
-import type { LoginFormUiHandler } from "#app/ui/handlers/login-form-ui-handler";
-import type { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
 import { getCookie, removeCookie } from "#app/utils/app-utils";
 import { executeIf } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
@@ -15,6 +12,9 @@ import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { LoginFormUiHandler } from "#ui/login-form-ui-handler";
+import type { RegistrationFormUiHandler } from "#ui/registration-form-ui-handler";
 import i18next from "i18next";
 
 export class LoginPhase extends Phase {

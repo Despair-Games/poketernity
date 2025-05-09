@@ -1,8 +1,5 @@
 import { allSpecies } from "#app/data/data-lists";
 import type { TitlePhase } from "#app/phases/title-phase";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
-import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
@@ -13,6 +10,9 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
+import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

@@ -23,7 +23,6 @@ import {
 import Overrides from "#app/overrides";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { timedEventManager } from "#app/timed-event-manager";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { NumberHolder, isNil } from "#app/utils/common-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
@@ -43,6 +42,7 @@ import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: MoveId[];

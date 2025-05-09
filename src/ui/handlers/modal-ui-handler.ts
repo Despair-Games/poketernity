@@ -1,6 +1,5 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -8,6 +7,7 @@ import type { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
+import { UiHandler } from "#ui/ui-handler";
 
 export abstract class ModalUiHandler extends UiHandler {
   protected modalContainer: Phaser.GameObjects.Container;

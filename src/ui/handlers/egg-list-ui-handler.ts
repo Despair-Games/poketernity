@@ -1,6 +1,5 @@
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import { ScrollableGridController } from "#app/ui/helpers/scrollable-grid-controller";
 import { addTextObject } from "#app/ui/text/text-utils";
@@ -9,6 +8,7 @@ import { Button } from "#enums/buttons";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { MessageUiHandler } from "#ui/message-ui-handler";
 import { ScrollBar } from "#ui/scroll-bar";
 import i18next from "i18next";
 

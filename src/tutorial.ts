@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import type { UiHandler } from "#ui/ui-handler";
 import i18next from "i18next";
 
 const tutorialHandlers = {

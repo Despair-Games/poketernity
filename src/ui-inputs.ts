@@ -1,10 +1,6 @@
 import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { InputsController } from "#app/inputs-controller";
-import type { MenuUiHandler } from "#app/ui/handlers/menu-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
-import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
 import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
 import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
@@ -14,6 +10,10 @@ import { settingsUiModes } from "#app/ui/ui";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { MenuUiHandler } from "#ui/menu-ui-handler";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import { RunInfoUiHandler } from "#ui/run-info-ui-handler";
+import { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import type Phaser from "phaser";
 
 type ActionKeys = Record<Button, () => void>;

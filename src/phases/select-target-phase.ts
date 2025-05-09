@@ -1,13 +1,13 @@
 import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
-import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
+import { CommandPhase } from "#app/phases/command-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import i18next from "i18next";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { CommandPhase } from "#app/phases/command-phase";
 
 export class SelectTargetPhase extends PokemonPhase {
   override readonly id = PhaseId.SELECT_TARGET;

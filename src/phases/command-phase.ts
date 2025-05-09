@@ -9,8 +9,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import type { EncoreTag } from "#battler-tags/encore-tag";
@@ -30,6 +28,8 @@ import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
+import type { FightUiHandler } from "#ui/fight-ui-handler";
 import i18next from "i18next";
 
 /**

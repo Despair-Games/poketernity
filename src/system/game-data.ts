@@ -38,7 +38,6 @@ import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#app/utils/common-utils";
@@ -74,6 +73,7 @@ import TrainerData from "#system/trainer-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 

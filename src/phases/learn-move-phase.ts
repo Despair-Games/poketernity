@@ -5,10 +5,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { LearnMoveType } from "#enums/learn-move-type";
@@ -19,6 +15,10 @@ import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
 import type { Move } from "#moves/move";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import type { SummaryUiHandler } from "#ui/summary-ui-handler";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {

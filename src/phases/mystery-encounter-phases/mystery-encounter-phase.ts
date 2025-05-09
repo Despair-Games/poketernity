@@ -8,7 +8,6 @@ import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-di
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
-import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
 import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
@@ -16,6 +15,7 @@ import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { SeenEncounterData } from "#mystery-encounters/mystery-encounter-save-data";
+import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 
 /**
  * Will handle (in order):

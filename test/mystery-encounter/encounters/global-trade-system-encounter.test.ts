@@ -3,7 +3,6 @@ import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
 import { PokemonNatureWeightModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import * as RandomUtils from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -18,6 +17,7 @@ import { GlobalTradeSystemEncounter } from "#mystery-encounters/global-trade-sys
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/globalTradeSystem";

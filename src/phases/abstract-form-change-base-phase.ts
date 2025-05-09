@@ -3,8 +3,8 @@ import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { UiMode } from "#enums/ui-mode";
+import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 
 /**
  * A base phase for handling Pokemon form changes, including evolutions

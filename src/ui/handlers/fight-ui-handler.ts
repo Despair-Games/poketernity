@@ -6,8 +6,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { fixedNumber } from "#app/utils/common-utils";
 import { leftPad } from "#app/utils/string-utils";
@@ -20,7 +18,9 @@ import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
+import { UiHandler } from "#ui/ui-handler";
 import i18next from "i18next";
 
 export class FightUiHandler extends UiHandler implements InfoToggle {

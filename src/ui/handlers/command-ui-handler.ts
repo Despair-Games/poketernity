@@ -4,10 +4,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerastallizeAccessModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
-import type { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
-import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { BattleCommand } from "#enums/battle-command";
@@ -17,6 +13,10 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { BallUiHandler } from "#ui/ball-ui-handler";
+import type { FightUiHandler } from "#ui/fight-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { UiHandler } from "#ui/ui-handler";
 import i18next from "i18next";
 
 export class CommandUiHandler extends UiHandler {

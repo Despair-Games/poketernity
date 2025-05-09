@@ -3,15 +3,15 @@ import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phase
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import type { GameManager } from "#test/test-utils/gameManager";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { vi } from "vitest";
 
 /**

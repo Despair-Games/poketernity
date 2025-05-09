@@ -14,8 +14,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { rgbHexToRgba } from "#app/utils/color-utils";
 import { fixedNumber, getEnumValues, isNil } from "#app/utils/common-utils";
@@ -33,6 +31,8 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { Move } from "#moves/move";
 import { settings } from "#system/settings-manager";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { UiHandler } from "#ui/ui-handler";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 

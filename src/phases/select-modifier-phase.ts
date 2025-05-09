@@ -22,10 +22,6 @@ import {
 } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { NumberHolder } from "#app/utils/common-utils";
 import { FilterItemMaxStacks } from "#app/utils/item-utils";
@@ -35,6 +31,10 @@ import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { SHOP_OPTIONS_ROW_LIMIT } from "#ui/modifier-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
 import i18next from "i18next";
 
 //#region Types

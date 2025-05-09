@@ -12,14 +12,14 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { FormChangeBasePhase } from "#app/phases/abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { fixedNumber } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
 import { achvs } from "#system/achievements";
+import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
 
 /**
  * A phase for handling certain form changes for player Pokemon.

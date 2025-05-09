@@ -2,7 +2,6 @@ import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -12,6 +11,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
 import { ScrollBar } from "#ui/scroll-bar";
+import { UiHandler } from "#ui/ui-handler";
 import i18next from "i18next";
 
 export interface InputsIcons {

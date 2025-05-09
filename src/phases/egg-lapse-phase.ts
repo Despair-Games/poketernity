@@ -7,12 +7,12 @@ import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
 import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 
 /**

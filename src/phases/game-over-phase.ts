@@ -15,7 +15,6 @@ import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
 import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AchvCategory } from "#enums/achv-category";
@@ -30,6 +29,7 @@ import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 
 /**

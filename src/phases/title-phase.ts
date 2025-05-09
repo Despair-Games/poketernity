@@ -14,9 +14,6 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
-import type { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
 import { BattleType } from "#enums/battle-type";
@@ -28,6 +25,9 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { vouchers } from "#system/voucher";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
+import type { TitleUiHandler } from "#ui/title-ui-handler";
 import i18next from "i18next";
 
 export class TitlePhase extends Phase {

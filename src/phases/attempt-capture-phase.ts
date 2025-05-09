@@ -12,9 +12,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { BattlerIndex } from "#enums/battler-index";
@@ -28,6 +25,9 @@ import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
 import { achvs } from "#system/achievements";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import type { SummaryUiHandler } from "#ui/summary-ui-handler";
 import i18next from "i18next";
 
 /**

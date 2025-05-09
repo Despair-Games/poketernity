@@ -1,4 +1,3 @@
-import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { Button } from "#enums/buttons";
 import { TypeEffectivenessColor } from "#enums/color";
 import { MoveId } from "#enums/move-id";
@@ -6,6 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
 import type { MockText } from "#test/test-utils/mocks/mocksContainer/mockText";
+import { FightUiHandler } from "#ui/fight-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
