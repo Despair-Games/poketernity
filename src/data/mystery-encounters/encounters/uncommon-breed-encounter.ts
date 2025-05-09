@@ -6,7 +6,6 @@ import {
   MoveRequirement,
   PersistentModifierRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { CHARMING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -39,6 +38,7 @@ import {
   getHighestLevelPlayerPokemon,
   getSpriteKeysFromPokemon,
 } from "#mystery-encounters/encounter-pokemon-utils";
+import { CHARMING_MOVES } from "#mystery-encounters/requirement-groups";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/uncommonBreed";

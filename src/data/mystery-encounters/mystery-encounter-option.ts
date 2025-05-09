@@ -13,8 +13,8 @@ import { randSeedInt } from "#app/utils/random-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { CanLearnMoveRequirementOptions } from "#app/data/mystery-encounters/requirements/can-learn-move-requirement";
-import { CanLearnMoveRequirement } from "#app/data/mystery-encounters/requirements/can-learn-move-requirement";
+import type { CanLearnMoveRequirementOptions } from "#mystery-encounters/can-learn-move-requirement";
+import { CanLearnMoveRequirement } from "#mystery-encounters/can-learn-move-requirement";
 
 export type OptionPhaseCallback = () => Promise<void | boolean>;
 

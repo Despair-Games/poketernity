@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { BerriesAboundEncounter } from "#app/data/mystery-encounters/encounters/berries-abound-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
@@ -12,6 +11,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { BerriesAboundEncounter } from "#mystery-encounters/berries-abound-encounter";
 import * as EncounterDialogueUtils from "#mystery-encounters/encounter-dialogue-utils";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import {

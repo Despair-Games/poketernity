@@ -7,7 +7,6 @@ import {
   CombinationPokemonRequirement,
   MoveRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { EXTORTION_ABILITIES, EXTORTION_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import { speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -24,6 +23,7 @@ import {
   updatePlayerMoney,
 } from "#mystery-encounters/encounter-phase-utils";
 import { getHighestStatTotalPlayerPokemon } from "#mystery-encounters/encounter-pokemon-utils";
+import { EXTORTION_ABILITIES, EXTORTION_MOVES } from "#mystery-encounters/requirement-groups";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

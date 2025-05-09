@@ -5,7 +5,6 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { DANCING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -41,6 +40,7 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#mystery-encounters/encounter-pokemon-utils";
+import { DANCING_MOVES } from "#mystery-encounters/requirement-groups";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

@@ -1,6 +1,5 @@
 import type BattleScene from "#app/battle-scene";
 import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
-import { DepartmentStoreSaleEncounter } from "#app/data/mystery-encounters/encounters/department-store-sale-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
@@ -10,6 +9,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { DepartmentStoreSaleEncounter } from "#mystery-encounters/department-store-sale-encounter";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
