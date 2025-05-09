@@ -1692,7 +1692,7 @@ export default class BattleScene extends SceneBase {
     this.rngCounter = 0;
   }
 
-  executeWithSeedOffset(func: Function, offset: number, seedOverride?: string): void {
+  executeWithSeedOffset(func: VoidFunction, offset: number, seedOverride?: string): void {
     if (!func) {
       return;
     }

@@ -1660,8 +1660,8 @@ export function regenerateModifierPoolThresholds(
             || itemModifierType instanceof FormChangeItemModifierType
             || existingModifiers.find((m) => m.stackCount < m.getMaxStackCount(true))
               ? weightedModifierType.weight instanceof Function
-                ? (weightedModifierType.weight as Function)(party, rerollCount)
-                : (weightedModifierType.weight as number)
+                ? weightedModifierType.weight(party, rerollCount)
+                : weightedModifierType.weight
               : 0;
           if (weightedModifierType.maxWeight) {
             const modifierId = weightedModifierType.modifierType.id;
@@ -1673,6 +1673,7 @@ export function regenerateModifierPoolThresholds(
               tierPercent: 0,
               totalPercent: 0,
             };
+            // @ts-expect-error - TODO: fix `outputWeight`
             tierMaxWeight += outputWeight;
           }
           if (weight) {

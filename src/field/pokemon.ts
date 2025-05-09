@@ -418,6 +418,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           case 7:
             return ElementalType.ROCK;
         }
+        break;
 
       // Custom
       case SpeciesId.SHEDINJA:
@@ -3781,12 +3782,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.getSpeciesForm().cry(soundConfig);
   }
 
-  faintCry(callback: Function): void {
+  faintCry(callback: VoidFunction): void {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
     const cry = globalScene.audioManager.playSound(key, { rate: rate }) as AnySound;
     if (!cry || settings.effectiveFieldVolume === 0) {
-      return callback();
+      callback();
+      return;
     }
     const sprite = this.getSprite();
     const tintSprite = this.getTintSprite();

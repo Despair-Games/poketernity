@@ -1,8 +1,8 @@
+import type { InputsEvent } from "#app/@types/InputsEvent";
+import type { LanguageEvent } from "#app/@types/Language";
+import type { SettingsEvent } from "#app/@types/Settings";
+import type { TouchControlsEvent } from "#app/@types/TouchControlsEvent";
 import Phaser from "phaser";
-import type { InputsEvent } from "./@types/InputsEvent";
-import type { LanguageEvent } from "./@types/Language";
-import type { SettingsEvent } from "./@types/Settings";
-import type { TouchControlsEvent } from "./@types/TouchControlsEvent";
 
 type EventName = SettingsEvent | InputsEvent | TouchControlsEvent | LanguageEvent;
 type CallbackFn<D> = (data: D) => void;
@@ -35,6 +35,7 @@ class EventBus extends Phaser.Events.EventEmitter {
     return super.addListener(event, fn, context);
   }
 
+  // biome-ignore lint/complexity/noBannedTypes: what should this even be replaced with?
   override removeListener(event: string | symbol, fn?: Function, context?: any, once?: boolean): this {
     return super.removeListener(event, fn, context, once);
   }
