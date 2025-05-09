@@ -1,4 +1,3 @@
-import { manageListeners } from "#app/../test/test-utils/listenersManager";
 import { initLoggedInUser } from "#app/account";
 import "#app/phaser-extensions";
 import { SESSION_ID_COOKIE } from "#constants/app-constants";
