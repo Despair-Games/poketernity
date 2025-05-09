@@ -30,9 +30,6 @@ import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modi
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
 import { TurnCommandManager } from "#app/turn-command-manager";
-import { isBetween, NumberHolder } from "#app/utils/common-utils";
-import { randInt, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
-import { shiftCharCodes } from "#app/utils/string-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -48,6 +45,9 @@ import type { Move } from "#moves/move";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { isBetween, NumberHolder } from "#utils/common-utils";
+import { randInt, randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
+import { shiftCharCodes } from "#utils/string-utils";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

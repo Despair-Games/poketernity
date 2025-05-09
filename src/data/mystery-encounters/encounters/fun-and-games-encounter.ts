@@ -7,7 +7,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { FieldPosition } from "#enums/field-position";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -31,6 +30,7 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { settings } from "#system/settings-manager";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

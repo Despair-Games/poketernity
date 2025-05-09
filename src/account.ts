@@ -1,7 +1,7 @@
 import { api } from "#api/api";
 import { BYPASS_LOGIN } from "#app/constants/app-constants";
-import { randomString } from "#app/utils/random-utils";
 import type { UserInfo } from "#types/UserInfo";
+import { randomString } from "#utils/random-utils";
 
 export let loggedInUser: UserInfo | null = null;
 // This is a random string that is used to identify the client session - unique per session (tab or window) so that the game will only save on the one that the server is expecting

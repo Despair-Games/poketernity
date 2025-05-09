@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils/common-utils";
-import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { PhaseId } from "#enums/phase-id";
+import { fixedNumber } from "#utils/common-utils";
 
 /**
  * Fully heals the player's party, usually occurs after every 10th wave

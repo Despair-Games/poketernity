@@ -17,9 +17,6 @@ import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import { isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedInt } from "#app/utils/random-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
@@ -44,6 +41,9 @@ import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { isNil } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** Will give +1 level every 10 waves */

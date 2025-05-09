@@ -6,8 +6,6 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedShuffle } from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
@@ -30,6 +28,8 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

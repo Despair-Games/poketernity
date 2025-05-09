@@ -1,7 +1,7 @@
 import { allTimedEvents } from "#app/data/all-timed-events";
-import { isNil } from "#app/utils/common-utils";
 import { EventModifierType } from "#enums/event-modifier-type";
 import type { EventBanner, TimedEvent } from "#types/TimedEvent";
+import { isNil } from "#utils/common-utils";
 
 function isActive(event: TimedEvent) {
   return event.startDate < new Date() && new Date() < event.endDate;

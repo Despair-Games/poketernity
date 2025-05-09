@@ -6,8 +6,6 @@ import { globalScene } from "#app/global-scene";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { isNil } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
@@ -36,6 +34,8 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { MoveRequirement, PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { CHARMING_MOVES } from "#mystery-encounters/requirement-groups";
 import PokemonData from "#system/pokemon-data";
+import { isNil } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/uncommonBreed";

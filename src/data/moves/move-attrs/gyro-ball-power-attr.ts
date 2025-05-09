@@ -1,8 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { Stat } from "#enums/stat";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Gyro_Ball_(move) | Gyro Ball's} power modifier.

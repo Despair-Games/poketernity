@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * This attribute will block any status damage that you put in the parameter.

@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
 

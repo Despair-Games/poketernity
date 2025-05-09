@@ -24,7 +24,6 @@ import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { isNil } from "#app/utils/common-utils";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
@@ -38,6 +37,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

@@ -1,9 +1,9 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

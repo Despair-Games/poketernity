@@ -1,8 +1,8 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Sets incoming moves additional effect chance to zero, ignoring all effects from moves. ie. Shield Dust.

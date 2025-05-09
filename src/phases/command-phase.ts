@@ -7,8 +7,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
-import { isNil } from "#app/utils/common-utils";
-import { isFieldTargeted } from "#app/utils/move-utils";
 import type { EncoreTag } from "#battler-tags/encore-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
@@ -30,6 +28,8 @@ import type { FightCommand } from "#types/FightCommand";
 import type { TurnMove } from "#types/TurnMove";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
+import { isNil } from "#utils/common-utils";
+import { isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 /**

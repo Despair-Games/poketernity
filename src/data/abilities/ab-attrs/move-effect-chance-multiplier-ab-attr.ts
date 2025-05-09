@@ -1,9 +1,9 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Modifies moves additional effects with multipliers, ie. Sheer Force, Serene Grace.

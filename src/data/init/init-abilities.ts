@@ -181,9 +181,6 @@ import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getWeatherCondition, normalTypeMoveConversionCondition } from "#app/utils/ability-utils";
-import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -200,6 +197,9 @@ import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { AbAttrCondition } from "#types/AbAttrCondition";
+import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
+import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 
 // prettier-ignore

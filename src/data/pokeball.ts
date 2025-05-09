@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils/common-utils";
 import { PokeballType } from "#enums/pokeball-type";
+import { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 export const MAX_PER_TYPE_POKEBALLS: number = 99;

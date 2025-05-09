@@ -3,7 +3,6 @@ import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
@@ -15,6 +14,7 @@ import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr"
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 import { StatusEffectAttr } from "#moves/status-effect-attr";
+import { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary

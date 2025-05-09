@@ -11,10 +11,6 @@ import type { PersistentModifier } from "#app/modifier/modifier";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { coerceArray } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randItem, randSeedItem } from "#app/utils/random-utils";
-import { toReadableString } from "#app/utils/string-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -25,6 +21,10 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
+import { coerceArray } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randItem, randSeedItem } from "#utils/random-utils";
+import { toReadableString } from "#utils/string-utils";
 import i18next from "i18next";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */

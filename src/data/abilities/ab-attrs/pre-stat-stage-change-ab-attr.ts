@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import type { BattleStat } from "#enums/stat";
+import type { BooleanHolder } from "#utils/common-utils";
 
 export abstract class PreStatStageChangeAbAttr extends AbAttr {
   /**

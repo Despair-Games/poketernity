@@ -6,10 +6,10 @@ import type { BattleAnim } from "#animations/battle-anims";
 
 import type BattleScene from "#app/battle-scene";
 import type { Variant } from "#app/data/variant";
-import { getFrameMs, type BooleanHolder } from "#app/utils/common-utils";
-import { randGauss, randInt } from "#app/utils/random-utils";
 import { PokeballType } from "#enums/pokeball-type";
 import { settings } from "#system/settings-manager";
+import { getFrameMs, type BooleanHolder } from "#utils/common-utils";
+import { randGauss, randInt } from "#utils/random-utils";
 
 /**
  * Class for handling general animations such as particle effects.

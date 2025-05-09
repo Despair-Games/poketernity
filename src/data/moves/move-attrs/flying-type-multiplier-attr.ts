@@ -1,8 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to add Flying-type effectiveness to the current attack in addition

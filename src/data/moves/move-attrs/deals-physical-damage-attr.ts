@@ -1,8 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { Stat } from "#enums/stat";
 import type { Move } from "#moves/move";
 import { VariableDefAttr } from "#moves/variable-def-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute for Special attacks that deal physical damage,

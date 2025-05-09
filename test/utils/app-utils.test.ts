@@ -1,4 +1,4 @@
-import { isLandscapeMode } from "#app/utils/app-utils";
+import { isLandscapeMode } from "#utils/app-utils";
 import Phaser from "phaser";
 import { describe, expect, it } from "vitest";
 

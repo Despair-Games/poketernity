@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to scale move power inversely with its remaining PP.

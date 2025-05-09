@@ -1,8 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 import type { UserMoveConditionFunc } from "#types/UserMoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Attribute that allows charge moves to resolve in 1 turn under a set condition.

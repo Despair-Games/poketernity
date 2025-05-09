@@ -1,10 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { getFrameMs } from "#app/utils/common-utils";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
+import { getFrameMs } from "#utils/common-utils";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Semi-invulnerable_turn | Semi-invulnerable} state

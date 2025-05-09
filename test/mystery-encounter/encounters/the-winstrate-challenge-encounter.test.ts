@@ -4,7 +4,6 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -23,6 +22,7 @@ import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/theWinstrateChallenge";

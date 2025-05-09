@@ -9,8 +9,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { isBetween, isNil, toDmgValue } from "#app/utils/common-utils";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import type { EncoreTag } from "#battler-tags/encore-tag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
@@ -32,6 +30,8 @@ import { getMoveTargets } from "#moves/move";
 import type PokemonData from "#system/pokemon-data";
 import type { TurnMove } from "#types/TurnMove";
 import { EnemyBattleInfo } from "#ui/battle-info";
+import { isBetween, isNil, toDmgValue } from "#utils/common-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;

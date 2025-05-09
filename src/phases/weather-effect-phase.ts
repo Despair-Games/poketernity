@@ -9,13 +9,13 @@ import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
+import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Applies the end-of-turn effects from active {@linkcode Weather}, including

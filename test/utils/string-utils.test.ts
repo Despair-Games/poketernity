@@ -1,4 +1,4 @@
-import { leftPad } from "#app/utils/string-utils";
+import { leftPad } from "#utils/string-utils";
 import { describe, expect, it } from "vitest";
 
 describe("Utils - String Utils", () => {

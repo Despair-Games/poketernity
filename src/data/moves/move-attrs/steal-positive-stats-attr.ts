@@ -3,12 +3,12 @@ import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-chan
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { BATTLE_STATS } from "#enums/stat";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

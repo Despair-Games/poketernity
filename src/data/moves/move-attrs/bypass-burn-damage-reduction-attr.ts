@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for moves that bypass the burn damage reduction of physical moves when calculating damage.

@@ -21,8 +21,6 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TerastallizationPhase } from "#app/phases/terastallization-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { WeatherEffectPhase } from "#app/phases/weather-effect-phase";
-import { BooleanHolder, isNil } from "#app/utils/common-utils";
-import { randSeedShuffle } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -35,6 +33,8 @@ import { SwitchType } from "#enums/switch-type";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
 import type { TurnCommandFilter } from "#types/TurnCommandFilter";
 import type { TurnMove } from "#types/TurnMove";
+import { BooleanHolder, isNil } from "#utils/common-utils";
+import { randSeedShuffle } from "#utils/random-utils";
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.

@@ -1,8 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Increases the power of Tera Blast to 100 if the user is Terastallized into Stellar type

@@ -6,7 +6,6 @@ import { getVariantTint } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils/common-utils";
 import { ElementalType } from "#enums/elemental-type";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { Gender } from "#enums/gender";
@@ -18,6 +17,7 @@ import { settings } from "#system/settings-manager";
 import { BattleFlyout } from "#ui/battle-flyout";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {

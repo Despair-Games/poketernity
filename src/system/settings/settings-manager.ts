@@ -1,8 +1,8 @@
 import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
-import { isNil } from "#app/utils/common-utils";
 import { defaultSettings } from "#system/default-settings";
 import type { Settings, SettingsCategory, UserFacingSettings } from "#types/Settings";
+import { isNil } from "#utils/common-utils";
 import { version } from "../../../package.json";
 
 //#region Types

@@ -1,5 +1,4 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { toDmgValue } from "#app/utils/common-utils";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { DamageProtectedTag } from "#battler-tags/damage-protected-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -8,6 +7,7 @@ import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";
+import { toDmgValue } from "#utils/common-utils";
 
 /**
  * Tag used to block damaging moves and damage the attacker if the move makes contact.

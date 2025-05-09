@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

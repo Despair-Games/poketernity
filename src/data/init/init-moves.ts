@@ -4,8 +4,6 @@ import { allMoves } from "#app/data/data-lists";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { isNil } from "#app/utils/common-utils";
-import { crashDamageFunc } from "#app/utils/move-utils";
 import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { AbilityId } from "#enums/ability-id";
@@ -251,6 +249,8 @@ import { WeatherBallTypeAttr } from "#moves/weather-ball-type-attr";
 import { WeatherChangeAttr } from "#moves/weather-change-attr";
 import { WeatherInstantChargeAttr } from "#moves/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#moves/weight-power-attr";
+import { isNil } from "#utils/common-utils";
+import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 
 // prettier-ignore

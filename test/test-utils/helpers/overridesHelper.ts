@@ -10,8 +10,6 @@ import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
-import { coerceArray } from "#app/utils/common-utils";
-import { shiftCharCodes } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -25,6 +23,8 @@ import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import type { TimedEvent } from "#types/TimedEvent";
+import { coerceArray } from "#utils/common-utils";
+import { shiftCharCodes } from "#utils/string-utils";
 import { expect, vi } from "vitest";
 
 /**

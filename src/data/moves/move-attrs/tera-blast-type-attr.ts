@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Changes the type of Tera Blast to match the user's tera type

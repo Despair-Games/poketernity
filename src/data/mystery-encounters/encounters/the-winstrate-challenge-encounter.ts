@@ -7,7 +7,6 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -35,6 +34,7 @@ import {
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

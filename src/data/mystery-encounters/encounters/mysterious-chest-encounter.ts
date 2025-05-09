@@ -1,7 +1,5 @@
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { globalScene } from "#app/global-scene";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedInt } from "#app/utils/random-utils";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -20,6 +18,8 @@ import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/enco
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/mysteriousChest";

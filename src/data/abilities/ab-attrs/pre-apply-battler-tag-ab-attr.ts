@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import type { BattlerTag } from "#battler-tags/battler-tag";
+import type { BooleanHolder } from "#utils/common-utils";
 
 export abstract class PreApplyBattlerTagAbAttr extends AbAttr {
   /**

@@ -5,7 +5,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
@@ -19,6 +18,7 @@ import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 import type { MessageUiHandler } from "#ui/message-ui-handler";
 import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {

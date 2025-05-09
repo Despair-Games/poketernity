@@ -12,13 +12,13 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { Arena } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";
 import { GameModes } from "#enums/game-modes";
 import { SpeciesId } from "#enums/species-id";
+import { applyChallenges } from "#utils/challenge-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface GameModeConfig {

@@ -1,8 +1,8 @@
 import { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { getPokemonWithWeatherBasedForms } from "#app/utils/ability-utils";
 import type { Move } from "#moves/move";
+import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
 
 /**
  * Used for weather suppressing abilities to trigger weather-based form changes upon being fainted.

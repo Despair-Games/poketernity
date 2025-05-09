@@ -14,7 +14,6 @@ import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
 import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { PhaseId } from "#enums/phase-id";
@@ -30,6 +29,7 @@ import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { SessionSaveData } from "#types/SessionData";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /**

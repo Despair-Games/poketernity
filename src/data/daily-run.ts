@@ -4,10 +4,10 @@ import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { speciesStarterCosts } from "#app/data/starters";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
-import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import type { SpeciesId } from "#enums/species-id";
 import type { StarterConfig } from "#types/StarterConfig";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { randSeedGauss, randSeedInt, randSeedItem } from "#utils/random-utils";
 
 export interface DailyRunConfig {
   seed: number;

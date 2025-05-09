@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify move damage to a fixed value.

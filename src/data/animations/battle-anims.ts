@@ -1,7 +1,6 @@
 import type { AnimFrame, LegacyAnimConfig } from "#animations/anim-config";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { getEnumValues, getFrameMs, isNil } from "#app/utils/common-utils";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
@@ -9,6 +8,7 @@ import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { settings } from "#system/settings-manager";
 import type { nil } from "#types/nil";
+import { getEnumValues, getFrameMs, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 interface GraphicFrameData {

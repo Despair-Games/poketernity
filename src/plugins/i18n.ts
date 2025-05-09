@@ -1,6 +1,6 @@
 import { LOCALE_LS_KEY } from "#app/constants/app-constants";
-import { camelCaseToKebabCase } from "#app/utils/string-utils";
 import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#system/supported-languages";
+import { camelCaseToKebabCase } from "#utils/string-utils";
 import i18next from "i18next";
 import pkg from "../../package.json";
 

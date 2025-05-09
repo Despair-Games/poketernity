@@ -34,8 +34,6 @@ import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { handleTutorial } from "#app/tutorial";
-import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -55,6 +53,8 @@ import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils"
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
+import { loadEncounterAnimAssets } from "#utils/anim-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**

@@ -12,8 +12,6 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
@@ -23,6 +21,8 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export default class Trainer extends Phaser.GameObjects.Container {

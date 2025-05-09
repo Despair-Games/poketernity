@@ -34,9 +34,6 @@ import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phas
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
-import { coerceArray, isNil } from "#app/utils/common-utils";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { randomString, randSeedInt } from "#app/utils/random-utils";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -69,6 +66,9 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
+import { coerceArray, isNil } from "#utils/common-utils";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
+import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**

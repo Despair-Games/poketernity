@@ -3,10 +3,10 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
-import { isNil } from "#app/utils/common-utils";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
+import { isNil } from "#utils/common-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given

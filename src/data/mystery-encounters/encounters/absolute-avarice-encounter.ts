@@ -7,8 +7,6 @@ import { type BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt } from "#app/utils/random-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";
@@ -39,6 +37,8 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

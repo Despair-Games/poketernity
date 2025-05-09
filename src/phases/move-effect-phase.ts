@@ -15,8 +15,6 @@ import {
   HitHealModifier,
 } from "#app/modifier/modifier";
 import { HitCheckPhase } from "#app/phases/hit-check-phase";
-import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
-import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -46,6 +44,8 @@ import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import type { AttackMoveResult } from "#types/AttackMoveResult";
 import type { DamageResult } from "#types/DamageResult";
 import type { TurnMove } from "#types/TurnMove";
+import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {

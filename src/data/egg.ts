@@ -30,12 +30,12 @@ import { speciesStarterCosts } from "#app/data/starters";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randomString, randSeedInt } from "#app/utils/random-utils";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
+import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt, randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 export const EGG_SEED = 1073741824;

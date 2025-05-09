@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { toDmgValue } from "#app/utils/common-utils";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
+import { toDmgValue } from "#utils/common-utils";
 
 /**
  * Attribute to set move damage randomly between 0.5x and 1.5x the user's level.

@@ -101,20 +101,6 @@ import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { timedEventManager } from "#app/timed-event-manager";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import {
-  BooleanHolder,
-  NumberHolder,
-  coerceArray,
-  fixedNumber,
-  getEnumValues,
-  isNil,
-  toDmgValue,
-} from "#app/utils/common-utils";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
-import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
-import { randSeedInt } from "#app/utils/random-utils";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -206,6 +192,20 @@ import type { PokemonWaveData } from "#types/PokemonWaveData";
 import type { Status } from "#types/Status";
 import type { TurnMove } from "#types/TurnMove";
 import type { BattleInfo } from "#ui/battle-info";
+import { applyChallenges } from "#utils/challenge-utils";
+import {
+  BooleanHolder,
+  NumberHolder,
+  coerceArray,
+  fixedNumber,
+  getEnumValues,
+  isNil,
+  toDmgValue,
+} from "#utils/common-utils";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
+import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface AbilityData {

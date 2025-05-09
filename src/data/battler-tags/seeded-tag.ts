@@ -4,7 +4,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -12,6 +11,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

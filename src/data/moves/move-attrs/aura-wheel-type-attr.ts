@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils/common-utils";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
+import { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change the move's type to Dark when used by Morpeko in Hangry Mode form.

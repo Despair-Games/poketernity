@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { isNil } from "#app/utils/common-utils";
 import type { WeatherType } from "#enums/weather-type";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
+import { isNil } from "#utils/common-utils";
 
 /**
  * Attribute that allows charge moves to resolve in 1 turn while specific {@linkcode WeatherType | Weather}

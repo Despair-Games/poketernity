@@ -8,7 +8,6 @@ import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { speciesStarterCosts } from "#app/data/starters";
 import { type Variant, variantData, type VariantSet } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { PokemonRegion } from "#enums/pokemon-regions";
@@ -16,6 +15,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
 import type { StarterMoveset } from "#types/StarterData";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 
 //#region Types

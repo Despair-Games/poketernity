@@ -8,13 +8,13 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
 import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
-import { fixedNumber, getFrameMs } from "#app/utils/common-utils";
-import { randInt } from "#app/utils/random-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { EggCounterContainer } from "#ui/egg-counter-container";
 import type { EggHatchSceneUiHandler } from "#ui/egg-hatch-scene-ui-handler";
 import { PokemonInfoContainer } from "#ui/pokemon-info-container";
+import { fixedNumber, getFrameMs } from "#utils/common-utils";
+import { randInt } from "#utils/random-utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 

@@ -1,9 +1,9 @@
 import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { toTitleCase } from "#app/utils/string-utils";
 import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
 import { addTextObject } from "#ui/text-utils";
+import { toTitleCase } from "#utils/string-utils";
 import i18next from "i18next";
 
 const hiddenX = -150;

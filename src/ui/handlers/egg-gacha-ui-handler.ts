@@ -4,9 +4,6 @@ import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
-import { fixedNumber, getEnumKeys, getEnumValues } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedShuffle } from "#app/utils/random-utils";
 import { Button } from "#enums/buttons";
 import { EggTier } from "#enums/egg-type";
 import { GachaType } from "#enums/gacha-types";
@@ -19,6 +16,9 @@ import { getVoucherTypeIcon } from "#system/voucher";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { fixedNumber, getEnumKeys, getEnumValues } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**

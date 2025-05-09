@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to set a move's type effectiveness to 1 against

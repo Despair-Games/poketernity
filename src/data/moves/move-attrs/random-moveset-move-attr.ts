@@ -1,12 +1,12 @@
 import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveId } from "#enums/move-id";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
+import { getMaxMoveList } from "#utils/move-utils";
 
 /**
  * Attribute used to call a random move in the user or party's moveset.

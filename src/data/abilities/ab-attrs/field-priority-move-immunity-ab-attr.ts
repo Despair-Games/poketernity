@@ -1,9 +1,9 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveTarget } from "#enums/move-target";
 import type { Move } from "#moves/move";
+import type { BooleanHolder } from "#utils/common-utils";
 
 export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

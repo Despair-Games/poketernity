@@ -2,8 +2,6 @@ import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder } from "#app/utils/common-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
 import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -12,6 +10,8 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { HealOnAllyAttr } from "#moves/heal-on-ally-attr";
 import { StatusCategoryOnAllyAttr } from "#moves/status-category-on-ally-attr";
+import { NumberHolder } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 
 /**

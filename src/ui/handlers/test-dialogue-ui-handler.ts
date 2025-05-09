@@ -1,9 +1,9 @@
-import { isNil } from "#app/utils/common-utils";
 import { UiMode } from "#enums/ui-mode";
 import type { AutoCompleteUiHandler } from "#ui/autocomplete-ui-handler";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
 import type { InputFieldConfig, ModalConfig } from "#ui/modal-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class TestDialogueUiHandler extends FormModalUiHandler {

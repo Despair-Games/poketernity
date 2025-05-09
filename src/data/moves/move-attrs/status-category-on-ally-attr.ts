@@ -1,8 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { MoveCategory } from "#enums/move-category";
 import type { Move } from "#moves/move";
 import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Change the move category to status when used on the user's ally.

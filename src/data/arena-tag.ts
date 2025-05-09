@@ -14,7 +14,6 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -32,6 +31,7 @@ import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 export abstract class ArenaTag {

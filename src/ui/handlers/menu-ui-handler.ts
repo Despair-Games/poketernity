@@ -5,8 +5,6 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { handleTutorial } from "#app/tutorial";
-import { getCookie } from "#app/utils/app-utils";
-import { fixedNumber, getEnumKeys } from "#app/utils/common-utils";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
@@ -32,6 +30,8 @@ import type { RunHistoryUiHandler } from "#ui/run-history-ui-handler";
 import type { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { getCookie } from "#utils/app-utils";
+import { fixedNumber, getEnumKeys } from "#utils/common-utils";
 import i18next from "i18next";
 
 enum MenuOptions {

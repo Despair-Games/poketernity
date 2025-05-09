@@ -5,7 +5,6 @@ import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 // -- end tsdoc imports --
 
 import { GAME_SPEEDS } from "#app/constants/app-constants";
-import { getEnumLength } from "#app/utils/common-utils";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
@@ -26,6 +25,7 @@ import type {
   SettingsUiItem,
   SettingUiItemOption,
 } from "#types/Settings";
+import { getEnumLength } from "#utils/common-utils";
 import i18next, { t } from "i18next";
 
 //#region Types

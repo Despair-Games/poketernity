@@ -4,7 +4,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerastallizeAccessModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
-import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
@@ -17,6 +16,7 @@ import type { FightUiHandler } from "#ui/fight-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
+import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 import i18next from "i18next";
 
 export class CommandUiHandler extends UiHandler {

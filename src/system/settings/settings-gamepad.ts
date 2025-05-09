@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { truncateString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";
@@ -8,6 +7,7 @@ import { settings } from "#system/settings-manager";
 import type { GamepadBindingUiHandler } from "#ui/gamepad-binding-ui-handler";
 import type { GamepadSettingsUiHandler } from "#ui/gamepad-settings-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { truncateString } from "#utils/string-utils";
 
 const pressAction = "Press action to assign"; // TODO localize
 

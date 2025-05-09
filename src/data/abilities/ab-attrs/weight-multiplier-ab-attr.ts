@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute used for abilites that change the ability owner's weight

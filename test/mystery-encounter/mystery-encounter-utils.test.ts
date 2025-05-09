@@ -1,7 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { speciesStarterCosts } from "#app/data/starters";
 import { MessagePhase } from "#app/phases/message-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
 import {
@@ -20,6 +19,7 @@ import {
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

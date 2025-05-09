@@ -1,8 +1,8 @@
 import { Phase } from "#app/phase";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import type { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { initMoveAnim } from "#init/init-move-anim";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 
 /**
  * Phase for synchronous move animation loading.

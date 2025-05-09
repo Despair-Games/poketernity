@@ -8,8 +8,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BerryType } from "#enums/berry-type";
@@ -48,6 +46,8 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";

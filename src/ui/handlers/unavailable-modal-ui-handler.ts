@@ -1,12 +1,12 @@
 import { updateUserInfo } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
-import { removeCookie } from "#app/utils/app-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import type { ModalConfig } from "#ui/modal-config";
 import { ModalUiHandler } from "#ui/modal-ui-handler";
 import { addTextObject } from "#ui/text-utils";
+import { removeCookie } from "#utils/app-utils";
 import i18next from "i18next";
 
 export class UnavailableModalUiHandler extends ModalUiHandler {

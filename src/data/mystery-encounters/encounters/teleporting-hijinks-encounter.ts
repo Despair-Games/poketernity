@@ -8,7 +8,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { randSeedInt } from "#app/utils/random-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BiomeId } from "#enums/biome-id";
 import { ElementalType } from "#enums/elemental-type";
@@ -36,6 +35,7 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement, WaveModulusRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import PokemonData from "#system/pokemon-data";
+import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/teleportingHijinks";

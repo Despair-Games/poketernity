@@ -48,12 +48,6 @@ import {
 import { modifierPool } from "#app/modifier/modifier-pools";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
-import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
-import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
-import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
-import { getModifierType } from "#app/utils/modifier-type-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { formatMoney, leftPad } from "#app/utils/string-utils";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -75,6 +69,12 @@ import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
 import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import { getModifierTierTextTint } from "#ui/text-utils";
+import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
+import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { getModifierPoolForType } from "#utils/modifier-pool-utils";
+import { getModifierType } from "#utils/modifier-type-utils";
+import { randSeedInt } from "#utils/random-utils";
+import { formatMoney, leftPad } from "#utils/string-utils";
 import i18next from "i18next";
 
 const outputModifierData = false;

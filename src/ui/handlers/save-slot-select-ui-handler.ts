@@ -2,8 +2,6 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
-import { fixedNumber, isNil } from "#app/utils/common-utils";
-import { getPlayTimeString, getPokemonLevelText } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
@@ -17,6 +15,8 @@ import { MessageUiHandler } from "#ui/message-ui-handler";
 import type { RunInfoUiHandler } from "#ui/run-info-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { fixedNumber, isNil } from "#utils/common-utils";
+import { getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
 const SESSION_SLOTS_COUNT = 5;

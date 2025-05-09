@@ -1,11 +1,11 @@
 import { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { getWeatherCondition } from "#app/utils/ability-utils";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { WeatherType } from "#enums/weather-type";
 import type { Move } from "#moves/move";
+import { getWeatherCondition } from "#utils/ability-utils";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that doubles speed if specific weather(s) are active

@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { BooleanHolder } from "#utils/common-utils";
 
 export class BypassBurnDamageReductionAbAttr extends AbAttr {
   constructor() {

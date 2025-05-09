@@ -3,7 +3,6 @@ import type BattleScene from "#app/battle-scene";
 import { getDailyRunStarters } from "#app/data/daily-run";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { getGameMode } from "#app/game-mode";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
@@ -11,6 +10,7 @@ import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
 import type { StarterConfig } from "#types/StarterConfig";
 import type { StarterMoveset } from "#types/StarterData";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 /** Function to convert Blob to string */
 export function blobToString(blob) {

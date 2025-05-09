@@ -6,10 +6,10 @@ import type { AbilityId } from "#enums/ability-id";
 
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Increases the STAB multiplier by `+0.5` if the move type is the same as one of the pokemon's types.

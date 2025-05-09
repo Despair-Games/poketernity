@@ -17,8 +17,6 @@ import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
-import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { CenterOfAttentionTag } from "#battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
@@ -45,6 +43,8 @@ import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
 import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
+import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 /**

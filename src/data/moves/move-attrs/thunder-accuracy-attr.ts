@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { WeatherType } from "#enums/weather-type";
 import type { Move } from "#moves/move";
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for Thunder and Hurricane that sets accuracy to 50 in sun and never miss in rain

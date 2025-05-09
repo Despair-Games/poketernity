@@ -15,8 +15,6 @@ import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
-import { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { MeFirstPowerBoostTag } from "#battler-tags/me-first-power-boost-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -54,6 +52,8 @@ import type { Constructor } from "#types/Constructor";
 import type { Localizable } from "#types/locales";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import type { nil } from "#types/nil";
+import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 
 export abstract class Move implements Localizable {

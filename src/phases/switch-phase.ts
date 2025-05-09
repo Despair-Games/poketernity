@@ -2,13 +2,13 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 
 /**
  * Opens the party selector UI and transitions into a {@linkcode SwitchSummonPhase}

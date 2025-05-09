@@ -8,7 +8,6 @@ import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import "#app/phaser-extensions";
-import { setCookie } from "#app/utils/app-utils";
 import { initAbilities } from "#init/init-abilities";
 import { initBiomes } from "#init/init-biomes";
 import { initMoves } from "#init/init-moves";
@@ -22,6 +21,7 @@ import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { mockContext } from "#test/test-utils/mocks/mockContext";
 import { mockLocalStorage } from "#test/test-utils/mocks/mockLocalStorage";
 import { MockImage } from "#test/test-utils/mocks/mocksContainer/mockImage";
+import { setCookie } from "#utils/app-utils";
 import Phaser from "phaser";
 
 /**

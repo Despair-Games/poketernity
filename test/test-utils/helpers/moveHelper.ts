@@ -6,7 +6,6 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
-import { coerceArray } from "#app/utils/common-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
@@ -17,6 +16,7 @@ import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
+import { coerceArray } from "#utils/common-utils";
 import { vi } from "vitest";
 
 /**

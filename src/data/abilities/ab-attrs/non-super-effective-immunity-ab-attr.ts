@@ -1,9 +1,9 @@
 import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import type { Move } from "#moves/move";
 import type { AbAttrCondition } from "#types/AbAttrCondition";
+import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

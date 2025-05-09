@@ -1,4 +1,4 @@
-import { randomString } from "#app/utils/random-utils";
+import { randomString } from "#utils/random-utils";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import Phaser from "phaser";

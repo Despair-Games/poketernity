@@ -1,9 +1,6 @@
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { hasTouchscreen } from "#app/utils/app-utils";
-import { isNil } from "#app/utils/common-utils";
-import { capitalizeFirstLetter } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -17,6 +14,9 @@ import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { hasTouchscreen } from "#utils/app-utils";
+import { isNil } from "#utils/common-utils";
+import { capitalizeFirstLetter } from "#utils/string-utils";
 import i18next from "i18next";
 
 /**

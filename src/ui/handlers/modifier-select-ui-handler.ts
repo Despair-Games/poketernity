@@ -7,8 +7,6 @@ import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
-import { isNil, NumberHolder } from "#app/utils/common-utils";
-import { formatMoney } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
 import { PokeballType } from "#enums/pokeball-type";
@@ -20,6 +18,8 @@ import { settings } from "#system/settings-manager";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { addTextObject, getModifierTierTextTint, setTextColor } from "#ui/text-utils";
+import { isNil, NumberHolder } from "#utils/common-utils";
+import { formatMoney } from "#utils/string-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
 

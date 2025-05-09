@@ -3,11 +3,11 @@ import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr, type MoveEffectAttrOptions } from "#moves/move-effect-attr";
+import { NumberHolder } from "#utils/common-utils";
 
 export interface ChanceBasedMoveEffectAttrOptions extends MoveEffectAttrOptions {
   /** Overrides the secondary effect chance for this attr if set. */

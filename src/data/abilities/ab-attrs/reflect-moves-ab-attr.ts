@@ -5,9 +5,9 @@ import type { MovePhase } from "#app/phases/move-phase";
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Move } from "#moves/move";
+import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

@@ -13,9 +13,6 @@ import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
-import { NumberHolder, isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
-import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { Challenges } from "#enums/challenges";
 import type { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -48,6 +45,9 @@ import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import { NumberHolder, isNil } from "#utils/common-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
+import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";

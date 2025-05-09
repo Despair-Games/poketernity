@@ -4,9 +4,6 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { coerceArray, isNil } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { capitalizeFirstLetter } from "#app/utils/string-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { Challenges } from "#enums/challenges";
 import type { EncounterAnim } from "#enums/encounter-anims";
@@ -30,6 +27,9 @@ import {
   StatusEffectRequirement,
   WaveRangeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
+import { coerceArray, isNil } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
+import { capitalizeFirstLetter } from "#utils/string-utils";
 
 export interface EncounterStartOfBattleEffect {
   sourcePokemon?: Pokemon;

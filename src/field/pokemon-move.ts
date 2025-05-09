@@ -1,8 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
-import { toDmgValue } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";
+import { toDmgValue } from "#utils/common-utils";
 
 /**
  * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.

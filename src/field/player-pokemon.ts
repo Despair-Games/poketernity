@@ -22,9 +22,6 @@ import {
 import Overrides from "#app/overrides";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { timedEventManager } from "#app/timed-event-manager";
-import { NumberHolder, isNil } from "#app/utils/common-utils";
-import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";
@@ -43,6 +40,9 @@ import type PokemonData from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/StarterData";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { NumberHolder, isNil } from "#utils/common-utils";
+import { PartyFilterNonFainted } from "#utils/party-ui-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: MoveId[];

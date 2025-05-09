@@ -3,12 +3,12 @@ import { chargeAnims } from "#animations/charge-anims";
 import { moveAnims } from "#animations/move-anims";
 import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
-import { animationFileName } from "#app/utils/string-utils";
 import { MoveId } from "#enums/move-id";
 import { initMoveChargeAnim } from "#init/init-move-charge-anim";
 import { BeakBlastHeaderAttr } from "#moves/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
 import type { ChargingMove } from "#moves/move";
+import { animationFileName } from "#utils/string-utils";
 
 //#region Exports
 

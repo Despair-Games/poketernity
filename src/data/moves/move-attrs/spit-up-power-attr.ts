@@ -1,9 +1,9 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used to calculate the power of attacks that scale with Stockpile stacks (i.e. Spit Up).

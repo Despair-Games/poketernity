@@ -1,11 +1,11 @@
 import { AbilityId } from "#enums/ability-id";
-import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
+import { toDmgValue } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { toDmgValue } from "#app/utils/common-utils";
 
 describe("Weather - Sandstorm", () => {
   let phaserGame: Phaser.Game;

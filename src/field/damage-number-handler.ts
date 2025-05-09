@@ -1,8 +1,6 @@
 import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { fixedNumber } from "#app/utils/common-utils";
-import { formatStat } from "#app/utils/string-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
@@ -11,6 +9,8 @@ import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
 import type { DamageResult } from "#types/DamageResult";
 import { addTextObject } from "#ui/text-utils";
+import { fixedNumber } from "#utils/common-utils";
+import { formatStat } from "#utils/string-utils";
 
 type TextAndShadowArr = [string | null, string | null];
 

@@ -6,14 +6,14 @@ import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getBerryName } from "#app/utils/berry-utils";
-import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { HitResult } from "#enums/hit-result";
 import { Stat, type BattleStat } from "#enums/stat";
+import { getBerryName } from "#utils/berry-utils";
+import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 export type BerryPredicate = (pokemon: Pokemon) => boolean;
