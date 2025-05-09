@@ -2,6 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
+import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
@@ -17,7 +18,10 @@ import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
 import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
-import { vi } from "vitest";
+import chalk from "chalk";
+import { expect, vi } from "vitest";
+
+chalk.level = 3; // support chalk in vitest
 
 /**
  * Helper to handle a Pokemon's move
@@ -29,8 +33,13 @@ export class MoveHelper extends GameManagerHelper {
    */
   public async forceHit(): Promise<void> {
     await this.game.phaseInterceptor.to("MoveEffectPhase", false);
-    const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
-    vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy").mockReturnValue(-1);
+    const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase<MoveEffectPhase>();
+    expect(moveEffectPhase).toBeDefined();
+    const move = moveEffectPhase!.move.getMove();
+    vi.spyOn(move, "calculateBattleAccuracy").mockImplementation((_user, target, _simulated) => {
+      console.log(chalk.gray(`- Forcing hit on ${getPokemonNameWithAffix(target)}'s ${move.name}! - `));
+      return -1;
+    });
   }
 
   /**
