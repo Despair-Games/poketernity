@@ -9,7 +9,6 @@ import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import TouchControl from "#app/touch-controls";
-import { MoveTouchControlsHandler } from "#app/ui/settings/move-touch-controls-handler";
 import { deepCopy, getEnumValues } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
@@ -17,6 +16,7 @@ import type { SettingGamepad } from "#enums/setting-gamepad";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import Phaser from "phaser";
 
 export interface DeviceMapping {

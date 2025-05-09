@@ -2,8 +2,6 @@ import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type { InputsIcons } from "#app/ui/settings/controls-settings-ui-handler";
-import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { hasTouchscreen } from "#app/utils/app-utils";
@@ -15,7 +13,9 @@ import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import type { InputsIcons } from "#ui/controls-settings-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";
+import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
 import i18next from "i18next";
 

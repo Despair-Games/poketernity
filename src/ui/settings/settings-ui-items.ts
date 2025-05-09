@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
+import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 

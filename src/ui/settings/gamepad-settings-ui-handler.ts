@@ -5,7 +5,6 @@ import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { truncateString } from "#app/utils/string-utils";
 import { Device } from "#enums/devices";
@@ -18,6 +17,7 @@ import {
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "#system/settings-gamepad";
+import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import i18next from "i18next";
 
 /**

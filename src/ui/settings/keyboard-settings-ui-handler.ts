@@ -3,8 +3,6 @@ import { deleteBind } from "#app/configs/inputs/configHandler";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
-import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { truncateString } from "#app/utils/string-utils";
 import { Device } from "#enums/devices";
@@ -17,6 +15,8 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#system/settings-keyboard";
+import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
+import { NavigationManager } from "#ui/navigation-menu";
 import i18next from "i18next";
 
 /**
