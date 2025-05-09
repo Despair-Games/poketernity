@@ -7,6 +7,7 @@ import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getTypeRgb } from "#app/data/type";
 import { getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#app/modifier/modifier";
 import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
 import type PokemonData from "#app/system/pokemon-data";

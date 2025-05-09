@@ -9,8 +9,8 @@ import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handl
 import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
 import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
 import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
-import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
 import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
+import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
 import { settingsUiModes } from "#app/ui/ui";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
@@ -177,6 +177,7 @@ export class UiInputs {
       return;
     }
     switch (globalScene.ui?.getMode()) {
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
       case UiMode.MESSAGE: {
         const messageHandler = globalScene.ui.getCurrentHandler<MessageUiHandler>();
         if (!messageHandler.pendingPrompt || messageHandler.isTextAnimationInProgress()) {

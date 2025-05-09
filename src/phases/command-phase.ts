@@ -1,5 +1,6 @@
 import type { FightCommand } from "#app/@types/FightCommand";
 import type { TurnMove } from "#app/@types/TurnMove";
+import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { FairyLockTag } from "#app/data/arena-tag";
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
@@ -14,7 +15,6 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { isNil } from "#app/utils/common-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { AbilityId } from "#enums/ability-id";
@@ -152,6 +152,7 @@ export class CommandPhase extends FieldPhase {
    */
   public handleCommand(command: BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
+    // TODO: refactor this function
     const pokemon = this.getPokemon();
     let success: boolean = false;
 
@@ -309,6 +310,7 @@ export class CommandPhase extends FieldPhase {
         }
         break;
       }
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
       case BattleCommand.RUN:
         if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");

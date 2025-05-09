@@ -224,6 +224,7 @@ export class MoveEffectPhase extends HitCheckPhase {
             this.applyMoveEffects(target, effectiveness, firstTarget);
             firstTarget = false;
             break;
+          // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
           case HitCheckResult.NO_EFFECT:
             if (move.id === MoveId.SHEER_COLD) {
               globalScene.phaseManager.queueMessagePhase(

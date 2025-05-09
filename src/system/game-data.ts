@@ -5,12 +5,12 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import {
   APP_ABBREVIATION,
+  BYPASS_LOGIN,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
-  BYPASS_LOGIN,
 } from "#app/constants/app-constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { allMoves, allSpecies } from "#app/data/data-lists";
@@ -36,6 +36,7 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";

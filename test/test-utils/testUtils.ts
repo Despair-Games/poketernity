@@ -1,8 +1,8 @@
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants/app-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameManager } from "#test/test-utils/gameManager";
-import fs from "node:fs";
 import i18next, { type ParseKeys } from "i18next";
+import fs from "node:fs";
 import path from "node:path";
 import { vi } from "vitest";
 
@@ -70,6 +70,7 @@ export function receivedStr(received: unknown, expectedType: TypeOfResult = "obj
   if (received === undefined) {
     return "undefined";
   }
+  // biome-ignore lint/suspicious/useValidTypeof: `expectedType` is a string
   if (typeof received !== expectedType) {
     return typeof received;
   }

@@ -2,6 +2,7 @@ import type { SessionSaveData } from "#app/@types/SessionData";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#app/modifier/modifier";
 import type PokemonData from "#app/system/pokemon-data";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
