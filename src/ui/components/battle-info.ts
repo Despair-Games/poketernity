@@ -6,7 +6,6 @@ import { getVariantTint } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import { BattleFlyout } from "#app/ui/components/battle-flyout";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -18,6 +17,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {

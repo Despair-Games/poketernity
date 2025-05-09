@@ -6,7 +6,6 @@ import { HealShopCostModifier, LockModifierTiersModifier } from "#app/modifier/m
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
-import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { AwaitableUiHandler } from "#app/ui/handlers/awaitable-ui-handler";
@@ -20,6 +19,7 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 import Phaser from "phaser";
 

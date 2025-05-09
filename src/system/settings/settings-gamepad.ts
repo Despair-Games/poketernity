@@ -7,7 +7,7 @@ import { Button } from "#enums/buttons";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
-import { settings } from "#app/system/settings/settings-manager";
+import { settings } from "#system/settings-manager";
 
 const pressAction = "Press action to assign"; // TODO localize
 

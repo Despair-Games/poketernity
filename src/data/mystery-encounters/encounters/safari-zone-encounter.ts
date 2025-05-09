@@ -6,7 +6,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { NumberHolder } from "#app/utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { randSeedInt } from "#app/utils/random-utils";
@@ -36,6 +35,7 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import { settings } from "#system/settings-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";

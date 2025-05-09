@@ -3,7 +3,6 @@ import { getEggTierForSpecies } from "#app/data/egg";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { HatchedPokemonContainer } from "#app/ui/components/hatched-pokemon-container";
 import { PokemonHatchInfoContainer } from "#app/ui/components/pokemon-hatch-info-container";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
@@ -14,6 +13,7 @@ import { Button } from "#enums/buttons";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
 
 const iconContainerX = 112;
 const iconContainerY = 9;

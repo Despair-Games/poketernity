@@ -3,12 +3,6 @@ import { deleteBind } from "#app/configs/inputs/configHandler";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import {
-  setSettingKeyboard,
-  settingKeyboardBlackList,
-  settingKeyboardDefaults,
-  settingKeyboardOptions,
-} from "#app/system/settings/settings-keyboard";
 import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject } from "#app/ui/text/text-utils";
@@ -17,6 +11,12 @@ import { Device } from "#enums/devices";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import {
+  setSettingKeyboard,
+  settingKeyboardBlackList,
+  settingKeyboardDefaults,
+  settingKeyboardOptions,
+} from "#system/settings-keyboard";
 import i18next from "i18next";
 
 /**

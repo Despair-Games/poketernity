@@ -46,7 +46,6 @@ import EggData from "#app/system/egg-data";
 import { GameStats } from "#app/system/game-stats";
 import PersistentModifierData from "#app/system/modifier-data";
 import PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import {
   applySessionVersionMigration,
@@ -77,6 +76,7 @@ import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
+import { settings } from "#system/settings-manager";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 

@@ -10,8 +10,6 @@ import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
 import type PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -37,6 +35,8 @@ import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
+import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 

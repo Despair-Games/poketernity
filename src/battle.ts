@@ -30,7 +30,6 @@ import { globalScene } from "#app/global-scene";
 import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
-import { settings } from "#app/system/settings/settings-manager";
 import { TurnCommandManager } from "#app/turn-command-manager";
 import { isBetween, NumberHolder } from "#app/utils/common-utils";
 import { randInt, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
@@ -48,6 +47,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Move } from "#moves/move";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { settings } from "#system/settings-manager";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

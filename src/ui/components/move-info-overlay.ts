@@ -1,7 +1,6 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils/common-utils";
@@ -9,6 +8,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#moves/move";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
 export interface MoveInfoOverlaySettings {

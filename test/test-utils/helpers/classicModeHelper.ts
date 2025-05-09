@@ -4,11 +4,11 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { BattleStyle } from "#enums/battle-style";
 import { GameModes } from "#enums/game-modes";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 

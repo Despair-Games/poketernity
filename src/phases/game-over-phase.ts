@@ -17,7 +17,6 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { achvs } from "#app/system/achievements";
-import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -30,6 +29,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
 /**

@@ -12,7 +12,6 @@ import type {
   SettingUiItemOption,
 } from "#app/@types/Settings";
 import { GAME_SPEEDS } from "#app/constants/app-constants";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { getEnumLength } from "#app/utils/common-utils";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
@@ -26,6 +25,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
+import { supportedLanguages } from "#system/supported-languages";
 import i18next, { t } from "i18next";
 
 //#region Types

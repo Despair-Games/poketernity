@@ -18,7 +18,6 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
 import { achvs } from "#app/system/achievements";
-import { settings } from "#app/system/settings/settings-manager";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
@@ -44,6 +43,7 @@ import {
   queueEncounterMessage,
   showEncounterText,
 } from "#mystery-encounters/encounter-dialogue-utils";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
 /** Will give +1 level every 10 waves */

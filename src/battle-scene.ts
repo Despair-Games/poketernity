@@ -100,7 +100,6 @@ import { type Achievement, achvs } from "#app/system/achievements";
 import { GameData } from "#app/system/game-data";
 import { initGameSpeed } from "#app/system/game-speed";
 import type PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
 import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
 import { UiInputs } from "#app/ui-inputs";
@@ -157,6 +156,7 @@ import { initMoveAnim } from "#init/init-move-anim";
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 import Phaser from "phaser";
 

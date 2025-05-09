@@ -5,15 +5,15 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { settings } from "#app/system/settings/settings-manager";
+import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
+import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
-import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
-import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.

@@ -1,13 +1,13 @@
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { EvolutionPhase } from "#app/phases/evolution-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { Button } from "#enums/buttons";
 import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
 
 /**
  * A handler for Pokemon form change and evolution scenes

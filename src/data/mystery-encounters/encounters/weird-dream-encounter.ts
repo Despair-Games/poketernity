@@ -16,7 +16,6 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
 import { NumberHolder, isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
@@ -48,6 +47,7 @@ import { doPokemonTransformationSequence } from "#mystery-encounters/encounter-t
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { settings } from "#system/settings-manager";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";

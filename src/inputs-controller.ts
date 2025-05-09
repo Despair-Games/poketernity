@@ -1,23 +1,23 @@
-import Phaser from "phaser";
-import { getEnumValues, deepCopy } from "#app/utils/common-utils";
-import pad_generic from "#app/configs/inputs/pad_generic";
-import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
-import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
-import pad_dualshock from "#app/configs/inputs/pad_dualshock";
-import pad_procon from "#app/configs/inputs/pad_procon";
-import { UiMode } from "#enums/ui-mode";
+import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
+import pad_dualshock from "#app/configs/inputs/pad_dualshock";
+import pad_generic from "#app/configs/inputs/pad_generic";
+import pad_procon from "#app/configs/inputs/pad_procon";
+import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
+import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type { SettingGamepad } from "#enums/setting-gamepad";
-import type { SettingKeyboard } from "#enums/setting-keyboard";
 import TouchControl from "#app/touch-controls";
+import { MoveTouchControlsHandler } from "#app/ui/settings/move-touch-controls-handler";
+import { deepCopy, getEnumValues } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
-import { MoveTouchControlsHandler } from "#app/ui/settings/move-touch-controls-handler";
-import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
-import { eventBus } from "#app/event-bus";
-import { settings } from "#app/system/settings/settings-manager";
+import type { SettingGamepad } from "#enums/setting-gamepad";
+import type { SettingKeyboard } from "#enums/setting-keyboard";
+import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
+import Phaser from "phaser";
 
 export interface DeviceMapping {
   [key: string]: number;

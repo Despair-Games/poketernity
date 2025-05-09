@@ -10,7 +10,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -19,6 +18,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
 //#region Types

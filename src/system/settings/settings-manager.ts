@@ -2,8 +2,8 @@ import type { Settings, SettingsCategory, UserFacingSettings } from "#app/@types
 import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { isNil } from "#app/utils/common-utils";
+import { defaultSettings } from "#system/default-settings";
 import { version } from "../../../package.json";
-import { defaultSettings } from "#app/system/settings/default-settings";
 
 //#region Types
 
