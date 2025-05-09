@@ -1,5 +1,5 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

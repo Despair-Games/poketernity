@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import type { Pokemon } from "#app/field/pokemon";
@@ -9,6 +8,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";

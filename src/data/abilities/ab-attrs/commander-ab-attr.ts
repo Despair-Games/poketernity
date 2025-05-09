@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { GameOverPhase } from "#app/phases/game-over-phase";
 import type { MovePhase } from "#app/phases/move-phase";
+import type { BattlerTag } from "#battler-tags/battler-tag";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -11,9 +11,6 @@ import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import type { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
 import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants/friendship-constants";
-import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
-import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
-import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
@@ -30,6 +27,9 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { isNil } from "#app/utils/common-utils";
+import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
+import type { GrudgeTag } from "#battler-tags/grudge-tag";
+import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";

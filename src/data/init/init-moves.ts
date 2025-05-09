@@ -1,7 +1,5 @@
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
-import type { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
-import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
 import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
@@ -242,6 +240,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { isNil } from "#app/utils/common-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
+import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
+import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

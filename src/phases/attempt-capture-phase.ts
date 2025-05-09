@@ -1,5 +1,4 @@
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import {
   doPokeballBounceAnim,
   getCriticalCaptureChance,
@@ -18,6 +17,7 @@ import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-ha
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PartyOption } from "#enums/party-option";

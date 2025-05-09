@@ -1,7 +1,7 @@
-import type { BideTag } from "#app/data/battler-tags/bide-tag";
 import type { Move } from "#app/data/moves/move";
 import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
 import type { Pokemon } from "#app/field/pokemon";
+import type { BideTag } from "#battler-tags/bide-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**

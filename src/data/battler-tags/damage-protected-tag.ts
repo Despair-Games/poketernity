@@ -1,6 +1,6 @@
-import { ProtectedTag } from "#app/data/battler-tags/protected-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
+import { ProtectedTag } from "#battler-tags/protected-tag";
 import { MoveCategory } from "#enums/move-category";
 
 /**

@@ -1,5 +1,4 @@
 import type { Status } from "#app/@types/Status";
-import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Variant } from "#app/data/variant";
 import type { Pokemon } from "#app/field/pokemon";
@@ -8,6 +7,7 @@ import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
 import { isPokemon } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { loadBattlerTag } from "#battler-tags/load-battler-tag";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
 import type { ElementalType } from "#enums/elemental-type";

@@ -1,9 +1,9 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { RestrictingBattlerTag } from "#app/data/battler-tags/restricting-battler-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
+import { BattlerTag } from "#battler-tags/battler-tag";
+import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

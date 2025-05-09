@@ -1,8 +1,8 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

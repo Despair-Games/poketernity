@@ -1,6 +1,6 @@
-import { SandTombTag } from "#app/data/battler-tags/sand-tomb-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import type { Pokemon } from "#app/field/pokemon";
+import { SandTombTag } from "#battler-tags/sand-tomb-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 

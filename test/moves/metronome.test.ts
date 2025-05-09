@@ -1,8 +1,8 @@
-import type { RechargingTag } from "#app/data/battler-tags/recharging-tag";
-import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerable-tag";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import type { RechargingTag } from "#battler-tags/recharging-tag";
+import type { SemiInvulnerableTag } from "#battler-tags/semi-invulnerable-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";

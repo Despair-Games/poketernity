@@ -1,5 +1,5 @@
-import { CritBoostTag } from "#app/data/battler-tags/crit-boost-tag";
 import type { Pokemon } from "#app/field/pokemon";
+import { CritBoostTag } from "#battler-tags/crit-boost-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";

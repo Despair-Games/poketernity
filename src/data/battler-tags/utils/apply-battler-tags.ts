@@ -1,5 +1,5 @@
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { coerceArray } from "#app/utils/common-utils";
+import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**

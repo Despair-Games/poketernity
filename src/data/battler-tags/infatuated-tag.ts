@@ -1,14 +1,14 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { MovePhase } from "#app/phases/move-phase";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import i18next from "i18next";
-import Overrides from "#app/overrides";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Infatuation | Infatuation} status effect

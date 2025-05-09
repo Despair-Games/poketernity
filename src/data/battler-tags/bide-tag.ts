@@ -1,7 +1,7 @@
-import { MoveLockTag } from "#app/data/battler-tags/move-lock-tag";
 import { getMoveTargets, type Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { MoveLockTag } from "#battler-tags/move-lock-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

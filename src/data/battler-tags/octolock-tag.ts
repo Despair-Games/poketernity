@@ -1,7 +1,7 @@
-import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
+import { TrappedTag } from "#battler-tags/trapped-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

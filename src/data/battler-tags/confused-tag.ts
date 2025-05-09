@@ -1,4 +1,3 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -6,6 +5,7 @@ import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { isNil, toDmgValue } from "#app/utils/common-utils";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

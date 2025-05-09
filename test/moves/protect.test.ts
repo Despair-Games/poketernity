@@ -1,6 +1,6 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
-import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import { allMoves } from "#app/data/data-lists";
+import { TrappedTag } from "#battler-tags/trapped-tag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { BattlerIndex } from "#enums/battler-index";

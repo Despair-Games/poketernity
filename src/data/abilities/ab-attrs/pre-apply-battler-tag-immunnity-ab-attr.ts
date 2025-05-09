@@ -1,8 +1,8 @@
 import { PreApplyBattlerTagAbAttr } from "#abilities/pre-apply-battler-tag-ab-attr";
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { coerceArray, type BooleanHolder } from "#app/utils/common-utils";
+import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import i18next from "i18next";
 

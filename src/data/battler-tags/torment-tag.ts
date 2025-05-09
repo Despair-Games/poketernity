@@ -1,8 +1,8 @@
-import { MoveRestrictionBattlerTag } from "#app/data/battler-tags/move-restriction-battler-tag";
+import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

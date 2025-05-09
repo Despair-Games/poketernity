@@ -1,7 +1,7 @@
 import type { TurnMove } from "#app/@types/TurnMove";
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import type { PokemonMove } from "#app/field/pokemon-move";
+import type { BattlerTag } from "#battler-tags/battler-tag";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";

@@ -1,7 +1,7 @@
-import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import type { Move } from "#app/data/moves/move";
 import { HealAttr } from "#app/data/moves/move-attrs/heal-attr";
 import type { Pokemon } from "#app/field/pokemon";
+import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**

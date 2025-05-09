@@ -1,8 +1,8 @@
-import { getMoveEffectPhaseData } from "#app/data/battler-tags/utils/get-move-effect-phase-data";
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BattlerTag } from "#battler-tags/battler-tag";
+import { getMoveEffectPhaseData } from "#battler-tags/get-move-effect-phase-data";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";

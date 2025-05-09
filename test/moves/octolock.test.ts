@@ -1,4 +1,4 @@
-import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
+import { TrappedTag } from "#battler-tags/trapped-tag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";

@@ -1,8 +1,8 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { allMoves } from "#app/data/data-lists";
 import { type Move, getMoveTargets } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";

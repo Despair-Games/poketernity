@@ -1,8 +1,8 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { SelfStatusMove } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";

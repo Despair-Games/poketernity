@@ -1,6 +1,6 @@
-import { FireSpinTag } from "#app/data/battler-tags/fire-spin-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import type { Pokemon } from "#app/field/pokemon";
+import { FireSpinTag } from "#battler-tags/fire-spin-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 
