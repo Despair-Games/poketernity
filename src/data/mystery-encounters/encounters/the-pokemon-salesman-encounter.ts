@@ -4,7 +4,6 @@ import { speciesStarterCosts } from "#app/data/starters";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
-import PokemonData from "#app/system/pokemon-data";
 import { isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
 import { randSeedInt } from "#app/utils/random-utils";
@@ -27,6 +26,7 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import PokemonData from "#system/pokemon-data";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/thePokemonSalesman";

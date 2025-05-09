@@ -1,17 +1,17 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { vouchers } from "#app/system/voucher";
-import { randSeedItem } from "#app/utils/random-utils";
-import { TrainerType } from "#enums/trainer-type";
-import i18next from "i18next";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { MoneyRewardPhase } from "#app/phases/money-reward-phase";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { PhaseId } from "#enums/phase-id";
 import { timedEventManager } from "#app/timed-event-manager";
+import { randSeedItem } from "#app/utils/random-utils";
 import { EventModifierType } from "#enums/event-modifier-type";
+import { PhaseId } from "#enums/phase-id";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerType } from "#enums/trainer-type";
+import { vouchers } from "#system/voucher";
+import i18next from "i18next";
 
 export class TrainerVictoryPhase extends BattlePhase {
   override readonly id = PhaseId.TRAINER_VICTORY;

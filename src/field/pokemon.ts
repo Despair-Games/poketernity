@@ -108,7 +108,6 @@ import Overrides from "#app/overrides";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
-import type PokemonData from "#app/system/pokemon-data";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { BattleInfo } from "#app/ui/components/battle-info";
 import { applyChallenges } from "#app/utils/challenge-utils";
@@ -205,6 +204,7 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
+import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 

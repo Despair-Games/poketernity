@@ -33,7 +33,6 @@ import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { achvs } from "#app/system/achievements";
 import { handleTutorial } from "#app/tutorial";
 import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
@@ -54,6 +53,7 @@ import { initEncounterAnims } from "#init/init-encounter-anims";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
+import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 

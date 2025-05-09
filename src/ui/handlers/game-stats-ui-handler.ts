@@ -2,7 +2,6 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/starters";
 import { globalScene } from "#app/global-scene";
-import type { GameData } from "#app/system/game-data";
 import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -10,6 +9,7 @@ import { formatLargeNumberFixedDigits, getPlayTimeString } from "#app/utils/stri
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import type { GameData } from "#system/game-data";
 import i18next from "i18next";
 import type Phaser from "phaser";
 

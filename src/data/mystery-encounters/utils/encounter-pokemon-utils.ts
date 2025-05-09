@@ -17,7 +17,6 @@ import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import { achvs } from "#app/system/achievements";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
@@ -43,6 +42,7 @@ import {
   queueEncounterMessage,
   showEncounterText,
 } from "#mystery-encounters/encounter-dialogue-utils";
+import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 

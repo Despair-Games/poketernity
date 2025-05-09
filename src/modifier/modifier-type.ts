@@ -50,7 +50,6 @@ import {
 import { modifierPool } from "#app/modifier/modifier-pools";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
-import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { getModifierTierTextTint } from "#app/ui/text/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
 import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
@@ -75,6 +74,7 @@ import type { VoucherType } from "#enums/voucher-type";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";
+import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
 import i18next from "i18next";
 
 const outputModifierData = false;

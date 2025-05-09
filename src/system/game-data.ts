@@ -39,19 +39,6 @@ import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import { achvs } from "#app/system/achievements";
-import ArenaData from "#app/system/arena-data";
-import ChallengeData from "#app/system/challenge-data";
-import EggData from "#app/system/egg-data";
-import { GameStats } from "#app/system/game-stats";
-import PersistentModifierData from "#app/system/modifier-data";
-import PokemonData from "#app/system/pokemon-data";
-import TrainerData from "#app/system/trainer-data";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-} from "#app/system/version_migration/version_converter";
-import { vouchers } from "#app/system/voucher";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { applyChallenges } from "#app/utils/challenge-utils";
@@ -76,7 +63,17 @@ import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
+import { achvs } from "#system/achievements";
+import ArenaData from "#system/arena-data";
+import ChallengeData from "#system/challenge-data";
+import EggData from "#system/egg-data";
+import { GameStats } from "#system/game-stats";
+import PersistentModifierData from "#system/modifier-data";
+import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
+import TrainerData from "#system/trainer-data";
+import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
+import { vouchers } from "#system/voucher";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 

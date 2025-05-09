@@ -22,8 +22,6 @@ import {
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { achvs } from "#app/system/achievements";
-import type PokemonData from "#app/system/pokemon-data";
 import { timedEventManager } from "#app/timed-event-manager";
 import { PlayerBattleInfo } from "#app/ui/components/battle-info";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
@@ -43,6 +41,8 @@ import { SpeciesId } from "#enums/species-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { achvs } from "#system/achievements";
+import type PokemonData from "#system/pokemon-data";
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: MoveId[];

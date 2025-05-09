@@ -14,7 +14,6 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { vouchers } from "#app/system/voucher";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
@@ -28,6 +27,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
+import { vouchers } from "#system/voucher";
 import i18next from "i18next";
 
 export class TitlePhase extends Phase {

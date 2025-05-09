@@ -3,7 +3,6 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
-import type PokemonData from "#app/system/pokemon-data";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
@@ -17,6 +16,7 @@ import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type PokemonData from "#system/pokemon-data";
 import i18next from "i18next";
 
 const SESSION_SLOTS_COUNT = 5;

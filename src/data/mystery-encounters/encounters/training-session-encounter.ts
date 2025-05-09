@@ -7,7 +7,6 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { randSeedShuffle } from "#app/utils/random-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -28,6 +27,7 @@ import { isPokemonValidForEncounterOptionSelection } from "#mystery-encounters/e
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import PokemonData from "#system/pokemon-data";
 import i18next from "i18next";
 
 /** The i18n namespace for the encounter */

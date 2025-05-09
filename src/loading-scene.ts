@@ -14,8 +14,6 @@ import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
-import { initAchievements } from "#app/system/achievements";
-import { initVouchers } from "#app/system/init-vouchers";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
@@ -31,6 +29,8 @@ import { initMoves } from "#init/init-moves";
 import { initSpecies } from "#init/init-species";
 import { initTrainerTypeDialogue } from "#init/init-trainer-type-dialogue";
 import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
+import { initAchievements } from "#system/achievements";
+import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import i18next from "i18next";
 

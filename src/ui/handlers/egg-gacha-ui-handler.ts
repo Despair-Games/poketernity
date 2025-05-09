@@ -3,7 +3,6 @@ import type { EggOptions } from "#app/data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { getVoucherTypeIcon } from "#app/system/voucher";
 import { handleTutorial } from "#app/tutorial";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
@@ -19,6 +18,7 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import { getVoucherTypeIcon } from "#system/voucher";
 import i18next from "i18next";
 
 /**
