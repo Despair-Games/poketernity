@@ -1,12 +1,15 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import i18next from "i18next";
+import { BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT } from "#app/constants/ai-constants";
 
 /**
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
@@ -63,5 +66,28 @@ export class AbilityCopyAttr extends MoveEffectAttr {
       }
       return ret;
     };
+  }
+
+  /**
+   * If the target's ability is detrimental, grants a (-5) penalty.
+   * Otherwise, grants (+2) effect score if one Pokemon's detrimental ability is overridden
+   * by this effect, and (+3) if more than one Pokemon's detrimental ability is overridden.
+   * @see {@linkcode DETRIMENTAL_ABILITIES}
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const targetRevealedAbilityId = target.getAbilities({ revealedOnly: true }).find((ab) => !ab.passive)?.ability.id;
+
+    if (targetRevealedAbilityId && DETRIMENTAL_ABILITIES.includes(targetRevealedAbilityId)) {
+      return BAD_MOVE_PENALTY;
+    }
+
+    const affectedPokemon: Pokemon[] = [user];
+    const ally = user.getAlly();
+    if (this.copyToPartner && ally?.isActive(true)) {
+      affectedPokemon.push(ally);
+    }
+
+    const numBenefit = affectedPokemon.filter((p) => DETRIMENTAL_ABILITIES.includes(p.getAbility().id)).length;
+    return Math.min(numBenefit * MAJOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT);
   }
 }

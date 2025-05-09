@@ -1,11 +1,15 @@
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
+import i18next from "i18next";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
 
 /**
  * Attribute to swap the user and target's abilities (if both are swappable).
@@ -33,5 +37,27 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
     return (user, target, _move) =>
       !user.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY)
       && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY);
+  }
+
+  /**
+   * If the user has a {@link DETRIMENTAL_ABILITIES | detrimental ability}, or the target
+   * has one of Huge Power, Pure Power, or Contrary, grants a (+2) effect score bonus
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /**
+     * Note: this only uses a subset of {@linkcode HIGH_VALUE_ABILITIES} since
+     * - Desolate Land and Primordial Sea are symmetrical effects
+     * - Wonder Guard cannot be swapped
+     */
+    const highValueSwappableAbilities = [AbilityId.HUGE_POWER, AbilityId.PURE_POWER, AbilityId.CONTRARY];
+
+    const targetHasHighValueAbility = target
+      .getAbilities({ revealedOnly: true })
+      .some((ab) => !ab.passive && highValueSwappableAbilities.includes(ab.ability.id));
+
+    if (DETRIMENTAL_ABILITIES.includes(user.getAbility().id) || targetHasHighValueAbility) {
+      return MAJOR_EFFECT_SCORE_BONUS;
+    }
+    return 0;
   }
 }

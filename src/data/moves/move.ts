@@ -59,6 +59,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { ALLY_TARGET_PENALTY, COMMANDING_TARGET_PENALTY } from "#app/constants/ai-constants";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -771,7 +772,7 @@ export abstract class Move implements Localizable {
   ): number {
     // penalize targeting Pokemon that are hidden by Commander
     if (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
-      return -20;
+      return COMMANDING_TARGET_PENALTY;
     }
 
     /** The combined score from all attributes of the move */
@@ -808,7 +809,7 @@ export abstract class Move implements Localizable {
       /**
        * ALLY TARGET PENALTY:
        *
-       * If the user is the target's ally, a (-20) score penalty is applied
+       * If the user is the target's ally, a {@link ALLY_TARGET_PENALTY | massive score penalty} is applied
        * unless the move has at least one attribute that overrides the penalty,
        * in which case the total score is the sum of effect scores from those
        * overriding attributes.
@@ -820,7 +821,7 @@ export abstract class Move implements Localizable {
       const allyTargetAttrs = this.attrs.filter((attr) => attr.overridesAllyTargetPenalty);
 
       if (allyTargetAttrs.length === 0) {
-        return -20;
+        return ALLY_TARGET_PENALTY;
       } else {
         return allyTargetAttrs
           .map((attr) => attr.getEffectScore(user, target, this))

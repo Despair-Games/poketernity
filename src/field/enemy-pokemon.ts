@@ -1,4 +1,5 @@
 import type { TurnMove } from "#app/@types/TurnMove";
+import { BAD_MOVE_PENALTY } from "#app/constants/ai-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
@@ -215,7 +216,9 @@ export class EnemyPokemon extends Pokemon {
 
     const critBonus = this.getCriticalHitBonus(opponent, move, attackScore);
 
-    return (isFail ? -5 : attackScore + critBonus) + move.getEffectScore(this, opponent, isKnockOut, isFail);
+    return (
+      (isFail ? BAD_MOVE_PENALTY : attackScore + critBonus) + move.getEffectScore(this, opponent, isKnockOut, isFail)
+    );
   }
 
   /**

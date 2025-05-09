@@ -1,11 +1,14 @@
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import i18next from "i18next";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
 
 /**
  * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
@@ -29,5 +32,17 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) =>
       !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
+  }
+
+  /**
+   * If the target has a {@link HIGH_VALUE_ABILITIES | high-value ability}, grants (+2)
+   * effect score. Otherwise, this has a 60% chance to grant (+1).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const targetHasHighValueAbility = target
+      .getAbilities({ revealedOnly: true })
+      .some((ab) => !ab.passive && HIGH_VALUE_ABILITIES.includes(ab.ability.id));
+
+    return targetHasHighValueAbility ? MAJOR_EFFECT_SCORE_BONUS : this.getRandomScore(user, 60);
   }
 }

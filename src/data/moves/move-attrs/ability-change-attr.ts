@@ -1,14 +1,17 @@
-import type { AbilityId } from "#enums/ability-id";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { allAbilities } from "#app/data/data-lists";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
+import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { allAbilities } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
-import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { AbilityId } from "#enums/ability-id";
+import i18next from "i18next";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
 
 /**
  * Attribute to change a target's ability to a set ability.
@@ -45,5 +48,19 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     return (user, target, _move) =>
       !(this.selfTarget ? user : target).getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
+  }
+
+  /**
+   * If the target is an opponent and is known to have a high-value ability,
+   * grants (+2) effect score.
+   * @see {@linkcode HIGH_VALUE_ABILITIES}
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const hasHighValueAbility = target
+      .getAbilities({ canApplyOnly: true, revealedOnly: true })
+      .filter((ab) => !ab.passive) // Remove this if passives are made to be overwritten
+      .some((ab) => HIGH_VALUE_ABILITIES.includes(ab.ability.id));
+
+    return hasHighValueAbility && user.isOpponent(target) ? MAJOR_EFFECT_SCORE_BONUS : 0;
   }
 }

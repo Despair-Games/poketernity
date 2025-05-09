@@ -2201,9 +2201,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Computes this Pokemon's matchup score (MUS) against the given opponent.
    * This MUS is a reflection of
-   * 1. How effective this Pokemon's moves are against the opponent, and
+   * 1. How effective this Pokemon's attacks are against the opponent, and
    * 2. How many turns this Pokemon will have to act, assuming the opponent
-   * attacks every turn.
+   * attacks with their perceived best attack every turn.
    *
    * If this Pokemon is on the field and can safely KO the opponent, its MUS
    * against that opponent will be `Infinity`. Otherwise, MUS falls in the
