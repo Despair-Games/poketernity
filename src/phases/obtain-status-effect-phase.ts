@@ -7,7 +7,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 
 /**
  * Applies a status effect to a pokemon

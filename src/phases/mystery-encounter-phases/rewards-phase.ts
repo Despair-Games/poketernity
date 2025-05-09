@@ -7,7 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PhaseId } from "#enums/phase-id";
-import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
+import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 
 /**
  * Will handle (in order):

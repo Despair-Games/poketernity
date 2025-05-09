@@ -55,7 +55,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
 import i18next from "i18next";
-import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by

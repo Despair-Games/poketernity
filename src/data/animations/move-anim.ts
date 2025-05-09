@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
-import { BattleAnim } from "./battle-anims";
+import { BattleAnim } from "#app/data/animations/battle-anims";
 
 /**
  * Animation for effects during the use of a move.

@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { PreSetStatusAbAttr } from "./pre-set-status-ab-attr";
+import { PreSetStatusAbAttr } from "#app/data/abilities/ab-attrs/pre-set-status-ab-attr";
 
 /**
  * Provides immunity to status effects to specified targets.

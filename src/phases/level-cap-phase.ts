@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
-import { FieldPhase } from "./abstract-field-phase";
+import { FieldPhase } from "#app/phases/abstract-field-phase";
 
 /**
  * Displays the message for when the level cap increases

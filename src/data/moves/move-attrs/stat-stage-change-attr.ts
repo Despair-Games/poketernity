@@ -5,7 +5,10 @@ import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { Move } from "#app/data/moves/move";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
+import {
+  ChanceBasedMoveEffectAttr,
+  type ChanceBasedMoveEffectAttrOptions,
+} from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects

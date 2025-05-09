@@ -1,4 +1,4 @@
-import { StatMultiplierAbAttr } from "./stat-multiplier-ab-attr";
+import { StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-multiplier-ab-attr";
 import type { WeatherType } from "#enums/weather-type";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";

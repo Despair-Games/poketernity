@@ -3,7 +3,7 @@ import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { isNil } from "#app/utils/common-utils";
 import { version } from "../../../package.json";
-import { defaultSettings } from "./default-settings";
+import { defaultSettings } from "#app/system/settings/default-settings";
 
 //#region Types
 

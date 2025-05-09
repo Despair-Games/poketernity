@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
-import { PostBiomeChangeAbAttr } from "./post-biome-change-ab-attr";
+import { PostBiomeChangeAbAttr } from "#app/data/abilities/ab-attrs/post-biome-change-ab-attr";
 
 export class PostBiomeChangeWeatherChangeAbAttr extends PostBiomeChangeAbAttr {
   private readonly weatherType: WeatherType;

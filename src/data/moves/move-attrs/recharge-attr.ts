@@ -1,5 +1,5 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
+import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 
 /**
  * Attribute to add a "recharging" turn after the move is used.

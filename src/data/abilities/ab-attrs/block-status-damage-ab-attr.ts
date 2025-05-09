@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 /**
  * This attribute will block any status damage that you put in the parameter.

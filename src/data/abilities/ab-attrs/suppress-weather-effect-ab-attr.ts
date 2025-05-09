@@ -2,7 +2,7 @@ import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PreWeatherEffectAbAttr } from "./pre-weather-effect-ab-attr";
+import { PreWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/pre-weather-effect-ab-attr";
 
 export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
   public readonly affectsPrimal: boolean;

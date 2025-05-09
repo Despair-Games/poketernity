@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { TerrainType } from "#enums/terrain-type";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 export class PostSummonTerrainChangeAbAttr extends PostSummonAbAttr {
   private readonly terrainType: TerrainType;

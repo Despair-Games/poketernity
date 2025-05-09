@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
-import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { PreDefendAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Move } from "#app/data/moves/move";
 

@@ -14,8 +14,8 @@ import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { SelectGenderPhase } from "./select-gender-phase";
-import { UnavailablePhase } from "./unavailable-phase";
+import { SelectGenderPhase } from "#app/phases/select-gender-phase";
+import { UnavailablePhase } from "#app/phases/unavailable-phase";
 
 export class LoginPhase extends Phase {
   override readonly id = PhaseId.LOGIN;

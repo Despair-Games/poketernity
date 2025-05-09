@@ -4,7 +4,7 @@ import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 
 export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;

@@ -9,7 +9,7 @@ import {
   leaveEncounterWithoutBattle,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import {
   getHighestLevelPlayerPokemon,
   koPlayerPokemon,

@@ -2,8 +2,8 @@ import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs
 import { TrainerType } from "#enums/trainer-type";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
-import { achvs } from "./achievements";
-import { Voucher, vouchers } from "./voucher";
+import { achvs } from "#app/system/achievements";
+import { Voucher, vouchers } from "#app/system/voucher";
 
 export function initVouchers() {
   for (const achv of [achvs.CLASSIC_VICTORY]) {

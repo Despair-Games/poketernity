@@ -4,9 +4,9 @@ import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin";
 import TransitionImagePackPlugin from "phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin";
 import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import pkg from "../package.json";
-import InvertPostFX from "./pipelines/invert";
-import { LoadingScene } from "./loading-scene";
-import BattleScene from "./battle-scene";
+import InvertPostFX from "#app/pipelines/invert";
+import { LoadingScene } from "#app/loading-scene";
+import BattleScene from "#app/battle-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 
 export const game = new Phaser.Game({

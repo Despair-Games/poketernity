@@ -3,8 +3,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils/common-utils";
 import i18next from "i18next";
-import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
-import { LevelUpPhase } from "./level-up-phase";
+import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
+import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**

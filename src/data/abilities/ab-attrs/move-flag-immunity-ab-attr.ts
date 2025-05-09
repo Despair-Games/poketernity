@@ -1,5 +1,5 @@
 import type { PreDefendAbAttrCondition } from "#app/@types/PreDefendAbAttrCondition";
-import { MoveImmunityAbAttr } from "./move-immunity-ab-attr";
+import { MoveImmunityAbAttr } from "#app/data/abilities/ab-attrs/move-immunity-ab-attr";
 import type { MoveFlags } from "#enums/move-flags";
 
 /**

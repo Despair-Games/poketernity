@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import type { MoveId } from "#enums/move-id";
 import type { ElementalType } from "#enums/elemental-type";
-import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
+import { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 
 export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {

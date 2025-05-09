@@ -11,9 +11,9 @@ import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import i18next from "i18next";
-import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
-import { PostSummonPhase } from "./post-summon-phase";
-import { ShinySparklePhase } from "./shiny-sparkle-phase";
+import { PartyMemberPokemonPhase } from "#app/phases/abstract-party-member-pokemon-phase";
+import { PostSummonPhase } from "#app/phases/post-summon-phase";
+import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */

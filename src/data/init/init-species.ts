@@ -1,6 +1,6 @@
 import { allSpecies } from "#app/data/data-lists";
 import PokemonSpecies from "#app/data/pokemon-species";
-import { PokemonForm } from "../pokemon-form";
+import { PokemonForm } from "#app/data/pokemon-form";
 import { AbilityId } from "#enums/ability-id";
 import { GrowthRate } from "#enums/growth-rates";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";

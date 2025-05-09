@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { PhaseId } from "#enums/phase-id";
-import { BattlePhase } from "./abstract-battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 
 /**
  * Applies {@linkcode MoveHeaderAttr}s

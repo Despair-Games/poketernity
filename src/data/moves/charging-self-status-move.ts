@@ -1,5 +1,5 @@
 import { SelfStatusMove } from "#app/data/moves/move";
-import { ChargeMove } from "./charge-move";
+import { ChargeMove } from "#app/data/moves/charge-move";
 
 export class ChargingSelfStatusMove extends ChargeMove(SelfStatusMove) {
   override isChargingSelfStatusMove(): this is this {

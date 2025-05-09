@@ -5,7 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { randSeedItem } from "#app/utils/random-utils";
 import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

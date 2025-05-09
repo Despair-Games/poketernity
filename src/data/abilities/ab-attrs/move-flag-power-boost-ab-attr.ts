@@ -1,6 +1,6 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { MoveFlags } from "#enums/move-flags";
-import { MovePowerBoostAbAttr } from "./move-power-boost-ab-attr";
+import { MovePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/move-power-boost-ab-attr";
 
 /**
  * Ability attribute that boosts the power of a move by a factor if it has a specified flag

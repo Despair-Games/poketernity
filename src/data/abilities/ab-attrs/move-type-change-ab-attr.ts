@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
-import { PreAttackAbAttr } from "./pre-attack-ab-attr";
+import { PreAttackAbAttr } from "#app/data/abilities/ab-attrs/pre-attack-ab-attr";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   constructor(

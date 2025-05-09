@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MoveCategory } from "#enums/move-category";
 import type { TerrainType } from "#enums/terrain-type";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 
 export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
   private readonly terrainType: TerrainType;

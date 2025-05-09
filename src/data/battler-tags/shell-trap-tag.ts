@@ -1,4 +1,4 @@
-import { getMoveEffectPhaseData } from "./utils/get-move-effect-phase-data";
+import { getMoveEffectPhaseData } from "#app/data/battler-tags/utils/get-move-effect-phase-data";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

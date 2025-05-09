@@ -17,11 +17,11 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { StatusEffect } from "#enums/status-effect";
-import type MysteryEncounterDialogue from "./mystery-encounter-dialogue";
-import type { OptionTextDisplay } from "./mystery-encounter-dialogue";
-import type MysteryEncounterOption from "./mystery-encounter-option";
-import type { OptionPhaseCallback } from "./mystery-encounter-option";
-import { MysteryEncounterOptionBuilder } from "./mystery-encounter-option";
+import type MysteryEncounterDialogue from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
+import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
@@ -29,7 +29,7 @@ import {
   PartySizeRequirement,
   StatusEffectRequirement,
   WaveRangeRequirement,
-} from "./mystery-encounter-requirements";
+} from "#app/data/mystery-encounters/mystery-encounter-requirements";
 
 export interface EncounterStartOfBattleEffect {
   sourcePokemon?: Pokemon;

@@ -5,7 +5,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveTarget } from "#enums/move-target";
-import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { PreDefendAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-ab-attr";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.

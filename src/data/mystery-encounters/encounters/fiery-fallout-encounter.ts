@@ -8,7 +8,7 @@ import {
   setEncounterRewards,
   generateModifierType,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";

@@ -12,8 +12,8 @@ import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { EggHatchPhase } from "./egg-hatch-phase";
-import { EggSummaryPhase } from "./egg-summary-phase";
+import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
+import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.

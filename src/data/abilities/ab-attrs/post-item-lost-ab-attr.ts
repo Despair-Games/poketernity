@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 /**
  * Triggers after the Pokemon loses or consumes an item

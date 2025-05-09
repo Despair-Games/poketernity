@@ -1,5 +1,5 @@
 import { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import { MoveAnim } from "./move-anim";
+import { MoveAnim } from "#app/data/animations/move-anim";
 import { chargeAnims } from "#app/data/animations/charge-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerIndex } from "#enums/battler-index";

@@ -2,7 +2,7 @@ import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
+import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 
 /**
  * After the turn ends, resets the status of either the ability holder or their ally

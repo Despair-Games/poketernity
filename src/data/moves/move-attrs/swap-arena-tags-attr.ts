@@ -5,7 +5,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "./move-effect-attr";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 
 export const courtChangeArenaTags = [
   ArenaTagType.AURORA_VEIL,

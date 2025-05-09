@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 export abstract class PostWeatherChangeAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

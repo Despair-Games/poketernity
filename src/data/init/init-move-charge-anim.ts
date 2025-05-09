@@ -1,5 +1,5 @@
-import { chargeAnims } from "../animations/charge-anims";
-import { LegacyAnimConfig } from "../animations/anim-config";
+import { chargeAnims } from "#app/data/animations/charge-anims";
+import { LegacyAnimConfig } from "#app/data/animations/anim-config";
 import { globalScene } from "#app/global-scene";
 import { ChargeAnim } from "#enums/charge-anim";
 

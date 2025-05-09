@@ -3,7 +3,7 @@ import { MoneyMultiplierModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils/common-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
-import { BattlePhase } from "./abstract-battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**

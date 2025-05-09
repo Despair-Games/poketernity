@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
 import { WeatherType } from "#enums/weather-type";
-import { PostFaintAbAttr } from "./post-faint-ab-attr";
+import { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
 
 /**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon fainting

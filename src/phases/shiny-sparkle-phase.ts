@@ -1,6 +1,6 @@
 import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class ShinySparklePhase extends PokemonPhase {

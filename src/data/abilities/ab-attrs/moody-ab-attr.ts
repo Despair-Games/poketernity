@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { EFFECTIVE_STATS } from "#enums/stat";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
+import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 
 /**
  * Attribute to randomly increase one stat stage by 2 and decrease a different

@@ -16,12 +16,13 @@ import { initAchievements } from "#app/system/achievements";
 import { initVouchers } from "#app/system/init-vouchers";
 import { setCookie } from "#app/utils/app-utils";
 import { blobToString } from "#test/test-utils/gameManagerUtils";
+import { manageListeners } from "#test/test-utils/listenersManager";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { mockContext } from "#test/test-utils/mocks/mockContext";
 import { mockLocalStorage } from "#test/test-utils/mocks/mockLocalStorage";
 import { MockImage } from "#test/test-utils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
-import { manageListeners } from "./listenersManager";
+import { manageListeners } from "#app/../test/test-utils/listenersManager";
 
 /**
  * A function to initialize game data before running any other test-related code.

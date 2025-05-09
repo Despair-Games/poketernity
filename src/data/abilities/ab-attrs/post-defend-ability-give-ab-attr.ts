@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {

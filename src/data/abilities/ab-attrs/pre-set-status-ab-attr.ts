@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 export abstract class PreSetStatusAbAttr extends AbAttr {
   /**

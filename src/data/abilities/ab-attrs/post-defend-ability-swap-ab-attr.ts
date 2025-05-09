@@ -3,7 +3,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {

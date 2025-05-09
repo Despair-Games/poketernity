@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
 import { SpeciesId } from "#enums/species-id";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 /**
  * Triggers weather-based form change when summoned into an active weather.

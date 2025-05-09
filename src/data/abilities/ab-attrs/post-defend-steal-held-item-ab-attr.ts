@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import i18next from "i18next";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import { MoveCategory } from "#enums/move-category";
 
 export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {

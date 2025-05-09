@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import i18next from "i18next";
-import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { PreDefendAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {

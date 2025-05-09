@@ -21,7 +21,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BideEffectAttr } from "#app/data/moves/move-attrs/bide-effect-attr";
 
 //#region Types

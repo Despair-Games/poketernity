@@ -4,7 +4,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 /**
  * Attribute to reflect stat-lowering effects from moves and abilities

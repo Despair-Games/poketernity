@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { randSeedItem } from "#app/utils/random-utils";
 import i18next from "i18next";
-import { PostBattleAbAttr } from "./post-battle-ab-attr";
+import { PostBattleAbAttr } from "#app/data/abilities/ab-attrs/post-battle-ab-attr";
 
 export class PostBattleLootAbAttr extends PostBattleAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {

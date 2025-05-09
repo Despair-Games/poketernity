@@ -15,7 +15,7 @@ import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encount
 import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
-import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 
 /**
  * Will handle (in order):

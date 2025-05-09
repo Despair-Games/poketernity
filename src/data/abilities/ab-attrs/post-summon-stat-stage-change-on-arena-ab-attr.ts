@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { Stat, type BattleStat } from "#enums/stat";
-import { PostSummonStatStageChangeAbAttr } from "./post-summon-stat-stage-change-ab-attr";
+import { PostSummonStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-stat-stage-change-ab-attr";
 
 /**
  * Applies a stat change after a Pokémon is summoned,

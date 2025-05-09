@@ -1,7 +1,7 @@
 import type { RollingTag } from "#app/data/battler-tags/rolling-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { MovePowerMultiplierAttr } from "./move-power-multiplier-attr";
+import { MovePowerMultiplierAttr } from "#app/data/moves/move-attrs/move-power-multiplier-attr";
 
 /**
  * Attribute implementing the power-multiplying properties of

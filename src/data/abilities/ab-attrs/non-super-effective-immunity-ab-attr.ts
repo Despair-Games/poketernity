@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import i18next from "i18next";
-import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
+import { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
 
 /**
  * Used by Wonder Guard

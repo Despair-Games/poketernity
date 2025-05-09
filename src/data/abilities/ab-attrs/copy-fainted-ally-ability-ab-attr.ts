@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { PostKnockOutAbAttr } from "./post-knock-out-ab-attr";
+import { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {

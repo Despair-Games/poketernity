@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { type BattleStat, Stat } from "#enums/stat";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 /**
  * Download raises either the Attack stat or Special Attack stat by one stage depending on the foe's currently lowest defensive stat:

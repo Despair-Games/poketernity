@@ -5,7 +5,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
-import { StatMultiplierAbAttr } from "./stat-multiplier-ab-attr";
+import { StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-multiplier-ab-attr";
 
 /**
  * Ability attribute that multiplies the ability holder's attack/special attack stat (depends on the move's category) by 1.5 if it uses a move of a specific type at less than 1/3 HP

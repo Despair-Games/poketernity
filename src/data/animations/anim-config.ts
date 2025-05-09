@@ -13,8 +13,8 @@ import { AnimFrameTarget } from "#enums/anim-frame-target";
 import type { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import type { MoveId } from "#enums/move-id";
 import type Phaser from "phaser";
-import type { BattleAnim } from "./battle-anims";
-import type { MoveAnim } from "./move-anim";
+import type { BattleAnim } from "#app/data/animations/battle-anims";
+import type { MoveAnim } from "#app/data/animations/move-anim";
 
 export interface AnimConfig {
   /**

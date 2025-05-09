@@ -29,7 +29,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/thePokemonSalesman";

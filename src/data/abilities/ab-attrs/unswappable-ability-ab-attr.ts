@@ -1,5 +1,5 @@
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 
 export class UnswappableAbilityAbAttr extends AbAttr {
   constructor() {

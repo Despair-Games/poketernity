@@ -5,7 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
-import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
+import { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
 
 /**
  * Applies immunity if the move used is not a status move.

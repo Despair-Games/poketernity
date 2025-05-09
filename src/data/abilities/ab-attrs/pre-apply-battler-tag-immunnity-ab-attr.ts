@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { coerceArray, type BooleanHolder } from "#app/utils/common-utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import i18next from "i18next";
-import { PreApplyBattlerTagAbAttr } from "./pre-apply-battler-tag-ab-attr";
+import { PreApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/pre-apply-battler-tag-ab-attr";
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.

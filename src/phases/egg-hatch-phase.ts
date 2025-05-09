@@ -16,7 +16,7 @@ import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import type { EggLapsePhase } from "./egg-lapse-phase";
+import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 
 /**
  * Class that represents egg hatching

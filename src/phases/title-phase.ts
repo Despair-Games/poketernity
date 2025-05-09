@@ -24,11 +24,11 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import i18next from "i18next";
-import { CheckSwitchPhase } from "./check-switch-phase";
-import { EncounterPhase } from "./encounter-phase";
-import { SelectChallengePhase } from "./select-challenge-phase";
-import { SelectStarterPhase } from "./select-starter-phase";
-import { SummonPhase } from "./summon-phase";
+import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
+import { EncounterPhase } from "#app/phases/encounter-phase";
+import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
+import { SelectStarterPhase } from "#app/phases/select-starter-phase";
+import { SummonPhase } from "#app/phases/summon-phase";
 
 export class TitlePhase extends Phase {
   override readonly id = PhaseId.TITLE;

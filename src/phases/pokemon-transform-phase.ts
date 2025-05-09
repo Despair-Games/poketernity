@@ -3,7 +3,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**

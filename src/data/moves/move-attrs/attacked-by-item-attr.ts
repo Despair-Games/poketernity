@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/moves/move";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { PreMoveMessageAttr } from "./pre-move-message-attr";
+import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
 
 /**
  * Attribute to cause the move to fail if the target is not holding an item.

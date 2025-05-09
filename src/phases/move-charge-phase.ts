@@ -9,7 +9,7 @@ import { BooleanHolder } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import i18next from "i18next";
-import { HitCheckPhase } from "./hit-check-phase";
+import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**

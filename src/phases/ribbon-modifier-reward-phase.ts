@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
-import { ModifierRewardPhase } from "./modifier-reward-phase";
+import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 
 export class RibbonModifierRewardPhase extends ModifierRewardPhase {
   override readonly id = PhaseId.RIBBON_MODIFIER_REWARD;

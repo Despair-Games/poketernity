@@ -53,7 +53,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/bugTypeSuperfan";

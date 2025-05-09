@@ -1,7 +1,7 @@
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { DamageResult } from "#app/@types/DamageResult";
-import type { Pokemon } from "./pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { fixedNumber } from "#app/utils/common-utils";
 import { formatStat } from "#app/utils/string-utils";

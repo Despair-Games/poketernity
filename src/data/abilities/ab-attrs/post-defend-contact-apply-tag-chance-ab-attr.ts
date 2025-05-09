@@ -2,7 +2,7 @@ import type { Move } from "#app/data/moves/move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 
 export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
   private readonly chance: number;

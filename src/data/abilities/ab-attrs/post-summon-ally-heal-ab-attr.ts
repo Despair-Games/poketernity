@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils/common-utils";
 import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
   private readonly healRatio: number;

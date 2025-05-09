@@ -4,8 +4,8 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import type { Move } from "../move";
-import { MoveEffectAttr } from "./move-effect-attr";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 
 /**

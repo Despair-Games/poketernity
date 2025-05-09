@@ -31,8 +31,8 @@ import { GachaType } from "#enums/gacha-types";
 import { ImagesFolder } from "#enums/images-folders";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
-import { initSpecies } from "./data/init/init-species";
-import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
+import { initSpecies } from "#app/data/init/init-species";
+import { initTrainerTypeDialogue } from "#app/data/init/init-trainer-type-dialogue";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 import { getEnumValues, deepCopy } from "#app/utils/common-utils";
-import pad_generic from "./configs/inputs/pad_generic";
-import pad_unlicensedSNES from "./configs/inputs/pad_unlicensedSNES";
-import pad_xbox360 from "./configs/inputs/pad_xbox360";
-import pad_dualshock from "./configs/inputs/pad_dualshock";
-import pad_procon from "./configs/inputs/pad_procon";
+import pad_generic from "#app/configs/inputs/pad_generic";
+import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
+import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
+import pad_dualshock from "#app/configs/inputs/pad_dualshock";
+import pad_procon from "#app/configs/inputs/pad_procon";
 import { UiMode } from "#enums/ui-mode";
-import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
+import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
 import type { SettingGamepad } from "#enums/setting-gamepad";

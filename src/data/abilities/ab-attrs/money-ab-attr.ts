@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { PostBattleAbAttr } from "./post-battle-ab-attr";
+import { PostBattleAbAttr } from "#app/data/abilities/ab-attrs/post-battle-ab-attr";
 
 /**
  * Gives money to the user after the battle.

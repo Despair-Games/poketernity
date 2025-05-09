@@ -3,8 +3,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import i18next from "i18next";
-import type { Move } from "../move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
+import type { Move } from "#app/data/moves/move";
+import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 
 /**
  * Drops the target's immunity to types it is immune to

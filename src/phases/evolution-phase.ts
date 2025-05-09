@@ -21,7 +21,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
+import { FormChangeBasePhase } from "#app/phases/abstract-form-change-base-phase";
 
 /**
  * A phase for handling Pokemon evolution

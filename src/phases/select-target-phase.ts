@@ -6,8 +6,8 @@ import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { PokemonPhase } from "./abstract-pokemon-phase";
-import { CommandPhase } from "./command-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
+import { CommandPhase } from "#app/phases/command-phase";
 
 export class SelectTargetPhase extends PokemonPhase {
   override readonly id = PhaseId.SELECT_TARGET;

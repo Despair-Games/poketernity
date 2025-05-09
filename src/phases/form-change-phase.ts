@@ -17,9 +17,9 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
-import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "./end-evolution-phase";
-import { LearnMovePhase } from "./learn-move-phase";
+import { FormChangeBasePhase } from "#app/phases/abstract-form-change-base-phase";
+import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
+import { LearnMovePhase } from "#app/phases/learn-move-phase";
 
 /**
  * A phase for handling certain form changes for player Pokemon.

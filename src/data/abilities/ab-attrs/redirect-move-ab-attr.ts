@@ -3,7 +3,7 @@ import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class RedirectMoveAbAttr extends AbAttr {

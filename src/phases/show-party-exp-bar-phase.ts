@@ -3,8 +3,8 @@ import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils/common-utils";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
-import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
-import { LevelUpPhase } from "./level-up-phase";
+import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
+import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
 

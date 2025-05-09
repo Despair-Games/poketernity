@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
-import { PostVictoryAbAttr } from "./post-victory-ab-attr";
+import { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 
 export class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
   private readonly stat: BattleStat | ((p: Pokemon) => BattleStat);

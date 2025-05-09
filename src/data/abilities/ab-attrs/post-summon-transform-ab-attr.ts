@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { randSeedItem } from "#app/utils/random-utils";
 import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
 
 /**
  * Used by Imposter

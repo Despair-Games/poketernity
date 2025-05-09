@@ -2,7 +2,7 @@ import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-tr
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
-import { SwitchSummonPhase } from "./switch-summon-phase";
+import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 
 export class ReturnPhase extends SwitchSummonPhase {
   override readonly id = PhaseId.RETURN;

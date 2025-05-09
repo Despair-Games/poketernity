@@ -7,11 +7,11 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
-import { FieldPhase } from "./abstract-field-phase";
-import { CommandPhase } from "./command-phase";
-import { EnemyCommandPhase } from "./enemy-command-phase";
-import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
-import { TurnStartPhase } from "./turn-start-phase";
+import { FieldPhase } from "#app/phases/abstract-field-phase";
+import { CommandPhase } from "#app/phases/command-phase";
+import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
+import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
+import { TurnStartPhase } from "#app/phases/turn-start-phase";
 
 export class TurnInitPhase extends FieldPhase {
   override readonly id = PhaseId.TURN_INIT;
