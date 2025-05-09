@@ -1,4 +1,3 @@
-import type { DamageResult } from "#app/@types/DamageResult";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { fixedNumber } from "#app/utils/common-utils";
@@ -6,6 +5,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { settings } from "#system/settings-manager";
+import type { DamageResult } from "#types/DamageResult";
 
 /**
  * Displays damage numbers and plays move hit SFX during battle

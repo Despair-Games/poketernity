@@ -1,6 +1,3 @@
-import type { DexEntry } from "#app/@types/DexData";
-import type { StarterConfig } from "#app/@types/StarterConfig";
-import type { StarterMoveset } from "#app/@types/StarterData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
@@ -63,6 +60,9 @@ import { UiMode } from "#enums/ui-mode";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { StarterPrefs } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { DexEntry } from "#types/DexData";
+import type { StarterConfig } from "#types/StarterConfig";
+import type { StarterMoveset } from "#types/StarterData";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";

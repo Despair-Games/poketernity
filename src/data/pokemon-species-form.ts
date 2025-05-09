@@ -1,4 +1,3 @@
-import type { StarterMoveset } from "#app/@types/StarterData";
 import type { AnySound } from "#app/audio-manager";
 import { speciesEggMoves } from "#app/data/egg-moves";
 import { noRandomSpeciesSpawn } from "#app/data/no-random-species-spawn";
@@ -16,6 +15,7 @@ import { PokemonRegion } from "#enums/pokemon-regions";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
+import type { StarterMoveset } from "#types/StarterData";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 
 //#region Types

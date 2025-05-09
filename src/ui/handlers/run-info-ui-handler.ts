@@ -1,4 +1,3 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getBiomeName } from "#app/data/biome-utils";
@@ -34,6 +33,7 @@ import { UiMode } from "#enums/ui-mode";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { SessionSaveData } from "#types/SessionData";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";

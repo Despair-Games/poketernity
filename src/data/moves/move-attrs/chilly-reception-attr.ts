@@ -1,9 +1,9 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { WeatherType } from "#enums/weather-type";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { Move } from "#moves/move";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Attribute to set the weather to Snow, then

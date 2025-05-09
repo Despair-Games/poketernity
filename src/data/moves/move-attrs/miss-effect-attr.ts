@@ -1,7 +1,7 @@
-import type { UserMoveConditionFunc } from "#app/@types/UserMoveConditionFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { UserMoveConditionFunc } from "#types/UserMoveConditionFunc";
 
 /**
  * Attribute to add an effect that triggers when the move misses.

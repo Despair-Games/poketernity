@@ -1,4 +1,3 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -9,6 +8,7 @@ import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveResult } from "#enums/move-result";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import i18next from "i18next";
 
 /**

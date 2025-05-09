@@ -1,5 +1,4 @@
 import { api } from "#api/api";
-import type { SessionSaveData } from "#app/@types/SessionData";
 import { loggedInUser } from "#app/account";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#app/data/daily-run";
 import { getBiomeKey } from "#app/field/arena";
@@ -23,6 +22,7 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { vouchers } from "#system/voucher";
+import type { SessionSaveData } from "#types/SessionData";
 import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";

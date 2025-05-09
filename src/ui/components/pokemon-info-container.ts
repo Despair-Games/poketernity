@@ -1,5 +1,3 @@
-import type { DexEntry } from "#app/@types/DexData";
-import type { StarterDataEntry } from "#app/@types/StarterData";
 import { DexAttr } from "#app/data/dex-attributes";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getNatureName } from "#app/data/nature";
@@ -13,6 +11,8 @@ import { Gender } from "#enums/gender";
 import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { DexEntry } from "#types/DexData";
+import type { StarterDataEntry } from "#types/StarterData";
 import { IVGraph } from "#ui/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";

@@ -1,4 +1,3 @@
-import type { Status } from "#app/@types/Status";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Variant } from "#app/data/variant";
 import type { Pokemon } from "#app/field/pokemon";
@@ -17,6 +16,7 @@ import { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Status } from "#types/Status";
 
 export default class PokemonData {
   public id: number;

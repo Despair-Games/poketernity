@@ -1,4 +1,3 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
@@ -11,6 +10,7 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type PokemonData from "#system/pokemon-data";
+import type { SessionSaveData } from "#types/SessionData";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";

@@ -1,5 +1,4 @@
 import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
-import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -7,6 +6,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
 import type { ElementalType } from "#enums/elemental-type";
 import type { BattleStat } from "#enums/stat";
 import type { Move } from "#moves/move";
+import type { AbAttrCondition } from "#types/AbAttrCondition";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
   private readonly stat: BattleStat;

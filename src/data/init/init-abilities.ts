@@ -176,7 +176,6 @@ import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boo
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
@@ -200,6 +199,7 @@ import { WeatherType } from "#enums/weather-type";
 import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { AbAttrCondition } from "#types/AbAttrCondition";
 import i18next from "i18next";
 
 // prettier-ignore

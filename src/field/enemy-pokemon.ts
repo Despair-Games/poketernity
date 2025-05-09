@@ -1,4 +1,3 @@
-import type { TurnMove } from "#app/@types/TurnMove";
 import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { allMoves } from "#app/data/data-lists";
@@ -31,6 +30,7 @@ import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
 import type PokemonData from "#system/pokemon-data";
+import type { TurnMove } from "#types/TurnMove";
 import { EnemyBattleInfo } from "#ui/battle-info";
 
 export class EnemyPokemon extends Pokemon {

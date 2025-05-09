@@ -1,4 +1,3 @@
-import type { StarterMoveset } from "#app/@types/StarterData";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants/friendship-constants";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -41,6 +40,7 @@ import { UiMode } from "#enums/ui-mode";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";
+import type { StarterMoveset } from "#types/StarterData";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 

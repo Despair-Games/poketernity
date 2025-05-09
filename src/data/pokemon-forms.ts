@@ -6,8 +6,6 @@ import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
-import type { nil } from "#app/@types/nil";
 import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -27,6 +25,8 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
+import type { AbstractConstructor } from "#types/AbstractConstructor";
+import type { nil } from "#types/nil";
 import i18next from "i18next";
 
 export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;

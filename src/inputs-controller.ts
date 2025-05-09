@@ -1,4 +1,3 @@
-import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import pad_dualshock from "#app/configs/inputs/pad_dualshock";
@@ -16,6 +15,7 @@ import type { SettingGamepad } from "#enums/setting-gamepad";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { SettingsUpdateEventArgs } from "#types/Settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import Phaser from "phaser";
 

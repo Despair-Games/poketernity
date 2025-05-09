@@ -1,9 +1,9 @@
-import type { SupportedLanguage } from "#app/@types/Language";
 import { LANGUAGE_MAX_OPTIONS } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import { supportedLanguages } from "#system/supported-languages";
+import type { SupportedLanguage } from "#types/Language";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";

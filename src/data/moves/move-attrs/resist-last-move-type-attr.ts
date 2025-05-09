@@ -1,4 +1,3 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { getTypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
@@ -10,6 +9,7 @@ import { ChallengeType } from "#enums/challenge-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import i18next from "i18next";
 
 /**

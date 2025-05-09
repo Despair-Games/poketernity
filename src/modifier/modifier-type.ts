@@ -1,5 +1,3 @@
-import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
-import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
@@ -74,6 +72,8 @@ import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
+import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
+import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import i18next from "i18next";
 

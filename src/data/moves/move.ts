@@ -8,11 +8,6 @@ import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import type { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-move-type-power-boost-ab-attr";
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
-import type { Constructor } from "#app/@types/Constructor";
-import type { Localizable } from "#app/@types/locales";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { nil } from "#app/@types/nil";
 import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { TYPE_BOOST_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game-constants";
@@ -54,6 +49,11 @@ import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-att
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
+import type { AbstractConstructor } from "#types/AbstractConstructor";
+import type { Constructor } from "#types/Constructor";
+import type { Localizable } from "#types/locales";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { nil } from "#types/nil";
 import i18next from "i18next";
 
 export abstract class Move implements Localizable {

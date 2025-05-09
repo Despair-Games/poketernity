@@ -1,4 +1,3 @@
-import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import {
   EVIL_GRUNT_1_WAVE,
   EVIL_GRUNT_2_WAVE,
@@ -25,6 +24,7 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
 import i18next from "i18next";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */

@@ -1,11 +1,11 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockOneHitKOAbAttr } from "#abilities/block-one-hit-ko-ab-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Attribute to mark a move as a {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move | one-hit knockout}

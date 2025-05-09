@@ -1,4 +1,3 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { allAbilities } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -6,6 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import i18next from "i18next";
 
 /**

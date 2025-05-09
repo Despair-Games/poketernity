@@ -1,5 +1,3 @@
-import type { FightCommand } from "#app/@types/FightCommand";
-import type { TurnMove } from "#app/@types/TurnMove";
 import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { FairyLockTag } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/data-lists";
@@ -28,6 +26,8 @@ import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
+import type { FightCommand } from "#types/FightCommand";
+import type { TurnMove } from "#types/TurnMove";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import i18next from "i18next";

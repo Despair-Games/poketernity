@@ -1,10 +1,10 @@
 import { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
-import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import type { Move } from "#moves/move";
+import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
 
 /**
  * Negates the damage from the first hit of a damaging move,

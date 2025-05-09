@@ -1,7 +1,7 @@
-import type { TimedEvent } from "#app/@types/TimedEvent";
 import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import { TextStyle } from "#enums/text-style";
+import type { TimedEvent } from "#types/TimedEvent";
 import { addTextObject } from "#ui/text-utils";
 import i18next from "i18next";
 

@@ -1,10 +1,10 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils/common-utils";
 import { HitResult } from "#enums/hit-result";
 import type { BattleStat } from "#enums/stat";
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Attribute to grant a stat stage boost to the user

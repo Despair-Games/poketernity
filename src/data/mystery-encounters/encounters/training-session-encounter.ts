@@ -1,5 +1,4 @@
 import type { Ability } from "#abilities/ability";
-import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { allAbilities } from "#app/data/data-lists";
 import { getNatureName } from "#app/data/nature";
@@ -27,6 +26,7 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import PokemonData from "#system/pokemon-data";
+import type { HeldModifierConfig } from "#types/HeldModifierConfig";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import i18next from "i18next";
 

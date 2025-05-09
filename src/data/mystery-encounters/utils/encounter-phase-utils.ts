@@ -1,5 +1,3 @@
-import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
-import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
 import {
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
@@ -65,6 +63,8 @@ import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils"
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import type PokemonData from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";

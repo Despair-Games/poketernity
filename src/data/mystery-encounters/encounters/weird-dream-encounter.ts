@@ -1,4 +1,3 @@
-import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allSpecies } from "#app/data/data-lists";
@@ -48,6 +47,7 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { HeldModifierConfig } from "#types/HeldModifierConfig";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";

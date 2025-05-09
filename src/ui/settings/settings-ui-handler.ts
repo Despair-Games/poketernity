@@ -1,4 +1,3 @@
-import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
@@ -9,6 +8,7 @@ import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
+import type { SettingsCategory, SettingsUiItem } from "#types/Settings";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";

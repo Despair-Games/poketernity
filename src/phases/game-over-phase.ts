@@ -1,5 +1,4 @@
 import { api } from "#api/api";
-import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -28,6 +27,7 @@ import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { SessionSaveData } from "#types/SessionData";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";

@@ -1,8 +1,8 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import type { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Last_Resort_(move) | Last Resort}'s

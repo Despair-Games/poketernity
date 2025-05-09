@@ -4,13 +4,6 @@ import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type {
-  AudioSettingsKey,
-  DisplaySettingsKey,
-  GeneralSettingsKey,
-  SettingsUiItem,
-  SettingUiItemOption,
-} from "#app/@types/Settings";
 import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { getEnumLength } from "#app/utils/common-utils";
 import { BattleStyle } from "#enums/battle-style";
@@ -26,6 +19,13 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
 import { supportedLanguages } from "#system/supported-languages";
+import type {
+  AudioSettingsKey,
+  DisplaySettingsKey,
+  GeneralSettingsKey,
+  SettingsUiItem,
+  SettingUiItemOption,
+} from "#types/Settings";
 import i18next, { t } from "i18next";
 
 //#region Types

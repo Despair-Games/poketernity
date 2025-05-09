@@ -1,4 +1,3 @@
-import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -39,6 +38,7 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import type { HeldModifierConfig } from "#types/HeldModifierConfig";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */

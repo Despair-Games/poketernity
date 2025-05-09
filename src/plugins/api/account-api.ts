@@ -1,12 +1,12 @@
 import { ApiBase } from "#api/api-base";
+import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { removeCookie, setCookie } from "#app/utils/app-utils";
 import type {
   AccountInfoResponse,
   AccountLoginRequest,
   AccountLoginResponse,
   AccountRegisterRequest,
-} from "#app/@types/AccountApi";
-import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
-import { removeCookie, setCookie } from "#app/utils/app-utils";
+} from "#types/AccountApi";
 
 /**
  * A wrapper for the account API requests.

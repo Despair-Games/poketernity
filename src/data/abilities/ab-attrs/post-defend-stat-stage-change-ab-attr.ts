@@ -1,10 +1,10 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
 import type { Move } from "#moves/move";
+import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
 
 /**
  * Activates after receiving an attack and if certain conditions are met, changes the effective stats

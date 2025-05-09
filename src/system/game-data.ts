@@ -1,8 +1,4 @@
 import { api } from "#api/api";
-import type { DexData, DexEntry } from "#app/@types/DexData";
-import type { SessionSaveData } from "#app/@types/SessionData";
-import type { StarterData } from "#app/@types/StarterData";
-import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import {
   APP_ABBREVIATION,
@@ -72,6 +68,10 @@ import TrainerData from "#system/trainer-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { DexData, DexEntry } from "#types/DexData";
+import type { SessionSaveData } from "#types/SessionData";
+import type { StarterData } from "#types/StarterData";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/SystemData";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { AES, enc } from "crypto-js";

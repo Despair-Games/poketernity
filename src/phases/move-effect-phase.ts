@@ -4,9 +4,6 @@ import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { MoveAnim } from "#animations/move-anim";
-import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
-import type { DamageResult } from "#app/@types/DamageResult";
-import type { TurnMove } from "#app/@types/TurnMove";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -46,6 +43,9 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
 import { NoEffectAttr } from "#moves/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import type { AttackMoveResult } from "#types/AttackMoveResult";
+import type { DamageResult } from "#types/DamageResult";
+import type { TurnMove } from "#types/TurnMove";
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {

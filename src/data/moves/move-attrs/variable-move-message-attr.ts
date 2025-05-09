@@ -1,7 +1,7 @@
-import type { MoveMessageFunc } from "#app/@types/MoveMessageFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { MoveMessageFunc } from "#types/MoveMessageFunc";
 
 /**
  * Attribute to override the default move usage message (e.g. "Pikachu used Thunderbolt!")

@@ -1,8 +1,8 @@
-import type { MoveMessageFunc } from "#app/@types/MoveMessageFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
+import type { MoveMessageFunc } from "#types/MoveMessageFunc";
 
 /**
  * Attribute to queue a message before a move deals damage

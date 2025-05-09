@@ -1,10 +1,10 @@
-import type { SupportedLanguageKey } from "#app/@types/Language";
 import { TextColor } from "#enums/color";
 import { FontStyle } from "#enums/font-style";
 import { TextStyle } from "#enums/text-style";
 import { UiTheme } from "#enums/ui-theme";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { SupportedLanguageKey } from "#types/Language";
 import { allTextFormats } from "#ui/font-style";
 import { allTextColors } from "#ui/text-color";
 import type { TextStyleOptions } from "#ui/text-style-options";

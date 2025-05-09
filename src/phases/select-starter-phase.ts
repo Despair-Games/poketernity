@@ -1,4 +1,3 @@
-import type { StarterConfig } from "#app/@types/StarterConfig";
 import { globalScene } from "#app/global-scene";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
@@ -12,6 +11,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
+import type { StarterConfig } from "#types/StarterConfig";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";

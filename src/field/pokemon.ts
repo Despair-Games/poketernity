@@ -42,14 +42,6 @@ import type { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
 import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
-import type { AbilityFilterOptions } from "#app/@types/AbilityFilterOptions";
-import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
-import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
-import type { nil } from "#app/@types/nil";
-import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
-import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
-import type { Status } from "#app/@types/Status";
-import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import {
@@ -205,6 +197,14 @@ import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr"
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
+import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";
+import type { DamageCalculationResult } from "#types/DamageCalculationResult";
+import type { DamageFunctionOptions } from "#types/DamageFunctionOptions";
+import type { nil } from "#types/nil";
+import type { PokemonTurnData } from "#types/PokemonTurnData";
+import type { PokemonWaveData } from "#types/PokemonWaveData";
+import type { Status } from "#types/Status";
+import type { TurnMove } from "#types/TurnMove";
 import type { BattleInfo } from "#ui/battle-info";
 import i18next from "i18next";
 

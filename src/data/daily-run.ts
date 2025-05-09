@@ -1,5 +1,4 @@
 import { api } from "#api/api";
-import type { StarterConfig } from "#app/@types/StarterConfig";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { speciesStarterCosts } from "#app/data/starters";
@@ -8,6 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import type { SpeciesId } from "#enums/species-id";
+import type { StarterConfig } from "#types/StarterConfig";
 
 export interface DailyRunConfig {
   seed: number;

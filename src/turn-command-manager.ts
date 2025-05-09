@@ -7,8 +7,6 @@ import type { MovePhase } from "#app/phases/move-phase";
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
-import type { TurnCommandFilter } from "#app/@types/TurnCommandFilter";
-import type { TurnMove } from "#app/@types/TurnMove";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
@@ -35,6 +33,8 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
+import type { TurnCommandFilter } from "#types/TurnCommandFilter";
+import type { TurnMove } from "#types/TurnMove";
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.

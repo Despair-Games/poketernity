@@ -1,10 +1,10 @@
 import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
-import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { Move } from "#moves/move";
+import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
 import i18next from "i18next";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {

@@ -1,8 +1,8 @@
-import type { MoveMessageFunc } from "#app/@types/MoveMessageFunc";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#moves/move";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
+import type { MoveMessageFunc } from "#types/MoveMessageFunc";
 
 /**
  * Header attribute to queue a message at the beginning of a turn.

@@ -1,4 +1,3 @@
-import type { ModifierPool } from "#app/@types/ModifierPool";
 import {
   dailyStarterModifierPool,
   enemyBuffModifierPool,
@@ -7,6 +6,7 @@ import {
   wildModifierPool,
 } from "#app/modifier/modifier-pools";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { ModifierPool } from "#types/ModifierPool";
 
 export function getModifierPoolForType(poolType: ModifierPoolType): ModifierPool {
   switch (poolType) {

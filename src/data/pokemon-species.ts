@@ -1,5 +1,3 @@
-import type { Localizable } from "#app/@types/locales";
-import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
 import type { PokemonForm } from "#app/data/pokemon-form";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
@@ -14,6 +12,8 @@ import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import type { Localizable } from "#types/locales";
+import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
 import i18next from "i18next";
 
 export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {

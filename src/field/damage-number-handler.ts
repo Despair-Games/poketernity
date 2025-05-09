@@ -1,4 +1,3 @@
-import type { DamageResult } from "#app/@types/DamageResult";
 import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -10,6 +9,7 @@ import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { HitResult } from "#enums/hit-result";
 import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
+import type { DamageResult } from "#types/DamageResult";
 import { addTextObject } from "#ui/text-utils";
 
 type TextAndShadowArr = [string | null, string | null];

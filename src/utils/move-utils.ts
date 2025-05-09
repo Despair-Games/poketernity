@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
@@ -12,6 +11,7 @@ import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
+import type { AbstractConstructor } from "#types/AbstractConstructor";
 import { t } from "i18next";
 
 //#region Exports

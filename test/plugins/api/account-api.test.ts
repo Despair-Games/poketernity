@@ -1,10 +1,10 @@
 import { AccountApi } from "#api/account-api";
-import type { AccountInfoResponse } from "#app/@types/AccountApi";
 import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import * as AppUtils from "#app/utils/app-utils";
 import { removeCookie, setCookie } from "#app/utils/app-utils";
 import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 import { getApiBaseUrl } from "#test/test-utils/testUtils";
+import type { AccountInfoResponse } from "#types/AccountApi";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
