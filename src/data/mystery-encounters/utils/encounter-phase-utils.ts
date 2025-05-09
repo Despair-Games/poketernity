@@ -8,7 +8,6 @@ import {
 import { biomeLinks } from "#app/data/biome-links";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#app/data/egg";
-import { initMoveAnim } from "#app/data/init/init-move-anim";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getNatureName } from "#app/data/nature";
@@ -41,9 +40,9 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { coerceArray, isNil } from "#app/utils/common-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
@@ -69,6 +68,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+import { initMoveAnim } from "#init/init-move-anim";
 import i18next from "i18next";
 
 /**

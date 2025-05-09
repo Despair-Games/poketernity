@@ -1,4 +1,3 @@
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -24,6 +23,7 @@ import { MoveId } from "#enums/move-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Unlockables } from "#enums/unlockables";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 
 export function initModifierPools() {
   modifierPool[ModifierTier.COMMON] = [

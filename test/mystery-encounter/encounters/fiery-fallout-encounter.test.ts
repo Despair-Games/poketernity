@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as InitMoveAnim from "#app/data/init/init-move-anim";
 import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -22,6 +21,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import * as InitMoveAnim from "#init/init-move-anim";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

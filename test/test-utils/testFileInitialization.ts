@@ -1,11 +1,8 @@
+import { manageListeners } from "#app/../test/test-utils/listenersManager";
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { allMoves } from "#app/data/data-lists";
 import { initEggMoves } from "#app/data/egg-moves";
-import { initAbilities } from "#app/data/init/init-abilities";
-import { initBiomes } from "#app/data/init/init-biomes";
-import { initMoves } from "#app/data/init/init-moves";
-import { initSpecies } from "#app/data/init/init-species";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
@@ -15,6 +12,10 @@ import "#app/phaser-extensions";
 import { initAchievements } from "#app/system/achievements";
 import { initVouchers } from "#app/system/init-vouchers";
 import { setCookie } from "#app/utils/app-utils";
+import { initAbilities } from "#init/init-abilities";
+import { initBiomes } from "#init/init-biomes";
+import { initMoves } from "#init/init-moves";
+import { initSpecies } from "#init/init-species";
 import { blobToString } from "#test/test-utils/gameManagerUtils";
 import { manageListeners } from "#test/test-utils/listenersManager";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
@@ -22,7 +23,6 @@ import { mockContext } from "#test/test-utils/mocks/mockContext";
 import { mockLocalStorage } from "#test/test-utils/mocks/mockLocalStorage";
 import { MockImage } from "#test/test-utils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
-import { manageListeners } from "#app/../test/test-utils/listenersManager";
 
 /**
  * A function to initialize game data before running any other test-related code.

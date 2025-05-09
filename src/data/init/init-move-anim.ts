@@ -2,13 +2,13 @@ import { LegacyAnimConfig } from "#animations/anim-config";
 import { chargeAnims } from "#animations/charge-anims";
 import { moveAnims } from "#animations/move-anims";
 import { allMoves } from "#app/data/data-lists";
-import { initMoveChargeAnim } from "#app/data/init/init-move-charge-anim";
 import type { ChargingMove } from "#app/data/moves/move";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
 import { globalScene } from "#app/global-scene";
 import { animationFileName } from "#app/utils/string-utils";
 import { MoveId } from "#enums/move-id";
+import { initMoveChargeAnim } from "#init/init-move-charge-anim";
 
 //#region Exports
 

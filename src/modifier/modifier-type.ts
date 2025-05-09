@@ -2,7 +2,6 @@ import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilte
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
 import { pokemonFormChanges, SpeciesFormChangeCondition } from "#app/data/pokemon-forms";
@@ -75,6 +74,7 @@ import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import type { VoucherType } from "#enums/voucher-type";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import i18next from "i18next";
 
 const outputModifierData = false;

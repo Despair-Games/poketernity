@@ -2,7 +2,6 @@ import { api } from "#api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { Pokemon } from "#app/field/pokemon";
@@ -30,6 +29,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import i18next from "i18next";
 
 /**

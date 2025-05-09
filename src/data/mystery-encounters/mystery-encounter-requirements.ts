@@ -1,5 +1,4 @@
 import { allAbilities } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -18,6 +17,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 
 export interface EncounterRequirement {
   meetsRequirement(): boolean; // Boolean to see if a requirement is met

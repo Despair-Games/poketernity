@@ -1,6 +1,5 @@
 import type { FixedBattleConfig } from "#app/battle";
 import { defaultStarterSpecies } from "#app/data/default-starters";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/starters";
@@ -10,8 +9,8 @@ import Trainer from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
-import { randSeedItem } from "#app/utils/random-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import { BattleType } from "#enums/battle-type";
 import { Challenges } from "#enums/challenges";
 import { TypeColor, TypeShadowColor } from "#enums/color";
@@ -22,6 +21,7 @@ import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import i18next from "i18next";
 
 /** A constant for the default max cost of the starting party before a run */

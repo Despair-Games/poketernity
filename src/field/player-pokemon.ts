@@ -1,6 +1,5 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants/friendship-constants";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -43,6 +42,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: MoveId[];

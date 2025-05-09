@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as InitMoveAnim from "#app/data/init/init-move-anim";
 import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -29,6 +28,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import * as InitMoveAnim from "#init/init-move-anim";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,

@@ -67,8 +67,6 @@ import { allAbilities, allMoves } from "#app/data/data-lists";
 import { DexAttr } from "#app/data/dex-attributes";
 import { speciesEggMoves } from "#app/data/egg-moves";
 import { getLevelTotalExp } from "#app/data/exp";
-import { initMoveAnim } from "#app/data/init/init-move-anim";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { getMoveTargets, type Move } from "#app/data/moves/move";
 import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#app/data/moves/move-attrs/combined-pledge-stab-boost-attr";
@@ -206,6 +204,8 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 import { SpeciesFormChangeStatusEffectTrigger } from "#form-change-triggers/species-form-change-status-effect-trigger";
+import { initMoveAnim } from "#init/init-move-anim";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import i18next from "i18next";
 
 interface AbilityData {

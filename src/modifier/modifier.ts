@@ -3,7 +3,6 @@ import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship-constants";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -45,6 +44,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { VoucherType } from "#enums/voucher-type";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import i18next from "i18next";
 
 const iconOverflowIndex = 24;

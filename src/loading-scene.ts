@@ -7,11 +7,6 @@ import { api } from "#api/api";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/constants/ui-constants";
 import { initChallenges } from "#app/data/challenge";
 import { initEggMoves } from "#app/data/egg-moves";
-import { initAbilities } from "#app/data/init/init-abilities";
-import { initBiomes } from "#app/data/init/init-biomes";
-import { initMoves } from "#app/data/init/init-moves";
-import { initSpecies } from "#app/data/init/init-species";
-import { initTrainerTypeDialogue } from "#app/data/init/init-trainer-type-dialogue";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
@@ -32,6 +27,11 @@ import { CommonColor } from "#enums/color";
 import { GachaType } from "#enums/gacha-types";
 import { ImagesFolder } from "#enums/images-folders";
 import { WindowVariant } from "#enums/window-variant";
+import { initAbilities } from "#init/init-abilities";
+import { initBiomes } from "#init/init-biomes";
+import { initMoves } from "#init/init-moves";
+import { initSpecies } from "#init/init-species";
+import { initTrainerTypeDialogue } from "#init/init-trainer-type-dialogue";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
