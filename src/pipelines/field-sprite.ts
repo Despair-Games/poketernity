@@ -1,5 +1,5 @@
-import { getTerrainColor } from "#app/data/terrain";
 import { globalScene } from "#app/global-scene";
+import { getTerrainColor } from "#data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { getCurrentTime } from "#utils/common-utils";
 

@@ -1,5 +1,5 @@
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { PlayerPokemon } from "#app/field/player-pokemon";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";

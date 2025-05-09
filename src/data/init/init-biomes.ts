@@ -1,4 +1,3 @@
-import { allBiomes } from "#app/data/data-lists";
 import { abyssBiome } from "#biomes/abyss";
 import { badlandsBiome } from "#biomes/badlands";
 import { beachBiome } from "#biomes/beach";
@@ -36,6 +35,7 @@ import { templeBiome } from "#biomes/temple";
 import { townBiome } from "#biomes/town";
 import { volcanoBiome } from "#biomes/volcano";
 import { wastelandBiome } from "#biomes/wasteland";
+import { allBiomes } from "#data/data-lists";
 
 export function initBiomes() {
   const rawAllBiomes = [

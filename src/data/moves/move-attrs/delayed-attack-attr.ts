@@ -1,7 +1,7 @@
-import type { DelayedAttackTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { DelayedAttackTag } from "#data/arena-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveResult } from "#enums/move-result";

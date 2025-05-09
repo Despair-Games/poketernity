@@ -1,13 +1,3 @@
-import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import {
-  CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
-  getCandyProgressRequirement,
-  speciesStarterCosts,
-} from "#app/data/starters";
-import { reverseCompatibleTms, tmSpecies } from "#app/data/tms";
-import type { Variant } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -21,6 +11,12 @@ import {
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
+import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
+import type { SpeciesFormChange } from "#data/pokemon-forms";
+import type PokemonSpecies from "#data/pokemon-species";
+import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
+import { reverseCompatibleTms, tmSpecies } from "#data/tms";
+import type { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";

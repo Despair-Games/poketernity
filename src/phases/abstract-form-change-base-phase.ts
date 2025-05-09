@@ -1,8 +1,8 @@
-import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { getTypeRgb } from "#data/type";
 import { UiMode } from "#enums/ui-mode";
 import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 

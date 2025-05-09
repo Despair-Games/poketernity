@@ -1,10 +1,10 @@
 import type BattleScene from "#app/battle-scene";
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import * as messages from "#app/messages";
 import { BindTag } from "#battler-tags/bind-tag";
 import { SubstituteTag } from "#battler-tags/substitute-tag";
+import { allMoves } from "#data/data-lists";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";

@@ -1,6 +1,6 @@
-import { allMoves } from "#app/data/data-lists";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

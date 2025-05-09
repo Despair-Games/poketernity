@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
+import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";

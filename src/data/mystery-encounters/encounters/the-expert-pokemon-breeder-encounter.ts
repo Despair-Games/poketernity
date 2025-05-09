@@ -1,11 +1,11 @@
-import type { EggOptions } from "#app/data/egg";
-import { getPokeballTintColor } from "#app/data/pokeball";
-import { speciesStarterCosts } from "#app/data/starters";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import type { EggOptions } from "#data/egg";
+import { getPokeballTintColor } from "#data/pokeball";
+import { speciesStarterCosts } from "#data/starters";
 import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";

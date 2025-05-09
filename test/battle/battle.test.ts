@@ -1,5 +1,5 @@
-import { allSpecies } from "#app/data/data-lists";
 import { getGameMode } from "#app/game-mode";
+import { allSpecies } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
 import { GameModes } from "#enums/game-modes";

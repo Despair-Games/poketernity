@@ -1,11 +1,11 @@
 import type { Ability } from "#abilities/ability";
-import { allAbilities } from "#app/data/data-lists";
-import { getNatureName } from "#app/data/nature";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { allAbilities } from "#data/data-lists";
+import { getNatureName } from "#data/nature";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

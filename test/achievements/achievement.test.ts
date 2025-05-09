@@ -1,4 +1,4 @@
-import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#app/data/challenge";
+import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#data/challenge";
 import { ElementalType } from "#enums/elemental-type";
 import { Achievement, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv, achvs } from "#system/achievements";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -4,7 +4,7 @@ import {
   getStatusEffectHealText,
   getStatusEffectObtainText,
   getStatusEffectOverlapText,
-} from "#app/data/status-effect";
+} from "#data/status-effect";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";

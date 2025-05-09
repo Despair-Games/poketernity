@@ -1,8 +1,8 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
-import { SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { PhaseId } from "#enums/phase-id";

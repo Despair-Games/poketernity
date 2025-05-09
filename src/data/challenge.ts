@@ -1,12 +1,12 @@
 import type { FixedBattleConfig } from "#app/battle";
-import { defaultStarterSpecies } from "#app/data/default-starters";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { speciesStarterCosts } from "#app/data/starters";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import Trainer from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
+import { defaultStarterSpecies } from "#data/default-starters";
+import { pokemonFormChanges } from "#data/pokemon-forms";
+import type PokemonSpecies from "#data/pokemon-species";
+import { speciesStarterCosts } from "#data/starters";
 import { BattleType } from "#enums/battle-type";
 import { Challenges } from "#enums/challenges";
 import { TypeColor, TypeShadowColor } from "#enums/color";

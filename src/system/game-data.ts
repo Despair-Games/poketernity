@@ -1,21 +1,5 @@
 import { api } from "#api/api";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
-import { EntryHazardTag } from "#app/data/arena-tag";
-import { allMoves, allSpecies } from "#app/data/data-lists";
-import { defaultStarterSpecies } from "#app/data/default-starters";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import type { Egg } from "#app/data/egg";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import {
-  STARTER_CANDY_GAIN_FROM_CATCH,
-  STARTER_CANDY_MULIPLIER_FOR_BOSS,
-  STARTER_CANDY_MULIPLIER_FOR_EGG,
-  getCandyGainMultiplierForShinies,
-  speciesStarterCosts,
-} from "#app/data/starters";
-import type { Variant } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -32,6 +16,22 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
+import { EntryHazardTag } from "#data/arena-tag";
+import { allMoves, allSpecies } from "#data/data-lists";
+import { defaultStarterSpecies } from "#data/default-starters";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
+import type { Egg } from "#data/egg";
+import { speciesEggMoves } from "#data/egg-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
+import {
+  STARTER_CANDY_GAIN_FROM_CATCH,
+  STARTER_CANDY_MULIPLIER_FOR_BOSS,
+  STARTER_CANDY_MULIPLIER_FOR_EGG,
+  getCandyGainMultiplierForShinies,
+  speciesStarterCosts,
+} from "#data/starters";
+import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";

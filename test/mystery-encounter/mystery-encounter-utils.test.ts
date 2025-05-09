@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { speciesStarterCosts } from "#app/data/starters";
+import { speciesStarterCosts } from "#data/starters";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
 import {

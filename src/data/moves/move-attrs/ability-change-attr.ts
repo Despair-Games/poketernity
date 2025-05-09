@@ -1,8 +1,8 @@
-import { allAbilities } from "#app/data/data-lists";
-import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { allAbilities } from "#data/data-lists";
+import { SpeciesFormChangeRevertWeatherFormTrigger } from "#data/pokemon-forms";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
 import type { Move } from "#moves/move";

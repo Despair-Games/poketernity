@@ -1,8 +1,8 @@
 import { LegacyAnimConfig } from "#animations/anim-config";
 import { chargeAnims } from "#animations/charge-anims";
 import { moveAnims } from "#animations/move-anims";
-import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
+import { allMoves } from "#data/data-lists";
 import { MoveId } from "#enums/move-id";
 import { initMoveChargeAnim } from "#init/init-move-charge-anim";
 import { BeakBlastHeaderAttr } from "#moves/beak-blast-header-attr";

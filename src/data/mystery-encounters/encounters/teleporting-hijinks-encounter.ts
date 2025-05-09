@@ -1,4 +1,3 @@
-import { TeleportingHijinksBiomeCandidates } from "#app/data/biome-utils";
 import { getBiomeKey } from "#app/field/arena";
 import { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,6 +6,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { TeleportingHijinksBiomeCandidates } from "#data/biome-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BiomeId } from "#enums/biome-id";
 import { ElementalType } from "#enums/elemental-type";

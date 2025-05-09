@@ -1,5 +1,5 @@
-import { genOneThroughFourExpFormula } from "#app/data/exp";
 import { globalScene } from "#app/global-scene";
+import { genOneThroughFourExpFormula } from "#data/exp";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";

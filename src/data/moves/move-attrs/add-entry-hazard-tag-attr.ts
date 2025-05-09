@@ -1,5 +1,5 @@
-import type { EntryHazardTag } from "#app/data/arena-tag";
 import { globalScene } from "#app/global-scene";
+import type { EntryHazardTag } from "#data/arena-tag";
 import { AddArenaTagAttr } from "#moves/add-arena-tag-attr";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 

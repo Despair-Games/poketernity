@@ -1,6 +1,6 @@
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { allMoves } from "#data/data-lists";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { TerrainType } from "#enums/terrain-type";

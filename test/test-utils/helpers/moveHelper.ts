@@ -1,7 +1,7 @@
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
+import { allMoves } from "#data/data-lists";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";

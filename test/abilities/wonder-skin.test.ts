@@ -1,4 +1,4 @@
-import { allAbilities, allMoves } from "#app/data/data-lists";
+import { allAbilities, allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";

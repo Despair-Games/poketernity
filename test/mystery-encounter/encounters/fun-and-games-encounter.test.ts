@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
+import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";

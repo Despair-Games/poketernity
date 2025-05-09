@@ -1,5 +1,5 @@
-import { defaultStarterSpecies } from "#app/data/default-starters";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import { defaultStarterSpecies } from "#data/default-starters";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { Nature } from "#enums/nature";
 import type { GameData } from "#system/game-data";
 import { GameManager } from "#test/test-utils/gameManager";

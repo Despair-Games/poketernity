@@ -1,6 +1,6 @@
-import { getPokeballName } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import { getPokeballName } from "#data/pokeball";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";

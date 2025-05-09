@@ -1,5 +1,5 @@
 import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
-import { allAbilities } from "#app/data/data-lists";
+import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";

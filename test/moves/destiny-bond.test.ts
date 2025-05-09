@@ -1,6 +1,6 @@
-import type { EntryHazardTag } from "#app/data/arena-tag";
-import { allMoves } from "#app/data/data-lists";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
+import type { EntryHazardTag } from "#data/arena-tag";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

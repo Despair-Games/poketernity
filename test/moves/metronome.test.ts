@@ -1,7 +1,7 @@
-import { allMoves } from "#app/data/data-lists";
 import type { RechargingTag } from "#battler-tags/recharging-tag";
 import type { SemiInvulnerableTag } from "#battler-tags/semi-invulnerable-tag";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";

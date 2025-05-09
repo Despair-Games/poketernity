@@ -1,4 +1,4 @@
-import { Egg } from "#app/data/egg";
+import { Egg } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";

@@ -1,5 +1,5 @@
-import type { TypeDamageMultiplier } from "#app/data/type";
 import type { TurnCommand } from "#app/turn-command-manager";
+import type { TypeDamageMultiplier } from "#data/type";
 import type { MoveId } from "#enums/move-id";
 import type { AttackMoveResult } from "#types/AttackMoveResult";
 

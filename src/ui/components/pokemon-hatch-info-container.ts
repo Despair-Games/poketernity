@@ -1,10 +1,10 @@
-import { allMoves } from "#app/data/data-lists";
-import { getEggTierForSpecies } from "#app/data/egg";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { starterColors } from "#app/data/starter-colors";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
+import { allMoves } from "#data/data-lists";
+import { getEggTierForSpecies } from "#data/egg";
+import type { EggHatchData } from "#data/egg-hatch-data";
+import { speciesEggMoves } from "#data/egg-moves";
+import { starterColors } from "#data/starter-colors";
 import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { SpeciesId } from "#enums/species-id";

@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
+import { CivilizationEncounterBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

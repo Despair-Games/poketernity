@@ -3,12 +3,12 @@
 import type { EvolutionPhase } from "#phases/evolution-phase";
 // -- end tsdoc imports --
 
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
-import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { SpeciesFormChange } from "#data/pokemon-forms";
+import { getSpeciesFormChangeMessage } from "#data/pokemon-forms";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";

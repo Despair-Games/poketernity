@@ -4,7 +4,6 @@ import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { MoveAnim } from "#animations/move-anim";
-import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -17,6 +16,7 @@ import {
 import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";

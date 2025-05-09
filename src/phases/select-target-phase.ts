@@ -1,5 +1,5 @@
-import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
+import { allMoves } from "#data/data-lists";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";

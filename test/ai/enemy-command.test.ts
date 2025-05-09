@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
-import { allMoves } from "#app/data/data-lists";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
 import { MoveCategory } from "#enums/move-category";

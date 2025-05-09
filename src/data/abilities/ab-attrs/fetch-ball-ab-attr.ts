@@ -1,8 +1,8 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
-import { getPokeballName } from "#app/data/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { getPokeballName } from "#data/pokeball";
 import i18next from "i18next";
 
 /**

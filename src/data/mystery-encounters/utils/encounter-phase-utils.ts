@@ -1,11 +1,4 @@
 import type Battle from "#app/battle";
-import { biomeLinks } from "#app/data/biome-links";
-import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { Egg, type EggOptions } from "#app/data/egg";
-import { getNatureName } from "#app/data/nature";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { TrainerConfig } from "#app/data/trainer-config";
-import type { Variant } from "#app/data/variant";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -25,6 +18,13 @@ import {
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#constants/mystery-encounter-constants";
+import { biomeLinks } from "#data/biome-links";
+import type { CustomPokemonData } from "#data/custom-pokemon-data";
+import { Egg, type EggOptions } from "#data/egg";
+import { getNatureName } from "#data/nature";
+import type PokemonSpecies from "#data/pokemon-species";
+import type { TrainerConfig } from "#data/trainer-config";
+import type { Variant } from "#data/variant";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";

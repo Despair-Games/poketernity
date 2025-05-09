@@ -1,6 +1,6 @@
-import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { starterColors } from "#data/starter-colors";
 import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { addTextObject } from "#ui/text-utils";

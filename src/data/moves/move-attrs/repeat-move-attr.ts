@@ -1,7 +1,7 @@
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { allMoves } from "#data/data-lists";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";

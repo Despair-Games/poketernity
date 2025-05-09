@@ -1,7 +1,7 @@
-import { biomeLinks } from "#app/data/biome-links";
-import { getBiomeName } from "#app/data/biome-utils";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
+import { biomeLinks } from "#data/biome-links";
+import { getBiomeName } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";

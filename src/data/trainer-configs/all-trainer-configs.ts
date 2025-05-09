@@ -1,4 +1,4 @@
-import type { TrainerConfigs } from "#app/data/trainer-config";
+import type { TrainerConfigs } from "#data/trainer-config";
 import { championDoubleTrainerConfigs } from "#trainer-configs/champion-double-trainer-configs";
 import { championTrainerConfigs } from "#trainer-configs/champion-trainer-configs";
 import { eliteFourTrainerConfigs } from "#trainer-configs/elite-four-trainer-configs";

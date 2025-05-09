@@ -1,27 +1,3 @@
-import { SpeciesId } from "#enums/species-id";
-import {
-  BiomeEvoCondition,
-  DayEvolutionCondition,
-  MoveKnownEvoCondition,
-  LowKeyToxtricityEvoCondition,
-  NightEvolutionCondition,
-  type PokemonEvolutions,
-  SpeciesEvolution,
-  SpeciesFormEvolution,
-  SpeciesFriendshipEvolutionCondition,
-  AmpedToxtricityEvoCondition,
-} from "#app/data/pokemon-evolutions";
-import { EvolutionItem } from "#enums/evolution-item";
-import {
-  ADVANCED_ITEM_EVO_LEVEL,
-  GENERIC_ITEM_EVO_LEVEL,
-  GRAPPLOCT_EVO_LEVEL,
-  HAPPINESS_EVO_LEVEL,
-  OVERQWIL_EVO_LEVEL,
-  SIRFETCHD_EVO_LEVEL,
-  SLOWPOKE_FAMILY_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
-import { MoveId } from "#enums/move-id";
 import {
   CaramelSwirlAlcremieBiomes,
   LemonAlcremieBiomes,
@@ -32,7 +8,31 @@ import {
   RubySwirlAlcremieBiomes,
   SaltedCreamAlcremieBiomes,
   VanillaAlcremieBiomes,
-} from "#app/data/biome-utils";
+} from "#data/biome-utils";
+import {
+  AmpedToxtricityEvoCondition,
+  BiomeEvoCondition,
+  DayEvolutionCondition,
+  LowKeyToxtricityEvoCondition,
+  MoveKnownEvoCondition,
+  NightEvolutionCondition,
+  type PokemonEvolutions,
+  SpeciesEvolution,
+  SpeciesFormEvolution,
+  SpeciesFriendshipEvolutionCondition,
+} from "#data/pokemon-evolutions";
+import {
+  ADVANCED_ITEM_EVO_LEVEL,
+  GENERIC_ITEM_EVO_LEVEL,
+  GRAPPLOCT_EVO_LEVEL,
+  HAPPINESS_EVO_LEVEL,
+  OVERQWIL_EVO_LEVEL,
+  SIRFETCHD_EVO_LEVEL,
+  SLOWPOKE_FAMILY_EVO_LEVEL,
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { EvolutionItem } from "#enums/evolution-item";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.GROOKEY]: [new SpeciesEvolution(SpeciesId.THWACKEY, 16, null, null)],

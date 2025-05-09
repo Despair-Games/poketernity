@@ -1,5 +1,5 @@
-import { getSplashMessages } from "#app/data/splash-messages";
 import * as appConstants from "#constants/app-constants";
+import { getSplashMessages } from "#data/splash-messages";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Data - Splash Messages", () => {

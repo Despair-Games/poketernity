@@ -1,10 +1,10 @@
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import type { Variant } from "#app/data/variant";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
 import type { ElementalType } from "#enums/elemental-type";

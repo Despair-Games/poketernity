@@ -1,5 +1,5 @@
-import { allMoves } from "#app/data/data-lists";
 import * as Messages from "#app/messages";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";

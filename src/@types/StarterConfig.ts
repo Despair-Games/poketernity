@@ -1,4 +1,4 @@
-import type PokemonSpecies from "#app/data/pokemon-species";
+import type PokemonSpecies from "#data/pokemon-species";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Nature } from "#enums/nature";
 import type { StarterMoveset } from "#types/StarterData";

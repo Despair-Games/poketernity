@@ -4,7 +4,7 @@ import {
   getBiomeName,
   HumanTransitableBiomes,
   NonExtremeEncounterBiomes,
-} from "#app/data/biome-utils";
+} from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { ATrainersTestEncounter } from "#mystery-encounters/a-trainers-test-encounter";

@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
-import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
 import { PokemonMove } from "#app/field/pokemon-move";
+import { CivilizationEncounterBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";

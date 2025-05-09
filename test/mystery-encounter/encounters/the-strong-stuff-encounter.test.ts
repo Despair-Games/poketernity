@@ -1,7 +1,7 @@
 import type BattleScene from "#app/battle-scene";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";

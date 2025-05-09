@@ -1,5 +1,5 @@
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
+import { allMoves } from "#data/data-lists";
 import { MoveId } from "#enums/move-id";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";

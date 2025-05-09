@@ -43,29 +43,6 @@ import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-ba
 import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { allAbilities, allMoves } from "#app/data/data-lists";
-import { DexAttr } from "#app/data/dex-attributes";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { getLevelTotalExp } from "#app/data/exp";
-import { getNatureStatMultiplier } from "#app/data/nature";
-import { starterPassiveAbilities } from "#app/data/passives";
-import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#app/data/pokemon-forms";
-import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import {
-  BASE_HIDDEN_ABILITY_CHANCE,
-  BASE_SHINY_CHANCE,
-  SHINY_EPIC_CHANCE,
-  SHINY_VARIANT_CHANCE,
-} from "#app/data/rates";
-import { getNonVolatileStatusEffects } from "#app/data/status-effect";
-import { tmPoolTiers, tmSpecies } from "#app/data/tms";
-import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
-import { variantData, type Variant } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -113,6 +90,24 @@ import {
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
 } from "#constants/game-constants";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import { allAbilities, allMoves } from "#data/data-lists";
+import { DexAttr } from "#data/dex-attributes";
+import { speciesEggMoves } from "#data/egg-moves";
+import { getLevelTotalExp } from "#data/exp";
+import { getNatureStatMultiplier } from "#data/nature";
+import { starterPassiveAbilities } from "#data/passives";
+import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
+import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
+import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#data/pokemon-level-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
+import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
+import { getNonVolatileStatusEffects } from "#data/status-effect";
+import { tmPoolTiers, tmSpecies } from "#data/tms";
+import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#data/type";
+import { variantData, type Variant } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";

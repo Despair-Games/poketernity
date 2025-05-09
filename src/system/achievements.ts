@@ -1,5 +1,5 @@
-import type { Challenge } from "#app/data/challenge";
 import { globalScene } from "#app/global-scene";
+import type { Challenge } from "#data/challenge";
 import { AchvCategory } from "#enums/achv-category";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";

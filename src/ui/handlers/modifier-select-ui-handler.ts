@@ -1,5 +1,3 @@
-import { allMoves } from "#app/data/data-lists";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
 import { HealShopCostModifier, LockModifierTiersModifier } from "#app/modifier/modifier";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
@@ -7,6 +5,8 @@ import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/mo
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { allMoves } from "#data/data-lists";
+import { getPokeballAtlasKey } from "#data/pokeball";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
 import { PokeballType } from "#enums/pokeball-type";

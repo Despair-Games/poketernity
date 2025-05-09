@@ -1,6 +1,6 @@
-import { allMoves } from "#app/data/data-lists";
-import { Weather } from "#app/data/weather";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { allMoves } from "#data/data-lists";
+import { Weather } from "#data/weather";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";

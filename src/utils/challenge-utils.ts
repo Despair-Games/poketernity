@@ -1,7 +1,7 @@
 import type { FixedBattleConfig } from "#app/battle";
-import type PokemonSpecies from "#app/data/pokemon-species";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
+import type PokemonSpecies from "#data/pokemon-species";
 import { ChallengeType } from "#enums/challenge-type";
 import type { MoveId } from "#enums/move-id";
 import type { MoveSourceType } from "#enums/move-source-type";

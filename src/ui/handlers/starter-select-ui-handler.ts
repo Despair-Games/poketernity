@@ -1,18 +1,23 @@
-import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import { Egg, getEggTierForSpecies } from "#app/data/egg";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { getGrowthRateColor, getGrowthRateShadowColor } from "#app/data/exp";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { getNatureName } from "#app/data/nature";
-import { starterPassiveAbilities } from "#app/data/passives";
-import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import type { LevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { starterColors } from "#app/data/starter-colors";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { handleTutorial } from "#app/tutorial";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { allAbilities, allMoves, allSpecies } from "#data/data-lists";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
+import { Egg, getEggTierForSpecies } from "#data/egg";
+import { speciesEggMoves } from "#data/egg-moves";
+import { getGrowthRateColor, getGrowthRateShadowColor } from "#data/exp";
+import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
+import { getNatureName } from "#data/nature";
+import { starterPassiveAbilities } from "#data/passives";
+import { pokemonFormLevelMoves } from "#data/pokemon-form-level-moves";
+import { pokemonFormChanges } from "#data/pokemon-forms";
+import type { LevelMoves } from "#data/pokemon-level-moves";
+import { pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
+import { starterColors } from "#data/starter-colors";
 import {
   POKERUS_STARTER_COUNT,
   getCandyProgressRequirement,
@@ -20,14 +25,9 @@ import {
   getSameSpeciesEggCandyCounts,
   getValueReductionCandyCounts,
   speciesStarterCosts,
-} from "#app/data/starters";
-import type { Variant } from "#app/data/variant";
-import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
-import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
-import { handleTutorial } from "#app/tutorial";
-import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+} from "#data/starters";
+import type { Variant } from "#data/variant";
+import { getVariantTierForVariant, getVariantTint } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";

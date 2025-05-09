@@ -1,4 +1,4 @@
-import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 

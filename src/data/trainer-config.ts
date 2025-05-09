@@ -1,4 +1,3 @@
-import type PokemonSpecies from "#app/data/pokemon-species";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
@@ -6,6 +5,7 @@ import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import { EVIL_GRUNT_1_WAVE, EVIL_GRUNT_2_WAVE, EVIL_GRUNT_3_WAVE, EVIL_GRUNT_4_WAVE } from "#constants/wave-constants";
+import type PokemonSpecies from "#data/pokemon-species";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";

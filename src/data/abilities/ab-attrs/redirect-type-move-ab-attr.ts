@@ -1,6 +1,6 @@
 import { RedirectMoveAbAttr } from "#abilities/redirect-move-ab-attr";
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
+import { allMoves } from "#data/data-lists";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 

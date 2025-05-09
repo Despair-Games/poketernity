@@ -1,13 +1,3 @@
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import {
-  doPokeballBounceAnim,
-  getPokeballAtlasKey,
-  getPokeballCatchMultiplier,
-  getPokeballTintColor,
-} from "#app/data/pokeball";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { speciesStarterCosts } from "#app/data/starters";
-import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -16,6 +6,16 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import {
+  doPokeballBounceAnim,
+  getPokeballAtlasKey,
+  getPokeballCatchMultiplier,
+  getPokeballTintColor,
+} from "#data/pokeball";
+import type PokemonSpecies from "#data/pokemon-species";
+import { speciesStarterCosts } from "#data/starters";
+import { getStatusEffectCatchRateMultiplier } from "#data/status-effect";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";

@@ -1,9 +1,9 @@
-import { allAbilities } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
 import type { BattlerTag } from "#battler-tags/battler-tag";
+import { allAbilities } from "#data/data-lists";
 import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";

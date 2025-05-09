@@ -1,8 +1,8 @@
-import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
-import type { PokemonForm } from "#app/data/pokemon-form";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import { variantData } from "#app/data/variant";
+import type { EvolutionLevel } from "#data/pokemon-evolutions";
+import type { PokemonForm } from "#data/pokemon-form";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import { PokemonSpeciesForm } from "#data/pokemon-species-form";
+import { variantData } from "#data/variant";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { GrowthRate } from "#enums/growth-rates";

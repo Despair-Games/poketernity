@@ -1,8 +1,8 @@
 import type BattleScene from "#app/battle-scene";
-import { speciesEggMoves } from "#app/data/egg-moves";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import { speciesEggMoves } from "#data/egg-moves";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";

@@ -4,9 +4,9 @@ import type { BlockStatusDamageAbAttr } from "#abilities/block-status-damage-ab-
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
-import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { getStatusEffectActivationText } from "#data/status-effect";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";

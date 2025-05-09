@@ -1,12 +1,12 @@
-import { allMoves } from "#app/data/data-lists";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { getVariantTint } from "#app/data/variant";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { GAME_WIDTH } from "#constants/ui-constants";
+import { allMoves } from "#data/data-lists";
+import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
+import { getVariantTint } from "#data/variant";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";

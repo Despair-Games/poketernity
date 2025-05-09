@@ -4,12 +4,12 @@ import type { FormChangePhase } from "#phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
-import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { EVOLVE_MOVE } from "#app/data/pokemon-level-moves";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
+import { EVOLVE_MOVE } from "#data/pokemon-level-moves";
 import { PhaseId } from "#enums/phase-id";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";

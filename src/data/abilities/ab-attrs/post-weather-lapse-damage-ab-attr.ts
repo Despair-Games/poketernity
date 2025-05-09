@@ -1,8 +1,8 @@
 import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
-import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import type { WeatherType } from "#enums/weather-type";

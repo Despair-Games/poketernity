@@ -1,9 +1,9 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-attr";
-import { getBerryEffectFunc } from "#app/data/berry";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
+import { getBerryEffectFunc } from "#data/berry";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";

@@ -1,6 +1,6 @@
-import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import type { EggHatchData } from "#data/egg-hatch-data";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import type { EggHatchSummaryUiHandler } from "#ui/egg-hatch-summary-ui-handler";

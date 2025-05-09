@@ -1,7 +1,7 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import type { EntryHazardTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { EntryHazardTag } from "#data/arena-tag";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { Move } from "#moves/move";
 import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";

@@ -1,7 +1,7 @@
-import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { timedEventManager } from "#app/timed-event-manager";
+import { getCharVariantFromDialogue } from "#data/dialogue";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";

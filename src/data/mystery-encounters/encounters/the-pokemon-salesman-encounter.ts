@@ -1,9 +1,9 @@
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { speciesStarterCosts } from "#app/data/starters";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import type PokemonSpecies from "#data/pokemon-species";
+import { speciesStarterCosts } from "#data/starters";
 import { AbilityId } from "#enums/ability-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

@@ -1,15 +1,11 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-tera-form-change-clear-weather-terrain-ab-attr";
 import type { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
-import {
-  getSpeciesFormChangeMessage,
-  SpeciesFormChangeTeraTrigger,
-  type SpeciesFormChange,
-} from "#app/data/pokemon-forms";
-import { getTypeRgb } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { getSpeciesFormChangeMessage, SpeciesFormChangeTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
+import { getTypeRgb } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";

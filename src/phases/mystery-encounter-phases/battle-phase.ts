@@ -3,10 +3,10 @@
 import type { PostSummonPhase } from "#phases/post-summon-phase";
 // -- end tsdoc imports --
 
-import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { IvScannerModifier } from "#app/modifier/modifier";
 import { Phase } from "#app/phase";
+import { getCharVariantFromDialogue } from "#data/dialogue";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";

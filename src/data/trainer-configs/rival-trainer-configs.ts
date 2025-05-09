@@ -1,13 +1,13 @@
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
 import {
   getRandomPartyMemberFunc,
   getSpeciesFilterRandomPartyMemberFunc,
   TrainerConfig,
   trainerPartyTemplates,
   type TrainerConfigs,
-} from "#app/data/trainer-config";
-import { modifierTypes } from "#app/modifier/modifier-types";
+} from "#data/trainer-config";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";

@@ -1,8 +1,8 @@
-import { allAbilities } from "#app/data/data-lists";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { allAbilities } from "#data/data-lists";
+import { pokemonFormChanges } from "#data/pokemon-forms";
 import type { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";

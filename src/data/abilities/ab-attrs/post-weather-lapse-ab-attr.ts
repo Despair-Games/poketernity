@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
 import type { AbAttrCondition } from "#types/AbAttrCondition";

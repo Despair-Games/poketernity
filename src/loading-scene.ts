@@ -4,10 +4,6 @@ import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 
 import { api } from "#api/api";
-import { initChallenges } from "#app/data/challenge";
-import { initEggMoves } from "#app/data/egg-moves";
-import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { getBiomeHasProps } from "#app/field/arena";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
@@ -16,6 +12,10 @@ import { SceneBase } from "#app/scene-base";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#constants/ui-constants";
+import { initChallenges } from "#data/challenge";
+import { initEggMoves } from "#data/egg-moves";
+import { initPokemonForms } from "#data/pokemon-forms";
+import { initPokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor } from "#enums/color";
 import { GachaType } from "#enums/gacha-types";

@@ -1,4 +1,3 @@
-import { getLevelForWaveFunc } from "#app/data/exp";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -30,6 +29,7 @@ import {
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "#constants/wave-constants";
+import { getLevelForWaveFunc } from "#data/exp";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import { ModifierTier } from "#enums/modifier-tier";

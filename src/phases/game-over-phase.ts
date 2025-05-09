@@ -1,10 +1,10 @@
 import { api } from "#api/api";
 import { clientSessionId } from "#app/account";
-import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import type PokemonSpecies from "#app/data/pokemon-species";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import { getCharVariantFromDialogue } from "#data/dialogue";
+import type PokemonSpecies from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { PhaseId } from "#enums/phase-id";

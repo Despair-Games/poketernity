@@ -1,8 +1,8 @@
-import { getTypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { getTypeDamageMultiplier } from "#data/type";
 import { ChallengeType } from "#enums/challenge-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";

@@ -1,10 +1,10 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/data-lists";
-import { ElementalType } from "#enums/elemental-type";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

@@ -1,7 +1,7 @@
 import type BattleScene from "#app/battle-scene";
-import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
 import { PokemonNatureWeightModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import { CivilizationEncounterBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";

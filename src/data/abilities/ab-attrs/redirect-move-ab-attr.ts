@@ -1,6 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
+import { allMoves } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";

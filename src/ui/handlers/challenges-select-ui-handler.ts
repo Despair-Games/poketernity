@@ -1,6 +1,6 @@
-import type { Challenge } from "#app/data/challenge";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import type { Challenge } from "#data/challenge";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";
 import { CommonColor, ShadowColor } from "#enums/color";

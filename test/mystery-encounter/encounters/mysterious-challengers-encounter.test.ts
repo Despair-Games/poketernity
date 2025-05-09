@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import { TrainerConfig, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
+import { HumanTransitableBiomes } from "#data/biome-utils";
+import { TrainerConfig, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";

@@ -1,5 +1,5 @@
-import type { Challenge } from "#app/data/challenge";
 import overrides from "#app/overrides";
+import type { Challenge } from "#data/challenge";
 import { BattleStyle } from "#enums/battle-style";
 import type { Challenges } from "#enums/challenges";
 import type { SpeciesId } from "#enums/species-id";
