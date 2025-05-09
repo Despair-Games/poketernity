@@ -36,7 +36,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
 
   public override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.canApply(user, target, move)) {
-      const effectChance = this.getMoveChance(user, target, move, this.selfTarget, true);
+      const effectChance = this.getMoveChance(user, target, move, true);
       return effectChance < 0 || user.randSeedInt(100) < effectChance;
     }
     return false;
@@ -50,6 +50,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * @param user the {@linkcode Pokemon} using this move
    * @param target the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being used
+   * @param showAbility `true` if this function call should prompt the ability flyout to show. Defaults to `false`.
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
