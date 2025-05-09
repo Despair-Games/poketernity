@@ -3,7 +3,6 @@ import type { ArenaEvent } from "#app/events/arena";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { TurnEndEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { TimeOfDayWidget } from "#app/ui/components/time-of-day-widget";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNil } from "#app/utils/common-utils";
@@ -16,6 +15,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { TextStyle } from "#enums/text-style";
 import { WeatherType } from "#enums/weather-type";
 import { WindowVariant } from "#enums/window-variant";
+import { TimeOfDayWidget } from "#ui/time-of-day-widget";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 

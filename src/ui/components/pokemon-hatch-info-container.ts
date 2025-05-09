@@ -5,7 +5,6 @@ import { speciesEggMoves } from "#app/data/egg-moves";
 import { starterColors } from "#app/data/starter-colors";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
-import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { rgbHexToRgba } from "#app/utils/color-utils";
 import { getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
@@ -14,6 +13,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
+import { PokemonInfoContainer } from "#ui/pokemon-info-container";
 import { argbFromRgba } from "@material/material-color-utilities";
 
 /**

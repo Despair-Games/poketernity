@@ -10,7 +10,6 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { EnemyBattleInfo } from "#app/ui/components/battle-info";
 import { isBetween, isNil, toDmgValue } from "#app/utils/common-utils";
 import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
 import type { EncoreTag } from "#battler-tags/encore-tag";
@@ -32,6 +31,7 @@ import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
 import type PokemonData from "#system/pokemon-data";
+import { EnemyBattleInfo } from "#ui/battle-info";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;

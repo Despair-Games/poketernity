@@ -5,7 +5,6 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { handleTutorial } from "#app/tutorial";
-import { BgmBar } from "#app/ui/components/bgm-bar";
 import type { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
 import type { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
 import { getAdminModeName } from "#app/ui/handlers/admin-ui-handler";
@@ -32,6 +31,7 @@ import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
+import { BgmBar } from "#ui/bgm-bar";
 import i18next from "i18next";
 
 enum MenuOptions {

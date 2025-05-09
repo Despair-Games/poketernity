@@ -7,16 +7,16 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
-import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
+import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
 import { fixedNumber, getFrameMs } from "#app/utils/common-utils";
 import { randInt } from "#app/utils/random-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import { EggCounterContainer } from "#ui/egg-counter-container";
+import { PokemonInfoContainer } from "#ui/pokemon-info-container";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 
 /**
  * Class that represents egg hatching

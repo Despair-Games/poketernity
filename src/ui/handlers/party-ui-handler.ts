@@ -14,7 +14,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
@@ -47,6 +46,7 @@ import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
+import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

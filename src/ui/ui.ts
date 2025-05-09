@@ -1,8 +1,5 @@
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { AchvBar } from "#app/ui/components/achv-bar";
-import type { BgmBar } from "#app/ui/components/bgm-bar";
-import { SavingIcon } from "#app/ui/components/saving-icon";
 import { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
 import { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
 import { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
@@ -56,6 +53,9 @@ import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import { AchvBar } from "#ui/achv-bar";
+import type { BgmBar } from "#ui/bgm-bar";
+import { SavingIcon } from "#ui/saving-icon";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */

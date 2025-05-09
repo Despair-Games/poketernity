@@ -16,7 +16,6 @@ import {
 import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { isNil } from "#app/utils/common-utils";
 import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
@@ -53,6 +52,7 @@ import {
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
