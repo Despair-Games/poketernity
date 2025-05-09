@@ -29,7 +29,6 @@ import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-fo
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { resetStarterColors, starterColors } from "#app/data/starter-colors";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { getTypeRgb } from "#app/data/type";
 import { type Variant, variantData } from "#app/data/variant";
 import { eventBus } from "#app/event-bus";
@@ -157,6 +156,7 @@ import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type TrainerData from "#system/trainer-data";
 import { type Voucher, vouchers } from "#system/voucher";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 import Phaser from "phaser";
 

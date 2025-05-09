@@ -1,6 +1,5 @@
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils/random-utils";
@@ -12,6 +11,7 @@ import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils
 import { initBattleWithEnemyConfig, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/mysteriousChallengers";

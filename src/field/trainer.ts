@@ -1,3 +1,4 @@
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game-constants";
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { getLevelForWaveFunc } from "#app/data/exp";
@@ -6,13 +7,11 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { signatureSpecies } from "#app/data/signatureSpecies";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { trainerNamePools } from "#app/data/trainer-names";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#app/utils/random-utils";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -23,6 +22,7 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 export default class Trainer extends Phaser.GameObjects.Container {

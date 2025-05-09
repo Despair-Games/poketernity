@@ -28,7 +28,6 @@ import {
   getCandyGainMultiplierForShinies,
   speciesStarterCosts,
 } from "#app/data/starters";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { Variant } from "#app/data/variant";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
@@ -74,6 +73,7 @@ import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
 import { vouchers } from "#system/voucher";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 

@@ -2,7 +2,6 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-enc
 import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -53,6 +52,7 @@ import {
   HeldItemRequirement,
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

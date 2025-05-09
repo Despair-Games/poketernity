@@ -11,7 +11,6 @@ import { Egg, type EggOptions } from "#app/data/egg";
 import { getNatureName } from "#app/data/nature";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { TrainerConfig } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { Variant } from "#app/data/variant";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -69,6 +68,7 @@ import { initMoveAnim } from "#init/init-move-anim";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import type PokemonData from "#system/pokemon-data";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /**

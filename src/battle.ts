@@ -20,7 +20,6 @@ import {
   TUTORIAL_BATTLE_WAVE,
 } from "#app/constants/wave-constants";
 import { getLevelForWaveFunc } from "#app/data/exp";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -48,6 +47,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { Move } from "#moves/move";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

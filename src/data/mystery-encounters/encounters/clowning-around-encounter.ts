@@ -3,7 +3,6 @@ import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
@@ -48,6 +47,7 @@ import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/enco
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";

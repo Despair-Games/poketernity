@@ -2,7 +2,6 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-enc
 import type { EggOptions } from "#app/data/egg";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { speciesStarterCosts } from "#app/data/starters";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -30,6 +29,7 @@ import {
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

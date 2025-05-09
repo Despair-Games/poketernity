@@ -3,7 +3,6 @@ import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
@@ -30,6 +29,7 @@ import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /**

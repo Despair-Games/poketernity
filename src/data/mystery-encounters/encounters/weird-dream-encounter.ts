@@ -5,7 +5,6 @@ import { allSpecies } from "#app/data/data-lists";
 import { getLevelTotalExp } from "#app/data/exp";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { TrainerPartyTemplate } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -48,6 +47,7 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
