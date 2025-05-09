@@ -1,4 +1,3 @@
-import { TurnInitEvent } from "#app/events/battle-scene";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
@@ -7,6 +6,7 @@ import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { PhaseId } from "#enums/phase-id";
+import { TurnInitEvent } from "#events/battle-scene";
 import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,

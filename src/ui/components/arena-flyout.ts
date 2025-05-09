@@ -1,7 +1,4 @@
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import type { ArenaEvent } from "#app/events/arena";
-import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { TurnEndEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { ArenaEventType } from "#enums/arena-event-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -11,6 +8,9 @@ import { TerrainType } from "#enums/terrain-type";
 import { TextStyle } from "#enums/text-style";
 import { WeatherType } from "#enums/weather-type";
 import { WindowVariant } from "#enums/window-variant";
+import type { ArenaEvent } from "#events/arena";
+import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
+import type { TurnEndEvent } from "#events/battle-scene";
 import { addTextObject } from "#ui/text-utils";
 import { TimeOfDayWidget } from "#ui/time-of-day-widget";
 import { addWindow } from "#ui/ui-theme";

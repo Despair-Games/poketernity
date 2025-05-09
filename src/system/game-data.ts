@@ -25,7 +25,6 @@ import {
   speciesStarterCosts,
 } from "#app/data/starters";
 import type { Variant } from "#app/data/variant";
-import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -51,6 +50,7 @@ import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
+import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { achvs } from "#system/achievements";
 import ArenaData from "#system/arena-data";

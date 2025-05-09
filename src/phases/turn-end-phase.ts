@@ -1,6 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
-import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -10,6 +9,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { PhaseId } from "#enums/phase-id";
 import { TerrainType } from "#enums/terrain-type";
+import { TurnEndEvent } from "#events/battle-scene";
 import i18next from "i18next";
 
 export class TurnEndPhase extends FieldPhase {

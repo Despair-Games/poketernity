@@ -1,7 +1,7 @@
-import { MoveUsedEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { MoveUsedEvent } from "#events/battle-scene";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
