@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { EatBerryAttr } from "#app/data/moves/move-attrs/eat-berry-attr";
 import type { Pokemon } from "#app/field/pokemon";

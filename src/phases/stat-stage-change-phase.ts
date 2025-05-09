@@ -1,10 +1,10 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostStatStageChangeAbAttr } from "#abilities/post-stat-stage-change-ab-attr";
 import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
 import type { ReflectStatStageChangeAbAttr } from "#abilities/reflect-stat-stage-change-ab-attr";
 import type { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { CANVAS_SCALE } from "#app/constants/ui-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

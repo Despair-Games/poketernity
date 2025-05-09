@@ -5,10 +5,10 @@ import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { initEncounterAnims } from "#app/data/init/init-encounter-anims";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";

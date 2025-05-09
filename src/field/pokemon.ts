@@ -7,8 +7,10 @@ import type { FaintPhase } from "#app/phases/faint-phase";
 // -- end tsdoc imports --
 
 import type { AbAttr } from "#abilities/ab-attr";
+import type { Ability } from "#abilities/ability";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
+import { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
 import type { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
 import type { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import type { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
@@ -60,8 +62,6 @@ import {
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
 } from "#app/constants/game-constants";
-import type { Ability } from "#app/data/abilities/ability";
-import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";

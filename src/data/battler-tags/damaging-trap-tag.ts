@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import type { Pokemon } from "#app/field/pokemon";

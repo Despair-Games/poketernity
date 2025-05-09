@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";

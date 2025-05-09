@@ -5,10 +5,10 @@ import type { MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import type { TurnCommandFilter } from "#app/@types/TurnCommandFilter";
 import type { TurnMove } from "#app/@types/TurnMove";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveHeaderAttr } from "#app/data/moves/move-attrs/move-header-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";

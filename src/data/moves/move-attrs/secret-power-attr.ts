@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";

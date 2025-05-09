@@ -1,7 +1,7 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IntimidateImmunityAbAttr } from "#abilities/intimidate-immunity-ab-attr";
 import type { PostIntimidateStatStageChangeAbAttr } from "#abilities/post-intimidate-stat-stage-change-ab-attr";
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";

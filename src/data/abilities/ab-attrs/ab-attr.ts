@@ -1,5 +1,5 @@
+import type { Ability } from "#abilities/ability";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type { Ability } from "#app/data/abilities/ability";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 

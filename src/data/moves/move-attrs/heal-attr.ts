@@ -1,5 +1,5 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { RecoveryBoostAbAttr } from "#abilities/recovery-boost-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";

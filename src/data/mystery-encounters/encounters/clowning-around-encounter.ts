@@ -1,7 +1,6 @@
+import { Ability } from "#abilities/ability";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { Ability } from "#app/data/abilities/ability";
 import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
@@ -22,6 +21,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
+import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
@@ -29,8 +29,8 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BerryType } from "#enums/berry-type";

@@ -1,11 +1,11 @@
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { DamageResult } from "#app/@types/DamageResult";
 import type { TurnMove } from "#app/@types/TurnMove";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveAnim } from "#app/data/animations/move-anim";
 import type { BideTag } from "#app/data/battler-tags/bide-tag";
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";

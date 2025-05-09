@@ -1,4 +1,5 @@
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ChangeMovePriorityAbAttr } from "#abilities/change-move-priority-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
 import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
@@ -15,7 +16,6 @@ import type { nil } from "#app/@types/nil";
 import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import { TYPE_BOOST_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants/game-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { MeFirstPowerBoostTag } from "#app/data/battler-tags/me-first-power-boost-tag";
 import type { TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";

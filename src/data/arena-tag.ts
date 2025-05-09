@@ -1,8 +1,8 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
 import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants/game-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";

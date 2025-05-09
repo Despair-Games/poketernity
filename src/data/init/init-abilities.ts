@@ -1,3 +1,4 @@
+import { Ability } from "#abilities/ability";
 import { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
@@ -176,7 +177,6 @@ import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-d
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { Ability } from "#app/data/abilities/ability";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";

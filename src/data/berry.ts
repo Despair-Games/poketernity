@@ -1,7 +1,7 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { ReduceBerryUseThresholdAbAttr } from "#abilities/reduce-berry-use-threshold-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

@@ -1,6 +1,6 @@
+import type { Ability } from "#abilities/ability";
 import { loggedInUser } from "#app/account";
 import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui-constants";
-import type { Ability } from "#app/data/abilities/ability";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";

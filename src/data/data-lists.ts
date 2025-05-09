@@ -1,4 +1,4 @@
-import type { Ability } from "#app/data/abilities/ability";
+import type { Ability } from "#abilities/ability";
 import type { Biome } from "#app/data/biome";
 import type { Move } from "#app/data/moves/move";
 import type PokemonSpecies from "#app/data/pokemon-species";

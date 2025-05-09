@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-tera-form-change-clear-weather-terrain-ab-attr";
 import type { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import {
   getSpeciesFormChangeMessage,
   SpeciesFormChangeTeraTrigger,

@@ -1,3 +1,4 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-attr";
 import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
@@ -20,7 +21,6 @@ import {
 } from "#app/constants/mystery-encounter-constants";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { ELITE_FOUR_1_WAVE } from "#app/constants/wave-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBiomeName } from "#app/data/biome-utils";
 import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";

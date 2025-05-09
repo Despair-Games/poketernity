@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship-constants";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";

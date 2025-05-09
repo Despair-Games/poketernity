@@ -1,5 +1,5 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { ChangeMultiHitTypeAttr } from "#app/data/moves/move-attrs/change-multi-hit-type-attr";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";

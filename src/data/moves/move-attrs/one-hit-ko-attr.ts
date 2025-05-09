@@ -1,6 +1,6 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockOneHitKOAbAttr } from "#abilities/block-one-hit-ko-ab-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";

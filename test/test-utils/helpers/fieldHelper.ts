@@ -3,7 +3,7 @@
 import type { globalScene } from "#app/global-scene";
 // -- end tsdoc imports --
 
-import type { Ability } from "#app/data/abilities/ability";
+import type { Ability } from "#abilities/ability";
 import { allAbilities } from "#app/data/data-lists";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
