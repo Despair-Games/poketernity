@@ -22,9 +22,50 @@
     "rootDir": ".",
     "baseUrl": "./src",
     "paths": {
-      "#enums/*": ["./enums/*.ts"],
+      "#api/*": ["./plugins/api/*.ts"],
       "#app/*": ["./*.ts"],
-      "#test/*": ["../test/*.ts"]
+      "#abilities/*": ["./data/abilities/ab-attrs/*.ts", "./data/abilities/*.ts"],
+      "#animations/*": ["./data/animations/*.ts"],
+      "#battler-tags/*": ["./data/battler-tags/utils/*.ts", "./data/battler-tags/*.ts"],
+      "#biomes/*": ["./data/biomes/*.ts"],
+      "#constants/*": ["./constants/*.ts"],
+      "#data/*": ["./data/*.ts"],
+      "#enums/*": ["./enums/*.ts"],
+      "#events/*": ["./events/*.ts"],
+      "#field/*": ["./field/*.ts"],
+      "#form-change-triggers/*": ["./data/species-form-change-triggers/*.ts"],
+      "#init/*": ["./data/init/*.ts"],
+      "#inputs/*": ["./configs/inputs/*.ts"],
+      "#items/*": ["./data/items/*.ts"],
+      "#modifier/*": ["./modifier/*.ts"],
+      "#moves/*": ["./data/moves/move-attrs/*.ts", "./data/moves/move-conditions/*.ts", "./data/moves/*.ts"],
+      "#mystery-encounters/*": [
+        "./data/mystery-encounters/utils/*.ts",
+        "./data/mystery-encounters/requirements/*.ts",
+        "./data/mystery-encounters/encounters/*.ts",
+        "./data/mystery-encounters/*.ts"
+      ],
+      "#phases/*": ["./phases/*.ts"],
+      "#pipelines/*": ["./pipelines/*.ts"],
+      "#system/*": [
+        "./system/settings/*.ts",
+        "./system/version_migration/versions/*.ts",
+        "./system/version_migration/*.ts",
+        "./system/*.ts"
+      ],
+      "#trainer-configs/*": ["./data/trainer-configs/*.ts"],
+      "#test/*": ["../test/*.ts"],
+      "#types/*": ["./@types/*.ts"],
+      "#ui/*": [
+        "./ui/components/*.ts",
+        "./ui/handlers/*.ts",
+        "./ui/helpers/*.ts",
+        "./ui/interfaces/*.ts",
+        "./ui/settings/*.ts",
+        "./ui/text/*.ts",
+        "./ui/*.ts"
+      ],
+      "#utils/*": ["./utils/*.ts"]
     },
     "outDir": "./build",
     "noEmit": true
