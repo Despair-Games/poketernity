@@ -1,6 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import { HealOnAllyAttr } from "#app/data/moves/move-attrs/heal-on-ally-attr";
-import { StatusCategoryOnAllyAttr } from "#app/data/moves/move-attrs/status-category-on-ally-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -12,6 +10,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
+import { HealOnAllyAttr } from "#moves/heal-on-ally-attr";
+import { StatusCategoryOnAllyAttr } from "#moves/status-category-on-ally-attr";
 import i18next from "i18next";
 
 /**

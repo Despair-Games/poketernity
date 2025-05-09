@@ -6,7 +6,6 @@ import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
 import { getVariantTint } from "#app/data/variant";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -47,6 +46,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

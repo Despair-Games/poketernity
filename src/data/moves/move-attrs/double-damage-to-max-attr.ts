@@ -1,7 +1,7 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MoveAttr } from "#moves/move-attr";
 
 export class DoubleDamageToMaxAttr extends MoveAttr {
   /**

@@ -1,9 +1,9 @@
-import { MoveId } from "#enums/move-id";
-import { ElementalType } from "#enums/elemental-type";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveId } from "#enums/move-id";
+import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 
 /**
  * Attribute to change the type of a {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves | Pledge move}

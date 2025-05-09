@@ -1,7 +1,7 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accuracy-attr";
+import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 
 /**
  * Attribute to set move accuracy based on accuracy rules for one-hit KO moves:

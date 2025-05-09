@@ -1,8 +1,8 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
 
 /**
  * Attribute to double move power if the target has not used a move this turn.

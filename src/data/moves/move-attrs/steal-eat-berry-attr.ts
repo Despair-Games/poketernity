@@ -2,11 +2,11 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { EatBerryAttr } from "#app/data/moves/move-attrs/eat-berry-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { EatBerryAttr } from "#moves/eat-berry-attr";
 import i18next from "i18next";
 
 /**

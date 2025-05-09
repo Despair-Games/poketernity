@@ -1,10 +1,10 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 
 /**
  * Attribute to add an effect that prevents the user from missing

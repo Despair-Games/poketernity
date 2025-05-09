@@ -1,8 +1,8 @@
-import { ElementalType } from "#enums/elemental-type";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { OneHitKOAccuracyAttr } from "#app/data/moves/move-attrs/one-hit-ko-accuracy-attr";
+import { ElementalType } from "#enums/elemental-type";
+import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Cold_(move) | Sheer Cold}'s

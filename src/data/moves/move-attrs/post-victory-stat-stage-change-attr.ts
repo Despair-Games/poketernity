@@ -1,9 +1,9 @@
-import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
+import type { Pokemon } from "#app/field/pokemon";
+import type { BattleStat } from "#enums/stat";
+import { MoveAttr } from "#moves/move-attr";
+import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 
 /**
  * Attribute to increase the user's stats upon knocking out the target with the move.

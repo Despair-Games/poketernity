@@ -1,8 +1,8 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accuracy-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 
 /**
  * Attribute to guarantee hits against Pokemon

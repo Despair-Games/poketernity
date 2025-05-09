@@ -6,12 +6,6 @@ import type { ReduceSleepDurationAbAttr } from "#abilities/reduce-sleep-duration
 import type { ReflectMovesAbAttr } from "#abilities/reflect-moves-ab-attr";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
-import { BypassRedirectAttr } from "#app/data/moves/move-attrs/bypass-redirect-attr";
-import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
-import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
-import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
-import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
-import { VariableMoveMessageAttr } from "#app/data/moves/move-attrs/variable-move-message-attr";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
@@ -45,6 +39,12 @@ import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
+import { BypassRedirectAttr } from "#moves/bypass-redirect-attr";
+import { BypassSleepAttr } from "#moves/bypass-sleep-attr";
+import { CopycatAttr } from "#moves/copycat-attr";
+import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
+import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
+import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import i18next from "i18next";
 
 /**

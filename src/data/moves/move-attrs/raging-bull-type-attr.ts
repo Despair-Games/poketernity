@@ -1,9 +1,9 @@
-import { SpeciesId } from "#enums/species-id";
-import { ElementalType } from "#enums/elemental-type";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import { ElementalType } from "#enums/elemental-type";
+import { SpeciesId } from "#enums/species-id";
+import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 
 /**
  * Attribute to change move type according to the form

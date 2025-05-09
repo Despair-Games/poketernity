@@ -1,7 +1,7 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
 
 /**
  * Attribute used for moves whose base power scales with the opponent's HP

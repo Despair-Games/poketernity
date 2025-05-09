@@ -1,14 +1,11 @@
-import { MoveCategory } from "#enums/move-category";
-import { type BattleStat, Stat } from "#enums/stat";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { Move } from "#app/data/moves/move";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import {
-  ChanceBasedMoveEffectAttr,
-  type ChanceBasedMoveEffectAttrOptions,
-} from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
+import { MoveCategory } from "#enums/move-category";
+import { type BattleStat, Stat } from "#enums/stat";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects

@@ -1,11 +1,11 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
-import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils/common-utils";
 import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveId } from "#enums/move-id";
+import { CallMoveAttr } from "#moves/call-move-attr";
 
 /**
  * Attribute used to copy the last move used by any pokemon.

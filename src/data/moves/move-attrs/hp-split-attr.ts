@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to split HP evenly between the user and target.

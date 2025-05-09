@@ -1,8 +1,8 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 
 /**
  * Attribute to scatter coins on the field, to be collected by the player at the end of battle.

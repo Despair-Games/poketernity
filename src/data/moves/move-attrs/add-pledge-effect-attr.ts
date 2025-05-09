@@ -1,9 +1,9 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
-import type { Move } from "#app/data/moves/move";
-import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
+import { AddArenaTagAttr } from "#moves/add-arena-tag-attr";
 
 /**
  * Attribute that adds a secondary effect to the field when two unique Pledge moves

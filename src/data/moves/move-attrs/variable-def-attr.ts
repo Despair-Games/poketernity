@@ -3,10 +3,10 @@
 import type { Stat } from "#enums/stat";
 // -- end tsdoc imports --
 
-import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
+import { MoveAttr } from "#moves/move-attr";
 
 /**
  * Attribute to change the defensive stat to be used in a move's damage calculations.

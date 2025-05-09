@@ -1,5 +1,5 @@
 import type { ElementalType } from "#enums/elemental-type";
-import { BaseItem } from "#app/data/items/base-item";
+import { BaseItem } from "#items/base-item";
 
 /**
  * Held items are items that are held onto by Pokemon

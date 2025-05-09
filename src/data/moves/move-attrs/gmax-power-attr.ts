@@ -1,8 +1,8 @@
-import type { SpeciesId } from "#enums/species-id";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import type { SpeciesId } from "#enums/species-id";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
 
 /**
  * Attribute to modify a G-Max move's base power

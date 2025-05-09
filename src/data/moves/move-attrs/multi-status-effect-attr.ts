@@ -1,8 +1,8 @@
-import type { StatusEffect } from "#enums/status-effect";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { randSeedItem } from "#app/utils/random-utils";
-import type { Move } from "#app/data/moves/move";
-import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
+import type { StatusEffect } from "#enums/status-effect";
+import { StatusEffectAttr } from "#moves/status-effect-attr";
 
 /**
  * Attribute to randomly apply one of a {@linkcode effects | set of status effects}

@@ -2,10 +2,6 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
-import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
-import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
-import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils/common-utils";
@@ -15,6 +11,10 @@ import { BiomeId } from "#enums/biome-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
+import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
+import { StatusEffectAttr } from "#moves/status-effect-attr";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary

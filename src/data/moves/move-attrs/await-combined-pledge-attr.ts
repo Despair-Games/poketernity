@@ -1,10 +1,10 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils/common-utils";
+import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 
 /**
  * Attribute that cancels the associated move's effects when set to be combined

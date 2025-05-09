@@ -1,5 +1,5 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 
 /**
  * Adds a {@link https://bulbapedia.bulbagarden.net/wiki/Seeding | Seeding} effect to the target

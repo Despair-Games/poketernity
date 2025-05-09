@@ -1,10 +1,10 @@
+import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import type { Move } from "#app/data/moves/move";
+import type { Pokemon } from "#app/field/pokemon";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesId } from "#enums/species-id";
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Adds the appropriate battler tag for Gulp Missile when Surf or Dive is used.

@@ -1,6 +1,5 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
-import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
@@ -8,6 +7,7 @@ import type { BooleanHolder } from "#app/utils/common-utils";
 import type { BideTag } from "#battler-tags/bide-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
+import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 
 /**
  * Attribute to resolve the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Bide_(move) | Bide}

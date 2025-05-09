@@ -3,8 +3,6 @@ import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
-import { CounterDamageAttr } from "#app/data/moves/move-attrs/counter-damage-attr";
-import { CritOnlyAttr } from "#app/data/moves/move-attrs/crit-only-attr";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
@@ -32,6 +30,8 @@ import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { CounterDamageAttr } from "#moves/counter-damage-attr";
+import { CritOnlyAttr } from "#moves/crit-only-attr";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;

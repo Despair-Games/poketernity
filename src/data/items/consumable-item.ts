@@ -1,4 +1,4 @@
-import { BaseItem } from "#app/data/items/base-item";
+import { BaseItem } from "#items/base-item";
 
 /**
  * Consumable items represent items that are immediately used up upon selecting

@@ -1,14 +1,13 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
-import type { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import type { NaturePowerAttr } from "#app/data/moves/move-attrs/nature-power-attr";
-import type { RandomMovesetMoveAttr } from "#app/data/moves/move-attrs/random-moveset-move-attr";
+import type { CopycatAttr } from "#moves/copycat-attr";
+import type { MetronomeAttr } from "#moves/metronome-attr";
+import type { NaturePowerAttr } from "#moves/nature-power-attr";
+import type { RandomMovesetMoveAttr } from "#moves/random-moveset-move-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { type Move, getMoveTargets } from "#app/data/moves/move";
-import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
@@ -16,6 +15,7 @@ import type { BooleanHolder } from "#app/utils/common-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
+import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 
 /**
  * Attribute used to call a different move.

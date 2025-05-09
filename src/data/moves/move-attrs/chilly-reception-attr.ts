@@ -1,9 +1,9 @@
-import { WeatherType } from "#enums/weather-type";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Move } from "#app/data/moves/move";
-import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { WeatherType } from "#enums/weather-type";
+import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 
 /**
  * Attribute to set the weather to Snow, then

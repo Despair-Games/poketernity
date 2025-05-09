@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { ReducePpMoveAttr } from "#app/data/moves/move-attrs/reduce-pp-move-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
+import type { Pokemon } from "#app/field/pokemon";
+import { ReducePpMoveAttr } from "#moves/reduce-pp-move-attr";
 
 /**
  * Attribute to reduce the PP of the target's last move after attacking.

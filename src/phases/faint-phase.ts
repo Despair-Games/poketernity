@@ -13,7 +13,6 @@ import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants/friendship-constants";
 import { allMoves } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -38,6 +37,7 @@ import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
 import i18next from "i18next";
 
 /**

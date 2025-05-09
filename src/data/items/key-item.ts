@@ -1,4 +1,4 @@
-import { BaseItem } from "#app/data/items/base-item";
+import { BaseItem } from "#items/base-item";
 
 /**
  * Key Items are items that are attached to the player

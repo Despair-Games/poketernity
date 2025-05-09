@@ -1,10 +1,10 @@
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
-import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getEnumValues, type BooleanHolder } from "#app/utils/common-utils";
 import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveId } from "#enums/move-id";
+import { CallMoveAttr } from "#moves/call-move-attr";
 
 /**
  * Attribute used to call a random move.

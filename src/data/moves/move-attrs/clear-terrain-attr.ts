@@ -1,8 +1,8 @@
-import { TerrainType } from "#enums/terrain-type";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { TerrainType } from "#enums/terrain-type";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to clear active terrain from the field.

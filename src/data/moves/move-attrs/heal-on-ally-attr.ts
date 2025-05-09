@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
-import { HealAttr } from "#app/data/moves/move-attrs/heal-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { HealAttr } from "#moves/heal-attr";
 
 /**
  * Heals the target only if it is the ally.

@@ -1,7 +1,6 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import type { Move } from "#app/data/moves/move";
-import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -9,6 +8,7 @@ import type { BooleanHolder } from "#app/utils/common-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveResult } from "#enums/move-result";
+import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import i18next from "i18next";
 
 /**

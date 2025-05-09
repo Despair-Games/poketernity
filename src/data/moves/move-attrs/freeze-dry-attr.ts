@@ -1,8 +1,8 @@
-import { ElementalType } from "#enums/elemental-type";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveTypeChartAttr } from "#app/data/moves/move-attrs/variable-move-type-chart-attr";
+import { ElementalType } from "#enums/elemental-type";
+import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 
 /**
  * Attribute to make a move super effective against the Water type.

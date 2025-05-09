@@ -1,7 +1,7 @@
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/variable-move-type-multiplier-attr";
+import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
 
 /**
  * Attribute to set move effectiveness to 0 if the user doesn't share a type with the target.

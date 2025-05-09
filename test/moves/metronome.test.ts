@@ -1,6 +1,5 @@
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import type { RechargingTag } from "#battler-tags/recharging-tag";
 import type { SemiInvulnerableTag } from "#battler-tags/semi-invulnerable-tag";
 import { AbilityId } from "#enums/ability-id";
@@ -9,6 +8,7 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { MetronomeAttr } from "#moves/metronome-attr";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

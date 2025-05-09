@@ -1,4 +1,4 @@
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MoveAttr } from "#moves/move-attr";
 
 /**
  * Attribute for Status moves that take attack type effectiveness

@@ -1,8 +1,8 @@
-import { Stat } from "#enums/stat";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import { Stat } from "#enums/stat";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Electro_Ball_(move) | Electro Ball}'s

@@ -3,10 +3,6 @@ import {
   PROTECTION_BATTLER_TAG_TYPES,
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
 } from "#app/constants/battler-tag-constants";
-import { BideEffectAttr } from "#app/data/moves/move-attrs/bide-effect-attr";
-import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
-import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
-import { ToxicAccuracyAttr } from "#app/data/moves/move-attrs/toxic-accuracy-attr";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
@@ -23,6 +19,10 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
+import { BideEffectAttr } from "#moves/bide-effect-attr";
+import { HitsTagAttr } from "#moves/hits-tag-attr";
+import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import { ToxicAccuracyAttr } from "#moves/toxic-accuracy-attr";
 
 //#region Types
 

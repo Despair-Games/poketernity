@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/moves/move";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils/common-utils";
 import type { ElementalType } from "#enums/elemental-type";
+import { MoveAttr } from "#moves/move-attr";
 
 /**
  * Attribute for moves which have a custom type chart interaction.

@@ -1,9 +1,9 @@
-import { MoveHeaderAttr } from "#app/data/moves/move-attrs/move-header-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { PhaseId } from "#enums/phase-id";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { MoveHeaderAttr } from "#moves/move-header-attr";
 
 /**
  * Applies {@linkcode MoveHeaderAttr}s

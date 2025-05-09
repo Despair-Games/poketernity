@@ -1,13 +1,13 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ConfusionOnStatusEffectAbAttr } from "#abilities/confusion-on-status-effect-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
 import type { StatusEffect } from "#enums/status-effect";
+import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
 import i18next from "i18next";
 
 /**

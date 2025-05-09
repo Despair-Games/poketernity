@@ -1,9 +1,9 @@
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
 
 /**
  * Attribute to cause the move to fail if the target is not holding an item.
