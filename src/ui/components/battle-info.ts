@@ -1,4 +1,3 @@
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui-constants";
 import { getLevelRelExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getTypeRgb } from "#app/data/type";
@@ -6,6 +5,7 @@ import { getVariantTint } from "#app/data/variant";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { CANVAS_SCALE, GAME_WIDTH } from "#constants/ui-constants";
 import { ElementalType } from "#enums/elemental-type";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { Gender } from "#enums/gender";

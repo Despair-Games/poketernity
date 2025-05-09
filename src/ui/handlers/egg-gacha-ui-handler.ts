@@ -1,9 +1,9 @@
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import type { EggOptions } from "#app/data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { EggTier } from "#enums/egg-type";
 import { GachaType } from "#enums/gacha-types";

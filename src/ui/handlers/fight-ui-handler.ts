@@ -1,9 +1,9 @@
 import type { InfoToggle } from "#app/battle-scene";
-import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
+import { GAME_WIDTH } from "#constants/ui-constants";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";

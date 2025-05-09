@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import { initLoggedInUser, loggedInUser, updateUserInfo } from "#app/account";
-import * as appConstants from "#app/constants/app-constants";
+import * as appConstants from "#constants/app-constants";
 import { describe, expect, it, vi } from "vitest";
 
 describe("account", () => {

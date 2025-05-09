@@ -1,5 +1,5 @@
-import { LARGE_NUMBER_ABBREVIATIONS } from "#app/constants/game-constants";
 import type { Pokemon } from "#app/field/pokemon";
+import { LARGE_NUMBER_ABBREVIATIONS } from "#constants/game-constants";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
 import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#system/supported-languages";

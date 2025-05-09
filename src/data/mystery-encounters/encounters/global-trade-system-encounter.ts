@@ -1,5 +1,3 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allSpecies } from "#app/data/data-lists";
 import { getGenderSymbol } from "#app/data/gender";
 import { getNatureName } from "#app/data/nature";
@@ -21,6 +19,8 @@ import {
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { timedEventManager } from "#app/timed-event-manager";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";

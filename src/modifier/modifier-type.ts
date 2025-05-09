@@ -1,4 +1,3 @@
-import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
@@ -48,6 +47,7 @@ import {
 import { modifierPool } from "#app/modifier/modifier-pools";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
+import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";

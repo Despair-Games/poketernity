@@ -1,5 +1,5 @@
-import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { Pokemon } from "#app/field/pokemon";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";

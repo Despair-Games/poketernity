@@ -1,5 +1,3 @@
-import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import { LEVEL_CAP_SCALE_FACTOR } from "#app/constants/game-constants";
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { getLevelForWaveFunc } from "#app/data/exp";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
@@ -12,6 +10,8 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";

@@ -1,4 +1,3 @@
-import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { FairyLockTag } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/data-lists";
 import { speciesStarterCosts } from "#app/data/starters";
@@ -9,6 +8,7 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import type { EncoreTag } from "#battler-tags/encore-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
+import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

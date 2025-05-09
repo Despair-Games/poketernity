@@ -1,8 +1,8 @@
 import { MoveAnim } from "#animations/move-anim";
 import BattleScene from "#app/battle-scene";
-import * as appConstants from "#app/constants/app-constants";
 import { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import * as appConstants from "#constants/app-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";

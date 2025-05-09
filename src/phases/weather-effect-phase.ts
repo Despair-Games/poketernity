@@ -4,10 +4,10 @@ import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-at
 import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
-import { WEATHER_DAMAGE_RATIO } from "#app/constants/weather-constants";
 import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { WEATHER_DAMAGE_RATIO } from "#constants/weather-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";

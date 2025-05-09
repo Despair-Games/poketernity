@@ -1,6 +1,6 @@
 import { updateUserInfo } from "#app/account";
-import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import type { ModalConfig } from "#ui/modal-config";

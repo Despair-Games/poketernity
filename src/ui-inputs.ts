@@ -1,6 +1,6 @@
-import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { InputsController } from "#app/inputs-controller";
+import { GAME_SPEEDS } from "#constants/app-constants";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";

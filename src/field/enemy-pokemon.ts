@@ -1,5 +1,3 @@
-import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { allMoves } from "#app/data/data-lists";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -9,6 +7,8 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import type { EncoreTag } from "#battler-tags/encore-tag";
+import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
 import { BattlerIndex } from "#enums/battler-index";

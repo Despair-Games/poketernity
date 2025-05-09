@@ -1,7 +1,7 @@
-import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import { getEggTierForSpecies } from "#app/data/egg";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";

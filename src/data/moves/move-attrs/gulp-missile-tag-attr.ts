@@ -1,5 +1,5 @@
-import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { Pokemon } from "#app/field/pokemon";
+import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesId } from "#enums/species-id";

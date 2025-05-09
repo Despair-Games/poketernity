@@ -1,6 +1,6 @@
 import BattleScene from "#app/battle-scene";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { LoadingScene } from "#app/loading-scene";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import InvertPostFX from "#pipelines/invert";
 import Phaser from "phaser";
 import BBCodeTextPlugin from "phaser3-rex-plugins/plugins/bbcodetext-plugin";

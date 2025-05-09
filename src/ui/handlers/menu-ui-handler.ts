@@ -1,9 +1,9 @@
 import { api } from "#api/api";
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#app/constants/app-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
 import { handleTutorial } from "#app/tutorial";
+import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";

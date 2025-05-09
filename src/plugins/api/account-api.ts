@@ -1,5 +1,5 @@
 import { ApiBase } from "#api/api-base";
-import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import type {
   AccountInfoResponse,
   AccountLoginRequest,

@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
-import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#app/constants/app-constants";
 import { bgmLoopPoint } from "#app/data/bgm-loop-point";
+import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#constants/app-constants";
 import { settings } from "#system/settings-manager";
 import { fixedNumber } from "#utils/common-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";

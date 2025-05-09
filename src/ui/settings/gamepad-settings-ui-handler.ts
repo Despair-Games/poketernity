@@ -1,10 +1,10 @@
 import pad_dualshock from "#app/configs/inputs/pad_dualshock";
 import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
 import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
-import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
+import { MAPPING_CONFIG_LS_KEY } from "#constants/app-constants";
 import { Device } from "#enums/devices";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";

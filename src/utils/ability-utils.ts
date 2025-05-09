@@ -1,6 +1,6 @@
-import { TERA_MOVES } from "#app/constants/move-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { TERA_MOVES } from "#constants/move-constants";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";

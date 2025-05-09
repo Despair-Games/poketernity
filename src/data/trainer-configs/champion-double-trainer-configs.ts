@@ -1,3 +1,4 @@
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import {
   ALOLA_CHAMPION_THEME,
   DEFAULT_CHAMPION_THEME,
@@ -12,8 +13,7 @@ import {
   KIERAN_CHAMPION_THEME,
   NEMONA_CHAMPION_THEME,
   SINNOH_CHAMPION_THEME,
-} from "#app/constants/music-constants";
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
+} from "#constants/music-constants";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";

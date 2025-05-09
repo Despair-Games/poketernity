@@ -1,7 +1,7 @@
 import { ApiBase } from "#api/api-base";
 import { SessionSavedataApi } from "#api/session-savedata-api";
 import { SystemSavedataApi } from "#api/system-savedata-api";
-import { MAX_INT_ATTR_VALUE } from "#app/constants/game-constants";
+import { MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import type { UpdateAllSavedataRequest } from "#types/SavedataApi";
 
 /**

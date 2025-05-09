@@ -1,7 +1,7 @@
 import { api } from "#api/api";
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants/app-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";

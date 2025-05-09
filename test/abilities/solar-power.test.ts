@@ -1,5 +1,5 @@
-import { SUNNY_WEATHER_TYPES } from "#app/constants/weather-constants";
 import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";

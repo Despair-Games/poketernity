@@ -1,4 +1,4 @@
-import { LOCALE_LS_KEY } from "#app/constants/app-constants";
+import { LOCALE_LS_KEY } from "#constants/app-constants";
 import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#system/supported-languages";
 import { camelCaseToKebabCase } from "#utils/string-utils";
 import i18next from "i18next";

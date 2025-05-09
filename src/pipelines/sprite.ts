@@ -1,4 +1,4 @@
-import { CANVAS_SCALE } from "#app/constants/ui-constants";
+import { CANVAS_SCALE } from "#constants/ui-constants";
 import FieldSpritePipeline from "#pipelines/field-sprite";
 
 const spriteFragShader = `

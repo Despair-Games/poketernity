@@ -1,5 +1,5 @@
-import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
+import { TEXT_SCALE } from "#constants/ui-constants";
 import { EggTier } from "#enums/egg-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { TextStyle } from "#enums/text-style";

@@ -1,5 +1,5 @@
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
+import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import type { Stat } from "#enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";

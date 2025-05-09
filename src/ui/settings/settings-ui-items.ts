@@ -4,7 +4,7 @@ import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { GAME_SPEEDS } from "#app/constants/app-constants";
+import { GAME_SPEEDS } from "#constants/app-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";

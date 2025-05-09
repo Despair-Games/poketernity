@@ -1,5 +1,5 @@
 import { AccountApi } from "#api/account-api";
-import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import type { AccountInfoResponse } from "#types/AccountApi";

@@ -1,5 +1,3 @@
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
@@ -8,6 +6,8 @@ import { getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";

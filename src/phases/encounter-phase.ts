@@ -7,8 +7,6 @@ import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { getNatureName } from "#app/data/nature";
 import type { Pokemon } from "#app/field/pokemon";
@@ -24,6 +22,8 @@ import {
 import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#constants/mystery-encounter-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";

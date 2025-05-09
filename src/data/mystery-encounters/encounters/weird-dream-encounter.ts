@@ -1,4 +1,3 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allSpecies } from "#app/data/data-lists";
 import { getLevelTotalExp } from "#app/data/exp";
@@ -13,6 +12,7 @@ import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Challenges } from "#enums/challenges";
 import type { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";

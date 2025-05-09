@@ -1,5 +1,5 @@
-import { CANVAS_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
+import { CANVAS_SCALE } from "#constants/ui-constants";
 import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
 import { WindowVariant } from "#enums/window-variant";

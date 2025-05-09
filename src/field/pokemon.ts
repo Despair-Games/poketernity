@@ -43,17 +43,6 @@ import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-ba
 import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
-import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import {
-  CRIT_BOOST_BATTLER_TAG_TYPES,
-  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
-  TRAPPED_BATTLER_TAG_TYPES,
-} from "#app/constants/battler-tag-constants";
-import {
-  DEFAULT_MAX_SLEEP_DURATION,
-  DEFAULT_MIN_SLEEP_DURATION,
-  DYNAMAX_DAMAGE_TAKEN_FACTOR,
-} from "#app/constants/game-constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import { DexAttr } from "#app/data/dex-attributes";
@@ -113,6 +102,17 @@ import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-ta
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
+import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import {
+  CRIT_BOOST_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+} from "#constants/battler-tag-constants";
+import {
+  DEFAULT_MAX_SLEEP_DURATION,
+  DEFAULT_MIN_SLEEP_DURATION,
+  DYNAMAX_DAMAGE_TAKEN_FACTOR,
+} from "#constants/game-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";

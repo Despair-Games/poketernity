@@ -1,6 +1,6 @@
-import { REMOVE_TYPE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTag } from "#battler-tags/battler-tag";
+import { REMOVE_TYPE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";

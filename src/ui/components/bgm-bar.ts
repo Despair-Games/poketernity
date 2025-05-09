@@ -1,5 +1,5 @@
-import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
+import { TEXT_SCALE } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
 import { addTextObject } from "#ui/text-utils";

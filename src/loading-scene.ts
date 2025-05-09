@@ -4,7 +4,6 @@ import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 
 import { api } from "#api/api";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/constants/ui-constants";
 import { initChallenges } from "#app/data/challenge";
 import { initEggMoves } from "#app/data/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
@@ -16,6 +15,7 @@ import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#constants/ui-constants";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor } from "#enums/color";
 import { GachaType } from "#enums/gacha-types";

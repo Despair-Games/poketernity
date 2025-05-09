@@ -1,8 +1,4 @@
 import type Battle from "#app/battle";
-import {
-  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
-  ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
-} from "#app/constants/mystery-encounter-constants";
 import { biomeLinks } from "#app/data/biome-links";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#app/data/egg";
@@ -25,6 +21,10 @@ import {
   type ModifierType,
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import {
+  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
+} from "#constants/mystery-encounter-constants";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";

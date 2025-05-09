@@ -1,8 +1,8 @@
 import { updateUserInfo } from "#app/account";
-import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { handleTutorial } from "#app/tutorial";
+import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";

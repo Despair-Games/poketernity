@@ -1,14 +1,5 @@
 import { api } from "#api/api";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
-import {
-  APP_ABBREVIATION,
-  BYPASS_LOGIN,
-  MAPPING_CONFIG_LS_KEY,
-  RUN_HISTORY_LIMIT,
-  SAVE_FILE_EXTENSION,
-  SETTINGS_LS_KEY,
-  TUTORIALS_LS_KEY,
-} from "#app/constants/app-constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { allMoves, allSpecies } from "#app/data/data-lists";
 import { defaultStarterSpecies } from "#app/data/default-starters";
@@ -32,6 +23,15 @@ import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import * as Modifier from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
+import {
+  APP_ABBREVIATION,
+  BYPASS_LOGIN,
+  MAPPING_CONFIG_LS_KEY,
+  RUN_HISTORY_LIMIT,
+  SAVE_FILE_EXTENSION,
+  SETTINGS_LS_KEY,
+  TUTORIALS_LS_KEY,
+} from "#constants/app-constants";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";

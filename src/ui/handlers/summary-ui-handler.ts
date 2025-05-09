@@ -1,6 +1,5 @@
 import type { Ability } from "#abilities/ability";
 import { loggedInUser } from "#app/account";
-import { CANVAS_SCALE, TEXT_SCALE } from "#app/constants/ui-constants";
 import { getBiomeName } from "#app/data/biome-utils";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
@@ -14,6 +13,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { CANVAS_SCALE, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";

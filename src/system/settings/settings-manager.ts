@@ -1,5 +1,5 @@
-import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
+import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#constants/app-constants";
 import { defaultSettings } from "#system/default-settings";
 import type { Settings, SettingsCategory, UserFacingSettings } from "#types/Settings";
 import { isNil } from "#utils/common-utils";

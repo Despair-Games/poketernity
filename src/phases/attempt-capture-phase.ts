@@ -1,4 +1,3 @@
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import {
   doPokeballBounceAnim,
   getCriticalCaptureChance,
@@ -11,6 +10,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PartyOption } from "#enums/party-option";

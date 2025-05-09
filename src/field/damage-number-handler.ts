@@ -1,6 +1,6 @@
-import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT } from "#constants/ui-constants";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";

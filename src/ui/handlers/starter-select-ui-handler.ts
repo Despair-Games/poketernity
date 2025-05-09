@@ -1,5 +1,3 @@
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
@@ -28,6 +26,8 @@ import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";

@@ -1,6 +1,6 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
 import { addTextObject } from "#ui/text-utils";

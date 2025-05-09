@@ -4,10 +4,10 @@ import type { GameOverPhase } from "#phases/game-over-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports--
 
-import { EVIL_BOSS_2_WAVE } from "#app/constants/wave-constants";
 import { globalScene } from "#app/global-scene";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
+import { EVIL_BOSS_2_WAVE } from "#constants/wave-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";

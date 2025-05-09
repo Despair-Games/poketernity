@@ -1,4 +1,3 @@
-import { GAME_WIDTH } from "#app/constants/ui-constants";
 import { allMoves } from "#app/data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getVariantTint } from "#app/data/variant";
@@ -7,6 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { GAME_WIDTH } from "#constants/ui-constants";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";

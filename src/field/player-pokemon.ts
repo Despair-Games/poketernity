@@ -1,4 +1,3 @@
-import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants/friendship-constants";
 import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -21,6 +20,7 @@ import {
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
+import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";

@@ -1,10 +1,5 @@
 import type { FixedBattleConfigs } from "#app/battle";
 import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
-import { DEFAULT_STARTING_MONEY } from "#app/constants/game-constants";
-import {
-  CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
-  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
-} from "#app/constants/mystery-encounter-constants";
 import type { Challenge } from "#app/data/challenge";
 import { allChallenges, copyChallenge } from "#app/data/challenge";
 import { allSpecies } from "#app/data/data-lists";
@@ -12,6 +7,11 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import type { Arena } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
+import { DEFAULT_STARTING_MONEY } from "#constants/game-constants";
+import {
+  CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
+  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
+} from "#constants/mystery-encounter-constants";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";

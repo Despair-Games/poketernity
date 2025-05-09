@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import * as account from "#app/account";
-import * as appConstants from "#app/constants/app-constants";
+import * as appConstants from "#constants/app-constants";
 import { GameManager } from "#test/test-utils/gameManager";
 import type { SessionSaveData } from "#types/SessionData";
 import Phaser from "phaser";

@@ -1,8 +1,8 @@
-import { TEXT_SCALE } from "#app/constants/ui-constants";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerastallizeAccessModifier } from "#app/modifier/modifier";
+import { TEXT_SCALE } from "#constants/ui-constants";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
