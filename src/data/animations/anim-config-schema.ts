@@ -211,7 +211,7 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
     blendType: {
       ...getNumberKeyFrameSetSchema({
         type: "integer",
-        enum: getTSEnumValues(AnimBlendType),
+        enum: Object.values(AnimBlendType),
       }),
       nullable: true,
     },
