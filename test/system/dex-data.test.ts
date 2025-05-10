@@ -50,9 +50,12 @@ describe("Dex Data", () => {
       expect(starterData.valueReduction).toBe(0);
       expect(starterData.classicWinCount).toBe(0);
 
+      // Starters get all neutral natures unlocked
       const unlockedNatures = gameData.getNaturesForAttr(starterData.natureAttr);
-      expect(unlockedNatures.length).toBe(1);
-      expect(neutralNatures.includes(unlockedNatures[0])).toBeTruthy();
+      expect(unlockedNatures.length).toBe(neutralNatures.length);
+      for (const starterNature of unlockedNatures) {
+        expect(neutralNatures).toContain(starterNature);
+      }
 
       expect(dexData.seenCount).toBe(0);
       expect(dexData.caughtCount).toBe(0);

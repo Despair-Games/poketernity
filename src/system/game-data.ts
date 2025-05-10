@@ -60,7 +60,7 @@ import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { NumberHolder, executeIf, fixedNumber, getEnumKeys, getEnumLength, isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randSeedItem } from "#app/utils/random-utils";
+import { randInt } from "#app/utils/random-utils";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";
@@ -1453,18 +1453,12 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
-    // Pick a random neutral nature for each of the default starters
-    const defaultStarterNatures: Nature[] = [];
-    globalScene.executeWithSeedOffset(
-      () => {
-        const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
-        for (let s = 0; s < defaultStarterSpecies.length; s++) {
-          defaultStarterNatures.push(randSeedItem(neutralNatures));
-        }
-      },
-      0,
-      "default",
-    );
+    // Each fresh file starter (default starters) will get all neutral natures unlocked
+    const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
+    let defaultNaturesAttr = 0;
+    for (const nature of neutralNatures) {
+      defaultNaturesAttr |= 1 << nature;
+    }
 
     const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
 
@@ -1478,7 +1472,7 @@ export class GameData {
         candyProgress: 0,
         abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
-        natureAttr: isDefaultStarter ? 1 << (defaultStarterNatures.shift()!) : 0,
+        natureAttr: isDefaultStarter ? defaultNaturesAttr : 0,
         ivs: Array(6).fill(isDefaultStarter ? IV_DEFAULT : IV_MIN),
         valueReduction: 0,
         classicWinCount: 0,
