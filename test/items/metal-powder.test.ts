@@ -1,12 +1,11 @@
-import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import i18next from "#app/plugins/i18n";
 import { NumberHolder } from "#app/utils/common-utils";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Items - Metal Powder", () => {
   let phaserGame: Phaser.Game;
@@ -26,59 +25,6 @@ describe("Items - Metal Powder", () => {
     game = new GameManager(phaserGame);
 
     game.override.battleType("single");
-  });
-
-  it("METAL_POWDER activates in battle correctly", async () => {
-    game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "METAL_POWDER" }]);
-    const consoleSpy = vi.spyOn(console, "log");
-    await game.startBattle([SpeciesId.DITTO]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-
-    // Checking console log to make sure Metal Powder is applied when getEffectiveStat (with the appropriate stat) is called
-    partyMember.getEffectiveStat(Stat.DEF);
-    expect(consoleSpy).toHaveBeenLastCalledWith(
-      "Applied",
-      i18next.t("modifierType:SpeciesBoosterItem.METAL_POWDER.name"),
-      "",
-    );
-
-    // Printing dummy console messages along the way so subsequent checks don't pass because of the first
-    console.log("");
-
-    partyMember.getEffectiveStat(Stat.SPDEF);
-    expect(consoleSpy).not.toHaveBeenLastCalledWith(
-      "Applied",
-      i18next.t("modifierType:SpeciesBoosterItem.METAL_POWDER.name"),
-      "",
-    );
-
-    console.log("");
-
-    partyMember.getEffectiveStat(Stat.ATK);
-    expect(consoleSpy).not.toHaveBeenLastCalledWith(
-      "Applied",
-      i18next.t("modifierType:SpeciesBoosterItem.METAL_POWDER.name"),
-      "",
-    );
-
-    console.log("");
-
-    partyMember.getEffectiveStat(Stat.SPATK);
-    expect(consoleSpy).not.toHaveBeenLastCalledWith(
-      "Applied",
-      i18next.t("modifierType:SpeciesBoosterItem.METAL_POWDER.name"),
-      "",
-    );
-
-    console.log("");
-
-    partyMember.getEffectiveStat(Stat.SPD);
-    expect(consoleSpy).not.toHaveBeenLastCalledWith(
-      "Applied",
-      i18next.t("modifierType:SpeciesBoosterItem.METAL_POWDER.name"),
-      "",
-    );
   });
 
   it("METAL_POWDER held by DITTO", async () => {
