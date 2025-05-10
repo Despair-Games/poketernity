@@ -13,6 +13,7 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
+import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   AddPokeballModifier,
@@ -2077,20 +2078,20 @@ function getNewModifierTypeOption(
   }
 
   if (player) {
-    console.log(index, ignoredPoolIndexes[tier].filter((i) => i <= index).length, ignoredPoolIndexes[tier]);
+    logModifiers(index, ignoredPoolIndexes[tier].filter((i) => i <= index).length, ignoredPoolIndexes[tier]);
   }
   let modifierType: ModifierType | null = pool[tier][index].modifierType;
   if (modifierType instanceof ModifierTypeGenerator) {
     modifierType = (modifierType as ModifierTypeGenerator).generateType(party);
     if (modifierType === null) {
       if (player) {
-        console.log(ModifierTier[tier], upgradeCount);
+        logModifiers(ModifierTier[tier], upgradeCount);
       }
       return getNewModifierTypeOption(party, poolType, tier, upgradeCount, ++retryCount);
     }
   }
 
-  console.log(modifierType, !player ? "(enemy)" : "");
+  logModifiers(modifierType, !player ? "(enemy)" : "");
 
   return new ModifierTypeOption(modifierType as ModifierType, upgradeCount!); // TODO: is this bang correct?
 }
