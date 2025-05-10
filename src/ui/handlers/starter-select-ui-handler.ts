@@ -1179,7 +1179,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     if (starterAttributes.nature !== undefined) {
-      const unlockedNatures = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr);
+      const unlockedNatures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
       if (unlockedNatures.indexOf(starterAttributes.nature as unknown as Nature) < 0) {
         // requested nature wasn't unlocked, purging setting
         delete starterAttributes.nature;
@@ -1670,7 +1670,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
               ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectNature"), null, () => {
-                  const natures = globalScene.gameData.getNaturesForAttr(this.speciesStarterDexEntry?.natureAttr);
+                  const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
                   ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
                     options: natures
                       .map((n: Nature, _i: number) => {
@@ -2050,7 +2050,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             break;
           case Button.CYCLE_NATURE:
             if (this.canCycleNature) {
-              const natures = globalScene.gameData.getNaturesForAttr(this.speciesStarterDexEntry?.natureAttr);
+              const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
               const natureIndex = natures.indexOf(this.natureCursor);
               const newNature = natures[natureIndex < natures.length - 1 ? natureIndex + 1 : 0];
               // store cycled nature as default
@@ -3337,9 +3337,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     if (species) {
       const dexEntry = globalScene.gameData.dexData[species.speciesId];
-      const abilityAttr = globalScene.gameData.starterData[species.speciesId].abilityAttr;
+      const starterEntry = globalScene.gameData.starterData[species.speciesId];
 
-      const caughtAttr = globalScene.gameData.dexData[species.speciesId]?.caughtAttr || BigInt(0);
+      const abilityAttr = starterEntry.abilityAttr;
+      const caughtAttr = dexEntry?.caughtAttr || BigInt(0);
 
       if (!dexEntry.caughtAttr) {
         const props = globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId));
@@ -3453,7 +3454,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             .map((_, f) => dexEntry.caughtAttr & globalScene.gameData.getFormAttr(f))
             .filter((f) => f).length > 1;
 
-        this.canCycleNature = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr).length > 1;
+        this.canCycleNature = globalScene.gameData.getNaturesForAttr(starterEntry.natureAttr).length > 1;
 
         this.canCycleTera =
           !this.statsMode

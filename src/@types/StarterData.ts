@@ -10,6 +10,7 @@ export interface StarterDataEntry {
   candyProgress: number;
   abilityAttr: number;
   passiveAttr: number;
+  natureAttr: number;
   valueReduction: number;
   classicWinCount: number;
 }

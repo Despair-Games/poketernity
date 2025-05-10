@@ -1,6 +1,6 @@
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import type { StarterData } from "#app/@types/StarterData";
+import type { StarterData, StarterDataEntry } from "#app/@types/StarterData";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import {
@@ -371,6 +371,15 @@ export class GameData {
             systemDataStr = cachedSystemDataStr;
           } else {
             this.clearLocalData();
+          }
+        }
+
+        // TODO: Temporary starter data migration, to be removed later
+        for (const starterData of Object.values(systemData.starterData)) {
+          if (!starterData.natureAttr) {
+            const unlocked = starterData.abilityAttr !== 0;
+            // As a placeholder migration, unlock all natures
+            starterData.natureAttr = unlocked ? 67108862 : 0;
           }
         }
 
@@ -1419,7 +1428,6 @@ export class GameData {
       data[species.speciesId] = {
         seenAttr: 0n,
         caughtAttr: 0n,
-        natureAttr: 0,
         seenCount: 0,
         caughtCount: 0,
         hatchedCount: 0,
@@ -1430,24 +1438,10 @@ export class GameData {
     const defaultStarterAttr =
       DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_VARIANT | DexAttr.DEFAULT_FORM;
 
-    const defaultStarterNatures: Nature[] = [];
-
-    globalScene.executeWithSeedOffset(
-      () => {
-        const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
-        for (let s = 0; s < defaultStarterSpecies.length; s++) {
-          defaultStarterNatures.push(randSeedItem(neutralNatures));
-        }
-      },
-      0,
-      "default",
-    );
-
     for (let ds = 0; ds < defaultStarterSpecies.length; ds++) {
       const entry = data[defaultStarterSpecies[ds]] as DexEntry;
       entry.seenAttr = defaultStarterAttr;
       entry.caughtAttr = defaultStarterAttr;
-      entry.natureAttr = 1 << (defaultStarterNatures[ds] + 1);
       for (const i in entry.ivs) {
         entry.ivs[i] = 15;
       }
@@ -1459,16 +1453,32 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
+    // Pick a random neutral nature for each of the default starters
+    const defaultStarterNatures: Nature[] = [];
+    globalScene.executeWithSeedOffset(
+      () => {
+        const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
+        for (let s = 0; s < defaultStarterSpecies.length; s++) {
+          defaultStarterNatures.push(randSeedItem(neutralNatures));
+        }
+      },
+      0,
+      "default",
+    );
+
     const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
+      const isDefaultStarter = defaultStarterSpecies.includes(speciesId);
+
       starterData[speciesId] = {
         moveset: null,
         eggMoves: 0,
         candyCount: 0,
         candyProgress: 0,
-        abilityAttr: defaultStarterSpecies.includes(speciesId) ? AbilityAttr.ABILITY_1 : 0,
+        abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
+        natureAttr: isDefaultStarter ? 1 << (defaultStarterNatures.shift()! + 1) : 0,
         valueReduction: 0,
         classicWinCount: 0,
       };
@@ -1591,16 +1601,16 @@ export class GameData {
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
 
-      // Unlock ability
+      // Unlock ability and nature
       if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
-        this.starterData[species.speciesId].abilityAttr |=
+        const starterData = this.starterData[species.speciesId];
+        starterData.abilityAttr |=
           pokemon.abilityIndex !== 1 || pokemon.species.ability2
             ? 1 << pokemon.abilityIndex
             : AbilityAttr.ABILITY_HIDDEN;
-      }
 
-      // Unlock nature
-      dexEntry.natureAttr |= 1 << (pokemon.nature + 1);
+        starterData.natureAttr |= 1 << (pokemon.nature + 1);
+      }
 
       const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
       const newCatch = !caughtAttr;
@@ -1812,11 +1822,17 @@ export class GameData {
     }
 
     const _unlockSpeciesNature = (speciesId: SpeciesId) => {
-      this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
+      // If it's a starter, unlock the nature
+      if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+        this.starterData[speciesId].natureAttr |= 1 << (nature + 1);
+      }
+
+      // If it has a pre-evolution, recursively unlock the nature for it
       if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
         _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
       }
     };
+
     _unlockSpeciesNature(species.speciesId);
   }
 
@@ -1924,7 +1940,7 @@ export class GameData {
   }
 
   getSpeciesDefaultNature(species: PokemonSpecies): Nature {
-    const dexEntry = this.dexData[species.speciesId];
+    const dexEntry = this.starterData[species.speciesId];
     for (let n = 0; n < 25; n++) {
       if (dexEntry.natureAttr & (1 << (n + 1))) {
         return n as Nature;

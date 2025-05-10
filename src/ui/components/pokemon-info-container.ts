@@ -311,7 +311,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, this.defaultTextStyle));
-      const dexNatures = dexEntry.natureAttr;
+      const dexNatures = starterEntry.natureAttr;
       const newNature = 1 << (pokemon.nature + 1);
       if (!(dexNatures & newNature)) {
         setTextColor(this.pokemonNatureLabelText, TextStyle.SUMMARY_BLUE);

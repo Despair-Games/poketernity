@@ -40,11 +40,12 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+    const naturesBefore = gameData.getNaturesForAttr(starterData.natureAttr);
+    expect(naturesBefore.length).toBe(1);
+    expect(naturesBefore.includes(Nature.MODEST)).toBeFalsy();
 
     expect(dexData.caughtCount).toBe(0);
     expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(1);
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeFalsy();
 
     // bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, false, 0, [], Nature.MODEST);
@@ -54,10 +55,11 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(gameData.gameStats.pokemonCaught).toBe(1);
     expect(starterData.candyCount).toBe(1);
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeTruthy();
+    const naturesAfter = gameData.getNaturesForAttr(starterData.natureAttr);
+    expect(naturesAfter.length).toBe(2);
+    expect(naturesAfter.includes(Nature.MODEST)).toBeTruthy();
 
     expect(dexData.caughtCount).toBe(1);
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(2);
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeTruthy();
   });
 
   it("should update data but not stats of rental for already caught Pokemon", async () => {
@@ -72,11 +74,12 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+    const naturesBefore = gameData.getNaturesForAttr(starterData.natureAttr);
+    expect(naturesBefore.length).toBe(1);
+    expect(naturesBefore.includes(Nature.MODEST)).toBeFalsy();
 
     expect(dexData.caughtCount).toBe(0);
     expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(1);
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeFalsy();
 
     // Shiny tier 3 bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, true, 2, [], Nature.MODEST);
@@ -90,10 +93,11 @@ describe("Dex Data - Set Pokemon caught", () => {
 
     // These should update for rental Pokemon
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeTruthy();
+    const naturesAfter = gameData.getNaturesForAttr(starterData.natureAttr);
+    expect(naturesAfter.length).toBe(2);
+    expect(naturesAfter.includes(Nature.MODEST)).toBeTruthy();
     expect(dexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
     expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeTruthy();
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(2);
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeTruthy();
   });
 
   it("should update nothing for rental, not already caught Pokemon", async () => {
@@ -109,7 +113,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(dexData.caughtAttr).toBeFalsy();
     expect(starterData.candyCount).toBe(0);
     expect(starterData.abilityAttr).toBeFalsy();
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(0);
+    expect(gameData.getNaturesForAttr(starterData.natureAttr).length).toBe(0);
 
     // Shiny tier 3 mewtwo
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.GENDERLESS, true, 2, [], Nature.MODEST);
@@ -123,7 +127,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(dexData.caughtAttr).toBeFalsy();
     expect(starterData.candyCount).toBe(0);
     expect(starterData.abilityAttr).toBeFalsy();
-    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(0);
+    expect(gameData.getNaturesForAttr(starterData.natureAttr).length).toBe(0);
   });
 
   it("should update data for a caught Pokemon's pre-evolutions", async () => {
@@ -136,6 +140,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+    expect(gameData.getNaturesForAttr(starterData.natureAttr).length).toBe(1);
 
     const bulbaDexData = gameData.dexData[SpeciesId.BULBASAUR];
     const ivyDexData = gameData.dexData[SpeciesId.IVYSAUR];
@@ -145,7 +150,6 @@ describe("Dex Data - Set Pokemon caught", () => {
       expect(dexData.caughtCount).toBe(0);
       expect(dexData.hatchedCount).toBe(0);
       expect(dexData.caughtAttr).toBeFalsy();
-      expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(0);
     });
 
     // Catch shiny tier 2 a Venusaur
@@ -162,13 +166,15 @@ describe("Dex Data - Set Pokemon caught", () => {
 
     expect(starterData.candyCount).toBe(10); // catching a rare tier shiny gives 10 candy
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeTruthy();
+    const unlockedNatures = gameData.getNaturesForAttr(starterData.natureAttr);
+    expect(unlockedNatures.length).toBe(2);
+    expect(unlockedNatures.includes(Nature.ADAMANT)).toBeTruthy();
+
     expect(bulbaDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
     expect(bulbaDexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
     expect(bulbaDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
     expect(bulbaDexData.caughtAttr & DexAttr.VARIANT_2).toBeTruthy();
     expect(bulbaDexData.caughtAttr & DexAttr.VARIANT_3).toBeFalsy();
-    expect(gameData.getNaturesForAttr(bulbaDexData.natureAttr).length).toBe(2);
-    expect(gameData.getNaturesForAttr(bulbaDexData.natureAttr).includes(Nature.ADAMANT)).toBeTruthy();
 
     [ivyDexData, venuDexData].forEach((dexData) => {
       expect(dexData.caughtAttr & DexAttr.NON_SHINY).toBeFalsy();
@@ -178,8 +184,6 @@ describe("Dex Data - Set Pokemon caught", () => {
       expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeFalsy();
       expect(dexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
       expect(dexData.caughtAttr & DexAttr.MALE).toBeFalsy();
-      expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(1);
-      expect(gameData.getNaturesForAttr(dexData.natureAttr)[0]).toBe(Nature.ADAMANT);
     });
   });
 
@@ -200,7 +204,7 @@ describe("Dex Data - Set Pokemon caught", () => {
       expect(dexData.caughtCount).toBe(0);
       expect(dexData.hatchedCount).toBe(0);
       expect(dexData.caughtAttr).toBeFalsy();
-      expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(0);
+      expect(gameData.getNaturesForAttr(starterData.natureAttr).length).toBe(0);
     });
 
     // Catch a donphan, should unlock phanpy as a starter
@@ -228,6 +232,10 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(starterData.candyCount).toBe(11); // 1 candy for standard catch + 5 * 2 candies for shiny hatch
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeTruthy();
+    const unlockedNatures = gameData.getNaturesForAttr(starterData.natureAttr);
+    expect(unlockedNatures.length).toBe(2);
+    expect(unlockedNatures.includes(Nature.MILD)).toBeTruthy();
+    expect(unlockedNatures.includes(Nature.QUIET)).toBeTruthy();
 
     // Phanpy data
     expect(phanpyDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
@@ -235,9 +243,6 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(phanpyDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
     expect(phanpyDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
     expect(phanpyDexData.caughtAttr & DexAttr.MALE).toBeTruthy();
-    expect(gameData.getNaturesForAttr(phanpyDexData.natureAttr).length).toBe(2);
-    expect(gameData.getNaturesForAttr(phanpyDexData.natureAttr).includes(Nature.MILD)).toBeTruthy();
-    expect(gameData.getNaturesForAttr(phanpyDexData.natureAttr).includes(Nature.QUIET)).toBeTruthy();
 
     // Donphan data
     expect(donphanDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
@@ -245,8 +250,6 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(donphanDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
     expect(donphanDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
     expect(donphanDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
-    expect(gameData.getNaturesForAttr(donphanDexData.natureAttr).length).toBe(1);
-    expect(gameData.getNaturesForAttr(donphanDexData.natureAttr)[0]).toBe(Nature.MILD);
   });
 
   it("should not unlock non existing forms for a caught mon's pre-evolutions", async () => {

@@ -48,7 +48,7 @@ describe("Dex Data", () => {
       expect(starterData.valueReduction).toBe(0);
       expect(starterData.classicWinCount).toBe(0);
 
-      const unlockedNatures = gameData.getNaturesForAttr(dexData.natureAttr);
+      const unlockedNatures = gameData.getNaturesForAttr(starterData.natureAttr);
       expect(unlockedNatures.length).toBe(1);
       expect(neutralNatures.includes(unlockedNatures[0])).toBeTruthy();
 

@@ -42,7 +42,6 @@ export class EggHatchData {
     this.dexEntryBeforeUpdate = {
       seenAttr: currDexEntry.seenAttr,
       caughtAttr: currDexEntry.caughtAttr,
-      natureAttr: currDexEntry.natureAttr,
       seenCount: currDexEntry.seenCount,
       caughtCount: currDexEntry.caughtCount,
       hatchedCount: currDexEntry.hatchedCount,
@@ -55,6 +54,7 @@ export class EggHatchData {
       candyProgress: currStarterDataEntry.candyProgress,
       abilityAttr: currStarterDataEntry.abilityAttr,
       passiveAttr: currStarterDataEntry.passiveAttr,
+      natureAttr: currStarterDataEntry.natureAttr,
       valueReduction: currStarterDataEntry.valueReduction,
       classicWinCount: currStarterDataEntry.classicWinCount,
     };
