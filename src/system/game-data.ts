@@ -58,7 +58,7 @@ import { vouchers } from "#app/system/voucher";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { applyChallenges } from "#app/utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#app/utils/common-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, getEnumLength, isNil } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randInt, randSeedItem } from "#app/utils/random-utils";
 import { BattleType } from "#enums/battle-type";
@@ -376,11 +376,12 @@ export class GameData {
         }
 
         // TODO: Temporary starter data migration, to be removed later
+        const allNaturesAttr = Math.pow(2, getEnumLength(Nature)) - 1;
         for (const starterData of Object.values(systemData.starterData)) {
           if (!starterData.natureAttr || !starterData.ivs) {
             const unlocked = starterData.abilityAttr !== 0;
             // As a placeholder migration, unlock all natures
-            starterData.natureAttr = unlocked ? 67108862 : 0;
+            starterData.natureAttr = unlocked ? allNaturesAttr : 0;
             // As a placeholder migration, max out all ivs
             starterData.ivs = Array(6).fill(unlocked ? IV_MAX : IV_MIN);
           }
@@ -1477,7 +1478,7 @@ export class GameData {
         candyProgress: 0,
         abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
-        natureAttr: isDefaultStarter ? 1 << (defaultStarterNatures.shift()! + 1) : 0,
+        natureAttr: isDefaultStarter ? 1 << (defaultStarterNatures.shift()!) : 0,
         ivs: Array(6).fill(isDefaultStarter ? IV_DEFAULT : IV_MIN),
         valueReduction: 0,
         classicWinCount: 0,
@@ -1609,7 +1610,7 @@ export class GameData {
             ? 1 << pokemon.abilityIndex
             : AbilityAttr.ABILITY_HIDDEN;
 
-        starterData.natureAttr |= 1 << (pokemon.nature + 1);
+        starterData.natureAttr |= 1 << pokemon.nature;
       }
 
       const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
@@ -1824,7 +1825,7 @@ export class GameData {
     const _unlockSpeciesNature = (speciesId: SpeciesId) => {
       // If it's a starter, unlock the nature
       if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
-        this.starterData[speciesId].natureAttr |= 1 << (nature + 1);
+        this.starterData[speciesId].natureAttr |= 1 << nature;
       }
 
       // If it has a pre-evolution, recursively unlock the nature for it
@@ -1954,7 +1955,7 @@ export class GameData {
   getSpeciesDefaultNature(species: PokemonSpecies): Nature {
     const dexEntry = this.starterData[species.speciesId];
     for (let n = 0; n < 25; n++) {
-      if (dexEntry.natureAttr & (1 << (n + 1))) {
+      if (dexEntry.natureAttr & (1 << n)) {
         return n as Nature;
       }
     }
@@ -1972,7 +1973,7 @@ export class GameData {
   getNaturesForAttr(natureAttr: number = 0): Nature[] {
     const ret: Nature[] = [];
     for (let n = 0; n < 25; n++) {
-      if (natureAttr & (1 << (n + 1))) {
+      if (natureAttr & (1 << n)) {
         ret.push(n);
       }
     }
