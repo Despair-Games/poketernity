@@ -1,6 +1,6 @@
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterConfig } from "#app/@types/StarterConfig";
-import type { StarterMoveset } from "#app/@types/StarterData";
+import type { StarterDataEntry, StarterMoveset } from "#app/@types/StarterData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
@@ -288,6 +288,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private starterTeras: ElementalType[] = [];
   private starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
+  private speciesStarterDataEntry: StarterDataEntry | null;
   private speciesStarterMoves: MoveId[];
   private canToggleShiny: boolean;
   private canCycleForm: boolean;
@@ -2833,11 +2834,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           return (candyCountA - candyCountB) * -sort.dir;
         case SortCriteria.IV:
           const avgIVsA =
-            globalScene.gameData.dexData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
-            / globalScene.gameData.dexData[a.species.speciesId].ivs.length;
+            globalScene.gameData.starterData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
+            / globalScene.gameData.starterData[a.species.speciesId].ivs.length;
           const avgIVsB =
-            globalScene.gameData.dexData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
-            / globalScene.gameData.dexData[b.species.speciesId].ivs.length;
+            globalScene.gameData.starterData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
+            / globalScene.gameData.starterData[b.species.speciesId].ivs.length;
           return (avgIVsA - avgIVsB) * -sort.dir;
         case SortCriteria.NAME:
           return a.species.name.localeCompare(b.species.name) * -sort.dir;
@@ -3001,6 +3002,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   setSpecies(species: PokemonSpecies | null) {
     this.speciesStarterDexEntry = species ? globalScene.gameData.dexData[species.speciesId] : null;
+    this.speciesStarterDataEntry = species ? globalScene.gameData.starterData[species.speciesId] : null;
     this.dexAttrCursor = species ? this.getCurrentDexProps(species.speciesId) : 0n;
     this.abilityCursor = species ? globalScene.gameData.getStarterSpeciesDefaultAbilityIndex(species) : 0;
     this.natureCursor = species ? globalScene.gameData.getSpeciesDefaultNature(species) : 0;
@@ -4077,13 +4079,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   showStats(): void {
-    if (!this.speciesStarterDexEntry) {
+    if (!this.speciesStarterDataEntry) {
       return;
     }
 
     this.statsContainer.setVisible(true);
-
-    this.statsContainer.updateIvs(this.speciesStarterDexEntry.ivs);
+    this.statsContainer.updateIvs(this.speciesStarterDataEntry.ivs);
   }
 
   public override clearText() {

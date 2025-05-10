@@ -1,4 +1,5 @@
 import type { FixedBattleConfig } from "#app/battle";
+import { IV_DEFAULT } from "#app/constants/game-constants";
 import { defaultStarterSpecies } from "#app/data/default-starters";
 import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
@@ -10,8 +11,8 @@ import Trainer from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
 import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
-import { randSeedItem } from "#app/utils/random-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
+import { randSeedItem } from "#app/utils/random-utils";
 import { BattleType } from "#enums/battle-type";
 import { Challenges } from "#enums/challenges";
 import { TypeColor, TypeShadowColor } from "#enums/color";
@@ -675,7 +676,7 @@ export class FreshStartChallenge extends Challenge {
     pokemon.shiny = false; // Not shiny
     pokemon.variant = 0; // Not shiny
     pokemon.formIndex = 0; // Froakie should be base form
-    pokemon.ivs = [15, 15, 15, 15, 15, 15]; // Default IVs of 15 for all stats (Updated to 15 from 10 in 1.2.0)
+    pokemon.ivs = Array(6).fill(IV_DEFAULT); // Default IV values
     return true;
   }
 

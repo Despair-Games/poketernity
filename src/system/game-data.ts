@@ -1,17 +1,18 @@
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import type { StarterData, StarterDataEntry } from "#app/@types/StarterData";
+import type { StarterData } from "#app/@types/StarterData";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import {
   APP_ABBREVIATION,
+  BYPASS_LOGIN,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
-  BYPASS_LOGIN,
 } from "#app/constants/app-constants";
+import { IV_DEFAULT, IV_MAX, IV_MIN } from "#app/constants/game-constants";
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { allMoves, allSpecies } from "#app/data/data-lists";
 import { defaultStarterSpecies } from "#app/data/default-starters";
@@ -376,10 +377,12 @@ export class GameData {
 
         // TODO: Temporary starter data migration, to be removed later
         for (const starterData of Object.values(systemData.starterData)) {
-          if (!starterData.natureAttr) {
+          if (!starterData.natureAttr || !starterData.ivs) {
             const unlocked = starterData.abilityAttr !== 0;
             // As a placeholder migration, unlock all natures
             starterData.natureAttr = unlocked ? 67108862 : 0;
+            // As a placeholder migration, max out all ivs
+            starterData.ivs = Array(6).fill(unlocked ? IV_MAX : IV_MIN);
           }
         }
 
@@ -1431,7 +1434,6 @@ export class GameData {
         seenCount: 0,
         caughtCount: 0,
         hatchedCount: 0,
-        ivs: [0, 0, 0, 0, 0, 0],
       };
     }
 
@@ -1442,9 +1444,6 @@ export class GameData {
       const entry = data[defaultStarterSpecies[ds]] as DexEntry;
       entry.seenAttr = defaultStarterAttr;
       entry.caughtAttr = defaultStarterAttr;
-      for (const i in entry.ivs) {
-        entry.ivs[i] = 15;
-      }
     }
 
     this.dexData = data;
@@ -1479,6 +1478,7 @@ export class GameData {
         abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
         natureAttr: isDefaultStarter ? 1 << (defaultStarterNatures.shift()! + 1) : 0,
+        ivs: Array(6).fill(isDefaultStarter ? IV_DEFAULT : IV_MIN),
         valueReduction: 0,
         classicWinCount: 0,
       };
@@ -1836,20 +1836,32 @@ export class GameData {
     _unlockSpeciesNature(species.speciesId);
   }
 
+  /**
+   * Update the maximum IVs for the given Pokemon {@linkcode SpeciesId} and its pre-evolutions.
+   */
   updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
-    let dexEntry: DexEntry;
-    do {
-      dexEntry = globalScene.gameData.dexData[speciesId];
-      const dexIvs = dexEntry.ivs;
-      for (let i = 0; i < dexIvs.length; i++) {
-        if (dexIvs[i] < ivs[i]) {
-          dexIvs[i] = ivs[i];
+    const doUpdateIvs = (speciesId: SpeciesId) => {
+      // If it's a starter, update its IVs
+      if (speciesStarterCosts.hasOwnProperty(speciesId)) {
+        const starterEntry = globalScene.gameData.starterData[speciesId];
+        const starterIvs = starterEntry.ivs;
+        for (let i = 0; i < starterIvs.length; i++) {
+          if (starterIvs[i] < ivs[i]) {
+            starterIvs[i] = ivs[i];
+          }
+        }
+        if (starterIvs.filter((iv) => iv === 31).length === 6) {
+          globalScene.validateAchv(achvs.PERFECT_IVS);
         }
       }
-      if (dexIvs.filter((iv) => iv === 31).length === 6) {
-        globalScene.validateAchv(achvs.PERFECT_IVS);
+
+      // If it has a pre-evolution, recursively update its IVs
+      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+        doUpdateIvs(pokemonPreEvolutions[speciesId]);
       }
-    } while (pokemonPreEvolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPreEvolutions[speciesId]));
+    };
+
+    doUpdateIvs(speciesId);
   }
 
   getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {

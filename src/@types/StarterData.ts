@@ -11,6 +11,7 @@ export interface StarterDataEntry {
   abilityAttr: number;
   passiveAttr: number;
   natureAttr: number;
+  ivs: number[];
   valueReduction: number;
   classicWinCount: number;
 }

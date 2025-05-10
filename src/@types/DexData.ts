@@ -7,7 +7,6 @@ export interface DexEntry {
   seenCount: number;
   caughtCount: number;
   hatchedCount: number;
-  ivs: number[];
 }
 
 export interface DexData {
