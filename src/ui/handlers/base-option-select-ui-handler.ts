@@ -191,6 +191,10 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
     }
   }
 
+  /**
+   * Place the cursor in front of the currently selected option.
+   * Initializes the cursor sprite if it doesn't exist.
+   */
   private updateCursorPlacement() {
     if (!this.cursorObj) {
       this.cursorObj = globalScene.add.image(0, 0, "cursor");
