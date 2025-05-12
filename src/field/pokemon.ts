@@ -1044,11 +1044,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   setStatStage(stat: BattleStat, value: number): void {
     if (this.summonData) {
-      if (value >= -6) {
-        this.summonData.statStages[stat - 1] = Math.min(value, MAX_STAT_STAGE);
-      } else {
-        this.summonData.statStages[stat - 1] = Math.max(value, MIN_STAT_STAGE);
-      }
+      this.summonData.statStages[stat - 1] = clamp(value, MIN_STAT_STAGE, MAX_STAT_STAGE);
     }
   }
 
@@ -2853,7 +2849,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), Stat.ACC, userAccStage);
 
-    userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, MAX_STAT_STAGE);
+    userAccStage.value = ignoreAccStatStage.value ? 0 : userAccStage.value;
     targetEvaStage.value = ignoreEvaStatStage.value ? 0 : targetEvaStage.value;
 
     if (target.hasTag(...EXPOSED_TAG_TYPES)) {

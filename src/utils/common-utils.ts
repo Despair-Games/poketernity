@@ -182,8 +182,8 @@ export function clamp(value: number, min: number, max: number): number {
  *
  * *The difference is {@linkcode clamp | clamped} to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].*
  *
- * @param userAccuracyStage - The user's accuracy stage
- * @param targetEvasionStage - The target's evasion stage
+ * @param userAccStage - The user's accuracy stage
+ * @param targetEvaStage - The target's evasion stage
  * @returns The accuracy multiplier based on the Gen V+ accuracy formula
  *
  * | Stage ACC | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
@@ -192,8 +192,8 @@ export function clamp(value: number, min: number, max: number): number {
  * | Gen V+    | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
  */
-export function calcAccuracyMultiplier(userAccuracyStage: number, targetEvasionStage: number): number {
-  const diff = clamp(userAccuracyStage - targetEvasionStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
+export function calcAccuracyMultiplier(userAccStage: number, targetEvaStage: number): number {
+  const diff = clamp(userAccStage - targetEvaStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
 
   if (diff < 0) return 3 / (3 - diff);
   if (diff > 0) return (3 + diff) / 3;
