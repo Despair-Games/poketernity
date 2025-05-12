@@ -43,9 +43,7 @@ export class GameWrapper {
     Pokemon.prototype.enableMask = () => null;
     Pokemon.prototype.cry = () => null as any;
     Pokemon.prototype.faintCry = (cb) => {
-      if (cb) {
-        cb();
-      }
+      cb?.();
     };
 
     Pokemon.prototype.damageAndUpdate = function (...args) {

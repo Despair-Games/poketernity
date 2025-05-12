@@ -66,9 +66,9 @@ export class SwitchSummonPhase extends SummonPhase {
     if (!this.doReturn || (this.slotIndex !== -1 && !this.getAlliedParty()[this.slotIndex])) {
       if (this.isPlayer) {
         this.switchAndSummon();
-        return;
+      } else {
+        time.delayedCall(750, () => this.switchAndSummon());
       }
-      time.delayedCall(750, () => this.switchAndSummon());
       return;
     }
 

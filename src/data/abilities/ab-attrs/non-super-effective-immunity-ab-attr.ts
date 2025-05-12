@@ -12,6 +12,8 @@ import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
  */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(condition?: AbAttrCondition) {
+    // This `AbAttr` ignores the superclass's `immuneType` field and overrides the methods that make use of it
+    // TODO: refactor this?
     super(null!, condition);
   }
 

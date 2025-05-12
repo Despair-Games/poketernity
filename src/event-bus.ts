@@ -35,8 +35,12 @@ class EventBus extends Phaser.Events.EventEmitter {
     return super.addListener(event, fn, context);
   }
 
-  // biome-ignore lint/complexity/noBannedTypes: what should this even be replaced with?
-  override removeListener(event: string | symbol, fn?: Function, context?: any, once?: boolean): this {
+  override removeListener<D = any, C = any>(
+    event: string | symbol,
+    fn?: CallbackFn<D>,
+    context?: C,
+    once?: boolean,
+  ): this {
     return super.removeListener(event, fn, context, once);
   }
 }

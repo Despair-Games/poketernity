@@ -169,6 +169,7 @@ export class CommandPhase extends FieldPhase {
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
+    // TODO: break out the code in this switch block into private methods
     switch (command) {
       case BattleCommand.TERA:
       case BattleCommand.FIGHT: {
@@ -310,7 +311,7 @@ export class CommandPhase extends FieldPhase {
         }
         break;
       }
-      // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: `Run` and `Pokemon` cases share checks for trapping
       case BattleCommand.RUN:
         if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
