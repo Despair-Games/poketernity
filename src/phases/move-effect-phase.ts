@@ -215,13 +215,14 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (this.firstHit) {
         user.pushMoveHistory(this.moveHistoryEntry);
       }
-
+      let firstTarget = true;
       for (const target of targets) {
         const [hitCheckResult, effectiveness] = this.hitChecks[targets.indexOf(target)];
 
         switch (hitCheckResult) {
           case HitCheckResult.HIT:
-            this.applyMoveEffects(target, effectiveness);
+            this.applyMoveEffects(target, effectiveness, firstTarget);
+            firstTarget = false;
             break;
           case HitCheckResult.NO_EFFECT:
             if (move.id === MoveId.SHEER_COLD) {
@@ -289,16 +290,13 @@ export class MoveEffectPhase extends HitCheckPhase {
 
   /**
    * Applies all move effects that trigger in the event of a successful hit.
-   * @param target the {@linkcode Pokemon} hit by this phase's move.
-   * @param effectiveness the effectiveness of the move (as previously evaluated in {@linkcode hitCheck})
+   * @param target - The {@linkcode Pokemon} hit by this phase's move.
+   * @param effectiveness - The effectiveness of the move (as previously evaluated in {@linkcode hitCheck})
+   * @param isFirstTarget - Whether this target is the first to be successfully hit by the move.
    */
-  protected applyMoveEffects(target: Pokemon, effectiveness: TypeDamageMultiplier): void {
+  protected applyMoveEffects(target: Pokemon, effectiveness: TypeDamageMultiplier, isFirstTarget: boolean): void {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
-
-    /** The first target hit by the move */
-    const firstTarget = target === this.getTargets().find((_, i) => this.hitChecks[i][1] > 0);
-
     if (isNil(user)) {
       return;
     }
@@ -308,15 +306,15 @@ export class MoveEffectPhase extends HitCheckPhase {
     const hitResult = this.applyMove(target, effectiveness);
 
     if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
-      this.applyGMaxUserEffects(user, target, firstTarget);
+      this.applyGMaxUserEffects(user, target, isFirstTarget);
     } else {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, isFirstTarget, true);
     }
 
     if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
-      this.applyGMaxTargetEffects(user, target, hitResult, firstTarget);
+      this.applyGMaxTargetEffects(user, target, hitResult, isFirstTarget);
     } else if (!move.hitsSubstitute(user, target)) {
-      this.applyOnTargetEffects(user, target, hitResult, firstTarget);
+      this.applyOnTargetEffects(user, target, hitResult, isFirstTarget);
     }
     if (this.lastHit) {
       globalScene.triggerPokemonFormChange(user, SpeciesFormChangePostMoveTrigger);

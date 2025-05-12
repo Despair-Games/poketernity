@@ -191,7 +191,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    let moveChance = this.getMoveChance(user, target, move, this.selfTarget, false);
+    let moveChance = this.getMoveChance(user, target, move, false);
     if (moveChance < 0) {
       moveChance = 100;
     }
