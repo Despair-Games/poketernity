@@ -401,7 +401,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public get teraType(): ElementalType {
     if (this.isPlayer() && Overrides.TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
       return Overrides.TERA_TYPE_OVERRIDE;
-    } else if (this.isEnemy() && Overrides.ENEMY_TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+    }
+    if (this.isEnemy() && Overrides.ENEMY_TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
       return Overrides.ENEMY_TERA_TYPE_OVERRIDE;
     }
 
