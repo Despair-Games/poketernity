@@ -180,9 +180,9 @@ export function clamp(value: number, min: number, max: number): number {
  * Calculates the accuracy multiplier
  * based on the user's accuracy stage and the target's evasion stage.
  *
- * *Both stages are clamped to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].*
+ * *The difference is {@linkcode clamp | clamped} to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].*
  *
- * @param userAccuracyStage - The user' accuracy stage
+ * @param userAccuracyStage - The user's accuracy stage
  * @param targetEvasionStage - The target's evasion stage
  * @returns The accuracy multiplier based on the Gen V+ accuracy formula
  *
@@ -193,16 +193,9 @@ export function clamp(value: number, min: number, max: number): number {
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
  */
 export function calcAccuracyMultiplier(userAccuracyStage: number, targetEvasionStage: number): number {
-  const userAcc = Phaser.Math.Clamp(userAccuracyStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
-  const targetEva = Phaser.Math.Clamp(targetEvasionStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
+  const diff = clamp(userAccuracyStage - targetEvasionStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
 
-  if (userAcc === targetEva) {
-    return 1;
-  } else if (userAcc > targetEva) {
-    const diff = userAcc - targetEva;
-    return (3 + diff) / 3;
-  } else {
-    const diff = targetEva - userAcc;
-    return 3 / (3 + diff);
-  }
+  if (diff < 0) return 3 / (3 - diff);
+  if (diff > 0) return (3 + diff) / 3;
+  return 1;
 }
