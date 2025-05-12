@@ -72,7 +72,7 @@ describe("Moves - Make It Rain", () => {
     game.move.select(MoveId.MAKE_IT_RAIN);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("StatStageChangePhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     enemyPokemon.forEach((p) => expect(p.isFainted()).toBe(true));
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);
