@@ -1,13 +1,36 @@
 import { IGNORING_ABILITIES } from "#app/constants/ability-constants";
+import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#app/constants/game-constants";
+import { allAbilities } from "#app/data/data-lists";
+import { calcAccuracyMultiplier } from "#app/utils/common-utils";
 import { capitalizeString } from "#app/utils/string-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
+import { arrayOfRange } from "#test/test-utils/testUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+//#region Constants
+
+const statStages = arrayOfRange(MIN_STAT_STAGE, MAX_STAT_STAGE).map((stage) => ({
+  stageStr: `${stage > 0 ? "+" : ""}${stage}`,
+  stage,
+}));
+
+const ignoringAbilities = IGNORING_ABILITIES.map((abilityId) => ({
+  abilityName: capitalizeString(AbilityId[abilityId], "_", false, true),
+  abilityId,
+}));
+
+const tangledFeetMultiplier = 2;
+
+//#endregion
 
 describe("Ability - Tangled Feet", () => {
   let phaserGame: Phaser.Game;
@@ -17,6 +40,7 @@ describe("Ability - Tangled Feet", () => {
     phaserGame = new Phaser.Game({
       type: Phaser.HEADLESS,
     });
+    console.log(allAbilities[AbilityId.TANGLED_FEET].getAttrs(AbAttrFlag.STAT_MULTIPLIER));
   });
 
   afterEach(() => {
@@ -58,36 +82,39 @@ describe("Ability - Tangled Feet", () => {
   });
 
   describe("When Confused", () => {
-    it("should half enemy accuracy", async () => {
+    it.each(statStages)("should half enemy accuracy (EVA = $stageStr)", async ({ stage }) => {
       const { classicMode, move, field } = game;
       await classicMode.startBattle([SpeciesId.FEEBAS]);
       const playerPkm = field.getPlayerPokemon();
+      playerPkm.setStatStage(Stat.EVA, stage);
       const enemyPkm = field.getEnemyPokemon();
       vi.spyOn(enemyPkm, "getAccuracyMultiplier");
 
       game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
       move.use(MoveId.SPLASH);
       await move.selectEnemyMove(MoveId.CONFUSE_RAY);
+      await move.forceHit();
       await game.toEndOfTurn();
       move.use(MoveId.SPLASH);
       await move.selectEnemyMove(MoveId.TACKLE);
       await game.toEndOfTurn();
 
       expect(playerPkm).toHaveBattlerTagType(BattlerTagType.CONFUSED);
-      expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(0.5);
+      expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
+        calcAccuracyMultiplier(0, stage) / tangledFeetMultiplier,
+      );
     });
 
     /**
-     * Turboblaze, Mold Breaker, and Teravolt do not bypass the effects of Tangled Feet,
-     * because Tangled Feet is not an Ability that affects other Pokémon — it is a self-targeting Ability.
+     * Mold Breaker, Teravolt and Turboblaze bypass the effects of Tangled Feet
+     * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ignoring_Abilities#Ignorable_Abilities | Ignoring Abilities - Bulbapedia}
+     * @see {@link https://www.smogon.com/dex/sv/abilities/mold-breaker/ | Mold Breaker - Smogon}
+     * @see {@link https://www.smogon.com/dex/sv/abilities/teravolt/ | Teravolt - Smogon}
+     * @see {@link https://www.smogon.com/dex/sv/abilities/turboblaze/ | Turboblaze - Smogon}
      */
-    it.each(
-      IGNORING_ABILITIES.map((abilityId) => ({
-        abilityName: capitalizeString(AbilityId[abilityId], "_", false, true),
-        abilityId,
-      })),
-    )("should NOT be bypassed by $abilityName Ability", async () => {
-      const { classicMode, move, field } = game;
+    it.each(ignoringAbilities)("should be bypassed by $abilityName Ability", async ({ abilityId }) => {
+      const { override, classicMode, move, field } = game;
+      override.enemyAbility(abilityId);
       await classicMode.startBattle([SpeciesId.FEEBAS]);
       const playerPkm = field.getPlayerPokemon();
       const enemyPkm = field.getEnemyPokemon();
@@ -96,13 +123,53 @@ describe("Ability - Tangled Feet", () => {
       game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
       move.use(MoveId.SPLASH);
       await move.selectEnemyMove(MoveId.CONFUSE_RAY);
+      await move.forceHit();
       await game.toEndOfTurn();
       move.use(MoveId.SPLASH);
       await move.selectEnemyMove(MoveId.TACKLE);
       await game.toEndOfTurn();
 
       expect(playerPkm).toHaveBattlerTagType(BattlerTagType.CONFUSED);
-      expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(0.5);
+      expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(1);
     });
+
+    it.each([
+      {
+        passiveAbilityName: "Sand Veil",
+        passiveAbilityId: AbilityId.SAND_VEIL,
+        weatherType: WeatherType.SANDSTORM,
+        passiveAbilityMultiplier: 1.2,
+      },
+      {
+        passiveAbilityName: "Snow Cloak",
+        passiveAbilityId: AbilityId.SNOW_CLOAK,
+        weatherType: WeatherType.HAIL,
+        passiveAbilityMultiplier: 1.2,
+      },
+    ])(
+      "should stack with $abilityName Ability",
+      async ({ passiveAbilityId, weatherType, passiveAbilityMultiplier }) => {
+        const { override, classicMode, move, field } = game;
+        override.passiveAbility(passiveAbilityId).weather(weatherType);
+        await classicMode.startBattle([SpeciesId.FEEBAS]);
+        const playerPkm = field.getPlayerPokemon();
+        const enemyPkm = field.getEnemyPokemon();
+        vi.spyOn(enemyPkm, "getAccuracyMultiplier");
+
+        game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+        move.use(MoveId.SPLASH);
+        await move.selectEnemyMove(MoveId.CONFUSE_RAY);
+        await move.forceHit();
+        await game.toEndOfTurn();
+        move.use(MoveId.SPLASH);
+        await move.selectEnemyMove(MoveId.TACKLE);
+        await game.toEndOfTurn();
+
+        expect(playerPkm).toHaveBattlerTagType(BattlerTagType.CONFUSED);
+        expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
+          1 / passiveAbilityMultiplier / tangledFeetMultiplier,
+        );
+      },
+    );
   });
 });
