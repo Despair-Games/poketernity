@@ -14,7 +14,7 @@ on:
 
 jobs:
   biome-lint:
-    name: Lint changes with Biome
+    name: Lint files with Biome
     runs-on: ubuntu-latest
 
     steps:

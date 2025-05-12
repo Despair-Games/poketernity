@@ -14,7 +14,7 @@ on:
 
 jobs:
   run-eslint:
-    name: Lint changes with ESLint
+    name: Lint files with ESLint
     runs-on: ubuntu-latest
 
     steps:
