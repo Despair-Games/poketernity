@@ -1,6 +1,5 @@
 import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { revealAllAbilities } from "#test/ai/utils/enemy-command-utils";
@@ -44,7 +43,6 @@ describe("Move Effect Scores - Ability Suppression", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toPreferSelectingMove(MoveId.GASTRO_ACID);
   });
@@ -54,7 +52,6 @@ describe("Move Effect Scores - Ability Suppression", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).not.toPreferSelectingMove(MoveId.GASTRO_ACID);
   });
@@ -65,7 +62,6 @@ describe("Move Effect Scores - Ability Suppression", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).not.toPreferSelectingMove(MoveId.GASTRO_ACID);
   });
@@ -77,7 +73,6 @@ describe("Move Effect Scores - Ability Suppression", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toNeverSelectMove(MoveId.GASTRO_ACID);
   });

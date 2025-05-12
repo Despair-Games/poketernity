@@ -444,10 +444,10 @@ export class EnemyPokemon extends Pokemon {
       };
     } else if (move.isFieldTarget()) {
       /**
-       * Field-targeting effects are internally self-targeted when
-       * evaluating score.
+       * Field-targeting effects are internally self-targeted during
+       * score evaluation.
        */
-      const score = move.getEffectScore(this, this);
+      const score = this.getMoveScore(this, move);
 
       return {
         moveId: move.id,

@@ -3,6 +3,7 @@ import type { Move } from "#app/data/moves/move";
 import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
+import { isNil } from "#app/utils/common-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
@@ -26,7 +27,7 @@ export class ScreenAttr extends AddArenaTagAttr {
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const baseScore = this.getBaseEffectScore();
-    if (!baseScore) {
+    if (isNil(baseScore)) {
       console.warn(`${this.constructor.name}.getEffectScore: ${ArenaTagType[this.tagType]} tag is not scorable!`);
       return 0;
     }

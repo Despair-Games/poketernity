@@ -1,4 +1,4 @@
-import { BAD_MOVE_PENALTY, SOFT_EFFECT_SCORE_LIMIT } from "#app/constants/ai-constants";
+import { BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT } from "#app/constants/ai-constants";
 import type { Move } from "#app/data/moves/move";
 import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
@@ -25,7 +25,8 @@ export class TrickRoomAttr extends AddArenaTagAttr {
 
     const numOutspedAllies = user.getParty().filter((ally) => {
       const allySpd = ally.isActive(true) ? ally.getEffectiveStat(Stat.SPD) : ally.getStat(Stat.SPD);
-      return ally.getOpponents().every((opp) => opp.getEffectiveStat(Stat.SPD) > allySpd);
+      const isOutsped = ally.getOpponents().every((opp) => opp.getEffectiveStat(Stat.SPD) > allySpd);
+      return isOutsped ? MINOR_EFFECT_SCORE_BONUS : -MINOR_EFFECT_SCORE_BONUS;
     }).length;
 
     return Math.min(numOutspedAllies, SOFT_EFFECT_SCORE_LIMIT);

@@ -9,8 +9,8 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 
 export class IonDelugeAttr extends AddArenaTagAttr {
-  constructor() {
-    super(ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 });
+  constructor(failOnOverlap: boolean = true) {
+    super(ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1, failOnOverlap });
   }
 
   /**

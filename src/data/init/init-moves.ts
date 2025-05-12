@@ -2716,7 +2716,7 @@ export function initMoves() {
       .attr(HalfSacrificialAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(MoveId.PLASMA_FISTS, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 100, 100, 15, -1, 0, 7)
-      .attr(IonDelugeAttr)
+      .attr(IonDelugeAttr, false)
       .punchingMove(),
     new AttackMove(MoveId.PHOTON_GEYSER, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 7)
       .attr(UseHigherAttackingStatAttr)

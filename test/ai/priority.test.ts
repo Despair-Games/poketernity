@@ -1,5 +1,4 @@
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -34,7 +33,6 @@ describe("Enemy Commands - Priority", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toNeverSelectMove((move) => move.id !== MoveId.QUICK_ATTACK);
   });

@@ -1,6 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -36,7 +35,6 @@ describe("Enemy Commands - Basic Move Selection", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toNeverSelectMove((move) => move.isStatusMove());
   });
@@ -51,7 +49,6 @@ describe("Enemy Commands - Basic Move Selection", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toNeverSelectMove([MoveId.LAST_RESORT, MoveId.SPLASH, MoveId.SWORDS_DANCE]);
   });
@@ -66,7 +63,6 @@ describe("Enemy Commands - Basic Move Selection", () => {
     await game.classicMode.startBattle([SpeciesId.DUSKULL]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toNeverSelectMove([MoveId.SPLASH, MoveId.COVET]);
   });

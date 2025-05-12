@@ -1,6 +1,5 @@
 import { DETRIMENTAL_ABILITIES, HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { revealAllAbilities } from "#test/ai/utils/enemy-command-utils";
@@ -44,7 +43,6 @@ describe("Move Effect Scores - Ability Give", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toPreferSelectingMove(MoveId.ENTRAINMENT);
   });
@@ -60,7 +58,6 @@ describe("Move Effect Scores - Ability Give", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toPreferSelectingMove(MoveId.ENTRAINMENT);
   });
@@ -71,7 +68,6 @@ describe("Move Effect Scores - Ability Give", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).not.toPreferSelectingMove(MoveId.ENTRAINMENT);
   });
@@ -83,7 +79,6 @@ describe("Move Effect Scores - Ability Give", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toNeverSelectMove(MoveId.ENTRAINMENT);
   });
@@ -95,7 +90,6 @@ describe("Move Effect Scores - Ability Give", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toNeverSelectMove(MoveId.ENTRAINMENT);
   });
@@ -107,7 +101,6 @@ describe("Move Effect Scores - Ability Give", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toNeverSelectMove(MoveId.ENTRAINMENT);
   });

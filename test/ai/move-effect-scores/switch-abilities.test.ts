@@ -1,6 +1,5 @@
 import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { revealAllAbilities } from "#test/ai/utils/enemy-command-utils";
@@ -44,7 +43,6 @@ describe("Move Effect Scores - Ability Switching", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toPreferSelectingMove(MoveId.SKILL_SWAP);
   });
@@ -63,7 +61,6 @@ describe("Move Effect Scores - Ability Switching", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).not.toPreferSelectingMove(MoveId.SKILL_SWAP);
   });
@@ -79,7 +76,6 @@ describe("Move Effect Scores - Ability Switching", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toPreferSelectingMove(MoveId.SKILL_SWAP);
   });
@@ -91,7 +87,6 @@ describe("Move Effect Scores - Ability Switching", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toNeverSelectMove(MoveId.SKILL_SWAP);
   });
@@ -103,7 +98,6 @@ describe("Move Effect Scores - Ability Switching", () => {
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).toNeverSelectMove(MoveId.SKILL_SWAP);
   });
@@ -114,7 +108,6 @@ describe("Move Effect Scores - Ability Switching", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemy = game.field.getEnemyPokemon();
-    enemy.aiType = AiType.SMART_RANDOM;
 
     expect(enemy).not.toPreferSelectingMove(MoveId.SKILL_SWAP);
   });
