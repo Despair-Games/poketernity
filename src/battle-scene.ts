@@ -124,7 +124,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
-import { BooleanHolder, fixedNumber, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
+import { BooleanHolder, clamp, fixedNumber, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
@@ -984,7 +984,7 @@ export default class BattleScene extends SceneBase {
       ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
     if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => Phaser.Math.Clamp(iv, IV_MIN, IV_MAX));
+      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => clamp(iv, IV_MIN, IV_MAX));
     }
 
     pokemon.init();

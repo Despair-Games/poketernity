@@ -166,6 +166,17 @@ export function coerceArray<T>(input: T | T[]): T[] {
 }
 
 /**
+ * Clamps a number between `min` and `max` (inclusive).
+ * @param value - The value to clamp
+ * @param min - The minimum value to clamp to
+ * @param max - The maximum value to clamp to
+ * @returns The clamped value, between `min` and `max`
+ */
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+/**
  * Calculates the accuracy multiplier
  * based on the user's accuracy stage and the target's evasion stage.
  *

@@ -56,7 +56,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { getModifierTierTextTint } from "#app/ui/text/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
-import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
+import { clamp, getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
 import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { randSeedInt } from "#app/utils/random-utils";
@@ -2132,7 +2132,7 @@ export function getPartyLuckValue(party: Pokemon[]): number {
     );
     return DailyLuck.value;
   }
-  const luck = Phaser.Math.Clamp(
+  const luck = clamp(
     party
       .map((p) => (p.isAllowedInBattle() ? p.getLuck() : 0))
       .reduce((total: number, value: number) => (total += value), 0),

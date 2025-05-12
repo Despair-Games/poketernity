@@ -1,11 +1,11 @@
 import type { RunSuccessAbAttr } from "#app/data/abilities/ab-attrs/run-success-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { PlayerPokemon } from "#app/field/player-pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { NumberHolder } from "#app/utils/common-utils";
+import { clamp, NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PhaseId } from "#enums/phase-id";
@@ -122,7 +122,7 @@ export class AttemptRunPhase extends PokemonPhase {
     const escapeSlope = (maxChance - minChance) / speedCap;
 
     // This will calculate the escape chance given all of the above and clamp it to the range of [`minChance`, `maxChance`]
-    escapeChance.value = Phaser.Math.Clamp(
+    escapeChance.value = clamp(
       Math.round(escapeSlope * speedRatio + minChance + escapeBonus * globalScene.currentBattle.escapeAttempts++),
       minChance,
       maxChance,

@@ -15,7 +15,7 @@ import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { UiHandler } from "#app/ui/handlers/ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
-import { isNil } from "#app/utils/common-utils";
+import { clamp, isNil } from "#app/utils/common-utils";
 import {
   formatLargeNumberFixedDigits,
   formatMoney,
@@ -597,7 +597,7 @@ export class RunInfoUiHandler extends UiHandler {
     runInfoTextContainer.add(runInfoText);
 
     // Luck
-    const luckValue = Phaser.Math.Clamp(
+    const luckValue = clamp(
       this.runInfo.party
         .map((p) => p.toPokemon().getLuck())
         .reduce((total: number, value: number) => (total += value), 0),

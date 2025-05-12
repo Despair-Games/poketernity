@@ -3,6 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryModifierType } from "#app/modifier/modifier-type";
+import { clamp } from "#app/utils/common-utils";
 import { randSeedInt } from "#app/utils/random-utils";
 import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
@@ -24,7 +25,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
-    if (Phaser.Math.Clamp(this.procChance(pokemon), 0, 1) < pass) {
+    if (clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;
     }
 

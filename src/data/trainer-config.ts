@@ -12,7 +12,7 @@ import type { PersistentModifier } from "#app/modifier/modifier";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { coerceArray } from "#app/utils/common-utils";
+import { clamp, coerceArray } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { randItem, randSeedItem } from "#app/utils/random-utils";
 import { toReadableString } from "#app/utils/string-utils";
@@ -1655,7 +1655,7 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
   const { currentBattle, gameMode } = globalScene;
   const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? wave, true);
   const targetTemplate = Math.ceil((adjustedWave - offsetWave) / wavesToScale);
-  return templates[Phaser.Math.Clamp(targetTemplate, 0, templates.length - 1)];
+  return templates[clamp(targetTemplate, 0, templates.length - 1)];
 }
 
 /**

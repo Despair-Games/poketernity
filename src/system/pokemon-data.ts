@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
-import { isPokemon } from "#app/utils/common-utils";
+import { clamp, isPokemon } from "#app/utils/common-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
@@ -70,7 +70,7 @@ export default class PokemonData {
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
     this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
     this.nickname = source.nickname;
-    this.formIndex = Phaser.Math.Clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
+    this.formIndex = clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
     this.abilityIndex = source.abilityIndex;
     this.passive = source.passive;
     this.shiny = source.shiny;
