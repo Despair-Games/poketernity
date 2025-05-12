@@ -1,5 +1,4 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { TurnMove } from "#app/@types/TurnMove";
 import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
@@ -18,21 +17,16 @@ export class ProtectAttr extends AddBattlerTagAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move): boolean => {
-      let timesUsed = 0;
-      const moveHistory = user.getLastXMoves();
-      let turnMove: TurnMove | undefined;
+      const moveHistory = user.getLastXMoves(-1).filter((mv) => !mv.virtual);
+      const lastNonUse = moveHistory.findIndex(
+        (mv) => mv.result !== MoveResult.SUCCESS || !mv.move.hasAttr(ProtectAttr),
+      );
 
-      while (moveHistory.length) {
-        turnMove = moveHistory.shift();
-        if (!turnMove?.move?.hasAttr(ProtectAttr) || turnMove?.result !== MoveResult.SUCCESS) {
-          break;
-        }
-        timesUsed++;
+      if (lastNonUse === -1) {
+        return !user.randSeedInt(Math.pow(3, moveHistory.length));
+      } else {
+        return !user.randSeedInt(Math.pow(3, lastNonUse));
       }
-      if (timesUsed) {
-        return !user.randSeedInt(Math.pow(3, timesUsed));
-      }
-      return true;
     };
   }
 }
