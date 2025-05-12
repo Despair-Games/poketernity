@@ -2882,8 +2882,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const sort = this.filterBar.getVals(DropDownColumn.SORT)[0];
     this.filteredStarterContainers.sort((a, b) => {
       switch (sort.val) {
-        default:
-          break;
         case SortCriteria.NUMBER:
           return (a.species.speciesId - b.species.speciesId) * -sort.dir;
         case SortCriteria.COST:

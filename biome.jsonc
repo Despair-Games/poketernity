@@ -69,7 +69,7 @@
         "noRedeclare": "error",
         "noGlobalIsNan": "error",
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
-        "useDefaultSwitchClauseLast": "info" // TODO: make error?
+        "useDefaultSwitchClauseLast": "warn" // TODO: make error?
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "warn", // TODO: Refactor and make this an error
