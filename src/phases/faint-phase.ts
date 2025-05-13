@@ -1,35 +1,23 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { GameOverPhase } from "#app/phases/game-over-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import type { BattlerTag } from "#battler-tags/battler-tag";
+import type { GameOverPhase } from "#phases/game-over-phase";
+import type { MovePhase } from "#phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { FRIENDSHIP_LOST_FROM_FAINTING } from "#app/constants/friendship-constants";
-import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
-import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
-import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
-import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
-import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
-import { allMoves } from "#app/data/data-lists";
-import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
+import type { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
+import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import { SwitchPhase } from "#app/phases/switch-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { isNil } from "#app/utils/common-utils";
+import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
+import type { GrudgeTag } from "#battler-tags/grudge-tag";
+import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
+import { FRIENDSHIP_LOST_FROM_FAINTING } from "#constants/friendship-constants";
+import { allMoves } from "#data/data-lists";
+import { classicFinalBossDialogue } from "#data/dialogue";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -38,6 +26,18 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { PokemonInstantReviveModifier } from "#modifier/modifier";
+import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { DamageAnimPhase } from "#phases/damage-anim-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import { SwitchPhase } from "#phases/switch-phase";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

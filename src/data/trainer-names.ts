@@ -1,5 +1,5 @@
 import { TrainerType } from "#enums/trainer-type";
-import { toReadableString } from "#app/utils/string-utils";
+import { toReadableString } from "#utils/string-utils";
 
 class TrainerNameConfig {
   public urls: string[];

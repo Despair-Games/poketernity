@@ -1,4 +1,4 @@
-import type { ModifierType, ModifierTypeGenerator } from "#app/modifier/modifier-type";
+import type { ModifierType, ModifierTypeGenerator } from "#modifier/modifier-type";
 
 //#region Types
 

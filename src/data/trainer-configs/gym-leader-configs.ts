@@ -1,8 +1,8 @@
-import { signatureSpecies } from "#app/data/signatureSpecies";
-import type { TrainerConfigs } from "#app/data/trainer-config";
-import { TrainerConfig } from "#app/data/trainer-config";
-import { TrainerType } from "#enums/trainer-type";
+import { signatureSpecies } from "#data/signatureSpecies";
+import type { TrainerConfigs } from "#data/trainer-config";
+import { TrainerConfig } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
+import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.BROCK;
 export const gymLeaderTrainerConfigs: TrainerConfigs = {

@@ -1,10 +1,10 @@
 import { AbilityId } from "#enums/ability-id";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { SpeciesId } from "#enums/species-id";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { ChangeMultiHitTypeAttr } from "#app/data/moves/move-attrs/change-multi-hit-type-attr";
+import type { Pokemon } from "#field/pokemon";
+import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
+import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) | Water Shuriken}'s

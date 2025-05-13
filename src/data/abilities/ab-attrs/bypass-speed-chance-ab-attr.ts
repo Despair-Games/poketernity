@@ -1,11 +1,11 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Move } from "#app/data/moves/move";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import i18next from "i18next";
 
 /**
  * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket.

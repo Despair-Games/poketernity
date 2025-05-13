@@ -3,15 +3,15 @@
 import type { globalScene } from "#app/global-scene";
 // -- end tsdoc imports --
 
-import type { Ability } from "#app/data/abilities/ability";
-import { allAbilities } from "#app/data/data-lists";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import type { Ability } from "#abilities/ability";
+import { allAbilities } from "#data/data-lists";
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { ElementalType } from "#enums/elemental-type";
 import { Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { expect, type MockInstance, vi } from "vitest";
 

@@ -1,53 +1,17 @@
-import type { HeldModifierConfig } from "#app/@types/HeldModifierConfig";
-import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
-import {
-  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
-  ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
-} from "#app/constants/mystery-encounter-constants";
-import { biomeLinks } from "#app/data/biome-links";
-import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { Egg, type EggOptions } from "#app/data/egg";
-import { initMoveAnim } from "#app/data/init/init-move-anim";
-import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { getNatureName } from "#app/data/nature";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { TrainerConfig } from "#app/data/trainer-config";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import type { Variant } from "#app/data/variant";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
-import Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
-  ModifierTypeGenerator,
-  ModifierTypeOption,
-  regenerateModifierPoolThresholds,
-  type CustomModifierSettings,
-  type ModifierType,
-} from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
-import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
-import { PartyExpPhase } from "#app/phases/party-exp-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
-import type PokemonData from "#app/system/pokemon-data";
-import type { UiHandler } from "#app/ui/handlers/ui-handler";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { coerceArray, isNil } from "#app/utils/common-utils";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { randomString, randSeedInt } from "#app/utils/random-utils";
+  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
+} from "#constants/mystery-encounter-constants";
+import { biomeLinks } from "#data/biome-links";
+import type { CustomPokemonData } from "#data/custom-pokemon-data";
+import { Egg, type EggOptions } from "#data/egg";
+import { getNatureName } from "#data/nature";
+import type PokemonSpecies from "#data/pokemon-species";
+import type { TrainerConfig } from "#data/trainer-config";
+import type { Variant } from "#data/variant";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -69,6 +33,42 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
+import Trainer from "#field/trainer";
+import { initMoveAnim } from "#init/init-move-anim";
+import {
+  ModifierTypeGenerator,
+  ModifierTypeOption,
+  regenerateModifierPoolThresholds,
+  type CustomModifierSettings,
+  type ModifierType,
+} from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import { BattleEndPhase } from "#phases/battle-end-phase";
+import { EggLapsePhase } from "#phases/egg-lapse-phase";
+import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterBattleStartCleanupPhase } from "#phases/mystery-encounter-phases/battle-start-cleanup-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
+import { PartyExpPhase } from "#phases/party-exp-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
+import type PokemonData from "#system/pokemon-data";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import type { UiHandler } from "#ui/ui-handler";
+import { coerceArray, isNil } from "#utils/common-utils";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
+import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**

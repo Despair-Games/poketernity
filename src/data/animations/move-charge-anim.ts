@@ -1,10 +1,10 @@
-import { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import { MoveAnim } from "./move-anim";
-import { chargeAnims } from "#app/data/animations/charge-anims";
-import type { Pokemon } from "#app/field/pokemon";
+import { LegacyAnimConfig } from "#animations/anim-config";
+import { chargeAnims } from "#animations/charge-anims";
+import { MoveAnim } from "#animations/move-anim";
 import { BattlerIndex } from "#enums/battler-index";
 import type { ChargeAnim } from "#enums/charge-anim";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 export class MoveChargeAnim extends MoveAnim {
   private chargeAnim: ChargeAnim;

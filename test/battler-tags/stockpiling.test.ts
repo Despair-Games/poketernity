@@ -1,9 +1,9 @@
-import { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import * as messages from "#app/messages";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
+import { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

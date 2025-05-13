@@ -1,4 +1,4 @@
-import { api } from "#app/plugins/api/api";
+import { api } from "#api/api";
 import { BiomeId } from "#enums/biome-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";

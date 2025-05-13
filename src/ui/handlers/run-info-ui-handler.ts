@@ -1,27 +1,11 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
-import { getBiomeName } from "#app/data/biome-utils";
-import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { getTypeRgb } from "#app/data/type";
-import { getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
-import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
-import type PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { isNil } from "#app/utils/common-utils";
-import {
-  formatLargeNumberFixedDigits,
-  formatMoney,
-  getPlayTimeString,
-  getPokemonLevelText,
-} from "#app/utils/string-utils";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import { getBiomeName } from "#data/biome-utils";
+import { getNatureName, getNatureStatMultiplier } from "#data/nature";
+import { getPokeballAtlasKey } from "#data/pokeball";
+import { getTypeRgb } from "#data/type";
+import { getVariantTint } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";
@@ -37,6 +21,17 @@ import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+import * as Modifier from "#modifier/modifier";
+import { getLuckString, getLuckTextTint } from "#modifier/modifier-type";
+import type PokemonData from "#system/pokemon-data";
+import { settings } from "#system/settings-manager";
+import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { SessionSaveData } from "#types/SessionData";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
+import { UiHandler } from "#ui/ui-handler";
+import { addWindow } from "#ui/ui-theme";
+import { isNil } from "#utils/common-utils";
+import { formatLargeNumberFixedDigits, formatMoney, getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 

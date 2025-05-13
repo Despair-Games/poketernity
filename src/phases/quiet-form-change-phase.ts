@@ -1,20 +1,16 @@
-import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-clear-weather-terrain-ab-attr";
-import type { PostTeraFormChangeStatChangeAbAttr } from "#app/data/abilities/ab-attrs/post-tera-form-change-stat-change-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import {
-  getSpeciesFormChangeMessage,
-  SpeciesFormChangeTeraTrigger,
-  type SpeciesFormChange,
-} from "#app/data/pokemon-forms";
-import { getTypeRgb } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-tera-form-change-clear-weather-terrain-ab-attr";
+import type { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { getSpeciesFormChangeMessage, SpeciesFormChangeTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
+import { getTypeRgb } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import type { MovePhase } from "#phases/move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
   override readonly id = PhaseId.QUIET_FORM_CHANGE;

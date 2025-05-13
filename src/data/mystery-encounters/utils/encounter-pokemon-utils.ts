@@ -1,36 +1,15 @@
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import {
-  getEncounterText,
-  queueEncounterMessage,
-  showEncounterText,
-} from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
 import {
   doPokeballBounceAnim,
   getPokeballAtlasKey,
   getPokeballCatchMultiplier,
   getPokeballTintColor,
-} from "#app/data/pokeball";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { speciesStarterCosts } from "#app/data/starters";
-import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import { achvs } from "#app/system/achievements";
-import { settings } from "#app/system/settings/settings-manager";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedInt } from "#app/utils/random-utils";
+} from "#data/pokeball";
+import type PokemonSpecies from "#data/pokemon-species";
+import { speciesStarterCosts } from "#data/starters";
+import { getStatusEffectCatchRateMultiplier } from "#data/status-effect";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
@@ -44,6 +23,27 @@ import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import {
+  getEncounterText,
+  queueEncounterMessage,
+  showEncounterText,
+} from "#mystery-encounters/encounter-dialogue-utils";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import { achvs } from "#system/achievements";
+import { settings } from "#system/settings-manager";
+import type { OptionSelectModeConfig } from "#ui/option-select-config";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { isNil } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** Will give +1 level every 10 waves */

@@ -1,4 +1,4 @@
-import { VortexTrapTag } from "#app/data/battler-tags/vortex-trap-tag";
+import { VortexTrapTag } from "#battler-tags/vortex-trap-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";

@@ -1,13 +1,13 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#data/status-effect";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 /**
  * Applies a status effect to a pokemon

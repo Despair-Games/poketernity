@@ -1,17 +1,17 @@
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants/app-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
+import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
-import { FormModalUiHandler } from "#app/ui/handlers/form-modal-ui-handler";
-import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber } from "#app/utils/common-utils";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { InputFieldConfig, ModalConfig } from "#ui/modal-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 import JSZip from "jszip";
 

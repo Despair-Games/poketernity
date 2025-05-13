@@ -1,10 +1,10 @@
-import { allMoves } from "#app/data/data-lists";
-import { PresentPowerAttr } from "#app/data/moves/move-attrs/present-power-attr";
-import { NumberHolder } from "#app/utils/common-utils";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { PresentPowerAttr } from "#moves/present-power-attr";
 import { GameManager } from "#test/test-utils/gameManager";
+import { NumberHolder } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

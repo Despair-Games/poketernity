@@ -1,13 +1,13 @@
-import { AbilityBattlerTag } from "#app/data/battler-tags/ability-battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { MovePhase } from "#app/phases/move-phase";
-import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
+import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { MovePhase } from "#phases/move-phase";
+import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import i18next from "i18next";
 
 /**

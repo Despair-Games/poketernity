@@ -1,10 +1,10 @@
-import { getStatusEffectDescriptor } from "#app/data/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
+import { PreSetStatusAbAttr } from "#abilities/pre-set-status-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common-utils";
+import { getStatusEffectDescriptor } from "#data/status-effect";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
-import { PreSetStatusAbAttr } from "./pre-set-status-ab-attr";
 
 /**
  * Provides immunity to status effects to specified targets.

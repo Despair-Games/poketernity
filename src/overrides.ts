@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { PokeballCounts } from "#app/battle-scene";
-import { Variant } from "#app/data/variant";
-import type { Arena } from "#app/field/arena";
-import type { ModifierOverride } from "#app/modifier/modifier-type";
+import { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -25,6 +23,8 @@ import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
+import type { Arena } from "#field/arena";
+import type { ModifierOverride } from "#modifier/modifier-type";
 
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
@@ -174,6 +174,11 @@ class DefaultOverrides {
   readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
   readonly SHINY_OVERRIDE: boolean | null = null;
   readonly VARIANT_OVERRIDE: Variant | null = null;
+  /**
+   * If equal to `ElementalType.UNKNOWN`, then ignore this override.
+   * Otherwise, override every player Pokemon's Tera type to be this type.
+   */
+  readonly TERA_TYPE_OVERRIDE: ElementalType = ElementalType.UNKNOWN;
 
   // --------------------------
   // ENEMY OVERRIDES
@@ -198,6 +203,16 @@ class DefaultOverrides {
    * 2+: the Pokemon will be a boss with the given number of health segments
    */
   readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number = 0;
+  /**
+   * If `true`, every enemy Pokemon Terastallizes on the first turn that it decides to use a move.
+   * If `false`, this override is ignored.
+   */
+  readonly FORCE_ENEMY_TERA_OVERRIDE: boolean = false;
+  /**
+   * If equal to `ElementalType.UNKNOWN`, then ignore this override.
+   * Otherwise, override every enemy Pokemon's Tera type to be this type.
+   */
+  readonly ENEMY_TERA_TYPE_OVERRIDE: ElementalType = ElementalType.UNKNOWN;
 
   // -------------
   // EGG OVERRIDES

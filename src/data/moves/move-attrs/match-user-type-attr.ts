@@ -1,8 +1,8 @@
 import { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change move type to match the user's primary type.

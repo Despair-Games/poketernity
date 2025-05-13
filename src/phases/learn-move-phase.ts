@@ -1,24 +1,24 @@
-import { allMoves } from "#app/data/data-lists";
-import { initMoveAnim } from "#app/data/init/init-move-anim";
-import type { Move } from "#app/data/moves/move";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
-import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
+import { allMoves } from "#data/data-lists";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
+import { initMoveAnim } from "#init/init-move-anim";
+import type { Move } from "#moves/move";
+import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import type { SelectModifierPhase } from "#phases/select-modifier-phase";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {

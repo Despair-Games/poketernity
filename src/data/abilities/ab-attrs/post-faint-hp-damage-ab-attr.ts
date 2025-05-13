@@ -1,8 +1,8 @@
-import { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HitResult } from "#enums/hit-result";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

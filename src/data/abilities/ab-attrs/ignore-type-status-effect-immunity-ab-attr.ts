@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import type { StatusEffect } from "#enums/status-effect";
-import type { ElementalType } from "#enums/elemental-type";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { ElementalType } from "#enums/elemental-type";
+import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * If the defender is normally immune to a status effect due to its type, ignore that immunity.

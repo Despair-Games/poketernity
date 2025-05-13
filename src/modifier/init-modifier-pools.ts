@@ -1,22 +1,5 @@
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import {
-  DoubleBattleChanceBoosterModifier,
-  ResetNegativeStatStageModifier,
-  TurnStatusEffectModifier,
-} from "#app/modifier/modifier";
-import {
-  dailyStarterModifierPool,
-  enemyBuffModifierPool,
-  modifierPool,
-  trainerModifierPool,
-  wildModifierPool,
-} from "#app/modifier/modifier-pools";
-import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { isNil } from "#app/utils/common-utils";
+import { MAX_PER_TYPE_POKEBALLS } from "#data/pokeball";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -24,6 +7,23 @@ import { MoveId } from "#enums/move-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Unlockables } from "#enums/unlockables";
+import type { Pokemon } from "#field/pokemon";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import {
+  DoubleBattleChanceBoosterModifier,
+  ResetNegativeStatStageModifier,
+  TurnStatusEffectModifier,
+} from "#modifier/modifier";
+import {
+  dailyStarterModifierPool,
+  enemyBuffModifierPool,
+  modifierPool,
+  trainerModifierPool,
+  wildModifierPool,
+} from "#modifier/modifier-pools";
+import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { isNil } from "#utils/common-utils";
 
 export function initModifierPools() {
   modifierPool[ModifierTier.COMMON] = [

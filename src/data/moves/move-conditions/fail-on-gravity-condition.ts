@@ -1,6 +1,6 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 export const failOnGravityCondition: MoveConditionFunc = (_user, _target, _move) =>
   !globalScene.arena.hasTag(ArenaTagType.GRAVITY);

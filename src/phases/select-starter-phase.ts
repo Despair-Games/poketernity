@@ -1,19 +1,19 @@
-import type { StarterConfig } from "#app/@types/StarterConfig";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { globalScene } from "#app/global-scene";
-import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
-import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { Gender } from "#enums/gender";
 import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
+import { overrideHeldItems, overrideModifiers } from "#modifier/modifier";
+import type { StarterConfig } from "#types/StarterConfig";
+import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
+import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
+import { applyChallenges } from "#utils/challenge-utils";
+import { isNil } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export class SelectStarterPhase extends Phase {

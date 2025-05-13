@@ -1,5 +1,5 @@
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { getBattlerTag } from "#app/data/battler-tags/utils/get-battler-tag";
+import type { BattlerTag } from "#battler-tags/battler-tag";
+import { getBattlerTag } from "#battler-tags/get-battler-tag";
 
 /**
  * When given a battler tag or json representing one, creates an actual BattlerTag object with the same data.

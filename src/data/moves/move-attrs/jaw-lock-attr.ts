@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Move } from "../move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
+import type { Pokemon } from "#field/pokemon";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute to implement Jaw Lock's linked trapping effect between the user and target

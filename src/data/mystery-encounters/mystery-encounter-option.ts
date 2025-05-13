@@ -1,20 +1,20 @@
-import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import { globalScene } from "#app/global-scene";
+import type { ElementalType } from "#enums/elemental-type";
+import type { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { CanLearnMoveRequirementOptions } from "#mystery-encounters/can-learn-move-requirement";
+import { CanLearnMoveRequirement } from "#mystery-encounters/can-learn-move-requirement";
+import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
   MoneyRequirement,
   TypeRequirement,
-} from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { isNil } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import type { ElementalType } from "#enums/elemental-type";
-import type { MoveId } from "#enums/move-id";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { CanLearnMoveRequirementOptions } from "./requirements/can-learn-move-requirement";
-import { CanLearnMoveRequirement } from "./requirements/can-learn-move-requirement";
+} from "#mystery-encounters/mystery-encounter-requirements";
+import { isNil } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 export type OptionPhaseCallback = () => Promise<void | boolean>;
 

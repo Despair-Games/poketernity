@@ -1,9 +1,9 @@
-import type PokemonSpecies from "#app/data/pokemon-species";
 import { globalScene } from "#app/global-scene";
-import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
+import type PokemonSpecies from "#data/pokemon-species";
 import { PhaseId } from "#enums/phase-id";
+import type { ModifierTypeFunc } from "#modifier/modifier-type";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
-import { ModifierRewardPhase } from "./modifier-reward-phase";
 
 export class RibbonModifierRewardPhase extends ModifierRewardPhase {
   override readonly id = PhaseId.RIBBON_MODIFIER_REWARD;

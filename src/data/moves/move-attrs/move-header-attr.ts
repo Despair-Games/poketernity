@@ -1,4 +1,4 @@
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MoveAttr } from "#moves/move-attr";
 
 /**
  * Base class defining all Move Header attributes.

@@ -1,34 +1,17 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { CommandPhase } from "#app/phases/command-phase";
-import type { TurnEndPhase } from "#app/phases/turn-end-phase";
-import type { TurnStartPhase } from "#app/phases/turn-start-phase";
+import type { CommandPhase } from "#phases/command-phase";
+import type { TurnEndPhase } from "#phases/turn-end-phase";
+import type { TurnStartPhase } from "#phases/turn-start-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
 import BattleScene from "#app/battle-scene";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import { ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import overrides from "#app/overrides";
-import { EncounterPhase } from "#app/phases/encounter-phase";
-import { FaintPhase } from "#app/phases/faint-phase";
-import { LoginPhase } from "#app/phases/login-phase";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type { UiHandler } from "#app/ui/handlers/ui-handler";
-import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { isNil } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleStyle } from "#enums/battle-style";
@@ -43,6 +26,17 @@ import { PlayerGender } from "#enums/player-gender";
 import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import Trainer from "#field/trainer";
+import { ModifierTypeOption } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { EncounterPhase } from "#phases/encounter-phase";
+import { FaintPhase } from "#phases/faint-phase";
+import { LoginPhase } from "#phases/login-phase";
+import { SelectStarterPhase } from "#phases/select-starter-phase";
+import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/gameManagerUtils";
 import { GameWrapper } from "#test/test-utils/gameWrapper";
@@ -60,6 +54,12 @@ import type { InputsHandler } from "#test/test-utils/inputsHandler";
 import { MockFetch } from "#test/test-utils/mocks/mockFetch";
 import { PhaseInterceptor, type PhaseInterceptorPhase } from "#test/test-utils/phaseInterceptor";
 import { TextInterceptor } from "#test/test-utils/TextInterceptor";
+import type { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import type { UiHandler } from "#ui/ui-handler";
+import { isNil } from "#utils/common-utils";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";

@@ -5,11 +5,11 @@ import {
   TrainerPartyTemplate,
   trainerPartyTemplates,
   type TrainerConfigs,
-} from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
+} from "#data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.BUCK;

@@ -1,4 +1,4 @@
-import type { PerishSongTag } from "#app/data/battler-tags/perish-song-tag";
+import type { PerishSongTag } from "#battler-tags/perish-song-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

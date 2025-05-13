@@ -1,19 +1,19 @@
-import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { settings } from "#app/system/settings/settings-manager";
+import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
 import { BattleType } from "#enums/battle-type";
 import { FieldPosition } from "#enums/field-position";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
+import { PostSummonPhase } from "#phases/post-summon-phase";
+import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
+import { settings } from "#system/settings-manager";
 import i18next from "i18next";
-import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
-import { PostSummonPhase } from "./post-summon-phase";
-import { ShinySparklePhase } from "./shiny-sparkle-phase";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */

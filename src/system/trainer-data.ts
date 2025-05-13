@@ -1,6 +1,6 @@
 import type { TrainerType } from "#enums/trainer-type";
-import Trainer from "../field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
+import Trainer from "#field/trainer";
 
 export default class TrainerData {
   public trainerType: TrainerType;

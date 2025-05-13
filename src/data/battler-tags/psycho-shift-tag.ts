@@ -1,11 +1,11 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { getStatusEffectHealText } from "#app/data/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BattlerTag } from "#battler-tags/battler-tag";
+import { getStatusEffectHealText } from "#data/status-effect";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Tag used to heal the user of Psycho Shift of its status effect if Psycho Shift succeeds in transferring its status effect to the target Pokemon

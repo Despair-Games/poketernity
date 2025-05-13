@@ -1,19 +1,19 @@
-import type { Egg } from "#app/data/egg";
-import { EGG_SEED } from "#app/data/egg";
-import { EggHatchData } from "#app/data/egg-hatch-data";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { settings } from "#app/system/settings/settings-manager";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import type { Egg } from "#data/egg";
+import { EGG_SEED } from "#data/egg";
+import { EggHatchData } from "#data/egg-hatch-data";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { EggHatchPhase } from "#phases/egg-hatch-phase";
+import { EggSummaryPhase } from "#phases/egg-summary-phase";
+import { settings } from "#system/settings-manager";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
-import { EggHatchPhase } from "./egg-hatch-phase";
-import { EggSummaryPhase } from "./egg-summary-phase";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.

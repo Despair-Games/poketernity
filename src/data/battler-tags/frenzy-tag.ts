@@ -1,7 +1,7 @@
-import { MoveLockTag } from "#app/data/battler-tags/move-lock-tag";
-import type { Pokemon } from "#app/field/pokemon";
+import { MoveLockTag } from "#battler-tags/move-lock-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Puts the source {@linkcode Pokemon} into a "frenzy", locking them into using the tag's

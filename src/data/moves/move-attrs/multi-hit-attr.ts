@@ -1,13 +1,13 @@
-import type { MaxMultiHitAbAttr } from "#app/data/abilities/ab-attrs/max-multi-hit-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { ChangeMultiHitTypeAttr } from "#app/data/moves/move-attrs/change-multi-hit-type-attr";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils/common-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";
+import type { Pokemon } from "#field/pokemon";
+import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
+import type { Move } from "#moves/move";
+import { MoveAttr } from "#moves/move-attr";
+import { NumberHolder } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
 
 /**
  * Attribute used for attack moves that hit multiple times per use, e.g. Bullet Seed.

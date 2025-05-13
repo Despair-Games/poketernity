@@ -1,4 +1,4 @@
-import { MoveLockTag } from "#app/data/battler-tags/move-lock-tag";
+import { MoveLockTag } from "#battler-tags/move-lock-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 

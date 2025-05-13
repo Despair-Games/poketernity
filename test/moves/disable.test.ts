@@ -1,12 +1,12 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { TurnMove } from "#types/TurnMove";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import type { TurnMove } from "#app/@types/TurnMove";
-import { ElementalType } from "#enums/elemental-type";
 
 describe("Moves - Disable", () => {
   let phaserGame: Phaser.Game;

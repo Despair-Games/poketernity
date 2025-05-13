@@ -1,7 +1,7 @@
-import { FRIENDSHIP_GAIN_PER_WAVE } from "#app/constants/friendship-constants";
 import { globalScene } from "#app/global-scene";
+import { FRIENDSHIP_GAIN_PER_WAVE } from "#constants/friendship-constants";
 import { PhaseId } from "#enums/phase-id";
-import { EncounterPhase } from "./encounter-phase";
+import { EncounterPhase } from "#phases/encounter-phase";
 
 /**
  * Triggers the next encounter (no biome change)

@@ -1,5 +1,7 @@
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
 import {
   EGG_PITY_EPIC_THRESHOLD,
   EGG_PITY_LEGENDARY_THRESHOLD,
@@ -24,18 +26,16 @@ import {
   SAME_SPECIES_EGG_SHINY_RATE,
   SHINY_EPIC_CHANCE,
   SHINY_VARIANT_CHANCE,
-} from "#app/data/rates";
-import { speciesEggTiers } from "#app/data/species-egg-tiers";
-import { speciesStarterCosts } from "#app/data/starters";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
-import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randomString, randSeedInt } from "#app/utils/random-utils";
+} from "#data/rates";
+import { speciesEggTiers } from "#data/species-egg-tiers";
+import { speciesStarterCosts } from "#data/starters";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt, randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 export const EGG_SEED = 1073741824;

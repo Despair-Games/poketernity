@@ -1,6 +1,14 @@
-import { EvolutionItem } from "#enums/evolution-item";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
+import {
+  BabySpeciesFriendshipEvolutionCondition,
+  DayEvolutionCondition,
+  MoveKnownEvoCondition,
+  NightEvolutionCondition,
+  type PokemonEvolutions,
+  RngFormEvoCondition,
+  SpeciesEvolution,
+  SpeciesFormEvolution,
+  SpeciesOwnedEvoCondition,
+} from "#data/pokemon-evolutions";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   AMBIPOM_EVO_LEVEL,
@@ -12,18 +20,10 @@ import {
   SUDOWOODO_EVO_LEVEL,
   WYRDEER_EVO_LEVEL,
   YANMEGA_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
-import {
-  type PokemonEvolutions,
-  SpeciesFormEvolution,
-  SpeciesEvolution,
-  NightEvolutionCondition,
-  DayEvolutionCondition,
-  MoveKnownEvoCondition,
-  SpeciesOwnedEvoCondition,
-  RngFormEvoCondition,
-  BabySpeciesFriendshipEvolutionCondition,
-} from "#app/data/pokemon-evolutions";
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { EvolutionItem } from "#enums/evolution-item";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.CHIKORITA]: [new SpeciesEvolution(SpeciesId.BAYLEEF, 16, null, null)],

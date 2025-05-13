@@ -1,5 +1,5 @@
 import { WeatherType } from "#enums/weather-type";
-import { WeatherHealAttr } from "#app/data/moves/move-attrs/weather-heal-attr";
+import { WeatherHealAttr } from "#moves/weather-heal-attr";
 
 /**
  * Attribute to restore a portion of the user's maximum HP.

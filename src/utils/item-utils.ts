@@ -1,7 +1,7 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import i18next from "i18next";
 
 export const FilterItemMaxStacks = (pokemon: PlayerPokemon, modifier: PokemonHeldItemModifier): string | null => {

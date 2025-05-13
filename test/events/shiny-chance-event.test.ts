@@ -1,10 +1,10 @@
-import { GameManager } from "#test/test-utils/gameManager";
-import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 import { timedEventManager } from "#app/timed-event-manager";
-import type { TimedEvent } from "#app/@types/TimedEvent";
-import { EventModifierType } from "#enums/event-modifier-type";
-import { Egg } from "#app/data/egg";
+import { Egg } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
+import { EventModifierType } from "#enums/event-modifier-type";
+import { GameManager } from "#test/test-utils/gameManager";
+import type { TimedEvent } from "#types/TimedEvent";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Shiny Chance Modifier Event", () => {
   let phaserGame: Phaser.Game;

@@ -1,12 +1,12 @@
-import { allAbilities } from "#app/data/data-lists";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { randSeedItem } from "#app/utils/random-utils";
-import { AbilityId } from "#enums/ability-id";
-import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
+import type { Pokemon } from "#field/pokemon";
+import { randSeedItem } from "#utils/random-utils";
+import i18next from "i18next";
 
 /**
  * Attempts to copy a pokemon's ability. Used by Trace.

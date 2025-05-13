@@ -1,24 +1,24 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { GameOverPhase } from "#app/phases/game-over-phase";
+import type { GameOverPhase } from "#phases/game-over-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports--
 
-import { EVIL_BOSS_2_WAVE } from "#app/constants/wave-constants";
 import { globalScene } from "#app/global-scene";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
-import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
+import { EVIL_BOSS_2_WAVE } from "#constants/wave-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
+import type { CustomModifierSettings } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { BattleEndPhase } from "#phases/battle-end-phase";
+import { EggLapsePhase } from "#phases/egg-lapse-phase";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
+import { NewBattlePhase } from "#phases/new-battle-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
 
 /**
  * Handles various effects when the player clears a wave:

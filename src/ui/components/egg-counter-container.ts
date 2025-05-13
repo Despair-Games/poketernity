@@ -1,10 +1,10 @@
-import type { EggCountChangedEvent } from "#app/events/egg";
 import { globalScene } from "#app/global-scene";
-import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
 import { EggEventType } from "#enums/egg-event-type";
 import { TextStyle } from "#enums/text-style";
+import type { EggCountChangedEvent } from "#events/egg";
+import type { EggHatchSceneUiHandler } from "#ui/egg-hatch-scene-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 
 /**
  * A container that displays the count of hatching eggs.

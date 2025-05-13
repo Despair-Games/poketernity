@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownType } from "#enums/drop-down-type";
 import { SortDirection } from "#enums/sort-direction";
 import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
+import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 
 export class DropDownLabel {

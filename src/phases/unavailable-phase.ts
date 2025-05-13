@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { UnavailableModalUiHandler } from "#app/ui/handlers/unavailable-modal-ui-handler";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
 
 export class UnavailablePhase extends Phase {
   override readonly id = PhaseId.UNAVAILABLE;

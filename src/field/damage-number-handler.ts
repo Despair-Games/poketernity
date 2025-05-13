@@ -1,16 +1,16 @@
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import type { DamageResult } from "#app/@types/DamageResult";
-import type { Pokemon } from "./pokemon";
-import { HitResult } from "#enums/hit-result";
-import { fixedNumber } from "#app/utils/common-utils";
-import { formatStat } from "#app/utils/string-utils";
-import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { DamageNumbersMode } from "#enums/damage-numbers-mode";
-import { GAME_HEIGHT } from "#app/constants/ui-constants";
+import { GAME_HEIGHT } from "#constants/ui-constants";
+import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor, ShadowColor } from "#enums/color";
+import { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import { HitResult } from "#enums/hit-result";
+import { TextStyle } from "#enums/text-style";
+import type { Pokemon } from "#field/pokemon";
+import { settings } from "#system/settings-manager";
+import type { DamageResult } from "#types/DamageResult";
+import { addTextObject } from "#ui/text-utils";
+import { fixedNumber } from "#utils/common-utils";
+import { formatStat } from "#utils/string-utils";
 
 type TextAndShadowArr = [string | null, string | null];
 

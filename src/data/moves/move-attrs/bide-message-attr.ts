@@ -1,7 +1,7 @@
-import type { BideTag } from "#app/data/battler-tags/bide-tag";
-import { VariableMoveMessageAttr } from "#app/data/moves/move-attrs/variable-move-message-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { BideTag } from "#battler-tags/bide-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import i18next from "i18next";
 
 /**

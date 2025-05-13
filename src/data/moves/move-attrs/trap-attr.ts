@@ -1,5 +1,5 @@
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 
 /**
  * Attribute to add a binding effect to the target.

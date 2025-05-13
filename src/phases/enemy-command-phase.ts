@@ -1,16 +1,17 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
+import Overrides from "#app/overrides";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import { FieldPhase } from "#phases/abstract-field-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -97,7 +98,10 @@ export class EnemyCommandPhase extends FieldPhase {
       }
     }
 
-    const command = trainer?.shouldTera(pokemon) ? BattleCommand.TERA : BattleCommand.FIGHT;
+    const command =
+      (Overrides.FORCE_ENEMY_TERA_OVERRIDE && !pokemon.isTerastallized) || trainer?.shouldTera(pokemon)
+        ? BattleCommand.TERA
+        : BattleCommand.FIGHT;
 
     battle.turnManager.addCommand({
       pokemon,

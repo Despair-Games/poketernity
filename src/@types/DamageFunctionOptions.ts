@@ -1,5 +1,5 @@
-import type { DamageResult } from "#app/@types/DamageResult";
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { DamageResult } from "#types/DamageResult";
 
 export interface DamageFunctionOptions {
   result?: DamageResult;

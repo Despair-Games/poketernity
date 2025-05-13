@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import type { MoveCondition } from "../move-conditions/move-condition";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { MoveCondition } from "#moves/move-condition";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Base class defining all {@linkcode Move} Attributes

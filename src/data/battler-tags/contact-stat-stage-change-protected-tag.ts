@@ -1,13 +1,13 @@
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { DamageProtectedTag } from "#app/data/battler-tags/damage-protected-tag";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
+import type { BattlerTag } from "#battler-tags/battler-tag";
+import { DamageProtectedTag } from "#battler-tags/damage-protected-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Tag used to block damaging moves and change the attacker's stats if the move makes contact.

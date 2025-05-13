@@ -1,6 +1,5 @@
-import type { EntryHazardTag } from "#app/data/arena-tag";
-import { allMoves } from "#app/data/data-lists";
-import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
+import type { EntryHazardTag } from "#data/arena-tag";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -8,6 +7,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import { PokemonInstantReviveModifier } from "#modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

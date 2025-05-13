@@ -1,21 +1,8 @@
-import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
-import {
-  EVIL_GRUNT_1_WAVE,
-  EVIL_GRUNT_2_WAVE,
-  EVIL_GRUNT_3_WAVE,
-  EVIL_GRUNT_4_WAVE,
-} from "#app/constants/wave-constants";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { globalScene } from "#app/global-scene";
-import type { PersistentModifier } from "#app/modifier/modifier";
-import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { coerceArray } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randItem, randSeedItem } from "#app/utils/random-utils";
-import { toReadableString } from "#app/utils/string-utils";
+import { EVIL_GRUNT_1_WAVE, EVIL_GRUNT_2_WAVE, EVIL_GRUNT_3_WAVE, EVIL_GRUNT_4_WAVE } from "#constants/wave-constants";
+import type PokemonSpecies from "#data/pokemon-species";
 import type { ElementalType } from "#enums/elemental-type";
 import { ImagesFolder } from "#enums/images-folders";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -25,6 +12,14 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PersistentModifier } from "#modifier/modifier";
+import type { ModifierTypeFunc } from "#modifier/modifier-type";
+import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
+import { coerceArray } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randItem, randSeedItem } from "#utils/random-utils";
+import { toReadableString } from "#utils/string-utils";
 import i18next from "i18next";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */

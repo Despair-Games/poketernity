@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { getTextWithColors } from "#app/ui/text/text-utils";
-import { isNil } from "#app/utils/common-utils";
 import type { TextStyle } from "#enums/text-style";
+import { getTextWithColors } from "#ui/text-utils";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
