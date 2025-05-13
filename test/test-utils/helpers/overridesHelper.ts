@@ -26,6 +26,7 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { expect, vi } from "vitest";
 import { TerrainType } from "#enums/terrain-type";
+import { ElementalType } from "#enums/elemental-type";
 
 /**
  * Helper to handle overrides in tests
@@ -522,6 +523,44 @@ export class OverridesHelper extends GameManagerHelper {
       this.log(`Paralysis and Freeze forced to ${activate ? "always" : "never"} activate!`);
     } else {
       this.log("Status activation override disabled!");
+    }
+    return this;
+  }
+
+  /**
+   * @param forceTera (Default `true`) If `true`, forces every enemy Pokemon to Terastallize. If `false`, disables this override.
+   * @returns `this`
+   */
+  public forceEnemyTera(forceTera: boolean = true): this {
+    vi.spyOn(Overrides, "FORCE_ENEMY_TERA_OVERRIDE", "get").mockReturnValue(forceTera);
+    this.log(`Enemy Pokemon are ${forceTera ? "" : "no longer "}forced to Terastallize!`);
+    return this;
+  }
+
+  /**
+   * @param type If equal to `ElementalType.UNKNOWN`, disable this override. Otherwise, force every player Pokemon's Tera type to be this type.
+   * @returns `this`
+   */
+  public teraType(type: ElementalType): this {
+    vi.spyOn(Overrides, "TERA_TYPE_OVERRIDE", "get").mockReturnValue(type);
+    if (type === ElementalType.UNKNOWN) {
+      this.log("Disabled override for player Tera type!");
+    } else {
+      this.log(`Player Tera type set to ${ElementalType[type]} (=${type})!`);
+    }
+    return this;
+  }
+
+  /**
+   * @param type If equal to `ElementalType.UNKNOWN`, disable this override. Otherwise, force every enemy Pokemon's Tera type to be this type.
+   * @returns `this`
+   */
+  public enemyTeraType(type: ElementalType): this {
+    vi.spyOn(Overrides, "ENEMY_TERA_TYPE_OVERRIDE", "get").mockReturnValue(type);
+    if (type === ElementalType.UNKNOWN) {
+      this.log("Disabled override for enemy Tera type!");
+    } else {
+      this.log(`Enemy Tera type set to ${ElementalType[type]} (=${type})!`);
     }
     return this;
   }
