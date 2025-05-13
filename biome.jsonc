@@ -79,6 +79,9 @@
         "noUselessConstructor": "error",
         "noBannedTypes": "warn", // TODO: refactor and make an error
         "useRegexLiterals": "off" // Was broken for some reason; TODO: re-enable
+      },
+      "nursery": {
+        "noCommonJs": "error"
       }
     }
   },
