@@ -72,7 +72,7 @@
         "useDefaultSwitchClauseLast": "warn" // TODO: make error?
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "warn", // TODO: Refactor and make this an error
+        "noExcessiveCognitiveComplexity": "info", // TODO: Refactor and make this an error
         "useLiteralKeys": "off",
         "noForEach": "off", // Foreach vs for of is not that simple.
         "noUselessSwitchCase": "off", // Explicit > Implicit
