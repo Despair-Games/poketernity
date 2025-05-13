@@ -1145,13 +1145,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const hasNonShiny = caughtAttr & DexAttr.NON_SHINY;
     if (starterAttributes.shiny && !hasShiny) {
       // shiny form wasn't unlocked, purging shiny and variant setting
-      // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.shiny;
-      // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.variant;
     } else if (starterAttributes.shiny === false && !hasNonShiny) {
       // non shiny form wasn't unlocked, purging shiny setting
-      // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.shiny;
     }
 
@@ -1167,7 +1167,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         || !unlockedVariants[starterAttributes.variant]
       ) {
         // variant value is invalid or requested variant wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.variant;
       }
     }
@@ -1175,7 +1175,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     if (starterAttributes.female !== undefined) {
       if (!(starterAttributes.female ? caughtAttr & DexAttr.FEMALE : caughtAttr & DexAttr.MALE)) {
         // requested gender wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.female;
       }
     }
@@ -1195,7 +1195,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       ];
       if (!unlockedAbilities[starterAttributes.ability]) {
         // requested ability wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.ability;
       }
     }
@@ -1207,7 +1207,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         || !(caughtAttr & globalScene.gameData.getFormAttr(selectedForm)))
     ) {
       // requested form wasn't unlocked/isn't a starter form, purging setting
-      // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.form;
     }
 
@@ -1215,7 +1215,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const unlockedNatures = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr);
       if (unlockedNatures.indexOf(starterAttributes.nature as unknown as Nature) < 0) {
         // requested nature wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.nature;
       }
     }
@@ -2329,7 +2329,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     // Switch from shiny to non shiny
-    // biome-ignore lint/performance/noDelete: TODO: is `delete` required?
+    // biome-ignore lint/performance/noDelete: Optimizes local storage size
     delete starterPrefs.variant;
     this.setSpeciesDetails(this.lastSpecies, { shiny: false, variant: 0 });
     this.pokemonShinyIcon.setVisible(false);
