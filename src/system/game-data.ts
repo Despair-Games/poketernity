@@ -6,13 +6,14 @@ import Overrides from "#app/overrides";
 import {
   APP_ABBREVIATION,
   BYPASS_LOGIN,
+  LS_PREFIX,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
-import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN } from "#constants/game-constants";
+import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import { EntryHazardTag } from "#data/arena-tag";
 import { allMoves, allSpecies } from "#data/data-lists";
 import { defaultStarterSpecies } from "#data/default-starters";
@@ -84,22 +85,23 @@ const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet n
 export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): string {
   switch (dataType) {
     case GameDataType.SYSTEM:
-      return "data";
+      return `${LS_PREFIX}/data_${loggedInUser?.username}`;
     case GameDataType.SESSION: {
       let ret = "sessionData";
       if (slotId) {
         ret += slotId;
       }
-      return ret;
+      // TODO: add LS_PREFIX and remove the speciesId temporary migration in parseSessionData
+      return `${ret}_${loggedInUser?.username}`;
     }
     case GameDataType.SETTINGS:
       return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
       return TUTORIALS_LS_KEY;
     case GameDataType.SEEN_DIALOGUES:
-      return "seenDialogues";
+      return `${LS_PREFIX}/seenDialogues`;
     case GameDataType.RUN_HISTORY:
-      return "runHistoryData";
+      return `${LS_PREFIX}/runHistoryData_${loggedInUser?.username}`;
   }
 }
 
@@ -257,12 +259,11 @@ export class GameData {
       globalScene.ui.savingIcon.show();
       const data = this.getSystemSaveData();
 
-      const maxIntAttrValue = 0x80000000;
       const systemData = JSON.stringify(data, (_k: any, v: any) =>
-        typeof v === "bigint" ? (v <= maxIntAttrValue ? Number(v) : v.toString()) : v,
+        typeof v === "bigint" ? (v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString()) : v,
       );
 
-      localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemData, BYPASS_LOGIN));
+      localStorage.setItem(getDataTypeKey(GameDataType.SYSTEM), encrypt(systemData, BYPASS_LOGIN));
 
       if (!BYPASS_LOGIN) {
         api.savedata.system.update({ clientSessionId }, systemData).then((error) => {
@@ -289,7 +290,7 @@ export class GameData {
     return new Promise<boolean>((resolve) => {
       console.log("Client Session:", clientSessionId);
 
-      if (BYPASS_LOGIN && !localStorage.getItem(`data_${loggedInUser?.username}`)) {
+      if (BYPASS_LOGIN && !localStorage.getItem(getDataTypeKey(GameDataType.SYSTEM))) {
         return resolve(false);
       }
 
@@ -316,14 +317,16 @@ export class GameData {
             return resolve(false);
           }
 
-          const cachedSystem = localStorage.getItem(`data_${loggedInUser?.username}`);
+          const cachedSystem = localStorage.getItem(getDataTypeKey(GameDataType.SYSTEM));
           this.initSystem(
             saveDataOrErr,
             cachedSystem ? AES.decrypt(cachedSystem, saveKey).toString(enc.Utf8) : undefined,
           ).then(resolve);
         });
       } else {
-        this.initSystem(decrypt(localStorage.getItem(`data_${loggedInUser?.username}`)!, BYPASS_LOGIN)).then(resolve); // TODO: is this bang correct?
+        this.initSystem(decrypt(localStorage.getItem(getDataTypeKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
+          resolve,
+        ); // TODO: is this bang correct?
       }
     });
   }
@@ -356,10 +359,10 @@ export class GameData {
           }
         }
 
-        localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemDataStr, BYPASS_LOGIN));
+        localStorage.setItem(getDataTypeKey(GameDataType.SYSTEM), encrypt(systemDataStr, BYPASS_LOGIN));
 
         // TODO: run history shouldn't be initialized here (and is it even needed?)
-        const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
+        const lsItemKey = getDataTypeKey(GameDataType.RUN_HISTORY);
         const lsItem = localStorage.getItem(lsItemKey);
         if (!lsItem) {
           localStorage.setItem(lsItemKey, "");
@@ -441,7 +444,7 @@ export class GameData {
       const response = await Utils.apiFetch("savedata/runHistory", true);
       const data = await response.json();
       */
-      const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
+      const lsItemKey = getDataTypeKey(GameDataType.RUN_HISTORY);
       const lsItem = localStorage.getItem(lsItemKey);
       if (lsItem) {
         const cachedResponse = lsItem;
@@ -459,10 +462,10 @@ export class GameData {
         }
         */
       }
-      localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
+      localStorage.setItem(lsItemKey, "");
       return {};
     }
-    const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
+    const lsItemKey = getDataTypeKey(GameDataType.RUN_HISTORY);
     const lsItem = localStorage.getItem(lsItemKey);
     if (lsItem) {
       const cachedResponse = lsItem;
@@ -472,7 +475,7 @@ export class GameData {
       }
       return {};
     }
-    localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
+    localStorage.setItem(lsItemKey, "");
     return {};
   }
 
@@ -501,7 +504,7 @@ export class GameData {
       isFavorite: false,
     };
     localStorage.setItem(
-      `runHistoryData_${loggedInUser?.username}`,
+      getDataTypeKey(GameDataType.RUN_HISTORY),
       encrypt(JSON.stringify(runHistoryData), BYPASS_LOGIN),
     );
     /**
@@ -578,7 +581,7 @@ export class GameData {
     if (BYPASS_LOGIN) {
       return;
     }
-    localStorage.removeItem(`data_${loggedInUser?.username}`);
+    localStorage.removeItem(getDataTypeKey(GameDataType.SYSTEM));
     for (let s = 0; s < 5; s++) {
       localStorage.removeItem(`sessionData${s ? s : ""}_${loggedInUser?.username}`);
     }
@@ -1156,20 +1159,16 @@ export class GameData {
         if (sync) {
           globalScene.ui.savingIcon.show();
         }
+
+        const sessionStorageKey = getDataTypeKey(GameDataType.SESSION, globalScene.sessionSlotId);
+        const systemStorageKey = getDataTypeKey(GameDataType.SYSTEM);
+
         const sessionData = useCachedSession
-          ? this.parseSessionData(
-              decrypt(
-                localStorage.getItem(
-                  `sessionData${globalScene.sessionSlotId ? globalScene.sessionSlotId : ""}_${loggedInUser?.username}`,
-                )!,
-                BYPASS_LOGIN,
-              ),
-            ) // TODO: is this bang correct?
+          ? this.parseSessionData(decrypt(localStorage.getItem(sessionStorageKey)!, BYPASS_LOGIN)) // TODO: is this bang correct?
           : this.getSessionSaveData();
 
-        const maxIntAttrValue = 0x80000000;
         const systemData = useCachedSystem
-          ? this.parseSystemData(decrypt(localStorage.getItem(`data_${loggedInUser?.username}`)!, BYPASS_LOGIN))
+          ? this.parseSystemData(decrypt(localStorage.getItem(systemStorageKey)!, BYPASS_LOGIN))
           : this.getSystemSaveData(); // TODO: is this bang correct?
 
         const request = {
@@ -1180,10 +1179,10 @@ export class GameData {
         };
 
         localStorage.setItem(
-          `data_${loggedInUser?.username}`,
+          systemStorageKey,
           encrypt(
             JSON.stringify(systemData, (_k: any, v: any) =>
-              typeof v === "bigint" ? (v <= maxIntAttrValue ? Number(v) : v.toString()) : v,
+              typeof v === "bigint" ? (v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString()) : v,
             ),
             BYPASS_LOGIN,
           ),
@@ -1224,7 +1223,7 @@ export class GameData {
 
   public tryExportData(dataType: GameDataType, slotId: number = 0): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      const dataKey: string = `${getDataTypeKey(dataType, slotId)}_${loggedInUser?.username}`;
+      const dataKey: string = getDataTypeKey(dataType, slotId);
       const handleData = (dataStr: string) => {
         switch (dataType) {
           case GameDataType.SYSTEM:
@@ -1269,7 +1268,7 @@ export class GameData {
   }
 
   public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number): void {
-    const dataKey = `${getDataTypeKey(dataType, slotId)}_${loggedInUser?.username}`;
+    const dataKey = getDataTypeKey(dataType, slotId);
 
     let saveFile: any = document.getElementById("saveFile");
     if (saveFile) {
