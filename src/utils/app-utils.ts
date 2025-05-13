@@ -1,5 +1,5 @@
-import { IS_BETA } from "#app/constants/app-constants";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
+import { IS_BETA } from "#constants/app-constants";
+import { supportedLanguages } from "#system/supported-languages";
 
 export function setCookie(cName: string, cValue: string): void {
   const expiration = new Date();

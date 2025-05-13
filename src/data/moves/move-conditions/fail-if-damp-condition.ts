@@ -1,10 +1,10 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { FieldPreventExplosionLikeAbAttr } from "#app/data/abilities/ab-attrs/field-prevent-explosion-like-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import { BooleanHolder } from "#utils/common-utils";
 
 /**
  *  TODO: Add simulated support

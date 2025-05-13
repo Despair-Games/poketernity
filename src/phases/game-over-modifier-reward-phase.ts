@@ -1,7 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
+import type { ModifierTypeFunc } from "#modifier/modifier-type";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
-import { ModifierRewardPhase } from "./modifier-reward-phase";
 
 /**
  * Used to grant vouchers to the player after they finish a classic run

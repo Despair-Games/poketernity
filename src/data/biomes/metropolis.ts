@@ -1,4 +1,4 @@
-import { Biome } from "#app/data/biome";
+import { Biome } from "#data/biome";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { SpeciesId } from "#enums/species-id";

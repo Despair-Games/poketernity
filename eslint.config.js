@@ -3,6 +3,7 @@ import stylisticTs from "@stylistic/eslint-plugin-ts";
 import parser from "@typescript-eslint/parser";
 import prettierConfig from "eslint-config-prettier";
 import importX from "eslint-plugin-import-x";
+import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -17,6 +18,7 @@ export default tseslint.config(
       "import-x": importX,
       "@stylistic/ts": stylisticTs,
       "@typescript-eslint": tseslint.plugin,
+      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
       "no-undef": "off", // Disables the rule that disallows the use of undeclared variables (TypeScript handles this)
@@ -40,6 +42,11 @@ export default tseslint.config(
           "ts-check": false,
           "ts-expect-error": "allow-with-description",
         },
+      ],
+      "no-relative-import-paths/no-relative-import-paths": [
+        // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
+        "error",
+        { rootDir: "src", prefix: "#app" },
       ],
     },
   },
@@ -72,6 +79,7 @@ export default tseslint.config(
       "import-x": importX,
       "@stylistic/ts": stylisticTs,
       "@typescript-eslint": tseslint.plugin,
+      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
       indent: ["error", 2, { SwitchCase: 1 }], // Enforces a 2-space indentation, enforces indentation of `case ...:` statements

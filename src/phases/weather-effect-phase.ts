@@ -1,21 +1,21 @@
-import { WEATHER_DAMAGE_RATIO } from "#app/constants/weather-constants";
-import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
-import type { PostWeatherLapseAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-ab-attr";
-import type { PreWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/pre-weather-damage-ab-attr";
-import type { SuppressWeatherEffectAbAttr } from "#app/data/abilities/ab-attrs/suppress-weather-effect-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#app/data/weather";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
+import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
+import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
+import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
+import { WEATHER_DAMAGE_RATIO } from "#constants/weather-constants";
+import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
+import { FieldPhase } from "#phases/abstract-field-phase";
+import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Applies the end-of-turn effects from active {@linkcode Weather}, including

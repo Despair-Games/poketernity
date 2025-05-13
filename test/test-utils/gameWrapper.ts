@@ -1,12 +1,12 @@
+import { MoveAnim } from "#animations/move-anim";
 import BattleScene from "#app/battle-scene";
-import * as appConstants from "#app/constants/app-constants";
-import { MoveAnim } from "#app/data/animations/move-anim";
-import { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import * as appConstants from "#constants/app-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
+import { Pokemon } from "#field/pokemon";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { MockClock } from "#test/test-utils/mocks/mockClock";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { MockGameObjectCreator } from "#test/test-utils/mocks/mockGameObjectCreator";

@@ -1,12 +1,12 @@
-import type { BlockItemTheftAbAttr } from "#app/data/abilities/ab-attrs/block-item-theft-ab-attr";
-import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { EatBerryAttr } from "#app/data/moves/move-attrs/eat-berry-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
+import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import { EatBerryAttr } from "#moves/eat-berry-attr";
+import type { Move } from "#moves/move";
+import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

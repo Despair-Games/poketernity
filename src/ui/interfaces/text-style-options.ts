@@ -1,5 +1,5 @@
-import type { TextColorCombination } from "#app/ui/interfaces/text-color-combination";
-import type { FontStyleOptions } from "#app/ui/interfaces/font-style-options";
+import type { FontStyleOptions } from "#ui/font-style-options";
+import type { TextColorCombination } from "#ui/text-color-combination";
 
 export interface TextStyleOptions {
   color: TextColorCombination;

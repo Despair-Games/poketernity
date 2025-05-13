@@ -1,23 +1,23 @@
-import pad_dualshock from "#app/configs/inputs/pad_dualshock";
-import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
-import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
-import { MAPPING_CONFIG_LS_KEY } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
+import { MAPPING_CONFIG_LS_KEY } from "#constants/app-constants";
+import { Device } from "#enums/devices";
+import { SettingGamepad } from "#enums/setting-gamepad";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import pad_dualshock from "#inputs/pad_dualshock";
+import pad_unlicensedSNES from "#inputs/pad_unlicensedSNES";
+import pad_xbox360 from "#inputs/pad_xbox360";
 import {
   setSettingGamepad,
   settingGamepadBlackList,
   settingGamepadDefaults,
   settingGamepadOptions,
-} from "#app/system/settings/settings-gamepad";
-import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { truncateString } from "#app/utils/string-utils";
-import { Device } from "#enums/devices";
-import { SettingGamepad } from "#enums/setting-gamepad";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
+} from "#system/settings-gamepad";
+import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
 
 /**

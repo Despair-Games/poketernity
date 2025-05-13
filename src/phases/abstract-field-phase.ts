@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "./abstract-battle-phase";
+import type { Pokemon } from "#field/pokemon";
+import { BattlePhase } from "#phases/abstract-battle-phase";
 
 /**
  * Abstract class that provides the {@linkcode executeForAll()} utility function that

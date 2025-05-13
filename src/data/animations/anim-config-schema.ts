@@ -1,9 +1,9 @@
-import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#app/data/animations/anim-config";
-import { easeFunctions } from "#app/data/animations/ease-functions";
-import { getEnumValues } from "#app/utils/common-utils";
+import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#animations/anim-config";
+import { easeFunctions } from "#animations/ease-functions";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import { MoveId } from "#enums/move-id";
+import { getEnumValues } from "#utils/common-utils";
 import type { JSONSchemaType } from "ajv";
 
 /** JSON Schema properties applicable to keyframes for any animation property. */

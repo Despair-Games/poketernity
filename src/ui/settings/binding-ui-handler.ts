@@ -1,12 +1,12 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
-import { NavigationManager } from "#app/ui/settings/navigation-menu";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import { NavigationManager } from "#ui/navigation-menu";
+import { addTextObject, setTextColor } from "#ui/text-utils";
+import { UiHandler } from "#ui/ui-handler";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 
 type CancelFn = (succes?: boolean) => boolean;

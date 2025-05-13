@@ -1,6 +1,6 @@
-import type { ScrollBar } from "#app/ui/components/scroll-bar";
-import type { UiHandler } from "#app/ui/handlers/ui-handler";
 import { Button } from "#enums/buttons";
+import type { ScrollBar } from "#ui/scroll-bar";
+import type { UiHandler } from "#ui/ui-handler";
 
 type UpdateGridCallbackFunction = () => void;
 type UpdateDetailsCallbackFunction = (index: number) => void;

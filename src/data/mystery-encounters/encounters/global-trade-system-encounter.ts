@@ -1,41 +1,14 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
-import { allSpecies } from "#app/data/data-lists";
-import { getGenderSymbol } from "#app/data/gender";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  leaveEncounterWithoutBattle,
-  selectPokemonForOption,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getNatureName } from "#app/data/nature";
-import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { trainerNamePools } from "#app/data/trainer-names";
-import { getTypeRgb } from "#app/data/type";
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import {
-  HiddenAbilityRateBoosterModifier,
-  ShinyRateBoosterModifier,
-  SpeciesStatBoosterModifier,
-} from "#app/modifier/modifier";
-import type { ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
-import PokemonData from "#app/system/pokemon-data";
 import { timedEventManager } from "#app/timed-event-manager";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { NumberHolder, isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { allSpecies } from "#data/data-lists";
+import { getGenderSymbol } from "#data/gender";
+import { getNatureName } from "#data/nature";
+import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
+import type PokemonSpecies from "#data/pokemon-species";
+import { trainerNamePools } from "#data/trainer-names";
+import { getTypeRgb } from "#data/type";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -46,6 +19,33 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import {
+  HiddenAbilityRateBoosterModifier,
+  ShinyRateBoosterModifier,
+  SpeciesStatBoosterModifier,
+} from "#modifier/modifier";
+import type { ModifierTypeOption } from "#modifier/modifier-type";
+import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#modifier/modifier-type";
+import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import {
+  leaveEncounterWithoutBattle,
+  selectPokemonForOption,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/encounter-pokemon-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import PokemonData from "#system/pokemon-data";
+import type { OptionSelectItem } from "#ui/option-select-config";
+import { NumberHolder, isNil } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt, randItem, randSeedInt, randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */

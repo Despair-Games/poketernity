@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
-import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
-import { hasTouchscreen, isLandscapeMode } from "#app/utils/app-utils";
+import { SettingsUiHandler } from "#ui/settings-ui-handler";
+import { generalSettingsUiItems } from "#ui/settings-ui-items";
+import { hasTouchscreen, isLandscapeMode } from "#utils/app-utils";
 import { t } from "i18next";
 import Phaser from "phaser";
 

@@ -1,9 +1,9 @@
 import type { GameMode } from "#app/game-mode";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import * as RandomUtils from "#app/utils/random-utils";
 import { GameManager } from "#test/test-utils/gameManager";
+import * as RandomUtils from "#utils/random-utils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("game-mode", () => {
   let phaserGame: Phaser.Game;

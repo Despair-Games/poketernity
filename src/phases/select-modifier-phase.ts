@@ -1,11 +1,18 @@
 import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { ModifierTier } from "#enums/modifier-tier";
+import { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
 import {
   ExtraModifierModifier,
   HealShopCostModifier,
   TempExtraModifierModifier,
   type Modifier,
   type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
+} from "#modifier/modifier";
 import {
   getPlayerModifierTypeOptions,
   getPlayerShopModifierTypeOptionsForWave,
@@ -19,22 +26,15 @@ import {
   type CustomModifierSettings,
   type ModifierType,
   type ModifierTypeOption,
-} from "#app/modifier/modifier-type";
-import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { NumberHolder } from "#app/utils/common-utils";
-import { FilterItemMaxStacks } from "#app/utils/item-utils";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
-import type { ModifierTier } from "#enums/modifier-tier";
-import { PartyOption } from "#enums/party-option";
-import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
-import { UiMode } from "#enums/ui-mode";
+} from "#modifier/modifier-type";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { SHOP_OPTIONS_ROW_LIMIT } from "#ui/modifier-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { NumberHolder } from "#utils/common-utils";
+import { FilterItemMaxStacks } from "#utils/item-utils";
 import i18next from "i18next";
 
 //#region Types

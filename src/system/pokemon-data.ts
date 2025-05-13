@@ -1,13 +1,7 @@
-import type { Status } from "#app/@types/Status";
-import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import type { Variant } from "#app/data/variant";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
-import { isPokemon } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { loadBattlerTag } from "#battler-tags/load-battler-tag";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
 import type { ElementalType } from "#enums/elemental-type";
@@ -17,6 +11,12 @@ import { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
+import type { Status } from "#types/Status";
+import { isPokemon } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export default class PokemonData {
   public id: number;

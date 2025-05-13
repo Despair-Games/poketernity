@@ -1,12 +1,12 @@
-import { allSpecies } from "#app/data/data-lists";
-import PokemonSpecies from "#app/data/pokemon-species";
-import { PokemonForm } from "../pokemon-form";
+import { allSpecies } from "#data/data-lists";
+import { PokemonForm } from "#data/pokemon-form";
+import PokemonSpecies from "#data/pokemon-species";
 import { AbilityId } from "#enums/ability-id";
+import { ElementalType } from "#enums/elemental-type";
 import { GrowthRate } from "#enums/growth-rates";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { ElementalType } from "#enums/elemental-type";
+import { SpeciesId } from "#enums/species-id";
 
 export function initSpecies() {
   allSpecies.push(

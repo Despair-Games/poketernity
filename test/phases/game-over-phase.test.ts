@@ -1,12 +1,12 @@
-import { BiomeId } from "#enums/biome-id";
 import { AbilityId } from "#enums/ability-id";
+import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Unlockables } from "#enums/unlockables";
+import { achvs } from "#system/achievements";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { achvs } from "#app/system/achievements";
-import { Unlockables } from "#enums/unlockables";
 
 describe("Game Over Phase", () => {
   let phaserGame: Phaser.Game;

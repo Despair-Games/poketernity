@@ -1,7 +1,7 @@
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { MoveHeaderAttr } from "#app/data/moves/move-attrs/move-header-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveHeaderAttr } from "#moves/move-header-attr";
 
 /**
  * Header attribute to add a battler tag to the user at the beginning of a turn.

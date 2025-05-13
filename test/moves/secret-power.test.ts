@@ -1,4 +1,4 @@
-import { allAbilities, allMoves } from "#app/data/data-lists";
+import { allAbilities, allMoves } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";

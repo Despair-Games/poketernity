@@ -1,10 +1,10 @@
 import { globalScene } from "#app/global-scene";
-import { MoneyMultiplierModifier } from "#app/modifier/modifier";
-import { NumberHolder } from "#app/utils/common-utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import i18next from "i18next";
-import { BattlePhase } from "./abstract-battle-phase";
 import { PhaseId } from "#enums/phase-id";
+import { MoneyMultiplierModifier } from "#modifier/modifier";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { NumberHolder } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Grants the player money at the end of a wave

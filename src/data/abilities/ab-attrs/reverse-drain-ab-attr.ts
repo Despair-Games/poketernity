@@ -1,11 +1,11 @@
-import type { Move } from "#app/data/moves/move";
-import { HitHealAttr } from "#app/data/moves/move-attrs/hit-heal-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import { HitHealAttr } from "#moves/hit-heal-attr";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.

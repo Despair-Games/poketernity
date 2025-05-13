@@ -1,5 +1,5 @@
-import { ShadowColor, TextColor, CommonColor } from "#enums/color";
-import type { TextColorCombination } from "#app/ui/interfaces/text-color-combination";
+import { CommonColor, ShadowColor, TextColor } from "#enums/color";
+import type { TextColorCombination } from "#ui/text-color-combination";
 
 /**
  * Object linking each {@linkcode TextColor} to a {@linkcode CommonColor} and {@linkcode ShadowColor}.

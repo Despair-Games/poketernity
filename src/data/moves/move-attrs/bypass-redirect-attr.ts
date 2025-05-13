@@ -1,4 +1,4 @@
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MoveAttr } from "#moves/move-attr";
 
 /**
  * Attribute used for moves which ignore redirection effects, and always target their original target, i.e. Snipe Shot

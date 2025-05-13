@@ -1,6 +1,6 @@
-import type { DamageResult } from "#app/@types/DamageResult";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
+import type { DamageResult } from "#types/DamageResult";
 
 export interface AttackMoveResult {
   moveId: MoveId;

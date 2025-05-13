@@ -1,8 +1,8 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
+import { api } from "#api/api";
 import * as account from "#app/account";
-import * as appConstants from "#app/constants/app-constants";
-import { api } from "#app/plugins/api/api";
+import * as appConstants from "#constants/app-constants";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { SessionSaveData } from "#types/SessionData";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

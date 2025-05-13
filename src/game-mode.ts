@@ -1,24 +1,24 @@
 import type { FixedBattleConfigs } from "#app/battle";
 import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
-import { DEFAULT_STARTING_MONEY } from "#app/constants/game-constants";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { DEFAULT_STARTING_MONEY } from "#constants/game-constants";
 import {
   CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
   CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
-} from "#app/constants/mystery-encounter-constants";
-import type { Challenge } from "#app/data/challenge";
-import { allChallenges, copyChallenge } from "#app/data/challenge";
-import { allSpecies } from "#app/data/data-lists";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { Arena } from "#app/field/arena";
-import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
+} from "#constants/mystery-encounter-constants";
+import type { Challenge } from "#data/challenge";
+import { allChallenges, copyChallenge } from "#data/challenge";
+import { allSpecies } from "#data/data-lists";
+import type PokemonSpecies from "#data/pokemon-species";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";
 import { GameModes } from "#enums/game-modes";
 import { SpeciesId } from "#enums/species-id";
+import type { Arena } from "#field/arena";
+import { applyChallenges } from "#utils/challenge-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface GameModeConfig {

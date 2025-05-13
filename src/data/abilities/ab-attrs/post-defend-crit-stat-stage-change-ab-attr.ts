@@ -1,10 +1,10 @@
-import { Stat } from "#enums/stat";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute that prompts a stat stage change after the ability holder received a critical hit

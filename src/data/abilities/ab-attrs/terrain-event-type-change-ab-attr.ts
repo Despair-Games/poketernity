@@ -1,11 +1,11 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { TerrainType } from "#enums/terrain-type";
-import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ElementalType } from "#enums/elemental-type";
+import { TerrainType } from "#enums/terrain-type";
+import type { Pokemon } from "#field/pokemon";
+import i18next from "i18next";
 
 /**
  * This applies a terrain-based type change to the Pokemon.

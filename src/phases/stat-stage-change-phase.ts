@@ -1,24 +1,24 @@
-import { CANVAS_SCALE } from "#app/constants/ui-constants";
-import type { PostStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-stat-stage-change-ab-attr";
-import type { ProtectStatAbAttr } from "#app/data/abilities/ab-attrs/protect-stat-ab-attr";
-import type { ReflectStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/reflect-stat-stage-change-ab-attr";
-import type { StatStageChangeCopyAbAttr } from "#app/data/abilities/ab-attrs/stat-stage-change-copy-ab-attr";
-import type { StatStageChangeMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-stage-change-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PostStatStageChangeAbAttr } from "#abilities/post-stat-stage-change-ab-attr";
+import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
+import type { ReflectStatStageChangeAbAttr } from "#abilities/reflect-stat-stage-change-ab-attr";
+import type { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
+import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
+import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
+import type { Pokemon } from "#field/pokemon";
+import { ResetNegativeStatStageModifier } from "#modifier/modifier";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { settings } from "#system/settings-manager";
+import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 //#region Types

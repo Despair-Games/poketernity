@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BATTLE_STATS } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
  * Resets an ally's temporary stat boots to zero with no regard to

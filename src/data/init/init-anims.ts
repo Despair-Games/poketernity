@@ -1,19 +1,19 @@
 import {
-  LegacyAnimConfig,
   AnimFrame,
-  type LegacyAnimTimedEvent,
-  AnimTimedSoundEvent,
   AnimTimedAddBgEvent,
+  AnimTimedSoundEvent,
   AnimTimedUpdateBgEvent,
-} from "#app/data/animations/anim-config";
-import { commonAnims } from "../animations/common-anims";
-import { chargeAnims } from "../animations/charge-anims";
-import { moveAnims } from "../animations/move-anims";
-import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
+  LegacyAnimConfig,
+  type LegacyAnimTimedEvent,
+} from "#animations/anim-config";
+import { chargeAnims } from "#animations/charge-anims";
+import { commonAnims } from "#animations/common-anims";
+import { moveAnims } from "#animations/move-anims";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
+import { getEnumKeys, getEnumValues } from "#utils/common-utils";
 
 export async function populateAnims() {
   const commonAnimNames = getEnumKeys(CommonAnim).map((k) => k.toLowerCase());

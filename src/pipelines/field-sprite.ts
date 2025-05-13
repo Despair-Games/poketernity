@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { getTerrainColor } from "#app/data/terrain";
+import { getTerrainColor } from "#data/terrain";
 import { TerrainType } from "#enums/terrain-type";
-import { getCurrentTime } from "#app/utils/common-utils";
+import { getCurrentTime } from "#utils/common-utils";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH

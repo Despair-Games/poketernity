@@ -1,10 +1,10 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
-import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { rgbHexToRgba } from "#app/utils/color-utils";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { starterColors } from "#data/starter-colors";
 import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
+import { addTextObject } from "#ui/text-utils";
+import { rgbHexToRgba } from "#utils/color-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 
 export class CandyBar extends Phaser.GameObjects.Container {

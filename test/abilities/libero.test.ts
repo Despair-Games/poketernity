@@ -1,6 +1,5 @@
-import { allMoves } from "#app/data/data-lists";
-import { Weather } from "#app/data/weather";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
+import { allMoves } from "#data/data-lists";
+import { Weather } from "#data/weather";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
@@ -8,6 +7,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

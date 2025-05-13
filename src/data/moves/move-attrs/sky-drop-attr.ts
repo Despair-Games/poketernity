@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { MOVE_LOCK_TAG_TYPES, SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Move } from "#app/data/moves/move";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { failOnGravityCondition } from "../move-conditions/fail-on-gravity-condition";
-import { MoveEffectAttr } from "./move-effect-attr";
-import { MOVE_LOCK_TAG_TYPES, SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import type { Pokemon } from "#field/pokemon";
+import { failOnGravityCondition } from "#moves/fail-on-gravity-condition";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Attribute implementing the charging phase effects of {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}.

@@ -1,16 +1,16 @@
-import type { HealFromBerryUseAbAttr } from "#app/data/abilities/ab-attrs/heal-from-berry-use-ab-attr";
-import type { PreventBerryUseAbAttr } from "#app/data/abilities/ab-attrs/prevent-berry-use-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { BerryUsedEvent } from "#app/events/battle-scene";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-attr";
+import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier } from "#app/modifier/modifier";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
+import { BerryUsedEvent } from "#events/battle-scene";
+import { BerryModifier } from "#modifier/modifier";
+import { FieldPhase } from "#phases/abstract-field-phase";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

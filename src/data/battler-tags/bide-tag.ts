@@ -1,11 +1,11 @@
-import { MoveLockTag } from "#app/data/battler-tags/move-lock-tag";
-import { getMoveTargets, type Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { MoveLockTag } from "#battler-tags/move-lock-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
+import { getMoveTargets, type Move } from "#moves/move";
 
 /**
  * Causes the user of Bide to "store energy" for 2 turns, then attack the last Pokemon that attacked it.

@@ -1,8 +1,8 @@
 import type BattleScene from "#app/battle-scene";
-import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#app/constants/app-constants";
-import { bgmLoopPoint } from "#app/data/bgm-loop-point";
-import { settings } from "#app/system/settings/settings-manager";
-import { fixedNumber } from "#app/utils/common-utils";
+import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#constants/app-constants";
+import { bgmLoopPoint } from "#data/bgm-loop-point";
+import { settings } from "#system/settings-manager";
+import { fixedNumber } from "#utils/common-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export type AnySound = Phaser.Sound.WebAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.NoAudioSound;

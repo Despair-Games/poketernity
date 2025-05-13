@@ -1,7 +1,7 @@
-import type { UpdateAllSavedataRequest } from "#app/@types/SavedataApi";
-import { SavedataApi } from "#app/plugins/api/savedata-api";
+import { SavedataApi } from "#api/savedata-api";
 import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 import { getApiBaseUrl } from "#test/test-utils/testUtils";
+import type { UpdateAllSavedataRequest } from "#types/SavedataApi";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

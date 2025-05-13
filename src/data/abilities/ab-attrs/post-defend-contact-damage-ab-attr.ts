@@ -1,11 +1,11 @@
-import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {

@@ -1,5 +1,3 @@
-import { TempStatStageBoosterModifier } from "#app/modifier/modifier";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
@@ -7,7 +5,9 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
+import { TempStatStageBoosterModifier } from "#modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

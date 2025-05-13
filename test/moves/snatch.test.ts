@@ -1,4 +1,4 @@
-import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
+import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";

@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
-import { BattlePhase } from "./abstract-battle-phase";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { settings } from "#system/settings-manager";
 
 export class ShowTrainerPhase extends BattlePhase {
   override readonly id = PhaseId.SHOW_TRAINER;

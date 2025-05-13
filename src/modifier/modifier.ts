@@ -1,36 +1,12 @@
-import { FRIENDSHIP_GAIN_FROM_CANDY } from "#app/constants/friendship-constants";
-import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
-import { getLevelTotalExp } from "#app/data/exp";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type {
-  AttackTypeBoosterModifierType,
-  DoubleBattleChanceBoosterModifierType,
-  EvolutionItemModifierType,
-  FormChangeItemModifierType,
-  ModifierOverride,
-  ModifierType,
-  PokemonBaseStatTotalModifierType,
-  PokemonExpBoosterModifierType,
-  PokemonFriendshipBoosterModifierType,
-  TmModifierType,
-} from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
-import { EvolutionPhase } from "#app/phases/evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { hslToHex } from "#app/utils/color-utils";
-import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#app/utils/common-utils";
-import { getModifierType } from "#app/utils/modifier-type-utils";
+import { FRIENDSHIP_GAIN_FROM_CANDY } from "#constants/friendship-constants";
+import { getBerryEffectFunc, getBerryPredicate } from "#data/berry";
+import { getLevelTotalExp } from "#data/exp";
+import { MAX_PER_TYPE_POKEBALLS } from "#data/pokeball";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -45,6 +21,30 @@ import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTL
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { VoucherType } from "#enums/voucher-type";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import type {
+  AttackTypeBoosterModifierType,
+  DoubleBattleChanceBoosterModifierType,
+  EvolutionItemModifierType,
+  FormChangeItemModifierType,
+  ModifierOverride,
+  ModifierType,
+  PokemonBaseStatTotalModifierType,
+  PokemonExpBoosterModifierType,
+  PokemonFriendshipBoosterModifierType,
+  TmModifierType,
+} from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { EvolutionPhase } from "#phases/evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
+import { LevelUpPhase } from "#phases/level-up-phase";
+import { addTextObject } from "#ui/text-utils";
+import { hslToHex } from "#utils/color-utils";
+import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
+import { getModifierType } from "#utils/modifier-type-utils";
 import i18next from "i18next";
 
 const iconOverflowIndex = 24;

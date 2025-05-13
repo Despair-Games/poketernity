@@ -1,6 +1,6 @@
-import { BaseOptionSelectUiHandler } from "#app/ui/handlers/base-option-select-ui-handler";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { UiMode } from "#enums/ui-mode";
+import { BaseOptionSelectUiHandler } from "#ui/base-option-select-ui-handler";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 
 export class OptionSelectUiHandler extends BaseOptionSelectUiHandler<OptionSelectItem> {
   constructor(mode: UiMode = UiMode.OPTION_SELECT) {

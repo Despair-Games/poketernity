@@ -1,36 +1,14 @@
-import type { StarterMoveset } from "#app/@types/StarterData";
-import { FRIENDSHIP_GAIN_CUTOFF } from "#app/constants/friendship-constants";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import {
-  CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
-  getCandyProgressRequirement,
-  speciesStarterCosts,
-} from "#app/data/starters";
-import { reverseCompatibleTms, tmSpecies } from "#app/data/tms";
-import type { Variant } from "#app/data/variant";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  EvoTrackerModifier,
-  PokemonFriendshipBoosterModifier,
-  type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { achvs } from "#app/system/achievements";
-import type PokemonData from "#app/system/pokemon-data";
 import { timedEventManager } from "#app/timed-event-manager";
-import { PlayerBattleInfo } from "#app/ui/components/battle-info";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { NumberHolder, isNil } from "#app/utils/common-utils";
-import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
+import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
+import type { SpeciesFormChange } from "#data/pokemon-forms";
+import type PokemonSpecies from "#data/pokemon-species";
+import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
+import { reverseCompatibleTms, tmSpecies } from "#data/tms";
+import type { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";
@@ -43,6 +21,20 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { achvs } from "#system/achievements";
+import type PokemonData from "#system/pokemon-data";
+import type { StarterMoveset } from "#types/StarterData";
+import { PlayerBattleInfo } from "#ui/battle-info";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { NumberHolder, isNil } from "#utils/common-utils";
+import { PartyFilterNonFainted } from "#utils/party-ui-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: MoveId[];

@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Removes specified arena tags when a Pokemon is summoned. Used by Screen Cleaner.

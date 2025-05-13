@@ -1,10 +1,10 @@
-import { PreAttackAbAttr } from "#app/data/abilities/ab-attrs/pre-attack-ab-attr";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 /**

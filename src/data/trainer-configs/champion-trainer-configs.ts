@@ -12,8 +12,8 @@ import {
   KIERAN_CHAMPION_THEME,
   NEMONA_CHAMPION_THEME,
   SINNOH_CHAMPION_THEME,
-} from "#app/constants/music-constants";
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
+} from "#constants/music-constants";
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";

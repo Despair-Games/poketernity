@@ -1,6 +1,14 @@
-import { EvolutionItem } from "#enums/evolution-item";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
+import {
+  BabySpeciesFriendshipEvolutionCondition,
+  DayEvolutionCondition,
+  MoveKnownEvoCondition,
+  NightEvolutionCondition,
+  type PokemonEvolutions,
+  SpeciesEvolution,
+  SpeciesFormEvolution,
+  SpeciesFriendshipEvolutionCondition,
+  TypeKnownEvoCondition,
+} from "#data/pokemon-evolutions";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   ANNIHILAPE_EVO_LEVEL,
@@ -12,19 +20,11 @@ import {
   MR_MIME_EVO_LEVEL,
   SLOWPOKE_FAMILY_EVO_LEVEL,
   TANGROWTH_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
-import {
-  type PokemonEvolutions,
-  SpeciesFormEvolution,
-  SpeciesEvolution,
-  SpeciesFriendshipEvolutionCondition,
-  NightEvolutionCondition,
-  DayEvolutionCondition,
-  MoveKnownEvoCondition,
-  TypeKnownEvoCondition,
-  BabySpeciesFriendshipEvolutionCondition,
-} from "#app/data/pokemon-evolutions";
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { ElementalType } from "#enums/elemental-type";
+import { EvolutionItem } from "#enums/evolution-item";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.BULBASAUR]: [new SpeciesEvolution(SpeciesId.IVYSAUR, 16, null, null)],

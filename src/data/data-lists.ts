@@ -1,9 +1,9 @@
-import type { Ability } from "#app/data/abilities/ability";
-import type { Biome } from "#app/data/biome";
-import type { Move } from "#app/data/moves/move";
-import type PokemonSpecies from "#app/data/pokemon-species";
+import type { Ability } from "#abilities/ability";
+import type { Biome } from "#data/biome";
+import type PokemonSpecies from "#data/pokemon-species";
 import type { BiomeId } from "#enums/biome-id";
 import type { MoveId } from "#enums/move-id";
+import type { Move } from "#moves/move";
 
 interface DataMap<K, V> extends Map<K, V> {
   get(key: K): V;

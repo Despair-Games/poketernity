@@ -1,9 +1,9 @@
-import { CANVAS_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
+import { CANVAS_SCALE } from "#constants/ui-constants";
 import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
 import { WindowVariant } from "#enums/window-variant";
+import { settings } from "#system/settings-manager";
 
 /**
  * Texture keys of atlases that need to be updated when the {@linkcode UiWindowStyle} changes.

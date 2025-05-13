@@ -1,22 +1,22 @@
-import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
-import { deleteBind } from "#app/configs/inputs/configHandler";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
+import { Device } from "#enums/devices";
+import { SettingKeyboard } from "#enums/setting-keyboard";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import cfg_keyboard_qwerty from "#inputs/cfg_keyboard_qwerty";
+import { deleteBind } from "#inputs/configHandler";
 import {
   setSettingKeyboard,
   settingKeyboardBlackList,
   settingKeyboardDefaults,
   settingKeyboardOptions,
-} from "#app/system/settings/settings-keyboard";
-import { ControlsSettingsUiHandler } from "#app/ui/settings/controls-settings-ui-handler";
-import { NavigationManager } from "#app/ui/settings/navigation-menu";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { truncateString } from "#app/utils/string-utils";
-import { Device } from "#enums/devices";
-import { SettingKeyboard } from "#enums/setting-keyboard";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
+} from "#system/settings-keyboard";
+import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
+import { NavigationManager } from "#ui/navigation-menu";
+import { addTextObject } from "#ui/text-utils";
+import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
 
 /**

@@ -1,27 +1,7 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import {
-  leaveEncounterWithoutBattle,
-  updatePlayerMoney,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  catchPokemon,
-  getRandomSpeciesByStarterCost,
-  getSpriteKeysFromPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { speciesStarterCosts } from "#app/data/starters";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
-import PokemonData from "#app/system/pokemon-data";
-import { isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
-import { randSeedInt } from "#app/utils/random-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import type PokemonSpecies from "#data/pokemon-species";
+import { speciesStarterCosts } from "#data/starters";
 import { AbilityId } from "#enums/ability-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -29,7 +9,24 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import { PlayerPokemon } from "#field/player-pokemon";
+import { showEncounterDialogue } from "#mystery-encounters/encounter-dialogue-utils";
+import { leaveEncounterWithoutBattle, updatePlayerMoney } from "#mystery-encounters/encounter-phase-utils";
+import {
+  catchPokemon,
+  getRandomSpeciesByStarterCost,
+  getSpriteKeysFromPokemon,
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import PokemonData from "#system/pokemon-data";
+import { isNil } from "#utils/common-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/thePokemonSalesman";

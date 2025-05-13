@@ -1,4 +1,4 @@
-import { coerceArray } from "#app/utils/common-utils";
+import { coerceArray } from "#utils/common-utils";
 
 let manifest: object;
 

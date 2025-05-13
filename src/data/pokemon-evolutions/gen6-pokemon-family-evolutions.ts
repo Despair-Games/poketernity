@@ -1,4 +1,3 @@
-import { SpeciesId } from "#enums/species-id";
 import {
   DayEvolutionCondition,
   FemaleEvolutionCondition,
@@ -9,12 +8,13 @@ import {
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesFormEvolution,
-} from "#app/data/pokemon-evolutions";
-import { EvolutionItem } from "#enums/evolution-item";
+} from "#data/pokemon-evolutions";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { EvolutionItem } from "#enums/evolution-item";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.CHESPIN]: [new SpeciesEvolution(SpeciesId.QUILLADIN, 16, null, null)],

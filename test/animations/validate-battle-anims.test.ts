@@ -1,4 +1,4 @@
-import { animConfigSchema } from "#app/data/animations/anim-config-schema";
+import { animConfigSchema } from "#animations/anim-config-schema";
 import Ajv from "ajv";
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";

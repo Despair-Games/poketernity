@@ -1,9 +1,9 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 /**
  * Plays a {@linkcode CommonBattleAnim}

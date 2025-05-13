@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
-import { BattlePhase } from "./abstract-battle-phase";
+import { BattlePhase } from "#phases/abstract-battle-phase";
 
 /**
  * Triggers a new battle

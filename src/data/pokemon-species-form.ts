@@ -1,21 +1,21 @@
-import type { StarterMoveset } from "#app/@types/StarterData";
 import type { AnySound } from "#app/audio-manager";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { noRandomSpeciesSpawn } from "#app/data/no-random-species-spawn";
-import type { PokemonForm } from "#app/data/pokemon-form";
-import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
-import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { speciesStarterCosts } from "#app/data/starters";
-import { type Variant, variantData, type VariantSet } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { speciesEggMoves } from "#data/egg-moves";
+import { noRandomSpeciesSpawn } from "#data/no-random-species-spawn";
+import type { PokemonForm } from "#data/pokemon-form";
+import { pokemonFormLevelMoves } from "#data/pokemon-form-level-moves";
+import { type LevelMoves, pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import { speciesStarterCosts } from "#data/starters";
+import { type Variant, variantData, type VariantSet } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { PokemonRegion } from "#enums/pokemon-regions";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
+import type { StarterMoveset } from "#types/StarterData";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 
 //#region Types

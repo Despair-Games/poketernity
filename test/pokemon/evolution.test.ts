@@ -1,12 +1,12 @@
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import * as RandomUtils from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { GameManager } from "#test/test-utils/gameManager";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import * as RandomUtils from "#utils/random-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

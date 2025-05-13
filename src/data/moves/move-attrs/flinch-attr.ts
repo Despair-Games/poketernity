@@ -1,14 +1,14 @@
-import type { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ab-attrs/ignore-move-effects-ab-attr";
-import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
+import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { Move } from "#moves/move";
+import { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute adding a chance to flinch the target.

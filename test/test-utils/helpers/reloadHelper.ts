@@ -1,12 +1,12 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
-import { CommandPhase } from "#app/phases/command-phase";
-import { TitlePhase } from "#app/phases/title-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { BattleStyle } from "#enums/battle-style";
 import { UiMode } from "#enums/ui-mode";
+import { CommandPhase } from "#phases/command-phase";
+import { TitlePhase } from "#phases/title-phase";
+import { TurnInitPhase } from "#phases/turn-init-phase";
+import { settings } from "#system/settings-manager";
 import type { GameManager } from "#test/test-utils/gameManager";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
+import type { SessionSaveData } from "#types/SessionData";
 import { vi } from "vitest";
 
 /**

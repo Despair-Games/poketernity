@@ -1,7 +1,7 @@
-import { signatureSpecies } from "#app/data/signatureSpecies";
-import { TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
-import { TrainerType } from "#enums/trainer-type";
+import { signatureSpecies } from "#data/signatureSpecies";
+import { TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
+import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.LORELEI;
 export const eliteFourTrainerConfigs: TrainerConfigs = {

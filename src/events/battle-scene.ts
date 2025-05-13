@@ -1,6 +1,6 @@
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
-import type { Move } from "../data/moves/move";
-import type { BerryModifier } from "../modifier/modifier";
+import type { BerryModifier } from "#modifier/modifier";
+import type { Move } from "#moves/move";
 
 /**
  * Container class for {@linkcode BattleSceneEventType.MOVE_USED} events
