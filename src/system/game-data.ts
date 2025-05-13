@@ -12,7 +12,7 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
-import { IV_DEFAULT, IV_MAX, IV_MIN } from "#constants/game-constants";
+import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN } from "#constants/game-constants";
 import { EntryHazardTag } from "#data/arena-tag";
 import { allMoves, allSpecies } from "#data/data-lists";
 import { defaultStarterSpecies } from "#data/default-starters";
@@ -1470,7 +1470,7 @@ export class GameData {
         abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
         natureAttr: isDefaultStarter ? defaultNaturesAttr : 0,
-        ivs: Array(6).fill(isDefaultStarter ? IV_DEFAULT : IV_MIN),
+        ivs: Array(6).fill(isDefaultStarter ? DEFAULT_STARTER_IVS : IV_MIN),
         valueReduction: 0,
         classicWinCount: 0,
       };

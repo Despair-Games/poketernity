@@ -1,6 +1,6 @@
 import type { FixedBattleConfig } from "#app/battle";
 import type { GameMode } from "#app/game-mode";
-import { IV_DEFAULT } from "#constants/game-constants";
+import { DEFAULT_STARTER_IVS } from "#constants/game-constants";
 import { defaultStarterSpecies } from "#data/default-starters";
 import { pokemonFormChanges } from "#data/pokemon-forms";
 import type PokemonSpecies from "#data/pokemon-species";
@@ -676,7 +676,7 @@ export class FreshStartChallenge extends Challenge {
     pokemon.shiny = false; // Not shiny
     pokemon.variant = 0; // Not shiny
     pokemon.formIndex = 0; // Froakie should be base form
-    pokemon.ivs = Array(6).fill(IV_DEFAULT); // Default IV values
+    pokemon.ivs = Array(6).fill(DEFAULT_STARTER_IVS); // Default IV values
     return true;
   }
 

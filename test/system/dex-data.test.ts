@@ -1,4 +1,4 @@
-import { IV_DEFAULT } from "#constants/game-constants";
+import { DEFAULT_STARTER_IVS } from "#constants/game-constants";
 import { defaultStarterSpecies } from "#data/default-starters";
 import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { Nature } from "#enums/nature";
@@ -28,7 +28,7 @@ describe("Dex Data", () => {
 
   it("should unlock default attributes for starter Pokemon", async () => {
     const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
-    const defaultIVs = new Array(6).fill(IV_DEFAULT);
+    const defaultIVs = new Array(6).fill(DEFAULT_STARTER_IVS);
 
     const caughtCount = gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(defaultStarterSpecies.length);
