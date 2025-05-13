@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 

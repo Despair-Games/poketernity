@@ -79,7 +79,6 @@ export default tseslint.config(
       "import-x": importX,
       "@stylistic/ts": stylisticTs,
       "@typescript-eslint": tseslint.plugin,
-      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
       indent: ["error", 2, { SwitchCase: 1 }], // Enforces a 2-space indentation, enforces indentation of `case ...:` statements
