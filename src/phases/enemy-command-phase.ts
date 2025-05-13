@@ -6,6 +6,7 @@ import type { Pokemon } from "#field/pokemon";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -97,7 +98,10 @@ export class EnemyCommandPhase extends FieldPhase {
       }
     }
 
-    const command = trainer?.shouldTera(pokemon) ? BattleCommand.TERA : BattleCommand.FIGHT;
+    const command =
+      (Overrides.FORCE_ENEMY_TERA_OVERRIDE && !pokemon.isTerastallized) || trainer?.shouldTera(pokemon)
+        ? BattleCommand.TERA
+        : BattleCommand.FIGHT;
 
     battle.turnManager.addCommand({
       pokemon,

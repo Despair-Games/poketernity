@@ -11,7 +11,7 @@ import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
 import { InputsController } from "#app/inputs-controller";
 import { LoadingScene } from "#app/loading-scene";
-import { CallSourceLogger } from "#app/loggers";
+import { CallSourceLogger, logModifiers } from "#app/loggers";
 import Overrides from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
@@ -2516,7 +2516,7 @@ export default class BattleScene extends SceneBase {
     const appliedModifiers: T[] = [];
     for (const modifier of modifiers) {
       if (modifier.apply(...args)) {
-        console.log("Applied", modifier.type.name, !player ? "(enemy)" : "");
+        logModifiers("Applied", modifier.type.name, !player ? "(enemy)" : "");
         appliedModifiers.push(modifier);
       }
     }
@@ -2541,7 +2541,7 @@ export default class BattleScene extends SceneBase {
     );
     for (const modifier of modifiers) {
       if (modifier.apply(...args)) {
-        console.log("Applied", modifier.type.name, !player ? "(enemy)" : "");
+        logModifiers("Applied", modifier.type.name, !player ? "(enemy)" : "");
         return modifier;
       }
     }

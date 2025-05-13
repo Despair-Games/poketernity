@@ -181,9 +181,32 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
     );
 
     this.optionSelectBg.setSize(bgWidth, bgHeight);
+
+    if (this.cursorObj) {
+      this.updateCursorPlacement();
+    }
+
     if (this.config?.onResize) {
       this.config.onResize(bgWidth, bgHeight);
     }
+  }
+
+  /**
+   * Place the cursor in front of the currently selected option.
+   * Initializes the cursor sprite if it doesn't exist.
+   */
+  private updateCursorPlacement() {
+    if (!this.cursorObj) {
+      this.cursorObj = globalScene.add.image(0, 0, "cursor");
+      this.optionSelectContainer.add(this.cursorObj);
+      this.cursorObj.setScale(this.scale * 6);
+    }
+
+    this.cursorObj.setPositionRelative(
+      this.optionSelectBg,
+      10,
+      102 * this.scale + this.cursor * (114 * this.scale - 3) - 2,
+    );
   }
 
   /**
@@ -405,17 +428,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
       this.cursor = cursor;
     }
 
-    if (!this.cursorObj) {
-      this.cursorObj = globalScene.add.image(0, 0, "cursor");
-      this.optionSelectContainer.add(this.cursorObj);
-    }
-
-    this.cursorObj.setScale(this.scale * 6);
-    this.cursorObj.setPositionRelative(
-      this.optionSelectBg,
-      10,
-      102 * this.scale + this.cursor * (114 * this.scale - 3) - 2,
-    );
+    this.updateCursorPlacement();
 
     return changed;
   }

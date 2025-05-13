@@ -36,6 +36,15 @@ import type { TurnMove } from "#types/TurnMove";
 import { BooleanHolder, isNil } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 
+/** Lower number = lower priority */
+const COMMAND_PRIORITY_MAP = {
+  [BattleCommand.FIGHT]: 0,
+  [BattleCommand.TERA]: 1,
+  [BattleCommand.POKEMON]: 2,
+  [BattleCommand.BALL]: 3,
+  [BattleCommand.RUN]: 4,
+} as const;
+
 /**
  * Interface representing an action taken by a Pokemon for the turn.
  * Encompasses both Player and Enemy commands.
@@ -317,12 +326,9 @@ export class TurnCommandManager {
   private sortPostSpeed(quiet: boolean = true): void {
     this.turnCommands.sort((a: TurnCommand, b: TurnCommand) => {
       if (a.command !== b.command) {
-        if (a.command === BattleCommand.FIGHT) {
-          return 1;
-        } else if (b.command === BattleCommand.FIGHT) {
-          return -1;
-        }
-      } else if (a.command === BattleCommand.FIGHT) {
+        return COMMAND_PRIORITY_MAP[a.command] > COMMAND_PRIORITY_MAP[b.command] ? -1 : 1;
+      }
+      if (a.command === BattleCommand.FIGHT) {
         const [aQuashed, bQuashed] = [a, b].map((tc) => tc.pokemon.hasTag(BattlerTagType.QUASHED));
         if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
           return aQuashed ? 1 : -1;
@@ -371,6 +377,8 @@ export class TurnCommandManager {
     let success: boolean = false;
     switch (turnCommand.command) {
       case BattleCommand.TERA:
+        success = this.handleTeraCommand(turnCommand);
+        break;
       case BattleCommand.FIGHT:
         success = this.handleFightCommand(turnCommand);
         break;
@@ -407,6 +415,7 @@ export class TurnCommandManager {
   private getNextTurnCommandPhaseId(turnCommand: TurnCommand): PhaseId {
     switch (turnCommand.command) {
       case BattleCommand.TERA:
+        return PhaseId.TERASTALLIZATION;
       case BattleCommand.FIGHT:
         return PhaseId.MOVE;
       case BattleCommand.BALL:
@@ -419,13 +428,35 @@ export class TurnCommandManager {
   }
 
   /**
+   * Validates a given {@linkcode BattleCommand.TERA | Tera} command and
+   * schedules a {@linkcode TerastallizationPhase} if valid.
+   * Then queues a new {@linkcode BattleCommand.FIGHT | Fight} command.
+   * @param turnCommand - The {@linkcode TurnCommand} to validate
+   * @returns Whether the command was successful
+   */
+  private handleTeraCommand(turnCommand: TurnCommand): boolean {
+    const { pokemon } = turnCommand;
+    if (!pokemon.isActive(true)) {
+      return false;
+    }
+
+    globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
+
+    const newCommand = turnCommand;
+    newCommand.command = BattleCommand.FIGHT;
+
+    this.addCommand(newCommand);
+    return true;
+  }
+
+  /**
    * Validates a given {@linkcode BattleCommand.FIGHT | FIGHT} command
    * and, if valid, schedules a {@linkcode MovePhase} for the command.
    * @param turnCommand the {@linkcode TurnCommand} to schedule
    * @returns `true` if the turn command is scheduled successfully
    */
   private handleFightCommand(turnCommand: TurnCommand): boolean {
-    const { pokemon, cursor, turnMove, targets, command } = turnCommand;
+    const { pokemon, cursor, turnMove, targets } = turnCommand;
     if (!pokemon.isActive(true) || !turnMove) {
       return false;
     }
@@ -433,10 +464,6 @@ export class TurnCommandManager {
     const move =
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
-
-    if (command === BattleCommand.TERA) {
-      globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
-    }
 
     globalScene.phaseManager.queueMovePhase({
       pokemon,

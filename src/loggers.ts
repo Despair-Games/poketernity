@@ -68,3 +68,9 @@ export class CallSourceLogger {
     console.error(...args, this.getStackTraceLine());
   }
 }
+
+export function logModifiers(...args: any[]): void {
+  if (import.meta.env.VITE_MODIFIERS_DEBUG === "1") {
+    console.log(...args);
+  }
+}

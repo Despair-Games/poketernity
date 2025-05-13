@@ -72,20 +72,17 @@ describe("Moves - Tera Blast", () => {
   });
 
   it("is super effective against terastallized targets if user is Stellar tera type", async () => {
+    game.override.forceEnemyTera().teraType(ElementalType.STELLAR);
     await game.classicMode.startBattle();
-
-    const player = game.field.getPlayerPokemon();
-    game.field.forceTera(player, ElementalType.STELLAR);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
-    game.field.forceTera(enemyPokemon);
 
-    game.move.select(MoveId.TERA_BLAST);
-    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEffectPhase");
+    game.move.select(MoveId.TERA_BLAST, 0, BattlerIndex.ENEMY, true); // Terastallize into Stellar type
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(2);
+    expect(enemyPokemon.isTerastallized).toBe(true);
+    expect(enemyPokemon.getMoveEffectiveness).toHaveLastReturnedWith(2);
   });
 
   // Currently abilities are bugged and can't see when a move's category is changed
