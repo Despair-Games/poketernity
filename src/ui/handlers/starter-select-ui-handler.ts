@@ -1,3 +1,4 @@
+import { loggedInUser } from "#app/account";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
@@ -53,7 +54,6 @@ import { UiMode } from "#enums/ui-mode";
 import { EncounterPhase } from "#phases/encounter-phase";
 import { SelectChallengePhase } from "#phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
-import { StarterPrefs } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/DexData";
 import type { StarterConfig } from "#types/StarterConfig";
@@ -172,6 +172,36 @@ function findClosestStarterRow(index: number, numberOfRows: number) {
     }
   }
   return closestRowIndex;
+}
+
+// the latest data saved/loaded for the Starter Preferences. Required to reduce read/writes. Initialize as "{}", since this is the default value and no data needs to be stored if present.
+// if they ever add private static variables, move this into StarterPrefs
+const StarterPrefers_DEFAULT: string = "{}";
+let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
+
+// StarterPreferences...
+// - don't need to be loaded on startup
+// - isn't stored with other data
+// - don't require to be encrypted
+// - shouldn't require calls outside of the starter selection
+
+/** called on starter selection show once */
+function loadStarterPrefs(): StarterPreferences {
+  return JSON.parse(
+    (StarterPrefers_private_latest =
+      localStorage.getItem(`starterPrefs_${loggedInUser?.username}`) || StarterPrefers_DEFAULT),
+  );
+}
+
+/** called on starter selection clear, always */
+function saveStarterPrefs(prefs: StarterPreferences): void {
+  const pStr: string = JSON.stringify(prefs);
+  if (pStr !== StarterPrefers_private_latest) {
+    // something changed, store the update
+    localStorage.setItem(`starterPrefs_${loggedInUser?.username}`, pStr);
+    // update the latest prefs
+    StarterPrefers_private_latest = pStr;
+  }
 }
 
 interface SpeciesDetails {
@@ -378,7 +408,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.filterBar.addFilter(DropDownColumn.GEN, i18next.t("filterBar:genFilter"), genDropDown);
 
     // type filter
-    const typeKeys = Object.keys(ElementalType).filter((v) => isNaN(Number(v)));
+    const typeKeys = Object.keys(ElementalType).filter((v) => Number.isNaN(Number(v)));
     const typeOptions: DropDownOption[] = [];
     typeKeys.forEach((type, index) => {
       if (index === 0 || index === 19) {
@@ -1048,7 +1078,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   public override show(selectedStarterCallback?: StarterSelectCallback): boolean {
     if (!this.starterPreferences || Object.keys(this.starterPreferences).length === 0) {
       // starterPreferences haven't been loaded yet
-      this.starterPreferences = StarterPrefs.load();
+      this.starterPreferences = loadStarterPrefs();
     }
     this.pokerusSpecies = getPokerusStarters();
 
@@ -1115,10 +1145,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const hasNonShiny = caughtAttr & DexAttr.NON_SHINY;
     if (starterAttributes.shiny && !hasShiny) {
       // shiny form wasn't unlocked, purging shiny and variant setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.shiny;
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.variant;
     } else if (starterAttributes.shiny === false && !hasNonShiny) {
       // non shiny form wasn't unlocked, purging shiny setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.shiny;
     }
 
@@ -1129,11 +1162,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         hasShiny && caughtAttr & DexAttr.VARIANT_3,
       ];
       if (
-        isNaN(starterAttributes.variant)
+        Number.isNaN(starterAttributes.variant)
         || starterAttributes.variant < 0
         || !unlockedVariants[starterAttributes.variant]
       ) {
         // variant value is invalid or requested variant wasn't unlocked, purging setting
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.variant;
       }
     }
@@ -1141,6 +1175,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     if (starterAttributes.female !== undefined) {
       if (!(starterAttributes.female ? caughtAttr & DexAttr.FEMALE : caughtAttr & DexAttr.MALE)) {
         // requested gender wasn't unlocked, purging setting
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.female;
       }
     }
@@ -1160,6 +1195,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       ];
       if (!unlockedAbilities[starterAttributes.ability]) {
         // requested ability wasn't unlocked, purging setting
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.ability;
       }
     }
@@ -1171,6 +1207,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         || !(caughtAttr & globalScene.gameData.getFormAttr(selectedForm)))
     ) {
       // requested form wasn't unlocked/isn't a starter form, purging setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
       delete starterAttributes.form;
     }
 
@@ -1178,6 +1215,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const unlockedNatures = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr);
       if (unlockedNatures.indexOf(starterAttributes.nature as unknown as Nature) < 0) {
         // requested nature wasn't unlocked, purging setting
+        // biome-ignore lint/performance/noDelete: Optimizes local storage size
         delete starterAttributes.nature;
       }
     }
@@ -2230,7 +2268,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   handleCycleShiny(starterPrefs: StarterAttributes, props: DexAttrProps): boolean {
     if ((!props.shiny && this.canToggleShiny) || (props.shiny && !this.canCycleVariant)) {
       return this.toggleShinyState(starterPrefs);
-    } else if (props.shiny && this.canCycleVariant) {
+    }
+    if (props.shiny && this.canCycleVariant) {
       // Find next unlocked variant
       const previousVariant = isNil(starterPrefs.variant) ? props.variant : starterPrefs.variant;
       let variant = previousVariant;
@@ -2244,9 +2283,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         if (!isNil(this.speciesStarterDexEntry)) {
           if (variant === 0 && this.speciesStarterDexEntry.caughtAttr & DexAttr.DEFAULT_VARIANT) {
             return this.switchToVariant(starterPrefs, variant);
-          } else if (variant === 1 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_2) {
+          }
+          if (variant === 1 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_2) {
             return this.switchToVariant(starterPrefs, variant);
-          } else if (variant === 2 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_3) {
+          }
+          if (variant === 2 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_3) {
             return this.switchToVariant(starterPrefs, variant);
           }
         }
@@ -2288,6 +2329,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     // Switch from shiny to non shiny
+    // biome-ignore lint/performance/noDelete: Optimizes local storage size
     delete starterPrefs.variant;
     this.setSpeciesDetails(this.lastSpecies, { shiny: false, variant: 0 });
     this.pokemonShinyIcon.setVisible(false);
@@ -2684,13 +2726,17 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsCaught = this.filterBar.getVals(DropDownColumn.CAUGHT).some((caught) => {
         if (caught === "SHINY3") {
           return isVariant3Caught;
-        } else if (caught === "SHINY2") {
+        }
+        if (caught === "SHINY2") {
           return isVariant2Caught && !isVariant3Caught;
-        } else if (caught === "SHINY") {
+        }
+        if (caught === "SHINY") {
           return isVariant1Caught && !isVariant2Caught && !isVariant3Caught;
-        } else if (caught === "NORMAL") {
+        }
+        if (caught === "NORMAL") {
           return isNonShinyCaught && !isVariant1Caught && !isVariant2Caught && !isVariant3Caught;
-        } else if (caught === "UNCAUGHT") {
+        }
+        if (caught === "UNCAUGHT") {
           return isUncaught;
         }
       });
@@ -2701,11 +2747,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsPassive = this.filterBar.getVals(DropDownColumn.UNLOCKS).some((unlocks) => {
         if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.ON) {
           return isPassiveUnlocked;
-        } else if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.EXCLUDE) {
+        }
+        if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.EXCLUDE) {
           return isStarterProgressable && !isPassiveUnlocked;
-        } else if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.UNLOCKABLE) {
+        }
+        if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.UNLOCKABLE) {
           return isPassiveUnlockable;
-        } else if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.OFF) {
+        }
+        if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.OFF) {
           return true;
         }
       });
@@ -2717,13 +2766,17 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsCostReduction = this.filterBar.getVals(DropDownColumn.UNLOCKS).some((unlocks) => {
         if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.ON) {
           return isCostFullyReduced;
-        } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.PARTIAL) {
+        }
+        if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.PARTIAL) {
           return isCostReduced && !isCostFullyReduced;
-        } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.EXCLUDE) {
+        }
+        if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.EXCLUDE) {
           return isStarterProgressable && !isCostReduced;
-        } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.UNLOCKABLE) {
+        }
+        if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.UNLOCKABLE) {
           return isCostReductionUnlockable;
-        } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.OFF) {
+        }
+        if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.OFF) {
           return true;
         }
       });
@@ -2749,9 +2802,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsWin = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "WIN" && misc.state === DropDownState.ON) {
           return hasWon;
-        } else if (misc.val === "WIN" && misc.state === DropDownState.EXCLUDE) {
+        }
+        if (misc.val === "WIN" && misc.state === DropDownState.EXCLUDE) {
           return hasNotWon || isUndefined;
-        } else if (misc.val === "WIN" && misc.state === DropDownState.OFF) {
+        }
+        if (misc.val === "WIN" && misc.state === DropDownState.OFF) {
           return true;
         }
       });
@@ -2764,9 +2819,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsHA = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.ON) {
           return hasHA;
-        } else if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.EXCLUDE) {
+        }
+        if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.EXCLUDE) {
           return speciesHasHiddenAbility && !hasHA;
-        } else if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.OFF) {
+        }
+        if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.OFF) {
           return true;
         }
       });
@@ -2776,9 +2833,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsEgg = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "EGG" && misc.state === DropDownState.ON) {
           return isEggPurchasable;
-        } else if (misc.val === "EGG" && misc.state === DropDownState.EXCLUDE) {
+        }
+        if (misc.val === "EGG" && misc.state === DropDownState.EXCLUDE) {
           return isStarterProgressable && !isEggPurchasable;
-        } else if (misc.val === "EGG" && misc.state === DropDownState.OFF) {
+        }
+        if (misc.val === "EGG" && misc.state === DropDownState.OFF) {
           return true;
         }
       });
@@ -2787,9 +2846,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const fitsPokerus = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "POKERUS" && misc.state === DropDownState.ON) {
           return this.pokerusSpecies.includes(container.species);
-        } else if (misc.val === "POKERUS" && misc.state === DropDownState.EXCLUDE) {
+        }
+        if (misc.val === "POKERUS" && misc.state === DropDownState.EXCLUDE) {
           return !this.pokerusSpecies.includes(container.species);
-        } else if (misc.val === "POKERUS" && misc.state === DropDownState.OFF) {
+        }
+        if (misc.val === "POKERUS" && misc.state === DropDownState.OFF) {
           return true;
         }
       });
@@ -2817,17 +2878,16 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const sort = this.filterBar.getVals(DropDownColumn.SORT)[0];
     this.filteredStarterContainers.sort((a, b) => {
       switch (sort.val) {
-        default:
-          break;
         case SortCriteria.NUMBER:
           return (a.species.speciesId - b.species.speciesId) * -sort.dir;
         case SortCriteria.COST:
           return (a.cost - b.cost) * -sort.dir;
-        case SortCriteria.CANDY:
+        case SortCriteria.CANDY: {
           const candyCountA = globalScene.gameData.starterData[a.species.speciesId].candyCount;
           const candyCountB = globalScene.gameData.starterData[b.species.speciesId].candyCount;
           return (candyCountA - candyCountB) * -sort.dir;
-        case SortCriteria.IV:
+        }
+        case SortCriteria.IV: {
           const avgIVsA =
             globalScene.gameData.dexData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
             / globalScene.gameData.dexData[a.species.speciesId].ivs.length;
@@ -2835,6 +2895,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             globalScene.gameData.dexData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
             / globalScene.gameData.dexData[b.species.speciesId].ivs.length;
           return (avgIVsA - avgIVsB) * -sort.dir;
+        }
         case SortCriteria.NAME:
           return a.species.name.localeCompare(b.species.name) * -sort.dir;
       }
@@ -2873,50 +2934,49 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           this.starterCursorObjs[this.starterSpecies.indexOf(container.species)].setVisible(false);
         }
         return;
-      } else {
-        container.setVisible(true);
-
-        if (this.pokerusSpecies.includes(container.species)) {
-          this.pokerusCursorObjs[pokerusCursorIndex].setPosition(pos.x - 1, pos.y + 1);
-          this.pokerusCursorObjs[pokerusCursorIndex].setVisible(true);
-          pokerusCursorIndex++;
-        }
-
-        if (this.starterSpecies.includes(container.species)) {
-          this.starterCursorObjs[this.starterSpecies.indexOf(container.species)].setPosition(pos.x - 1, pos.y + 1);
-          this.starterCursorObjs[this.starterSpecies.indexOf(container.species)].setVisible(true);
-        }
-
-        const speciesId = container.species.speciesId;
-        this.updateStarterValueLabel(container);
-
-        container.label.setVisible(true);
-        const speciesVariants =
-          speciesId && globalScene.gameData.dexData[speciesId].caughtAttr & DexAttr.SHINY
-            ? [DexAttr.DEFAULT_VARIANT, DexAttr.VARIANT_2, DexAttr.VARIANT_3].filter(
-                (v) => (globalScene.gameData.dexData[speciesId].caughtAttr & v) > 0,
-              )
-            : [];
-        for (let v = 0; v < 3; v++) {
-          const hasVariant = speciesVariants.length > v;
-          container.shinyIcons[v].setVisible(hasVariant);
-          if (hasVariant) {
-            container.shinyIcons[v].setTint(
-              getVariantTint(
-                speciesVariants[v] === DexAttr.DEFAULT_VARIANT ? 0 : speciesVariants[v] === DexAttr.VARIANT_2 ? 1 : 2,
-              ),
-            );
-          }
-        }
-
-        container.starterPassiveBgs.setVisible(globalScene.gameData.starterData[speciesId].passiveAttr > 0);
-        container.hiddenAbilityIcon.setVisible(
-          globalScene.gameData.dexData[speciesId].caughtAttr > 0
-            && (globalScene.gameData.starterData[speciesId].abilityAttr & AbilityAttr.ABILITY_HIDDEN) > 0,
-        );
-        container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
-        container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
       }
+      container.setVisible(true);
+
+      if (this.pokerusSpecies.includes(container.species)) {
+        this.pokerusCursorObjs[pokerusCursorIndex].setPosition(pos.x - 1, pos.y + 1);
+        this.pokerusCursorObjs[pokerusCursorIndex].setVisible(true);
+        pokerusCursorIndex++;
+      }
+
+      if (this.starterSpecies.includes(container.species)) {
+        this.starterCursorObjs[this.starterSpecies.indexOf(container.species)].setPosition(pos.x - 1, pos.y + 1);
+        this.starterCursorObjs[this.starterSpecies.indexOf(container.species)].setVisible(true);
+      }
+
+      const speciesId = container.species.speciesId;
+      this.updateStarterValueLabel(container);
+
+      container.label.setVisible(true);
+      const speciesVariants =
+        speciesId && globalScene.gameData.dexData[speciesId].caughtAttr & DexAttr.SHINY
+          ? [DexAttr.DEFAULT_VARIANT, DexAttr.VARIANT_2, DexAttr.VARIANT_3].filter(
+              (v) => (globalScene.gameData.dexData[speciesId].caughtAttr & v) > 0,
+            )
+          : [];
+      for (let v = 0; v < 3; v++) {
+        const hasVariant = speciesVariants.length > v;
+        container.shinyIcons[v].setVisible(hasVariant);
+        if (hasVariant) {
+          container.shinyIcons[v].setTint(
+            getVariantTint(
+              speciesVariants[v] === DexAttr.DEFAULT_VARIANT ? 0 : speciesVariants[v] === DexAttr.VARIANT_2 ? 1 : 2,
+            ),
+          );
+        }
+      }
+
+      container.starterPassiveBgs.setVisible(globalScene.gameData.starterData[speciesId].passiveAttr > 0);
+      container.hiddenAbilityIcon.setVisible(
+        globalScene.gameData.dexData[speciesId].caughtAttr > 0
+          && (globalScene.gameData.starterData[speciesId].abilityAttr & AbilityAttr.ABILITY_HIDDEN) > 0,
+      );
+      container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
+      container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
     });
   };
 
@@ -3017,7 +3077,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // load default nature from stater save data, if set
       this.natureCursor = starterAttributes.nature;
     }
-    if (starterAttributes?.ability && !isNaN(starterAttributes.ability)) {
+    if (starterAttributes?.ability && !Number.isNaN(starterAttributes.ability)) {
       // load default ability from stater save data, if set
       this.abilityCursor = starterAttributes.ability;
     }
@@ -3163,7 +3223,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           // load default nature from stater save data, if set
           const defaultNature = starterAttributes?.nature || globalScene.gameData.getSpeciesDefaultNature(species);
           props = globalScene.gameData.getSpeciesDexAttrProps(species, defaultDexAttr);
-          if (starterAttributes?.variant && !isNaN(starterAttributes.variant)) {
+          if (starterAttributes?.variant && !Number.isNaN(starterAttributes.variant)) {
             if (props.shiny) {
               props.variant = starterAttributes.variant as Variant;
             }
@@ -3899,26 +3959,25 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const thisObj = this;
         const originalStarterSelectCallback = this.starterSelectCallback;
         this.starterSelectCallback = null;
-        originalStarterSelectCallback
-          && originalStarterSelectCallback(
-            new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
-              const starterSpecies = thisObj.starterSpecies[i];
-              return {
-                species: starterSpecies,
-                dexAttr: thisObj.starterAttr[i],
-                abilityIndex: thisObj.starterAbilityIndexes[i],
-                passive: !(
-                  globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
-                  ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
-                ),
-                nature: thisObj.starterNatures[i],
-                teraType: thisObj.starterTeras[i],
-                moveset: thisObj.starterMovesets[i],
-                pokerus: thisObj.pokerusSpecies.includes(starterSpecies),
-                nickname: thisObj.starterPreferences[starterSpecies.speciesId]?.nickname,
-              };
-            }),
-          );
+        originalStarterSelectCallback?.(
+          new Array(this.starterSpecies.length).fill(0).map((_, i) => {
+            const starterSpecies = thisObj.starterSpecies[i];
+            return {
+              species: starterSpecies,
+              dexAttr: thisObj.starterAttr[i],
+              abilityIndex: thisObj.starterAbilityIndexes[i],
+              passive: !(
+                globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
+                ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
+              ),
+              nature: thisObj.starterNatures[i],
+              teraType: thisObj.starterTeras[i],
+              moveset: thisObj.starterMovesets[i],
+              pokerus: thisObj.pokerusSpecies.includes(starterSpecies),
+              nickname: thisObj.starterPreferences[starterSpecies.speciesId]?.nickname,
+            };
+          }),
+        );
       };
 
       const cancelStartRun = () => {
@@ -4104,7 +4163,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   protected override clear(): void {
-    StarterPrefs.save(this.starterPreferences);
+    saveStarterPrefs(this.starterPreferences);
     this.cursor = -1;
     this.hideInstructions();
     this.activeTooltip = undefined;

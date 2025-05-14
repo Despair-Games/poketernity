@@ -48,11 +48,10 @@ export class IVGraph extends Phaser.GameObjects.Container {
     this.setName("stats");
     const ivChartBgData = new Array(6)
       .fill(null)
-      .map((_, i: number) => [
+      .flatMap((_, i: number) => [
         ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][0],
         ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][1],
-      ])
-      .flat();
+      ]);
     const ivChartBg = globalScene.add.polygon(48, 44, ivChartBgData, 0xd8e0f0, 0.625);
     ivChartBg.setOrigin(0, 0);
 
@@ -122,11 +121,10 @@ export class IVGraph extends Phaser.GameObjects.Container {
 
     const ivChartData = new Array(6)
       .fill(null)
-      .map((_, i) => [
+      .flatMap((_, i) => [
         (ivs[ivChartStatIndexes[i]] / 31) * ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][0],
         (ivs[ivChartStatIndexes[i]] / 31) * ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][1],
-      ])
-      .flat();
+      ]);
     const lastIvChartData = this.statsIvsCache || defaultIvChartData;
     this.statsIvsCache = ivChartData.slice(0);
 

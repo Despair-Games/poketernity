@@ -16,8 +16,7 @@ export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return pokemon.canAddTag(this.tagType);
-    } else {
-      return pokemon.addTag(this.tagType, this.turnCount);
     }
+    return pokemon.addTag(this.tagType, this.turnCount);
   }
 }

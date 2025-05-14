@@ -382,24 +382,22 @@ export default class MysteryEncounter implements IMysteryEncounter {
         // Always choose from the non-overlapping pokemon first
         this.primaryPokemon = truePrimaryPool[randSeedInt(truePrimaryPool.length, 0)];
         return true;
-      } else {
-        // If there are multiple overlapping pokemon, we're okay - just choose one and take it out of the primary pokemon pool
-        if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
-          // is this working?
-          this.primaryPokemon = overlap[randSeedInt(overlap.length, 0)];
-          this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
-          return true;
-        }
-        console.log(
-          "Mystery Encounter Edge Case: Requirement not met due to primary pokemon overlapping with secondary pokemon. There's no valid primary pokemon left.",
-        );
-        return false;
       }
-    } else {
-      // this means we CAN have the same pokemon be a primary and secondary pokemon, so just choose any qualifying one randomly.
-      this.primaryPokemon = qualified[randSeedInt(qualified.length, 0)];
-      return true;
+      // If there are multiple overlapping pokemon, we're okay - just choose one and take it out of the primary pokemon pool
+      if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
+        // is this working?
+        this.primaryPokemon = overlap[randSeedInt(overlap.length, 0)];
+        this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
+        return true;
+      }
+      console.log(
+        "Mystery Encounter Edge Case: Requirement not met due to primary pokemon overlapping with secondary pokemon. There's no valid primary pokemon left.",
+      );
+      return false;
     }
+    // this means we CAN have the same pokemon be a primary and secondary pokemon, so just choose any qualifying one randomly.
+    this.primaryPokemon = qualified[randSeedInt(qualified.length, 0)];
+    return true;
   }
 
   /**
@@ -603,10 +601,9 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
     if (!this.options) {
       const options = [option];
       return Object.assign(this, { options });
-    } else {
-      this.options.push(option);
-      return this;
     }
+    this.options.push(option);
+    return this;
   }
 
   /**

@@ -140,7 +140,7 @@ export abstract class BattleAnim {
           x += userInitialX - userFocusX;
           y += userInitialY - userHalfHeight - userFocusY;
           break;
-        case AnimFocus.USER_TARGET:
+        case AnimFocus.USER_TARGET: {
           /** Comments are based on the values set during {@linkcode play} */
           const point = transformPoint(
             this.srcLine[0], // userFocusX
@@ -163,6 +163,7 @@ export abstract class BattleAnim {
             zoomX = zoomX * -1;
           }
           break;
+        }
       }
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.IMAGE ? g++ : frame.target === AnimFrameTarget.SOURCE ? u++ : t++;
@@ -316,11 +317,8 @@ export abstract class BattleAnim {
               const isUser = frame.target === AnimFrameTarget.SOURCE;
               if (isUser && target === user) {
                 continue;
-              } else if (
-                this.playRegardlessOfIssues
-                && frame.target === AnimFrameTarget.TARGET
-                && !target.isOnField()
-              ) {
+              }
+              if (this.playRegardlessOfIssues && frame.target === AnimFrameTarget.TARGET && !target.isOnField()) {
                 continue;
               }
               const sprites = spriteCache[isUser ? AnimFrameTarget.SOURCE : AnimFrameTarget.TARGET];

@@ -177,9 +177,8 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
     if (rand < moveAccuracy * accuracyMultiplier) {
       return [HitCheckResult.HIT, effectiveness];
-    } else {
-      return [HitCheckResult.MISS, 0];
     }
+    return [HitCheckResult.MISS, 0];
   }
 
   /** @returns The {@linkcode Pokemon} using this phase's invoked move */

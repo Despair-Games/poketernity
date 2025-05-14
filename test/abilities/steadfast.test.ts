@@ -5,7 +5,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -36,7 +36,7 @@ describe("Abilities - Steadfast", () => {
       .enemyLevel(100);
   });
 
-  it(`should boost SPD +1 after flinching`, async () => {
+  it("should boost SPD +1 after flinching", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -58,7 +58,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
   });
 
-  it(`should NOT boost SPD when Pokemon does NOT flinch`, async () => {
+  it("should NOT boost SPD when Pokemon does NOT flinch", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -80,7 +80,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
-  it(`should NOT boost SPD if flinching occured after owner acted`, async () => {
+  it("should NOT boost SPD if flinching occured after owner acted", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 

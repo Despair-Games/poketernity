@@ -6,7 +6,6 @@ import type { MysteryEncounterPostSummonTag } from "#battler-tags/mystery-encoun
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
@@ -14,10 +13,6 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 export class PostSummonPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_SUMMON;
-
-  constructor(battlerIndex: BattlerIndex) {
-    super(battlerIndex);
-  }
 
   public override start(): void {
     super.start();

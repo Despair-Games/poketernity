@@ -3,7 +3,7 @@ import type { TrainerType } from "#enums/trainer-type";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 
 export function initTrainerTypeDialogue(): void {
-  const trainerTypes = Object.keys(trainerTypeDialogue).map((t) => parseInt(t) as TrainerType);
+  const trainerTypes = Object.keys(trainerTypeDialogue).map((t) => Number.parseInt(t) as TrainerType);
   for (const trainerType of trainerTypes) {
     const messages = trainerTypeDialogue[trainerType];
     const messageTypes = ["encounter", "victory", "defeat"];

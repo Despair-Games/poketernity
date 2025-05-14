@@ -170,7 +170,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
 
       api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
         if (!error) {
-          originalLoginAction && originalLoginAction();
+          originalLoginAction?.();
         } else {
           onFail(error);
         }
@@ -255,9 +255,8 @@ export class LoginFormUiHandler extends FormModalUiHandler {
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);
-        } else {
-          return onFail(this.ERR_NO_SAVES);
         }
+        return onFail(this.ERR_NO_SAVES);
       }
     });
 

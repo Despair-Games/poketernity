@@ -101,7 +101,7 @@ export function doPokeballBounceAnim(
   y1: number,
   y2: number,
   baseBounceDuration: number,
-  callback: Function,
+  callback: VoidFunction,
   isCritical: boolean = false,
 ) {
   let bouncePower = 1;

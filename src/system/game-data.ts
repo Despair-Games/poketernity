@@ -49,6 +49,7 @@ import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { ReloadSessionPhase } from "#phases/reload-session-phase";
@@ -83,12 +84,13 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
   switch (dataType) {
     case GameDataType.SYSTEM:
       return "data";
-    case GameDataType.SESSION:
+    case GameDataType.SESSION: {
       let ret = "sessionData";
       if (slotId) {
         ret += slotId;
       }
       return ret;
+    }
     case GameDataType.SETTINGS:
       return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
@@ -145,37 +147,6 @@ export interface StarterAttributes {
 
 export interface StarterPreferences {
   [key: number]: StarterAttributes;
-}
-
-// the latest data saved/loaded for the Starter Preferences. Required to reduce read/writes. Initialize as "{}", since this is the default value and no data needs to be stored if present.
-// if they ever add private static variables, move this into StarterPrefs
-const StarterPrefers_DEFAULT: string = "{}";
-let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
-
-// This is its own class as StarterPreferences...
-// - don't need to be loaded on startup
-// - isn't stored with other data
-// - don't require to be encrypted
-// - shouldn't require calls outside of the starter selection
-export class StarterPrefs {
-  // called on starter selection show once
-  static load(): StarterPreferences {
-    return JSON.parse(
-      (StarterPrefers_private_latest =
-        localStorage.getItem(`starterPrefs_${loggedInUser?.username}`) || StarterPrefers_DEFAULT),
-    );
-  }
-
-  // called on starter selection clear, always
-  static save(prefs: StarterPreferences): void {
-    const pStr: string = JSON.stringify(prefs);
-    if (pStr !== StarterPrefers_private_latest) {
-      // something changed, store the update
-      localStorage.setItem(`starterPrefs_${loggedInUser?.username}`, pStr);
-      // update the latest prefs
-      StarterPrefers_private_latest = pStr;
-    }
-  }
 }
 
 export interface SeenDialogues {
@@ -331,7 +302,8 @@ export class GameData {
                 true,
               );
               return resolve(true);
-            } else if (saveDataOrErr?.includes("Too many connections")) {
+            }
+            if (saveDataOrErr?.includes("Too many connections")) {
               globalScene.phaseManager.queueMessagePhase(
                 "Too many people are trying to connect and the server is overloaded. Please try again later.",
                 null,
@@ -473,25 +445,22 @@ export class GameData {
           return cachedRHData;
         }
         */
-      } else {
-        localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
-        return {};
       }
-    } else {
-      const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
-      const lsItem = localStorage.getItem(lsItemKey);
-      if (lsItem) {
-        const cachedResponse = lsItem;
-        if (cachedResponse) {
-          const runHistory: RunHistoryData = JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
-          return runHistory;
-        }
-        return {};
-      } else {
-        localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
-        return {};
-      }
+      localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
+      return {};
     }
+    const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
+    const lsItem = localStorage.getItem(lsItemKey);
+    if (lsItem) {
+      const cachedResponse = lsItem;
+      if (cachedResponse) {
+        const runHistory: RunHistoryData = JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
+        return runHistory;
+      }
+      return {};
+    }
+    localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
+    return {};
   }
 
   /**
@@ -543,7 +512,8 @@ export class GameData {
     return JSON.parse(dataStr, (k: string, v: any) => {
       if (k === "gameStats") {
         return new GameStats(v);
-      } else if (k === "eggs") {
+      }
+      if (k === "eggs") {
         const ret: EggData[] = [];
         if (v === null) {
           v = [];
@@ -1037,19 +1007,16 @@ export class GameData {
           daily = JSON.parse(atob(localStorage.getItem("daily")!)); // TODO: is this bang correct?
           if (daily.includes(seed)) {
             return resolve(false);
-          } else {
-            daily.push(seed);
-            localStorage.setItem("daily", btoa(JSON.stringify(daily)));
-            return resolve(true);
           }
-        } else {
           daily.push(seed);
           localStorage.setItem("daily", btoa(JSON.stringify(daily)));
           return resolve(true);
         }
-      } else {
+        daily.push(seed);
+        localStorage.setItem("daily", btoa(JSON.stringify(daily)));
         return resolve(true);
       }
+      return resolve(true);
     });
   }
 
@@ -1078,7 +1045,7 @@ export class GameData {
         }
         localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
       } else {
-        if (jsonResponse && jsonResponse.error?.startsWith("session out of date")) {
+        if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
           globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
         }
@@ -1312,16 +1279,18 @@ export class GameData {
           try {
             dataName = GameDataType[dataType].toLowerCase();
             switch (dataType) {
-              case GameDataType.SYSTEM:
+              case GameDataType.SYSTEM: {
                 dataStr = this.convertSystemDataStr(dataStr);
                 const systemData = this.parseSystemData(dataStr);
                 valid = !!systemData.dexData && !!systemData.timestamp;
                 break;
-              case GameDataType.SESSION:
+              }
+              case GameDataType.SESSION: {
                 const sessionData = this.parseSessionData(dataStr);
                 valid = !!sessionData.party && !!sessionData.enemyParty && !!sessionData.timestamp;
                 break;
-              case GameDataType.RUN_HISTORY:
+              }
+              case GameDataType.RUN_HISTORY: {
                 const data = JSON.parse(dataStr);
                 const keys = Object.keys(data);
                 dataName = i18next.t("menuUiHandler:RUN_HISTORY").toLowerCase();
@@ -1331,6 +1300,7 @@ export class GameData {
                     ["isFavorite", "isVictory", "entry"].every((v) => entryKeys.includes(v)) && entryKeys.length === 3;
                 });
                 break;
+              }
               case GameDataType.SETTINGS:
               case GameDataType.TUTORIALS:
                 valid = true;
@@ -1456,7 +1426,7 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       starterData[speciesId] = {
@@ -1530,16 +1500,15 @@ export class GameData {
     const speciesRootForm = pokemon.species.getRootSpeciesId();
     if (!isNonRentalCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
       return Promise.resolve([]);
-    } else {
-      return this.setPokemonSpeciesCaught(
-        pokemon,
-        pokemon.species,
-        isNonRentalCatch,
-        isNonRentalCatch,
-        fromEgg,
-        showMessage,
-      );
     }
+    return this.setPokemonSpeciesCaught(
+      pokemon,
+      pokemon.species,
+      isNonRentalCatch,
+      isNonRentalCatch,
+      fromEgg,
+      showMessage,
+    );
   }
 
   /**

@@ -425,6 +425,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           case 7:
             return ElementalType.ROCK;
         }
+        break;
 
       // Custom
       case SpeciesId.SHEDINJA:
@@ -808,7 +809,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       || formKey === "caph-starmobile"
     ) {
       return 1.5;
-    } else if (this.customPokemonData.spriteScale > 0) {
+    }
+    if (this.customPokemonData.spriteScale > 0) {
       return this.customPokemonData.spriteScale;
     }
     return 1;
@@ -918,15 +920,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return false;
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   /** If this Pokemon has a Substitute on the field, removes its sprite from the field. */
   destroySubstitute(): void {
     const substitute = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-    if (substitute && substitute.sprite) {
+    if (substitute?.sprite) {
       substitute.sprite.destroy();
     }
   }
@@ -1176,7 +1177,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret *= 1.5;
         }
         break;
-      case Stat.SPD:
+      case Stat.SPD: {
         const side = this.getArenaTagSide();
         if (globalScene.arena.hasTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
@@ -1204,6 +1205,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret *= 2;
         }
         break;
+      }
     }
 
     const highestStatBoost = this.findTag(
@@ -1356,7 +1358,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
-    let overrideArray: MoveId | Array<MoveId> = this.isPlayer()
+    let overrideArray: MoveId | MoveId[] = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
       : Overrides.ENEMY_MOVESET_OVERRIDE;
 
@@ -2334,11 +2336,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
     if (rand.value >= SHINY_VARIANT_CHANCE) {
       return 0; // 6/10
-    } else if (rand.value >= SHINY_EPIC_CHANCE) {
-      return 1; // 3/10
-    } else {
-      return 2; // 1/10
     }
+    if (rand.value >= SHINY_EPIC_CHANCE) {
+      return 1; // 3/10
+    }
+    return 2; // 1/10
   }
 
   /** Generates a semi-random moveset for a Pokemon */
@@ -2373,7 +2375,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.hasTrainer()) {
       const tms = Object.keys(tmSpecies);
       for (const tm of tms) {
-        const moveId = parseInt(tm) as MoveId;
+        const moveId = Number.parseInt(tm) as MoveId;
         let compatible = false;
         for (const p of tmSpecies[tm]) {
           if (Array.isArray(p)) {
@@ -2592,7 +2594,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   hideInfo(): Promise<void> {
     return new Promise((resolve) => {
-      if (this.battleInfo && this.battleInfo.visible) {
+      if (this.battleInfo?.visible) {
         globalScene.tweens.add({
           targets: [this.battleInfo, this.battleInfo.expMaskRect],
           x: this.isPlayer() ? "+=150" : `-=${!this.isBoss() ? 150 : 246}`,
@@ -3717,7 +3719,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
       if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
         return tag as MoveRestrictionBattlerTag;
-      } else if (user && target && (tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
+      }
+      if (user && target && (tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
         return tag as MoveRestrictionBattlerTag;
       }
     }
@@ -3748,9 +3751,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const moveHistory = this.getMoveHistory();
     if (moveCount >= 0) {
       return moveHistory.slice(Math.max(moveHistory.length - moveCount, 0)).reverse();
-    } else {
-      return moveHistory.slice(0).reverse();
     }
+    return moveHistory.slice(0).reverse();
   }
 
   getMoveQueue(): TurnMove[] {
@@ -3783,12 +3785,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.getSpeciesForm().cry(soundConfig);
   }
 
-  faintCry(callback: Function): void {
+  faintCry(callback: VoidFunction): void {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
     const cry = globalScene.audioManager.playSound(key, { rate: rate }) as AnySound;
     if (!cry || settings.effectiveFieldVolume === 0) {
-      return callback();
+      callback();
+      return;
     }
     const sprite = this.getSprite();
     const tintSprite = this.getTintSprite();
@@ -3927,7 +3930,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     switch (effect) {
       case StatusEffect.POISON:
-      case StatusEffect.TOXIC:
+      case StatusEffect.TOXIC: {
         // Check if the Pokemon is immune to Poison/Toxic or if the source pokemon is canceling the immunity
         const poisonImmunity = types.map((defType) => {
           // Check if the Pokemon is not immune to Poison/Toxic
@@ -3960,12 +3963,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           }
         }
         break;
+      }
       case StatusEffect.PARALYSIS:
         if (this.isOfType(ElementalType.ELECTRIC)) {
           return false;
         }
         break;
-      case StatusEffect.SLEEP:
+      case StatusEffect.SLEEP: {
         const preventSleep = new BooleanHolder(false);
         globalScene
           .getField(true)
@@ -3975,6 +3979,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           return false;
         }
         break;
+      }
       case StatusEffect.FREEZE:
         if (
           this.isOfType(ElementalType.ICE)
@@ -4423,8 +4428,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, this, false);
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

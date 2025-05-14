@@ -21,9 +21,8 @@ export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && pokemon.randSeedInt(100) < this.chance) {
       if (simulated) {
         return attacker.canAddTag(this.tagType);
-      } else {
-        return attacker.addTag(this.tagType, this.turnCount, move.id, attacker.id);
       }
+      return attacker.addTag(this.tagType, this.turnCount, move.id, attacker.id);
     }
 
     return false;

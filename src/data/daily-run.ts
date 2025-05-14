@@ -33,8 +33,8 @@ export function getDailyRunStarters(seed: string): StarterConfig[] {
         for (let s = 0; s < 3; s++) {
           const offset = 6 + s * 6;
           const starterSpeciesForm = getPokemonSpeciesForm(
-            parseInt(seed.slice(offset, offset + 4)) as SpeciesId,
-            parseInt(seed.slice(offset + 4, offset + 6)),
+            Number.parseInt(seed.slice(offset, offset + 4)) as SpeciesId,
+            Number.parseInt(seed.slice(offset + 4, offset + 6)),
           );
           starters.push(getDailyRunStarter(starterSpeciesForm, startingLevel));
         }
@@ -49,7 +49,7 @@ export function getDailyRunStarters(seed: string): StarterConfig[] {
       for (let c = 0; c < starterCosts.length; c++) {
         const cost = starterCosts[c];
         const costSpecies = Object.keys(speciesStarterCosts)
-          .map((s) => parseInt(s) as SpeciesId)
+          .map((s) => Number.parseInt(s) as SpeciesId)
           .filter((s) => speciesStarterCosts[s] === cost);
         const randPkmSpecies = getPokemonSpecies(randSeedItem(costSpecies));
         const starterSpecies = getPokemonSpecies(randPkmSpecies.getEnemySpeciesForLevel(startingLevel, true));

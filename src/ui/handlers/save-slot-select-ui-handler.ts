@@ -6,6 +6,7 @@ import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import type PokemonData from "#system/pokemon-data";
 import type { SessionSaveData } from "#types/SessionData";
@@ -108,16 +109,16 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
           switch (this.uiMode) {
             case SaveSlotUiMode.LOAD:
               this.saveSlotSelectCallback = null;
-              originalCallback && originalCallback(cursor);
+              originalCallback?.(cursor);
               break;
-            case SaveSlotUiMode.SAVE:
+            case SaveSlotUiMode.SAVE: {
               const saveAndCallback = () => {
                 const originalCallback = this.saveSlotSelectCallback;
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
                 ui.setMessageMode();
-                originalCallback && originalCallback(cursor);
+                originalCallback?.(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
                 const overwriteDataOptions: ConfirmModeConfig = {
@@ -147,12 +148,13 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                 return false;
               }
               break;
+            }
           }
           success = true;
         }
       } else {
         this.saveSlotSelectCallback = null;
-        originalCallback && originalCallback(-1);
+        originalCallback?.(-1);
         success = true;
       }
     } else {

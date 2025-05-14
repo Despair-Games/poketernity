@@ -319,7 +319,8 @@ export class PartyUiHandler extends MessageUiHandler {
           this.clearOptions();
           ui.playSelect();
           return true;
-        } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && option !== PartyOption.CANCEL) {
+        }
+        if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && option !== PartyOption.CANCEL) {
           // clear overlay on cancel
           this.moveInfoOverlay.clear();
           const filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
@@ -332,7 +333,8 @@ export class PartyUiHandler extends MessageUiHandler {
           }
           ui.playSelect();
           return true;
-        } else if (
+        }
+        if (
           (option !== PartyOption.SUMMARY
             && option !== PartyOption.UNPAUSE_EVOLUTION
             && option !== PartyOption.RELEASE
@@ -420,10 +422,9 @@ export class PartyUiHandler extends MessageUiHandler {
               ui.playSelect();
             }
             return true;
-          } else {
-            this.clearOptions();
-            this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
           }
+          this.clearOptions();
+          this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
           ui.setModeWithoutClear<SummaryUiHandler>(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
@@ -591,7 +592,8 @@ export class PartyUiHandler extends MessageUiHandler {
           return this.processInput(Button.CANCEL);
         }
         return true;
-      } else if (button === Button.CANCEL) {
+      }
+      if (button === Button.CANCEL) {
         if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && this.transferMode) {
           this.clearTransfer();
           ui.playSelect();
@@ -629,10 +631,12 @@ export class PartyUiHandler extends MessageUiHandler {
           if (slotCount === battlerCount) {
             success = this.setCursor(6);
             break;
-          } else if (battlerCount >= 2 && slotCount > battlerCount && this.getCursor() === 0 && this.lastCursor === 1) {
+          }
+          if (battlerCount >= 2 && slotCount > battlerCount && this.getCursor() === 0 && this.lastCursor === 1) {
             success = this.setCursor(2);
             break;
-          } else if (slotCount > battlerCount && this.cursor < battlerCount) {
+          }
+          if (slotCount > battlerCount && this.cursor < battlerCount) {
             success = this.setCursor(this.lastCursor < 6 ? this.lastCursor || battlerCount : battlerCount);
             break;
           }
@@ -659,7 +663,7 @@ export class PartyUiHandler extends MessageUiHandler {
     }
 
     for (const p in party) {
-      const slotIndex = parseInt(p);
+      const slotIndex = Number.parseInt(p);
       const partySlot = new PartySlot(slotIndex, party[p], this.iconAnimHandler, this.partyUiMode, this.tmMoveId);
       globalScene.add.existing(partySlot);
       this.partySlotsContainer.add(partySlot);
@@ -963,7 +967,7 @@ export class PartyUiHandler extends MessageUiHandler {
           case PartyOption.MOVE_1:
           case PartyOption.MOVE_2:
           case PartyOption.MOVE_3:
-          case PartyOption.MOVE_4:
+          case PartyOption.MOVE_4: {
             const move = pokemon.moveset[option - PartyOption.MOVE_1];
             if (this.showMovePp) {
               const maxPP = move.getMovePp();
@@ -973,6 +977,7 @@ export class PartyUiHandler extends MessageUiHandler {
               optionName = move.getName();
             }
             break;
+          }
           default:
             if (formChangeItemModifiers && option >= PartyOption.FORM_CHANGE_ITEM) {
               const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
@@ -1083,7 +1088,7 @@ export class PartyUiHandler extends MessageUiHandler {
           }
           if (this.partyUiMode === PartyUiMode.RELEASE) {
             const { selectCallback, cursor } = this;
-            selectCallback && selectCallback(cursor, PartyOption.RELEASE);
+            selectCallback?.(cursor, PartyOption.RELEASE);
             this.selectCallback = null;
           }
           this.showText("", 0);
@@ -1295,7 +1300,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     }
 
     if (this.pokemon.isShiny()) {
-      const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
+      const shinyStar = globalScene.add.image(0, 0, "shiny_star_small");
       shinyStar.setOrigin(0, 0);
       shinyStar.setPositionRelative(this.slotName, -9, 3);
       shinyStar.setTint(getVariantTint(this.pokemon.getVariant()));

@@ -312,6 +312,7 @@ export abstract class PokemonSpeciesForm {
         case SpeciesId.DUDUNSPARCE:
           break;
         case SpeciesId.ZACIAN:
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional (TODO: rename sprite files?)
         case SpeciesId.ZAMAZENTA:
           if (formSpriteKey.startsWith("behemoth")) {
             formSpriteKey = "crowned";

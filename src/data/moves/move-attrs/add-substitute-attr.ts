@@ -31,9 +31,8 @@ export class AddSubstituteAttr extends MoveEffectAttr {
   private getHpCost(user: Pokemon): number {
     if (this.isShedTail) {
       return Math.ceil(user.getMaxHp() * 0.5);
-    } else {
-      return Math.floor(user.getMaxHp() * 0.25);
     }
+    return Math.floor(user.getMaxHp() * 0.25);
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
@@ -68,10 +67,10 @@ export class AddSubstituteAttr extends MoveEffectAttr {
   override getFailedText(user: Pokemon, _target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     if (user.getTag(BattlerTagType.SUBSTITUTE)) {
       return i18next.t("moveTriggers:substituteOnOverlap", { pokemonName: getPokemonNameWithAffix(user) });
-    } else if (user.hp <= this.getHpCost(user) || user.getMaxHp() === 1) {
-      return i18next.t("moveTriggers:substituteNotEnoughHp");
-    } else {
-      return i18next.t("battle:attackFailed");
     }
+    if (user.hp <= this.getHpCost(user) || user.getMaxHp() === 1) {
+      return i18next.t("moveTriggers:substituteNotEnoughHp");
+    }
+    return i18next.t("battle:attackFailed");
   }
 }

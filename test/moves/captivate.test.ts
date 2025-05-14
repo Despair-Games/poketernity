@@ -1,11 +1,11 @@
 import { AbilityId } from "#enums/ability-id";
+import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 import { Stat } from "#enums/stat";
-import { Gender } from "#enums/gender";
+import { GameManager } from "#test/test-utils/game-manager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Captivate should give -2 spA to valid opponents", () => {
   let phaserGame: Phaser.Game;

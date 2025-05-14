@@ -5,7 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { getEnumKeys, toDmgValue } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
@@ -89,7 +89,7 @@ describe("Abilities - Solar Power", () => {
     });
   });
 
-  it(`should NOT deal 1/8 of max-HP damage to the owner if Sunny weather ends in the same turn`, async () => {
+  it("should NOT deal 1/8 of max-HP damage to the owner if Sunny weather ends in the same turn", async () => {
     const { override, classicMode, field, move } = game;
     override.newWeatherDuration(2);
 
@@ -110,7 +110,7 @@ describe("Abilities - Solar Power", () => {
     expect(game).not.toHaveWeather(WeatherType.SUNNY);
   });
 
-  it(`should NOT deal 1/8 of max-HP damage to the owner if Harsh Sun ends in the same turn`, async () => {
+  it("should NOT deal 1/8 of max-HP damage to the owner if Harsh Sun ends in the same turn", async () => {
     const { override, classicMode, phaseInterceptor, field, move } = game;
     override.enemyAbility(AbilityId.DESOLATE_LAND);
     await classicMode.startBattle([SpeciesId.CHARMANDER]);

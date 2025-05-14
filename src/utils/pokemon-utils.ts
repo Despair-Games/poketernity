@@ -74,7 +74,7 @@ export function getPokerusStarters(): PokemonSpecies[] {
   globalScene.executeWithSeedOffset(
     () => {
       while (pokerusStarters.length < POKERUS_STARTER_COUNT) {
-        const randomSpeciesId = parseInt(randSeedItem(Object.keys(speciesStarterCosts)), 10);
+        const randomSpeciesId = Number.parseInt(randSeedItem(Object.keys(speciesStarterCosts)), 10);
         const species = getPokemonSpecies(randomSpeciesId);
         if (!pokerusStarters.includes(species)) {
           pokerusStarters.push(species);

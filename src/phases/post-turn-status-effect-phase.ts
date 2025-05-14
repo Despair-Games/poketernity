@@ -8,7 +8,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getStatusEffectActivationText } from "#data/status-effect";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
@@ -17,10 +16,6 @@ import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;
-
-  constructor(battlerIndex: BattlerIndex) {
-    super(battlerIndex);
-  }
 
   public override start(): void {
     const pokemon = this.getPokemon();

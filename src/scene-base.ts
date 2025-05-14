@@ -41,10 +41,6 @@ interface TextureLoadingOptions {
 }
 
 export class SceneBase extends Phaser.Scene {
-  constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
-    super(config);
-  }
-
   getCachedUrl(url: string): string {
     const manifest = this.game["manifest"];
     if (manifest) {

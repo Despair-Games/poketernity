@@ -13,8 +13,8 @@ import { AnOfferYouCantRefuseEncounter } from "#mystery-encounters/an-offer-you-
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
-import { GameManager } from "#test/test-utils/gameManager";
-import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

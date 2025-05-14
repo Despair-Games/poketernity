@@ -25,7 +25,8 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
     if (user.isPlayer()) {
       globalScene.phaseManager.unshiftPhase(new RevivalBlessingPhase(user));
       return true;
-    } else if (user.isEnemy()) {
+    }
+    if (user.isEnemy()) {
       // If used by an enemy trainer with at least one fainted non-boss Pokemon, this
       // revives one of said Pokemon selected at random.
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());

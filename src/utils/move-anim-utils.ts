@@ -9,7 +9,7 @@ import { loadAnimAssets } from "#utils/anim-utils";
 
 export function loadMoveAnimAssets(moveIds: MoveId[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
-    const moveAnimations = moveIds.map((m) => moveAnims.get(m)!).flat();
+    const moveAnimations = moveIds.flatMap((m) => moveAnims.get(m)!);
 
     for (const moveId of moveIds) {
       const chargeAnimSource = allMoves.get(moveId).isChargingMove()

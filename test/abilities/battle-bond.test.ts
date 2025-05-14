@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { SpeciesId } from "#enums/species-id";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Abilities - BATTLE BOND", () => {

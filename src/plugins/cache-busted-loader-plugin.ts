@@ -3,10 +3,6 @@ import { coerceArray } from "#utils/common-utils";
 let manifest: object;
 
 export default class CacheBustedLoaderPlugin extends Phaser.Loader.LoaderPlugin {
-  constructor(scene: Phaser.Scene) {
-    super(scene);
-  }
-
   get manifest() {
     return manifest;
   }

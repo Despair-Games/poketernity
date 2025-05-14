@@ -374,7 +374,8 @@ export class TrainerConfig {
     }
     if (!female && this.spriteNameLeft) {
       return this.spriteNameLeft;
-    } else if (female && this.spriteNameRight) {
+    }
+    if (female && this.spriteNameRight) {
       return this.spriteNameRight;
     }
     return ret;
@@ -1219,7 +1220,7 @@ export class TrainerConfig {
    * @param battleBgm the string representation of the battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, battleBgm: string): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean, battleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1458,7 +1459,7 @@ export class TrainerConfig {
    * @param variant - The variant of the trainer to determine the specific title.
    * @returns - The title of the trainer.
    **/
-  getTitle(trainerSlot: TrainerSlot = TrainerSlot.NONE, variant: TrainerVariant): string {
+  getTitle(trainerSlot: TrainerSlot, variant: TrainerVariant): string {
     const ret = this.name;
 
     // Check if the variant is double and the name for double exists
@@ -1486,10 +1487,9 @@ export class TrainerConfig {
         if (i18next.exists(`trainerClasses:${this.name.toLowerCase()}`)) {
           // If it does, return
           return ret + "_female";
-        } else {
-          // If it doesn't, we do not do anything and go to the normal return
-          // This is to prevent the game from displaying an error if a female version of the trainer does not exist in the localization
         }
+        // If it doesn't, we do not do anything and go to the normal return
+        // This is to prevent the game from displaying an error if a female version of the trainer does not exist in the localization
       }
     }
 
@@ -1583,7 +1583,7 @@ export class TrainerConfig {
 
     if (this.partyMemberFuncs) {
       Object.keys(this.partyMemberFuncs).forEach((index) => {
-        clone = clone.setPartyMemberFunc(parseInt(index, 10), this.partyMemberFuncs[index]);
+        clone = clone.setPartyMemberFunc(Number.parseInt(index, 10), this.partyMemberFuncs[index]);
       });
     }
 
@@ -1621,15 +1621,17 @@ export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
   const waveIndex = globalScene.currentBattle?.waveIndex;
   if (waveIndex <= EVIL_GRUNT_1_WAVE) {
     return trainerPartyTemplates.TWO_AVG;
-  } else if (waveIndex <= EVIL_GRUNT_2_WAVE) {
-    return trainerPartyTemplates.THREE_AVG;
-  } else if (waveIndex <= EVIL_GRUNT_3_WAVE) {
-    return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
-  } else if (waveIndex < EVIL_GRUNT_4_WAVE) {
-    return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
-  } else {
-    return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
   }
+  if (waveIndex <= EVIL_GRUNT_2_WAVE) {
+    return trainerPartyTemplates.THREE_AVG;
+  }
+  if (waveIndex <= EVIL_GRUNT_3_WAVE) {
+    return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
+  }
+  if (waveIndex < EVIL_GRUNT_4_WAVE) {
+    return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
+  }
+  return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
 }
 
 /**

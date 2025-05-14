@@ -10,10 +10,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * @extends VariableDefAttr
  */
 export class DealsPhysicalDamageAttr extends VariableDefAttr {
-  constructor() {
-    super();
-  }
-
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, defendingStat: NumberHolder): boolean {
     defendingStat.value = Stat.DEF;
     return true;

@@ -18,11 +18,11 @@ export class MatchUserTypeAttr extends VariableMoveTypeAttr {
       const nonTeraTypes = user.getTypes();
       moveType.value = nonTeraTypes[0];
       return true;
-    } else if (userTypes.length > 0) {
+    }
+    if (userTypes.length > 0) {
       moveType.value = userTypes[0];
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

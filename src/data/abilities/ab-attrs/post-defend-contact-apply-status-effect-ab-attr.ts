@@ -48,9 +48,8 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
           : this.statusEffects[pokemon.randSeedInt(this.statusEffects.length)];
       if (simulated) {
         return attacker.canSetStatus(status, true, false, pokemon);
-      } else {
-        return attacker.trySetStatus(status, true, pokemon);
       }
+      return attacker.trySetStatus(status, true, pokemon);
     }
 
     return false;

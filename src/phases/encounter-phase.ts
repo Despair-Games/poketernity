@@ -402,11 +402,10 @@ export class EncounterPhase extends BattlePhase {
         return i18next.t("battle:trainerAppearedDouble", {
           trainerName: currentBattle.trainer?.getName(TrainerSlot.NONE, true),
         });
-      } else {
-        return i18next.t("battle:trainerAppeared", {
-          trainerName: currentBattle.trainer?.getName(TrainerSlot.NONE, true),
-        });
       }
+      return i18next.t("battle:trainerAppeared", {
+        trainerName: currentBattle.trainer?.getName(TrainerSlot.NONE, true),
+      });
     }
 
     return enemyField.length === 1

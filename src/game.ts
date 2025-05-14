@@ -1,13 +1,13 @@
 import BattleScene from "#app/battle-scene";
 import { LoadingScene } from "#app/loading-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import pkg from "#package.json";
 import InvertPostFX from "#pipelines/invert";
 import Phaser from "phaser";
 import BBCodeTextPlugin from "phaser3-rex-plugins/plugins/bbcodetext-plugin";
 import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin";
 import TransitionImagePackPlugin from "phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin";
 import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import pkg from "../package.json";
 
 export const game = new Phaser.Game({
   type: Phaser.WEBGL,

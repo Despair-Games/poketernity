@@ -36,8 +36,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
         );
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

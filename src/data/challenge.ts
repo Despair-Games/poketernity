@@ -406,7 +406,7 @@ export class SingleGenerationChallenge extends Challenge {
     return false;
   }
 
-  override applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
+  override applyFixedBattle(waveIndex: number, battleConfig: FixedBattleConfig): boolean {
     let trainerTypes: TrainerType[] = [];
     switch (waveIndex) {
       case 182:
@@ -477,12 +477,11 @@ export class SingleGenerationChallenge extends Challenge {
     }
     if (trainerTypes.length === 0) {
       return false;
-    } else {
-      battleConfig
-        .setBattleType(BattleType.TRAINER)
-        .setGetTrainerFunc(() => new Trainer(trainerTypes[this.value - 1], TrainerVariant.DEFAULT));
-      return true;
     }
+    battleConfig
+      .setBattleType(BattleType.TRAINER)
+      .setGetTrainerFunc(() => new Trainer(trainerTypes[this.value - 1], TrainerVariant.DEFAULT));
+    return true;
   }
 
   override getDifficulty(): number {
@@ -718,7 +717,8 @@ export class InverseBattleChallenge extends Challenge {
     if (effectiveness.value < 1) {
       effectiveness.value = 2;
       return true;
-    } else if (effectiveness.value > 1) {
+    }
+    if (effectiveness.value > 1) {
       effectiveness.value = 0.5;
       return true;
     }

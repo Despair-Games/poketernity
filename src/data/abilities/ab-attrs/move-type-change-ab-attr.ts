@@ -25,7 +25,7 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
     moveType?: NumberHolder,
     power?: NumberHolder,
   ): boolean {
-    if (this.condition && this.condition(pokemon, defender, move)) {
+    if (this.condition?.(pokemon, defender, move)) {
       if (moveType) {
         moveType.value = this.newType;
       }

@@ -2,8 +2,8 @@ import { Egg } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/test-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

@@ -215,13 +215,14 @@ export class Arena {
     if (pokemonSpecies.isLegendLike()) {
       if (pokemonSpecies.baseTotal >= 720) {
         return level < 90;
-      } else if (pokemonSpecies.baseTotal >= 670) {
-        return level < 70;
-      } else if (pokemonSpecies.baseTotal >= 580) {
-        return level < 50;
-      } else {
-        return level < 30;
       }
+      if (pokemonSpecies.baseTotal >= 670) {
+        return level < 70;
+      }
+      if (pokemonSpecies.baseTotal >= 580) {
+        return level < 50;
+      }
+      return level < 30;
     }
     return false;
   }
@@ -242,13 +243,14 @@ export class Arena {
   generateBossBiomeTier(tierValue: number): BiomePoolTier {
     if (tierValue >= 20) {
       return BiomePoolTier.BOSS;
-    } else if (tierValue >= 6) {
-      return BiomePoolTier.BOSS_RARE;
-    } else if (tierValue >= 1) {
-      return BiomePoolTier.BOSS_SUPER_RARE;
-    } else {
-      return BiomePoolTier.BOSS_ULTRA_RARE;
     }
+    if (tierValue >= 6) {
+      return BiomePoolTier.BOSS_RARE;
+    }
+    if (tierValue >= 1) {
+      return BiomePoolTier.BOSS_SUPER_RARE;
+    }
+    return BiomePoolTier.BOSS_ULTRA_RARE;
   }
 
   /**
@@ -268,15 +270,17 @@ export class Arena {
   generateNonBossBiomeTier(tierValue: number): BiomePoolTier {
     if (tierValue >= 156) {
       return BiomePoolTier.COMMON;
-    } else if (tierValue >= 32) {
-      return BiomePoolTier.UNCOMMON;
-    } else if (tierValue >= 6) {
-      return BiomePoolTier.RARE;
-    } else if (tierValue >= 1) {
-      return BiomePoolTier.SUPER_RARE;
-    } else {
-      return BiomePoolTier.ULTRA_RARE;
     }
+    if (tierValue >= 32) {
+      return BiomePoolTier.UNCOMMON;
+    }
+    if (tierValue >= 6) {
+      return BiomePoolTier.RARE;
+    }
+    if (tierValue >= 1) {
+      return BiomePoolTier.SUPER_RARE;
+    }
+    return BiomePoolTier.ULTRA_RARE;
   }
 
   /**
@@ -334,7 +338,7 @@ export class Arena {
             return 5;
         }
         break;
-      case SpeciesId.LYCANROC:
+      case SpeciesId.LYCANROC: {
         const timeOfDay = this.getTimeOfDay();
         switch (timeOfDay) {
           case TimeOfDay.DAY:
@@ -346,6 +350,7 @@ export class Arena {
             return 1;
         }
         break;
+      }
     }
 
     return 0;

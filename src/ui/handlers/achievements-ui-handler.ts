@@ -252,7 +252,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
             success = this.setCursor(this.cursor - this.COLS);
           }
           break;
-        case Button.DOWN:
+        case Button.DOWN: {
           const canMoveDown = itemOffset + 1 < this.currentTotal;
           if (rowIndex >= this.ROWS - 1) {
             if (this.scrollCursor < Math.ceil(this.currentTotal / this.COLS) - this.ROWS && canMoveDown) {
@@ -266,6 +266,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
             success = this.setCursor(Math.min(this.cursor + this.COLS, this.currentTotal - itemOffset - 1));
           }
           break;
+        }
         case Button.LEFT:
           if (this.cursor % this.COLS === 0) {
             success = this.setCursor(Math.min(this.cursor + this.COLS - 1, this.currentTotal - itemOffset - 1));

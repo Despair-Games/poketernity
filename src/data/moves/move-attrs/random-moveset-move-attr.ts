@@ -49,7 +49,7 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
         allies = [user];
       }
 
-      const partyMoveset = allies.map((p) => p.moveset).flat();
+      const partyMoveset = allies.flatMap((p) => p.moveset);
       const moves = partyMoveset.filter((m) => !this.invalidMoves.has(m.moveId) && !m.getMove().name.endsWith(" (N)"));
 
       if (moves.length === 0) {
