@@ -24,9 +24,8 @@ export class ProtectAttr extends AddBattlerTagAttr {
 
       if (lastNonUse === -1) {
         return !user.randSeedInt(Math.pow(3, moveHistory.length));
-      } else {
-        return !user.randSeedInt(Math.pow(3, lastNonUse));
       }
+      return !user.randSeedInt(Math.pow(3, lastNonUse));
     };
   }
 }
