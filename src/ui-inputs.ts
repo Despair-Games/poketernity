@@ -177,11 +177,13 @@ export class UiInputs {
       return;
     }
     switch (globalScene.ui?.getMode()) {
-      case UiMode.MESSAGE:
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
+      case UiMode.MESSAGE: {
         const messageHandler = globalScene.ui.getCurrentHandler<MessageUiHandler>();
         if (!messageHandler.pendingPrompt || messageHandler.isTextAnimationInProgress()) {
           return;
         }
+      }
       case UiMode.TITLE:
       case UiMode.COMMAND:
       case UiMode.MODIFIER_SELECT:
@@ -221,7 +223,9 @@ export class UiInputs {
   buttonSpeedChange(up = true): void {
     const { ui } = globalScene;
 
-    if (settingsUiModes.includes(ui?.getMode())) return;
+    if (settingsUiModes.includes(ui?.getMode())) {
+      return;
+    }
 
     const { gameSpeedIndex } = settings;
     const lastIndex = GAME_SPEEDS.length - 1;

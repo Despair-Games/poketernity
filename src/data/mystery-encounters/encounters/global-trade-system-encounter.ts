@@ -927,7 +927,7 @@ function generateRandomTraderName() {
   }
   // Some trainers have 2 gendered pools, some do not
   const genderedPool = trainerTypePool[randInt(trainerTypePool.length)];
-  const trainerNameString = genderedPool instanceof Array ? genderedPool[randInt(genderedPool.length)] : genderedPool;
+  const trainerNameString = Array.isArray(genderedPool) ? genderedPool[randInt(genderedPool.length)] : genderedPool;
   // Some names have an '&' symbol and need to be trimmed to a single name instead of a double name
   const trainerNames = trainerNameString.split(" & ");
   return trainerNames[randInt(trainerNames.length)];

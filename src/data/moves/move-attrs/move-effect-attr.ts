@@ -95,9 +95,8 @@ export abstract class MoveEffectAttr extends MoveAttr {
   override apply(user: Pokemon, target: Pokemon | null, move: Move): boolean {
     if (this.canApply(user, target, move)) {
       return this.applyEffect(user, target, move);
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**

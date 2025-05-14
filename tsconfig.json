@@ -45,6 +45,7 @@
         "./data/mystery-encounters/encounters/*.ts",
         "./data/mystery-encounters/*.ts"
       ],
+      "#package.json": ["../package.json"],
       "#phases/*": ["./phases/*.ts"],
       "#pipelines/*": ["./pipelines/*.ts"],
       "#system/*": [

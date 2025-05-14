@@ -162,6 +162,7 @@ input:-internal-autofill-selected {
   --small-control-size: calc(var(--controls-size) / 3);
   --rect-control-size: calc(var(--controls-size) * 0.74);
 
+  /* biome-ignore lint/a11y/useGenericFontNames: TODO: add fallback font family */
   font-family: "emerald";
   font-size: var(--controls-size);
   text-shadow: var(--color-dark) var(--text-shadow-size) var(--text-shadow-size);

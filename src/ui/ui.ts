@@ -271,9 +271,8 @@ export class UI extends Phaser.GameObjects.Container {
     const handler = this.getCurrentHandler();
     if (handler instanceof MessageUiHandler && handler.message) {
       return handler;
-    } else {
-      return this.getMessageHandler();
     }
+    return this.getMessageHandler();
   }
 
   processInfoButton(pressed: boolean) {
@@ -317,14 +316,14 @@ export class UI extends Phaser.GameObjects.Container {
   showText(
     text: string,
     delay?: number | null,
-    callback?: Function | null,
+    callback?: VoidFunction | null,
     callbackDelay?: number | null,
     prompt?: boolean | null,
     promptDelay?: number | null,
   ): void {
     if (prompt && text.indexOf("$") > -1) {
       const messagePages = text.split(/\$/g).map((m) => m.trim());
-      let showMessageAndCallback = () => callback && callback();
+      let showMessageAndCallback = () => callback?.();
       for (let p = messagePages.length - 1; p >= 0; p--) {
         const originalFunc = showMessageAndCallback;
         showMessageAndCallback = () => this.showText(messagePages[p], null, originalFunc, null, true);
@@ -338,11 +337,12 @@ export class UI extends Phaser.GameObjects.Container {
   showDialogue(
     keyOrText: string,
     name: string | undefined,
-    delay: number | null = 0,
-    callback: Function,
+    delay: number | null,
+    callback: VoidFunction,
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
+    delay = delay ?? 0;
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
@@ -657,8 +657,7 @@ export class UI extends Phaser.GameObjects.Container {
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {
       return globalScene.inputController.getConfig(globalScene.inputController.selectedDevice[Device.GAMEPAD]).padType;
-    } else {
-      return globalScene.inputMethod;
     }
+    return globalScene.inputMethod;
   }
 }

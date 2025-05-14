@@ -10,10 +10,6 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
  * @extends PostSummonMessageAbAttr
  */
 export class AnticipationAbAttr extends PostSummonMessageAbAttr {
-  constructor(messageFunc: (pokemon: Pokemon) => string) {
-    super(messageFunc);
-  }
-
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     for (const opponent of pokemon.getOpponents()) {
       for (const pkmMove of opponent.getMoveset()) {
@@ -24,7 +20,8 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
           // Anticipation does not consider the effects of Strong Winds and Gravity on moves or opponent move type-changing abilities
           if (pokemon.getAttackTypeEffectiveness(moveType, undefined, true, simulated) >= 2) {
             return super.apply(pokemon, simulated);
-          } else if (move.hasAttr(OneHitKOAttr)) {
+          }
+          if (move.hasAttr(OneHitKOAttr)) {
             return super.apply(pokemon, simulated);
           }
         }

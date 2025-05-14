@@ -63,14 +63,13 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       tag?.addAttack(user, move.id, target.getBattlerIndex());
 
       return true;
-    } else {
-      globalScene.phaseManager.queueMessagePhase(
-        i18next.t("moveTriggers:tookMoveAttack", {
-          pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
-          moveName: move.name,
-        }),
-      );
     }
+    globalScene.phaseManager.queueMessagePhase(
+      i18next.t("moveTriggers:tookMoveAttack", {
+        pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
+        moveName: move.name,
+      }),
+    );
     return true;
   }
 

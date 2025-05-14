@@ -41,4 +41,4 @@ export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
 export const LANGUAGE_MAX_OPTIONS = 7;
 
 /** Key (placeholder) to use for a missing textures */
-export const MISSING_TEXTURE_KEY  = "__MISSING";
+export const MISSING_TEXTURE_KEY = "__MISSING";

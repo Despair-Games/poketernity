@@ -6,6 +6,7 @@ import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
+// biome-ignore lint/correctness/noEmptyPattern: TODO: change this?
 vi.mock("../data/exp", ({}) => {
   return {
     getLevelRelExp: vi.fn(() => 1), //consistent levelRelExp

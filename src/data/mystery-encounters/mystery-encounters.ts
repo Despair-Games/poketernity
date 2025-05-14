@@ -1,7 +1,6 @@
 import {
   CivilizationEncounterBiomes,
   ExtremeEncounterBiomes,
-  getBiomeName,
   HumanTransitableBiomes,
   NonExtremeEncounterBiomes,
 } from "#data/biome-utils";
@@ -201,19 +200,18 @@ export function initMysteryEncounters() {
   });
 
   // Add ANY biome encounters to biome map
-  // eslint-disable-next-line
-  let encounterBiomeTableLog = "";
-  mysteryEncountersByBiome.forEach((biomeEncounters, biome) => {
+  // let encounterBiomeTableLog = "";
+  mysteryEncountersByBiome.forEach((biomeEncounters, _biome) => {
     anyBiomeEncounters.forEach((encounter) => {
       if (!biomeEncounters.includes(encounter)) {
         biomeEncounters.push(encounter);
       }
     });
 
-    encounterBiomeTableLog += `${getBiomeName(biome).toUpperCase()}: [${biomeEncounters
-      .map((type) => MysteryEncounterType[type].toString().toLowerCase())
-      .sort()
-      .join(", ")}]\n`;
+    // encounterBiomeTableLog += `${getBiomeName(biome).toUpperCase()}: [${biomeEncounters
+    //   .map((type) => MysteryEncounterType[type].toString().toLowerCase())
+    //   .sort()
+    //   .join(", ")}]\n`;
   });
 
   //console.debug("All Mystery Encounters by Biome:\n" + encounterBiomeTableLog);

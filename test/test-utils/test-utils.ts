@@ -1,9 +1,9 @@
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#constants/app-constants";
 import type { Pokemon } from "#field/pokemon";
 import type { GameManager } from "#test/test-utils/game-manager";
-import fs from "fs";
 import i18next, { type ParseKeys } from "i18next";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { vi } from "vitest";
 
 //#region Types
@@ -13,7 +13,7 @@ type TypeOfResult = "undefined" | "object" | "boolean" | "number" | "bigint" | "
 //#endregion
 //#region Constants
 
-export const RESOURCES_FOLDER_PATH = `test/test-utils/resources`;
+export const RESOURCES_FOLDER_PATH = "test/test-utils/resources";
 export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
 
 //#endregion
@@ -70,6 +70,7 @@ export function receivedStr(received: unknown, expectedType: TypeOfResult = "obj
   if (received === undefined) {
     return "undefined";
   }
+  // biome-ignore lint/suspicious/useValidTypeof: `expectedType` is a string
   if (typeof received !== expectedType) {
     return typeof received;
   }

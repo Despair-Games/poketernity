@@ -258,7 +258,7 @@ export class PhaseInterceptor {
         if (currentPhase) {
           if (currentPhase.name !== targetName) {
             clearInterval(interval);
-            const skip = skipFn && skipFn(currentPhase);
+            const skip = skipFn?.(currentPhase);
             if (skip) {
               this.onHold.unshift(currentPhase);
               ErrorInterceptor.getInstance().remove(this);
@@ -374,7 +374,7 @@ export class PhaseInterceptor {
     this.promptInterval = setInterval(() => {
       if (this.prompts.length) {
         const actionForNextPrompt = this.prompts[0];
-        const expireFn = actionForNextPrompt.expireFn && actionForNextPrompt.expireFn();
+        const expireFn = actionForNextPrompt.expireFn?.();
         const currentMode = this.scene.ui.getMode();
         const currentPhase = this.scene.phaseManager.getCurrentPhase()?.constructor.name;
         const currentHandler = this.scene.ui.getCurrentHandler();

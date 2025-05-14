@@ -452,7 +452,7 @@ export function initAbilities() {
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY),
     new Ability(AbilityId.ARENA_TRAP, 3)
-      .attr(ArenaTrapAbAttr, (_user, target) => target.isGrounded() ? true : false)
+      .attr(ArenaTrapAbAttr, (_user, target) => target.isGrounded())
       .attr(DoubleBattleChanceAbAttr),
     new Ability(AbilityId.VITAL_SPIRIT, 3)
       .attr(StatusEffectImmunityAbAttr, StatusEffect.SLEEP)

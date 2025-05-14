@@ -12,7 +12,9 @@ import i18next from "i18next";
  */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(condition?: AbAttrCondition) {
-    super(null, condition);
+    // This `AbAttr` ignores the superclass's `immuneType` field and overrides the methods that make use of it
+    // TODO: refactor this?
+    super(null!, condition);
   }
 
   override apply(

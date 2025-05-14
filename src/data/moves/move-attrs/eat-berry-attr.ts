@@ -17,6 +17,7 @@ import { BooleanHolder } from "#utils/common-utils";
  */
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier | undefined;
+  // biome-ignore lint/complexity/noUselessConstructor: enforces no options can be passed to the superclass
   constructor(selfTarget: boolean) {
     super(selfTarget);
   }

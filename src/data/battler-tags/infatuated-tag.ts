@@ -27,14 +27,12 @@ export class InfatuatedTag extends BattlerTag {
 
       if (pkm) {
         return pokemon.isOppositeGender(pkm);
-      } else {
-        console.warn("canAdd: this.sourceId is not a valid pokemon id!", this.sourceId);
-        return false;
       }
-    } else {
-      console.warn("canAdd: this.sourceId is undefined");
+      console.warn("canAdd: this.sourceId is not a valid pokemon id!", this.sourceId);
       return false;
     }
+    console.warn("canAdd: this.sourceId is undefined");
+    return false;
   }
 
   override onAdd(pokemon: Pokemon): void {

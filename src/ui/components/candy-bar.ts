@@ -54,11 +54,10 @@ export class CandyBar extends Phaser.GameObjects.Container {
       if (this.shown) {
         if (this.speciesId === starterSpeciesId) {
           return resolve();
-        } else {
-          return this.hide()
-            .then(() => this.showStarterSpeciesCandy(starterSpeciesId, count))
-            .then(() => resolve());
         }
+        return this.hide()
+          .then(() => this.showStarterSpeciesCandy(starterSpeciesId, count))
+          .then(() => resolve());
       }
 
       const colorScheme = starterColors[starterSpeciesId];

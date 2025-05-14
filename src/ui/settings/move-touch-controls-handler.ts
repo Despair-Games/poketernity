@@ -207,7 +207,9 @@ export class MoveTouchControlsHandler {
   private createToolbar() {
     this.touchControlsEl?.prepend(this.createToolbarElement());
 
-    if (!this.configToolbarEl) return;
+    if (!this.configToolbarEl) {
+      return;
+    }
 
     this.saveBtn.addEventListener("click", () => {
       this.saveCurrentPositions();
@@ -280,8 +282,8 @@ export class MoveTouchControlsHandler {
       .map((controlGroupEl) => {
         return {
           id: controlGroupEl.id,
-          x: parseFloat(this.isLeft(controlGroupEl) ? controlGroupEl.style.left : controlGroupEl.style.right),
-          y: parseFloat(controlGroupEl.style.bottom),
+          x: Number.parseFloat(this.isLeft(controlGroupEl) ? controlGroupEl.style.left : controlGroupEl.style.right),
+          y: Number.parseFloat(controlGroupEl.style.bottom),
         };
       });
   }

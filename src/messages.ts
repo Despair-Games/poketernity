@@ -24,9 +24,8 @@ export function getPokemonNameWithAffix(pokemon: Pokemon | nil): string {
             pokemonName: pokemon.getNameToRender(),
           })
       : pokemon.getNameToRender();
-  } else {
-    return !pokemon.isPlayer()
-      ? i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() })
-      : pokemon.getNameToRender();
   }
+  return !pokemon.isPlayer()
+    ? i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() })
+    : pokemon.getNameToRender();
 }

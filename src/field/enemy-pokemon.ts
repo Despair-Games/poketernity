@@ -207,10 +207,9 @@ export class EnemyPokemon extends Pokemon {
         ) {
           MOVE_LOCK_TAG_TYPES.forEach((tagType) => this.lapseTag(tagType));
           return queuedMove;
-        } else {
-          this.getMoveQueue().shift();
-          return this.getNextMove();
         }
+        this.getMoveQueue().shift();
+        return this.getNextMove();
       }
     }
 
@@ -233,11 +232,13 @@ export class EnemyPokemon extends Pokemon {
         }
       }
       switch (this.aiType) {
-        case AiType.RANDOM: // No enemy should spawn with this AI type in-game
+        // No enemy should spawn with this AI type in-game
+        case AiType.RANDOM: {
           const move = movePool[globalScene.randBattleSeedInt(movePool.length)].getMove();
           return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
+        }
         case AiType.SMART_RANDOM:
-        case AiType.SMART:
+        case AiType.SMART: {
           /**
            * Search this Pokemon's move pool for moves that will KO an opposing target.
            * If there are any moves that can KO an opponent (i.e. a player Pokemon),
@@ -388,6 +389,7 @@ export class EnemyPokemon extends Pokemon {
           );
           const retMove = sortedMovePool[r].getMove();
           return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
+        }
       }
     }
     return {

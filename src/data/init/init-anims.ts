@@ -76,50 +76,52 @@ export async function populateAnims() {
       const fieldName = field.slice(0, field.indexOf(":"));
       const fieldData = field.slice(fieldName.length + 1, field.lastIndexOf("\n")).trim();
       switch (fieldName) {
-        case "array":
+        case "array": {
           const framesData = fieldData.split("  - - - ").slice(1);
           for (let fd = 0; fd < framesData.length; fd++) {
             anim.frames.push([]);
             const frameData = framesData[fd];
             const focusFramesData = frameData.split("    - - ");
             for (let tf = 0; tf < focusFramesData.length; tf++) {
-              const values = focusFramesData[tf].replace(/      \- /g, "").split("\n");
+              const values = focusFramesData[tf].replace(/ {6}\- /g, "").split("\n");
               const targetFrame = new AnimFrame(
-                parseFloat(values[0]),
-                parseFloat(values[1]),
-                parseFloat(values[2]),
-                parseFloat(values[11]),
-                parseFloat(values[3]),
-                parseInt(values[4]) === 1,
-                parseInt(values[6]) === 1,
-                parseInt(values[5]),
-                parseInt(values[7]),
-                parseInt(values[8]),
-                parseInt(values[12]),
-                parseInt(values[13]),
-                parseInt(values[14]),
-                parseInt(values[15]),
-                parseInt(values[16]),
-                parseInt(values[17]),
-                parseInt(values[18]),
-                parseInt(values[19]),
-                parseInt(values[21]),
-                parseInt(values[22]),
-                parseInt(values[23]),
-                parseInt(values[24]),
-                parseInt(values[20]) === 1,
-                parseInt(values[25]),
-                parseInt(values[26]) as AnimFocus,
+                Number.parseFloat(values[0]),
+                Number.parseFloat(values[1]),
+                Number.parseFloat(values[2]),
+                Number.parseFloat(values[11]),
+                Number.parseFloat(values[3]),
+                Number.parseInt(values[4]) === 1,
+                Number.parseInt(values[6]) === 1,
+                Number.parseInt(values[5]),
+                Number.parseInt(values[7]),
+                Number.parseInt(values[8]),
+                Number.parseInt(values[12]),
+                Number.parseInt(values[13]),
+                Number.parseInt(values[14]),
+                Number.parseInt(values[15]),
+                Number.parseInt(values[16]),
+                Number.parseInt(values[17]),
+                Number.parseInt(values[18]),
+                Number.parseInt(values[19]),
+                Number.parseInt(values[21]),
+                Number.parseInt(values[22]),
+                Number.parseInt(values[23]),
+                Number.parseInt(values[24]),
+                Number.parseInt(values[20]) === 1,
+                Number.parseInt(values[25]),
+                Number.parseInt(values[26]) as AnimFocus,
               );
               anim.frames[fd].push(targetFrame);
             }
           }
           break;
-        case "graphic":
+        }
+        case "graphic": {
           const graphic = fieldData !== "''" ? fieldData : "";
           anim.graphic = graphic.indexOf(".") > -1 ? graphic.slice(0, fieldData.indexOf(".")) : graphic;
           break;
-        case "timing":
+        }
+        case "timing": {
           const timingEntries = fieldData.split("- !ruby/object:PBAnimTiming ").slice(1);
           for (let t = 0; t < timingEntries.length; t++) {
             const timingData = timingEntries[t]
@@ -131,9 +133,9 @@ export async function populateAnims() {
                 /flashColor: !ruby\/object:Color { alpha: ([\d\.]+), blue: ([\d\.]+), green: ([\d\.]+), red: ([\d\.]+)}/,
                 "flashRed: $4, flashGreen: $3, flashBlue: $2, flashAlpha: $1",
               );
-            const frameIndex = parseInt(/frame: (\d+)/.exec(timingData)![1]); // TODO: is the bang correct?
+            const frameIndex = Number.parseInt(/frame: (\d+)/.exec(timingData)![1]); // TODO: is the bang correct?
             let resourceName = /name: "(.*?)"/.exec(timingData)![1].replace("''", ""); // TODO: is the bang correct?
-            const timingType = parseInt(/timingType: (\d)/.exec(timingData)![1]); // TODO: is the bang correct?
+            const timingType = Number.parseInt(/timingType: (\d)/.exec(timingData)![1]); // TODO: is the bang correct?
             let timedEvent: LegacyAnimTimedEvent | undefined;
             switch (timingType) {
               case 0:
@@ -172,7 +174,7 @@ export async function populateAnims() {
               switch (prop) {
                 case "bgX":
                 case "bgY":
-                  value = parseFloat(value);
+                  value = Number.parseFloat(value);
                   break;
                 case "volume":
                 case "pitch":
@@ -188,7 +190,7 @@ export async function populateAnims() {
                 case "flashBlue":
                 case "flashAlpha":
                 case "flashDuration":
-                  value = parseInt(value);
+                  value = Number.parseInt(value);
                   break;
               }
               if (timedEvent.hasOwnProperty(prop)) {
@@ -201,11 +203,12 @@ export async function populateAnims() {
             anim.frameTimedEvents.get(frameIndex)!.push(timedEvent); // TODO: is this bang correct?
           }
           break;
+        }
         case "position":
-          anim.position = parseInt(fieldData);
+          anim.position = Number.parseInt(fieldData);
           break;
         case "hue":
-          anim.hue = parseInt(fieldData);
+          anim.hue = Number.parseInt(fieldData);
           break;
       }
     }

@@ -63,9 +63,8 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
         return true;
       }
       return false;
-    } else {
-      return super.lapse(pokemon, lapseType);
     }
+    return super.lapse(pokemon, lapseType);
   }
 
   /**

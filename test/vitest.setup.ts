@@ -8,7 +8,6 @@ import { afterAll, beforeAll, vi } from "vitest";
 
 /** Mock the override import to always return default values, ignoring any custom overrides. */
 vi.mock("#app/overrides", async (importOriginal) => {
-  // eslint-disable-next-line
   const { defaultOverrides } = await importOriginal<typeof import("#app/overrides")>();
 
   return {
@@ -16,7 +15,7 @@ vi.mock("#app/overrides", async (importOriginal) => {
     // Export `defaultOverrides` as a *copy*.
     // This ensures we can easily reset `overrides` back to its default values after modifying it.
     defaultOverrides: { ...defaultOverrides },
-  } satisfies typeof import("#app/overrides"); // eslint-disable-line
+  } satisfies typeof import("#app/overrides");
 });
 
 /**

@@ -1,6 +1,6 @@
 import { animConfigSchema } from "#animations/anim-config-schema";
 import Ajv from "ajv";
-import { readdirSync, readFileSync } from "fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 describe("Animations - BattleAnim Validation", () => {

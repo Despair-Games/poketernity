@@ -8,7 +8,6 @@ import { globalScene } from "#app/global-scene";
 import { EVIL_BOSS_2_WAVE } from "#constants/wave-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
@@ -32,10 +31,6 @@ import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
  */
 export class VictoryPhase extends PokemonPhase {
   override readonly id = PhaseId.VICTORY;
-
-  constructor(battlerIndex: BattlerIndex | number) {
-    super(battlerIndex);
-  }
 
   public override start(): void {
     super.start();

@@ -6,16 +6,16 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import { Pokemon } from "#field/pokemon";
+import { version } from "#package.json";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { MockClock } from "#test/test-utils/mocks/mock-clock";
 import { MockConsole } from "#test/test-utils/mocks/mock-console";
 import { MockGameObjectCreator } from "#test/test-utils/mocks/mock-game-object-creator";
 import { MockLoader } from "#test/test-utils/mocks/mock-loader";
 import { MockTextureManager } from "#test/test-utils/mocks/mock-texture-manager";
-import fs from "fs";
+import fs from "node:fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
-import { version } from "../../package.json";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
@@ -43,14 +43,13 @@ export class GameWrapper {
     Pokemon.prototype.enableMask = () => null;
     Pokemon.prototype.cry = () => null as any;
     Pokemon.prototype.faintCry = (cb) => {
-      if (cb) cb();
+      cb?.();
     };
 
     Pokemon.prototype.damageAndUpdate = function (...args) {
-      const pokemon: Pokemon = this;
-      const ret = GameWrapper.originalDamageAndUpdate.apply(pokemon, args);
+      const ret = GameWrapper.originalDamageAndUpdate.apply(this, args);
 
-      const side = pokemon.isPlayer() ? "Player" : "Enemy";
+      const side = this.isPlayer() ? "Player" : "Enemy";
       const lowHpMoves = [MoveId.FALSE_SWIPE, MoveId.HARD_PRESS];
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
       let moveName = "N/A";
@@ -73,13 +72,13 @@ export class GameWrapper {
        */
       if (
         ret > 0
-        && pokemon.getHpRatio() < 0.2
-        && !pokemon.isFainted()
-        && !pokemon.getTag(BattlerTagType.ENDURING)
+        && this.getHpRatio() < 0.2
+        && !this.isFainted()
+        && !this.getTag(BattlerTagType.ENDURING)
         && !isLowHpMove
       ) {
-        const line1 = `Caution: ${side} ${pokemon.name} was damaged to low HP (${pokemon.hp}/${pokemon.getMaxHp()}) by the move ${moveName}!\n`;
-        const line2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
+        const line1 = `Caution: ${side} ${this.name} was damaged to low HP (${this.hp}/${this.getMaxHp()}) by the move ${moveName}!\n`;
+        const line2 = "Make sure that the test cannot break from the Pokemon accidentally fainting!";
         MockConsole.queuePostTestWarning(line1 + line2);
         console.warn(line1 + line2);
       }
@@ -92,7 +91,7 @@ export class GameWrapper {
   setScene(scene: BattleScene) {
     this.scene = scene;
     this.injectMandatory();
-    this.scene.preload && this.scene.preload();
+    this.scene.preload?.();
     this.scene.create();
   }
 

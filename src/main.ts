@@ -1,7 +1,7 @@
 import "#app/phaser-extensions";
 
 // Catch global errors and display them in an alert so users can report the issue.
-window.onerror = function (_message, _source, _lineno, _colno, error) {
+window.onerror = (_message, _source, _lineno, _colno, error) => {
   console.error(error);
   // const errorString = `Received unhandled error. Open browser console and click OK to see details.\nError: ${message}\nSource: ${source}\nLine: ${lineno}\nColumn: ${colno}\nStack: ${error.stack}`;
   //alert(errorString);

@@ -1,17 +1,12 @@
 import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { type BooleanHolder, type NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
-  constructor(immuneType: ElementalType) {
-    super(immuneType);
-  }
-
   override apply(
     pokemon: Pokemon,
     simulated: boolean,

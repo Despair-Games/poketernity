@@ -23,8 +23,7 @@ export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAtt
 
     if (simulated) {
       return pokemon.canAddTag(this.tagType);
-    } else {
-      return pokemon.addTag(this.tagType, this.turnCount);
     }
+    return pokemon.addTag(this.tagType, this.turnCount);
   }
 }

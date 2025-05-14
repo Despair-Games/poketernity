@@ -9,12 +9,11 @@ export class MeloettaFormChangePostMoveTrigger extends SpeciesFormChangePostMove
     // TODO: improve this (should only block the form change in Psychic or Fighting mono-type, not Normal)
     if (globalScene.gameMode.hasChallenge(Challenges.SINGLE_TYPE)) {
       return false;
-    } else {
-      // Meloetta will not transform if it has the ability Sheer Force when using Relic Song
-      if (pokemon.hasAbility(AbilityId.SHEER_FORCE)) {
-        return false;
-      }
-      return super.canChange(pokemon);
     }
+    // Meloetta will not transform if it has the ability Sheer Force when using Relic Song
+    if (pokemon.hasAbility(AbilityId.SHEER_FORCE)) {
+      return false;
+    }
+    return super.canChange(pokemon);
   }
 }

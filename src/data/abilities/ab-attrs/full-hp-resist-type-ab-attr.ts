@@ -34,7 +34,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
     move: Move,
     typeMultiplier: NumberHolder,
   ): boolean {
-    if (move && move.hasAttr(FixedDamageAttr)) {
+    if (move?.hasAttr(FixedDamageAttr)) {
       return false;
     }
 

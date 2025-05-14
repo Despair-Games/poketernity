@@ -342,6 +342,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
   additionalProperties: false,
   required: ["eventType", "time", "resourceName"],
   if: { properties: { eventType: { const: "AnimTimedSoundEvent" } } },
+  // biome-ignore lint/suspicious/noThenProperty: `then` is a JSON Schema keyword - https://ajv.js.org/json-schema.html#if-then-else
   then: { required: ["volume", "pitch"] },
   else: { required: ["bgX", "bgY", "duration", "scale"] },
 } as const;

@@ -61,7 +61,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { isNil } from "#utils/common-utils";
 import { AES, enc } from "crypto-js";
-import fs from "fs";
+import fs from "node:fs";
 import { expect, vi } from "vitest";
 
 /**

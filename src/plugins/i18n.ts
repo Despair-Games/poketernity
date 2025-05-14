@@ -1,15 +1,15 @@
 import { LOCALE_LS_KEY } from "#constants/app-constants";
+import pkg from "#package.json";
 import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#system/supported-languages";
 import { camelCaseToKebabCase } from "#utils/string-utils";
 import i18next from "i18next";
-import pkg from "../../package.json";
 
 //#region Interfaces/Types
 
 interface LoadingFontFaceProperty {
   face: FontFace;
   extraOptions?: { [key: string]: any };
-  only?: Array<string>;
+  only?: string[];
 }
 
 //#region Constants
@@ -33,7 +33,7 @@ const rangesByLanguage = {
   ),
 };
 
-const fonts: Array<LoadingFontFaceProperty> = [
+const fonts: LoadingFontFaceProperty[] = [
   // unicode (special character from PokePT)
   {
     face: new FontFace("emerald", "url(./fonts/PokePT_Wansung.woff2)", {
@@ -119,7 +119,7 @@ async function initFonts(language: string | undefined) {
  * @returns a money formatted string
  */
 function i18nMoneyFormatter(amount: any): string {
-  if (isNaN(Number(amount))) {
+  if (Number.isNaN(Number(amount))) {
     console.warn(`i18nMoneyFormatter: value "${amount}" is not a number!`);
   }
 

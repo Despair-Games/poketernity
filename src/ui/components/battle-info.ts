@@ -360,7 +360,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       nameTextWidth + this.genderText.displayWidth + 1 + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
       2.5,
     );
-    this.shinyIcon.setTexture(`shiny_star`);
+    this.shinyIcon.setTexture("shiny_star");
     this.shinyIcon.setVisible(pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
@@ -705,7 +705,8 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       if (this.lastHp !== pokemon.hp || this.lastMaxHp !== pokemon.getMaxHp()) {
         return updatePokemonHp();
-      } else if (!this.player && this.lastLevel !== pokemon.level) {
+      }
+      if (!this.player && this.lastLevel !== pokemon.level) {
         this.setLevel(pokemon.level);
         this.lastLevel = pokemon.level;
       }

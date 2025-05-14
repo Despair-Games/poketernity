@@ -10,10 +10,6 @@ import { VariableAtkAttr } from "#moves/variable-atk-attr";
  * @extends VariableAtkAttr
  */
 export class DefAtkAttr extends VariableAtkAttr {
-  constructor() {
-    super();
-  }
-
   override getStatOverride(user: Pokemon, target: Pokemon, move: Move, isCritical: boolean) {
     return user.getStageMultipliedStat(Stat.DEF, target, move, AbilityApplyMode.DEFAULT, isCritical);
   }

@@ -1,4 +1,4 @@
-name: ESLint workflow
+name: Biome workflow
 
 on:
   push:
@@ -13,8 +13,8 @@ on:
     types: [checks_requested]
 
 jobs:
-  run-eslint:
-    name: Lint files with ESLint
+  biome-lint:
+    name: Lint files with Biome
     runs-on: ubuntu-latest
 
     steps:
@@ -32,5 +32,5 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run eslint-ci
+      - name: Run Biome
+        run: npm run biome-ci
