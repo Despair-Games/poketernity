@@ -144,7 +144,7 @@ describe("Abilities - Steadfast", () => {
       abilityName: capitalizeString(AbilityId[abilityId], "_", false, true),
       abilityId,
     })),
-  )(`should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability`, async ({ abilityId }) => {
+  )("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
     await classicMode.startBattle([SpeciesId.FEEBAS]);

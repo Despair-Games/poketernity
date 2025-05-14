@@ -147,7 +147,7 @@ describe("Ability - Tangled Feet", () => {
         passiveAbilityMultiplier: 1.2,
       },
     ])(
-      "should stack with $abilityName Ability",
+      "should stack with $passiveAbilityName Ability",
       async ({ passiveAbilityId, weatherType, passiveAbilityMultiplier }) => {
         const { override, classicMode, move, field } = game;
         override.passiveAbility(passiveAbilityId).weather(weatherType);

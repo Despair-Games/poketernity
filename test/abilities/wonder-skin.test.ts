@@ -61,7 +61,7 @@ describe("Abilities - Wonder Skin", () => {
       abilityName: capitalizeString(AbilityId[abilityId], "_", false, true),
       abilityId,
     })),
-  )(`does not affect pokemon with $abilityName`, async ({ abilityId }) => {
+  )("does not affect pokemon with $abilityName", async ({ abilityId }) => {
     const moveToCheck = allMoves.get(MoveId.CHARM);
 
     game.override.ability(abilityId);
