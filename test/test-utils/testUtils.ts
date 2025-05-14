@@ -29,14 +29,14 @@ export function mockI18next() {
 }
 
 /**
- * Creates an array of range `start - end`
+ * Creates an array of range `start - end` (inclusive).
  *
  * @param start start number e.g. 1
  * @param end end number e.g. 10
- * @returns an array of numbers
+ * @returns an array from start to end (inclusive)
  */
 export function arrayOfRange(start: number, end: number) {
-  return Array.from({ length: end - start }, (_v, k) => k + start);
+  return Array.from({ length: end - start + 1 }, (_v, k) => k + start);
 }
 
 /**
