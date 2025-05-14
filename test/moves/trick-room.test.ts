@@ -1,5 +1,5 @@
-import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
-import { allAbilities } from "#app/data/data-lists";
+import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
+import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";

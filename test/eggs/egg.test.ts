@@ -1,12 +1,12 @@
-import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
-import { speciesEggTiers } from "#app/data/species-egg-tiers";
-import * as RandomUtils from "#app/utils/random-utils";
+import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#data/egg";
+import { speciesEggTiers } from "#data/species-egg-tiers";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
 import { GameManager } from "#test/test-utils/gameManager";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
+import * as RandomUtils from "#utils/random-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

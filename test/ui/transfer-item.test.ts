@@ -1,5 +1,3 @@
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { BerryType } from "#enums/berry-type";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
@@ -7,6 +5,8 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
+import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { PartyUiHandler } from "#ui/party-ui-handler";
 import Phaser from "phaser";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

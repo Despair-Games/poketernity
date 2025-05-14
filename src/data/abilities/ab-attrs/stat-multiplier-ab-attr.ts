@@ -1,10 +1,10 @@
-import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor

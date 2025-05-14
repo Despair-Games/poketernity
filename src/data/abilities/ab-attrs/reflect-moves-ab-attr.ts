@@ -1,14 +1,14 @@
 // -- start tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#phases/move-phase";
 // -- end tsdoc imports
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import i18next from "i18next";
-import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Move } from "#app/data/moves/move";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { BooleanHolder } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Attribute to apply the effects of {@linkcode https://bulbapedia.bulbagarden.net/wiki/Magic_Bounce_(Ability) | Magic Bounce}

@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import type { ModifierType, ModifierTypeFunc } from "#app/modifier/modifier-type";
-import { getModifierType } from "#app/utils/modifier-type-utils";
 import { Phase } from "#app/phase";
 import { PhaseId } from "#enums/phase-id";
+import type { ModifierType, ModifierTypeFunc } from "#modifier/modifier-type";
+import { getModifierType } from "#utils/modifier-type-utils";
 import i18next from "i18next";
 
 export class ModifierRewardPhase extends Phase {

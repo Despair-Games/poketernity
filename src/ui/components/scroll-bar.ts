@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
+import { settings } from "#system/settings-manager";
 
 /**
  * A vertical scrollbar element that resizes dynamically based on the current scrolling

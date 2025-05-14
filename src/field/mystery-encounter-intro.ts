@@ -1,10 +1,10 @@
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import type { Variant } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
-import { isNil } from "#app/utils/common-utils";
+import type { Variant } from "#data/variant";
 import { ImagesFolder } from "#enums/images-folders";
 import type { SpeciesId } from "#enums/species-id";
+import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { isNil } from "#utils/common-utils";
 import type { GameObjects } from "phaser";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 

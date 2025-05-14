@@ -1,10 +1,10 @@
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { randSeedInt } from "#app/utils/random-utils";
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import { randSeedInt } from "#utils/random-utils";
 
 const ROCKET_BOSS_TITLE = "Rocket Boss";
 const ROCKET_MUSIC = "battle_rocket_boss";

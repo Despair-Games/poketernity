@@ -1,12 +1,12 @@
-import { MoveId } from "#enums/move-id";
-import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type Move, getMoveTargets } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import { getStatusEffectHealText } from "#app/data/status-effect";
+import { getStatusEffectHealText } from "#data/status-effect";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveId } from "#enums/move-id";
+import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import { type Move, getMoveTargets } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Move attribute to cure a set of {@linkcode StatusEffect | status effects}

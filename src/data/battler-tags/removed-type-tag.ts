@@ -1,4 +1,4 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";

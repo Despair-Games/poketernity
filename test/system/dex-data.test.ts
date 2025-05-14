@@ -1,9 +1,9 @@
-import { defaultStarterSpecies } from "#app/data/default-starters";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import type { GameData } from "#app/system/game-data";
+import { defaultStarterSpecies } from "#data/default-starters";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { Nature } from "#enums/nature";
+import type { GameData } from "#system/game-data";
 import { GameManager } from "#test/test-utils/gameManager";
-import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Dex Data", () => {
   let phaserGame: Phaser.Game;

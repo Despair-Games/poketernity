@@ -1,12 +1,12 @@
-import { PostWeatherLapseAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-ab-attr";
-import type { Weather } from "#app/data/weather";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
+import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import type { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

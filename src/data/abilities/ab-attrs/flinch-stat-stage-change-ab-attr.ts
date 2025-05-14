@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
-import { FlinchEffectAbAttr } from "./flinch-effect-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute that prompts a stat stage change after the ability holder is flinched.

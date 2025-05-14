@@ -1,11 +1,4 @@
 import {
-  BRAMBLEGHAST_EVO_LEVEL,
-  GENERIC_ITEM_EVO_LEVEL,
-  GHOLDENGO_EVO_LEVEL,
-  PAWMOT_EVO_LEVEL,
-  RABSCA_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
-import {
   FemaleEvolutionCondition,
   GholdengoEvoCondition,
   MaleEvolutionCondition,
@@ -14,7 +7,14 @@ import {
   SpeciesEvolution,
   SpeciesFormEvolution,
   type PokemonEvolutions,
-} from "#app/data/pokemon-evolutions";
+} from "#data/pokemon-evolutions";
+import {
+  BRAMBLEGHAST_EVO_LEVEL,
+  GENERIC_ITEM_EVO_LEVEL,
+  GHOLDENGO_EVO_LEVEL,
+  PAWMOT_EVO_LEVEL,
+  RABSCA_EVO_LEVEL,
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { EvolutionItem } from "#enums/evolution-item";
 import { SpeciesId } from "#enums/species-id";
 

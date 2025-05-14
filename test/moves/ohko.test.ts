@@ -1,11 +1,11 @@
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import { Stat } from "#enums/stat";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - One Hit KO Moves", () => {
   let phaserGame: Phaser.Game;

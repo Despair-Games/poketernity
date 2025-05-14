@@ -1,5 +1,5 @@
-import { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
-import { audioSettingsUiItems } from "#app/ui/settings/settings-ui-items";
+import { SettingsUiHandler } from "#ui/settings-ui-handler";
+import { audioSettingsUiItems } from "#ui/settings-ui-items";
 
 export class AudioSettingsUiHandler extends SettingsUiHandler {
   constructor() {

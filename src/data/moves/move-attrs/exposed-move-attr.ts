@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
-import type { Move } from "../move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**
  * Drops the target's immunity to types it is immune to

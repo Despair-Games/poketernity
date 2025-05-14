@@ -1,53 +1,53 @@
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { Ability } from "#abilities/ability";
+import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
+import { globalScene } from "#app/global-scene";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { ElementalType } from "#enums/elemental-type";
+import { EncounterAnim } from "#enums/encounter-anims";
+import { Gender } from "#enums/gender";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import type { AttackTypeBoosterModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
+  generateModifierType,
   initBattleWithEnemyConfig,
-  loadCustomMovesForEncounter,
   leaveEncounterWithoutBattle,
+  loadCustomMovesForEncounter,
   setEncounterExp,
   setEncounterRewards,
-  generateModifierType,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
-import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import {
-  AbilityRequirement,
-  CombinationPokemonRequirement,
-  TypeRequirement,
-} from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { SpeciesId } from "#enums/species-id";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { Gender } from "#enums/gender";
-import { ElementalType } from "#enums/elemental-type";
-import { BattlerIndex } from "#enums/battler-index";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { MoveId } from "#enums/move-id";
-import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
-import { WeatherType } from "#enums/weather-type";
-import { randSeedInt } from "#app/utils/random-utils";
-import { StatusEffect } from "#enums/status-effect";
-import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+} from "#mystery-encounters/encounter-phase-utils";
 import {
   applyAbilityOverrideToPokemon,
   applyDamageToPokemon,
   applyModifierTypeToPlayerPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { EncounterAnim } from "#enums/encounter-anims";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { AbilityId } from "#enums/ability-id";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { Stat } from "#enums/stat";
-import { Ability } from "#app/data/abilities/ability";
-import { FIRE_RESISTANT_ABILITIES } from "#app/data/mystery-encounters/requirements/requirement-groups";
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import {
+  AbilityRequirement,
+  CombinationPokemonRequirement,
+  TypeRequirement,
+} from "#mystery-encounters/mystery-encounter-requirements";
+import { FIRE_RESISTANT_ABILITIES } from "#mystery-encounters/requirement-groups";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fieryFallout";

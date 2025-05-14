@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import i18next from "i18next";
-import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
+import i18next from "i18next";
 
 export class IntimidateImmunityAbAttr extends AbAttr {
   protected readonly hasTriggerMessage: boolean;

@@ -1,11 +1,11 @@
-import type { PreventBypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/prevent-bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils/common-utils";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PreventBypassSpeedChanceAbAttr } from "#abilities/prevent-bypass-speed-chance-ab-attr";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Tag to allow the affected Pokemon's move to go first in its priority bracket.

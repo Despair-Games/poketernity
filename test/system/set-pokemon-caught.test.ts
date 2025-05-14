@@ -1,12 +1,12 @@
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import { PlayerPokemon } from "#app/field/player-pokemon";
-import type { GameData } from "#app/system/game-data";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
+import { PlayerPokemon } from "#field/player-pokemon";
+import type { GameData } from "#system/game-data";
 import { GameManager } from "#test/test-utils/gameManager";
-import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Dex Data - Set Pokemon caught", () => {
   let phaserGame: Phaser.Game;

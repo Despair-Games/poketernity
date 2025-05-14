@@ -1,41 +1,41 @@
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { globalScene } from "#app/global-scene";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { ModifierTypeOption } from "#modifier/modifier-type";
+import {
+  getPartyLuckValue,
+  getPlayerModifierTypeOptions,
+  regenerateModifierPoolThresholds,
+} from "#modifier/modifier-type";
+import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterExp,
   setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { ModifierTier } from "#enums/modifier-tier";
-import type { ModifierTypeOption } from "#app/modifier/modifier-type";
-import {
-  getPartyLuckValue,
-  getPlayerModifierTypeOptions,
-  regenerateModifierPoolThresholds,
-} from "#app/modifier/modifier-type";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { TrainerSlot } from "#enums/trainer-slot";
+} from "#mystery-encounters/encounter-phase-utils";
 import {
   getEncounterPokemonLevelForWave,
   getSpriteKeysFromPokemon,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import PokemonData from "#app/system/pokemon-data";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
+} from "#mystery-encounters/encounter-pokemon-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { MoveRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import { STEALING_MOVES } from "#mystery-encounters/requirement-groups";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import PokemonData from "#system/pokemon-data";
+import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fightOrFlight";

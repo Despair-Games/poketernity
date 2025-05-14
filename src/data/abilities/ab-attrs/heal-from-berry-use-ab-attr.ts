@@ -1,10 +1,10 @@
+import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { clamp, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import i18next from "i18next";
-import { AbAttr } from "./ab-attr";
 
 /**
  * A Pokemon with this ability heals by a percentage of their maximum hp after eating a berry

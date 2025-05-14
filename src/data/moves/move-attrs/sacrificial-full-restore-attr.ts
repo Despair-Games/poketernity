@@ -1,10 +1,10 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { PendingHealTag } from "#app/data/arena-tag";
-import type { Move } from "#app/data/moves/move";
-import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { PendingHealTag } from "#data/arena-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { SacrificialAttr } from "#moves/sacrificial-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon

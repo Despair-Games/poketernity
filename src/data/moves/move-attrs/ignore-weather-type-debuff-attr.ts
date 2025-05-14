@@ -1,9 +1,9 @@
-import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import type { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveAttr } from "#moves/move-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for moves which ignore type-based debuffs from weather, namely Hydro Steam.

@@ -1,5 +1,3 @@
-import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
@@ -7,6 +5,8 @@ import { FormChangeItem } from "#enums/form-change-item";
 import { MoveId } from "#enums/move-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
+import { modifierTypes } from "#modifier/modifier-types";
+import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

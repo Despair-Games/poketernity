@@ -1,12 +1,12 @@
-import type { RecoveryBoostAbAttr } from "#app/data/abilities/ab-attrs/recovery-boost-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { RecoveryBoostAbAttr } from "#abilities/recovery-boost-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

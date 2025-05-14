@@ -1,7 +1,7 @@
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to set move power proportional to the user's friendship level.

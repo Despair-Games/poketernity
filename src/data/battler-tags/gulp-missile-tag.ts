@@ -1,13 +1,8 @@
-import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder, toDmgValue } from "#app/utils/common-utils";
-import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { BattlerTag } from "#battler-tags/battler-tag";
+import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -17,6 +12,11 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Battler tag for Gulp Missile used by Cramorant.

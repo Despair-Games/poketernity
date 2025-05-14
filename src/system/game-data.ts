@@ -1,65 +1,33 @@
-import type { DexData, DexEntry } from "#app/@types/DexData";
-import type { SessionSaveData } from "#app/@types/SessionData";
-import type { StarterData } from "#app/@types/StarterData";
-import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
+import { api } from "#api/api";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
+import { getGameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
 import {
   APP_ABBREVIATION,
+  BYPASS_LOGIN,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
-  BYPASS_LOGIN,
-} from "#app/constants/app-constants";
-import { EntryHazardTag } from "#app/data/arena-tag";
-import { allMoves, allSpecies } from "#app/data/data-lists";
-import { defaultStarterSpecies } from "#app/data/default-starters";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import type { Egg } from "#app/data/egg";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
+} from "#constants/app-constants";
+import { EntryHazardTag } from "#data/arena-tag";
+import { allMoves, allSpecies } from "#data/data-lists";
+import { defaultStarterSpecies } from "#data/default-starters";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
+import type { Egg } from "#data/egg";
+import { speciesEggMoves } from "#data/egg-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
 import {
   STARTER_CANDY_GAIN_FROM_CATCH,
   STARTER_CANDY_MULIPLIER_FOR_BOSS,
   STARTER_CANDY_MULIPLIER_FOR_EGG,
   getCandyGainMultiplierForShinies,
   speciesStarterCosts,
-} from "#app/data/starters";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import type { Variant } from "#app/data/variant";
-import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { getGameMode } from "#app/game-mode";
-import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
-import Overrides from "#app/overrides";
-import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import { api } from "#app/plugins/api/api";
-import { achvs } from "#app/system/achievements";
-import ArenaData from "#app/system/arena-data";
-import ChallengeData from "#app/system/challenge-data";
-import EggData from "#app/system/egg-data";
-import { GameStats } from "#app/system/game-stats";
-import PersistentModifierData from "#app/system/modifier-data";
-import PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
-import TrainerData from "#app/system/trainer-data";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-} from "#app/system/version_migration/version_converter";
-import { vouchers } from "#app/system/voucher";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randSeedItem } from "#app/utils/random-utils";
+} from "#data/starters";
+import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";
@@ -77,6 +45,35 @@ import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
+import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import * as Modifier from "#modifier/modifier";
+import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
+import { ReloadSessionPhase } from "#phases/reload-session-phase";
+import { achvs } from "#system/achievements";
+import ArenaData from "#system/arena-data";
+import ChallengeData from "#system/challenge-data";
+import EggData from "#system/egg-data";
+import { GameStats } from "#system/game-stats";
+import PersistentModifierData from "#system/modifier-data";
+import PokemonData from "#system/pokemon-data";
+import { settings } from "#system/settings-manager";
+import TrainerData from "#system/trainer-data";
+import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
+import { vouchers } from "#system/voucher";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { DexData, DexEntry } from "#types/DexData";
+import type { SessionSaveData } from "#types/SessionData";
+import type { StarterData } from "#types/StarterData";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/SystemData";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { applyChallenges } from "#utils/challenge-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt, randSeedItem } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 

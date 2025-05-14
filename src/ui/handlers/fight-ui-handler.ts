@@ -1,18 +1,7 @@
-import type { FightCommand } from "#app/@types/FightCommand";
 import type { InfoToggle } from "#app/battle-scene";
-import { GAME_WIDTH } from "#app/constants/ui-constants";
-import { getTypeDamageMultiplierColor } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import type { CommandPhase } from "#app/phases/command-phase";
-import { settings } from "#app/system/settings/settings-manager";
-import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { fixedNumber } from "#app/utils/common-utils";
-import { leftPad } from "#app/utils/string-utils";
+import { GAME_WIDTH } from "#constants/ui-constants";
+import { getTypeDamageMultiplierColor } from "#data/type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
@@ -21,6 +10,17 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import type { CommandPhase } from "#phases/command-phase";
+import { settings } from "#system/settings-manager";
+import type { FightCommand } from "#types/FightCommand";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
+import { MoveInfoOverlay } from "#ui/move-info-overlay";
+import { addTextObject, setTextColor } from "#ui/text-utils";
+import { UiHandler } from "#ui/ui-handler";
+import { fixedNumber } from "#utils/common-utils";
+import { leftPad } from "#utils/string-utils";
 import i18next from "i18next";
 
 export class FightUiHandler extends UiHandler implements InfoToggle {

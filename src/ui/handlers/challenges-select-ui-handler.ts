@@ -1,15 +1,15 @@
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
-import type { Challenge } from "#app/data/challenge";
 import { globalScene } from "#app/global-scene";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
-import { addBBCodeTextObject, addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import type { Challenge } from "#data/challenge";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { SelectStarterPhase } from "#phases/select-starter-phase";
+import { addBBCodeTextObject, addTextObject } from "#ui/text-utils";
+import { UiHandler } from "#ui/ui-handler";
+import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

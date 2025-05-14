@@ -1,4 +1,4 @@
-import type { ModifierPool } from "#app/@types/ModifierPool";
+import type { ModifierPool } from "#types/ModifierPool";
 
 export const modifierPool: ModifierPool = {};
 

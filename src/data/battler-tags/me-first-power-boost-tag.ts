@@ -1,9 +1,9 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Tag to boost the power of moves invoked by

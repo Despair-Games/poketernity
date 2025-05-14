@@ -1,8 +1,8 @@
 import { AbilityId } from "#enums/ability-id";
-import { MoveId } from "#enums/move-id";
 import { ModifierTier } from "#enums/modifier-tier";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

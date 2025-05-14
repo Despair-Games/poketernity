@@ -5,11 +5,11 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { settings } from "#app/system/settings/settings-manager";
-import { windowStyleDependantAtlases } from "#app/ui/ui-theme";
-import { coerceArray } from "#app/utils/common-utils";
-import { getLocalizedFilename } from "#app/utils/string-utils";
 import { ImagesFolder } from "#enums/images-folders";
+import { settings } from "#system/settings-manager";
+import { windowStyleDependantAtlases } from "#ui/ui-theme";
+import { coerceArray } from "#utils/common-utils";
+import { getLocalizedFilename } from "#utils/string-utils";
 
 /**
  * Additional parameters that can be used when loading Images, Spritesheets or Atlases.

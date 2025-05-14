@@ -1,5 +1,5 @@
 import { IGNORING_ABILITIES } from "#app/constants/ability-constants";
-import { allMoves } from "#app/data/data-lists";
+import { allMoves } from "#data/data-lists";
 import { capitalizeString } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";

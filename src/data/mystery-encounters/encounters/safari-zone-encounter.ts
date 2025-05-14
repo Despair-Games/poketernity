@@ -1,41 +1,41 @@
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import type PokemonSpecies from "#data/pokemon-species";
+import { ImagesFolder } from "#enums/images-folders";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PlayerGender } from "#enums/player-gender";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { TrainerSlot } from "#enums/trainer-slot";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#modifier/modifier";
+import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   initSubsequentOptionSelect,
   leaveEncounterWithoutBattle,
   updatePlayerMoney,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { PokeballType } from "#enums/pokeball-type";
-import { PlayerGender } from "#enums/player-gender";
-import { NumberHolder } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-utils";
-import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
+} from "#mystery-encounters/encounter-phase-utils";
 import {
   doPlayerFlee,
   doPokemonFlee,
   getRandomSpeciesByStarterCost,
   trainerThrowPokeball,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { getPokemonNameWithAffix } from "#app/messages";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { settings } from "#app/system/settings/settings-manager";
-import { ImagesFolder } from "#enums/images-folders";
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import { ScanIvsPhase } from "#phases/scan-ivs-phase";
+import { SummonPhase } from "#phases/summon-phase";
+import { settings } from "#system/settings-manager";
+import { NumberHolder } from "#utils/common-utils";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";

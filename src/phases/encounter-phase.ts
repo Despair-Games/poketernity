@@ -1,46 +1,20 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
+import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants/mystery-encounter-constants";
-import type { SyncEncounterNatureAbAttr } from "#app/data/abilities/ab-attrs/sync-encounter-nature-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { initEncounterAnims } from "#app/data/init/init-encounter-anims";
-import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getNatureName } from "#app/data/nature";
-import { EncounterPhaseEvent } from "#app/events/battle-scene";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  BoostBugSpawnModifier,
-  IvScannerModifier,
-  overrideHeldItems,
-  overrideModifiers,
-  TurnHeldItemTransferModifier,
-} from "#app/modifier/modifier";
-import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { ReturnPhase } from "#app/phases/return-phase";
-import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
-import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { achvs } from "#app/system/achievements";
-import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { randSeedInt, randSeedItem } from "#app/utils/random-utils";
-import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#constants/mystery-encounter-constants";
+import { getCharVariantFromDialogue } from "#data/dialogue";
+import { getNatureName } from "#data/nature";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -54,8 +28,34 @@ import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
+import { EncounterPhaseEvent } from "#events/battle-scene";
+import type { Pokemon } from "#field/pokemon";
+import { initEncounterAnims } from "#init/init-encounter-anims";
+import {
+  BoostBugSpawnModifier,
+  IvScannerModifier,
+  overrideHeldItems,
+  overrideModifiers,
+  TurnHeldItemTransferModifier,
+} from "#modifier/modifier";
+import { regenerateModifierPoolThresholds } from "#modifier/modifier-type";
+import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
+import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { CheckSwitchPhase } from "#phases/check-switch-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { PostSummonPhase } from "#phases/post-summon-phase";
+import { ReturnPhase } from "#phases/return-phase";
+import { ScanIvsPhase } from "#phases/scan-ivs-phase";
+import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
+import { SummonPhase } from "#phases/summon-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { achvs } from "#system/achievements";
+import { settings } from "#system/settings-manager";
+import { loadEncounterAnimAssets } from "#utils/anim-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
-import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by

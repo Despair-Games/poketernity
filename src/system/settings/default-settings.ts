@@ -1,10 +1,3 @@
-import type {
-  AudioSettings,
-  DisplaySettings,
-  GamepadSettings,
-  GeneralSettings,
-  UserFacingSettings,
-} from "#app/@types/Settings";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
@@ -13,10 +6,17 @@ import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import { MoneyFormat } from "#enums/money-format";
+import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
-import { PlayerGender } from "#enums/player-gender";
 import { UiWindowStyle } from "#enums/ui-window-style";
+import type {
+  AudioSettings,
+  DisplaySettings,
+  GamepadSettings,
+  GeneralSettings,
+  UserFacingSettings,
+} from "#types/Settings";
 
 export const defaultGeneralSettings: GeneralSettings = {
   gameSpeed: 2,

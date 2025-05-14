@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
-import type { Move } from "../move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) | Perish Song}.

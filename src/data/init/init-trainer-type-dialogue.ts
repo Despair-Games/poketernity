@@ -1,6 +1,6 @@
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import { trainerTypeDialogue } from "#app/data/dialogue";
+import { trainerTypeDialogue } from "#data/dialogue";
 import type { TrainerType } from "#enums/trainer-type";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 
 export function initTrainerTypeDialogue(): void {
   const trainerTypes = Object.keys(trainerTypeDialogue).map((t) => parseInt(t) as TrainerType);

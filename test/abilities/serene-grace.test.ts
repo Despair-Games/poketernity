@@ -1,12 +1,12 @@
-import { BattlerIndex } from "#enums/battler-index";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { FlinchAttr } from "#moves/flinch-attr";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { allMoves } from "#app/data/data-lists";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
 
 describe("Abilities - Serene Grace", () => {
   let phaserGame: Phaser.Game;

@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { Stat, type EffectiveStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 

@@ -1,9 +1,9 @@
-import { allMoves } from "#app/data/data-lists";
-import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
-import { MultiHitType } from "#enums/multi-hit-type";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
+import { MultiHitType } from "#enums/multi-hit-type";
 import { SpeciesId } from "#enums/species-id";
+import { MultiHitAttr } from "#moves/multi-hit-attr";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

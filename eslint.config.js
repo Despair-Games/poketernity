@@ -1,8 +1,9 @@
-import tseslint from "@typescript-eslint/eslint-plugin";
 import stylisticTs from "@stylistic/eslint-plugin-ts";
+import tseslint from "@typescript-eslint/eslint-plugin";
 import parser from "@typescript-eslint/parser";
-import importX from "eslint-plugin-import-x";
 import prettierConfig from "eslint-config-prettier";
+import importX from "eslint-plugin-import-x";
+import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 
 const eslintRules = {
   eqeqeq: ["error", "always"], // Enforces the use of `===` and `!==` instead of `==` and `!=`
@@ -45,6 +46,11 @@ const eslintRules = {
   "@typescript-eslint/consistent-type-imports": "error", // Enforces type-only imports wherever possible
   "@typescript-eslint/no-import-type-side-effects": "error", // Typescript turns `import { type X } from Y` into `import {} from Y` but completely removes `import type { X } from Y`
   "@typescript-eslint/ban-ts-comment": ["error", { "ts-check": false, "ts-expect-error": "allow-with-description" }], // Disallow usage of `@ts-ignore`
+  "no-relative-import-paths/no-relative-import-paths": [
+    // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
+    "error",
+    { rootDir: "src", prefix: "#app" },
+  ],
 };
 
 export default [
@@ -59,6 +65,7 @@ export default [
       "import-x": importX,
       "@stylistic/ts": stylisticTs,
       "@typescript-eslint": tseslint,
+      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: eslintRules,
   },
@@ -91,6 +98,7 @@ export default [
       "import-x": importX,
       "@stylistic/ts": stylisticTs,
       "@typescript-eslint": tseslint,
+      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: eslintRules,
   },

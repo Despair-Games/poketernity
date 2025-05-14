@@ -2,18 +2,46 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
-import type { FaintPhase } from "#app/phases/faint-phase";
+import type { FaintPhase } from "#phases/faint-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { AbilityFilterOptions } from "#app/@types/AbilityFilterOptions";
-import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
-import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
-import type { nil } from "#app/@types/nil";
-import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
-import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
-import type { Status } from "#app/@types/Status";
-import type { TurnMove } from "#app/@types/TurnMove";
+import type { AbAttr } from "#abilities/ab-attr";
+import type { Ability } from "#abilities/ability";
+import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
+import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
+import { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
+import type { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
+import type { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
+import type { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
+import type { BonusCritAbAttr } from "#abilities/bonus-crit-ab-attr";
+import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-damage-reduction-ab-attr";
+import type { BypassParaSpeedReductionAbAttr } from "#abilities/bypass-para-speed-reduction-ab-attr";
+import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
+import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
+import type { FieldMultiplyStatAbAttr } from "#abilities/field-multiply-stat-ab-attr";
+import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
+import type { FullHpResistTypeAbAttr } from "#abilities/full-hp-resist-type-ab-attr";
+import type { IgnoreOpponentStatStagesAbAttr } from "#abilities/ignore-opponent-stat-stages-ab-attr";
+import type { IgnoreTypeImmunityAbAttr } from "#abilities/ignore-type-immunity-ab-attr";
+import type { IgnoreTypeStatusEffectImmunityAbAttr } from "#abilities/ignore-type-status-effect-immunity-ab-attr";
+import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
+import type { MockStatusEffectAbAttr } from "#abilities/mock-status-effect-ab-attr";
+import type { MoveImmunityAbAttr } from "#abilities/move-immunity-ab-attr";
+import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
+import type { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
+import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
+import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
+import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
+import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
+import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
+import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
+import type { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
+import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
+import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
+import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
 import {
@@ -29,42 +57,6 @@ import {
   MAX_STAT_STAGE,
   MIN_STAT_STAGE,
 } from "#app/constants/game-constants";
-import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
-import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
-import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
-import type { ArenaTrapAbAttr } from "#app/data/abilities/ab-attrs/arena-trap-ab-attr";
-import type { BattlerTagImmunityAbAttr } from "#app/data/abilities/ab-attrs/battler-tag-immunity-ab-attr";
-import type { BlockCritAbAttr } from "#app/data/abilities/ab-attrs/block-crit-ab-attr";
-import type { BonusCritAbAttr } from "#app/data/abilities/ab-attrs/bonus-crit-ab-attr";
-import type { BypassBurnDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-burn-damage-reduction-ab-attr";
-import type { BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
-import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
-import type { DamageBoostAbAttr } from "#app/data/abilities/ab-attrs/damage-boost-ab-attr";
-import type { FieldMultiplyStatAbAttr } from "#app/data/abilities/ab-attrs/field-multiply-stat-ab-attr";
-import type { FieldPriorityMoveImmunityAbAttr } from "#app/data/abilities/ab-attrs/field-priority-move-immunity-ab-attr";
-import type { FullHpResistTypeAbAttr } from "#app/data/abilities/ab-attrs/full-hp-resist-type-ab-attr";
-import type { IgnoreOpponentStatStagesAbAttr } from "#app/data/abilities/ab-attrs/ignore-opponent-stat-stages-ab-attr";
-import type { IgnoreTypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/ignore-type-immunity-ab-attr";
-import type { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ab-attrs/ignore-type-status-effect-immunity-ab-attr";
-import type { InfiltratorAbAttr } from "#app/data/abilities/ab-attrs/infiltrator-ab-attr";
-import type { MockStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/mock-status-effect-ab-attr";
-import type { MoveImmunityAbAttr } from "#app/data/abilities/ab-attrs/move-immunity-ab-attr";
-import type { MoveTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/move-type-change-ab-attr";
-import type { MultCritAbAttr } from "#app/data/abilities/ab-attrs/mult-crit-ab-attr";
-import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
-import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
-import type { PreDefendFullHpEndureAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-full-hp-endure-ab-attr";
-import type { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/ab-attrs/received-move-damage-multiplier-ab-attr";
-import type { StabBoostAbAttr } from "#app/data/abilities/ab-attrs/stab-boost-ab-attr";
-import type { StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-multiplier-ab-attr";
-import type { StatusEffectImmunityAbAttr } from "#app/data/abilities/ab-attrs/status-effect-immunity-ab-attr";
-import type { SynchronizeStatusAbAttr } from "#app/data/abilities/ab-attrs/synchronize-status-ab-attr";
-import type { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
-import type { UserFieldBattlerTagImmunityAbAttr } from "#app/data/abilities/ab-attrs/user-field-battler-tag-immunity-ab-attr";
-import type { UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/ab-attrs/user-field-status-effect-immunity-ab-attr";
-import type { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight-multiplier-ab-attr";
-import type { Ability } from "#app/data/abilities/ability";
-import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
 import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";
@@ -211,6 +203,14 @@ import {
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
+import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";
+import type { DamageCalculationResult } from "#types/DamageCalculationResult";
+import type { DamageFunctionOptions } from "#types/DamageFunctionOptions";
+import type { nil } from "#types/nil";
+import type { PokemonTurnData } from "#types/PokemonTurnData";
+import type { PokemonWaveData } from "#types/PokemonWaveData";
+import type { Status } from "#types/Status";
+import type { TurnMove } from "#types/TurnMove";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -404,6 +404,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * - Shedinja is always Bug
    */
   public get teraType(): ElementalType {
+    if (this.isPlayer() && Overrides.TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+      return Overrides.TERA_TYPE_OVERRIDE;
+    }
+    if (this.isEnemy() && Overrides.ENEMY_TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+      return Overrides.ENEMY_TERA_TYPE_OVERRIDE;
+    }
+
     switch (this.species.speciesId) {
       case SpeciesId.TERAPAGOS:
         return ElementalType.STELLAR;

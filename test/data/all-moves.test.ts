@@ -1,12 +1,12 @@
-import { allMoves } from "#app/data/data-lists";
-import { resolve } from "path";
-import { readFileSync } from "fs";
-import { describe, expect, it } from "vitest";
-import { MoveCategory } from "#enums/move-category";
-import { MoveId } from "#enums/move-id";
-import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
+import { allMoves } from "#data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
+import { MoveCategory } from "#enums/move-category";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveId } from "#enums/move-id";
+import type { Move } from "#moves/move";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+import { describe, expect, it } from "vitest";
 
 describe("All Moves", async () => {
   type MoveData = {

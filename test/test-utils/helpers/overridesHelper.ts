@@ -1,31 +1,32 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Arena } from "#app/field/arena";
+import type { Arena } from "#field/arena";
 import { GameManager } from "#test/test-utils/gameManager";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { TimedEvent } from "#app/@types/TimedEvent";
-import type { Variant } from "#app/data/variant";
-import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
-import { coerceArray } from "#app/utils/common-utils";
-import { shiftCharCodes } from "#app/utils/string-utils";
+import type { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
 import { TrainerType } from "#enums/trainer-type";
 import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
+import type { ModifierOverride } from "#modifier/modifier-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
+import type { TimedEvent } from "#types/TimedEvent";
+import { coerceArray } from "#utils/common-utils";
+import { shiftCharCodes } from "#utils/string-utils";
 import { expect, vi } from "vitest";
-import { TerrainType } from "#enums/terrain-type";
 
 /**
  * Helper to handle overrides in tests
@@ -522,6 +523,44 @@ export class OverridesHelper extends GameManagerHelper {
       this.log(`Paralysis and Freeze forced to ${activate ? "always" : "never"} activate!`);
     } else {
       this.log("Status activation override disabled!");
+    }
+    return this;
+  }
+
+  /**
+   * @param forceTera (Default `true`) If `true`, forces every enemy Pokemon to Terastallize. If `false`, disables this override.
+   * @returns `this`
+   */
+  public forceEnemyTera(forceTera: boolean = true): this {
+    vi.spyOn(Overrides, "FORCE_ENEMY_TERA_OVERRIDE", "get").mockReturnValue(forceTera);
+    this.log(`Enemy Pokemon are ${forceTera ? "" : "no longer "}forced to Terastallize!`);
+    return this;
+  }
+
+  /**
+   * @param type If equal to `ElementalType.UNKNOWN`, disable this override. Otherwise, force every player Pokemon's Tera type to be this type.
+   * @returns `this`
+   */
+  public teraType(type: ElementalType): this {
+    vi.spyOn(Overrides, "TERA_TYPE_OVERRIDE", "get").mockReturnValue(type);
+    if (type === ElementalType.UNKNOWN) {
+      this.log("Disabled override for player Tera type!");
+    } else {
+      this.log(`Player Tera type set to ${ElementalType[type]} (=${type})!`);
+    }
+    return this;
+  }
+
+  /**
+   * @param type If equal to `ElementalType.UNKNOWN`, disable this override. Otherwise, force every enemy Pokemon's Tera type to be this type.
+   * @returns `this`
+   */
+  public enemyTeraType(type: ElementalType): this {
+    vi.spyOn(Overrides, "ENEMY_TERA_TYPE_OVERRIDE", "get").mockReturnValue(type);
+    if (type === ElementalType.UNKNOWN) {
+      this.log("Disabled override for enemy Tera type!");
+    } else {
+      this.log(`Enemy Tera type set to ${ElementalType[type]} (=${type})!`);
     }
     return this;
   }

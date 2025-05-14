@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { SystemSaveData } from "#app/@types/SystemData";
 import type { BattleStat } from "#enums/stat";
 import type { StatusEffect } from "#enums/status-effect";
+import type { SystemSaveData } from "#types/SystemData";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 

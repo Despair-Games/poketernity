@@ -1,9 +1,9 @@
-import { GAME_HEIGHT } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
-import { UiHandler } from "#app/ui/handlers/ui-handler";
+import { GAME_HEIGHT } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
+import { EggHatchPhase } from "#phases/egg-hatch-phase";
+import { UiHandler } from "#ui/ui-handler";
 
 export class EggHatchSceneUiHandler extends UiHandler {
   public eggHatchContainer: Phaser.GameObjects.Container;

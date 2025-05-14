@@ -1,8 +1,8 @@
-import type { Weather } from "#app/data/weather";
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
+import { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
+import type { Weather } from "#data/weather";
 import type { WeatherType } from "#enums/weather-type";
-import { PreWeatherDamageAbAttr } from "./pre-weather-damage-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that protects the holder against certain forms of weather damage

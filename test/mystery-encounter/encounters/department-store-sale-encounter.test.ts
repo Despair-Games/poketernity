@@ -1,18 +1,18 @@
 import type BattleScene from "#app/battle-scene";
-import { CivilizationEncounterBiomes } from "#app/data/biome-utils";
-import { DepartmentStoreSaleEncounter } from "#app/data/mystery-encounters/encounters/department-store-sale-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { CivilizationEncounterBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { DepartmentStoreSaleEncounter } from "#mystery-encounters/department-store-sale-encounter";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/departmentStoreSale";

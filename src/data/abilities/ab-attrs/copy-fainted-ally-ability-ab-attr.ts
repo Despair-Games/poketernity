@@ -1,10 +1,10 @@
-import { allAbilities } from "#app/data/data-lists";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { PostKnockOutAbAttr } from "./post-knock-out-ab-attr";
+import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import i18next from "i18next";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, knockedOutPokemon: Pokemon): boolean {

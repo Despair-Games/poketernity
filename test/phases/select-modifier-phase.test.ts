@@ -1,11 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { settings } from "#app/system/settings/settings-manager";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { shiftCharCodes } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -13,8 +6,15 @@ import { MoveId } from "#enums/move-id";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import type { CustomModifierSettings } from "#modifier/modifier-type";
+import { ModifierTypeOption } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import { settings } from "#system/settings-manager";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { shiftCharCodes } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

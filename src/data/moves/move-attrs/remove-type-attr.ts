@@ -1,8 +1,8 @@
-import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to remove a set type from the user after the move is used.

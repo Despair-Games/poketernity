@@ -1,12 +1,12 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
-import type { Pokemon } from "#app/field/pokemon";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
+import { BattlePhase } from "#phases/abstract-battle-phase";
 import i18next from "i18next";
 
 export class TerastallizationPhase extends BattlePhase {
@@ -21,12 +21,6 @@ export class TerastallizationPhase extends BattlePhase {
 
   public override start(): void {
     super.start();
-
-    // Failsafe to prevent a crash if the pokemon faints before the phase runs
-    // TODO: remove this when Tera phase timing is fixed
-    if (this.pokemon.isFainted()) {
-      return super.end();
-    }
 
     new CommonBattleAnim(CommonAnim.TERASTALLIZE, this.pokemon).play(false, () => {
       globalScene.phaseManager.queueMessagePhase(

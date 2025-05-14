@@ -1,8 +1,8 @@
-import type { BattlerIndex } from "#enums/battler-index";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { BattlerIndex } from "#enums/battler-index";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 
 /**
  * Triggers just after a move is used either by the opponent or the player

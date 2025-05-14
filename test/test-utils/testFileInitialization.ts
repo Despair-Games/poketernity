@@ -1,27 +1,27 @@
 import { initLoggedInUser } from "#app/account";
-import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
-import { allMoves } from "#app/data/data-lists";
-import { initEggMoves } from "#app/data/egg-moves";
-import { initAbilities } from "#app/data/init/init-abilities";
-import { initBiomes } from "#app/data/init/init-biomes";
-import { initMoves } from "#app/data/init/init-moves";
-import { initSpecies } from "#app/data/init/init-species";
-import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { initModifierPools } from "#app/modifier/init-modifier-pools";
-import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import "#app/phaser-extensions";
-import { initAchievements } from "#app/system/achievements";
-import { initVouchers } from "#app/system/init-vouchers";
-import { setCookie } from "#app/utils/app-utils";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
+import { allMoves } from "#data/data-lists";
+import { initEggMoves } from "#data/egg-moves";
+import { initPokemonForms } from "#data/pokemon-forms";
+import { initPokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import { initAbilities } from "#init/init-abilities";
+import { initBiomes } from "#init/init-biomes";
+import { initMoves } from "#init/init-moves";
+import { initSpecies } from "#init/init-species";
+import { initModifierPools } from "#modifier/init-modifier-pools";
+import { initModifierTypes } from "#modifier/init-modifier-types";
+import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
+import { initAchievements } from "#system/achievements";
+import { initVouchers } from "#system/init-vouchers";
 import { blobToString } from "#test/test-utils/gameManagerUtils";
+import { manageListeners } from "#test/test-utils/listenersManager";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { mockContext } from "#test/test-utils/mocks/mockContext";
 import { mockLocalStorage } from "#test/test-utils/mocks/mockLocalStorage";
 import { MockImage } from "#test/test-utils/mocks/mocksContainer/mockImage";
+import { setCookie } from "#utils/app-utils";
 import Phaser from "phaser";
-import { manageListeners } from "./listenersManager";
 
 /**
  * A function to initialize game data before running any other test-related code.

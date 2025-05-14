@@ -1,9 +1,9 @@
-import { EncounterPokemonRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { coerceArray, isNil } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { EncounterPokemonRequirement } from "#mystery-encounters/mystery-encounter-requirements";
+import { coerceArray, isNil } from "#utils/common-utils";
 
 /**
  * {@linkcode CanLearnMoveRequirement} options

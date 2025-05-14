@@ -1,8 +1,8 @@
-import { GameManager } from "#test/test-utils/gameManager";
-import { describe, beforeAll, afterEach, vi, it, expect, beforeEach } from "vitest";
 import { timedEventManager } from "#app/timed-event-manager";
-import type { TimedEvent } from "#app/@types/TimedEvent";
 import { EventModifierType } from "#enums/event-modifier-type";
+import { GameManager } from "#test/test-utils/gameManager";
+import type { TimedEvent } from "#types/TimedEvent";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Timed Event Manager", () => {
   let phaserGame: Phaser.Game;

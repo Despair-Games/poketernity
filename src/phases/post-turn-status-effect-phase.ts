@@ -1,19 +1,19 @@
-import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
-import type { BlockStatusDamageAbAttr } from "#app/data/abilities/ab-attrs/block-status-damage-ab-attr";
-import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
-import type { ReduceBurnDamageAbAttr } from "#app/data/abilities/ab-attrs/reduce-burn-damage-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { getStatusEffectActivationText } from "#app/data/status-effect";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
+import type { BlockStatusDamageAbAttr } from "#abilities/block-status-damage-ab-attr";
+import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
+import type { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils/common-utils";
+import { getStatusEffectActivationText } from "#data/status-effect";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;

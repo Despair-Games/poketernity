@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Infiltrator_(Ability) | Infiltrator}.

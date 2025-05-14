@@ -1,14 +1,14 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import { EvolutionPhase } from "#app/phases/evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { ExpNotification } from "#enums/exp-notification";
-import i18next from "i18next";
-import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
-import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#app/constants/friendship-constants";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import { EvolutionPhase } from "#phases/evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
+import { settings } from "#system/settings-manager";
+import i18next from "i18next";
 
 /**
  * Handles the effects of a pokemon levelling up:

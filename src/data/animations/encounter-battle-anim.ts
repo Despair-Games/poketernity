@@ -1,8 +1,8 @@
-import type { LegacyAnimConfig } from "#app/data/animations/anim-config";
-import type { Pokemon } from "#app/field/pokemon";
+import type { LegacyAnimConfig } from "#animations/anim-config";
+import { BattleAnim } from "#animations/battle-anims";
+import { encounterAnims } from "#animations/encounter-anims";
 import type { EncounterAnim } from "#enums/encounter-anims";
-import { BattleAnim } from "./battle-anims";
-import { encounterAnims } from "./encounter-anims";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Animation for effects that occur at the beginning

@@ -1,5 +1,5 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
 
 export type PokemonModifierTransferSelectFilter = (
   pokemon: PlayerPokemon,

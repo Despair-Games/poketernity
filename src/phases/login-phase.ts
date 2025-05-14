@@ -1,21 +1,21 @@
 import { updateUserInfo } from "#app/account";
-import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
-import type { LoginFormUiHandler } from "#app/ui/handlers/login-form-ui-handler";
-import type { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
-import { executeIf } from "#app/utils/common-utils";
-import { getCookie, removeCookie } from "#app/utils/app-utils";
+import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
+import { SelectGenderPhase } from "#phases/select-gender-phase";
+import { UnavailablePhase } from "#phases/unavailable-phase";
+import { settings } from "#system/settings-manager";
+import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { LoginFormUiHandler } from "#ui/login-form-ui-handler";
+import type { RegistrationFormUiHandler } from "#ui/registration-form-ui-handler";
+import { getCookie, removeCookie } from "#utils/app-utils";
+import { executeIf } from "#utils/common-utils";
 import i18next from "i18next";
-import { SelectGenderPhase } from "./select-gender-phase";
-import { UnavailablePhase } from "./unavailable-phase";
 
 export class LoginPhase extends Phase {
   override readonly id = PhaseId.LOGIN;

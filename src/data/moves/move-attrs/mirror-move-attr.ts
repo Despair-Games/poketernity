@@ -1,11 +1,11 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
-import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import { CallMoveAttr } from "#moves/call-move-attr";
+import type { Move } from "#moves/move";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
+import { getMaxMoveList } from "#utils/move-utils";
 
 /**
  * Attribute used to copy the last move used by the target.

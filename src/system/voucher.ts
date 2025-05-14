@@ -1,7 +1,7 @@
-import i18next from "i18next";
-import type { ConditionFn } from "#app/@types/ConditionFn";
 import { AchvTier } from "#enums/achv-tier";
 import { VoucherType } from "#enums/voucher-type";
+import type { ConditionFn } from "#types/ConditionFn";
+import i18next from "i18next";
 
 export class Voucher {
   public id: string;

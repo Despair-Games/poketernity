@@ -1,15 +1,15 @@
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
 import { globalScene } from "#app/global-scene";
-import { ScrollBar } from "#app/ui/components/scroll-bar";
-import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import type { UIOptionSelectItem } from "#app/ui/interfaces/option-select-ui-item";
-import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNil } from "#app/utils/common-utils";
+import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { MessageUiHandler } from "#ui/message-ui-handler";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import type { UIOptionSelectItem } from "#ui/option-select-ui-item";
+import { ScrollBar } from "#ui/scroll-bar";
+import { addBBCodeTextObject, getBBCodeFragment } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { fixedNumber, isNil } from "#utils/common-utils";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 const SCROLLBAR_PADDING = 5;

@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonMessageAbAttr } from "#abilities/post-summon-message-ab-attr";
 import { MoveId } from "#enums/move-id";
-import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
-import { PostSummonMessageAbAttr } from "./post-summon-message-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 
 /**
  * Ability Attribute for Anticipation.

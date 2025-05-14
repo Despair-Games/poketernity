@@ -1,4 +1,11 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { BerryType } from "#enums/berry-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { Nature } from "#enums/nature";
+import { PokeballType } from "#enums/pokeball-type";
+import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { VoucherType } from "#enums/voucher-type";
+import type { Pokemon } from "#field/pokemon";
 import {
   BoostBugSpawnModifier,
   BypassSpeedChanceModifier,
@@ -36,7 +43,7 @@ import {
   TerastallizeAccessModifier,
   TurnHealModifier,
   TurnStatusEffectModifier,
-} from "#app/modifier/modifier";
+} from "#modifier/modifier";
 import {
   AddPokeballModifierType,
   AddVoucherModifierType,
@@ -71,17 +78,10 @@ import {
   TempStatStageBoosterModifierTypeGenerator,
   TmModifierTypeGenerator,
   TurnHeldItemTransferModifierType,
-} from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { getEnumValues } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { BerryType } from "#enums/berry-type";
-import { ModifierTier } from "#enums/modifier-tier";
-import { Nature } from "#enums/nature";
-import { PokeballType } from "#enums/pokeball-type";
-import { SpeciesId } from "#enums/species-id";
-import { Stat } from "#enums/stat";
-import { VoucherType } from "#enums/voucher-type";
+} from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { getEnumValues } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 import { t } from "i18next";
 
 export function initModifierTypes() {

@@ -1,11 +1,11 @@
-import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**

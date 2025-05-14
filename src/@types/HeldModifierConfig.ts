@@ -1,5 +1,5 @@
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 
 export interface HeldModifierConfig {
   modifier: PokemonHeldItemModifierType | PokemonHeldItemModifier;

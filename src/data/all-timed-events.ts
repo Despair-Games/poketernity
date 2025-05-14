@@ -1,4 +1,4 @@
-import type { TimedEvent } from "#app/@types/TimedEvent";
+import type { TimedEvent } from "#types/TimedEvent";
 
 /**
  * Array of the {@linkcode TimedEvent} used in the game.

@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Move } from "../move";
-import { MoveEffectAttr } from "./move-effect-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 export const rapidSpinRemoveTags = [
   BattlerTagType.BIND,

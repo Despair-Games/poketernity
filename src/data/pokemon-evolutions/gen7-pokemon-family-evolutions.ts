@@ -1,4 +1,3 @@
-import { SpeciesId } from "#enums/species-id";
 import {
   DayEvolutionCondition,
   FemaleEvolutionCondition,
@@ -8,15 +7,16 @@ import {
   SpeciesEvolution,
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
-} from "#app/data/pokemon-evolutions";
-import { EvolutionItem } from "#enums/evolution-item";
+} from "#data/pokemon-evolutions";
 import {
   GENERIC_ITEM_EVO_LEVEL,
   HAPPINESS_EVO_LEVEL,
   NAGANADEL_EVO_LEVEL,
   TSAREENA_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.ROWLET]: [new SpeciesEvolution(SpeciesId.DARTRIX, 17, null, null)],

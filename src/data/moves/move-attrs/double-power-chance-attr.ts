@@ -1,11 +1,11 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { NumberHolder } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 
 export const doublePowerChanceMessageFunc = (user: Pokemon, _target: Pokemon, move: Move) => {
   let message: string = "";

@@ -1,5 +1,5 @@
-import type { ModifierType, ModifierTypeFunc } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
+import type { ModifierType, ModifierTypeFunc } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
 
 export function getModifierType(modifierTypeFunc: ModifierTypeFunc): ModifierType {
   const modifierType = modifierTypeFunc();

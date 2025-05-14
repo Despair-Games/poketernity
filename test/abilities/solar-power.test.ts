@@ -1,13 +1,13 @@
-import { SUNNY_WEATHER_TYPES } from "#app/constants/weather-constants";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { getEnumKeys, toDmgValue } from "#app/utils/common-utils";
-import { capitalizeString } from "#app/utils/string-utils";
+import { SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { GameManager } from "#test/test-utils/gameManager";
+import { getEnumKeys, toDmgValue } from "#utils/common-utils";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

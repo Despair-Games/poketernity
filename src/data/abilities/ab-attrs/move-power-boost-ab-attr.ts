@@ -1,8 +1,8 @@
-import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
+import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { NumberHolder } from "#utils/common-utils";
 
 export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private readonly condition: PokemonAttackCondition;

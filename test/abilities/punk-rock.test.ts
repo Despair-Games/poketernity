@@ -1,11 +1,11 @@
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { NumberHolder } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NumberHolder } from "#app/utils/common-utils";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Punk Rock", () => {
   let phaserGame: Phaser.Game;
