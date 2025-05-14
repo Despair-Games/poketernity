@@ -11,9 +11,9 @@ import { UiMode } from "#enums/ui-mode";
 import { EncounterPhase } from "#phases/encounter-phase";
 import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
-import { GameManager } from "#test/test-utils/gameManager";
-import { generateStarter } from "#test/test-utils/gameManagerUtils";
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { generateStarter } from "#test/test-utils/game-manager-utils";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/test-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

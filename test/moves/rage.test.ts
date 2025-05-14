@@ -1,12 +1,12 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 import { Stat } from "#enums/stat";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { GameManager } from "#test/test-utils/game-manager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Rage", () => {
   let phaserGame: Phaser.Game;

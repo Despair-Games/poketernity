@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { PartyUiHandler } from "#ui/party-ui-handler";
 import Phaser from "phaser";

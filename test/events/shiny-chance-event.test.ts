@@ -2,7 +2,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import { Egg } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EventModifierType } from "#enums/event-modifier-type";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import type { TimedEvent } from "#types/TimedEvent";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

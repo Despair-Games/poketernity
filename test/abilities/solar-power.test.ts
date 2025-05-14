@@ -5,7 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { getEnumKeys, toDmgValue } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";

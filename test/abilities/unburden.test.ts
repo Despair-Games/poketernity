@@ -8,7 +8,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#modifier/modifier";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
