@@ -3338,7 +3338,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const starterEntry = globalScene.gameData.starterData[species.speciesId];
 
       const abilityAttr = starterEntry.abilityAttr;
-      const caughtAttr = dexEntry?.caughtAttr || BigInt(0);
+      const caughtAttr = dexEntry?.caughtAttr ?? BigInt(0);
 
       if (!dexEntry.caughtAttr) {
         const props = globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId));
