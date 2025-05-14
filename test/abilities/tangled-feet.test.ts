@@ -40,7 +40,6 @@ describe("Ability - Tangled Feet", () => {
     phaserGame = new Phaser.Game({
       type: Phaser.HEADLESS,
     });
-    console.log(allAbilities[AbilityId.TANGLED_FEET].getAttrs(AbAttrFlag.STAT_MULTIPLIER));
   });
 
   afterEach(() => {
