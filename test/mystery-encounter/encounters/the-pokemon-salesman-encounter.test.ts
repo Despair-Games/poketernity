@@ -18,8 +18,8 @@ import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { GameManager } from "#test/test-utils/gameManager";
-import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

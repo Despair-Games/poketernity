@@ -1,7 +1,7 @@
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatBoosterModifier } from "#modifier/modifier";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { NumberHolder } from "#utils/common-utils";
 import { randItem } from "#utils/random-utils";
 import Phase from "phaser";

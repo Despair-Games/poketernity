@@ -1,12 +1,12 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/game-manager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - G-Max debuff both opponents", () => {
   let phaserGame: Phaser.Game;

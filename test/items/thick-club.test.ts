@@ -2,7 +2,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#modifier/modifier";
 import { modifierTypes } from "#modifier/modifier-types";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { NumberHolder } from "#utils/common-utils";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

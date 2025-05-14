@@ -4,7 +4,7 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import * as RandomUtils from "#utils/random-utils";
 import Phaser from "phaser";

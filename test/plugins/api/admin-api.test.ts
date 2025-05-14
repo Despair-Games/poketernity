@@ -1,6 +1,6 @@
 import { AdminApi } from "#api/admin-api";
-import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
-import { getApiBaseUrl } from "#test/test-utils/testUtils";
+import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
+import { getApiBaseUrl } from "#test/test-utils/test-utils";
 import type {
   LinkAccountToDiscordIdRequest,
   LinkAccountToGoogledIdRequest,

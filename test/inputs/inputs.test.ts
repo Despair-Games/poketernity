@@ -1,7 +1,7 @@
 import cfg_keyboard_qwerty from "#inputs/cfg_keyboard_qwerty";
 import pad_xbox360 from "#inputs/pad_xbox360";
-import { GameManager } from "#test/test-utils/gameManager";
-import { InputsHandler } from "#test/test-utils/inputsHandler";
+import { GameManager } from "#test/test-utils/game-manager";
+import { InputsHandler } from "#test/test-utils/inputs-handler";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

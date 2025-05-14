@@ -1,5 +1,5 @@
 import { MoveResult } from "#enums/move-result";
-import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 //#region Types

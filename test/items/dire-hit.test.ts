@@ -6,7 +6,7 @@ import { UiMode } from "#enums/ui-mode";
 import { TempCritBoosterModifier } from "#modifier/modifier";
 import { CommandPhase } from "#phases/command-phase";
 import { NewBattlePhase } from "#phases/new-battle-phase";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
