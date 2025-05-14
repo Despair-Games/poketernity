@@ -14,21 +14,27 @@ export class TrickRoomAttr extends AddArenaTagAttr {
   }
 
   /**
-   * Grants (+1) for each party member that is outsped by all active opponents,
-   * up to (+3). The AI is discouraged from using Trick Room when the effect is
-   * active to disable the effect.
+   * For each Pokemon in the user's party, this grants (+1) if the Pokemon is outsped
+   * by all active opponents and (-1) otherwise. The total bonus from this effect cannot
+   * be lower than the {@link BAD_MOVE_PENALTY | Bad Move Penalty} nor higher than the
+   * {@link SOFT_EFFECT_SCORE_LIMIT | soft effect score cap}. The AI is discouraged from
+   * using Trick Room when the effect is active to disable the effect.
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     if (globalScene.arena.hasTag(ArenaTagType.TRICK_ROOM)) {
       return BAD_MOVE_PENALTY;
     }
 
-    const numOutspedAllies = user.getParty().filter((ally) => {
+    const allyScores = user.getParty().map((ally) => {
       const allySpd = ally.isActive(true) ? ally.getEffectiveStat(Stat.SPD) : ally.getStat(Stat.SPD);
       const isOutsped = ally.getOpponents().every((opp) => opp.getEffectiveStat(Stat.SPD) > allySpd);
       return isOutsped ? MINOR_EFFECT_SCORE_BONUS : -MINOR_EFFECT_SCORE_BONUS;
-    }).length;
+    });
 
-    return Math.min(numOutspedAllies, SOFT_EFFECT_SCORE_LIMIT);
+    return Phaser.Math.Clamp(
+      allyScores.reduce((total, score) => total + score, 0),
+      BAD_MOVE_PENALTY,
+      SOFT_EFFECT_SCORE_LIMIT,
+    );
   }
 }

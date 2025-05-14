@@ -4,6 +4,7 @@ import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
+import { isBetween } from "#app/utils/common-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -21,7 +22,7 @@ export class GravityAttr extends AddArenaTagAttr {
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const isBenefitMove = (pokemonMove: PokemonMove) => {
       const move = pokemonMove.getMove();
-      return !move.hasAttr(OneHitKOAttr) && move.accuracy < 80 && move.accuracy >= 0;
+      return !move.hasAttr(OneHitKOAttr) && isBetween(move.accuracy, 0, 79);
     };
 
     const benefittingAllies = user
