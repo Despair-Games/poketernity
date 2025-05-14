@@ -6,6 +6,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/G-Max_Wildfire_(move) | G-Max Wildfire}
+ * and similar moves. Deals 1/6 max HP damage to foes that are not
+ * of a specific {@link ElementalType | type} at the end of each turn for 4 turns.
+ * @extends AddArenaTagAttr
+ */
 export class TypeImmuneDamageOverTimeAttr extends AddArenaTagAttr {
   constructor(tagType: ArenaTagType) {
     super(tagType);

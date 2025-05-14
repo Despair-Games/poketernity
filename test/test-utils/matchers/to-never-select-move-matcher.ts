@@ -3,7 +3,7 @@ import type { EnemyPokemon } from "#app/field/enemy-pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { coerceArray } from "#app/utils/common-utils";
 import { MoveId } from "#enums/move-id";
-import { getEnemyMoveChoices } from "#test/ai/utils/enemy-command-utils";
+import { getEnemyMoveChoices } from "#test/test-utils/enemy-command-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 

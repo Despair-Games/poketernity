@@ -6,6 +6,11 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Tailwind_(move) | Tailwind}.
+ * Doubles the Speed of the user and its party for 4 turns.
+ * @extends AddArenaTagAttr
+ */
 export class TailwindAttr extends AddArenaTagAttr {
   constructor() {
     super(ArenaTagType.TAILWIND, ArenaTagRelativeSide.USER, { turnCount: 4, failOnOverlap: true });

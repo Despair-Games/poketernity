@@ -8,6 +8,12 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Stat } from "#enums/stat";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) | Trick Room}.
+ * While its effect is active, Pokemon will act in reverse
+ * {@link Stat.SPD | Speed} order within their priority bracket.
+ * @extends AddArenaTagAttr
+ */
 export class TrickRoomAttr extends AddArenaTagAttr {
   constructor() {
     super(ArenaTagType.TRICK_ROOM, ArenaTagRelativeSide.ALL, { turnCount: 5 });

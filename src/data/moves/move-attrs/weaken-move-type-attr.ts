@@ -7,6 +7,11 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Mud_Sport | "Sport" moves}.
+ * Halves the power of ALL moves of a specific type for 5 turns.
+ * @extends AddArenaTagAttr
+ */
 export class WeakenMoveTypeAttr extends AddArenaTagAttr {
   constructor(tagType: ArenaTagType) {
     super(tagType, ArenaTagRelativeSide.ALL, { turnCount: 5, failOnOverlap: true });

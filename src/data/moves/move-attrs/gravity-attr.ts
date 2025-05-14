@@ -9,6 +9,12 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Gravity_(move) | Gravity}.
+ * Causes all Pokemon on the field to become {@link Pokemon.isGrounded | "grounded"}
+ * for 5 turns. This also increases the accuracy of all non-OHKO moves by 1.67x.
+ * @extends AddArenaTagAttr
+ */
 export class GravityAttr extends AddArenaTagAttr {
   constructor() {
     super(ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5, failOnOverlap: true });

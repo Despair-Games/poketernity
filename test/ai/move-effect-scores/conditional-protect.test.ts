@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllMoves } from "#test/ai/utils/enemy-command-utils";
+import { revealAllMoves } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

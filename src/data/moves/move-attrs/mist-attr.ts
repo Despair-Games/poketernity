@@ -5,6 +5,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
+/**
+ * Attribute to apply the effect of {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) | Mist}.
+ * Protects the user and its party from having their stat stages
+ * reduced by other Pokemon for 5 turns.
+ * @extends AddArenaTagAttr
+ */
 export class MistAttr extends AddArenaTagAttr {
   constructor() {
     super(ArenaTagType.MIST, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true });

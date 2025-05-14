@@ -4,8 +4,8 @@ import {
   MatBlockConditionFunc,
   QuickGuardConditionFunc,
   WideGuardConditionFunc,
-  type ProtectConditionFunc,
 } from "#app/data/arena-tag";
+import type { ProtectConditionFunc } from "#app/@types/ProtectConditionFunc";
 import type { Move } from "#app/data/moves/move";
 import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
 import type { EnemyPokemon } from "#app/field/enemy-pokemon";
@@ -14,6 +14,12 @@ import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
+/**
+ * Attribute to apply team-wide protection against certain moves
+ * for a turn. Incoming moves are negated if they meet the effect's
+ * associated {@linkcode ProtectConditionFunc | condition}.
+ * @extends AddArenaTagAttr
+ */
 export class ConditionalProtectAttr extends AddArenaTagAttr {
   constructor(tagType: ArenaTagType) {
     super(tagType, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true });

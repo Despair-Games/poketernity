@@ -8,6 +8,12 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 
+/**
+ * Attribute to apply the effect of {@link https://bulbapedia.bulbagarden.net/wiki/Ion_Deluge_(move) | Ion Deluge}.
+ * Converts all {@linkcode ElementalType.NORMAL | NORMAL}-type moves to
+ * {@linkcode ElementalType.ELECTRIC | ELECTRIC}-type for the rest of the turn.
+ * @extends AddArenaTagAttr
+ */
 export class IonDelugeAttr extends AddArenaTagAttr {
   constructor(failOnOverlap: boolean = true) {
     super(ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1, failOnOverlap });

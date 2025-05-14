@@ -7,6 +7,11 @@ import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Fairy_Lock_(move) | Fairy Lock}.
+ * Prevents all active Pokemon from fleeing or switching out during their next turn.
+ * @extends AddArenaTagAttr
+ */
 export class FairyLockAttr extends AddArenaTagAttr {
   constructor() {
     super(ArenaTagType.FAIRY_LOCK, ArenaTagRelativeSide.ALL, { turnCount: 2, failOnOverlap: true });

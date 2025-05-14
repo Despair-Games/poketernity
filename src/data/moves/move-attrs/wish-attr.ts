@@ -7,6 +7,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Wish_(move) | Wish}.
+ * Heals the {@linkcode Pokemon} in the user's position at the end of the next
+ * turn after use.
+ * @extends AddArenaTagAttr
+ */
 export class WishAttr extends AddArenaTagAttr {
   constructor() {
     super(ArenaTagType.WISH, ArenaTagRelativeSide.USER, { turnCount: 2, failOnOverlap: true });

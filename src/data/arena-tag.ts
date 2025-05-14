@@ -6,6 +6,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
+import type { ProtectConditionFunc } from "#app/@types/ProtectConditionFunc";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -276,8 +277,6 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
     }
   }
 }
-
-export type ProtectConditionFunc = (moveId: MoveId) => boolean;
 
 /**
  * Class to implement conditional team protection

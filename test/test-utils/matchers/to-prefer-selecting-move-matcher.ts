@@ -1,6 +1,6 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
-import { getEnemyMoveChoices } from "#test/ai/utils/enemy-command-utils";
+import { getEnemyMoveChoices } from "#test/test-utils/enemy-command-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 

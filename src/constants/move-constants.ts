@@ -19,6 +19,7 @@ export const PROTECT_MOVES = Object.freeze([
   MoveId.SILK_TRAP,
 ]);
 
+/** An array containing the {@linkcode MoveId | MoveIds} for all Status moves that set hazards */
 export const HAZARD_STATUS_MOVES = Object.freeze([
   MoveId.SPIKES,
   MoveId.TOXIC_SPIKES,
