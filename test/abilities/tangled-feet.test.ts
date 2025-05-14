@@ -104,13 +104,11 @@ describe("Ability - Tangled Feet", () => {
       );
     });
 
-    /**
-     * Mold Breaker, Teravolt and Turboblaze bypass the effects of Tangled Feet
-     * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ignoring_Abilities#Ignorable_Abilities | Ignoring Abilities - Bulbapedia}
-     * @see {@link https://www.smogon.com/dex/sv/abilities/mold-breaker/ | Mold Breaker - Smogon}
-     * @see {@link https://www.smogon.com/dex/sv/abilities/teravolt/ | Teravolt - Smogon}
-     * @see {@link https://www.smogon.com/dex/sv/abilities/turboblaze/ | Turboblaze - Smogon}
-     */
+    // Mold Breaker, Teravolt and Turboblaze bypass the effects of Tangled Feet
+    // https://bulbapedia.bulbagarden.net/wiki/Ignoring_Abilities#Ignorable_Abilities
+    // https://www.smogon.com/dex/sv/abilities/mold-breaker/
+    // https://www.smogon.com/dex/sv/abilities/teravolt/
+    // https://www.smogon.com/dex/sv/abilities/turboblaze/
     it.each(ignoringAbilities)("should be bypassed by $abilityName Ability", async ({ abilityId }) => {
       const { override, classicMode, move, field } = game;
       override.enemyAbility(abilityId);
