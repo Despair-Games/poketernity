@@ -13,7 +13,7 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
-import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
+import { DEFAULT_STARTER_IVS, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import { EntryHazardTag } from "#data/arena-tag";
 import { allMoves, allSpecies } from "#data/data-lists";
 import { defaultStarterSpecies } from "#data/default-starters";
@@ -74,7 +74,7 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, getEnumLength, isNil } from "#utils/common-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";

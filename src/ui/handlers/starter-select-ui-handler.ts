@@ -2302,6 +2302,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
    */
   private toggleShinyOff(starterPrefs: StarterAttributes): void {
     starterPrefs.shiny = false;
+    // biome-ignore lint/performance/noDelete: Optimizes local storage size
     delete starterPrefs.variant;
     this.setSpeciesDetails(this.lastSpecies, { shiny: false, variant: 0 });
     this.pokemonShinyIcon.setVisible(false);
