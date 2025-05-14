@@ -4,7 +4,7 @@ import type { initGameSpeed } from "#system/game-speed";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#app/constants/game-constants";
+import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
 import type { Pokemon } from "#field/pokemon";
 import type { nil } from "#types/nil";
 

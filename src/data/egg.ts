@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { clamp } from "#app/utils/common-utils";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import {
@@ -35,6 +34,7 @@ import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
 import type { PlayerPokemon } from "#field/player-pokemon";
+import { clamp } from "#utils/common-utils";
 import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt, randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";

@@ -1,4 +1,4 @@
-import { calcAccuracyMultiplier, clamp } from "#app/utils/common-utils";
+import { calcAccuracyMultiplier, clamp } from "#utils/common-utils";
 import { describe, expect, it } from "vitest";
 
 describe("Utils - Common Utils", () => {

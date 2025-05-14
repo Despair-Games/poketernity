@@ -1,10 +1,10 @@
-import { IGNORING_ABILITIES } from "#app/constants/ability-constants";
+import { IGNORING_ABILITIES } from "#constants/ability-constants";
 import { allMoves } from "#data/data-lists";
-import { capitalizeString } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

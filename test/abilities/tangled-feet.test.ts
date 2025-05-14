@@ -1,8 +1,6 @@
-import { IGNORING_ABILITIES } from "#app/constants/ability-constants";
-import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#app/constants/game-constants";
-import { allAbilities } from "#app/data/data-lists";
-import { calcAccuracyMultiplier } from "#app/utils/common-utils";
-import { capitalizeString } from "#app/utils/string-utils";
+import { IGNORING_ABILITIES } from "#constants/ability-constants";
+import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
+import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
@@ -13,6 +11,8 @@ import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import { arrayOfRange } from "#test/test-utils/testUtils";
+import { calcAccuracyMultiplier } from "#utils/common-utils";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

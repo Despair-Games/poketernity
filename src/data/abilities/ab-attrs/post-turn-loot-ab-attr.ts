@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import { BerryModifier } from "#modifier/modifier";
 import { BerryModifierType } from "#modifier/modifier-type";
-import { clamp } from "#app/utils/common-utils";
+import { clamp } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 

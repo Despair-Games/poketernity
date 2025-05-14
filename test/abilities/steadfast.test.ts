@@ -1,5 +1,4 @@
-import { IGNORING_ABILITIES } from "#app/constants/ability-constants";
-import { capitalizeString } from "#app/utils/string-utils";
+import { IGNORING_ABILITIES } from "#constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -7,6 +6,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
