@@ -19,3 +19,10 @@ export const DETRIMENTAL_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
   AbilityId.KLUTZ,
   AbilityId.SLOW_START,
 ]);
+
+/** Abilities that grant an immunity to Electric-type moves */
+export const ELECTRIC_IMMUNE_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
+  AbilityId.VOLT_ABSORB,
+  AbilityId.LIGHTNING_ROD,
+  AbilityId.MOTOR_DRIVE,
+]);

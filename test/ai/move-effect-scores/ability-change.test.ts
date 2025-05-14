@@ -1,9 +1,8 @@
 import { HIGH_VALUE_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllAbilities } from "#test/ai/utils/enemy-command-utils";
+import { revealAllAbilities } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -42,7 +41,6 @@ describe("Move Effect Scores - Ability Change", () => {
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toPreferSelectingMove(MoveId.WORRY_SEED);
   });
@@ -54,7 +52,6 @@ describe("Move Effect Scores - Ability Change", () => {
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).not.toPreferSelectingMove(MoveId.WORRY_SEED);
   });
@@ -65,7 +62,6 @@ describe("Move Effect Scores - Ability Change", () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).not.toPreferSelectingMove(MoveId.WORRY_SEED);
   });
@@ -77,7 +73,6 @@ describe("Move Effect Scores - Ability Change", () => {
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toNeverSelectMove(MoveId.WORRY_SEED);
   });
@@ -89,7 +84,6 @@ describe("Move Effect Scores - Ability Change", () => {
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
-    enemyPokemon.aiType = AiType.SMART_RANDOM;
 
     expect(enemyPokemon).toNeverSelectMove(MoveId.WORRY_SEED);
   });

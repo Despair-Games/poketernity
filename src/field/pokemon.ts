@@ -1324,7 +1324,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegmentIndex(): number;
 
-  getMoveset(baseOnly?: boolean): PokemonMove[] {
+  /**
+   * Obtains this Pokemon's known moves.
+   * If {@linkcode Overrides.MOVESET_OVERRIDE} is non-empty and this is a {@linkcode PlayerPokemon},
+   * calling this function will reset the Pokemon's moveset to the moves given in the override
+   * (likewise for {@linkcode Overrides.ENEMY_MOVESET_OVERRIDE} and {@linkcode EnemyPokemon}).
+   * @param baseOnly - (Default `false`) If `true`, ignores temporary moveset changes in the Pokemon's
+   * {@linkcode summonData}
+   * @returns An array containing this Pokemon's known {@linkcode PokemonMove | PokemonMoves}
+   */
+  public getMoveset(baseOnly: boolean = false): PokemonMove[] {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
@@ -1344,6 +1353,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return ret;
+  }
+
+  /**
+   * Checks whether this Pokemon knows a specific move.
+   * @param moveId - The {@linkcode MoveId} to check.
+   * @param revealedOnly - (Default `false`) If `true`, limits the search to
+   * moves that the Pokemon has revealed in battle.
+   * @returns `true` if the Pokemon knows the given move
+   */
+  public hasMove(moveId: MoveId, revealedOnly: boolean = false): boolean {
+    return revealedOnly
+      ? this.waveData.revealedMoves.has(moveId)
+      : this.getMoveset().some((mv) => mv.moveId === moveId);
   }
 
   /**

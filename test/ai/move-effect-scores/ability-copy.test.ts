@@ -1,9 +1,8 @@
 import { DETRIMENTAL_ABILITIES } from "#app/constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
-import { AiType } from "#enums/ai-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllAbilities } from "#test/ai/utils/enemy-command-utils";
+import { revealAllAbilities } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -53,7 +52,6 @@ describe("Move Effect Scores - Ability Copy", () => {
 
         revealAllAbilities(game.scene);
         const enemy = game.field.getEnemyPokemon();
-        enemy.aiType = AiType.SMART_RANDOM;
 
         expect(enemy).toPreferSelectingMove(moveId);
       },
@@ -68,7 +66,6 @@ describe("Move Effect Scores - Ability Copy", () => {
 
         revealAllAbilities(game.scene);
         const enemy = game.field.getEnemyPokemon();
-        enemy.aiType = AiType.SMART_RANDOM;
 
         expect(enemy).toNeverSelectMove(moveId);
       },
@@ -85,7 +82,6 @@ describe("Move Effect Scores - Ability Copy", () => {
       const [enemy1, enemy2] = game.scene.getEnemyField();
       game.field.mockAbility(enemy2, abilityId);
       revealAllAbilities(game.scene);
-      enemy1.aiType = AiType.SMART_RANDOM;
 
       expect(enemy1).toPreferSelectingMove(MoveId.DOODLE);
     },

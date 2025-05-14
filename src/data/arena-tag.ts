@@ -6,6 +6,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
+import type { ProtectConditionFunc } from "#app/@types/ProtectConditionFunc";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -277,8 +278,6 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
   }
 }
 
-type ProtectConditionFunc = (arena: Arena, moveId: MoveId) => boolean;
-
 /**
  * Class to implement conditional team protection
  * applies protection based on the attributes of incoming moves
@@ -325,7 +324,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
    * @returns `true` if this tag protected against the attack; `false` otherwise
    */
   override apply(
-    arena: Arena,
+    _arena: Arena,
     simulated: boolean,
     isProtected: BooleanHolder,
     attacker: Pokemon,
@@ -334,7 +333,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   ): boolean {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
-      && this.protectConditionFunc(arena, moveId)
+      && this.protectConditionFunc(moveId)
       && (this.ignoresBypass || !allMoves.get(moveId).checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
     ) {
       if (!isProtected.value) {
@@ -363,7 +362,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
  * @returns `true` if the incoming move's priority is greater than 0.
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
-const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
+export const QuickGuardConditionFunc: ProtectConditionFunc = (moveId: MoveId) => {
   const move = allMoves.get(moveId);
   const effectPhase = globalScene.phaseManager.getCurrentPhase();
 
@@ -393,7 +392,7 @@ class QuickGuardTag extends ConditionalProtectTag {
  * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
-const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
+export const WideGuardConditionFunc: ProtectConditionFunc = (moveId: MoveId) => {
   const move = allMoves.get(moveId);
 
   switch (move.moveTarget) {
@@ -424,7 +423,7 @@ class WideGuardTag extends ConditionalProtectTag {
  * @param moveId {@linkcode MoveId} The move to check against this condition.
  * @returns `true` if the incoming move is not a Status move.
  */
-const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
+export const MatBlockConditionFunc: ProtectConditionFunc = (moveId: MoveId) => {
   const move = allMoves.get(moveId);
   return move.category !== MoveCategory.STATUS;
 };
@@ -460,7 +459,7 @@ class MatBlockTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is a Status move, is not a hazard, and does not target all
  * Pokemon or sides of the field.
  */
-const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
+export const CraftyShieldConditionFunc: ProtectConditionFunc = (moveId: MoveId) => {
   const move = allMoves.get(moveId);
   return (
     move.category === MoveCategory.STATUS

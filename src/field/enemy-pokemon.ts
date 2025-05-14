@@ -206,9 +206,18 @@ export class EnemyPokemon extends Pokemon {
    * @returns the sum of the move's AS and ES against the given opponent
    */
   public getMoveScore(opponent: Pokemon, move: Move): number {
+    /** @todo Exceptions should be based on conditions, not moves */
     const meetsConditions =
       move.applyConditions(this, opponent, move)
-      || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
+      || [
+        MoveId.SUCKER_PUNCH,
+        MoveId.UPPER_HAND,
+        MoveId.THUNDERCLAP,
+        MoveId.WIDE_GUARD,
+        MoveId.QUICK_GUARD,
+        MoveId.MAT_BLOCK,
+        MoveId.CRAFTY_SHIELD,
+      ].includes(move.id);
 
     const attackScore = this.getAttackScore(opponent, move);
     const isKnockOut = attackScore >= 4;
@@ -444,10 +453,10 @@ export class EnemyPokemon extends Pokemon {
       };
     } else if (move.isFieldTarget()) {
       /**
-       * Field-targeting effects are internally self-targeted when
-       * evaluating score.
+       * Field-targeting effects are internally self-targeted during
+       * score evaluation.
        */
-      const score = move.getEffectScore(this, this);
+      const score = this.getMoveScore(this, move);
 
       return {
         moveId: move.id,
