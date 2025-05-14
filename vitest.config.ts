@@ -1,12 +1,12 @@
 import { defineProject } from "vitest/config";
-import { defaultConfig } from "./vite.config";
 import { BaseSequencer, type TestSpecification } from "vitest/node";
+import { defaultConfig } from "./vite.config";
 
 export default defineProject(({ mode }) => ({
   ...defaultConfig,
   test: {
     testTimeout: 20000,
-    setupFiles: ["./test/matchers.setup.ts", "./test/fontFace.setup.ts", "./test/vitest.setup.ts"],
+    setupFiles: ["./test/matchers.setup.ts", "./test/font-face.setup.ts", "./test/vitest.setup.ts"],
     sequence: {
       sequencer: MySequencer,
     },

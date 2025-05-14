@@ -6,7 +6,7 @@ import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/ba
 import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
 import { PostKnockoutPhase } from "#phases/post-knockout-phase";
-import type { GameManager } from "#test/test-utils/gameManager";
+import type { GameManager } from "#test/test-utils/game-manager";
 import type { MessageUiHandler } from "#ui/message-ui-handler";
 import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";

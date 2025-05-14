@@ -5,7 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";
-import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 //#region Types

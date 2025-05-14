@@ -2,8 +2,8 @@ import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
-import { getMovePosition } from "#test/test-utils/gameManagerUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { getMovePosition } from "#test/test-utils/game-manager-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

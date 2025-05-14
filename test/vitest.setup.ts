@@ -1,8 +1,8 @@
 import "vitest-canvas-mock";
 
+import { MockConsole } from "#test/test-utils/mocks/mock-console";
+import { initDataForTests, initTestFile } from "#test/test-utils/test-file-initialization";
 import { afterAll, beforeAll, vi } from "vitest";
-import { initDataForTests, initTestFile } from "#test/test-utils/testFileInitialization";
-import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 
 //#region Mocking
 
