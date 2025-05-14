@@ -1,7 +1,5 @@
 import { IGNORING_ABILITIES } from "#constants/ability-constants";
 import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
-import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -68,9 +66,6 @@ describe("Ability - Tangled Feet", () => {
       vi.spyOn(enemyPkm, "getAccuracyMultiplier");
 
       game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-      move.use(MoveId.SPLASH);
-      await move.selectEnemyMove(MoveId.TACKLE);
-      await game.toEndOfTurn();
       move.use(MoveId.SPLASH);
       await move.selectEnemyMove(MoveId.TACKLE);
       await game.toEndOfTurn();
