@@ -1,16 +1,16 @@
-import { biomeLinks } from "#app/data/biome-links";
-import { getBiomeName } from "#app/data/biome-utils";
 import { globalScene } from "#app/global-scene";
-import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { SwitchBiomePhase } from "#app/phases/switch-biome-phase";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { randSeedInt } from "#app/utils/random-utils";
+import { biomeLinks } from "#data/biome-links";
+import { getBiomeName } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import { MapModifier, MoneyInterestModifier } from "#modifier/modifier";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { PartyHealPhase } from "#phases/party-heal-phase";
+import { SwitchBiomePhase } from "#phases/switch-biome-phase";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { randSeedInt } from "#utils/random-utils";
 
 export class SelectBiomePhase extends BattlePhase {
   override readonly id = PhaseId.SELECT_BIOME;

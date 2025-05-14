@@ -1,12 +1,12 @@
-import type { EntryHazardTag } from "#app/data/arena-tag";
-import { allMoves } from "#app/data/data-lists";
-import { toDmgValue } from "#app/utils/common-utils";
+import type { EntryHazardTag } from "#data/arena-tag";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
+import { toDmgValue } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 

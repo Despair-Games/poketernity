@@ -1,6 +1,6 @@
-import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { HighestStatBoostTag } from "#app/data/battler-tags/highest-stat-boost-tag";
-import type { WeatherBattlerTag } from "#app/data/battler-tags/weather-battler-tag";
+import type { BattlerTag } from "#battler-tags/battler-tag";
+import { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
+import type { WeatherBattlerTag } from "#battler-tags/weather-battler-tag";
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";

@@ -1,8 +1,8 @@
-import { LARGE_NUMBER_ABBREVIATIONS } from "#app/constants/game-constants";
-import type { Pokemon } from "#app/field/pokemon";
-import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
+import { LARGE_NUMBER_ABBREVIATIONS } from "#constants/game-constants";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#system/supported-languages";
 import i18next from "i18next";
 
 export function toReadableString(str: string): string {

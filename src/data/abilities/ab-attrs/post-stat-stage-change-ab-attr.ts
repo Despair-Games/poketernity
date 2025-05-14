@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostStatStageChangeAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

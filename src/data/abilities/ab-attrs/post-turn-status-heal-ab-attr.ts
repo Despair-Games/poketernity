@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * This attribute will heal 1/8th HP if the ability pokemon has the correct status.

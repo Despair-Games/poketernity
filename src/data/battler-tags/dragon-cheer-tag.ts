@@ -1,8 +1,8 @@
-import { CritBoostTag } from "#app/data/battler-tags/crit-boost-tag";
-import type { Pokemon } from "#app/field/pokemon";
+import { CritBoostTag } from "#battler-tags/crit-boost-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Tag for the effects of Dragon Cheer, which boosts the critical hit ratio of the user's ally.

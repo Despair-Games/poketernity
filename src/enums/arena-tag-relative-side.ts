@@ -1,6 +1,6 @@
 // tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Denotes which side of the field an effect applies,

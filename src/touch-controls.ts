@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { hasTouchscreen } from "#app/utils/app-utils";
 import { Button } from "#enums/buttons";
+import { settings } from "#system/settings-manager";
+import { hasTouchscreen } from "#utils/app-utils";
 import EventEmitter = Phaser.Events.EventEmitter;
 
 const repeatInputDelayMillis = 250;

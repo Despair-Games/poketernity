@@ -1,4 +1,4 @@
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";

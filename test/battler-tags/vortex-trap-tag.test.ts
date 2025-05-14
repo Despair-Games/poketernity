@@ -1,11 +1,11 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { toDmgValue } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import { toDmgValue } from "#utils/common-utils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("BattlerTag - VortexTrapTag", () => {
   describe("lapse behavior", () => {

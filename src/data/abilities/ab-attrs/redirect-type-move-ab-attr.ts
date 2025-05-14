@@ -1,8 +1,8 @@
-import { allMoves } from "#app/data/data-lists";
-import type { MoveId } from "#enums/move-id";
+import { RedirectMoveAbAttr } from "#abilities/redirect-move-ab-attr";
+import { allMoves } from "#data/data-lists";
 import type { ElementalType } from "#enums/elemental-type";
-import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
   public readonly type: ElementalType;

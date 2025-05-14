@@ -1,11 +1,11 @@
-import type { Move } from "#app/data/moves/move";
-import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
-import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability) | Tera Shell}

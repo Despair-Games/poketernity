@@ -1,4 +1,4 @@
-import { allSpecies } from "#app/data/data-lists";
+import { allSpecies } from "#data/data-lists";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
 import { describe, expect, it } from "vitest";

@@ -1,8 +1,8 @@
-import type { nil } from "#app/@types/nil";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerIndex } from "#enums/battler-index";
-import { FieldPhase } from "./abstract-field-phase";
+import type { Pokemon } from "#field/pokemon";
+import { FieldPhase } from "#phases/abstract-field-phase";
+import type { nil } from "#types/nil";
 
 /**
  * Provides helper functions to get the pokemon involved in the phase

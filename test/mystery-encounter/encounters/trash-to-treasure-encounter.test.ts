@@ -1,15 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as InitMoveAnim from "#app/data/init/init-move-anim";
-import { TrashToTreasureEncounter } from "#app/data/mystery-encounters/encounters/trash-to-treasure-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
@@ -19,12 +8,23 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { PokemonMove } from "#field/pokemon-move";
+import * as InitMoveAnim from "#init/init-move-anim";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { TrashToTreasureEncounter } from "#mystery-encounters/trash-to-treasure-encounter";
+import { CommandPhase } from "#phases/command-phase";
+import type { MovePhase } from "#phases/move-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import * as MoveAnimUtils from "#utils/move-anim-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/trashToTreasure";

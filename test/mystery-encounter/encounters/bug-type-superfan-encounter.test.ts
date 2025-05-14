@@ -1,14 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { BugTypeSuperfanEncounter } from "#app/data/mystery-encounters/encounters/bug-type-superfan-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as encounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
-import { CommandPhase } from "#app/phases/command-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -17,6 +7,15 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import { PokemonMove } from "#field/pokemon-move";
+import { ContactHeldItemTransferChanceModifier } from "#modifier/modifier";
+import { BugTypeSuperfanEncounter } from "#mystery-encounters/bug-type-superfan-encounter";
+import * as encounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { CommandPhase } from "#phases/command-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -24,6 +23,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/bugTypeSuperfan";

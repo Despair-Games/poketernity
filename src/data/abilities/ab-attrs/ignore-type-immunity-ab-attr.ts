@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
 
 export class IgnoreTypeImmunityAbAttr extends AbAttr {
   private readonly defenderType: ElementalType;

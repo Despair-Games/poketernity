@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { coerceArray, fixedNumber } from "#app/utils/common-utils";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
+import { coerceArray, fixedNumber } from "#utils/common-utils";
 
 type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
 

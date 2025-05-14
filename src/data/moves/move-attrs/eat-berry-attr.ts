@@ -1,13 +1,13 @@
-import type { HealFromBerryUseAbAttr } from "#app/data/abilities/ab-attrs/heal-from-berry-use-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getBerryEffectFunc } from "#app/data/berry";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
-import { BooleanHolder } from "#app/utils/common-utils";
+import { getBerryEffectFunc } from "#data/berry";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import { type BerryModifier, PreserveBerryModifier } from "#modifier/modifier";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Attribute that causes targets of the move to eat a berry.

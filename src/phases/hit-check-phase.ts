@@ -1,18 +1,9 @@
-import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
-import type { ProtectedTag } from "#app/data/battler-tags/protected-tag";
-import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
-import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
-import { ToxicAccuracyAttr } from "#app/data/moves/move-attrs/toxic-accuracy-attr";
-import type { TypeDamageMultiplier } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { BooleanHolder } from "#app/utils/common-utils";
-import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import {
-  PROTECTION_BATTLER_TAG_TYPES,
-  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
-} from "#app/constants/battler-tag-constants";
+import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
+import type { ProtectedTag } from "#battler-tags/protected-tag";
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import { PROTECTION_BATTLER_TAG_TYPES, SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
@@ -21,8 +12,14 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { PokemonPhase } from "./abstract-pokemon-phase";
-import { BideEffectAttr } from "#app/data/moves/move-attrs/bide-effect-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import { BideEffectAttr } from "#moves/bide-effect-attr";
+import { HitsTagAttr } from "#moves/hits-tag-attr";
+import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import { ToxicAccuracyAttr } from "#moves/toxic-accuracy-attr";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { BooleanHolder } from "#utils/common-utils";
 
 //#region Types
 

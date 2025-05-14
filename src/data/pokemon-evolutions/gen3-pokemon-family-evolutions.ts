@@ -1,4 +1,3 @@
-import { SpeciesId } from "#enums/species-id";
 import {
   BabySpeciesFriendshipEvolutionCondition,
   DayEvolutionCondition,
@@ -8,13 +7,14 @@ import {
   type PokemonEvolutions,
   ShedinjaEvoCondition,
   SpeciesEvolution,
-} from "#app/data/pokemon-evolutions";
-import { EvolutionItem } from "#enums/evolution-item";
+} from "#data/pokemon-evolutions";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   BABY_HAPPINESS_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { EvolutionItem } from "#enums/evolution-item";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.TREECKO]: [new SpeciesEvolution(SpeciesId.GROVYLE, 16, null, null)],

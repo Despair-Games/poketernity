@@ -1,10 +1,10 @@
+import { ApiBase } from "#api/api-base";
 import type {
   GetSystemSavedataRequest,
   UpdateSystemSavedataRequest,
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
-} from "#app/@types/SystemSavedataApi";
-import { ApiBase } from "#app/plugins/api/api-base";
+} from "#types/SystemSavedataApi";
 
 /**
  * A wrapper for system savedata API requests.

@@ -1,36 +1,9 @@
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants/mystery-encounter-constants";
-import { Ability } from "#app/data/abilities/ability";
-import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  generateModifierType,
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-  loadCustomMovesForEncounter,
-  selectPokemonForOption,
-  setEncounterRewards,
-} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  applyAbilityOverrideToPokemon,
-  applyModifierTypeToPlayerPokemon,
-} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
-import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
+import { Ability } from "#abilities/ability";
+import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
 import { globalScene } from "#app/global-scene";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { randSeedInt, randSeedShuffle } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BerryType } from "#enums/berry-type";
@@ -48,6 +21,33 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { showEncounterDialogue, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import {
+  generateModifierType,
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  loadCustomMovesForEncounter,
+  selectPokemonForOption,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import {
+  applyAbilityOverrideToPokemon,
+  applyModifierTypeToPlayerPokemon,
+} from "#mystery-encounters/encounter-pokemon-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";

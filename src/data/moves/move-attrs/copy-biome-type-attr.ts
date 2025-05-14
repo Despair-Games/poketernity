@@ -1,12 +1,12 @@
-import { TerrainType } from "#enums/terrain-type";
-import { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { BiomeId } from "#enums/biome-id";
+import { ElementalType } from "#enums/elemental-type";
+import { TerrainType } from "#enums/terrain-type";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import i18next from "i18next";
 
 /**
  * Attribute to change the user's type based on the current biome.

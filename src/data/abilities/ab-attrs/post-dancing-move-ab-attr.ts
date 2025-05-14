@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
+import { PostMoveUsedAbAttr } from "#abilities/post-move-used-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { BattlerIndex } from "#enums/battler-index";
-import { PostMoveUsedAbAttr } from "./post-move-used-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
 
 /**
  * Triggers after a dance move is used either by the opponent or the player

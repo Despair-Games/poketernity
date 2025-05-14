@@ -1,10 +1,10 @@
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
 import { Stat } from "#enums/stat";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveCategoryAttr } from "#app/data/moves/move-attrs/variable-move-category-attr";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change move category to match the user's highest effective offensive stat.

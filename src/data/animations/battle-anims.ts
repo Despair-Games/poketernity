@@ -1,14 +1,14 @@
-import type { LegacyAnimConfig, AnimFrame } from "#app/data/animations/anim-config";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import type { Pokemon } from "#app/field/pokemon";
+import type { AnimFrame, LegacyAnimConfig } from "#animations/anim-config";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { getEnumValues, getFrameMs, isNil } from "#app/utils/common-utils";
-import type { nil } from "#app/@types/nil";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import { settings } from "#system/settings-manager";
+import type { nil } from "#types/nil";
+import { getEnumValues, getFrameMs, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 interface GraphicFrameData {

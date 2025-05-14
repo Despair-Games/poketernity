@@ -1,16 +1,16 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { SpeciesId } from "#enums/species-id";
-import { EvolutionItem } from "#enums/evolution-item";
 import { globalScene } from "#app/global-scene";
-import { TimeOfDay } from "#enums/time-of-day";
-import type { MoveId } from "#enums/move-id";
-import { ElementalType } from "#enums/elemental-type";
-import { Gender } from "#enums/gender";
-import { randSeedInt } from "#app/utils/random-utils";
-import { PokeballType } from "#enums/pokeball-type";
-import { WeatherType } from "#enums/weather-type";
 import type { BiomeId } from "#enums/biome-id";
+import { ElementalType } from "#enums/elemental-type";
+import { EvolutionItem } from "#enums/evolution-item";
+import { Gender } from "#enums/gender";
+import type { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
+import { PokeballType } from "#enums/pokeball-type";
+import type { SpeciesId } from "#enums/species-id";
+import { TimeOfDay } from "#enums/time-of-day";
+import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
+import { randSeedInt } from "#utils/random-utils";
 
 /**
  * Pokemon Evolution tuple type consisting of:

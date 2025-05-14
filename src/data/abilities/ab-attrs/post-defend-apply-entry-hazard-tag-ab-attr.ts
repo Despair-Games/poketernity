@@ -1,10 +1,10 @@
-import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import type { EntryHazardTag } from "#app/data/arena-tag";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { EntryHazardTag } from "#data/arena-tag";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
 
 export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;

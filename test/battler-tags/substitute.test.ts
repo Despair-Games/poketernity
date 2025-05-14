@@ -1,21 +1,21 @@
-import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
-import type { TurnMove } from "#app/@types/TurnMove";
 import type BattleScene from "#app/battle-scene";
-import { BindTag } from "#app/data/battler-tags/bind-tag";
-import { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import { allMoves } from "#app/data/data-lists";
-import { AttackMove } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import * as messages from "#app/messages";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { BindTag } from "#battler-tags/bind-tag";
+import { SubstituteTag } from "#battler-tags/substitute-tag";
+import { allMoves } from "#data/data-lists";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import { AttackMove } from "#moves/move";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { PokemonTurnData } from "#types/PokemonTurnData";
+import type { TurnMove } from "#types/TurnMove";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**

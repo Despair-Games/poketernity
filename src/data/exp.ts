@@ -1,9 +1,9 @@
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * A look up table containing the total amount of EXP required to reach each level (for the first `100` levels), ordered by growth rate:

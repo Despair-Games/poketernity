@@ -1,7 +1,7 @@
-import { isNil } from "#app/utils/common-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Nature } from "#enums/nature";
+import { isNil } from "#utils/common-utils";
 
 /**
  * Data that can customize a Pokemon in non-standard ways from its Species

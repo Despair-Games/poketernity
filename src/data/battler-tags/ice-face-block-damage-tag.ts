@@ -1,9 +1,9 @@
-import { FormBlockDamageTag } from "#app/data/battler-tags/form-block-damage-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { FormBlockDamageTag } from "#battler-tags/form-block-damage-tag";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Provides the additional weather-based effects of the Ice Face ability

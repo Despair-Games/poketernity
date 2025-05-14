@@ -1,6 +1,6 @@
+import { FieldMovePowerBoostAbAttr } from "#abilities/field-move-power-boost-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { MoveCategory } from "#enums/move-category";
-import { FieldMovePowerBoostAbAttr } from "./field-move-power-boost-ab-attr";
 
 /**
  * Boosts the power of moves in specified categories.

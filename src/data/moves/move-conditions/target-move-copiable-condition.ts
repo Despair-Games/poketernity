@@ -1,7 +1,7 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * TODO: review this

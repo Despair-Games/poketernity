@@ -1,11 +1,11 @@
-import { chargeAnims } from "#app/data/animations/charge-anims";
-import { moveAnims } from "#app/data/animations/move-anims";
-import { allMoves } from "#app/data/data-lists";
-import type { ChargingMove } from "#app/data/moves/move";
-import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";
-import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
-import { loadAnimAssets } from "#app/utils/anim-utils";
+import { chargeAnims } from "#animations/charge-anims";
+import { moveAnims } from "#animations/move-anims";
+import { allMoves } from "#data/data-lists";
 import type { MoveId } from "#enums/move-id";
+import { BeakBlastHeaderAttr } from "#moves/beak-blast-header-attr";
+import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
+import type { ChargingMove } from "#moves/move";
+import { loadAnimAssets } from "#utils/anim-utils";
 
 export function loadMoveAnimAssets(moveIds: MoveId[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {

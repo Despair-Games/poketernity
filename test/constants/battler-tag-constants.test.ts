@@ -7,7 +7,7 @@ import {
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
   VORTEX_TRAPPED_BATTLER_TAG_TYPES,
-} from "#app/constants/battler-tag-constants";
+} from "#constants/battler-tag-constants";
 import { describe, expect, it } from "vitest";
 
 describe("Utils - Battler Tag Types Utils", () => {

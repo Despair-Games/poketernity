@@ -1,19 +1,19 @@
-import type { PreSwitchOutAbAttr } from "#app/data/abilities/ab-attrs/pre-switch-out-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import { getPokeballTintColor } from "#app/data/pokeball";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
-import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
+import { getPokeballTintColor } from "#data/pokeball";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import type { SwitchEffectTransferModifier } from "#modifier/modifier";
+import { PostSummonPhase } from "#phases/post-summon-phase";
+import { SummonPhase } from "#phases/summon-phase";
 import i18next from "i18next";
 
 export class SwitchSummonPhase extends SummonPhase {

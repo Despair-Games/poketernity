@@ -1,22 +1,22 @@
-import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
-import type { CommandPhase } from "#app/phases/command-phase";
-import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import type { SelectTargetPhase } from "#app/phases/select-target-phase";
-import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
-import { coerceArray } from "#app/utils/common-utils";
+import { allMoves } from "#data/data-lists";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { getMoveTargets } from "#moves/move";
+import type { CommandPhase } from "#phases/command-phase";
+import type { EnemyCommandPhase } from "#phases/enemy-command-phase";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
+import type { SelectTargetPhase } from "#phases/select-target-phase";
 import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
+import type { FightUiHandler } from "#ui/fight-ui-handler";
+import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
+import { coerceArray } from "#utils/common-utils";
 import { vi } from "vitest";
 
 /**

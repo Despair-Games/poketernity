@@ -1,16 +1,9 @@
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui-constants";
-import { getLevelRelExp } from "#app/data/exp";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { getTypeRgb } from "#app/data/type";
-import { getVariantTint } from "#app/data/variant";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { BattleFlyout } from "#app/ui/components/battle-flyout";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber } from "#app/utils/common-utils";
+import { CANVAS_SCALE, GAME_WIDTH } from "#constants/ui-constants";
+import { getLevelRelExp } from "#data/exp";
+import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
+import { getTypeRgb } from "#data/type";
+import { getVariantTint } from "#data/variant";
 import { ElementalType } from "#enums/elemental-type";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { Gender } from "#enums/gender";
@@ -18,6 +11,13 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { settings } from "#system/settings-manager";
+import { BattleFlyout } from "#ui/battle-flyout";
+import { addTextObject, setTextColor } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {

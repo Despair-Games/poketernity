@@ -1,12 +1,12 @@
 import { globalScene } from "#app/global-scene";
-import { ExpBoosterModifier } from "#app/modifier/modifier";
-import { NumberHolder } from "#app/utils/common-utils";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
-import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
-import { LevelUpPhase } from "./level-up-phase";
-import { settings } from "#app/system/settings/settings-manager";
 import { PhaseId } from "#enums/phase-id";
+import { ExpBoosterModifier } from "#modifier/modifier";
+import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import { LevelUpPhase } from "#phases/level-up-phase";
+import { settings } from "#system/settings-manager";
+import { NumberHolder } from "#utils/common-utils";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   override readonly id = PhaseId.SHOW_PARTY_EXP_BAR;

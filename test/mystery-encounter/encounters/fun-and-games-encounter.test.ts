@@ -1,13 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { CommandPhase } from "#app/phases/command-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
@@ -17,12 +9,20 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import { FunAndGamesEncounter } from "#mystery-encounters/fun-and-games-encounter";
+import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { CommandPhase } from "#phases/command-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/funAndGames";

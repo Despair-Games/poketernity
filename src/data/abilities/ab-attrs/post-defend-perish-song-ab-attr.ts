@@ -1,10 +1,10 @@
-import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveFlags } from "#enums/move-flags";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 import i18next from "i18next";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 /**
  * This ability applies the Perish Song tag to the attacking pokemon

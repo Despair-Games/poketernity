@@ -1,6 +1,4 @@
-import { allMoves } from "#app/data/data-lists";
-import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { toDmgValue } from "#app/utils/common-utils";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -9,7 +7,9 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { FlinchAttr } from "#moves/flinch-attr";
 import { GameManager } from "#test/test-utils/gameManager";
+import { toDmgValue } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

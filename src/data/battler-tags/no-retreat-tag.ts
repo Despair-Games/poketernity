@@ -1,9 +1,9 @@
-import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
-import type { Pokemon } from "#app/field/pokemon";
-import { TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { TrappedTag } from "#battler-tags/trapped-tag";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * BattlerTag implementing No Retreat's trapping effect.

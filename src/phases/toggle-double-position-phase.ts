@@ -1,7 +1,7 @@
-import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "./abstract-battle-phase";
+import { FieldPosition } from "#enums/field-position";
 import { PhaseId } from "#enums/phase-id";
+import { BattlePhase } from "#phases/abstract-battle-phase";
 
 export class ToggleDoublePositionPhase extends BattlePhase {
   override readonly id = PhaseId.TOGGLE_DOUBLE_POSITION;

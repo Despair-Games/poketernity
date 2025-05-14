@@ -1,6 +1,6 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { AddBattlerTagHeaderAttr } from "#app/data/moves/move-attrs/add-battler-tag-header-attr";
 import { ChargeAnim } from "#enums/charge-anim";
+import { AddBattlerTagHeaderAttr } from "#moves/add-battler-tag-header-attr";
 
 /**
  * Header attribute to implement the "charge phase" of Beak Blast at the beginning of a turn.

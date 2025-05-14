@@ -1,5 +1,5 @@
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
+import { HitsTagAttr } from "#moves/hits-tag-attr";
 
 /**
  * Used for moves that will always hit for a given tag but also doubles damage.

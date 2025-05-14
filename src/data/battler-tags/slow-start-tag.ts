@@ -1,10 +1,10 @@
-import { AbilityBattlerTag } from "#app/data/battler-tags/ability-battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**

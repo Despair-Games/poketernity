@@ -1,10 +1,10 @@
-import { allMoves } from "#app/data/data-lists";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { coerceArray } from "#app/utils/common-utils";
+import { allMoves } from "#data/data-lists";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import { coerceArray } from "#utils/common-utils";
 
 /**
  * Represents an ongoing in-battle effect associated with a {@linkcode Pokemon}.

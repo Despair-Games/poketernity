@@ -1,25 +1,25 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { EvolutionPhase } from "#app/phases/evolution-phase";
+import type { EvolutionPhase } from "#phases/evolution-phase";
 // -- end tsdoc imports --
 
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
-import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { achvs } from "#app/system/achievements";
-import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { fixedNumber } from "#app/utils/common-utils";
+import type { SpeciesFormChange } from "#data/pokemon-forms";
+import { getSpeciesFormChangeMessage } from "#data/pokemon-forms";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
-import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "./end-evolution-phase";
-import { LearnMovePhase } from "./learn-move-phase";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
+import { EndEvolutionPhase } from "#phases/end-evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
+import { achvs } from "#system/achievements";
+import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { fixedNumber } from "#utils/common-utils";
 
 /**
  * A phase for handling certain form changes for player Pokemon.

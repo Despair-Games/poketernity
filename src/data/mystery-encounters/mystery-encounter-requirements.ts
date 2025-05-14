@@ -1,10 +1,6 @@
-import { allAbilities } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { coerceArray, isNil } from "#app/utils/common-utils";
+import { allAbilities } from "#data/data-lists";
+import { pokemonFormChanges } from "#data/pokemon-forms";
 import type { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -17,7 +13,11 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
-import { SpeciesFormChangeItemTrigger } from "../species-form-change-triggers/species-form-change-item-trigger";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { coerceArray, isNil } from "#utils/common-utils";
 
 export interface EncounterRequirement {
   meetsRequirement(): boolean; // Boolean to see if a requirement is met

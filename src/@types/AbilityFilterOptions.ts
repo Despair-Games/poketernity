@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
+import type { PokemonWaveData } from "#types/PokemonWaveData";
 // -- end tsdoc imports --
 
 export interface AbilityFilterOptions {

@@ -1,16 +1,16 @@
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
-import { getSplashMessages } from "#app/data/splash-messages";
+import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
 import { timedEventManager } from "#app/timed-event-manager";
-import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
-import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { fixedNumber } from "#app/utils/common-utils";
-import { randItem } from "#app/utils/random-utils";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { getSplashMessages } from "#data/splash-messages";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { OptionSelectModeConfig } from "#ui/option-select-config";
+import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { TimedEventDisplay } from "#ui/timed-event-display";
+import { fixedNumber } from "#utils/common-utils";
+import { randItem } from "#utils/random-utils";
 import i18next from "i18next";
 import { version } from "../../../package.json";
 

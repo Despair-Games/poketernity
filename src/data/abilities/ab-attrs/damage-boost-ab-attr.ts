@@ -1,14 +1,14 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
+import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 // -- end tsdoc imports --
 
-import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import { PreAttackAbAttr } from "./pre-attack-ab-attr";
+import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Class for abilities that boost the damage of moves

@@ -1,11 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import { ATrainersTestEncounter } from "#app/data/mystery-encounters/encounters/a-trainers-test-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { CommandPhase } from "#app/phases/command-phase";
-import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -13,6 +7,12 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
+import { ATrainersTestEncounter } from "#mystery-encounters/a-trainers-test-encounter";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { CommandPhase } from "#phases/command-phase";
+import { PartyHealPhase } from "#phases/party-heal-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,

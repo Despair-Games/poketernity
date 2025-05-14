@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
 
 /**
  * Resets the UI Mode after an evolution is finished.

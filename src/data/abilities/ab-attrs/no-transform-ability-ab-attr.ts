@@ -1,4 +1,4 @@
-import { AbAttr } from "./ab-attr";
+import { AbAttr } from "#abilities/ab-attr";
 export class NoTransformAbilityAbAttr extends AbAttr {
   constructor() {
     super(false);

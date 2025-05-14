@@ -1,9 +1,9 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import Phaser from "phaser";
-import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species-id";
+import { allMoves } from "#data/data-lists";
 import { MoveId } from "#enums/move-id";
-import { allMoves } from "#app/data/data-lists";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Retaliate", () => {
   let phaserGame: Phaser.Game;

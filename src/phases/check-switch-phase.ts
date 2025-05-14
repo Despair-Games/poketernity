@@ -1,17 +1,17 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { SummonMissingPhase } from "#app/phases/summon-missing-phase";
-import { SwitchPhase } from "#app/phases/switch-phase";
-import { settings } from "#app/system/settings/settings-manager";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { MOVE_LOCK_TAG_TYPES } from "#app/constants/battler-tag-constants";
+import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { SummonMissingPhase } from "#phases/summon-missing-phase";
+import { SwitchPhase } from "#phases/switch-phase";
+import { settings } from "#system/settings-manager";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 
 /**

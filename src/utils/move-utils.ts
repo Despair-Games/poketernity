@@ -1,17 +1,17 @@
-import type { AbstractConstructor } from "#app/@types/AbstractConstructor";
-import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move, MoveAttrFilter } from "#app/data/moves/move";
-import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, getEnumKeys, toDmgValue } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import type { Move, MoveAttrFilter } from "#moves/move";
+import type { MoveAttr } from "#moves/move-attr";
+import type { AbstractConstructor } from "#types/AbstractConstructor";
+import { BooleanHolder, getEnumKeys, toDmgValue } from "#utils/common-utils";
 import { t } from "i18next";
 
 //#region Exports

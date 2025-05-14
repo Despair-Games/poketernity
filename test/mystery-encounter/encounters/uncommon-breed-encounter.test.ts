@@ -1,17 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { PokemonMove } from "#app/field/pokemon-move";
-import type { BerryModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { speciesEggMoves } from "#data/egg-moves";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -22,12 +10,24 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { PokemonMove } from "#field/pokemon-move";
+import type { BerryModifier } from "#modifier/modifier";
+import { modifierTypes } from "#modifier/modifier-types";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { UncommonBreedEncounter } from "#mystery-encounters/uncommon-breed-encounter";
+import { CommandPhase } from "#phases/command-phase";
+import type { MovePhase } from "#phases/move-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/uncommonBreed";

@@ -1,9 +1,9 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Tag to amplify the power of the owner's attacks of a specified type.

@@ -1,27 +1,27 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { FormChangePhase } from "#app/phases/form-change-phase";
+import type { FormChangePhase } from "#phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
-import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { EVOLVE_MOVE } from "#app/data/pokemon-level-moves";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { BooleanHolder, fixedNumber } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
+import { EVOLVE_MOVE } from "#data/pokemon-level-moves";
 import { PhaseId } from "#enums/phase-id";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
+import { EndEvolutionPhase } from "#phases/end-evolution-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { BooleanHolder, fixedNumber } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 
 /**
  * A phase for handling Pokemon evolution

@@ -1,11 +1,11 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import type { Move } from "../move";
-import { MoveEffectAttr } from "./move-effect-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Generic class for removing arena tags

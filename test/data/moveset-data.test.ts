@@ -1,10 +1,10 @@
-import { G_MAX_FORM_KEYS } from "#app/constants/game-constants";
-import { FORM_CHANGE_MOVE } from "#app/data/pokemon-level-moves";
-import { allMoves } from "#app/data/data-lists";
-import { GMaxPowerAttr } from "#app/data/moves/move-attrs/gmax-power-attr";
-import { pokemonFormLevelMoves } from "#app/data/pokemon-form-level-moves";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import { G_MAX_FORM_KEYS } from "#constants/game-constants";
+import { allMoves } from "#data/data-lists";
+import { pokemonFormLevelMoves } from "#data/pokemon-form-level-moves";
+import { pokemonFormChanges } from "#data/pokemon-forms";
+import { FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";
 import type { MoveId } from "#enums/move-id";
+import { GMaxPowerAttr } from "#moves/gmax-power-attr";
 import { describe, expect, it } from "vitest";
 
 describe("Moveset Data", async () => {

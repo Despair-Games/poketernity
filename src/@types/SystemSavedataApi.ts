@@ -1,4 +1,4 @@
-import type { SystemSaveData } from "#app/@types/SystemData";
+import type { SystemSaveData } from "#types/SystemData";
 
 export interface GetSystemSavedataRequest {
   clientSessionId: string;

@@ -1,14 +1,14 @@
-import type { IntimidateImmunityAbAttr } from "#app/data/abilities/ab-attrs/intimidate-immunity-ab-attr";
-import type { PostIntimidateStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-intimidate-stat-stage-change-ab-attr";
-import { PostSummonAbAttr } from "#app/data/abilities/ab-attrs/post-summon-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { IntimidateImmunityAbAttr } from "#abilities/intimidate-immunity-ab-attr";
+import type { PostIntimidateStatStageChangeAbAttr } from "#abilities/post-intimidate-stat-stage-change-ab-attr";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import { BooleanHolder } from "#utils/common-utils";
 
 export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
   private readonly stats: BattleStat[];

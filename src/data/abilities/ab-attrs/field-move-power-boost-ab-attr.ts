@@ -1,8 +1,8 @@
-import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import { PreAttackAbAttr } from "./pre-attack-ab-attr";
+import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Boosts the power of a Pokémon's move under certain conditions.

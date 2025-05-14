@@ -1,7 +1,7 @@
-import { isNil } from "#app/utils/common-utils";
-import { capitalizeString } from "#app/utils/string-utils";
 import { TerrainType } from "#enums/terrain-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/testUtils";
+import { isNil } from "#utils/common-utils";
+import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**

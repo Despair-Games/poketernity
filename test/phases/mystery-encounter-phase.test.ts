@@ -1,13 +1,13 @@
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
 import { Button } from "#enums/buttons";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
 import { GameManager } from "#test/test-utils/gameManager";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

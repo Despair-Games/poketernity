@@ -1,37 +1,15 @@
-import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
-import type { DamageResult } from "#app/@types/DamageResult";
-import type { TurnMove } from "#app/@types/TurnMove";
-import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
-import type { PostAttackAbAttr } from "#app/data/abilities/ab-attrs/post-attack-ab-attr";
-import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
-import type { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { MoveAnim } from "#app/data/animations/move-anim";
-import type { BideTag } from "#app/data/battler-tags/bide-tag";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import { TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
-import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
-import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { MissEffectAttr } from "#app/data/moves/move-attrs/miss-effect-attr";
-import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
-import { NoEffectAttr } from "#app/data/moves/move-attrs/no-effect-attr";
-import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
-import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
-import type { TypeDamageMultiplier } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
+import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
+import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
+import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
+import { MoveAnim } from "#animations/move-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  ContactHeldItemTransferChanceModifier,
-  DamageMoneyRewardModifier,
-  FlinchChanceModifier,
-  HitHealModifier,
-} from "#app/modifier/modifier";
-import { HitCheckPhase } from "#app/phases/hit-check-phase";
-import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
-import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import type { BideTag } from "#battler-tags/bide-tag";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
+import { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
@@ -46,6 +24,28 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
+import {
+  ContactHeldItemTransferChanceModifier,
+  DamageMoneyRewardModifier,
+  FlinchChanceModifier,
+  HitHealModifier,
+} from "#modifier/modifier";
+import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
+import { FlinchAttr } from "#moves/flinch-attr";
+import { MissEffectAttr } from "#moves/miss-effect-attr";
+import type { MoveAttr } from "#moves/move-attr";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { MultiHitAttr } from "#moves/multi-hit-attr";
+import { NoEffectAttr } from "#moves/no-effect-attr";
+import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import { HitCheckPhase } from "#phases/hit-check-phase";
+import type { AttackMoveResult } from "#types/AttackMoveResult";
+import type { DamageResult } from "#types/DamageResult";
+import type { TurnMove } from "#types/TurnMove";
+import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {

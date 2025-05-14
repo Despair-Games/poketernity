@@ -1,10 +1,10 @@
-import { allMoves } from "#app/data/data-lists";
-import type { MovePhase } from "#app/phases/move-phase";
+import { allMoves } from "#data/data-lists";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
+import type { MovePhase } from "#phases/move-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

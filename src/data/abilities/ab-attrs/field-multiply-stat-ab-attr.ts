@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils/common-utils";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Stat } from "#enums/stat";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 /**
  * Multiplies a Stat if the checked Pokemon lacks this ability.

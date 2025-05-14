@@ -1,4 +1,4 @@
-import { animConfigSchema } from "#app/data/animations/anim-config-schema";
+import { animConfigSchema } from "#animations/anim-config-schema";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { MoveId } from "#enums/move-id";
 import Ajv from "ajv";
