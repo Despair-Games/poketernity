@@ -18,7 +18,7 @@ pre-commit:
 
 pre-push:
   commands:
-    eslint:
+    biome-lint:
       glob: "*.{js,ts,jsx,tsx}"
       run: npx biome ci --changed --no-errors-on-unmatched --diagnostic-level=error {push_files}
 

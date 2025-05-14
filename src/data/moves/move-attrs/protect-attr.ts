@@ -2,12 +2,20 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
-import type { TurnMove } from "#types/TurnMove";
 
 /**
  * Attribute to apply a set type of protection to the user.
  * Moves with this attribute have an increased chance of failing after
- * consecutive uses.
+ * consecutive uses:
+ *
+ * | Uses | Success Rate |
+ * |------|--------------|
+ * |  0   |      1       |
+ * |  1   |    1/3       |
+ * |  2   |    1/9       |
+ * |  3   |   1/27       |
+ * |  4   |    ...       |
+ *
  * @extends AddBattlerTagAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Protect | Variations of Protect}
  */
@@ -18,21 +26,15 @@ export class ProtectAttr extends AddBattlerTagAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move): boolean => {
-      let timesUsed = 0;
-      const moveHistory = user.getLastXMoves();
-      let turnMove: TurnMove | undefined;
+      const moveHistory = user.getLastXMoves(-1).filter((mv) => !mv.virtual);
+      const lastNonUse = moveHistory.findIndex(
+        (mv) => mv.result !== MoveResult.SUCCESS || !mv.move.hasAttr(ProtectAttr),
+      );
 
-      while (moveHistory.length) {
-        turnMove = moveHistory.shift();
-        if (!turnMove?.move?.hasAttr(ProtectAttr) || turnMove?.result !== MoveResult.SUCCESS) {
-          break;
-        }
-        timesUsed++;
+      if (lastNonUse === -1) {
+        return !user.randSeedInt(Math.pow(3, moveHistory.length));
       }
-      if (timesUsed) {
-        return !user.randSeedInt(Math.pow(3, timesUsed));
-      }
-      return true;
+      return !user.randSeedInt(Math.pow(3, lastNonUse));
     };
   }
 }
