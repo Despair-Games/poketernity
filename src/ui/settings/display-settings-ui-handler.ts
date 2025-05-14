@@ -42,9 +42,8 @@ export class DisplaySettingsUiHandler extends SettingsUiHandler {
                   () => this.handleCancelLanguageChange(),
                 );
                 return true;
-              } else {
-                return this.handleChangeLanguage(l);
               }
+              return this.handleChangeLanguage(l);
             },
           };
         }),

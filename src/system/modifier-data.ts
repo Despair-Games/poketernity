@@ -28,7 +28,7 @@ export default class ModifierData {
     this.className = sourceModifier ? sourceModifier.constructor.name : source.className;
   }
 
-  toModifier(constructor: any): PersistentModifier | null {
+  toModifier(constructorData: any): PersistentModifier | null {
     const typeFunc = getModifierTypeFuncById(this.typeId);
     if (!typeFunc) {
       return null;
@@ -46,7 +46,7 @@ export default class ModifierData {
       }
 
       const ret = Reflect.construct(
-        constructor,
+        constructorData,
         ([type] as any[]).concat(this.args).concat(this.stackCount),
       ) as PersistentModifier;
 

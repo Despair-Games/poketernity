@@ -5,10 +5,10 @@
  */
 
 import chalk from "chalk";
-import fs from "fs";
+import fs from "node:fs";
 import inquirer from "inquirer";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 //#region Constants
 
@@ -55,7 +55,8 @@ async function promptTestType() {
   if (typeAnswer.selectedOption === "EXIT") {
     console.log("Exiting...");
     return process.exit();
-  } else if (!choices.some((choice) => choice.dir === typeAnswer.selectedOption.dir)) {
+  }
+  if (!choices.some((choice) => choice.dir === typeAnswer.selectedOption.dir)) {
     console.error(`Please provide a valid type: (${choices.map((choice) => choice.label).join(", ")})!`);
     return await promptTestType();
   }

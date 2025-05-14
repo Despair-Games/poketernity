@@ -1,38 +1,36 @@
-name: ESLint
+name: ESLint workflow
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
-      - main # Trigger on push events to the main branch
-      - beta # Trigger on push events to the beta branch
+      - main
+      - beta
   pull_request:
     branches:
-      - main # Trigger on pull request events targeting the main branch
-      - beta # Trigger on pull request events targeting the beta branch
+      - main
+      - beta
   merge_group:
     types: [checks_requested]
 
 jobs:
-  run-linters: # Define a job named "run-linters"
-    name: Run linters # Human-readable name for the job
+  run-eslint:
+    name: Lint files with ESLint
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out Git repository # Step to check out the repository
-        uses: actions/checkout@v4 # Use the checkout action version 4
+      - name: Check out Git repository
+        uses: actions/checkout@v4
         with:
           submodules: "recursive"
 
-      - name: Set up Node.js # Step to set up Node.js environment
-        uses: actions/setup-node@v4 # Use the setup-node action version 4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
-      - name: Install Node.js dependencies # Step to install Node.js dependencies
-        run: npm ci # Use 'npm ci' to install dependencies
+      - name: Install Node.js dependencies
+        run: npm ci
 
-      - name: eslint # Step to run linters
+      - name: Run ESLint
         run: npm run eslint-ci

@@ -152,7 +152,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   getMenuOptionsConfig(): OptionSelectModeConfig {
     const validOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
+      .map((m) => Number.parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
         return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));
       });
@@ -399,7 +399,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     const communityOptions: OptionSelectItem[] = [];
 
-    if (VITE_WIKI_URL && VITE_WIKI_URL.startsWith("https://")) {
+    if (VITE_WIKI_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "Wiki",
         handler: () => {
@@ -410,7 +410,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_DISCORD_URL && VITE_DISCORD_URL.startsWith("https://")) {
+    if (VITE_DISCORD_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "Discord",
         handler: () => {
@@ -421,7 +421,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_GITHUB_URL && VITE_GITHUB_URL.startsWith("https://")) {
+    if (VITE_GITHUB_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "GitHub",
         handler: () => {
@@ -432,7 +432,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_REDDIT_URL && VITE_REDDIT_URL.startsWith("https://")) {
+    if (VITE_REDDIT_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "Reddit",
         handler: () => {
@@ -443,7 +443,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_DONATE_URL && VITE_DONATE_URL.startsWith("https://")) {
+    if (VITE_DONATE_URL?.startsWith("https://")) {
       communityOptions.push({
         label: i18next.t("menuUiHandler:donate"),
         handler: () => {
@@ -461,7 +461,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           const skippedAdminModes: AdminMode[] = [AdminMode.ADMIN]; // this is here so that we can skip the menu populating enums that aren't meant for the menu, such as the AdminMode.ADMIN
           const options: OptionSelectItem[] = [];
           Object.values(AdminMode)
-            .filter((v) => !isNaN(Number(v)) && !skippedAdminModes.includes(v as AdminMode))
+            .filter((v) => !Number.isNaN(Number(v)) && !skippedAdminModes.includes(v as AdminMode))
             .forEach((mode) => {
               // this gets all the enums in a way we can use
               options.push({
@@ -579,12 +579,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                   const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
                   window.open(discordUrl, "_self");
                   return true;
-                } else {
-                  api.unlinkDiscord().then((_isSuccess) => {
-                    updateUserInfo().then(() => globalScene.reset(true, true));
-                  });
-                  return true;
                 }
+                api.unlinkDiscord().then((_isSuccess) => {
+                  updateUserInfo().then(() => globalScene.reset(true, true));
+                });
+                return true;
               },
             },
             {
@@ -600,12 +599,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                   const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
                   window.open(googleUrl, "_self");
                   return true;
-                } else {
-                  api.unlinkGoogle().then((_isSuccess) => {
-                    updateUserInfo().then(() => globalScene.reset(true, true));
-                  });
-                  return true;
                 }
+                api.unlinkGoogle().then((_isSuccess) => {
+                  updateUserInfo().then(() => globalScene.reset(true, true));
+                });
+                return true;
               },
             },
           );
@@ -650,7 +648,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           }
         }
         break;
-      case MenuOptions.LOG_OUT:
+      case MenuOptions.LOG_OUT: {
         success = true;
         const doLogout = () => {
           ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, {
@@ -681,6 +679,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           doLogout();
         }
         break;
+      }
     }
     return success;
   }
@@ -695,9 +694,8 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         }
       });
       return true;
-    } else {
-      return super.processInput(button);
     }
+    return super.processInput(button);
   }
 
   public override showText(

@@ -4,23 +4,23 @@ pre-commit:
       glob: "*.{js,jsx,ts,tsx}"
       run: npx prettier --write {staged_files}
       priority: 1
-      skip:
-        - merge
-        - rebase
-    eslint:
-      glob: "*.{js,jsx,ts,tsx}"
-      run: npx eslint --fix {staged_files}
       stage_fixed: true
       skip:
         - merge
         - rebase
+    biome-lint:
+      run: npx biome check --write --reporter=summary --staged --no-errors-on-unmatched
+      stage_fixed: true
       priority: 2
+      skip:
+        - merge
+        - rebase
 
 pre-push:
   commands:
     eslint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: npx eslint {push_files}
+      run: npx biome ci --changed --no-errors-on-unmatched --diagnostic-level=error {push_files}
 
 post-merge:
   commands:

@@ -14,10 +14,10 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
-  private readonly immuneType: ElementalType | null;
+  private readonly immuneType: ElementalType;
   private readonly condition: AbAttrCondition | null;
 
-  constructor(immuneType: ElementalType | null, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType, condition?: AbAttrCondition) {
     super();
     this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 

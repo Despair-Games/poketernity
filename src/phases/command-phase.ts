@@ -152,6 +152,7 @@ export class CommandPhase extends FieldPhase {
    */
   public handleCommand(command: BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
+    // TODO: refactor this function
     const pokemon = this.getPokemon();
     let success: boolean = false;
 
@@ -168,9 +169,10 @@ export class CommandPhase extends FieldPhase {
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
+    // TODO: break out the code in this switch block into private methods
     switch (command) {
       case BattleCommand.TERA:
-      case BattleCommand.FIGHT:
+      case BattleCommand.FIGHT: {
         const ignorePp = args[0] as boolean | undefined;
         const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
         const useStruggle = cursor > -1 && !pokemon.getMoveset().filter((m) => m.isUsable(pokemon)).length;
@@ -257,7 +259,8 @@ export class CommandPhase extends FieldPhase {
           );
         }
         break;
-      case BattleCommand.BALL:
+      }
+      case BattleCommand.BALL: {
         const notInDex =
           globalScene
             .getEnemyField()
@@ -307,18 +310,21 @@ export class CommandPhase extends FieldPhase {
           }
         }
         break;
+      }
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: `Run` and `Pokemon` cases share checks for trapping
       case BattleCommand.RUN:
         if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
-        } else if (
+        }
+        if (
           battleType === BattleType.TRAINER
           || mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
         ) {
           failCatchRun("battle:noEscapeTrainer");
           break;
         }
-      case BattleCommand.POKEMON:
+      case BattleCommand.POKEMON: {
         const isSwitch = command === BattleCommand.POKEMON;
         const batonPass = isSwitch && (args[0] as boolean);
         const trappedAbMessages: string[] = [];
@@ -380,6 +386,7 @@ export class CommandPhase extends FieldPhase {
           showNoEscapeText(getNoEscapeText(trapTag ?? fairyLockTag));
         }
         break;
+      }
     }
 
     if (success) {

@@ -1158,14 +1158,13 @@ export default class BattleScene extends SceneBase {
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
-          .map((mp) =>
+          .flatMap((mp) =>
             Object.values(mp)
               .flat()
               .map((mt) => mt.modifierType)
               .filter((mt) => "localize" in mt)
               .map((lpb) => lpb as unknown as Localizable),
-          )
-          .flat(),
+          ),
       ];
       for (const item of localizable) {
         item.localize();
@@ -1541,7 +1540,7 @@ export default class BattleScene extends SceneBase {
       case SpeciesId.BASCULEGION:
       case SpeciesId.OINKOLOGNE:
         return gender === Gender.FEMALE ? 1 : 0;
-      case SpeciesId.TOXTRICITY:
+      case SpeciesId.TOXTRICITY: {
         const lowkeyNatures = [
           Nature.LONELY,
           Nature.BOLD,
@@ -1560,13 +1559,13 @@ export default class BattleScene extends SceneBase {
           return 1;
         }
         return 0;
+      }
       case SpeciesId.GIMMIGHOUL:
         // Chest form can only be found in Mysterious Chest Encounter, if this is a game mode with MEs
         if (this.gameMode.hasMysteryEncounters && !isEggPhase) {
           return 1; // Wandering form
-        } else {
-          return randSeedInt(species.forms.length);
         }
+        return randSeedInt(species.forms.length);
     }
 
     if (ignoreArena) {
@@ -1616,7 +1615,8 @@ export default class BattleScene extends SceneBase {
   ): number {
     if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE > 1) {
       return Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
-    } else if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
+    }
+    if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
       // The rest of the code expects to be returned 0 and not 1 if the enemy is not a boss
       return 0;
     }
@@ -1626,7 +1626,7 @@ export default class BattleScene extends SceneBase {
     }
 
     let isBoss: boolean | undefined;
-    if (forceBoss || (species && species.isLegendLike())) {
+    if (forceBoss || species?.isLegendLike()) {
       isBoss = true;
     } else {
       this.executeWithSeedOffset(() => {
@@ -1692,7 +1692,7 @@ export default class BattleScene extends SceneBase {
     this.rngCounter = 0;
   }
 
-  executeWithSeedOffset(func: Function, offset: number, seedOverride?: string): void {
+  executeWithSeedOffset(func: VoidFunction, offset: number, seedOverride?: string): void {
     if (!func) {
       return;
     }
@@ -2223,13 +2223,12 @@ export default class BattleScene extends SceneBase {
               applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
             }
             return true;
-          } else {
-            this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
-            if (source && itemLost) {
-              applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
-            }
-            return true;
           }
+          this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
+          if (source && itemLost) {
+            applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
+          }
+          return true;
         }
         return false;
       };
@@ -2702,7 +2701,7 @@ export default class BattleScene extends SceneBase {
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.audioManager.fadeOutBgm(fixedNumber(2000), false);
-      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
+      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, null, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,
         ) as TurnHeldItemTransferModifier;

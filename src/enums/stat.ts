@@ -57,17 +57,16 @@ export function getStatStageChangeDescriptionKey(stages: number, isIncrease: boo
       default:
         return "battle:statRoseDrastically";
     }
-  } else {
-    switch (stages) {
-      case 0:
-        return "battle:statWontGoAnyLower";
-      case 1:
-        return "battle:statFell";
-      case 2:
-        return "battle:statHarshlyFell";
-      default:
-        return "battle:statSeverelyFell";
-    }
+  }
+  switch (stages) {
+    case 0:
+      return "battle:statWontGoAnyLower";
+    case 1:
+      return "battle:statFell";
+    case 2:
+      return "battle:statHarshlyFell";
+    default:
+      return "battle:statSeverelyFell";
   }
 }
 

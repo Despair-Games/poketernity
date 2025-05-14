@@ -224,6 +224,7 @@ export class MoveEffectPhase extends HitCheckPhase {
             this.applyMoveEffects(target, effectiveness, firstTarget);
             firstTarget = false;
             break;
+          // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
           case HitCheckResult.NO_EFFECT:
             if (move.id === MoveId.SHEER_COLD) {
               globalScene.phaseManager.queueMessagePhase(
@@ -454,7 +455,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     const isCritical = target.getCriticalHitResult(user, move, false);
 
-    const { result: result, damage: dmg } = target.getAttackDamage(
+    const { result, damage: dmg } = target.getAttackDamage(
       user,
       move,
       AbilityApplyMode.DEFAULT,

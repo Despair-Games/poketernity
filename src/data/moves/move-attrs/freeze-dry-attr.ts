@@ -20,8 +20,7 @@ export class FreezeDryAttr extends VariableMoveTypeChartAttr {
     if (defType === ElementalType.WATER) {
       multiplier.value = 2;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

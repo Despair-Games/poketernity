@@ -11,7 +11,7 @@ export const SESSION_ID_COOKIE: string = `${APP_ABBREVIATION}_access_token`;
 export const SAVES_ZIP_PREFIX = `${APP_ABBREVIATION}_`;
 
 /** File extension for save files. */
-export const SAVE_FILE_EXTENSION = `txt`;
+export const SAVE_FILE_EXTENSION = "txt";
 
 /** Prefix for local storage keys. */
 export const LS_PREFIX = APP_ABBREVIATION;

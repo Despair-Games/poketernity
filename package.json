@@ -18,6 +18,11 @@
     "typecheck": "tsc --noEmit",
     "eslint": "eslint --fix .",
     "eslint-ci": "eslint .",
+    "biome": "biome check --write --changed --no-errors-on-unmatched",
+    "biome:unsafe": "biome check --write --unsafe --changed --no-errors-on-unmatched",
+    "biome-ci": "biome ci --diagnostic-level=error --reporter=github --no-errors-on-unmatched .",
+    "biome-all": "biome check --write --no-errors-on-unmatched",
+    "biome-all:unsafe": "biome check --write --unsafe --no-errors-on-unmatched",
     "prettier": "prettier . --write",
     "docs": "typedoc",
     "depcruise": "depcruise src",
@@ -28,6 +33,7 @@
     "update-locales:remote": "git submodule update --progress --init --recursive --force --remote"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@eslint/js": "^9.24.0",
     "@hpcc-js/wasm": "^2.22.4",
     "@stylistic/eslint-plugin-ts": "^4.2.0",

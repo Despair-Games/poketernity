@@ -1,7 +1,7 @@
 import { DailyApi } from "#api/daily-api";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
-import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
-import { getApiBaseUrl } from "#test/test-utils/testUtils";
+import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
+import { getApiBaseUrl } from "#test/test-utils/test-utils";
 import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#types/DailyApi";
 import type { RankingEntry } from "#types/RankingEntry";
 import { http, HttpResponse } from "msw";

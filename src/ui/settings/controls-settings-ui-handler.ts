@@ -25,7 +25,7 @@ export interface LayoutConfig {
   optionValueLabels: Phaser.GameObjects.Text[][];
   optionCursors: number[];
   keys: string[];
-  bindingSettings: Array<String>;
+  bindingSettings: string[];
 }
 /**
  * Abstract class for handling UI elements related to control settings.
@@ -52,10 +52,10 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
   protected inputsIcons: InputsIcons;
   protected navigationIcons: InputsIcons;
   // list all the setting keys used in the selected layout (because dualshock has more buttons than xbox)
-  protected keys: Array<string>;
+  protected keys: string[];
 
   // Store the specific settings related to key bindings for the current gamepad configuration.
-  protected bindingSettings: Array<string>;
+  protected bindingSettings: string[];
 
   protected setting;
   protected settingBlacklisted;
@@ -81,9 +81,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
 
   private camelize(string: string): string {
     return string
-      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-        return index === 0 ? word.toLowerCase() : word.toUpperCase();
-      })
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase()))
       .replace(/\s+/g, "");
   }
 

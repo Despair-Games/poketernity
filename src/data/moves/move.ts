@@ -825,16 +825,13 @@ export abstract class Move implements Localizable {
     }
 
     const fieldAuras = new Set(
-      globalScene
-        .getField(true)
-        .map(
-          (p) =>
-            p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
-              const condition = attr.getCondition();
-              return !condition || condition(p);
-            }) as FieldMoveTypePowerBoostAbAttr[],
-        )
-        .flat(),
+      globalScene.getField(true).flatMap(
+        (p) =>
+          p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
+            const condition = attr.getCondition();
+            return !condition || condition(p);
+          }) as FieldMoveTypePowerBoostAbAttr[],
+      ),
     );
     for (const aura of fieldAuras) {
       aura.apply(source, simulated, this, target, power);

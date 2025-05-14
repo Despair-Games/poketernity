@@ -27,8 +27,7 @@ export abstract class VariableMoveMessageAttr extends MoveAttr {
   public getMoveMessage(user: Pokemon, target: Pokemon, move: Move): string | undefined {
     if (typeof this.message === "string") {
       return this.message;
-    } else {
-      return this.message(user, target, move);
     }
+    return this.message(user, target, move);
   }
 }

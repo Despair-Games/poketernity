@@ -12,10 +12,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * @extends MoveAttr
  */
 export abstract class VariableAtkAttr extends MoveAttr {
-  constructor() {
-    super();
-  }
-
   /**
    * Changes the offensive stat used for the current attack's damage calculation
    * @param user the {@linkcode Pokemon} using the move

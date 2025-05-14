@@ -171,9 +171,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     if (eligibleEvolutions.length > 0) {
       const randSpecies = randSeedItem(eligibleEvolutions);
       return getPokemonSpecies(randSpecies).getEnemySpeciesForLevel(level, forTrainer);
-    } else {
-      return this.speciesId;
     }
+    return this.speciesId;
   }
 
   getPreEvolutionLevels(): EvolutionLevel[] {
@@ -185,9 +184,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         if (
           e.speciesId === this.speciesId
           && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
-          && preEvolutionLevels.every((pe) => pe[0] !== parseInt(p))
+          && preEvolutionLevels.every((pe) => pe[0] !== Number.parseInt(p))
         ) {
-          const speciesId = parseInt(p) as SpeciesId;
+          const speciesId = Number.parseInt(p) as SpeciesId;
           const level = e.enemyEvolveLevel;
           preEvolutionLevels.push([speciesId, level]);
           const subPreEvolutionLevels = getPokemonSpecies(speciesId).getPreEvolutionLevels();

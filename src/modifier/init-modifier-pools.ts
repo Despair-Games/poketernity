@@ -338,9 +338,8 @@ export function initModifierPools() {
           if (!isHoldingOrb) {
             if (canSetStatus) {
               return hasRelevantAbilities || hasStatusMoves;
-            } else {
-              return hasItemMoves;
             }
+            return hasItemMoves;
           }
           return false;
         })
@@ -379,9 +378,8 @@ export function initModifierPools() {
           if (!isHoldingOrb) {
             if (canSetStatus) {
               return hasRelevantAbilities || hasStatusMoves;
-            } else {
-              return hasItemMoves;
             }
+            return hasItemMoves;
           }
           return false;
         })
@@ -407,7 +405,7 @@ export function initModifierPools() {
               .getHeldItems()
               .some((i) => i instanceof ResetNegativeStatStageModifier && i.stackCount >= i.getMaxHeldItemCount(p))
             && (checkedAbilities.some((a) => p.hasAbility(a, false, true))
-              || p.getMoveset(true).some((m) => m && m.getMove().isSelfStatLowering())),
+              || p.getMoveset(true).some((m) => m.getMove().isSelfStatLowering())),
         ).length;
         // If a party member has one of the above moves or abilities and doesn't have max herbs, the herb will appear more frequently
         return 0 * (weightMultiplier ? 2 : 1) + (weightMultiplier ? weightMultiplier * 0 : 0);

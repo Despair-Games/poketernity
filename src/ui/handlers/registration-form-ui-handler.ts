@@ -103,7 +103,7 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
         if (!registerError) {
           api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
             if (!loginError) {
-              originalRegistrationAction && originalRegistrationAction();
+              originalRegistrationAction?.();
             } else {
               onFail(loginError);
             }

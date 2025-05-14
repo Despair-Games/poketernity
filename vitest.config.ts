@@ -1,12 +1,12 @@
 import { defineProject } from "vitest/config";
-import { defaultConfig } from "./vite.config";
 import { BaseSequencer, type TestSpecification } from "vitest/node";
+import { defaultConfig } from "./vite.config";
 
 export default defineProject(({ mode }) => ({
   ...defaultConfig,
   test: {
     testTimeout: 20000,
-    setupFiles: ["./test/matchers.setup.ts", "./test/fontFace.setup.ts", "./test/vitest.setup.ts"],
+    setupFiles: ["./test/matchers.setup.ts", "./test/font-face.setup.ts", "./test/vitest.setup.ts"],
     sequence: {
       sequencer: MySequencer,
     },
@@ -60,11 +60,11 @@ class MySequencer extends BaseSequencer {
 function getTestOrder(testName: string): number {
   if (testName.includes("battle-scene.test.ts")) {
     return 1;
-  } else if (testName.includes("inputs.test.ts") || testName.includes("all-moves.test.ts")) {
-    return 2;
-  } else {
-    return 3;
   }
+  if (testName.includes("inputs.test.ts") || testName.includes("all-moves.test.ts")) {
+    return 2;
+  }
+  return 3;
 }
 
 //#endregion

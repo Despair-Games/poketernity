@@ -4,7 +4,7 @@ import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { PlayerPokemon } from "#field/player-pokemon";
 import type { GameData } from "#system/game-data";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

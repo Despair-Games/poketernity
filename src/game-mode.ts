@@ -307,9 +307,8 @@ export class GameMode implements GameModeConfig {
     const challengeConfig = new FixedBattleConfig();
     if (applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, challengeConfig)) {
       return challengeConfig;
-    } else {
-      return this.battleConfig[waveIndex];
     }
+    return this.battleConfig[waveIndex];
   }
 
   getClearScoreBonus(): number {
@@ -353,12 +352,12 @@ export class GameMode implements GameModeConfig {
    */
   getMysteryEncounterLegalWaves(): [number, number] {
     switch (this.modeId) {
-      default:
-        return [0, 0];
       case GameModes.CLASSIC:
         return [...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES];
       case GameModes.CHALLENGE:
         return [...CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES];
+      default:
+        return [0, 0];
     }
   }
 

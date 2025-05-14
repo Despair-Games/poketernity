@@ -5,6 +5,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { getSplashMessages } from "#data/splash-messages";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { version } from "#package.json";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { addTextObject } from "#ui/text-utils";
@@ -12,7 +13,6 @@ import { TimedEventDisplay } from "#ui/timed-event-display";
 import { fixedNumber } from "#utils/common-utils";
 import { randItem } from "#utils/random-utils";
 import i18next from "i18next";
-import { version } from "../../../package.json";
 
 export class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */

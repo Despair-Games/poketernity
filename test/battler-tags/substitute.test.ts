@@ -13,7 +13,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import { AttackMove } from "#moves/move";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import type { PokemonTurnData } from "#types/PokemonTurnData";
 import type { TurnMove } from "#types/TurnMove";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

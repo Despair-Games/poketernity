@@ -223,10 +223,9 @@ export class BattleMessageUiHandler extends MessageUiHandler {
       this.onActionInput = () => {
         if (!showTotals) {
           return this.promptLevelUpStats(partyMemberIndex, [], true).then(() => resolve());
-        } else {
-          this.levelUpStatsContainer.setVisible(false);
-          resolve();
         }
+        this.levelUpStatsContainer.setVisible(false);
+        resolve();
       };
     });
   }

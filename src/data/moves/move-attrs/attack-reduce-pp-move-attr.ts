@@ -9,15 +9,11 @@ import type { MoveConditionFunc } from "#types/MoveConditionFunc";
  * @extends ReducePpMoveAttr
  */
 export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
-  constructor(reduction: number) {
-    super(reduction);
-  }
-
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const lastMove = target.getLastXMoves().find(() => true);
     if (lastMove) {
       const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move.id);
-      if (Boolean(movesetMove?.getPpRatio())) {
+      if (movesetMove?.getPpRatio()) {
         super.apply(user, target, move);
       }
     }

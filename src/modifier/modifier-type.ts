@@ -194,7 +194,8 @@ export class ModifierType {
           if (weight > 0) {
             this.tier = modifier.modifierType.tier;
             return this;
-          } else if (isNil(defaultTier)) {
+          }
+          if (isNil(defaultTier)) {
             // If weight is 0, keep track of the first tier where the item was found
             defaultTier = modifier.modifierType.tier;
           }
@@ -211,7 +212,7 @@ export class ModifierType {
   }
 
   newModifier(...args: any[]): Modifier | null {
-    return this.newModifierFunc && this.newModifierFunc(this, args);
+    return this.newModifierFunc?.(this, args) ?? null; // using `| null` instead of making a param optional... ugh
   }
 
   isPokemonHeldItemModifierType(): this is PokemonHeldItemModifierType {
@@ -741,7 +742,8 @@ enum AttackTypeBoosterItem {
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   public moveType: ElementalType;
   public boostPercent: number;
 
@@ -781,7 +783,8 @@ export type SpeciesStatBoosterItem = keyof typeof SpeciesStatBoosterModifierType
  */
 export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private key: SpeciesStatBoosterItem;
 
   constructor(key: SpeciesStatBoosterItem) {
@@ -838,7 +841,8 @@ export class AllPokemonLevelIncrementModifierType extends ModifierType {
 
 export class BaseStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private stat: PermanentStat;
   private key: string;
 
@@ -870,7 +874,8 @@ export class BaseStatBoosterModifierType
  */
 export class PokemonBaseStatTotalModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: number;
 
   constructor(statModifier: number) {
@@ -908,7 +913,8 @@ export class PokemonBaseStatTotalModifierType
  */
 export class PokemonBaseStatFlatModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: number;
   private readonly stats: Stat[];
 
@@ -1137,8 +1143,7 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
               (fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger) && fc.preFormKey === pokemon.getFormKey(),
             )
             // Returns true if any form changes match this item
-            .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
-            .flat()
+            .flatMap((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
             .flatMap((fc) => fc.item)
             .includes(this.formChangeItem)
         ) {
@@ -1172,15 +1177,13 @@ export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerato
         return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, 20);
       }
 
-      const attackMoveTypes = party
-        .map((p) =>
-          p
-            .getMoveset()
-            .map((m) => m.getMove())
-            .filter((m) => m.isAttackMove())
-            .map((m) => m.type),
-        )
-        .flat();
+      const attackMoveTypes = party.flatMap((p) =>
+        p
+          .getMoveset()
+          .map((m) => m.getMove())
+          .filter((m) => m.isAttackMove())
+          .map((m) => m.type),
+      );
       if (!attackMoveTypes.length) {
         return null;
       }
@@ -1421,7 +1424,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
         ...new Set(
           party
             .filter((p) => pokemonFormChanges.hasOwnProperty(p.species.speciesId))
-            .map((p) => {
+            .flatMap((p) => {
               const formChanges = pokemonFormChanges[p.species.speciesId];
               let formChangeItemTriggers = formChanges
                 .filter(
@@ -1440,8 +1443,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                 .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
                 .filter(
                   (t) =>
-                    t
-                    && t.active
+                    t?.active
                     && !globalScene.findModifier(
                       (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === p.id && m.formChangeItem === t.item,
                     ),
@@ -1474,8 +1476,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                 }
               }
               return formChangeItemTriggers;
-            })
-            .flat(),
+            }),
         ),
       ]
         .flat()
@@ -1610,13 +1611,13 @@ let modifierPoolThresholds = {};
 let ignoredPoolIndexes = {};
 
 let dailyStarterModifierPoolThresholds = {};
-let ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 let enemyModifierPoolThresholds = {};
-let enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 let enemyBuffModifierPoolThresholds = {};
-let enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 const tierWeights = [768 / 1024, 195 / 1024, 48 / 1024, 12 / 1024, 1 / 1024];
 /**
@@ -1660,8 +1661,8 @@ export function regenerateModifierPoolThresholds(
             || itemModifierType instanceof FormChangeItemModifierType
             || existingModifiers.find((m) => m.stackCount < m.getMaxStackCount(true))
               ? weightedModifierType.weight instanceof Function
-                ? (weightedModifierType.weight as Function)(party, rerollCount)
-                : (weightedModifierType.weight as number)
+                ? weightedModifierType.weight(party, rerollCount)
+                : weightedModifierType.weight
               : 0;
           if (weightedModifierType.maxWeight) {
             const modifierId = weightedModifierType.modifierType.id;
@@ -1669,10 +1670,11 @@ export function regenerateModifierPoolThresholds(
             const outputWeight = useMaxWeightForOutput ? weightedModifierType.maxWeight : weight;
             modifierTableData[modifierId] = {
               weight: outputWeight,
-              tier: parseInt(t),
+              tier: Number.parseInt(t),
               tierPercent: 0,
               totalPercent: 0,
             };
+            // @ts-expect-error - TODO: fix `outputWeight`
             tierMaxWeight += outputWeight;
           }
           if (weight) {
@@ -1710,15 +1712,15 @@ export function regenerateModifierPoolThresholds(
     case ModifierPoolType.WILD:
     case ModifierPoolType.TRAINER:
       enemyModifierPoolThresholds = thresholds;
-      enemyIgnoredPoolIndexes = ignoredIndexes;
+      _enemyIgnoredPoolIndexes = ignoredIndexes;
       break;
     case ModifierPoolType.ENEMY_BUFF:
       enemyBuffModifierPoolThresholds = thresholds;
-      enemyBuffIgnoredPoolIndexes = ignoredIndexes;
+      _enemyBuffIgnoredPoolIndexes = ignoredIndexes;
       break;
     case ModifierPoolType.DAILY_STARTER:
       dailyStarterModifierPoolThresholds = thresholds;
-      ignoredDailyStarterPoolIndexes = ignoredIndexes;
+      _ignoredDailyStarterPoolIndexes = ignoredIndexes;
       break;
   }
 }
@@ -2062,11 +2064,11 @@ function getNewModifierTypeOption(
   }
 
   const tierThresholds = Object.keys(thresholds[tier]);
-  const totalWeight = parseInt(tierThresholds[tierThresholds.length - 1]);
+  const totalWeight = Number.parseInt(tierThresholds[tierThresholds.length - 1]);
   const value = randSeedInt(totalWeight);
   let index: number | undefined;
   for (const t of tierThresholds) {
-    const threshold = parseInt(t);
+    const threshold = Number.parseInt(t);
     if (value < threshold) {
       index = thresholds[tier][threshold];
       break;

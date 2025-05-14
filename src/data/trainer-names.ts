@@ -1,7 +1,7 @@
 import { TrainerType } from "#enums/trainer-type";
-import { toReadableString } from "#utils/string-utils";
 
-class TrainerNameConfig {
+// TODO: move to `scripts/`
+/* class TrainerNameConfig {
   public urls: string[];
   public femaleUrls: string[] | null;
 
@@ -17,11 +17,10 @@ class TrainerNameConfig {
 
 interface TrainerNameConfigs {
   [key: number]: TrainerNameConfig;
-}
+} */
 
-// used in a commented code
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const trainerNameConfigs: TrainerNameConfigs = {
+// TODO: move to `scripts/`
+/* const trainerNameConfigs: TrainerNameConfigs = {
   [TrainerType.ACE_TRAINER]: new TrainerNameConfig(TrainerType.ACE_TRAINER),
   [TrainerType.ARTIST]: new TrainerNameConfig(TrainerType.ARTIST),
   [TrainerType.BACKERS]: new TrainerNameConfig(TrainerType.BACKERS),
@@ -72,7 +71,7 @@ const trainerNameConfigs: TrainerNameConfigs = {
   [TrainerType.WAITER]: new TrainerNameConfig(TrainerType.WAITER).hasGenderVariant("Waitress"),
   [TrainerType.WORKER]: new TrainerNameConfig(TrainerType.WORKER),
   [TrainerType.YOUNGSTER]: new TrainerNameConfig(TrainerType.YOUNGSTER).hasGenderVariant("Lass"),
-};
+}; */
 
 export const trainerNamePools = {
   [TrainerType.ACE_TRAINER]: [
@@ -2719,9 +2718,8 @@ export const trainerNamePools = {
   ],
 };
 
-// function used in a commented code
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function fetchAndPopulateTrainerNames(
+// TODO: move to `scripts/`
+/* function fetchAndPopulateTrainerNames(
   url: string,
   parser: DOMParser,
   trainerNames: Set<string>,
@@ -2776,8 +2774,9 @@ function fetchAndPopulateTrainerNames(
         resolve();
       });
   });
-}
+} */
 
+// TODO: move to `scripts/`
 /*export function scrapeTrainerNames() {
   const parser = new DOMParser();
   const trainerTypeNames = {};

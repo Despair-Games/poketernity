@@ -422,12 +422,13 @@ export class MovePhase extends BattlePhase {
         case BattlerIndex.BOTH_SIDES:
           targets.push(...globalScene.getField(true));
           break;
-        default:
+        default: {
           const target = globalScene.getPokemonByBattlerIndex(t);
           if (!isNil(target)) {
             targets.push(target);
           }
           break;
+        }
       }
     }
 
@@ -455,13 +456,12 @@ export class MovePhase extends BattlePhase {
         if (isFieldTargeted(this.targets)) {
           this.cancel();
           return;
-        } else {
-          // Remove this target from the current move's list of targets.
-          // If no targets are left after this point, cancel the move.
-          this.targets.splice(this.targets.indexOf(target.getBattlerIndex()), 1);
-          if (this.targets.length === 0) {
-            this.cancel();
-          }
+        }
+        // Remove this target from the current move's list of targets.
+        // If no targets are left after this point, cancel the move.
+        this.targets.splice(this.targets.indexOf(target.getBattlerIndex()), 1);
+        if (this.targets.length === 0) {
+          this.cancel();
         }
       }
     }
@@ -485,9 +485,8 @@ export class MovePhase extends BattlePhase {
      */
     if (multiple || isFieldTargeted(targets)) {
       return targets;
-    } else {
-      return [this.pokemon.getBattlerIndex()];
     }
+    return [this.pokemon.getBattlerIndex()];
   }
 
   protected useMove(): void {

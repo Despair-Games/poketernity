@@ -18,14 +18,14 @@ export function getCurrentTime(): number {
 
 export function getEnumKeys(enumType: any): string[] {
   return Object.values(enumType)
-    .filter((v) => isNaN(parseInt(v!.toString())))
+    .filter((v) => Number.isNaN(Number.parseInt(v!.toString())))
     .map((v) => v!.toString());
 }
 
 export function getEnumValues(enumType: any): number[] {
   return Object.values(enumType)
-    .filter((v) => !isNaN(parseInt(v!.toString())))
-    .map((v) => parseInt(v!.toString()));
+    .filter((v) => !Number.isNaN(Number.parseInt(v!.toString())))
+    .map((v) => Number.parseInt(v!.toString()));
 }
 
 /**
@@ -137,15 +137,23 @@ export function isBetween(num: number, min: number, max: number): boolean {
  * @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360}
  */
 export function deepFreeze<T>(obj: T): Readonly<T> {
-  if (obj === null || typeof obj !== "object") return obj;
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
   // support objects with reference loops
-  if (Object.isFrozen(obj)) return obj;
+  if (Object.isFrozen(obj)) {
+    return obj;
+  }
 
   Object.freeze(obj);
   if (Array.isArray(obj)) {
-    for (const elem of obj) deepFreeze(elem);
+    for (const elem of obj) {
+      deepFreeze(elem);
+    }
   } else {
-    for (const elem of Object.values(obj)) deepFreeze(elem);
+    for (const elem of Object.values(obj)) {
+      deepFreeze(elem);
+    }
   }
   return obj;
 }

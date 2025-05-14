@@ -12,10 +12,6 @@ import i18next from "i18next";
 export class SelectTargetPhase extends PokemonPhase {
   override readonly id = PhaseId.SELECT_TARGET;
 
-  constructor(fieldIndex: number) {
-    super(fieldIndex);
-  }
-
   public override start(): void {
     super.start();
 

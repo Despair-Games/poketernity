@@ -138,7 +138,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
       gachaInfoContainer.add(gachaUpLabel);
 
       switch (gachaType as GachaType) {
-        case GachaType.LEGENDARY:
+        case GachaType.LEGENDARY: {
           if (["de", "es-ES"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
@@ -151,6 +151,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
           gachaInfoContainer.add(pokemonIcon);
           break;
+        }
         case GachaType.MOVE:
           if (["de", "es-ES", "fr", "pt-BR"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
@@ -597,11 +598,12 @@ export class EggGachaUiHandler extends MessageUiHandler {
   updateGachaInfo(gachaType: GachaType): void {
     const infoContainer = this.gachaInfoContainers[gachaType];
     switch (gachaType as GachaType) {
-      case GachaType.LEGENDARY:
+      case GachaType.LEGENDARY: {
         const species = getPokemonSpecies(getLegendaryGachaSpeciesForTimestamp(new Date().getTime()));
         const pokemonIcon = infoContainer.getAt(1) as Phaser.GameObjects.Sprite;
         pokemonIcon.setTexture(species.getIconAtlasKey(), species.getIconId(false));
         break;
+      }
     }
   }
 

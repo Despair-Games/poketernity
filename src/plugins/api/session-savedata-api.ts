@@ -82,9 +82,8 @@ export class SessionSavedataApi extends ApiBase {
 
       if (response.ok) {
         return null;
-      } else {
-        return await response.text();
       }
+      return await response.text();
     } catch (err) {
       console.warn("Could not delete session savedata!", err);
       return "Unknown error";

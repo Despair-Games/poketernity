@@ -1,3 +1,4 @@
+import { version } from "#package.json";
 import type { SessionSaveData } from "#types/SessionData";
 import type { SessionSaveMigrator } from "#types/SessionSaveMigrator";
 import type { Settings } from "#types/Settings";
@@ -5,7 +6,6 @@ import type { SettingsSaveMigrator } from "#types/SettingsSaveMigrator";
 import type { SystemSaveData } from "#types/SystemData";
 import type { SystemSaveMigrator } from "#types/SystemSaveMigrator";
 import { compareVersions } from "compare-versions";
-import { version } from "../../../package.json";
 
 /*
 // template for save migrator creation

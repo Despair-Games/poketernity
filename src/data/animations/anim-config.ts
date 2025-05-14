@@ -225,7 +225,7 @@ export class LegacyAnimConfig {
 
           timedEvent && timedEvents.push(timedEvent);
         }
-        this.frameTimedEvents.set(parseInt(fte), timedEvents);
+        this.frameTimedEvents.set(Number.parseInt(fte), timedEvents);
       }
 
       this.position = source.position;
@@ -513,11 +513,11 @@ export class AnimTimedSoundEvent extends LegacyAnimTimedEvent {
         console.error(err);
       }
       return Math.ceil((globalScene.sound.get(`battle_anims/${this.resourceName}`).totalDuration * 1000) / 33.33);
-    } else if (battleAnim.user) {
-      return Math.ceil((battleAnim.user.cry(soundConfig).totalDuration * 1000) / 33.33);
-    } else {
-      throw new Error("battleAnim.user is null!");
     }
+    if (battleAnim.user) {
+      return Math.ceil((battleAnim.user.cry(soundConfig).totalDuration * 1000) / 33.33);
+    }
+    throw new Error("battleAnim.user is null!");
   }
 
   getEventType(): string {
@@ -540,7 +540,7 @@ abstract class AnimTimedBgEvent extends LegacyAnimTimedEvent {
     public flashBlue: number = 0;
     public flashAlpha: number = 0;
     public flashDuration: number = 0;*/
-  constructor(frameIndex: number, resourceName: string, source: any) {
+  constructor(frameIndex: number, resourceName: string, source?: any) {
     super(frameIndex, resourceName);
 
     if (source) {
@@ -548,24 +548,20 @@ abstract class AnimTimedBgEvent extends LegacyAnimTimedEvent {
       this.bgY = source.bgY;
       this.opacity = source.opacity;
       /*this.colorRed = source.colorRed;
-            this.colorGreen = source.colorGreen;
-            this.colorBlue = source.colorBlue;
-            this.colorAlpha = source.colorAlpha;*/
+        this.colorGreen = source.colorGreen;
+        this.colorBlue = source.colorBlue;
+        this.colorAlpha = source.colorAlpha;*/
       this.duration = source.duration;
       /*this.flashScope = source.flashScope;
-            this.flashRed = source.flashRed;
-            this.flashGreen = source.flashGreen;
-            this.flashBlue = source.flashBlue;
-            this.flashAlpha = source.flashAlpha;
-            this.flashDuration = source.flashDuration;*/
+        this.flashRed = source.flashRed;
+        this.flashGreen = source.flashGreen;
+        this.flashBlue = source.flashBlue;
+        this.flashAlpha = source.flashAlpha;
+        this.flashDuration = source.flashDuration;*/
     }
   }
 }
 export class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
-  constructor(frameIndex: number, resourceName: string, source?: any) {
-    super(frameIndex, resourceName, source);
-  }
-
   execute(moveAnim: MoveAnim, _priority?: number): number {
     const tweenProps = {};
     if (this.bgX !== undefined) {
@@ -596,10 +592,6 @@ export class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
   }
 }
 export class AnimTimedAddBgEvent extends AnimTimedBgEvent {
-  constructor(frameIndex: number, resourceName: string, source?: any) {
-    super(frameIndex, resourceName, source);
-  }
-
   execute(moveAnim: MoveAnim, priority?: number): number {
     if (moveAnim.bgSprite) {
       moveAnim.bgSprite.destroy();

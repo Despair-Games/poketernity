@@ -35,7 +35,7 @@ class EventBus extends Phaser.Events.EventEmitter {
     return super.addListener(event, fn, context);
   }
 
-  override removeListener(event: string | symbol, fn?: Function, context?: any, once?: boolean): this {
+  override removeListener<D = any, C = any>(event: EventName, fn?: CallbackFn<D>, context?: C, once?: boolean): this {
     return super.removeListener(event, fn, context, once);
   }
 }

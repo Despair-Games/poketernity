@@ -78,15 +78,14 @@ export class CombinationSceneRequirement extends EncounterSceneRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     if (this.isAnd) {
       throw new Error("Not implemented (Sorry)");
-    } else {
-      for (const req of this.requirements) {
-        if (req.meetsRequirement()) {
-          return req.getDialogueToken(pokemon);
-        }
-      }
-
-      return this.requirements[0].getDialogueToken(pokemon);
     }
+    for (const req of this.requirements) {
+      if (req.meetsRequirement()) {
+        return req.getDialogueToken(pokemon);
+      }
+    }
+
+    return this.requirements[0].getDialogueToken(pokemon);
   }
 }
 
@@ -155,10 +154,9 @@ export class CombinationPokemonRequirement extends EncounterPokemonRequirement {
   override queryParty(partyPokemon: PlayerPokemon[]): PlayerPokemon[] {
     if (this.isAnd) {
       return this.requirements.reduce((relevantPokemon, req) => req.queryParty(relevantPokemon), partyPokemon);
-    } else {
-      const matchingRequirement = this.requirements.find((req) => req.queryParty(partyPokemon).length > 0);
-      return matchingRequirement ? matchingRequirement.queryParty(partyPokemon) : [];
     }
+    const matchingRequirement = this.requirements.find((req) => req.queryParty(partyPokemon).length > 0);
+    return matchingRequirement ? matchingRequirement.queryParty(partyPokemon) : [];
   }
 
   /**
@@ -170,15 +168,14 @@ export class CombinationPokemonRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     if (this.isAnd) {
       throw new Error("Not implemented (Sorry)");
-    } else {
-      for (const req of this.requirements) {
-        if (req.meetsRequirement()) {
-          return req.getDialogueToken(pokemon);
-        }
-      }
-
-      return this.requirements[0].getDialogueToken(pokemon);
     }
+    for (const req of this.requirements) {
+      if (req.meetsRequirement()) {
+        return req.getDialogueToken(pokemon);
+      }
+    }
+
+    return this.requirements[0].getDialogueToken(pokemon);
   }
 }
 
@@ -444,12 +441,11 @@ export class SpeciesRequirement extends EncounterPokemonRequirement {
       return partyPokemon.filter(
         (pokemon) => this.requiredSpecies.filter((species) => pokemon.species.speciesId === species).length > 0,
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed speciess
-      return partyPokemon.filter(
-        (pokemon) => this.requiredSpecies.filter((species) => pokemon.species.speciesId === species).length === 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed speciess
+    return partyPokemon.filter(
+      (pokemon) => this.requiredSpecies.filter((species) => pokemon.species.speciesId === species).length === 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -483,12 +479,11 @@ export class NatureRequirement extends EncounterPokemonRequirement {
       return partyPokemon.filter(
         (pokemon) => this.requiredNature.filter((nature) => pokemon.nature === nature).length > 0,
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed natures
-      return partyPokemon.filter(
-        (pokemon) => this.requiredNature.filter((nature) => pokemon.nature === nature).length === 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed natures
+    return partyPokemon.filter(
+      (pokemon) => this.requiredNature.filter((nature) => pokemon.nature === nature).length === 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -535,12 +530,11 @@ export class TypeRequirement extends EncounterPokemonRequirement {
       return partyPokemon.filter(
         (pokemon) => this.requiredType.filter((type) => pokemon.getTypes().includes(type)).length > 0,
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed types
-      return partyPokemon.filter(
-        (pokemon) => this.requiredType.filter((type) => pokemon.getTypes().includes(type)).length === 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed types
+    return partyPokemon.filter(
+      (pokemon) => this.requiredType.filter((type) => pokemon.getTypes().includes(type)).length === 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -625,15 +619,14 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
             pokemon.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(learnableMove),
           ).length > 0,
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed learnableMoves
-      return partyPokemon.filter(
-        (pokemon) =>
-          this.requiredMoves.filter((learnableMove) =>
-            pokemon.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(learnableMove),
-          ).length === 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed learnableMoves
+    return partyPokemon.filter(
+      (pokemon) =>
+        this.requiredMoves.filter((learnableMove) =>
+          pokemon.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(learnableMove),
+        ).length === 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -719,9 +712,8 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         if (statusEffect === StatusEffect.NONE) {
           // StatusEffect.NONE also checks for null or undefined status
           return !pokemon.hasNonVolatileStatusEffect();
-        } else {
-          return pokemon.hasStatusEffect(statusEffect);
         }
+        return pokemon.hasStatusEffect(statusEffect);
       });
       return this.invertQuery ? !effectFilter : effectFilter;
     });
@@ -732,7 +724,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
       if (a === StatusEffect.NONE) {
         return pokemon && !pokemon.hasNonVolatileStatusEffect();
       }
-      return pokemon && pokemon.hasStatusEffect(a);
+      return pokemon?.hasStatusEffect(a);
     });
     if (reqStatus.length > 0) {
       return ["status", StatusEffect[reqStatus[0]]];
@@ -775,15 +767,13 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
       && pokemonFormChanges[pokemon.species.speciesId]
         .filter((fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger))
         // Returns true if any form changes match this item
-        .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
-        .flat()
+        .flatMap((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
         .flatMap((fc) => fc.item)
         .includes(formChangeItem)
     ) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   override queryParty(partyPokemon: PlayerPokemon[]): PlayerPokemon[] {
@@ -792,14 +782,12 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
         (pokemon) =>
           this.requiredFormChangeItem.filter((formChangeItem) => this.filterByForm(pokemon, formChangeItem)).length > 0,
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed formChangeItems
-      return partyPokemon.filter(
-        (pokemon) =>
-          this.requiredFormChangeItem.filter((formChangeItem) => this.filterByForm(pokemon, formChangeItem)).length
-          === 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed formChangeItems
+    return partyPokemon.filter(
+      (pokemon) =>
+        this.requiredFormChangeItem.filter((formChangeItem) => this.filterByForm(pokemon, formChangeItem)).length === 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -860,13 +848,12 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
         (pokemon) =>
           this.requiredEvolutionItem.filter((evolutionItem) => this.filterByEvo(pokemon, evolutionItem)).length > 0,
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed evolutionItemss
-      return partyPokemon.filter(
-        (pokemon) =>
-          this.requiredEvolutionItem.filter((evolutionItems) => this.filterByEvo(pokemon, evolutionItems)).length === 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed evolutionItemss
+    return partyPokemon.filter(
+      (pokemon) =>
+        this.requiredEvolutionItem.filter((evolutionItems) => this.filterByEvo(pokemon, evolutionItems)).length === 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -912,19 +899,18 @@ export class HeldItemRequirement extends EncounterPokemonRequirement {
           });
         }),
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that have any held items that are NOT in requiredHeldItemModifiers
-      // E.g. functions as a blacklist
-      return partyPokemon.filter(
-        (pokemon) =>
-          pokemon.getHeldItems().filter((it) => {
-            return (
-              !this.requiredHeldItemModifiers.some((heldItem) => it.constructor.name === heldItem)
-              && (!this.requireTransferable || it.isTransferable)
-            );
-          }).length > 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that have any held items that are NOT in requiredHeldItemModifiers
+    // E.g. functions as a blacklist
+    return partyPokemon.filter(
+      (pokemon) =>
+        pokemon.getHeldItems().filter((it) => {
+          return (
+            !this.requiredHeldItemModifiers.some((heldItem) => it.constructor.name === heldItem)
+            && (!this.requireTransferable || it.isTransferable)
+          );
+        }).length > 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -979,21 +965,20 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
           });
         }),
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that have any held items that are NOT in requiredHeldItemModifiers
-      // E.g. functions as a blacklist
-      return partyPokemon.filter(
-        (pokemon) =>
-          pokemon.getHeldItems().filter((it) => {
-            return !this.requiredHeldItemTypes.some(
-              (heldItemType) =>
-                it.isAttackTypeBoosterModifier()
-                && it.type.moveType === heldItemType
-                && (!this.requireTransferable || it.isTransferable),
-            );
-          }).length > 0,
-      );
     }
+    // for an inverted query, we only want to get the pokemon that have any held items that are NOT in requiredHeldItemModifiers
+    // E.g. functions as a blacklist
+    return partyPokemon.filter(
+      (pokemon) =>
+        pokemon.getHeldItems().filter((it) => {
+          return !this.requiredHeldItemTypes.some(
+            (heldItemType) =>
+              it.isAttackTypeBoosterModifier()
+              && it.type.moveType === heldItemType
+              && (!this.requireTransferable || it.isTransferable),
+          );
+        }).length > 0,
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -1039,12 +1024,11 @@ export class LevelRequirement extends EncounterPokemonRequirement {
       return partyPokemon.filter(
         (pokemon) => pokemon.level >= this.requiredLevelRange[0] && pokemon.level <= this.requiredLevelRange[1],
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredLevelRanges
-      return partyPokemon.filter(
-        (pokemon) => pokemon.level < this.requiredLevelRange[0] || pokemon.level > this.requiredLevelRange[1],
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredLevelRanges
+    return partyPokemon.filter(
+      (pokemon) => pokemon.level < this.requiredLevelRange[0] || pokemon.level > this.requiredLevelRange[1],
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -1081,13 +1065,12 @@ export class FriendshipRequirement extends EncounterPokemonRequirement {
           pokemon.friendship >= this.requiredFriendshipRange[0]
           && pokemon.friendship <= this.requiredFriendshipRange[1],
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredFriendshipRanges
-      return partyPokemon.filter(
-        (pokemon) =>
-          pokemon.friendship < this.requiredFriendshipRange[0] || pokemon.friendship > this.requiredFriendshipRange[1],
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredFriendshipRanges
+    return partyPokemon.filter(
+      (pokemon) =>
+        pokemon.friendship < this.requiredFriendshipRange[0] || pokemon.friendship > this.requiredFriendshipRange[1],
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -1129,13 +1112,12 @@ export class HealthRatioRequirement extends EncounterPokemonRequirement {
           pokemon.getHpRatio() >= this.requiredHealthRange[0] && pokemon.getHpRatio() <= this.requiredHealthRange[1]
         );
       });
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredHealthRanges
-      return partyPokemon.filter(
-        (pokemon) =>
-          pokemon.getHpRatio() < this.requiredHealthRange[0] || pokemon.getHpRatio() > this.requiredHealthRange[1],
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredHealthRanges
+    return partyPokemon.filter(
+      (pokemon) =>
+        pokemon.getHpRatio() < this.requiredHealthRange[0] || pokemon.getHpRatio() > this.requiredHealthRange[1],
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -1175,13 +1157,12 @@ export class WeightRequirement extends EncounterPokemonRequirement {
         (pokemon) =>
           pokemon.getWeight() >= this.requiredWeightRange[0] && pokemon.getWeight() <= this.requiredWeightRange[1],
       );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredWeightRanges
-      return partyPokemon.filter(
-        (pokemon) =>
-          pokemon.getWeight() < this.requiredWeightRange[0] || pokemon.getWeight() > this.requiredWeightRange[1],
-      );
     }
+    // for an inverted query, we only want to get the pokemon that don't have ANY of the listed requiredWeightRanges
+    return partyPokemon.filter(
+      (pokemon) =>
+        pokemon.getWeight() < this.requiredWeightRange[0] || pokemon.getWeight() > this.requiredWeightRange[1],
+    );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {

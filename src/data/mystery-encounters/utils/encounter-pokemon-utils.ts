@@ -272,7 +272,7 @@ export function getRandomSpeciesByStarterCost(
   let max = Array.isArray(starterTiers) ? starterTiers[1] : starterTiers;
 
   let filteredSpecies: [PokemonSpecies, number][] = Object.keys(speciesStarterCosts)
-    .map((s) => [parseInt(s) as SpeciesId, speciesStarterCosts[s] as number])
+    .map((s) => [Number.parseInt(s) as SpeciesId, speciesStarterCosts[s] as number])
     .filter((s) => {
       const pokemonSpecies = getPokemonSpecies(s[0]);
       return (
