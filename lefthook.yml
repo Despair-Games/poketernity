@@ -20,7 +20,7 @@ pre-push:
   commands:
     eslint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: npx biome ci --changed --no-errors-on-unmatched --diagnostic-level=error {push_files} 
+      run: npx biome ci --changed --no-errors-on-unmatched --diagnostic-level=error {push_files}
 
 post-merge:
   commands:
