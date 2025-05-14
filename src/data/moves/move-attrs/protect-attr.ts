@@ -6,7 +6,16 @@ import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 /**
  * Attribute to apply a set type of protection to the user.
  * Moves with this attribute have an increased chance of failing after
- * consecutive uses.
+ * consecutive uses:
+ *
+ * | Uses | Success Rate |
+ * |------|--------------|
+ * |  0   |      1       |
+ * |  1   |    1/3       |
+ * |  2   |    1/9       |
+ * |  3   |   1/27       |
+ * |  4   |    ...       |
+ *
  * @extends AddBattlerTagAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Protect | Variations of Protect}
  */
