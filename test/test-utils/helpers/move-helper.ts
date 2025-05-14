@@ -21,7 +21,8 @@ import { coerceArray } from "#utils/common-utils";
 import chalk from "chalk";
 import { expect, vi } from "vitest";
 
-chalk.level = 3; // support chalk in vitest The default level doesn't work with vitest so we have to set to 3)
+// Chalk must be set to level 3 when used with Vitest in order to properly color the console output
+chalk.level = 3;
 
 /**
  * Helper to handle a Pokemon's move
