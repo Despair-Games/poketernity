@@ -2626,7 +2626,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             /* Here we are making a fake form index dex props for challenges
              * Since some pokemon rely on forms to be valid (i.e. blaze tauros for fire challenges), we make a fake form and dex props to use in the challenge
              */
-            const tempFormProps = BigInt(Math.pow(2, i)) * DexAttr.DEFAULT_FORM;
+            const tempFormProps = globalScene.gameData.getFormAttr(i);
             const isValidForChallenge = new BooleanHolder(true);
             applyChallenges(
               globalScene.gameMode,
@@ -4036,7 +4036,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const unlockedVariants = globalScene.gameData.getUnlockedVariantsAttr(caughtAttr, getRarestVariant);
     if (unlockedVariants.length > 0 && this.starterPreferences[speciesId]?.shiny !== false) {
       if (this.starterPreferences[speciesId]?.variant !== undefined) {
-        props += BigInt(Math.pow(2, this.starterPreferences[speciesId].variant)) * DexAttr.SHINY_BASE_VARIANT;
+        props += BigInt(1 << this.starterPreferences[speciesId].variant) * DexAttr.SHINY_BASE_VARIANT;
       } else {
         props += unlockedVariants[0];
       }
@@ -4045,7 +4045,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
     if (this.starterPreferences[speciesId]?.form) {
       // this checks for the form of the pokemon
-      props += BigInt(Math.pow(2, this.starterPreferences[speciesId].form)) * DexAttr.DEFAULT_FORM;
+      props += globalScene.gameData.getFormAttr(this.starterPreferences[speciesId].form);
     } else {
       // Get the first unlocked form
       props += globalScene.gameData.getFormAttr(globalScene.gameData.getFormIndex(caughtAttr));

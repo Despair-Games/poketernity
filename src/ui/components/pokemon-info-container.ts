@@ -269,7 +269,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       if (formName) {
         this.pokemonFormLabelText.setVisible(true);
         this.pokemonFormText.setVisible(true);
-        const newForm = BigInt(1 << pokemon.getSelectableFormIndex()) * DexAttr.DEFAULT_FORM;
+        const newForm = globalScene.gameData.getFormAttr(pokemon.getSelectableFormIndex());
 
         if ((newForm & caughtAttr) === BigInt(0)) {
           setTextColor(this.pokemonFormLabelText, TextStyle.SUMMARY_BLUE);

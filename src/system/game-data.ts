@@ -1967,7 +1967,7 @@ export class GameData {
   }
 
   getFormAttr(formIndex: number): bigint {
-    return BigInt(1) << BigInt(6 + formIndex);
+    return BigInt(1 << formIndex) * DexAttr.DEFAULT_FORM;
   }
 
   /**
