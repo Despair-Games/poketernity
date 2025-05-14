@@ -42,7 +42,12 @@ const displayStats: DisplayStats = {
   shinyStartersUnlocked: {
     label_key: "shinyStarters",
     sourceFunc: (gameData) => {
-      const starterCount = gameData.getStarterCount((d) => (d.caughtAttr & DexAttr.SHINY) > 0);
+      const starterCount = gameData.getStarterCount(
+        (d) =>
+          (d.caughtAttr & DexAttr.SHINY_BASE_VARIANT) > 0
+          || (d.caughtAttr & DexAttr.SHINY_RARE_VARIANT) > 0
+          || (d.caughtAttr & DexAttr.SHINY_EPIC_VARIANT) > 0,
+      );
       return `${starterCount} (${Math.floor((starterCount / Object.keys(speciesStarterCosts).length) * 1000) / 10}%)`;
     },
   },

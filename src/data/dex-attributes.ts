@@ -1,12 +1,11 @@
 export const DexAttr = {
   NON_SHINY: 1n,
-  SHINY: 2n,
-  MALE: 4n,
-  FEMALE: 8n,
-  DEFAULT_VARIANT: 16n,
-  VARIANT_2: 32n,
-  VARIANT_3: 64n,
-  DEFAULT_FORM: 128n,
+  SHINY_BASE_VARIANT: 2n,
+  SHINY_RARE_VARIANT: 4n,
+  SHINY_EPIC_VARIANT: 8n,
+  MALE: 16n,
+  FEMALE: 32n,
+  DEFAULT_FORM: 64n,
 };
 
 export const AbilityAttr = {

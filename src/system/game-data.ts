@@ -347,18 +347,6 @@ export class GameData {
           }
         }
 
-        // TODO: Temporary starter data migration, to be removed later
-        const allNaturesAttr = Math.pow(2, getEnumLength(Nature)) - 1;
-        for (const starterData of Object.values(systemData.starterData)) {
-          if (!starterData.natureAttr || !starterData.ivs) {
-            const unlocked = starterData.abilityAttr !== 0;
-            // As a placeholder migration, unlock all natures
-            starterData.natureAttr = unlocked ? allNaturesAttr : 0;
-            // As a placeholder migration, max out all ivs
-            starterData.ivs = Array(6).fill(unlocked ? IV_MAX : IV_MIN);
-          }
-        }
-
         localStorage.setItem(getDataTypeKey(GameDataType.SYSTEM), encrypt(systemDataStr, BYPASS_LOGIN));
 
         // TODO: run history shouldn't be initialized here (and is it even needed?)
@@ -1404,8 +1392,7 @@ export class GameData {
       };
     }
 
-    const defaultStarterAttr =
-      DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_VARIANT | DexAttr.DEFAULT_FORM;
+    const defaultStarterAttr = DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_FORM;
 
     for (let ds = 0; ds < defaultStarterSpecies.length; ds++) {
       const entry = data[defaultStarterSpecies[ds]] as DexEntry;
@@ -1851,35 +1838,32 @@ export class GameData {
     let ret = 0n;
     const dexEntry = this.dexData[species.speciesId];
     const attr = dexEntry.caughtAttr;
-    if (optimistic) {
-      if (attr & DexAttr.SHINY) {
-        ret |= DexAttr.SHINY;
 
-        if (attr & DexAttr.VARIANT_3) {
-          ret |= DexAttr.VARIANT_3;
-        } else if (attr & DexAttr.VARIANT_2) {
-          ret |= DexAttr.VARIANT_2;
-        } else {
-          ret |= DexAttr.DEFAULT_VARIANT;
-        }
+    if (optimistic) {
+      if (attr & DexAttr.SHINY_EPIC_VARIANT) {
+        ret |= DexAttr.SHINY_EPIC_VARIANT;
+      } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
+        ret |= DexAttr.SHINY_RARE_VARIANT;
+      } else if (attr & DexAttr.SHINY_BASE_VARIANT) {
+        ret |= DexAttr.SHINY_BASE_VARIANT;
       } else {
         ret |= DexAttr.NON_SHINY;
-        ret |= DexAttr.DEFAULT_VARIANT;
       }
     } else {
       // Default to non shiny. Fallback to shiny if it's the only thing that's unlocked
-      ret |= attr & DexAttr.NON_SHINY || !(attr & DexAttr.SHINY) ? DexAttr.NON_SHINY : DexAttr.SHINY;
-
-      if (attr & DexAttr.DEFAULT_VARIANT) {
-        ret |= DexAttr.DEFAULT_VARIANT;
-      } else if (attr & DexAttr.VARIANT_2) {
-        ret |= DexAttr.VARIANT_2;
-      } else if (attr & DexAttr.VARIANT_3) {
-        ret |= DexAttr.VARIANT_3;
+      if (attr & DexAttr.NON_SHINY) {
+        ret |= DexAttr.NON_SHINY;
+      } else if (attr & DexAttr.SHINY_BASE_VARIANT) {
+        ret |= DexAttr.SHINY_BASE_VARIANT;
+      } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
+        ret |= DexAttr.SHINY_RARE_VARIANT;
+      } else if (attr & DexAttr.SHINY_EPIC_VARIANT) {
+        ret |= DexAttr.SHINY_EPIC_VARIANT;
       } else {
-        ret |= DexAttr.DEFAULT_VARIANT;
+        ret |= DexAttr.NON_SHINY; // Neither shiny and non shiny unlocked, fallback to non shiny
       }
     }
+
     ret |= attr & DexAttr.MALE || !(attr & DexAttr.FEMALE) ? DexAttr.MALE : DexAttr.FEMALE;
     ret |= this.getFormAttr(this.getFormIndex(attr));
     return ret;
@@ -1889,11 +1873,11 @@ export class GameData {
     const shiny = !(dexAttr & DexAttr.NON_SHINY);
     const female = !(dexAttr & DexAttr.MALE);
     let variant: Variant = 0;
-    if (dexAttr & DexAttr.DEFAULT_VARIANT) {
+    if (dexAttr & DexAttr.SHINY_BASE_VARIANT) {
       variant = 0;
-    } else if (dexAttr & DexAttr.VARIANT_2) {
+    } else if (dexAttr & DexAttr.SHINY_RARE_VARIANT) {
       variant = 1;
-    } else if (dexAttr & DexAttr.VARIANT_3) {
+    } else if (dexAttr & DexAttr.SHINY_EPIC_VARIANT) {
       variant = 2;
     }
     const formIndex = this.getFormIndex(dexAttr);
@@ -1926,7 +1910,16 @@ export class GameData {
   }
 
   getDexAttrLuck(dexAttr: bigint): number {
-    return dexAttr & DexAttr.SHINY ? (dexAttr & DexAttr.VARIANT_3 ? 3 : dexAttr & DexAttr.VARIANT_2 ? 2 : 1) : 0;
+    if (dexAttr & DexAttr.SHINY_EPIC_VARIANT) {
+      return 3;
+    }
+    if (dexAttr & DexAttr.SHINY_RARE_VARIANT) {
+      return 2;
+    }
+    if (dexAttr & DexAttr.SHINY_BASE_VARIANT) {
+      return 1;
+    }
+    return 0;
   }
 
   getNaturesForAttr(natureAttr: number = 0): Nature[] {
@@ -1974,6 +1967,19 @@ export class GameData {
   }
 
   getFormAttr(formIndex: number): bigint {
-    return BigInt(1) << BigInt(7 + formIndex);
+    return BigInt(1) << BigInt(6 + formIndex);
+  }
+
+  /**
+   * Get an ordered list of the {@linkcode DexAttr}s for all unlocked variants of the given caughtAttr.
+   * @param caughtAttr - The dex attribute to examine
+   * @param getRarestFirst - Whether the returned array should be ordered starting from the rarest unlocked variant, or not. Default: `false`
+   * @returns array of {@linkcode DexAttr}s for the unlocked variants, if any.
+   */
+  getUnlockedVariantsAttr(caughtAttr: bigint, getRarestFirst: boolean = false): bigint[] {
+    const orderedVariants = getRarestFirst
+      ? [DexAttr.SHINY_EPIC_VARIANT, DexAttr.SHINY_RARE_VARIANT, DexAttr.SHINY_BASE_VARIANT]
+      : [DexAttr.SHINY_BASE_VARIANT, DexAttr.SHINY_RARE_VARIANT, DexAttr.SHINY_EPIC_VARIANT];
+    return orderedVariants.filter((v) => (caughtAttr & v) > 0);
   }
 }

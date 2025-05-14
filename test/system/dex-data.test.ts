@@ -61,12 +61,11 @@ describe("Dex Data", () => {
       [dexData.caughtAttr, dexData.seenAttr].forEach((attr: bigint) => {
         expect(attr !== 0n).toBeTruthy();
         expect(attr & DexAttr.NON_SHINY).toBeTruthy();
-        expect(attr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
         expect(attr & DexAttr.FEMALE).toBeTruthy();
         expect(attr & DexAttr.MALE).toBeTruthy();
-        expect(attr & DexAttr.SHINY).toBeFalsy();
-        expect(attr & DexAttr.VARIANT_2).toBeFalsy();
-        expect(attr & DexAttr.VARIANT_3).toBeFalsy();
+        expect(attr & DexAttr.SHINY_BASE_VARIANT).toBeFalsy();
+        expect(attr & DexAttr.SHINY_RARE_VARIANT).toBeFalsy();
+        expect(attr & DexAttr.SHINY_EPIC_VARIANT).toBeFalsy();
         expect(attr & DexAttr.DEFAULT_FORM).toBeTruthy();
         expect(gameData.getFormIndex(attr)).toBe(0);
       });
