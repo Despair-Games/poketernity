@@ -46,11 +46,13 @@ import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
+import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#battler-tags/crit-boost-stackable-tag";
 import { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
 import { ExposedTag } from "#battler-tags/exposed-tag";
+import { getBattlerTag } from "#battler-tags/get-battler-tag";
 import { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
 import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
@@ -59,8 +61,6 @@ import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-ta
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
-import { applyBattlerTags } from "#battler-tags/utils/apply-battler-tags";
-import { getBattlerTag } from "#battler-tags/utils/get-battler-tag";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
