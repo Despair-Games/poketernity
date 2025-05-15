@@ -1,12 +1,12 @@
-import type { EffectiveStat } from "#enums/stat";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
-import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { EffectiveStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { toDmgValue } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Heals user as a side effect of a move that hits a target.

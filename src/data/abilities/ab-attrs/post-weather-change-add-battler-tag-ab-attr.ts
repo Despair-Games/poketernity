@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
-import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAttr {
   private readonly tagType: BattlerTagType;
@@ -23,8 +23,7 @@ export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAtt
 
     if (simulated) {
       return pokemon.canAddTag(this.tagType);
-    } else {
-      return pokemon.addTag(this.tagType, this.turnCount);
     }
+    return pokemon.addTag(this.tagType, this.turnCount);
   }
 }

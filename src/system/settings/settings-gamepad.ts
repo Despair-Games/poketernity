@@ -1,13 +1,13 @@
 import { globalScene } from "#app/global-scene";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
-import type { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
-import { truncateString } from "#app/utils/string-utils";
 import { Button } from "#enums/buttons";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
-import { settings } from "./settings-manager";
+import { settings } from "#system/settings-manager";
+import type { GamepadBindingUiHandler } from "#ui/gamepad-binding-ui-handler";
+import type { GamepadSettingsUiHandler } from "#ui/gamepad-settings-ui-handler";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { truncateString } from "#utils/string-utils";
 
 const pressAction = "Press action to assign"; // TODO localize
 
@@ -86,7 +86,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui) {
           const cancelHandler = (success: boolean = false): boolean => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
+            globalScene.ui.getCurrentHandler<GamepadSettingsUiHandler>().updateBindings();
             return success;
           };
           globalScene.ui.setOverlayMode<GamepadBindingUiHandler>(UiMode.GAMEPAD_BINDING, setting, cancelHandler);
@@ -99,12 +99,9 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
         if (globalScene.ui && gp) {
           const cancelHandler = () => {
             globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).setOptionCursor(
-              Object.values(SettingGamepad).indexOf(SettingGamepad.Controller),
-              0,
-              true,
-            );
-            (globalScene.ui.getHandler() as GamepadSettingsUiHandler).updateBindings();
+            const handler = globalScene.ui.getCurrentHandler<GamepadSettingsUiHandler>();
+            handler.setOptionCursor(Object.values(SettingGamepad).indexOf(SettingGamepad.Controller), 0, true);
+            handler.updateBindings();
             return false;
           };
           const changeGamepadHandler = (gamepad: string, index: number) => {

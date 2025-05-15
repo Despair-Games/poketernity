@@ -1,27 +1,19 @@
-import { DEFAULT_NEW_TERRAIN_DURATION } from "#app/constants/game-constants";
-import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#app/constants/weather-constants";
-import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
-import type { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
-import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/terrain-event-type-change-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getArenaTag, type ArenaTag, type EntryHazardTag } from "#app/data/arena-tag";
-import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#app/data/biome-utils";
-import { allBiomes } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
-import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
-import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr";
+import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
+import type { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import { coerceArray, getEnumValues } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedInt, weightedPick } from "#app/utils/random-utils";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import { DEFAULT_NEW_TERRAIN_DURATION } from "#constants/game-constants";
+import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
+import { getArenaTag, type ArenaTag, type EntryHazardTag } from "#data/arena-tag";
+import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#data/biome-utils";
+import { allBiomes } from "#data/data-lists";
+import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
+import type PokemonSpecies from "#data/pokemon-species";
+import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
+import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -37,6 +29,14 @@ import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
+import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { ShowAbilityPhase } from "#phases/show-ability-phase";
+import { coerceArray, getEnumValues } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedInt, weightedPick } from "#utils/random-utils";
 
 export class Arena {
   public biomeId: BiomeId;
@@ -215,13 +215,14 @@ export class Arena {
     if (pokemonSpecies.isLegendLike()) {
       if (pokemonSpecies.baseTotal >= 720) {
         return level < 90;
-      } else if (pokemonSpecies.baseTotal >= 670) {
-        return level < 70;
-      } else if (pokemonSpecies.baseTotal >= 580) {
-        return level < 50;
-      } else {
-        return level < 30;
       }
+      if (pokemonSpecies.baseTotal >= 670) {
+        return level < 70;
+      }
+      if (pokemonSpecies.baseTotal >= 580) {
+        return level < 50;
+      }
+      return level < 30;
     }
     return false;
   }
@@ -242,13 +243,14 @@ export class Arena {
   generateBossBiomeTier(tierValue: number): BiomePoolTier {
     if (tierValue >= 20) {
       return BiomePoolTier.BOSS;
-    } else if (tierValue >= 6) {
-      return BiomePoolTier.BOSS_RARE;
-    } else if (tierValue >= 1) {
-      return BiomePoolTier.BOSS_SUPER_RARE;
-    } else {
-      return BiomePoolTier.BOSS_ULTRA_RARE;
     }
+    if (tierValue >= 6) {
+      return BiomePoolTier.BOSS_RARE;
+    }
+    if (tierValue >= 1) {
+      return BiomePoolTier.BOSS_SUPER_RARE;
+    }
+    return BiomePoolTier.BOSS_ULTRA_RARE;
   }
 
   /**
@@ -268,15 +270,17 @@ export class Arena {
   generateNonBossBiomeTier(tierValue: number): BiomePoolTier {
     if (tierValue >= 156) {
       return BiomePoolTier.COMMON;
-    } else if (tierValue >= 32) {
-      return BiomePoolTier.UNCOMMON;
-    } else if (tierValue >= 6) {
-      return BiomePoolTier.RARE;
-    } else if (tierValue >= 1) {
-      return BiomePoolTier.SUPER_RARE;
-    } else {
-      return BiomePoolTier.ULTRA_RARE;
     }
+    if (tierValue >= 32) {
+      return BiomePoolTier.UNCOMMON;
+    }
+    if (tierValue >= 6) {
+      return BiomePoolTier.RARE;
+    }
+    if (tierValue >= 1) {
+      return BiomePoolTier.SUPER_RARE;
+    }
+    return BiomePoolTier.ULTRA_RARE;
   }
 
   /**
@@ -334,7 +338,7 @@ export class Arena {
             return 5;
         }
         break;
-      case SpeciesId.LYCANROC:
+      case SpeciesId.LYCANROC: {
         const timeOfDay = this.getTimeOfDay();
         switch (timeOfDay) {
           case TimeOfDay.DAY:
@@ -346,6 +350,7 @@ export class Arena {
             return 1;
         }
         break;
+      }
     }
 
     return 0;

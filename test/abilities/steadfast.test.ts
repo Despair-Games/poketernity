@@ -1,10 +1,12 @@
+import { IGNORING_ABILITIES } from "#constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -34,7 +36,7 @@ describe("Abilities - Steadfast", () => {
       .enemyLevel(100);
   });
 
-  it(`should boost SPD +1 after flinching`, async () => {
+  it("should boost SPD +1 after flinching", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -47,7 +49,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -56,7 +58,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, +1);
   });
 
-  it(`should NOT boost SPD when Pokemon does NOT flinch`, async () => {
+  it("should NOT boost SPD when Pokemon does NOT flinch", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -69,7 +71,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -78,7 +80,7 @@ describe("Abilities - Steadfast", () => {
     expect(playerPkm).toHaveStatStage(Stat.SPD, 0);
   });
 
-  it(`should NOT boost SPD if flinching occured after owner acted`, async () => {
+  it("should NOT boost SPD if flinching occured after owner acted", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
     await classicMode.startBattle([SpeciesId.FEEBAS]);
 
@@ -87,12 +89,12 @@ describe("Abilities - Steadfast", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.FAKE_OUT);
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
     await phaseInterceptor.to("MessagePhase", false);
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -124,7 +126,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
@@ -137,20 +139,12 @@ describe("Abilities - Steadfast", () => {
     // Item not yet implemented
   });
 
-  it.each([
-    {
-      abilityName: "Mold Breaker",
-      abilityId: AbilityId.MOLD_BREAKER,
-    },
-    {
-      abilityName: "Teravolt",
-      abilityId: AbilityId.TERAVOLT,
-    },
-    {
-      abilityName: "Turboblaze",
-      abilityId: AbilityId.TURBOBLAZE,
-    },
-  ])(`should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability`, async ({ abilityId }) => {
+  it.each(
+    IGNORING_ABILITIES.map((abilityId) => ({
+      abilityName: capitalizeString(AbilityId[abilityId], "_", false, true),
+      abilityId,
+    })),
+  )("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
     await classicMode.startBattle([SpeciesId.FEEBAS]);
@@ -164,7 +158,7 @@ describe("Abilities - Steadfast", () => {
 
     expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
 
-    await phaseInterceptor.to("MoveEndPhase", true);
+    await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
 

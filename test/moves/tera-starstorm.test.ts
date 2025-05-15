@@ -1,11 +1,11 @@
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
-import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Tera Starstorm", () => {
   let phaserGame: Phaser.Game;
@@ -76,11 +76,11 @@ describe("Moves - Tera Starstorm", () => {
     const enemyField = game.scene.getEnemyField();
 
     // Pokemon other than Terapagos should not be affected - only hits one target
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyField.some((pokemon) => pokemon.isFullHp())).toBe(true);
 
     // Terapagos in Stellar Form should hit both targets
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyField.every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
 });

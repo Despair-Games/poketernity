@@ -1,9 +1,9 @@
-import { LS_PREFIX } from "#app/constants/app-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
-import type { UI } from "#app/ui/ui";
+import { LS_PREFIX } from "#constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import type { UI } from "#ui/ui";
 import { t } from "i18next";
 
 //#region Types
@@ -207,7 +207,9 @@ export class MoveTouchControlsHandler {
   private createToolbar() {
     this.touchControlsEl?.prepend(this.createToolbarElement());
 
-    if (!this.configToolbarEl) return;
+    if (!this.configToolbarEl) {
+      return;
+    }
 
     this.saveBtn.addEventListener("click", () => {
       this.saveCurrentPositions();
@@ -280,8 +282,8 @@ export class MoveTouchControlsHandler {
       .map((controlGroupEl) => {
         return {
           id: controlGroupEl.id,
-          x: parseFloat(this.isLeft(controlGroupEl) ? controlGroupEl.style.left : controlGroupEl.style.right),
-          y: parseFloat(controlGroupEl.style.bottom),
+          x: Number.parseFloat(this.isLeft(controlGroupEl) ? controlGroupEl.style.left : controlGroupEl.style.right),
+          y: Number.parseFloat(controlGroupEl.style.bottom),
         };
       });
   }

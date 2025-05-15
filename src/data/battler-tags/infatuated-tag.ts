@@ -1,14 +1,14 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import Overrides from "#app/overrides";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
+import type { Pokemon } from "#field/pokemon";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import type { MovePhase } from "#phases/move-phase";
 import i18next from "i18next";
-import Overrides from "#app/overrides";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Infatuation | Infatuation} status effect
@@ -27,14 +27,12 @@ export class InfatuatedTag extends BattlerTag {
 
       if (pkm) {
         return pokemon.isOppositeGender(pkm);
-      } else {
-        console.warn("canAdd: this.sourceId is not a valid pokemon id!", this.sourceId);
-        return false;
       }
-    } else {
-      console.warn("canAdd: this.sourceId is undefined");
+      console.warn("canAdd: this.sourceId is not a valid pokemon id!", this.sourceId);
       return false;
     }
+    console.warn("canAdd: this.sourceId is undefined");
+    return false;
   }
 
   override onAdd(pokemon: Pokemon): void {

@@ -1,11 +1,11 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
-import type { SessionSaveMigrator } from "#app/@types/SessionSaveMigrator";
-import type { Settings } from "#app/@types/Settings";
-import type { SettingsSaveMigrator } from "#app/@types/SettingsSaveMigrator";
-import type { SystemSaveData } from "#app/@types/SystemData";
-import type { SystemSaveMigrator } from "#app/@types/SystemSaveMigrator";
+import { version } from "#package.json";
+import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveMigrator } from "#types/SessionSaveMigrator";
+import type { Settings } from "#types/Settings";
+import type { SettingsSaveMigrator } from "#types/SettingsSaveMigrator";
+import type { SystemSaveData } from "#types/SystemData";
+import type { SystemSaveMigrator } from "#types/SystemSaveMigrator";
 import { compareVersions } from "compare-versions";
-import { version } from "../../../package.json";
 
 /*
 // template for save migrator creation

@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "./abstract-field-phase";
 import { PhaseId } from "#enums/phase-id";
+import { FieldPhase } from "#phases/abstract-field-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.

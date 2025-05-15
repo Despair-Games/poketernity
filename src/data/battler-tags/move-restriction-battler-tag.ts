@@ -1,12 +1,11 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { RestrictingBattlerTag } from "#app/data/battler-tags/restricting-battler-tag";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { MovePhase } from "#app/phases/move-phase";
+import { BattlerTag } from "#battler-tags/battler-tag";
+import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { MovePhase } from "#phases/move-phase";
 
 /**
  * Base class for tags that restrict the usage of moves. This effect is generally referred to as "disabling" a move
@@ -19,16 +18,6 @@ import { MoveId } from "#enums/move-id";
  * @implements `RestrictingBattlerTag`
  */
 export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
-  constructor(
-    tagType: BattlerTagType,
-    lapseType: BattlerTagLapseType | BattlerTagLapseType[],
-    turnCount: number,
-    sourceMoveId?: MoveId,
-    sourceId?: number,
-  ) {
-    super(tagType, lapseType, turnCount, sourceMoveId, sourceId);
-  }
-
   /** @override */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {

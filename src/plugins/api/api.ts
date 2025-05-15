@@ -1,9 +1,9 @@
-import type { TitleStatsResponse } from "#app/@types/Api";
-import { AccountApi } from "#app/plugins/api/account-api";
-import { AdminApi } from "#app/plugins/api/admin-api";
-import { ApiBase } from "#app/plugins/api/api-base";
-import { DailyApi } from "#app/plugins/api/daily-api";
-import { SavedataApi } from "#app/plugins/api/savedata-api";
+import { AccountApi } from "#api/account-api";
+import { AdminApi } from "#api/admin-api";
+import { ApiBase } from "#api/api-base";
+import { DailyApi } from "#api/daily-api";
+import { SavedataApi } from "#api/savedata-api";
+import type { TitleStatsResponse } from "#types/Api";
 
 /**
  * A wrapper for API requests.
@@ -79,9 +79,8 @@ export class Api extends ApiBase {
       const response = await this.doPost("/auth/discord/logout");
       if (response.ok) {
         return true;
-      } else {
-        console.warn(`Discord unlink failed (${response.status}: ${response.statusText})`);
       }
+      console.warn(`Discord unlink failed (${response.status}: ${response.statusText})`);
     } catch (err) {
       console.warn("Could not unlink Discord!", err);
     }
@@ -103,9 +102,8 @@ export class Api extends ApiBase {
       const response = await this.doPost("/auth/google/logout");
       if (response.ok) {
         return true;
-      } else {
-        console.warn(`Google unlink failed (${response.status}: ${response.statusText})`);
       }
+      console.warn(`Google unlink failed (${response.status}: ${response.statusText})`);
     } catch (err) {
       console.warn("Could not unlink Google!", err);
     }

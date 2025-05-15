@@ -1,9 +1,9 @@
-import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 /**
  * Plays a {@linkcode CommonBattleAnim}
@@ -17,9 +17,21 @@ export class CommonAnimPhase extends PokemonPhase {
   private readonly targetIndex?: BattlerIndex;
 
   constructor(anim: CommonAnim, battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex) {
-    super(battlerIndex);
+    // TODO: refactor `PokemonPhase` and/or this phase
+    super(battlerIndex!);
+
+    battlerIndex =
+      battlerIndex
+      ?? globalScene
+        .getField()
+        .find((p) => p?.isActive())
+        ?.getBattlerIndex();
+    if (battlerIndex === undefined) {
+      console.warn("There are no Pokemon on the field!"); // TODO: figure out a suitable fallback behavior
+    }
 
     this.anim = anim;
+    this.battlerIndex = battlerIndex!;
     this.targetIndex = targetIndex;
   }
 

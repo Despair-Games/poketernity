@@ -1,14 +1,14 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import { allMoves } from "#app/data/data-lists";
-import { type Move, getMoveTargets } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { BattlerTag } from "#battler-tags/battler-tag";
+import { allMoves } from "#data/data-lists";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
+import type { Pokemon } from "#field/pokemon";
+import { type Move, getMoveTargets } from "#moves/move";
 
 /**
  * Locks the source into using a move consecutively for `turnCount - 1` turns. If the move fails or is interrupted
@@ -30,9 +30,8 @@ export abstract class MoveLockTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.CUSTOM) {
       return this.handleCustomLapse(pokemon);
-    } else {
-      return this.handleAfterMoveLapse(pokemon);
     }
+    return this.handleAfterMoveLapse(pokemon);
   }
 
   /**
@@ -98,28 +97,26 @@ export abstract class MoveLockTag extends BattlerTag {
   protected getNextTargets(pokemon: Pokemon, move: Move): BattlerIndex[] {
     if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
       return getMoveTargets(pokemon, move.id).targets;
-    } else {
-      // Failsafe if `this.lastTargets` has somehow not been set
-      if (!this.lastTargets?.length) {
-        this.lastTargets = pokemon.isPlayer() ? [BattlerIndex.ENEMY] : [BattlerIndex.PLAYER];
-      }
-
-      // Note: this assumes the locked move is single-target
-      const lastTarget = globalScene.getPokemonByBattlerIndex(this.lastTargets[0]);
-      const adjacentIndex = this.lastTargets[0] + (this.lastTargets[0] % 2 === 0 ? 1 : -1);
-      const adjacentTarget = globalScene.getPokemonByBattlerIndex(adjacentIndex);
-
-      if (
-        !lastTarget?.isActive(true)
-        && globalScene.currentBattle.double
-        && adjacentTarget?.isActive(true)
-        && adjacentTarget !== pokemon
-      ) {
-        return [adjacentIndex];
-      } else {
-        return this.lastTargets;
-      }
     }
+    // Failsafe if `this.lastTargets` has somehow not been set
+    if (!this.lastTargets?.length) {
+      this.lastTargets = pokemon.isPlayer() ? [BattlerIndex.ENEMY] : [BattlerIndex.PLAYER];
+    }
+
+    // Note: this assumes the locked move is single-target
+    const lastTarget = globalScene.getPokemonByBattlerIndex(this.lastTargets[0]);
+    const adjacentIndex = this.lastTargets[0] + (this.lastTargets[0] % 2 === 0 ? 1 : -1);
+    const adjacentTarget = globalScene.getPokemonByBattlerIndex(adjacentIndex);
+
+    if (
+      !lastTarget?.isActive(true)
+      && globalScene.currentBattle.double
+      && adjacentTarget?.isActive(true)
+      && adjacentTarget !== pokemon
+    ) {
+      return [adjacentIndex];
+    }
+    return this.lastTargets;
   }
 
   override loadTag(source: BattlerTag | any): void {

@@ -1,3 +1,5 @@
+import { ApiBase } from "#api/api-base";
+import type { SessionSaveData } from "#types/SessionData";
 import type {
   ClearSessionSavedataRequest,
   ClearSessionSavedataResponse,
@@ -5,9 +7,7 @@ import type {
   GetSessionSavedataRequest,
   NewClearSessionSavedataRequest,
   UpdateSessionSavedataRequest,
-} from "#app/@types/SessionSavedataApi";
-import { ApiBase } from "#app/plugins/api/api-base";
-import type { SessionSaveData } from "#app/@types/SessionData";
+} from "#types/SessionSavedataApi";
 
 /**
  * A wrapper for session savedata API requests.
@@ -82,9 +82,8 @@ export class SessionSavedataApi extends ApiBase {
 
       if (response.ok) {
         return null;
-      } else {
-        return await response.text();
       }
+      return await response.text();
     } catch (err) {
       console.warn("Could not delete session savedata!", err);
       return "Unknown error";

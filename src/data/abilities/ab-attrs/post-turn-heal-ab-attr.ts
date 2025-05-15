@@ -1,9 +1,9 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
+import type { Pokemon } from "#field/pokemon";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 export class PostTurnHealAbAttr extends PostTurnAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

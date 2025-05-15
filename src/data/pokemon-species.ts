@@ -1,19 +1,19 @@
-import type { Localizable } from "#app/@types/locales";
-import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
-import type { PokemonForm } from "#app/data/pokemon-form";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import { variantData } from "#app/data/variant";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randSeedGauss, randSeedItem } from "#app/utils/random-utils";
+import type { EvolutionLevel } from "#data/pokemon-evolutions";
+import type { PokemonForm } from "#data/pokemon-form";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import { PokemonSpeciesForm } from "#data/pokemon-species-form";
+import { variantData } from "#data/variant";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { GrowthRate } from "#enums/growth-rates";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import type { Localizable } from "#types/locales";
+import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {
@@ -171,9 +171,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     if (eligibleEvolutions.length > 0) {
       const randSpecies = randSeedItem(eligibleEvolutions);
       return getPokemonSpecies(randSpecies).getEnemySpeciesForLevel(level, forTrainer);
-    } else {
-      return this.speciesId;
     }
+    return this.speciesId;
   }
 
   getPreEvolutionLevels(): EvolutionLevel[] {
@@ -185,9 +184,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         if (
           e.speciesId === this.speciesId
           && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
-          && preEvolutionLevels.every((pe) => pe[0] !== parseInt(p))
+          && preEvolutionLevels.every((pe) => pe[0] !== Number.parseInt(p))
         ) {
-          const speciesId = parseInt(p) as SpeciesId;
+          const speciesId = Number.parseInt(p) as SpeciesId;
           const level = e.enemyEvolveLevel;
           preEvolutionLevels.push([speciesId, level]);
           const subPreEvolutionLevels = getPokemonSpecies(speciesId).getPreEvolutionLevels();

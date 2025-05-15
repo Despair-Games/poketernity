@@ -1,13 +1,7 @@
-import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { Status } from "#app/data/status-effect";
-import type { Variant } from "#app/data/variant";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
-import { isPokemon } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { loadBattlerTag } from "#battler-tags/load-battler-tag";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
 import type { ElementalType } from "#enums/elemental-type";
@@ -17,6 +11,12 @@ import { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
+import type { Status } from "#types/Status";
+import { clamp, isPokemon } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export default class PokemonData {
   public id: number;
@@ -70,7 +70,7 @@ export default class PokemonData {
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
     this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
     this.nickname = source.nickname;
-    this.formIndex = Phaser.Math.Clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
+    this.formIndex = clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
     this.abilityIndex = source.abilityIndex;
     this.passive = source.passive;
     this.shiny = source.shiny;
@@ -97,6 +97,8 @@ export default class PokemonData {
     this.teraType = source.teraType;
     this.isTerastallized = source.isTerastallized ?? false;
     this.stellarTypesBoosted = source.stellarTypesBoosted ?? [];
+    // @ts-expect-error - `Pokemon#status` is protected
+    this.status = source.status;
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
@@ -109,22 +111,15 @@ export default class PokemonData {
 
     if (isPokemon(source)) {
       this.moveset = source.moveset;
-      this.status = source.status;
       if (this.player) {
         this.summonData = source.summonData;
       }
       return;
     }
 
-    // TODO: is this `.map()` needed? why?
     this.moveset = (source.moveset || [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.GROWL)]).map(
       (m) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride),
     );
-    // TODO: can this just be `this.status = source.status`?
-    if (source.status) {
-      // @ts-expect-error - `Status#effect` is protected but we need to use the raw values when parsing save data
-      this.status = new Status(source.status.effect, source.status.toxicTurnCount, source.status.sleepTurnsRemaining);
-    }
 
     this.summonData = new PokemonSummonData();
     if (!source.summonData) {
@@ -138,9 +133,7 @@ export default class PokemonData {
     this.summonData.ability = source.summonData.ability;
     this.summonData.types = source.summonData.types;
 
-    // TODO: is this `.map()` needed? why?
     this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
-    // TODO: is this `.map()` needed? why?
     this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
   }
 

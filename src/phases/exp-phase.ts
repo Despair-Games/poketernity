@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ExpBoosterModifier } from "#app/modifier/modifier";
-import { NumberHolder } from "#app/utils/common-utils";
-import i18next from "i18next";
-import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
-import { LevelUpPhase } from "./level-up-phase";
 import { PhaseId } from "#enums/phase-id";
+import { ExpBoosterModifier } from "#modifier/modifier";
+import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import { LevelUpPhase } from "#phases/level-up-phase";
+import { NumberHolder } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up

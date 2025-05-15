@@ -1,3 +1,3 @@
-import type PokemonSpecies from "#app/data/pokemon-species";
+import type PokemonSpecies from "#data/pokemon-species";
 
 export type PokemonSpeciesFilter = (species: PokemonSpecies) => boolean;

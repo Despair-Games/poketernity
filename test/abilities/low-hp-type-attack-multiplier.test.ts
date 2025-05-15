@@ -1,12 +1,12 @@
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/data-lists";
 
 describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
   let phaserGame: Phaser.Game;
@@ -48,7 +48,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
       game.move.select(moveId);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK] * 1.5));
     },
@@ -70,7 +70,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
       game.move.select(moveId);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.SPATK] * 1.5));
     },
@@ -91,7 +91,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
       game.move.select(moveId);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       const statUsed =
         playerPokemon.getMoveCategory(game.scene.getEnemyPokemon()!, allMoves.get(moveId)) === MoveCategory.PHYSICAL
@@ -115,7 +115,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
     game.move.select(MoveId.TACKLE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK]));
   });

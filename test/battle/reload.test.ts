@@ -1,11 +1,11 @@
-import { api } from "#app/plugins/api/api";
+import { api } from "#api/api";
 import { BiomeId } from "#enums/biome-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Reload", () => {
@@ -55,7 +55,7 @@ describe("Reload", () => {
     game.move.select(MoveId.SPLASH);
     game.onNextPrompt("SelectBiomePhase", UiMode.OPTION_SELECT, () => {
       // Input first option for Map
-      game.scene.ui.getHandler().processInput(Button.ACTION);
+      game.scene.ui.getCurrentHandler().processInput(Button.ACTION);
     });
     await game.faintOpponents();
     await game.toNextWave();
@@ -176,6 +176,6 @@ describe("Reload", () => {
 
     const newPokemon = game.field.getPlayerPokemon();
     expect(newPokemon.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
-    expect(newPokemon.status?.toxicTurnCount).toBe(2);
+    expect(newPokemon.toxicTurnCount).toBe(2);
   });
 });

@@ -1,10 +1,10 @@
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { NumberHolder } from "#app/utils/common-utils";
 import type { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for moves that double in power if the given move immediately
@@ -50,9 +50,8 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
         if (lastMove?.result === MoveResult.SUCCESS && lastMove?.move.id === this.moveId) {
           power.value *= 2;
           return true;
-        } else {
-          break;
         }
+        break;
       }
     }
 

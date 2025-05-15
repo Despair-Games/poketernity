@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils/common-utils";
 import { PokeballType } from "#enums/pokeball-type";
+import { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 export const MAX_PER_TYPE_POKEBALLS: number = 99;
@@ -101,7 +101,7 @@ export function doPokeballBounceAnim(
   y1: number,
   y2: number,
   baseBounceDuration: number,
-  callback: Function,
+  callback: VoidFunction,
   isCritical: boolean = false,
 ) {
   let bouncePower = 1;

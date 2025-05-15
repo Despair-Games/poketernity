@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import type { PersistentModifier } from "#app/modifier/modifier";
-import type { GeneratedPersistentModifierType, ModifierType } from "#app/modifier/modifier-type";
-import { ModifierTypeGenerator, getModifierTypeFuncById } from "#app/modifier/modifier-type";
+import type { PersistentModifier } from "#modifier/modifier";
+import type { GeneratedPersistentModifierType, ModifierType } from "#modifier/modifier-type";
+import { ModifierTypeGenerator, getModifierTypeFuncById } from "#modifier/modifier-type";
 
 export default class ModifierData {
   public player: boolean;
@@ -28,7 +28,7 @@ export default class ModifierData {
     this.className = sourceModifier ? sourceModifier.constructor.name : source.className;
   }
 
-  toModifier(constructor: any): PersistentModifier | null {
+  toModifier(constructorData: any): PersistentModifier | null {
     const typeFunc = getModifierTypeFuncById(this.typeId);
     if (!typeFunc) {
       return null;
@@ -46,7 +46,7 @@ export default class ModifierData {
       }
 
       const ret = Reflect.construct(
-        constructor,
+        constructorData,
         ([type] as any[]).concat(this.args).concat(this.stackCount),
       ) as PersistentModifier;
 

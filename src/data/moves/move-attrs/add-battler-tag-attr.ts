@@ -1,8 +1,8 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Move } from "../move";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
+import type { Pokemon } from "#field/pokemon";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
+import type { Move } from "#moves/move";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** Should the move fail if the target already has a tag of the same type? */

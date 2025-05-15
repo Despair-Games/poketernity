@@ -1,9 +1,9 @@
-import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
-import type { Pokemon } from "#app/field/pokemon";
-import type { StatusEffect } from "#enums/status-effect";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveFlags } from "#enums/move-flags";
+import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 
 /**
  * Ability attribute that inflicts a status on the attacking Pokemon if the attacker used a contact move on the ability holder
@@ -48,9 +48,8 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
           : this.statusEffects[pokemon.randSeedInt(this.statusEffects.length)];
       if (simulated) {
         return attacker.canSetStatus(status, true, false, pokemon);
-      } else {
-        return attacker.trySetStatus(status, true, pokemon);
       }
+      return attacker.trySetStatus(status, true, pokemon);
     }
 
     return false;

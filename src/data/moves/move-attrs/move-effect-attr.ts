@@ -1,7 +1,7 @@
-import type { Move } from "#app/data/moves/move";
-import { MoveAttr, type MoveAttrOptions } from "#app/data/moves/move-attrs/move-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveAttr, type MoveAttrOptions } from "#moves/move-attr";
 
 export interface MoveEffectAttrOptions extends MoveAttrOptions {
   /**
@@ -95,9 +95,8 @@ export abstract class MoveEffectAttr extends MoveAttr {
   override apply(user: Pokemon, target: Pokemon | null, move: Move): boolean {
     if (this.canApply(user, target, move)) {
       return this.applyEffect(user, target, move);
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**

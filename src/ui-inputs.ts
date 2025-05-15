@@ -1,19 +1,19 @@
-import { GAME_SPEEDS } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
 import type { InputsController } from "#app/inputs-controller";
-import { settings } from "#app/system/settings/settings-manager";
-import type { MenuUiHandler } from "#app/ui/handlers/menu-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
-import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
-import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
-import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
-import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
-import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
-import { settingsUiModes } from "#app/ui/ui";
+import { GAME_SPEEDS } from "#constants/app-constants";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
+import { AudioSettingsUiHandler } from "#ui/audio-settings-ui-handler";
+import { DisplaySettingsUiHandler } from "#ui/display-settings-ui-handler";
+import { GamepadSettingsUiHandler } from "#ui/gamepad-settings-ui-handler";
+import { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
+import { KeyboardSettingsUiHandler } from "#ui/keyboard-settings-ui-handler";
+import type { MenuUiHandler } from "#ui/menu-ui-handler";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import { RunInfoUiHandler } from "#ui/run-info-ui-handler";
+import { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
+import { settingsUiModes } from "#ui/ui";
 import type Phaser from "phaser";
 
 type ActionKeys = Record<Button, () => void>;
@@ -152,7 +152,7 @@ export class UiInputs {
 
   buttonGoToFilter(button: Button): void {
     const whitelist = [StarterSelectUiHandler];
-    const uiHandler = globalScene.ui?.getHandler();
+    const uiHandler = globalScene.ui?.getCurrentHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {
       globalScene.ui.processInput(button);
     } else {
@@ -177,11 +177,13 @@ export class UiInputs {
       return;
     }
     switch (globalScene.ui?.getMode()) {
-      case UiMode.MESSAGE:
-        const messageHandler = globalScene.ui.getHandler<MessageUiHandler>();
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
+      case UiMode.MESSAGE: {
+        const messageHandler = globalScene.ui.getCurrentHandler<MessageUiHandler>();
         if (!messageHandler.pendingPrompt || messageHandler.isTextAnimationInProgress()) {
           return;
         }
+      }
       case UiMode.TITLE:
       case UiMode.COMMAND:
       case UiMode.MODIFIER_SELECT:
@@ -210,7 +212,7 @@ export class UiInputs {
       GamepadSettingsUiHandler,
       KeyboardSettingsUiHandler,
     ];
-    const uiHandler = globalScene.ui?.getHandler();
+    const uiHandler = globalScene.ui?.getCurrentHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {
       globalScene.ui.processInput(button);
     } else if (button === Button.CYCLE_TERA) {
@@ -221,7 +223,9 @@ export class UiInputs {
   buttonSpeedChange(up = true): void {
     const { ui } = globalScene;
 
-    if (settingsUiModes.includes(ui?.getMode())) return;
+    if (settingsUiModes.includes(ui?.getMode())) {
+      return;
+    }
 
     const { gameSpeedIndex } = settings;
     const lastIndex = GAME_SPEEDS.length - 1;

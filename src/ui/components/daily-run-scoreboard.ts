@@ -1,13 +1,13 @@
-import i18next from "i18next";
+import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { getEnumKeys, executeIf } from "#app/utils/common-utils";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "#app/ui/ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import { api } from "#app/plugins/api/api";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
-import type { RankingEntry } from "#app/@types/RankingEntry";
+import { TextStyle } from "#enums/text-style";
+import { WindowVariant } from "#enums/window-variant";
+import type { RankingEntry } from "#types/RankingEntry";
+import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { executeIf, getEnumKeys } from "#utils/common-utils";
+import i18next from "i18next";
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   private loadingLabel: Phaser.GameObjects.Text;
@@ -152,10 +152,11 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       entryContainer.add(scoreLabel);
 
       switch (this.category) {
-        case ScoreboardCategory.DAILY:
+        case ScoreboardCategory.DAILY: {
           const waveLabel = addTextObject(68, 0, wave, TextStyle.WINDOW_SMALL);
           entryContainer.add(waveLabel);
           break;
+        }
         case ScoreboardCategory.WEEKLY:
           scoreLabel.x -= 16;
           break;

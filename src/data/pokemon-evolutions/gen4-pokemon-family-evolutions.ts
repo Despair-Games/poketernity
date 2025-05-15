@@ -1,4 +1,3 @@
-import { SpeciesId } from "#enums/species-id";
 import {
   DayEvolutionCondition,
   FemaleEvolutionCondition,
@@ -6,8 +5,9 @@ import {
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesFriendshipEvolutionCondition,
-} from "#app/data/pokemon-evolutions";
-import { HAPPINESS_EVO_LEVEL } from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#data/pokemon-evolutions";
+import { HAPPINESS_EVO_LEVEL } from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.TURTWIG]: [new SpeciesEvolution(SpeciesId.GROTLE, 18, null, null)],

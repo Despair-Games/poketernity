@@ -1,14 +1,14 @@
-import type { LegacyAnimConfig, AnimFrame } from "#app/data/animations/anim-config";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import type { Pokemon } from "#app/field/pokemon";
+import type { AnimFrame, LegacyAnimConfig } from "#animations/anim-config";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { getEnumValues, getFrameMs, isNil } from "#app/utils/common-utils";
-import type { nil } from "#app/@types/nil";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Pokemon } from "#field/pokemon";
+import { settings } from "#system/settings-manager";
+import type { nil } from "#types/nil";
+import { getEnumValues, getFrameMs, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 interface GraphicFrameData {
@@ -140,7 +140,7 @@ export abstract class BattleAnim {
           x += userInitialX - userFocusX;
           y += userInitialY - userHalfHeight - userFocusY;
           break;
-        case AnimFocus.USER_TARGET:
+        case AnimFocus.USER_TARGET: {
           /** Comments are based on the values set during {@linkcode play} */
           const point = transformPoint(
             this.srcLine[0], // userFocusX
@@ -163,6 +163,7 @@ export abstract class BattleAnim {
             zoomX = zoomX * -1;
           }
           break;
+        }
       }
       const angle = -frame.angle;
       const key = frame.target === AnimFrameTarget.IMAGE ? g++ : frame.target === AnimFrameTarget.SOURCE ? u++ : t++;
@@ -316,11 +317,8 @@ export abstract class BattleAnim {
               const isUser = frame.target === AnimFrameTarget.SOURCE;
               if (isUser && target === user) {
                 continue;
-              } else if (
-                this.playRegardlessOfIssues
-                && frame.target === AnimFrameTarget.TARGET
-                && !target.isOnField()
-              ) {
+              }
+              if (this.playRegardlessOfIssues && frame.target === AnimFrameTarget.TARGET && !target.isOnField()) {
                 continue;
               }
               const sprites = spriteCache[isUser ? AnimFrameTarget.SOURCE : AnimFrameTarget.TARGET];

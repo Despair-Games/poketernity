@@ -1,20 +1,20 @@
-import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
-import { Gender } from "#enums/gender";
-import { ElementalType } from "#enums/elemental-type";
-import { rgbHexToRgba } from "#app/utils/color-utils";
-import { leftPad } from "#app/utils/string-utils";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { allMoves } from "#app/data/data-lists";
-import { SpeciesId } from "#enums/species-id";
-import { getEggTierForSpecies } from "#app/data/egg";
-import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
+import { allMoves } from "#data/data-lists";
+import { getEggTierForSpecies } from "#data/egg";
+import type { EggHatchData } from "#data/egg-hatch-data";
+import { speciesEggMoves } from "#data/egg-moves";
+import { starterColors } from "#data/starter-colors";
+import { ElementalType } from "#enums/elemental-type";
+import { Gender } from "#enums/gender";
+import { SpeciesId } from "#enums/species-id";
+import { TextStyle } from "#enums/text-style";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PokemonInfoContainer } from "#ui/pokemon-info-container";
+import { addTextObject } from "#ui/text-utils";
+import { rgbHexToRgba } from "#utils/color-utils";
+import { getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { leftPad } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
 
 /**
  * Class for the hatch info summary of each pokemon

@@ -3,36 +3,36 @@
 import type { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 
-import { initChallenges } from "#app/data/challenge";
-import { initEggMoves } from "#app/data/egg-moves";
-import { initAbilities } from "#app/data/init/init-abilities";
-import { initBiomes } from "#app/data/init/init-biomes";
-import { initMoves } from "#app/data/init/init-moves";
-import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { getBiomeHasProps } from "#app/field/arena";
-import { initModifierPools } from "#app/modifier/init-modifier-pools";
-import { initModifierTypes } from "#app/modifier/init-modifier-types";
-import { api } from "#app/plugins/api/api";
+import { api } from "#api/api";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
-import { initAchievements } from "#app/system/achievements";
-import { initVouchers } from "#app/system/init-vouchers";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/constants/ui-constants";
-import { getWindowVariantSuffix } from "#app/ui/ui-theme";
-import { getEnumKeys, getEnumValues } from "#app/utils/common-utils";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#constants/ui-constants";
+import { initChallenges } from "#data/challenge";
+import { initEggMoves } from "#data/egg-moves";
+import { initPokemonForms } from "#data/pokemon-forms";
+import { initPokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor } from "#enums/color";
 import { GachaType } from "#enums/gacha-types";
 import { ImagesFolder } from "#enums/images-folders";
 import { WindowVariant } from "#enums/window-variant";
+import { getBiomeHasProps } from "#field/arena";
+import { initAbilities } from "#init/init-abilities";
+import { initBiomes } from "#init/init-biomes";
+import { initMoves } from "#init/init-moves";
+import { initSpecies } from "#init/init-species";
+import { initTrainerTypeDialogue } from "#init/init-trainer-type-dialogue";
+import { initModifierPools } from "#modifier/init-modifier-pools";
+import { initModifierTypes } from "#modifier/init-modifier-types";
+import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
+import { initAchievements } from "#system/achievements";
+import { initVouchers } from "#system/init-vouchers";
+import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import { getWindowVariantSuffix } from "#ui/ui-theme";
+import { getEnumKeys, getEnumValues } from "#utils/common-utils";
 import i18next from "i18next";
-import { initSpecies } from "./data/init/init-species";
-import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

@@ -1,13 +1,4 @@
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
-import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { coerceArray, isNil } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { capitalizeFirstLetter } from "#app/utils/string-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { Challenges } from "#enums/challenges";
 import type { EncounterAnim } from "#enums/encounter-anims";
@@ -17,11 +8,17 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { StatusEffect } from "#enums/status-effect";
-import type MysteryEncounterDialogue from "./mystery-encounter-dialogue";
-import type { OptionTextDisplay } from "./mystery-encounter-dialogue";
-import type MysteryEncounterOption from "./mystery-encounter-option";
-import type { OptionPhaseCallback } from "./mystery-encounter-option";
-import { MysteryEncounterOptionBuilder } from "./mystery-encounter-option";
+import type { MysteryEncounterSpriteConfig } from "#field/mystery-encounter-intro";
+import MysteryEncounterIntroVisuals from "#field/mystery-encounter-intro";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import type MysteryEncounterDialogue from "#mystery-encounters/mystery-encounter-dialogue";
+import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
+import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
+import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
@@ -29,7 +26,10 @@ import {
   PartySizeRequirement,
   StatusEffectRequirement,
   WaveRangeRequirement,
-} from "./mystery-encounter-requirements";
+} from "#mystery-encounters/mystery-encounter-requirements";
+import { coerceArray, isNil } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
+import { capitalizeFirstLetter } from "#utils/string-utils";
 
 export interface EncounterStartOfBattleEffect {
   sourcePokemon?: Pokemon;
@@ -382,24 +382,22 @@ export default class MysteryEncounter implements IMysteryEncounter {
         // Always choose from the non-overlapping pokemon first
         this.primaryPokemon = truePrimaryPool[randSeedInt(truePrimaryPool.length, 0)];
         return true;
-      } else {
-        // If there are multiple overlapping pokemon, we're okay - just choose one and take it out of the primary pokemon pool
-        if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
-          // is this working?
-          this.primaryPokemon = overlap[randSeedInt(overlap.length, 0)];
-          this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
-          return true;
-        }
-        console.log(
-          "Mystery Encounter Edge Case: Requirement not met due to primary pokemon overlapping with secondary pokemon. There's no valid primary pokemon left.",
-        );
-        return false;
       }
-    } else {
-      // this means we CAN have the same pokemon be a primary and secondary pokemon, so just choose any qualifying one randomly.
-      this.primaryPokemon = qualified[randSeedInt(qualified.length, 0)];
-      return true;
+      // If there are multiple overlapping pokemon, we're okay - just choose one and take it out of the primary pokemon pool
+      if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
+        // is this working?
+        this.primaryPokemon = overlap[randSeedInt(overlap.length, 0)];
+        this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
+        return true;
+      }
+      console.log(
+        "Mystery Encounter Edge Case: Requirement not met due to primary pokemon overlapping with secondary pokemon. There's no valid primary pokemon left.",
+      );
+      return false;
     }
+    // this means we CAN have the same pokemon be a primary and secondary pokemon, so just choose any qualifying one randomly.
+    this.primaryPokemon = qualified[randSeedInt(qualified.length, 0)];
+    return true;
   }
 
   /**
@@ -603,10 +601,9 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
     if (!this.options) {
       const options = [option];
       return Object.assign(this, { options });
-    } else {
-      this.options.push(option);
-      return this;
     }
+    this.options.push(option);
+    return this;
   }
 
   /**

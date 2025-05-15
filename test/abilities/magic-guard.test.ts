@@ -1,4 +1,4 @@
-import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
+import { getStatusEffectCatchRateMultiplier } from "#data/status-effect";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -7,7 +7,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -137,7 +137,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    const toxicStartCounter = enemyPokemon.status!.toxicTurnCount;
+    const toxicStartCounter = enemyPokemon.toxicTurnCount;
     //should be 0
 
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -149,7 +149,7 @@ describe("Abilities - Magic Guard", () => {
      * - The enemy Pokemon's hypothetical CatchRateMultiplier should be 1.5
      */
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(enemyPokemon.status!.toxicTurnCount).toBeGreaterThan(toxicStartCounter);
+    expect(enemyPokemon.toxicTurnCount).toBeGreaterThan(toxicStartCounter);
     expect(getStatusEffectCatchRateMultiplier(enemyPokemon.getStatusEffect(true))).toBe(1.5);
   });
 

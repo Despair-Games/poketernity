@@ -1,13 +1,13 @@
-import type { MaxMultiHitAbAttr } from "#app/data/abilities/ab-attrs/max-multi-hit-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { ChangeMultiHitTypeAttr } from "#app/data/moves/move-attrs/change-multi-hit-type-attr";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils/common-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";
+import type { Pokemon } from "#field/pokemon";
+import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
+import type { Move } from "#moves/move";
+import { MoveAttr } from "#moves/move-attr";
+import { NumberHolder } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
 
 /**
  * Attribute used for attack moves that hit multiple times per use, e.g. Bullet Seed.
@@ -81,13 +81,14 @@ export class MultiHitAttr extends MoveAttr {
         applyAbAttrs<MaxMultiHitAbAttr>(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
         if (hitValue.value >= 13) {
           return 2;
-        } else if (hitValue.value >= 6) {
-          return 3;
-        } else if (hitValue.value >= 3) {
-          return 4;
-        } else {
-          return 5;
         }
+        if (hitValue.value >= 6) {
+          return 3;
+        }
+        if (hitValue.value >= 3) {
+          return 4;
+        }
+        return 5;
       }
       case MultiHitType._2:
         return 2;
@@ -95,12 +96,13 @@ export class MultiHitAttr extends MoveAttr {
         return 3;
       case MultiHitType._10:
         return 10;
-      case MultiHitType.BEAT_UP:
+      case MultiHitType.BEAT_UP: {
         const party = user.getParty();
         // No status means the ally pokemon can contribute to Beat Up
         return party.reduce((total, pokemon) => {
           return total + (pokemon.id === user.id ? 1 : pokemon.getStatusEffect(true) ? 0 : 1);
         }, 0);
+      }
     }
   }
 }

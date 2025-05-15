@@ -2,8 +2,8 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
 
 describe("Moves - Lucky Chant", () => {
   let phaserGame: Phaser.Game;

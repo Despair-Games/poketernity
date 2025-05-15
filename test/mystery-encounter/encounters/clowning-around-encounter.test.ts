@@ -1,20 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import * as InitMoveAnim from "#app/data/init/init-move-anim";
-import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -29,13 +13,29 @@ import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import * as InitMoveAnim from "#init/init-move-anim";
+import type { PokemonHeldItemModifier } from "#modifier/modifier";
+import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { ClowningAroundEncounter } from "#mystery-encounters/clowning-around-encounter";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { CommandPhase } from "#phases/command-phase";
+import type { MovePhase } from "#phases/move-phase";
+import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { GameManager } from "#test/test-utils/gameManager";
-import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import * as MoveAnimUtils from "#utils/move-anim-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/clowningAround";
@@ -222,13 +222,13 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       // Select "Yes" on train ability
       game.onNextPrompt("PostMysteryEncounterPhase", UiMode.CONFIRM, () => {
-        game.scene.ui.getHandler().processInput(Button.ACTION);
+        game.scene.ui.getCurrentHandler().processInput(Button.ACTION);
       });
 
       // Select first pokemon in party to train
       game.onNextPrompt("PostMysteryEncounterPhase", UiMode.PARTY, () => {
-        game.scene.ui.getHandler().processInput(Button.ACTION); // open Pokemon sub menu
-        game.scene.ui.getHandler().processInput(Button.ACTION); // 'Select'
+        game.scene.ui.getCurrentHandler().processInput(Button.ACTION); // open Pokemon sub menu
+        game.scene.ui.getCurrentHandler().processInput(Button.ACTION); // 'Select'
       });
 
       game.endPhase();

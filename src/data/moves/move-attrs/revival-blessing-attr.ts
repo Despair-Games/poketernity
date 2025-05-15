@@ -1,14 +1,14 @@
-import { SwitchType } from "#enums/switch-type";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { toDmgValue } from "#app/utils/common-utils";
+import { SwitchType } from "#enums/switch-type";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to revive a Pokemon in the user's party to 50% HP.
@@ -25,7 +25,8 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
     if (user.isPlayer()) {
       globalScene.phaseManager.unshiftPhase(new RevivalBlessingPhase(user));
       return true;
-    } else if (user.isEnemy()) {
+    }
+    if (user.isEnemy()) {
       // If used by an enemy trainer with at least one fainted non-boss Pokemon, this
       // revives one of said Pokemon selected at random.
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());

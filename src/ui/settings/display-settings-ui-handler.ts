@@ -1,16 +1,16 @@
-import type { SupportedLanguage } from "#app/@types/Language";
-import { LANGUAGE_MAX_OPTIONS } from "#app/constants/ui-constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
+import { LANGUAGE_MAX_OPTIONS } from "#constants/ui-constants";
 import { UiMode } from "#enums/ui-mode";
+import { supportedLanguages } from "#system/supported-languages";
+import type { SupportedLanguage } from "#types/Language";
+import type { OptionSelectItem } from "#ui/option-select-config";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { SettingsUiHandler } from "#ui/settings-ui-handler";
+import { displaySettingUiItems } from "#ui/settings-ui-items";
 import i18next from "i18next";
-import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
+export class DisplaySettingsUiHandler extends SettingsUiHandler {
   constructor() {
     super("display", displaySettingUiItems);
   }
@@ -42,9 +42,8 @@ export class DisplaySettingsUiHandler extends AbstractSettingsUiHandler {
                   () => this.handleCancelLanguageChange(),
                 );
                 return true;
-              } else {
-                return this.handleChangeLanguage(l);
               }
+              return this.handleChangeLanguage(l);
             },
           };
         }),

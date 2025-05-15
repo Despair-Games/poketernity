@@ -1,11 +1,11 @@
-import type { Pokemon } from "../field/pokemon";
-import type { Move } from "./moves/move";
-import { ElementalType } from "#enums/elemental-type";
-import { ProtectAttr } from "./moves/move-attrs/protect-attr";
-import type { BattlerIndex } from "#enums/battler-index";
-import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { ProtectAttr } from "#moves/protect-attr";
+import i18next from "i18next";
 
 /**
  * Class representing Terrain effects

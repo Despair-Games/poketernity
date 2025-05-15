@@ -1,9 +1,9 @@
-import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#app/data/animations/anim-config";
-import { easeFunctions } from "#app/data/animations/ease-functions";
-import { getEnumValues } from "#app/utils/common-utils";
+import type { AnimConfig, AnimKeyFrame, AnimProp, AnimTimedEvent } from "#animations/anim-config";
+import { easeFunctions } from "#animations/ease-functions";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import { MoveId } from "#enums/move-id";
+import { getEnumValues } from "#utils/common-utils";
 import type { JSONSchemaType } from "ajv";
 
 /** JSON Schema properties applicable to keyframes for any animation property. */
@@ -342,6 +342,7 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
   additionalProperties: false,
   required: ["eventType", "time", "resourceName"],
   if: { properties: { eventType: { const: "AnimTimedSoundEvent" } } },
+  // biome-ignore lint/suspicious/noThenProperty: `then` is a JSON Schema keyword - https://ajv.js.org/json-schema.html#if-then-else
   then: { required: ["volume", "pitch"] },
   else: { required: ["bgX", "bgY", "duration", "scale"] },
 } as const;

@@ -1,10 +1,10 @@
-import type { MovePhase } from "#app/phases/move-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import type { MovePhase } from "#phases/move-phase";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -44,7 +44,7 @@ describe("Moves - After You", () => {
     await game.phaseInterceptor.to("MovePhase", false);
     const phase = game.scene.phaseManager.getCurrentPhase() as MovePhase;
     expect(phase.pokemon).toBe(game.scene.getPlayerField()[1]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
   });
 
   it("fails if target already moved", async () => {
@@ -54,8 +54,8 @@ describe("Moves - After You", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.AFTER_YOU, 1, BattlerIndex.PLAYER);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MovePhase");
 
     expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);

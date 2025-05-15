@@ -1,10 +1,10 @@
-import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import i18next from "i18next";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class ForewarnAbAttr extends PostSummonAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

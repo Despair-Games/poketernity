@@ -1,12 +1,12 @@
+import { ApiBase } from "#api/api-base";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import type {
   AccountInfoResponse,
   AccountLoginRequest,
   AccountLoginResponse,
   AccountRegisterRequest,
-} from "#app/@types/AccountApi";
-import { SESSION_ID_COOKIE } from "#app/constants/app-constants";
-import { ApiBase } from "#app/plugins/api/api-base";
-import { removeCookie, setCookie } from "#app/utils/app-utils";
+} from "#types/AccountApi";
+import { removeCookie, setCookie } from "#utils/app-utils";
 
 /**
  * A wrapper for the account API requests.
@@ -25,10 +25,9 @@ export class AccountApi extends ApiBase {
       if (response.ok) {
         const resData = (await response.json()) as AccountInfoResponse;
         return [resData, response.status];
-      } else {
-        console.warn("Could not get account info!", response.status, response.statusText);
-        return [null, response.status];
       }
+      console.warn("Could not get account info!", response.status, response.statusText);
+      return [null, response.status];
     } catch (err) {
       console.warn("Could not get account info!", err);
       return [null, 500];
@@ -46,9 +45,8 @@ export class AccountApi extends ApiBase {
 
       if (response.ok) {
         return null;
-      } else {
-        return response.text();
       }
+      return response.text();
     } catch (err) {
       console.warn("Register failed!", err);
     }
@@ -70,10 +68,9 @@ export class AccountApi extends ApiBase {
         const loginResponse = (await response.json()) as AccountLoginResponse;
         setCookie(SESSION_ID_COOKIE, loginResponse.token);
         return null;
-      } else {
-        console.warn("Login failed!", response.status, response.statusText);
-        return response.text();
       }
+      console.warn("Login failed!", response.status, response.statusText);
+      return response.text();
     } catch (err) {
       console.warn("Login failed!", err);
     }

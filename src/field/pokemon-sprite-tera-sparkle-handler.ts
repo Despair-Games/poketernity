@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { coerceArray, fixedNumber } from "#app/utils/common-utils";
-import { randInt } from "#app/utils/random-utils";
+import type { Pokemon } from "#field/pokemon";
+import { coerceArray, fixedNumber } from "#utils/common-utils";
+import { randInt } from "#utils/random-utils";
 import type Phaser from "phaser";
 
 export default class PokemonSpriteTeraSparkleHandler {

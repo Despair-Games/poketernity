@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { Achievement } from "#app/system/achievements";
-import type { Voucher } from "#app/system/voucher";
-import { addTextObject } from "#app/ui/text/text-utils";
+import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
+import { Achievement } from "#system/achievements";
+import type { Voucher } from "#system/voucher";
+import { addTextObject } from "#ui/text-utils";
 
 export class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;
@@ -73,7 +73,7 @@ export class AchvBar extends Phaser.GameObjects.Container {
       return;
     }
 
-    this.bg.setTexture(`achv_bar`);
+    this.bg.setTexture("achv_bar");
     this.icon.setFrame(achv.iconImage);
     this.titleText.setText(achv.name);
     this.scoreText.setVisible(achv instanceof Achievement);

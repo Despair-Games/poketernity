@@ -1,11 +1,10 @@
-import type {
-  AudioSettingsKey,
-  DisplaySettingsKey,
-  GeneralSettingsKey,
-  SettingsUiItem,
-  SettingUiItemOption,
-} from "#app/@types/Settings";
-import { GAME_SPEEDS } from "#app/constants/app-constants";
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
+import { GAME_SPEEDS } from "#constants/app-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
@@ -17,11 +16,17 @@ import { MoneyFormat } from "#enums/money-format";
 import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
-import { getEnumLength } from "#app/utils/common-utils";
-import { isLandscapeMode } from "#app/utils/app-utils";
-import i18next, { t } from "i18next";
 import { UiWindowStyle } from "#enums/ui-window-style";
+import { supportedLanguages } from "#system/supported-languages";
+import type {
+  AudioSettingsKey,
+  DisplaySettingsKey,
+  GeneralSettingsKey,
+  SettingsUiItem,
+  SettingUiItemOption,
+} from "#types/Settings";
+import { getEnumLength } from "#utils/common-utils";
+import i18next, { t } from "i18next";
 
 //#region Types
 
@@ -183,7 +188,8 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     options: [
       {
         value: 0,
-        label: isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"),
+        /** Replaced with the actual label in {@linkcode GeneralSettingsUiHandler.updateMoveTouchControlsSettingsLabel} */
+        label: "ORIENTATION",
       },
       {
         value: 1,

@@ -1,9 +1,9 @@
-import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { PERMANENT_STATS, getStatKey } from "#enums/stat";
-import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { PERMANENT_STATS, getStatKey } from "#enums/stat";
+import { TextStyle } from "#enums/text-style";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 const ivChartSize = 24;
 const ivChartStatCoordMultipliers = [
@@ -48,11 +48,10 @@ export class IVGraph extends Phaser.GameObjects.Container {
     this.setName("stats");
     const ivChartBgData = new Array(6)
       .fill(null)
-      .map((_, i: number) => [
+      .flatMap((_, i: number) => [
         ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][0],
         ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][1],
-      ])
-      .flat();
+      ]);
     const ivChartBg = globalScene.add.polygon(48, 44, ivChartBgData, 0xd8e0f0, 0.625);
     ivChartBg.setOrigin(0, 0);
 
@@ -122,11 +121,10 @@ export class IVGraph extends Phaser.GameObjects.Container {
 
     const ivChartData = new Array(6)
       .fill(null)
-      .map((_, i) => [
+      .flatMap((_, i) => [
         (ivs[ivChartStatIndexes[i]] / 31) * ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][0],
         (ivs[ivChartStatIndexes[i]] / 31) * ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][1],
-      ])
-      .flat();
+      ]);
     const lastIvChartData = this.statsIvsCache || defaultIvChartData;
     this.statsIvsCache = ivChartData.slice(0);
 

@@ -1,5 +1,5 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import { t } from "i18next";
 
 export const PartyFilterAll = (_pokemon: PlayerPokemon) => null;

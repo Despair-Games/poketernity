@@ -1,15 +1,15 @@
-import type { HealBlockTag } from "#app/data/battler-tags/heal-block-tag";
-import { getStatusEffectHealText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { HealingBoosterModifier } from "#app/modifier/modifier";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { NumberHolder } from "#app/utils/common-utils";
+import type { HealBlockTag } from "#battler-tags/heal-block-tag";
+import { getStatusEffectHealText } from "#data/status-effect";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
+import { HealingBoosterModifier } from "#modifier/modifier";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 export interface PokemonHealPhaseOptions {
@@ -95,10 +95,11 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
     if (healBlock && this.hpHealed > 0) {
       globalScene.phaseManager.queueMessagePhase(healBlock.onActivation(pokemon));
-      // TODO: is this necessary?
-      delete this.message;
-      return super.end();
-    } else if (healOrDamage) {
+      this.message = undefined;
+      super.end();
+      return;
+    }
+    if (healOrDamage) {
       const hpRestoreMultiplier = new NumberHolder(1);
       if (!this.revive) {
         globalScene.applyModifiers(HealingBoosterModifier, this.isPlayer, hpRestoreMultiplier);
@@ -126,7 +127,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
         }
       }
 
-      if (this.healStatus && !this.revive && pokemon.status) {
+      if (this.healStatus && !this.revive && pokemon.hasNonVolatileStatusEffect(false, true)) {
         lastStatusEffect = pokemon.getStatusEffect(true);
         pokemon.resetStatus();
       }

@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toDmgValue } from "#app/utils/common-utils";
-import i18next from "i18next";
-import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { Pokemon } from "#field/pokemon";
+import { clamp, toDmgValue } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * A Pokemon with this ability heals by a percentage of their maximum hp after eating a berry
@@ -20,7 +20,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
     // Clamp healPercent so its between [0,1].
-    this.healPercent = Phaser.Math.Clamp(healPercent, 0, 1);
+    this.healPercent = clamp(healPercent, 0, 1);
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

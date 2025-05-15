@@ -1,61 +1,61 @@
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
-import { AchvBar } from "#app/ui/components/achv-bar";
-import type { BgmBar } from "#app/ui/components/bgm-bar";
-import { SavingIcon } from "#app/ui/components/saving-icon";
-import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
-import { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
-import { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
-import { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
-import { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
-import { ChallengeSelectUiHandler } from "#app/ui/handlers/challenges-select-ui-handler";
-import { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import { EggGachaUiHandler } from "#app/ui/handlers/egg-gacha-ui-handler";
-import { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
-import { EggListUiHandler } from "#app/ui/handlers/egg-list-ui-handler";
-import { EggHatchSummaryUiHandler } from "#app/ui/handlers/egg-hatch-summary-ui-handler";
-import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
-import { GameStatsUiHandler } from "#app/ui/handlers/game-stats-ui-handler";
-import { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
-import { LoginFormUiHandler } from "#app/ui/handlers/login-form-ui-handler";
-import { MenuUiHandler } from "#app/ui/handlers/menu-ui-handler";
-import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
-import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
-import { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
-import { RunHistoryUiHandler } from "#app/ui/handlers/run-history-ui-handler";
-import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
-import { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
-import { SessionReloadModalUiHandler } from "#app/ui/handlers/session-reload-modal-ui-handler";
-import { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
-import { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
-import { TestDialogueUiHandler } from "#app/ui/handlers/test-dialogue-ui-handler";
-import { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
-import { UnavailableModalUiHandler } from "#app/ui/handlers/unavailable-modal-ui-handler";
-import { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
-import { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
-import { NavigationManager } from "#app/ui/settings/navigation-menu";
-import { AudioSettingsUiHandler } from "#app/ui/settings/audio-settings-ui-handler";
-import { DisplaySettingsUiHandler } from "#app/ui/settings/display-settings-ui-handler";
-import { GamepadSettingsUiHandler } from "#app/ui/settings/gamepad-settings-ui-handler";
-import { KeyboardSettingsUiHandler } from "#app/ui/settings/keyboard-settings-ui-handler";
-import { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { executeIf } from "#app/utils/common-utils";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import type { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
+import { AchievementsUiHandler } from "#ui/achievements-ui-handler";
+import { AchvBar } from "#ui/achv-bar";
+import { AdminUiHandler } from "#ui/admin-ui-handler";
+import { AudioSettingsUiHandler } from "#ui/audio-settings-ui-handler";
+import { AutoCompleteUiHandler } from "#ui/autocomplete-ui-handler";
+import { BallUiHandler } from "#ui/ball-ui-handler";
+import { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
+import type { BgmBar } from "#ui/bgm-bar";
+import { ChallengeSelectUiHandler } from "#ui/challenges-select-ui-handler";
+import { CommandUiHandler } from "#ui/command-ui-handler";
+import { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { DisplaySettingsUiHandler } from "#ui/display-settings-ui-handler";
+import { EggGachaUiHandler } from "#ui/egg-gacha-ui-handler";
+import { EggHatchSceneUiHandler } from "#ui/egg-hatch-scene-ui-handler";
+import { EggHatchSummaryUiHandler } from "#ui/egg-hatch-summary-ui-handler";
+import { EggListUiHandler } from "#ui/egg-list-ui-handler";
+import { FightUiHandler } from "#ui/fight-ui-handler";
+import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
+import { GameStatsUiHandler } from "#ui/game-stats-ui-handler";
+import { GamepadBindingUiHandler } from "#ui/gamepad-binding-ui-handler";
+import { GamepadSettingsUiHandler } from "#ui/gamepad-settings-ui-handler";
+import { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
+import { KeyboardBindingUiHandler } from "#ui/keyboard-binding-ui-handler";
+import { KeyboardSettingsUiHandler } from "#ui/keyboard-settings-ui-handler";
+import { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import { LoginFormUiHandler } from "#ui/login-form-ui-handler";
+import { MenuUiHandler } from "#ui/menu-ui-handler";
+import { MessageUiHandler } from "#ui/message-ui-handler";
+import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
+import { NavigationManager } from "#ui/navigation-menu";
+import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { PartyUiHandler } from "#ui/party-ui-handler";
+import { RegistrationFormUiHandler } from "#ui/registration-form-ui-handler";
+import { RenamePokemonUiHandler } from "#ui/rename-pokemon-ui-handler";
+import { RunHistoryUiHandler } from "#ui/run-history-ui-handler";
+import { RunInfoUiHandler } from "#ui/run-info-ui-handler";
+import { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
+import { SavingIcon } from "#ui/saving-icon";
+import { SessionReloadModalUiHandler } from "#ui/session-reload-modal-ui-handler";
+import { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
+import { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
+import { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { TitleUiHandler } from "#ui/title-ui-handler";
+import type { UiHandler } from "#ui/ui-handler";
+import { addWindow } from "#ui/ui-theme";
+import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
+import { executeIf } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
@@ -210,7 +210,7 @@ export class UI extends Phaser.GameObjects.Container {
    */
   public resetHandlers(): void {
     this.mode = DEFAULT_MODE;
-    const currentHandler = this.getHandler();
+    const currentHandler = this.getCurrentHandler();
     for (const handler of this.handlers.filter((h) => h.active && h !== currentHandler)) {
       handler.stop();
     }
@@ -259,7 +259,7 @@ export class UI extends Phaser.GameObjects.Container {
     globalScene.uiContainer.add(this.tooltipContainer);
   }
 
-  getHandler<H extends UiHandler = UiHandler>(): H {
+  getCurrentHandler<H extends UiHandler = UiHandler>(): H {
     return this.handlers[this.mode] as H;
   }
 
@@ -268,12 +268,11 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   getCurrentMessageHandler(): MessageUiHandler {
-    const handler = this.getHandler();
+    const handler = this.getCurrentHandler();
     if (handler instanceof MessageUiHandler && handler.message) {
       return handler;
-    } else {
-      return this.getMessageHandler();
     }
+    return this.getMessageHandler();
   }
 
   processInfoButton(pressed: boolean) {
@@ -294,7 +293,7 @@ export class UI extends Phaser.GameObjects.Container {
       return false;
     }
 
-    const handler = this.getHandler();
+    const handler = this.getCurrentHandler();
 
     if (handler.isAwaitableUiHandler() && handler.tutorialActive) {
       return handler.processTutorialInput(button);
@@ -317,14 +316,14 @@ export class UI extends Phaser.GameObjects.Container {
   showText(
     text: string,
     delay?: number | null,
-    callback?: Function | null,
+    callback?: VoidFunction | null,
     callbackDelay?: number | null,
     prompt?: boolean | null,
     promptDelay?: number | null,
   ): void {
     if (prompt && text.indexOf("$") > -1) {
       const messagePages = text.split(/\$/g).map((m) => m.trim());
-      let showMessageAndCallback = () => callback && callback();
+      let showMessageAndCallback = () => callback?.();
       for (let p = messagePages.length - 1; p >= 0; p--) {
         const originalFunc = showMessageAndCallback;
         showMessageAndCallback = () => this.showText(messagePages[p], null, originalFunc, null, true);
@@ -338,11 +337,12 @@ export class UI extends Phaser.GameObjects.Container {
   showDialogue(
     keyOrText: string,
     name: string | undefined,
-    delay: number | null = 0,
-    callback: Function,
+    delay: number | null,
+    callback: VoidFunction,
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
+    delay = delay ?? 0;
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
@@ -465,7 +465,7 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   setCursor(cursor: number): boolean {
-    const changed = this.getHandler().setCursor(cursor);
+    const changed = this.getCurrentHandler().setCursor(cursor);
     if (changed) {
       this.playSelect();
     }
@@ -565,8 +565,8 @@ export class UI extends Phaser.GameObjects.Container {
       }
       const doSetMode = () => {
         if (this.mode !== mode) {
-          if (clear && this.getHandler().active) {
-            this.getHandler().stop();
+          if (clear && this.getCurrentHandler().active) {
+            this.getCurrentHandler().stop();
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -577,9 +577,9 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getHandler().start(...params);
-        } else if (!this.getHandler().active) {
-          this.getHandler().start(...params);
+          this.getCurrentHandler().start(...params);
+        } else if (!this.getCurrentHandler().active) {
+          this.getCurrentHandler().start(...params);
         }
         resolve();
       };
@@ -611,7 +611,7 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.getHandler().stop();
+        this.getCurrentHandler().stop();
         this.mode = this.modeChain.pop()!; // TODO: is this bang correct?
         globalScene.updateGameInfo();
         const touchControls = document.getElementById("touchControls");
@@ -657,8 +657,7 @@ export class UI extends Phaser.GameObjects.Container {
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {
       return globalScene.inputController.getConfig(globalScene.inputController.selectedDevice[Device.GAMEPAD]).padType;
-    } else {
-      return globalScene.inputMethod;
     }
+    return globalScene.inputMethod;
   }
 }

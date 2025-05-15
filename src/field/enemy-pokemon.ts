@@ -1,29 +1,15 @@
-import type { TurnMove } from "#app/@types/TurnMove";
-import { BAD_MOVE_PENALTY } from "#app/constants/ai-constants";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, type Move } from "#app/data/moves/move";
-import { CounterDamageAttr } from "#app/data/moves/move-attrs/counter-damage-attr";
-import { CritOnlyAttr } from "#app/data/moves/move-attrs/crit-only-attr";
-import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import { Status } from "#app/data/status-effect";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { Pokemon, type TargetScoreData } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type PokemonData from "#app/system/pokemon-data";
 import type { TurnCommand } from "#app/turn-command-manager";
-import { EnemyBattleInfo } from "#app/ui/components/battle-info";
-import { BooleanHolder, isBetween, isNil, toDmgValue } from "#app/utils/common-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
-import { randSeedInt, randSeedItem, randSeedShuffle } from "#app/utils/random-utils";
+import type { EncoreTag } from "#battler-tags/encore-tag";
+import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
+import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { allMoves } from "#data/data-lists";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";
@@ -40,6 +26,21 @@ import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { Pokemon, type TargetScoreData } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { CounterDamageAttr } from "#moves/counter-damage-attr";
+import { CritOnlyAttr } from "#moves/crit-only-attr";
+import { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import { getMoveTargets, type Move } from "#moves/move";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import type PokemonData from "#system/pokemon-data";
+import type { TurnMove } from "#types/TurnMove";
+import { EnemyBattleInfo } from "#ui/battle-info";
+import { BooleanHolder, isBetween, isNil, toDmgValue } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
+import { randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
@@ -82,7 +83,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     if (Overrides.ENEMY_STATUS_OVERRIDE) {
-      this.status = new Status(Overrides.ENEMY_STATUS_OVERRIDE, 0, 4);
+      this.setStatus(Overrides.ENEMY_STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
     }
 
     if (Overrides.ENEMY_GENDER_OVERRIDE) {

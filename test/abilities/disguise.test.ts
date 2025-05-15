@@ -1,11 +1,11 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { toDmgValue } from "#app/utils/common-utils";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
+import { toDmgValue } from "#utils/common-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Disguise", () => {
@@ -45,7 +45,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.SHADOW_SNEAK);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(mimikyu.hp).equals(maxHp - disguiseDamage);
     expect(mimikyu.formIndex).toBe(bustedForm);
@@ -60,7 +60,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.VACUUM_WAVE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
   });
@@ -217,7 +217,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(mimikyu.formIndex).toBe(bustedForm);
     expect(mimikyu.hp).toBe(maxHp - disguiseDamage);

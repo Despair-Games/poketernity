@@ -1,9 +1,9 @@
-import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
-import type { Move } from "#app/data/moves/move";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import { SpeciesId } from "#enums/species-id";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change a move's type based on the form of Genesect using it.

@@ -1,4 +1,4 @@
-import type { EntryHazardTag } from "#app/data/arena-tag";
+import type { EntryHazardTag } from "#data/arena-tag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -6,7 +6,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -145,7 +145,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.use(MoveId.TOXIC_SPIKES);
     await game.move.forceEnemyMove(MoveId.MEMENTO);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.isFainted()).toBe(true);
     await game.toNextTurn();
 

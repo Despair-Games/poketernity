@@ -1,22 +1,13 @@
-import type { FightCommand } from "#app/@types/FightCommand";
-import type { TurnMove } from "#app/@types/TurnMove";
-import type { FairyLockTag } from "#app/data/arena-tag";
-import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
-import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
-import type { TrappedTag } from "#app/data/battler-tags/trapped-tag";
-import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, type MoveTargetSet } from "#app/data/moves/move";
-import { speciesStarterCosts } from "#app/data/starters";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#app/constants/battler-tag-constants";
-import { isNil } from "#app/utils/common-utils";
-import { isFieldTargeted } from "#app/utils/move-utils";
+import type { EncoreTag } from "#battler-tags/encore-tag";
+import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
+import type { TrappedTag } from "#battler-tags/trapped-tag";
+import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import type { FairyLockTag } from "#data/arena-tag";
+import { allMoves } from "#data/data-lists";
+import { speciesStarterCosts } from "#data/starters";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -30,6 +21,15 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
+import type { Pokemon } from "#field/pokemon";
+import { getMoveTargets, type MoveTargetSet } from "#moves/move";
+import { FieldPhase } from "#phases/abstract-field-phase";
+import type { FightCommand } from "#types/FightCommand";
+import type { TurnMove } from "#types/TurnMove";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
+import type { FightUiHandler } from "#ui/fight-ui-handler";
+import { isNil } from "#utils/common-utils";
+import { isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 /**
@@ -152,6 +152,7 @@ export class CommandPhase extends FieldPhase {
    */
   public handleCommand(command: BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
+    // TODO: refactor this function
     const pokemon = this.getPokemon();
     let success: boolean = false;
 
@@ -168,9 +169,10 @@ export class CommandPhase extends FieldPhase {
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
+    // TODO: break out the code in this switch block into private methods
     switch (command) {
       case BattleCommand.TERA:
-      case BattleCommand.FIGHT:
+      case BattleCommand.FIGHT: {
         const ignorePp = args[0] as boolean | undefined;
         const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
         const useStruggle = cursor > -1 && !pokemon.getMoveset().filter((m) => m.isUsable(pokemon)).length;
@@ -257,7 +259,8 @@ export class CommandPhase extends FieldPhase {
           );
         }
         break;
-      case BattleCommand.BALL:
+      }
+      case BattleCommand.BALL: {
         const notInDex =
           globalScene
             .getEnemyField()
@@ -307,18 +310,21 @@ export class CommandPhase extends FieldPhase {
           }
         }
         break;
+      }
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: `Run` and `Pokemon` cases share checks for trapping
       case BattleCommand.RUN:
         if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
-        } else if (
+        }
+        if (
           battleType === BattleType.TRAINER
           || mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
         ) {
           failCatchRun("battle:noEscapeTrainer");
           break;
         }
-      case BattleCommand.POKEMON:
+      case BattleCommand.POKEMON: {
         const isSwitch = command === BattleCommand.POKEMON;
         const batonPass = isSwitch && (args[0] as boolean);
         const trappedAbMessages: string[] = [];
@@ -380,6 +386,7 @@ export class CommandPhase extends FieldPhase {
           showNoEscapeText(getNoEscapeText(trapTag ?? fairyLockTag));
         }
         break;
+      }
     }
 
     if (success) {

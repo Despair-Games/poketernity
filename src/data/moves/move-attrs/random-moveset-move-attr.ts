@@ -1,12 +1,12 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/moves/move";
-import { CallMoveAttr } from "#app/data/moves/move-attrs/call-move-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import { getMaxMoveList } from "#app/utils/move-utils";
+import { allMoves } from "#data/data-lists";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import { CallMoveAttr } from "#moves/call-move-attr";
+import type { Move } from "#moves/move";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
+import { getMaxMoveList } from "#utils/move-utils";
 
 /**
  * Attribute used to call a random move in the user or party's moveset.
@@ -49,7 +49,7 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
         allies = [user];
       }
 
-      const partyMoveset = allies.map((p) => p.moveset).flat();
+      const partyMoveset = allies.flatMap((p) => p.moveset);
       const moves = partyMoveset.filter((m) => !this.invalidMoves.has(m.moveId) && !m.getMove().name.endsWith(" (N)"));
 
       if (moves.length === 0) {

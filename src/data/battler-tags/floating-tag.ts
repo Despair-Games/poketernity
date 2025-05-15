@@ -1,10 +1,10 @@
-import { TypeImmuneTag } from "#app/data/battler-tags/type-immune-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**

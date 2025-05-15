@@ -1,6 +1,6 @@
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { Button } from "#enums/buttons";
-import { OptionSelectUiHandler } from "./option-select-ui-handler";
+import type { OptionSelectModeConfig } from "#ui/option-select-config";
+import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 
 export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   private modalContainer?: Phaser.GameObjects.Container;
@@ -42,7 +42,8 @@ export class AutoCompleteUiHandler extends OptionSelectUiHandler {
         ui.playError();
       }
       return true;
-    } else if (button !== Button.CANCEL && button !== Button.ACTION) {
+    }
+    if (button !== Button.CANCEL && button !== Button.ACTION) {
       return super.processInput(button);
     }
     return false;

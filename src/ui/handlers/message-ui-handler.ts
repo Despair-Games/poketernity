@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { getFrameMs, isNil } from "#app/utils/common-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { AwaitableUiHandler } from "./awaitable-ui-handler";
+import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { getFrameMs, isNil } from "#utils/common-utils";
 
 export abstract class MessageUiHandler extends AwaitableUiHandler {
   protected textTimer: Phaser.Time.TimerEvent | null;
@@ -108,13 +108,13 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
           charVarMap.set(actionMatch.index, actionMatch[2]);
           break;
         case "d":
-          delayMap.set(actionMatch.index, parseInt(actionMatch[2]));
+          delayMap.set(actionMatch.index, Number.parseInt(actionMatch[2]));
           break;
         case "s":
           soundMap.set(actionMatch.index, actionMatch[2]);
           break;
         case "f":
-          fadeMap.set(actionMatch.index, parseInt(actionMatch[2]));
+          fadeMap.set(actionMatch.index, Number.parseInt(actionMatch[2]));
           break;
       }
       text = text.slice(0, actionMatch.index) + text.slice(actionMatch.index + actionMatch[2].length + 4);

@@ -1,12 +1,12 @@
-import { MAJOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
-import { PLEDGE_MOVES } from "#app/constants/move-constants";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { PLEDGE_MOVES } from "#constants/move-constants";
 import type { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
-import type { Move } from "../move";
-import { AddArenaTagAttr } from "./add-arena-tag-attr";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { AddArenaTagAttr } from "#moves/add-arena-tag-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute that adds a secondary effect to the field when two unique Pledge moves

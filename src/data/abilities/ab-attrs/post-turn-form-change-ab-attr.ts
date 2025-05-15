@@ -1,7 +1,7 @@
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 
 export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
   private readonly formFunc: (p: Pokemon) => number;

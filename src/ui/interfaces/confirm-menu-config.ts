@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { UiMode } from "#enums/ui-mode";
 // -- end tsdoc imports --
-import type { OptionMenuSettings } from "#app/ui/interfaces/option-select-config";
+import type { OptionMenuSettings } from "#ui/option-select-config";
 
 /**
  * Customizations options for UI's {@linkcode UiMode.CONFIRM}

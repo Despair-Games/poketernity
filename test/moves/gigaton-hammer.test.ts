@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { GameManager } from "#test/test-utils/gameManager";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -39,7 +39,7 @@ describe("Moves - Gigaton Hammer", () => {
 
     game.move.select(MoveId.GIGATON_HAMMER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 
@@ -62,7 +62,7 @@ describe("Moves - Gigaton Hammer", () => {
 
     game.move.select(MoveId.GIGATON_HAMMER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 

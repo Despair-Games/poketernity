@@ -1,37 +1,9 @@
-import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModifierTransferSelectCallback";
-import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
-import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
-import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
-import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
-import { GAME_WIDTH } from "#app/constants/ui-constants";
-import { allMoves } from "#app/data/data-lists";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { getVariantTint } from "#app/data/variant";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { CommandPhase } from "#app/phases/command-phase";
-import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
-import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
-import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { BooleanHolder, isNil } from "#app/utils/common-utils";
-import { FilterAllMoves } from "#app/utils/move-utils";
-import { PartyFilterAll } from "#app/utils/party-ui-utils";
-import { toReadableString } from "#app/utils/string-utils";
+import { GAME_WIDTH } from "#constants/ui-constants";
+import { allMoves } from "#data/data-lists";
+import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
+import { getVariantTint } from "#data/variant";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
@@ -47,6 +19,34 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#modifier/modifier";
+import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
+import type { CommandPhase } from "#phases/command-phase";
+import type { SelectModifierPhase } from "#phases/select-modifier-phase";
+import type { PartyModifierTransferSelectCallback } from "#types/PartyModifierTransferSelectCallback";
+import type { PartySelectCallback } from "#types/PartySelectCallback";
+import type { PokemonModifierTransferSelectFilter } from "#types/PokemonModifierTransferSelectFilter";
+import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
+import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { MessageUiHandler } from "#ui/message-ui-handler";
+import { MoveInfoOverlay } from "#ui/move-info-overlay";
+import { PokemonIconAnimHelper } from "#ui/pokemon-icon-anim-helper";
+import type { RenamePokemonUiHandler } from "#ui/rename-pokemon-ui-handler";
+import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { applyChallenges } from "#utils/challenge-utils";
+import { BooleanHolder, isNil } from "#utils/common-utils";
+import { FilterAllMoves } from "#utils/move-utils";
+import { PartyFilterAll } from "#utils/party-ui-utils";
+import { toReadableString } from "#utils/string-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
@@ -319,7 +319,8 @@ export class PartyUiHandler extends MessageUiHandler {
           this.clearOptions();
           ui.playSelect();
           return true;
-        } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && option !== PartyOption.CANCEL) {
+        }
+        if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && option !== PartyOption.CANCEL) {
           // clear overlay on cancel
           this.moveInfoOverlay.clear();
           const filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
@@ -332,7 +333,8 @@ export class PartyUiHandler extends MessageUiHandler {
           }
           ui.playSelect();
           return true;
-        } else if (
+        }
+        if (
           (option !== PartyOption.SUMMARY
             && option !== PartyOption.UNPAUSE_EVOLUTION
             && option !== PartyOption.RELEASE
@@ -420,10 +422,9 @@ export class PartyUiHandler extends MessageUiHandler {
               ui.playSelect();
             }
             return true;
-          } else {
-            this.clearOptions();
-            this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
           }
+          this.clearOptions();
+          this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
           ui.setModeWithoutClear<SummaryUiHandler>(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
@@ -591,7 +592,8 @@ export class PartyUiHandler extends MessageUiHandler {
           return this.processInput(Button.CANCEL);
         }
         return true;
-      } else if (button === Button.CANCEL) {
+      }
+      if (button === Button.CANCEL) {
         if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && this.transferMode) {
           this.clearTransfer();
           ui.playSelect();
@@ -629,10 +631,12 @@ export class PartyUiHandler extends MessageUiHandler {
           if (slotCount === battlerCount) {
             success = this.setCursor(6);
             break;
-          } else if (battlerCount >= 2 && slotCount > battlerCount && this.getCursor() === 0 && this.lastCursor === 1) {
+          }
+          if (battlerCount >= 2 && slotCount > battlerCount && this.getCursor() === 0 && this.lastCursor === 1) {
             success = this.setCursor(2);
             break;
-          } else if (slotCount > battlerCount && this.cursor < battlerCount) {
+          }
+          if (slotCount > battlerCount && this.cursor < battlerCount) {
             success = this.setCursor(this.lastCursor < 6 ? this.lastCursor || battlerCount : battlerCount);
             break;
           }
@@ -659,7 +663,7 @@ export class PartyUiHandler extends MessageUiHandler {
     }
 
     for (const p in party) {
-      const slotIndex = parseInt(p);
+      const slotIndex = Number.parseInt(p);
       const partySlot = new PartySlot(slotIndex, party[p], this.iconAnimHandler, this.partyUiMode, this.tmMoveId);
       globalScene.add.existing(partySlot);
       this.partySlotsContainer.add(partySlot);
@@ -963,7 +967,7 @@ export class PartyUiHandler extends MessageUiHandler {
           case PartyOption.MOVE_1:
           case PartyOption.MOVE_2:
           case PartyOption.MOVE_3:
-          case PartyOption.MOVE_4:
+          case PartyOption.MOVE_4: {
             const move = pokemon.moveset[option - PartyOption.MOVE_1];
             if (this.showMovePp) {
               const maxPP = move.getMovePp();
@@ -973,6 +977,7 @@ export class PartyUiHandler extends MessageUiHandler {
               optionName = move.getName();
             }
             break;
+          }
           default:
             if (formChangeItemModifiers && option >= PartyOption.FORM_CHANGE_ITEM) {
               const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
@@ -1083,7 +1088,7 @@ export class PartyUiHandler extends MessageUiHandler {
           }
           if (this.partyUiMode === PartyUiMode.RELEASE) {
             const { selectCallback, cursor } = this;
-            selectCallback && selectCallback(cursor, PartyOption.RELEASE);
+            selectCallback?.(cursor, PartyOption.RELEASE);
             this.selectCallback = null;
           }
           this.showText("", 0);
@@ -1295,7 +1300,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     }
 
     if (this.pokemon.isShiny()) {
-      const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
+      const shinyStar = globalScene.add.image(0, 0, "shiny_star_small");
       shinyStar.setOrigin(0, 0);
       shinyStar.setPositionRelative(this.slotName, -9, 3);
       shinyStar.setTint(getVariantTint(this.pokemon.getVariant()));

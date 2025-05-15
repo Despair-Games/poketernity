@@ -1,24 +1,24 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { getLevelRelExp } from "#app/data/exp";
-import { fixedNumber } from "#app/utils/common-utils";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { Gender } from "#enums/gender";
-import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
-import { getTypeRgb } from "#app/data/type";
+import { CANVAS_SCALE, GAME_WIDTH } from "#constants/ui-constants";
+import { getLevelRelExp } from "#data/exp";
+import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
+import { getTypeRgb } from "#data/type";
+import { getVariantTint } from "#data/variant";
 import { ElementalType } from "#enums/elemental-type";
-import { getVariantTint } from "#app/data/variant";
-import { Stat } from "#enums/stat";
-import { BattleFlyout } from "#app/ui/components/battle-flyout";
-import { addWindow } from "#app/ui/ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import i18next from "i18next";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
-import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/constants/ui-constants";
+import { Gender } from "#enums/gender";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TextStyle } from "#enums/text-style";
+import { WindowVariant } from "#enums/window-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { settings } from "#system/settings-manager";
+import { BattleFlyout } from "#ui/battle-flyout";
+import { addTextObject, setTextColor } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { clamp, fixedNumber } from "#utils/common-utils";
+import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
@@ -360,7 +360,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       nameTextWidth + this.genderText.displayWidth + 1 + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
       2.5,
     );
-    this.shinyIcon.setTexture(`shiny_star`);
+    this.shinyIcon.setTexture("shiny_star");
     this.shinyIcon.setVisible(pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
@@ -653,7 +653,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       // Plays the animation of the Pokemon's HP bar increasing or decreasing.
       const updatePokemonHp = () => {
-        let duration = !instant ? Phaser.Math.Clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
+        let duration = !instant ? clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
         const speed = settings.general.hpBarSpeed;
         if (speed) {
           duration = speed >= 3 ? 0 : duration / Math.pow(2, speed);
@@ -705,7 +705,8 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       if (this.lastHp !== pokemon.hp || this.lastMaxHp !== pokemon.getMaxHp()) {
         return updatePokemonHp();
-      } else if (!this.player && this.lastLevel !== pokemon.level) {
+      }
+      if (!this.player && this.lastLevel !== pokemon.level) {
         this.setLevel(pokemon.level);
         this.lastLevel = pokemon.level;
       }

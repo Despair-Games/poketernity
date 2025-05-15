@@ -1,10 +1,10 @@
-import type { BattlerIndex } from "#enums/battler-index";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
-import { PokemonPhase } from "./abstract-pokemon-phase";
 import { PhaseId } from "#enums/phase-id";
+import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 /**
  * Transforms a Pokemon into another Pokemon on the field.

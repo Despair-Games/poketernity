@@ -1,11 +1,11 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -31,9 +31,8 @@ export class AddSubstituteAttr extends MoveEffectAttr {
   private getHpCost(user: Pokemon): number {
     if (this.isShedTail) {
       return Math.ceil(user.getMaxHp() * 0.5);
-    } else {
-      return Math.floor(user.getMaxHp() * 0.25);
     }
+    return Math.floor(user.getMaxHp() * 0.25);
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
@@ -68,10 +67,10 @@ export class AddSubstituteAttr extends MoveEffectAttr {
   override getFailedText(user: Pokemon, _target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     if (user.getTag(BattlerTagType.SUBSTITUTE)) {
       return i18next.t("moveTriggers:substituteOnOverlap", { pokemonName: getPokemonNameWithAffix(user) });
-    } else if (user.hp <= this.getHpCost(user) || user.getMaxHp() === 1) {
-      return i18next.t("moveTriggers:substituteNotEnoughHp");
-    } else {
-      return i18next.t("battle:attackFailed");
     }
+    if (user.hp <= this.getHpCost(user) || user.getMaxHp() === 1) {
+      return i18next.t("moveTriggers:substituteNotEnoughHp");
+    }
+    return i18next.t("battle:attackFailed");
   }
 }

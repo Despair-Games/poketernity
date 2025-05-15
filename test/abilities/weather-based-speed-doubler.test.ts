@@ -1,11 +1,11 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/test-utils/game-manager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
   let phaserGame: Phaser.Game;

@@ -1,20 +1,72 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ES2020",
+    "module": "ES2022",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "noImplicitOverride": true,
     "sourceMap": false,
+    // #region `strict` options
     "strict": false,
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictBuiltinIteratorReturn": true,
+    "strictFunctionTypes": false, // TODO: refactor so this can be true
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false, // TODO: refactor so this can be true
+    "noImplicitAny": false, // TODO: refactor so this can be true
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": false, // TODO: refactor so this can be true
+    // #endregion
     "rootDir": ".",
     "baseUrl": "./src",
     "paths": {
+      "#api/*": ["./plugins/api/*.ts"],
+      "#abilities/*": ["./data/abilities/ab-attrs/*.ts", "./data/abilities/*.ts"],
+      "#animations/*": ["./data/animations/*.ts"],
+      "#battler-tags/*": ["./data/battler-tags/utils/*.ts", "./data/battler-tags/*.ts"],
+      "#biomes/*": ["./data/biomes/*.ts"],
+      "#constants/*": ["./constants/*.ts"],
       "#enums/*": ["./enums/*.ts"],
+      "#events/*": ["./events/*.ts"],
+      "#field/*": ["./field/*.ts"],
+      "#form-change-triggers/*": ["./data/species-form-change-triggers/*.ts"],
+      "#init/*": ["./data/init/*.ts"],
+      "#inputs/*": ["./configs/inputs/*.ts"],
+      "#items/*": ["./data/items/*.ts"],
+      "#modifier/*": ["./modifier/*.ts"],
+      "#moves/*": ["./data/moves/move-attrs/*.ts", "./data/moves/move-conditions/*.ts", "./data/moves/*.ts"],
+      "#mystery-encounters/*": [
+        "./data/mystery-encounters/utils/*.ts",
+        "./data/mystery-encounters/requirements/*.ts",
+        "./data/mystery-encounters/encounters/*.ts",
+        "./data/mystery-encounters/*.ts"
+      ],
+      "#package.json": ["../package.json"],
+      "#phases/*": ["./phases/*.ts"],
+      "#pipelines/*": ["./pipelines/*.ts"],
+      "#system/*": [
+        "./system/settings/*.ts",
+        "./system/version_migration/versions/*.ts",
+        "./system/version_migration/*.ts",
+        "./system/*.ts"
+      ],
+      "#trainer-configs/*": ["./data/trainer-configs/*.ts"],
+      "#test/*": ["../test/*.ts"],
+      "#types/*": ["./@types/*.ts"],
+      "#ui/*": [
+        "./ui/components/*.ts",
+        "./ui/handlers/*.ts",
+        "./ui/helpers/*.ts",
+        "./ui/interfaces/*.ts",
+        "./ui/settings/*.ts",
+        "./ui/text/*.ts",
+        "./ui/*.ts"
+      ],
+      "#utils/*": ["./utils/*.ts"],
+      "#data/*": ["./data/*.ts"],
       "#app/*": ["./*.ts"],
-      "#test/*": ["../test/*.ts"]
     },
     "outDir": "./build",
     "noEmit": true

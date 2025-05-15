@@ -1,4 +1,3 @@
-import { SpeciesId } from "#enums/species-id";
 import {
   DayEvolutionCondition,
   FemaleEvolutionCondition,
@@ -10,16 +9,17 @@ import {
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
   SpeciesOwnedEvoCondition,
-} from "#app/data/pokemon-evolutions";
-import { EvolutionItem } from "#enums/evolution-item";
+} from "#data/pokemon-evolutions";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   BASCULEGION_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
   HAPPINESS_EVO_LEVEL,
   KINGAMBIT_EVO_LEVEL,
-} from "#app/data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+} from "#data/pokemon-evolutions/enemy-pokemon-evolution-levels";
+import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.SNIVY]: [new SpeciesEvolution(SpeciesId.SERVINE, 17, null, null)],

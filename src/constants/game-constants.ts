@@ -1,6 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { SystemSaveData } from "#app/@types/SystemData";
+import type { BattleStat } from "#enums/stat";
+import type { StatusEffect } from "#enums/status-effect";
+import type { SystemSaveData } from "#types/SystemData";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -65,8 +67,30 @@ export const G_MAX_FORM_KEYS = Object.freeze<string[]>([
 /** Default amount of money the player starts with. Same for all game modes. */
 export const DEFAULT_STARTING_MONEY = 1000;
 
-/** The defualt duration of a freshly applied terrain (in turns). */
+/** The default duration of a freshly applied terrain (in turns). */
 export const DEFAULT_NEW_TERRAIN_DURATION = 5;
 
 /** Abbreviations from 10^0 to 10^33 @todo localize these */
 export const LARGE_NUMBER_ABBREVIATIONS: string[] = ["", "K", "M", "B", "t", "q", "Q", "s", "S", "o", "n", "d"];
+
+/**
+ * The default min value for {@linkcode StatusEffect.SLEEP} when randomly setting the duration.
+ * Number from {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)#Generation_V | Gen 5+}
+ *
+ * Note: This equates to `1` turn of sleep, subtract `1` from this value to get the actual duration.
+ */
+export const DEFAULT_MIN_SLEEP_DURATION = 2;
+
+/**
+ * The default max value for {@linkcode StatusEffect.SLEEP} when randomly setting the duration.
+ * Number from {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)#Generation_V | Gen 5+}
+ *
+ * Note: This equates to `3` turns of sleep, subtract `1` from this value to get the actual duration.
+ */
+export const DEFAULT_MAX_SLEEP_DURATION = 4;
+
+/** The minimum stage a {@linkcode BattleStat} can have. */
+export const MIN_STAT_STAGE = -6;
+
+/** The maximum stage a {@linkcode BattleStat} can have. */
+export const MAX_STAT_STAGE = 6;

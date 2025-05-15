@@ -1,24 +1,24 @@
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { SpeciesId } from "#enums/species-id";
-import { TrainerType } from "#enums/trainer-type";
-import { randInt } from "#app/utils/random-utils";
-import { TrainerVariant } from "#enums/trainer-variant";
 import {
-  KANTO_CHAMPION_THEME,
-  JOHTO_CHAMPION_THEME,
-  HOENN5_CHAMPION_THEME,
-  HOENN6_CHAMPION_THEME,
-  SINNOH_CHAMPION_THEME,
-  KALOS_CHAMPION_THEME,
-  DEFAULT_CHAMPION_THEME,
-  IRIS_CHAMPION_THEME,
   ALOLA_CHAMPION_THEME,
+  DEFAULT_CHAMPION_THEME,
   GALAR_CHAMPION_THEME,
   GEETA_CHAMPION_THEME,
-  NEMONA_CHAMPION_THEME,
+  HOENN5_CHAMPION_THEME,
+  HOENN6_CHAMPION_THEME,
+  IRIS_CHAMPION_THEME,
+  JOHTO_CHAMPION_THEME,
+  KALOS_CHAMPION_THEME,
+  KANTO_CHAMPION_THEME,
   KIERAN_CHAMPION_THEME,
-} from "#app/constants/music-constants";
+  NEMONA_CHAMPION_THEME,
+  SINNOH_CHAMPION_THEME,
+} from "#constants/music-constants";
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
+import { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
+import { randInt } from "#utils/random-utils";
 
 let t = TrainerType.BLUE_RED;
 export const championDoubleTrainerConfigs: TrainerConfigs = {

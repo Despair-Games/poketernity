@@ -1,5 +1,4 @@
-import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -7,7 +6,8 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
-import { GameManager } from "#test/test-utils/gameManager";
+import { MetronomeAttr } from "#moves/metronome-attr";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -116,7 +116,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(playerPokemon.getTag(BattlerTagType.SPIKY_SHIELD)).toBeDefined();
 

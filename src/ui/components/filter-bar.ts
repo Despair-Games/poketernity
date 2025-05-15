@@ -1,12 +1,12 @@
-import type { DropDown } from "./drop-down";
-import { DropDownType } from "#enums/drop-down-type";
-import type { StarterContainer } from "./starter-container";
-import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
-import { WindowVariant } from "#enums/window-variant";
 import { globalScene } from "#app/global-scene";
 import type { DropDownColumn } from "#enums/drop-down-column";
+import { DropDownType } from "#enums/drop-down-type";
+import { TextStyle } from "#enums/text-style";
+import { WindowVariant } from "#enums/window-variant";
+import type { DropDown } from "#ui/drop-down";
+import type { StarterContainer } from "#ui/starter-container";
+import { addTextObject, setTextColor } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
 
 export class FilterBar extends Phaser.GameObjects.Container {
   private window: Phaser.GameObjects.NineSlice;
@@ -152,18 +152,16 @@ export class FilterBar extends Phaser.GameObjects.Container {
     if (this.dropDowns[this.lastCursor].cursor === this.dropDowns[this.lastCursor].options.length - 1) {
       // if at the bottom of the list, wrap around
       return this.dropDowns[this.lastCursor].setCursor(0);
-    } else {
-      return this.dropDowns[this.lastCursor].setCursor(this.dropDowns[this.lastCursor].cursor + 1);
     }
+    return this.dropDowns[this.lastCursor].setCursor(this.dropDowns[this.lastCursor].cursor + 1);
   }
 
   decDropDownCursor(): boolean {
     if (this.dropDowns[this.lastCursor].cursor === 0) {
       // if at the top of the list, wrap around
       return this.dropDowns[this.lastCursor].setCursor(this.dropDowns[this.lastCursor].options.length - 1);
-    } else {
-      return this.dropDowns[this.lastCursor].setCursor(this.dropDowns[this.lastCursor].cursor - 1);
     }
+    return this.dropDowns[this.lastCursor].setCursor(this.dropDowns[this.lastCursor].cursor - 1);
   }
 
   toggleOptionState(): void {

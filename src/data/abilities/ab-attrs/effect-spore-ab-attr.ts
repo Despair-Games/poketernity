@@ -1,11 +1,11 @@
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import { AbilityId } from "#enums/ability-id";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { MoveFlags } from "#enums/move-flags";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveFlags } from "#enums/move-flags";
+import { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 
 /**
  * Effect Spore's ability attribute
@@ -39,9 +39,8 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
       const statusEffect = this.getStatus(roll);
       if (simulated) {
         return attacker.canSetStatus(statusEffect, true, false, pokemon);
-      } else {
-        return attacker.trySetStatus(statusEffect, true, pokemon);
       }
+      return attacker.trySetStatus(statusEffect, true, pokemon);
     }
     return false;
   }
@@ -57,9 +56,11 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
     const PSN_THRESHOLD = 9 + PARA_THRESHOLD;
     if (roll < SLEEP_THRESHOLD) {
       return StatusEffect.SLEEP;
-    } else if (roll < PARA_THRESHOLD) {
+    }
+    if (roll < PARA_THRESHOLD) {
       return StatusEffect.PARALYSIS;
-    } else if (roll < PSN_THRESHOLD) {
+    }
+    if (roll < PSN_THRESHOLD) {
       return StatusEffect.POISON;
     }
     return StatusEffect.NONE;

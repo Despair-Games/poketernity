@@ -1,23 +1,23 @@
-import Phaser from "phaser";
-import { getEnumValues, deepCopy } from "#app/utils/common-utils";
-import pad_generic from "./configs/inputs/pad_generic";
-import pad_unlicensedSNES from "./configs/inputs/pad_unlicensedSNES";
-import pad_xbox360 from "./configs/inputs/pad_xbox360";
-import pad_dualshock from "./configs/inputs/pad_dualshock";
-import pad_procon from "./configs/inputs/pad_procon";
-import { UiMode } from "#enums/ui-mode";
-import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
-import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type { SettingGamepad } from "#enums/setting-gamepad";
-import type { SettingKeyboard } from "#enums/setting-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
-import { MoveTouchControlsHandler } from "#app/ui/settings/move-touch-controls-handler";
-import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
-import { eventBus } from "#app/event-bus";
-import { settings } from "#app/system/settings/settings-manager";
+import type { SettingGamepad } from "#enums/setting-gamepad";
+import type { SettingKeyboard } from "#enums/setting-keyboard";
+import { UiMode } from "#enums/ui-mode";
+import cfg_keyboard_qwerty from "#inputs/cfg_keyboard_qwerty";
+import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inputs/configHandler";
+import pad_dualshock from "#inputs/pad_dualshock";
+import pad_generic from "#inputs/pad_generic";
+import pad_procon from "#inputs/pad_procon";
+import pad_unlicensedSNES from "#inputs/pad_unlicensedSNES";
+import pad_xbox360 from "#inputs/pad_xbox360";
+import { settings } from "#system/settings-manager";
+import type { SettingsUpdateEventArgs } from "#types/Settings";
+import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
+import { deepCopy, getEnumValues } from "#utils/common-utils";
+import Phaser from "phaser";
 
 export interface DeviceMapping {
   [key: string]: number;
@@ -70,7 +70,7 @@ const repeatInputDelayMillis = 250;
  * providing a unified interface for all input-related interactions.
  */
 export class InputsController {
-  private gamepads: Array<Phaser.Input.Gamepad.Gamepad> = new Array();
+  private gamepads: Phaser.Input.Gamepad.Gamepad[] = new Array();
   public events: Phaser.Events.EventEmitter;
 
   private buttonLock: Button[] = new Array();
@@ -82,7 +82,7 @@ export class InputsController {
   public gamepadSupport: boolean = true;
   public selectedDevice;
 
-  private disconnectedGamepads: Array<String> = new Array();
+  private disconnectedGamepads: string[] = new Array();
 
   public lastSource: string = "keyboard";
   private inputInterval: NodeJS.Timeout[] = new Array();
@@ -134,26 +134,18 @@ export class InputsController {
     });
 
     if (typeof globalScene.input.gamepad !== "undefined") {
-      globalScene.input.gamepad?.on(
-        "connected",
-        function (thisGamepad) {
-          if (!thisGamepad) {
-            return;
-          }
-          this.refreshGamepads();
-          this.setupGamepad(thisGamepad);
-          this.onReconnect(thisGamepad);
-        },
-        this,
-      );
+      const connectedListenerFunc = (thisGamepad: Phaser.Input.Gamepad.Gamepad) => {
+        if (!thisGamepad) {
+          return;
+        }
+        this.refreshGamepads();
+        this.setupGamepad(thisGamepad);
+        this.onReconnect(thisGamepad);
+      };
+      globalScene.input.gamepad?.on("connected", connectedListenerFunc, this);
 
-      globalScene.input.gamepad?.on(
-        "disconnected",
-        function (thisGamepad) {
-          this.onDisconnect(thisGamepad); // when a gamepad is disconnected
-        },
-        this,
-      );
+      const disconnectedListenerFunc = (thisGamepad: Phaser.Input.Gamepad.Gamepad) => this.onDisconnect(thisGamepad);
+      globalScene.input.gamepad?.on("disconnected", disconnectedListenerFunc, this);
 
       // Check to see if the gamepad has already been setup by the browser
       globalScene.input.gamepad?.refreshPads();
@@ -220,7 +212,7 @@ export class InputsController {
    * @param gamepad - The identifier of the gamepad to set as chosen.
    * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
-  setChosenGamepad(gamepad: String, emitInitEvent: boolean = true): void {
+  setChosenGamepad(gamepad: string, emitInitEvent: boolean = true): void {
     this.deactivatePressedKey();
     this.initChosenGamepad(gamepad, emitInitEvent);
   }
@@ -230,7 +222,7 @@ export class InputsController {
    *
    * @param layoutKeyboard - The identifier of the keyboard layout to set as chosen.
    */
-  setChosenKeyboardLayout(layoutKeyboard: String): void {
+  setChosenKeyboardLayout(layoutKeyboard: string): void {
     this.deactivatePressedKey();
     this.initChosenLayoutKeyboard(layoutKeyboard);
   }
@@ -239,7 +231,7 @@ export class InputsController {
    * Retrieves the identifiers of all connected gamepads, excluding any that are currently marked as disconnected.
    * @returns Array<String> An array of strings representing the IDs of the connected gamepads.
    */
-  getGamepadsName(): Array<String> {
+  getGamepadsName(): string[] {
     return this.gamepads.filter((g) => !this.disconnectedGamepads.includes(g.id)).map((g) => g.id);
   }
 
@@ -249,7 +241,7 @@ export class InputsController {
    * @param gamepadName - Optional parameter to specify the name of the gamepad to initialize as chosen.
    * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
-  initChosenGamepad(gamepadName?: String, emitInitEvent: boolean = true): void {
+  initChosenGamepad(gamepadName?: string, emitInitEvent: boolean = true): void {
     if (gamepadName) {
       this.selectedDevice[Device.GAMEPAD] = gamepadName.toLowerCase();
     }
@@ -263,7 +255,7 @@ export class InputsController {
    * If a layout name is provided, it uses that as the chosen layout; otherwise, it defaults to the currently chosen layout.
    * @param layoutKeyboard Optional parameter to specify the name of the keyboard layout to initialize as chosen.
    */
-  initChosenLayoutKeyboard(layoutKeyboard?: String): void {
+  initChosenLayoutKeyboard(layoutKeyboard?: string): void {
     if (layoutKeyboard) {
       this.selectedDevice[Device.KEYBOARD] = layoutKeyboard.toLowerCase();
     }
@@ -342,10 +334,7 @@ export class InputsController {
    */
   refreshGamepads(): void {
     // Sometimes, gamepads are undefined. For some reason.
-    this.gamepads =
-      globalScene.input.gamepad?.gamepads.filter(function (el) {
-        return el !== null;
-      }) ?? [];
+    this.gamepads = globalScene.input.gamepad?.gamepads.filter((el) => el !== null) ?? [];
 
     for (const [index, thisGamepad] of this.gamepads.entries()) {
       thisGamepad.index = index; // Overwrite the gamepad index, in case we had undefined gamepads earlier
@@ -503,11 +492,14 @@ export class InputsController {
 
     if (id.includes("081f") && id.includes("e401")) {
       return pad_unlicensedSNES;
-    } else if (id.includes("xbox") && id.includes("360")) {
+    }
+    if (id.includes("xbox") && id.includes("360")) {
       return pad_xbox360;
-    } else if (id.includes("054c")) {
+    }
+    if (id.includes("054c")) {
       return pad_dualshock;
-    } else if (id.includes("057e") && id.includes("2009")) {
+    }
+    if (id.includes("057e") && id.includes("2009")) {
       return pad_procon;
     }
 
@@ -561,9 +553,8 @@ export class InputsController {
   getLastSourceDevice(): Device {
     if (this.lastSource === "gamepad") {
       return Device.GAMEPAD;
-    } else {
-      return Device.KEYBOARD;
     }
+    return Device.KEYBOARD;
   }
 
   getLastSourceConfig() {
@@ -624,8 +615,7 @@ export class InputsController {
     this.deactivatePressedKey();
     if (config.padType === "keyboard") {
       return assign(config, settingName, pressedButton);
-    } else {
-      return swap(config, settingName, pressedButton);
     }
+    return swap(config, settingName, pressedButton);
   }
 }

@@ -1,13 +1,13 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr, type MoveEffectAttrOptions } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveTarget } from "#enums/move-target";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { type MoveEffectAttrOptions, MoveEffectAttr } from "#moves/move-effect-attr";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
   /** The number of turns the tag is in effect */

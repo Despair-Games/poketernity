@@ -1,15 +1,15 @@
-import type { RunSuccessAbAttr } from "#app/data/abilities/ab-attrs/run-success-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { NumberHolder } from "#app/utils/common-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { clamp, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -20,10 +20,6 @@ export class AttemptRunPhase extends PokemonPhase {
   override readonly id = PhaseId.ATTEMPT_RUN;
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override
-
-  constructor(fieldIndex: number) {
-    super(fieldIndex);
-  }
 
   public override start(): void {
     super.start();
@@ -122,7 +118,7 @@ export class AttemptRunPhase extends PokemonPhase {
     const escapeSlope = (maxChance - minChance) / speedCap;
 
     // This will calculate the escape chance given all of the above and clamp it to the range of [`minChance`, `maxChance`]
-    escapeChance.value = Phaser.Math.Clamp(
+    escapeChance.value = clamp(
       Math.round(escapeSlope * speedRatio + minChance + escapeBonus * globalScene.currentBattle.escapeAttempts++),
       minChance,
       maxChance,

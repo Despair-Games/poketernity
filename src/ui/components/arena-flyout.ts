@@ -1,13 +1,5 @@
-import type { ArenaEvent } from "#app/events/arena";
-import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { TurnEndEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { TimeOfDayWidget } from "#app/ui/components/time-of-day-widget";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import { fixedNumber, isNil } from "#app/utils/common-utils";
-import { toCamelCaseString, toTitleCase } from "#app/utils/string-utils";
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { ArenaEventType } from "#enums/arena-event-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -16,6 +8,14 @@ import { TerrainType } from "#enums/terrain-type";
 import { TextStyle } from "#enums/text-style";
 import { WeatherType } from "#enums/weather-type";
 import { WindowVariant } from "#enums/window-variant";
+import type { ArenaEvent } from "#events/arena";
+import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
+import type { TurnEndEvent } from "#events/battle-scene";
+import { addTextObject } from "#ui/text-utils";
+import { TimeOfDayWidget } from "#ui/time-of-day-widget";
+import { addWindow } from "#ui/ui-theme";
+import { fixedNumber, isNil } from "#utils/common-utils";
+import { toCamelCaseString, toTitleCase } from "#utils/string-utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
@@ -271,7 +271,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
     let foundIndex: number;
     switch (arenaEffectChangedEvent.constructor) {
-      case TagAddedEvent:
+      case TagAddedEvent: {
         const tagAddedEvent = arenaEffectChangedEvent as TagAddedEvent;
 
         const excludedTagTypes = [ArenaTagType.DELAYED_ATTACK, ArenaTagType.PENDING_HEAL];
@@ -304,7 +304,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
             const layers = tagAddedEvent.arenaTagMaxLayers > 1 ? ` (${tagAddedEvent.arenaTagLayers})` : "";
             this.fieldEffectInfo[existingEntryHazardIndex].name = `${name}${layers}`;
             break;
-          } else if (tagAddedEvent.arenaTagMaxLayers > 1) {
+          }
+          if (tagAddedEvent.arenaTagMaxLayers > 1) {
             name = `${name} (${tagAddedEvent.arenaTagLayers})`;
           }
         }
@@ -317,7 +318,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           tagType: tagAddedEvent.arenaTagType,
         });
         break;
-      case TagRemovedEvent:
+      }
+      case TagRemovedEvent: {
         const tagRemovedEvent = arenaEffectChangedEvent as TagRemovedEvent;
         foundIndex = this.fieldEffectInfo.findIndex((info) => info.tagType === tagRemovedEvent.arenaTagType);
 
@@ -326,8 +328,9 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           this.fieldEffectInfo.splice(foundIndex, 1);
         }
         break;
+      }
 
-      case WeatherChangedEvent:
+      case WeatherChangedEvent: {
         const weatherEvent = arenaEffectChangedEvent as WeatherChangedEvent;
         const oldWeatherName = getFieldEffectText(WeatherType[weatherEvent.oldWeatherType]);
         const newWeatherName = getFieldEffectText(WeatherType[weatherEvent.newWeatherType]);
@@ -339,7 +342,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         };
         this.insertFieldEffectInfo(newWeatherInfo, oldWeatherName);
         break;
-      case TerrainChangedEvent:
+      }
+      case TerrainChangedEvent: {
         const terrainEvent = arenaEffectChangedEvent as TerrainChangedEvent;
         const oldTerrainName = getFieldEffectText(TerrainType[terrainEvent.oldTerrainType]);
         const newTerrainName = getFieldEffectText(TerrainType[terrainEvent.newTerrainType]);
@@ -352,6 +356,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         };
         this.insertFieldEffectInfo(newTerrainInfo, oldTerrainName);
         break;
+      }
     }
     this.updateFieldText();
   }

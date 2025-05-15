@@ -1,17 +1,9 @@
+import { api } from "#api/api";
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#app/constants/app-constants";
 import { globalScene } from "#app/global-scene";
-import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
-import { BgmBar } from "#app/ui/components/bgm-bar";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getEnumKeys } from "#app/utils/common-utils";
-import { getCookie } from "#app/utils/app-utils";
+import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#constants/app-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
@@ -19,20 +11,28 @@ import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
+import type { SelectModifierPhase } from "#phases/select-modifier-phase";
+import type { AchievementsUiHandler } from "#ui/achievements-ui-handler";
+import type { AdminUiHandler } from "#ui/admin-ui-handler";
+import { getAdminModeName } from "#ui/admin-ui-handler";
+import type { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
+import { BgmBar } from "#ui/bgm-bar";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import type { EggGachaUiHandler } from "#ui/egg-gacha-ui-handler";
+import type { EggListUiHandler } from "#ui/egg-list-ui-handler";
+import type { GameStatsUiHandler } from "#ui/game-stats-ui-handler";
+import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
+import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { RunHistoryUiHandler } from "#ui/run-history-ui-handler";
+import type { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { getCookie } from "#utils/app-utils";
+import { fixedNumber, getEnumKeys } from "#utils/common-utils";
 import i18next from "i18next";
-import type { GeneralSettingsUiHandler } from "#app/ui/settings/general-settings-ui-handler";
-import type { AchievementsUiHandler } from "./achievements-ui-handler";
-import type { AdminUiHandler } from "./admin-ui-handler";
-import { getAdminModeName } from "./admin-ui-handler";
-import type { AwaitableUiHandler } from "./awaitable-ui-handler";
-import type { ConfirmUiHandler } from "./confirm-ui-handler";
-import type { EggGachaUiHandler } from "./egg-gacha-ui-handler";
-import type { EggListUiHandler } from "./egg-list-ui-handler";
-import type { GameStatsUiHandler } from "./game-stats-ui-handler";
-import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
-import { OptionSelectUiHandler } from "./option-select-ui-handler";
-import type { RunHistoryUiHandler } from "./run-history-ui-handler";
-import type { TestDialogueUiHandler } from "./test-dialogue-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -152,7 +152,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   getMenuOptionsConfig(): OptionSelectModeConfig {
     const validOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
+      .map((m) => Number.parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
         return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));
       });
@@ -337,7 +337,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
               ui.playSelect();
               const dialogueTestName = sanitizedName;
               const dialogueName = decodeURIComponent(escape(atob(dialogueTestName)));
-              const handler = ui.getHandler() as AwaitableUiHandler;
+              const handler = ui.getCurrentHandler<AwaitableUiHandler>();
               handler.tutorialActive = true;
               const interpolatorOptions: any = {};
               const splitArr = dialogueName.split(" "); // this splits our inputted text into words to cycle through later
@@ -399,7 +399,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     const communityOptions: OptionSelectItem[] = [];
 
-    if (VITE_WIKI_URL && VITE_WIKI_URL.startsWith("https://")) {
+    if (VITE_WIKI_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "Wiki",
         handler: () => {
@@ -410,7 +410,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_DISCORD_URL && VITE_DISCORD_URL.startsWith("https://")) {
+    if (VITE_DISCORD_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "Discord",
         handler: () => {
@@ -421,7 +421,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_GITHUB_URL && VITE_GITHUB_URL.startsWith("https://")) {
+    if (VITE_GITHUB_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "GitHub",
         handler: () => {
@@ -432,7 +432,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_REDDIT_URL && VITE_REDDIT_URL.startsWith("https://")) {
+    if (VITE_REDDIT_URL?.startsWith("https://")) {
       communityOptions.push({
         label: "Reddit",
         handler: () => {
@@ -443,7 +443,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     }
 
-    if (VITE_DONATE_URL && VITE_DONATE_URL.startsWith("https://")) {
+    if (VITE_DONATE_URL?.startsWith("https://")) {
       communityOptions.push({
         label: i18next.t("menuUiHandler:donate"),
         handler: () => {
@@ -461,7 +461,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           const skippedAdminModes: AdminMode[] = [AdminMode.ADMIN]; // this is here so that we can skip the menu populating enums that aren't meant for the menu, such as the AdminMode.ADMIN
           const options: OptionSelectItem[] = [];
           Object.values(AdminMode)
-            .filter((v) => !isNaN(Number(v)) && !skippedAdminModes.includes(v as AdminMode))
+            .filter((v) => !Number.isNaN(Number(v)) && !skippedAdminModes.includes(v as AdminMode))
             .forEach((mode) => {
               // this gets all the enums in a way we can use
               options.push({
@@ -579,12 +579,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                   const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
                   window.open(discordUrl, "_self");
                   return true;
-                } else {
-                  api.unlinkDiscord().then((_isSuccess) => {
-                    updateUserInfo().then(() => globalScene.reset(true, true));
-                  });
-                  return true;
                 }
+                api.unlinkDiscord().then((_isSuccess) => {
+                  updateUserInfo().then(() => globalScene.reset(true, true));
+                });
+                return true;
               },
             },
             {
@@ -600,12 +599,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                   const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
                   window.open(googleUrl, "_self");
                   return true;
-                } else {
-                  api.unlinkGoogle().then((_isSuccess) => {
-                    updateUserInfo().then(() => globalScene.reset(true, true));
-                  });
-                  return true;
                 }
+                api.unlinkGoogle().then((_isSuccess) => {
+                  updateUserInfo().then(() => globalScene.reset(true, true));
+                });
+                return true;
               },
             },
           );
@@ -650,7 +648,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           }
         }
         break;
-      case MenuOptions.LOG_OUT:
+      case MenuOptions.LOG_OUT: {
         success = true;
         const doLogout = () => {
           ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, {
@@ -681,6 +679,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           doLogout();
         }
         break;
+      }
     }
     return success;
   }
@@ -695,9 +694,8 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         }
       });
       return true;
-    } else {
-      return super.processInput(button);
     }
+    return super.processInput(button);
   }
 
   public override showText(

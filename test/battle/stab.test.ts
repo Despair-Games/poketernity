@@ -3,7 +3,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -121,7 +121,7 @@ describe("STAB", () => {
 
     // Wait until both Pledges have been used
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
 
     expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
@@ -147,7 +147,7 @@ describe("STAB", () => {
 
     // Wait until both Pledges have been used
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
 
     expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);
@@ -175,7 +175,7 @@ describe("STAB", () => {
 
     // Wait until both Pledges have been used
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
 
     expect(enemyPkm2.calcStabMultiplierForTakingDamage).toHaveLastReturnedWith(1.5);

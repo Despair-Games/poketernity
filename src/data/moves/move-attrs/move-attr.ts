@@ -1,9 +1,9 @@
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Move } from "#app/data/moves/move";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils/common-utils";
-import type { MoveCondition } from "../move-conditions/move-condition";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { MoveCondition } from "#moves/move-condition";
+import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { BooleanHolder } from "#utils/common-utils";
 
 export interface MoveAttrOptions {
   /** Does this attribute contribute to AI effect score when the move KOs its target? */

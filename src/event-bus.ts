@@ -1,8 +1,8 @@
+import type { InputsEvent } from "#types/InputsEvent";
+import type { LanguageEvent } from "#types/Language";
+import type { SettingsEvent } from "#types/Settings";
+import type { TouchControlsEvent } from "#types/TouchControlsEvent";
 import Phaser from "phaser";
-import type { InputsEvent } from "./@types/InputsEvent";
-import type { LanguageEvent } from "./@types/Language";
-import type { SettingsEvent } from "./@types/Settings";
-import type { TouchControlsEvent } from "./@types/TouchControlsEvent";
 
 type EventName = SettingsEvent | InputsEvent | TouchControlsEvent | LanguageEvent;
 type CallbackFn<D> = (data: D) => void;
@@ -35,7 +35,7 @@ class EventBus extends Phaser.Events.EventEmitter {
     return super.addListener(event, fn, context);
   }
 
-  override removeListener(event: string | symbol, fn?: Function, context?: any, once?: boolean): this {
+  override removeListener<D = any, C = any>(event: EventName, fn?: CallbackFn<D>, context?: C, once?: boolean): this {
     return super.removeListener(event, fn, context, once);
   }
 }

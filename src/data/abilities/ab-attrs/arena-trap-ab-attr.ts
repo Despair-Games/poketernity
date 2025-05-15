@@ -1,11 +1,11 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils/common-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
+import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
-import { AbAttr } from "./ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
 
@@ -43,7 +43,8 @@ export class ArenaTrapAbAttr extends AbAttr {
       ) {
         trapped.value = false;
         return false;
-      } else if (trappedPokemon.hasAbility(AbilityId.RUN_AWAY)) {
+      }
+      if (trappedPokemon.hasAbility(AbilityId.RUN_AWAY)) {
         trapped.value = false;
         return false;
       }

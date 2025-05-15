@@ -1,10 +1,10 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type NumberHolder, toDmgValue } from "#app/utils/common-utils";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { VariablePowerAttr } from "#moves/variable-power-attr";
+import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
-import type { Move } from "#app/data/moves/move";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 
 /**
  * Attribute to set move power based on one of four random outcomes (listed below).

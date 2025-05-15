@@ -1,17 +1,17 @@
-import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { CommandPhase } from "#app/phases/command-phase";
-import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { isNil } from "#app/utils/common-utils";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";
-import type { GameManager } from "#test/test-utils/gameManager";
+import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
+import { CommandPhase } from "#phases/command-phase";
+import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
+import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import type { GameManager } from "#test/test-utils/game-manager";
+import type { MessageUiHandler } from "#ui/message-ui-handler";
+import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { isNil } from "#utils/common-utils";
 import { vi } from "vitest";
 
 /**
@@ -37,7 +37,7 @@ export async function runMysteryEncounterToEnd(
     "MysteryEncounterOptionSelectedPhase",
     UiMode.MESSAGE,
     () => {
-      const uiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
+      const uiHandler = game.scene.ui.getCurrentHandler<MysteryEncounterUiHandler>();
       uiHandler.processInput(Button.ACTION);
     },
     () => game.isCurrentPhase(MysteryEncounterBattlePhase) || game.isCurrentPhase(MysteryEncounterRewardsPhase),
@@ -74,13 +74,13 @@ export async function runMysteryEncounterToEnd(
 
     // Handle end of battle trainer messages
     game.onNextPrompt("TrainerVictoryPhase", UiMode.MESSAGE, () => {
-      const uiHandler = game.scene.ui.getHandler<MessageUiHandler>();
+      const uiHandler = game.scene.ui.getCurrentHandler<MessageUiHandler>();
       uiHandler.processInput(Button.ACTION);
     });
 
     // Handle egg hatch dialogue
     game.onNextPrompt("EggLapsePhase", UiMode.MESSAGE, () => {
-      const uiHandler = game.scene.ui.getHandler<MessageUiHandler>();
+      const uiHandler = game.scene.ui.getCurrentHandler<MessageUiHandler>();
       uiHandler.processInput(Button.ACTION);
     });
 
@@ -106,7 +106,7 @@ export async function runSelectMysteryEncounterOption(
   await game.phaseInterceptor.to("MysteryEncounterPhase", true);
 
   // select the desired option
-  const uiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
+  const uiHandler = game.scene.ui.getCurrentHandler<MysteryEncounterUiHandler>();
   uiHandler.unblockInput(); // input are blocked by 1s to prevent accidental input. Tests need to handle that
 
   switch (optionNumber) {
@@ -147,7 +147,7 @@ async function handleSecondaryOptionSelect(game: GameManager, partySlot: number,
     "MysteryEncounterPhase",
     UiMode.PARTY,
     () => {
-      const partyUiHandler = game.scene.ui.getHandler<PartyUiHandler>();
+      const partyUiHandler = game.scene.ui.getCurrentHandler<PartyUiHandler>();
       // Move to the requested Pokemon, open menu and click "Select"
       for (let i = 1; i < partySlot; i++) {
         partyUiHandler.processInput(Button.DOWN);
@@ -164,7 +164,7 @@ async function handleSecondaryOptionSelect(game: GameManager, partySlot: number,
       "MysteryEncounterPhase",
       UiMode.OPTION_SELECT,
       () => {
-        const optionUiHandler = game.scene.ui.getHandler<OptionSelectUiHandler>();
+        const optionUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         // Navigate to and select the requestion option
         for (let i = 1; i < optionNumber; i++) {
           optionUiHandler.processInput(Button.DOWN);
@@ -175,7 +175,7 @@ async function handleSecondaryOptionSelect(game: GameManager, partySlot: number,
     );
   }
 
-  const encounterUiHandler = game.scene.ui.getHandler<MysteryEncounterUiHandler>();
+  const encounterUiHandler = game.scene.ui.getCurrentHandler<MysteryEncounterUiHandler>();
   encounterUiHandler.processInput(Button.ACTION);
 }
 

@@ -1,5 +1,5 @@
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
 
 // TODO: Delete this phase and replace it with PokemonPhase
 export abstract class PlayerPartyMemberPokemonPhase extends PartyMemberPokemonPhase {

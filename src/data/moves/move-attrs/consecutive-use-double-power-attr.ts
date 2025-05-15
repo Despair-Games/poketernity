@@ -1,4 +1,4 @@
-import { ConsecutiveUsePowerMultiplierAttr } from "#app/data/moves/move-attrs/consecutive-use-power-multiplier-attr";
+import { ConsecutiveUsePowerMultiplierAttr } from "#moves/consecutive-use-power-multiplier-attr";
 
 /**
  * Attribute to multiply move power by 2 for each time the

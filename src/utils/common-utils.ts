@@ -1,11 +1,12 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { initGameSpeed } from "#app/system/game-speed";
+import type { initGameSpeed } from "#system/game-speed";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { nil } from "#app/@types/nil";
-import type { Pokemon } from "#app/field/pokemon";
+import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
+import type { Pokemon } from "#field/pokemon";
+import type { nil } from "#types/nil";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);
@@ -18,14 +19,14 @@ export function getCurrentTime(): number {
 
 export function getEnumKeys(enumType: any): string[] {
   return Object.values(enumType)
-    .filter((v) => isNaN(parseInt(v!.toString())))
+    .filter((v) => Number.isNaN(Number.parseInt(v!.toString())))
     .map((v) => v!.toString());
 }
 
 export function getEnumValues(enumType: any): number[] {
   return Object.values(enumType)
-    .filter((v) => !isNaN(parseInt(v!.toString())))
-    .map((v) => parseInt(v!.toString()));
+    .filter((v) => !Number.isNaN(Number.parseInt(v!.toString())))
+    .map((v) => Number.parseInt(v!.toString()));
 }
 
 /**
@@ -137,15 +138,23 @@ export function isBetween(num: number, min: number, max: number): boolean {
  * @see {@link https://github.com/smogon/pokemon-showdown/blob/c4a5ed50e4369bda543c016e33b01a08e0b20640/lib/utils.ts#L348-L360}
  */
 export function deepFreeze<T>(obj: T): Readonly<T> {
-  if (obj === null || typeof obj !== "object") return obj;
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
   // support objects with reference loops
-  if (Object.isFrozen(obj)) return obj;
+  if (Object.isFrozen(obj)) {
+    return obj;
+  }
 
   Object.freeze(obj);
   if (Array.isArray(obj)) {
-    for (const elem of obj) deepFreeze(elem);
+    for (const elem of obj) {
+      deepFreeze(elem);
+    }
   } else {
-    for (const elem of Object.values(obj)) deepFreeze(elem);
+    for (const elem of Object.values(obj)) {
+      deepFreeze(elem);
+    }
   }
   return obj;
 }
@@ -162,4 +171,45 @@ export function isPokemon(data: any): data is Pokemon {
 export function coerceArray<T>(input: T | readonly T[]): T[];
 export function coerceArray<T>(input: T | T[]): T[] {
   return Array.isArray(input) ? [...input] : [input];
+}
+
+/**
+ * Clamps a number between `min` and `max` (inclusive).
+ * @param value - The value to clamp
+ * @param min - The minimum value to clamp to
+ * @param max - The maximum value to clamp to
+ * @returns The clamped value, between `min` and `max`
+ */
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+/**
+ * Calculates the accuracy multiplier
+ * based on the user's accuracy stage and the target's evasion stage.
+ *
+ * *The difference is {@linkcode clamp | clamped} to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].*
+ *
+ * @param userAccStage - The user's accuracy stage
+ * @param targetEvaStage - The target's evasion stage
+ * @returns The accuracy multiplier based on the Gen V+ accuracy formula
+ *
+ * | Stage ACC | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
+ * |-----------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+ * | Stage EVA | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
+ * | Gen V+    | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
+ */
+export function calcAccuracyMultiplier(userAccStage: number, targetEvaStage: number): number {
+  const diff = clamp(userAccStage - targetEvaStage, MIN_STAT_STAGE, MAX_STAT_STAGE);
+
+  if (diff < 0) {
+    return 3 / (3 - diff);
+  }
+
+  if (diff > 0) {
+    return (3 + diff) / 3;
+  }
+
+  return 1;
 }

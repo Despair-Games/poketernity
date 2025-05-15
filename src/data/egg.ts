@@ -1,5 +1,7 @@
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
 import {
   EGG_PITY_EPIC_THRESHOLD,
   EGG_PITY_LEGENDARY_THRESHOLD,
@@ -24,18 +26,17 @@ import {
   SAME_SPECIES_EGG_SHINY_RATE,
   SHINY_EPIC_CHANCE,
   SHINY_VARIANT_CHANCE,
-} from "#app/data/rates";
-import { speciesEggTiers } from "#app/data/species-egg-tiers";
-import { speciesStarterCosts } from "#app/data/starters";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
-import { getIvsFromId, getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randomString, randSeedInt } from "#app/utils/random-utils";
+} from "#data/rates";
+import { speciesEggTiers } from "#data/species-egg-tiers";
+import { speciesStarterCosts } from "#data/starters";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import { clamp } from "#utils/common-utils";
+import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt, randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 export const EGG_SEED = 1073741824;
@@ -412,7 +413,8 @@ export class Egg {
        */
       const rand = randSeedInt(MANAPHY_EGG_MANAPHY_RATE) !== 1;
       return rand ? SpeciesId.PHIONE : SpeciesId.MANAPHY;
-    } else if (this.tier === EggTier.LEGENDARY && this._sourceType === EggSourceType.GACHA_LEGENDARY) {
+    }
+    if (this.tier === EggTier.LEGENDARY && this._sourceType === EggSourceType.GACHA_LEGENDARY) {
       if (!randSeedInt(2)) {
         return getLegendaryGachaSpeciesForTimestamp(this.timestamp);
       }
@@ -444,7 +446,7 @@ export class Egg {
 
     let speciesPool = Object.keys(speciesEggTiers)
       .filter((s) => speciesEggTiers[s] === this.tier)
-      .map((s) => parseInt(s) as SpeciesId)
+      .map((s) => Number.parseInt(s) as SpeciesId)
       .filter((s) => !pokemonPreEvolutions.hasOwnProperty(s) && ignoredSpecies.indexOf(s) === -1);
 
     // If this is the 10th egg without unlocking something new, attempt to force it.
@@ -478,7 +480,7 @@ export class Egg {
     const speciesWeights: number[] = [];
     for (const speciesId of speciesPool) {
       // Accounts for species that have starter costs outside of the normal range for their EggTier
-      const speciesCostClamped = Phaser.Math.Clamp(speciesStarterCosts[speciesId], minStarterValue, maxStarterValue);
+      const speciesCostClamped = clamp(speciesStarterCosts[speciesId], minStarterValue, maxStarterValue);
       const weight = Math.floor(
         (((maxStarterValue - speciesCostClamped) / (maxStarterValue - minStarterValue + 1)) * 1.5 + 1) * 100,
       );
@@ -540,11 +542,11 @@ export class Egg {
     const rand = randSeedInt(10);
     if (rand >= SHINY_VARIANT_CHANCE) {
       return VariantTier.STANDARD; // 6/10
-    } else if (rand >= SHINY_EPIC_CHANCE) {
-      return VariantTier.RARE; // 3/10
-    } else {
-      return VariantTier.EPIC; // 1/10
     }
+    if (rand >= SHINY_EPIC_CHANCE) {
+      return VariantTier.RARE; // 3/10
+    }
+    return VariantTier.EPIC; // 1/10
   }
 
   private checkForPityTierOverrides(): void {
@@ -600,7 +602,7 @@ export class Egg {
 export function getValidLegendaryGachaSpecies(): SpeciesId[] {
   return Object.entries(speciesEggTiers)
     .filter((s) => s[1] === EggTier.LEGENDARY)
-    .map((s) => parseInt(s[0]))
+    .map((s) => Number.parseInt(s[0]))
     .filter((s) => s !== SpeciesId.ETERNATUS);
 }
 

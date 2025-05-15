@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
-import { PostTerrainChangeAbAttr } from "./post-terrain-change-ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAttr {
   private readonly tagType: BattlerTagType;
@@ -23,8 +23,7 @@ export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAtt
 
     if (simulated) {
       return pokemon.canAddTag(this.tagType);
-    } else {
-      return pokemon.addTag(this.tagType, this.turnCount);
     }
+    return pokemon.addTag(this.tagType, this.turnCount);
   }
 }

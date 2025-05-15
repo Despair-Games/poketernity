@@ -1,10 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
-import { isNil } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
+import { isNil } from "#utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one

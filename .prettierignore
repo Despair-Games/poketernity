@@ -2,6 +2,7 @@
 **/*.md
 package.json
 package-lock.json
+biome.jsonc
 
 # Ignore artifacts:
 build

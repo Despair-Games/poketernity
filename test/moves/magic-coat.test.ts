@@ -1,5 +1,5 @@
-import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
-import { allMoves } from "#app/data/data-lists";
+import type { EncoreTag } from "#battler-tags/encore-tag";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -10,7 +10,7 @@ import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -289,7 +289,7 @@ describe("Moves - Magic Coat", () => {
     // Turn 1 - thunder wave immunity test
     game.move.use(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
 
     // Turn 2 - soundproof immunity test
     game.move.use(MoveId.GROWL);
@@ -315,7 +315,7 @@ describe("Moves - Magic Coat", () => {
     vi.spyOn(opponent, "getAccuracyMultiplier").mockReturnValue(0);
     game.move.use(MoveId.SPORE);
     await game.toEndOfTurn();
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
+    expect(game.field.getPlayerPokemon()).toHaveStatusEffect(StatusEffect.NONE);
   });
 
   it("should always apply the leftmost available target's Magic Coat when bouncing moves like sticky webs in doubles", async () => {

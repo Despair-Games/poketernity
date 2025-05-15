@@ -1,10 +1,11 @@
-import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { VictoryPhase } from "#app/phases/victory-phase";
+import { genOneThroughFourExpFormula } from "#data/exp";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
+import { handleMysteryEncounterVictory } from "#mystery-encounters/encounter-phase-utils";
+import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { VictoryPhase } from "#phases/victory-phase";
 
 /**
  * Handles the actions after the player KOs a pokemon:
@@ -38,7 +39,7 @@ export class PostKnockoutPhase extends PokemonPhase {
       gameData.gameStats.pokemonDefeated++;
     }
 
-    const expValue = this.getPokemon().getExpValue();
+    const expValue = genOneThroughFourExpFormula(this.getPokemon());
     globalScene.applyPartyExp(expValue, true);
 
     if (isMysteryEncounter) {

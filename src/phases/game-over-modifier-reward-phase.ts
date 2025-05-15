@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { PhaseId } from "#enums/phase-id";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
-import { ModifierRewardPhase } from "./modifier-reward-phase";
 
 /**
  * Used to grant vouchers to the player after they finish a classic run
@@ -10,10 +9,6 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
  */
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
   override readonly id = PhaseId.GAME_OVER_MODIFIER_REWARD;
-
-  constructor(modifierTypeFunc: ModifierTypeFunc) {
-    super(modifierTypeFunc);
-  }
 
   public override doReward(): Promise<void> {
     const { arenaBg, time, ui } = globalScene;

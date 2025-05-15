@@ -1,14 +1,14 @@
+import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
-import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
-import { setTextColor } from "#app/ui/text/text-utils";
-import { toTitleCase } from "#app/utils/string-utils";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
+import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { InputFieldConfig, ModalConfig } from "#ui/modal-config";
+import { setTextColor } from "#ui/text-utils";
+import { toTitleCase } from "#utils/string-utils";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
@@ -24,9 +24,8 @@ export class AdminUiHandler extends FormModalUiHandler {
   private readonly ERR_REQUIRED_FIELD = (field: string) => {
     if (field === "username") {
       return `${toTitleCase(field)} is required`;
-    } else {
-      return `${toTitleCase(field)} Id is required`;
     }
+    return `${toTitleCase(field)} Id is required`;
   };
   // returns a string saying whether a username has been successfully linked/unlinked to discord/google
   private readonly SUCCESS_SERVICE_MODE = (service: string, mode: string) => {
@@ -73,7 +72,7 @@ export class AdminUiHandler extends FormModalUiHandler {
       case AdminMode.SEARCH:
         inputFieldConfigs.push({ label: "Username" });
         break;
-      case AdminMode.ADMIN:
+      case AdminMode.ADMIN: {
         const adminResult = this.adminResult ?? {
           username: "",
           discordId: "",
@@ -88,6 +87,7 @@ export class AdminUiHandler extends FormModalUiHandler {
         inputFieldConfigs.push({ label: "Last played", isReadOnly: true });
         inputFieldConfigs.push({ label: "Registered", isReadOnly: true });
         break;
+      }
     }
     return inputFieldConfigs;
   }
@@ -150,9 +150,8 @@ export class AdminUiHandler extends FormModalUiHandler {
           .then((response) => {
             if (response.error) {
               return this.showMessage(response.errorType, adminSearchResult, true); // error or some kind
-            } else {
-              return this.showMessage(this.SUCCESS_SERVICE_MODE("discord", "link"), adminSearchResult, false); // success
             }
+            return this.showMessage(this.SUCCESS_SERVICE_MODE("discord", "link"), adminSearchResult, false); // success
           });
       } else if (this.adminMode === AdminMode.SEARCH) {
         this.adminSearch(adminSearchResult) // admin search for username
@@ -228,20 +227,19 @@ export class AdminUiHandler extends FormModalUiHandler {
                   if (response.error) {
                     globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                     return this.showMessage(response.errorType, adminResult, true); // fail
-                  } else {
-                    // success, reload panel with new results
-                    globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
-                    this.adminSearch(adminResult).then((response) => {
-                      if (response.error) {
-                        return this.showMessage(response.errorType, adminResult, true);
-                      }
-                      return this.showMessage(
-                        this.SUCCESS_SERVICE_MODE(service, mode),
-                        response.adminSearchResult ?? adminResult,
-                        false,
-                      );
-                    });
                   }
+                  // success, reload panel with new results
+                  globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
+                  this.adminSearch(adminResult).then((response) => {
+                    if (response.error) {
+                      return this.showMessage(response.errorType, adminResult, true);
+                    }
+                    return this.showMessage(
+                      this.SUCCESS_SERVICE_MODE(service, mode),
+                      response.adminSearchResult ?? adminResult,
+                      false,
+                    );
+                  });
                 },
               );
             });
@@ -318,10 +316,9 @@ export class AdminUiHandler extends FormModalUiHandler {
       if (errorType || !adminInfo) {
         // error - if adminInfo.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
         return { adminSearchResult: adminSearchResult, error: true, errorType };
-      } else {
-        // success
-        return { adminSearchResult: adminInfo, error: false };
       }
+      // success
+      return { adminSearchResult: adminInfo, error: false };
     } catch (err) {
       console.error(err);
       return { error: true, errorType: err };
@@ -371,10 +368,9 @@ export class AdminUiHandler extends FormModalUiHandler {
       if (errorType) {
         // error - if response.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
         return { adminSearchResult: adminSearchResult, error: true, errorType };
-      } else {
-        // success!
-        return { adminSearchResult: adminSearchResult, error: false };
       }
+      // success!
+      return { adminSearchResult: adminSearchResult, error: false };
     } catch (err) {
       console.error(err);
       return { error: true, errorType: err };

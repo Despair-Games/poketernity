@@ -1,10 +1,10 @@
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { AbilityId } from "#enums/ability-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -50,7 +50,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
 
@@ -78,7 +78,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
 
@@ -100,7 +100,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
   });
 
@@ -124,7 +124,7 @@ describe("Moves - Tar Shot", () => {
     game.move.select(MoveId.FIRE_PUNCH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
 });

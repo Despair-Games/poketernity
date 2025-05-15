@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Changes the weather if possible when a pokemon is summoned.

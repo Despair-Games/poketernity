@@ -1,7 +1,7 @@
-import { ProtectedTag } from "#app/data/battler-tags/protected-tag";
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { ProtectedTag } from "#battler-tags/protected-tag";
 import { MoveCategory } from "#enums/move-category";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 
 /**
  * Base class for `BattlerTag`s that block damaging moves but not status moves

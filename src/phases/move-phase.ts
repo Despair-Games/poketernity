@@ -1,38 +1,20 @@
-import type { PokemonTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/pokemon-type-change-ab-attr";
-import type { PostMoveUsedAbAttr } from "#app/data/abilities/ab-attrs/post-move-used-ab-attr";
-import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
-import type { ReduceSleepDurationAbAttr } from "#app/data/abilities/ab-attrs/reduce-sleep-duration-ab-attr";
-import type { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
-import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
-import type { MagicCoatTag } from "#app/data/battler-tags/magic-coat-tag";
-import type { SnatchingTag } from "#app/data/battler-tags/snatch-tag";
-import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
-import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
-import { BypassRedirectAttr } from "#app/data/moves/move-attrs/bypass-redirect-attr";
-import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
-import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
-import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
-import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
-import { VariableMoveMessageAttr } from "#app/data/moves/move-attrs/variable-move-message-attr";
-import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
-import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
-import { getTerrainBlockMessage } from "#app/data/terrain";
-import { MoveUsedEvent } from "#app/events/battle-scene";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PokemonTypeChangeAbAttr } from "#abilities/pokemon-type-change-ab-attr";
+import type { PostMoveUsedAbAttr } from "#abilities/post-move-used-ab-attr";
+import type { RedirectMoveAbAttr } from "#abilities/redirect-move-ab-attr";
+import type { ReduceSleepDurationAbAttr } from "#abilities/reduce-sleep-duration-ab-attr";
+import type { ReflectMovesAbAttr } from "#abilities/reflect-moves-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { BooleanHolder, isNil, NumberHolder } from "#app/utils/common-utils";
-import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
+import type { CenterOfAttentionTag } from "#battler-tags/center-of-attention-tag";
+import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
+import type { MagicCoatTag } from "#battler-tags/magic-coat-tag";
+import type { SnatchingTag } from "#battler-tags/snatch-tag";
+import { allMoves } from "#data/data-lists";
+import { getStatusEffectActivationText, getStatusEffectHealText } from "#data/status-effect";
+import { getTerrainBlockMessage } from "#data/terrain";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
@@ -46,6 +28,23 @@ import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { MoveUsedEvent } from "#events/battle-scene";
+import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#field/pokemon-move";
+import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
+import { BypassRedirectAttr } from "#moves/bypass-redirect-attr";
+import { BypassSleepAttr } from "#moves/bypass-sleep-attr";
+import { CopycatAttr } from "#moves/copycat-attr";
+import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
+import { getMoveTargets, SelfStatusMove } from "#moves/move";
+import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
+import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
+import { BattlePhase } from "#phases/abstract-battle-phase";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { MoveEffectPhase } from "#phases/move-effect-phase";
+import { ShowAbilityPhase } from "#phases/show-ability-phase";
+import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 /**
@@ -61,9 +60,7 @@ import i18next from "i18next";
  * - Handles move failure due to weather or terrain
  * - Handles the Dancer ability
  *
- * If the move is successful then a {@linkcode MoveEffectPhase} is queued.
- * Regardless of success, a {@linkcode MoveEndPhase} is queued.
- *
+ * If the move is successful, then a {@linkcode MoveEffectPhase} is queued.
  * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
@@ -255,7 +252,7 @@ export class MovePhase extends BattlePhase {
       !this.followUp
       && this.pokemon.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.PARALYSIS, StatusEffect.FREEZE], false, true)
     ) {
-      this.pokemon.status!.incrementTurn();
+      this.pokemon.advanceStatusCounter();
       let activated = false;
       let healed = false;
 
@@ -268,21 +265,8 @@ export class MovePhase extends BattlePhase {
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
-          const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
-          applyAbAttrs<ReduceSleepDurationAbAttr>(
-            AbAttrFlag.REDUCE_SLEEP_DURATION,
-            this.pokemon,
-            false,
-            statusEffect,
-            turnsRemaining,
-          );
-          if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
-            turnsRemaining.value = Math.max(turnsRemaining.value, 1);
-          } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
-            turnsRemaining.value = 0;
-          }
-          this.pokemon.status!.sleepTurnsRemaining = turnsRemaining.value;
-          healed = this.pokemon.status!.sleepTurnsRemaining <= 0;
+          applyAbAttrs<ReduceSleepDurationAbAttr>(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect);
+          healed = this.pokemon.sleepTurnsRemaining <= 0;
           activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
           break;
         case StatusEffect.FREEZE:
@@ -438,12 +422,13 @@ export class MovePhase extends BattlePhase {
         case BattlerIndex.BOTH_SIDES:
           targets.push(...globalScene.getField(true));
           break;
-        default:
+        default: {
           const target = globalScene.getPokemonByBattlerIndex(t);
           if (!isNil(target)) {
             targets.push(target);
           }
           break;
+        }
       }
     }
 
@@ -471,13 +456,12 @@ export class MovePhase extends BattlePhase {
         if (isFieldTargeted(this.targets)) {
           this.cancel();
           return;
-        } else {
-          // Remove this target from the current move's list of targets.
-          // If no targets are left after this point, cancel the move.
-          this.targets.splice(this.targets.indexOf(target.getBattlerIndex()), 1);
-          if (this.targets.length === 0) {
-            this.cancel();
-          }
+        }
+        // Remove this target from the current move's list of targets.
+        // If no targets are left after this point, cancel the move.
+        this.targets.splice(this.targets.indexOf(target.getBattlerIndex()), 1);
+        if (this.targets.length === 0) {
+          this.cancel();
         }
       }
     }
@@ -501,9 +485,8 @@ export class MovePhase extends BattlePhase {
      */
     if (multiple || isFieldTargeted(targets)) {
       return targets;
-    } else {
-      return [this.pokemon.getBattlerIndex()];
     }
+    return [this.pokemon.getBattlerIndex()];
   }
 
   protected useMove(): void {
@@ -656,18 +639,6 @@ export class MovePhase extends BattlePhase {
         globalScene.currentBattle.lastMove = this.move.getMove();
       }
     }
-  }
-
-  /**
-   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp},
-   * then ends the phase.
-   */
-  public override end(): void {
-    if (!this.followUp) {
-      globalScene.phaseManager.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
-    }
-
-    super.end();
   }
 
   /**

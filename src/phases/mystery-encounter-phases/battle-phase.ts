@@ -1,22 +1,22 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { PostSummonPhase } from "#app/phases/post-summon-phase";
+import type { PostSummonPhase } from "#phases/post-summon-phase";
 // -- end tsdoc imports --
 
-import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
-import { IvScannerModifier } from "#app/modifier/modifier";
 import { Phase } from "#app/phase";
-import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { ReturnPhase } from "#app/phases/return-phase";
-import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
-import { SummonPhase } from "#app/phases/summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { randSeedItem } from "#app/utils/random-utils";
+import { getCharVariantFromDialogue } from "#data/dialogue";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { IvScannerModifier } from "#modifier/modifier";
+import { CheckSwitchPhase } from "#phases/check-switch-phase";
+import { ReturnPhase } from "#phases/return-phase";
+import { ScanIvsPhase } from "#phases/scan-ivs-phase";
+import { SummonPhase } from "#phases/summon-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**

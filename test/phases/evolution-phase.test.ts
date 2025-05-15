@@ -1,10 +1,10 @@
-import type { EvolutionPhase } from "#app/phases/evolution-phase";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/test-utils/gameManager";
+import type { EvolutionPhase } from "#phases/evolution-phase";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -94,7 +94,7 @@ describe("Evolution Phase", () => {
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
     game.move.use(MoveId.SPLASH);
-    await game.faintOpponents();
+    await game.move.forceEnemyMove(MoveId.MEMENTO);
     await game.phaseInterceptor.to("EvolutionPhase", false);
 
     // Cancel the evolution

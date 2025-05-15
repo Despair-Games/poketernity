@@ -5,7 +5,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -51,7 +51,7 @@ describe("Moves - Tidy Up", () => {
     expect(game.scene.arena.hasTag(tagType, ArenaTagSide.PLAYER)).toBeTruthy();
     expect(game.scene.arena.hasTag(tagType, ArenaTagSide.ENEMY)).toBeTruthy();
     game.move.use(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(game.scene.arena.hasTag(tagType)).toBeFalsy();
   });
 
@@ -64,7 +64,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.SUBSTITUTE);
     await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
     pokemon.forEach((p) => {

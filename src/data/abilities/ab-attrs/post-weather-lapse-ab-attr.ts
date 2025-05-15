@@ -1,10 +1,10 @@
-import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type { Weather } from "#app/data/weather";
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { AbAttrCondition } from "#types/AbAttrCondition";
 
 export abstract class PostWeatherLapseAbAttr extends AbAttr {
   protected readonly weatherTypes: WeatherType[];

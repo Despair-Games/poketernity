@@ -1,4 +1,4 @@
-import { allBiomes } from "#app/data/data-lists";
+import { allBiomes } from "#data/data-lists";
 import { BiomeId } from "#enums/biome-id";
 import type { SpeciesId } from "#enums/species-id";
 import type { TrainerType } from "#enums/trainer-type";

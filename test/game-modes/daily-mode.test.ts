@@ -1,12 +1,12 @@
+import { api } from "#api/api";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import { MapModifier } from "#app/modifier/modifier";
-import { api } from "#app/plugins/api/api";
-import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
+import { MapModifier } from "#modifier/modifier";
+import { GameManager } from "#test/test-utils/game-manager";
+import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
 
 //const TIMEOUT = 20 * 1000;
 
@@ -77,7 +77,7 @@ describe("Shop modifications", async () => {
     await game.faintOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
-      expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
+      expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(ModifierSelectUiHandler);
       game.modifiers.testCheck("EVIOLITE", false).testCheck("MINI_BLACK_HOLE", false);
     });
   });
@@ -88,7 +88,7 @@ describe("Shop modifications", async () => {
     await game.faintOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
-      expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
+      expect(game.scene.ui.getCurrentHandler()).toBeInstanceOf(ModifierSelectUiHandler);
       game.modifiers.testCheck("EVIOLITE", true).testCheck("MINI_BLACK_HOLE", true);
     });
   });

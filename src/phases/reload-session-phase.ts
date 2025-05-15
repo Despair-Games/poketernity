@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { SessionReloadModalUiHandler } from "#app/ui/handlers/session-reload-modal-ui-handler";
-import { fixedNumber } from "#app/utils/common-utils";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
+import type { SessionReloadModalUiHandler } from "#ui/session-reload-modal-ui-handler";
+import { fixedNumber } from "#utils/common-utils";
 
 export class ReloadSessionPhase extends Phase {
   override readonly id = PhaseId.RELOAD_SESSION;

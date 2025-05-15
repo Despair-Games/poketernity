@@ -1,22 +1,23 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/constants/ui-constants";
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
-import type PokemonData from "#app/system/pokemon-data";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import type { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNil } from "#app/utils/common-utils";
-import { getPlayTimeString, getPokemonLevelText } from "#app/utils/string-utils";
+import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/buttons";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
+import * as Modifier from "#modifier/modifier";
+import type PokemonData from "#system/pokemon-data";
+import type { SessionSaveData } from "#types/SessionData";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { MessageUiHandler } from "#ui/message-ui-handler";
+import type { RunInfoUiHandler } from "#ui/run-info-ui-handler";
+import { addTextObject } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { fixedNumber, isNil } from "#utils/common-utils";
+import { getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
 const SESSION_SLOTS_COUNT = 5;
@@ -108,16 +109,16 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
           switch (this.uiMode) {
             case SaveSlotUiMode.LOAD:
               this.saveSlotSelectCallback = null;
-              originalCallback && originalCallback(cursor);
+              originalCallback?.(cursor);
               break;
-            case SaveSlotUiMode.SAVE:
+            case SaveSlotUiMode.SAVE: {
               const saveAndCallback = () => {
                 const originalCallback = this.saveSlotSelectCallback;
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
                 ui.setMessageMode();
-                originalCallback && originalCallback(cursor);
+                originalCallback?.(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
                 const overwriteDataOptions: ConfirmModeConfig = {
@@ -147,12 +148,13 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                 return false;
               }
               break;
+            }
           }
           success = true;
         }
       } else {
         this.saveSlotSelectCallback = null;
-        originalCallback && originalCallback(-1);
+        originalCallback?.(-1);
         success = true;
       }
     } else {

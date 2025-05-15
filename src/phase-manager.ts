@@ -1,34 +1,34 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import type { VictoryPhase } from "#app/phases/victory-phase";
 import type { ChargeAnim } from "#enums/charge-anim";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
+import type { VictoryPhase } from "#phases/victory-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
-import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
-import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
+import { MoveChargeAnim } from "#animations/move-charge-anim";
 import type { Phase } from "#app/phase";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { FaintPhase } from "#app/phases/faint-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
-import { LoginPhase } from "#app/phases/login-phase";
-import { MessagePhase } from "#app/phases/message-phase";
-import { MoveAnimPhase } from "#app/phases/move-anim-phase";
-import { MoveChargePhase } from "#app/phases/move-charge-phase";
-import { MovePhase } from "#app/phases/move-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
-import { SelectTargetPhase } from "#app/phases/select-target-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { TitlePhase } from "#app/phases/title-phase";
-import { TurnInitPhase } from "#app/phases/turn-init-phase";
+import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
+import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import { BattleEndPhase } from "#phases/battle-end-phase";
+import { FaintPhase } from "#phases/faint-phase";
+import { GameOverPhase } from "#phases/game-over-phase";
+import { LoginPhase } from "#phases/login-phase";
+import { MessagePhase } from "#phases/message-phase";
+import { MoveAnimPhase } from "#phases/move-anim-phase";
+import { MoveChargePhase } from "#phases/move-charge-phase";
+import { MovePhase } from "#phases/move-phase";
+import { NewBattlePhase } from "#phases/new-battle-phase";
+import { PokemonHealPhase } from "#phases/pokemon-heal-phase";
+import { SelectTargetPhase } from "#phases/select-target-phase";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import { TitlePhase } from "#phases/title-phase";
+import { TurnInitPhase } from "#phases/turn-init-phase";
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -79,7 +79,7 @@ export class PhaseManager {
   private phaseQueuePrepend: Phase[] = [];
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
-  private conditionalQueue: Array<[() => boolean, Phase]> = [];
+  private conditionalQueue: [() => boolean, Phase][] = [];
 
   private currentPhase: Phase | null = null;
   private standbyPhase: Phase | null = null;
@@ -252,9 +252,8 @@ export class PhaseManager {
   ): P | undefined {
     if (checkPrepend) {
       return (this.phaseQueuePrepend.find(phaseFilter) ?? this.phaseQueue.find(phaseFilter)) as P;
-    } else {
-      return this.phaseQueue.find(phaseFilter) as P;
     }
+    return this.phaseQueue.find(phaseFilter) as P;
   }
 
   /**
@@ -267,9 +266,8 @@ export class PhaseManager {
   public hasPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean, checkPrepend: boolean = false): boolean {
     if (checkPrepend) {
       return this.phaseQueuePrepend.some(phaseFilter) || this.phaseQueue.some(phaseFilter);
-    } else {
-      return this.phaseQueue.some(phaseFilter);
     }
+    return this.phaseQueue.some(phaseFilter);
   }
 
   public tryRemovePhase(phaseFilter: (phase: Phase) => boolean): boolean {
@@ -309,10 +307,9 @@ export class PhaseManager {
     if (targetIndex !== -1) {
       this.phaseQueue.splice(targetIndex, 0, phase);
       return true;
-    } else {
-      this.unshiftPhase(phase);
-      return false;
     }
+    this.unshiftPhase(phase);
+    return false;
   }
 
   /**
@@ -329,10 +326,9 @@ export class PhaseManager {
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
       this.phaseQueue.splice(targetIndex + 1, 0, phase);
       return true;
-    } else {
-      this.unshiftPhase(phase);
-      return false;
     }
+    this.unshiftPhase(phase);
+    return false;
   }
 
   /**

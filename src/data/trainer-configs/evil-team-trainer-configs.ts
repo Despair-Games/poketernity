@@ -3,13 +3,13 @@ import {
   getRandomPartyMemberFunc,
   TrainerConfig,
   type TrainerConfigs,
-} from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { PokemonMove } from "#app/field/pokemon-move";
+} from "#data/trainer-config";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerPoolTier } from "#enums/trainer-pool-tier";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import { PokemonMove } from "#field/pokemon-move";
 
 let t = TrainerType.ROCKET_GRUNT;
 export const evilTeamTrainerConfigs: TrainerConfigs = {

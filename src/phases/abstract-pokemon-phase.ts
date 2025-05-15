@@ -1,8 +1,8 @@
-import type { nil } from "#app/@types/nil";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlerIndex } from "#enums/battler-index";
-import { FieldPhase } from "./abstract-field-phase";
+import type { Pokemon } from "#field/pokemon";
+import { FieldPhase } from "#phases/abstract-field-phase";
+import type { nil } from "#types/nil";
 
 /**
  * Provides helper functions to get the pokemon involved in the phase
@@ -13,18 +13,8 @@ export abstract class PokemonPhase extends FieldPhase {
   public isPlayer: boolean;
   public fieldIndex: number;
 
-  constructor(battlerIndex?: BattlerIndex | number) {
+  constructor(battlerIndex: BattlerIndex | number) {
     super();
-
-    battlerIndex =
-      battlerIndex
-      ?? globalScene
-        .getField()
-        .find((p) => p?.isActive())! // TODO: is the bang correct here?
-        .getBattlerIndex();
-    if (battlerIndex === undefined) {
-      console.warn("There are no Pokemon on the field!"); // TODO: figure out a suitable fallback behavior
-    }
 
     this.battlerIndex = battlerIndex;
     this.isPlayer = battlerIndex < 2;

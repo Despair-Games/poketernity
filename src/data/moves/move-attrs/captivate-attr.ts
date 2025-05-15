@@ -1,12 +1,12 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
-import type { Move } from "../move";
-import { MoveEffectAttr } from "./move-effect-attr";
-import { getPokemonNameWithAffix } from "#app/messages";
 
 /**
  * Attribute used for captivate where all opponents that do not have the {@linkcode AbilityId.OBLIVIOUS} ability

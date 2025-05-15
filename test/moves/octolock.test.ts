@@ -1,9 +1,9 @@
-import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
+import { TrappedTag } from "#battler-tags/trapped-tag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -107,7 +107,7 @@ describe("Moves - Octolock", () => {
     game.move.select(MoveId.OCTOLOCK);
 
     // after Octolock - enemy should be trapped
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
   });
 

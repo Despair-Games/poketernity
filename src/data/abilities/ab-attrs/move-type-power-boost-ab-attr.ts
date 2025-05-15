@@ -1,5 +1,5 @@
+import { MovePowerBoostAbAttr } from "#abilities/move-power-boost-ab-attr";
 import type { ElementalType } from "#enums/elemental-type";
-import { MovePowerBoostAbAttr } from "./move-power-boost-ab-attr";
 
 export class MoveTypePowerBoostAbAttr extends MovePowerBoostAbAttr {
   constructor(boostedType: ElementalType, powerMultiplier: number = 1.5) {

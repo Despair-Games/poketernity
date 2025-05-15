@@ -1,5 +1,3 @@
-import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { modifierTypes } from "#app/modifier/modifier-types";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ElementalType } from "#enums/elemental-type";
@@ -7,7 +5,9 @@ import { FormChangeItem } from "#enums/form-change-item";
 import { MoveId } from "#enums/move-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { modifierTypes } from "#modifier/modifier-types";
+import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -93,7 +93,7 @@ describe("Form Change Phase", () => {
     await game.phaseInterceptor.to("FormChangePhase", false);
 
     // Repeatedly press "Cancel" to attempt to cancel form change
-    const pressCancelInterval = setInterval(() => game.scene.ui.getHandler().processInput(Button.CANCEL));
+    const pressCancelInterval = setInterval(() => game.scene.ui.getCurrentHandler().processInput(Button.CANCEL));
 
     await game.toNextTurn();
     clearInterval(pressCancelInterval);

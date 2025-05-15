@@ -1,16 +1,16 @@
-import { ElementalType } from "#enums/elemental-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { toDmgValue } from "#app/utils/common-utils";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
+import { toDmgValue } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import { BattlerIndex } from "#enums/battler-index";
 
 describe("Abilities - Parental Bond", () => {
   let phaserGame: Phaser.Game;
@@ -269,7 +269,7 @@ describe("Abilities - Parental Bond", () => {
 
     expect(leadPokemon.turnData.hitCount).toBe(3);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.hp).toBe(enemyStartingHp - 200);
   });
@@ -310,7 +310,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeUndefined();
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
 
     await game.toEndOfTurn();
@@ -439,13 +439,13 @@ describe("Abilities - Parental Bond", () => {
 
     game.move.select(MoveId.SECRET_POWER);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     // The enemy's Sp Atk should not drop before the second hit
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
     expect(playerPokemon.turnData.hitCount).toBe(2);
   });

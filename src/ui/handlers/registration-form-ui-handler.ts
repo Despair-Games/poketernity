@@ -1,12 +1,12 @@
+import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
-import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
-import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
+import type { InputFieldConfig, ModalConfig } from "#ui/modal-config";
+import { addTextObject } from "#ui/text-utils";
 import i18next from "i18next";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
 
 export class RegistrationFormUiHandler extends FormModalUiHandler {
   constructor() {
@@ -103,7 +103,7 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
         if (!registerError) {
           api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
             if (!loginError) {
-              originalRegistrationAction && originalRegistrationAction();
+              originalRegistrationAction?.();
             } else {
               onFail(loginError);
             }

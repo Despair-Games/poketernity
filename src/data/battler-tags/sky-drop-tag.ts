@@ -1,12 +1,10 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { MovePhase } from "#app/phases/move-phase";
-import { getFrameMs } from "#app/utils/common-utils";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
+import type { Pokemon } from "#field/pokemon";
+import { getFrameMs } from "#utils/common-utils";
 
 /**
  * Tag representing {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}'s
@@ -45,15 +43,6 @@ export class SkyDropTag extends BattlerTag {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
           globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
-          if (
-            globalScene.phaseManager.tryRemovePhase(
-              (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id,
-            )
-          ) {
-            // Just in case we removed a queued `MovePhase`, queue the next `MovePhase`.
-            const { turnManager } = globalScene.currentBattle;
-            turnManager.scheduleNextValidCommand();
-          }
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }

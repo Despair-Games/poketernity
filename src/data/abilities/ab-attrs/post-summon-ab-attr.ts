@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Base class for defining all {@linkcode Ability} Attributes post summon

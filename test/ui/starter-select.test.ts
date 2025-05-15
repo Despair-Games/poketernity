@@ -1,9 +1,4 @@
-import { allSpecies } from "#app/data/data-lists";
-import type { TitlePhase } from "#app/phases/title-phase";
-import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
-import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
-import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import { allSpecies } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { GameModes } from "#enums/game-modes";
@@ -11,8 +6,13 @@ import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/test-utils/gameManager";
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
+import type { TitlePhase } from "#phases/title-phase";
+import { GameManager } from "#test/test-utils/game-manager";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/test-utils";
+import type { OptionSelectItem } from "#ui/option-select-config";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
+import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -46,7 +46,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.ACTION);
@@ -57,7 +57,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -71,15 +71,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -103,7 +103,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_GENDER);
@@ -115,7 +115,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -129,15 +129,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -162,7 +162,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_GENDER);
@@ -176,7 +176,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -190,15 +190,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -224,7 +224,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_GENDER);
@@ -236,7 +236,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -250,15 +250,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -282,7 +282,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.ACTION);
@@ -294,7 +294,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -308,15 +308,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -339,7 +339,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_SHINY);
@@ -353,7 +353,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -367,15 +367,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -398,7 +398,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_SHINY);
@@ -411,7 +411,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -425,15 +425,15 @@ describe("UI - Starter select", () => {
 
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.SUBMIT);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-        const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         handler.processInput(Button.ACTION);
       });
       game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-        const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+        const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
         saveSlotSelectUiHandler.processInput(Button.ACTION);
         resolve();
       });
@@ -456,7 +456,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.RIGHT);
@@ -468,7 +468,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -483,7 +483,7 @@ describe("UI - Starter select", () => {
     let starterSelectUiHandler: StarterSelectUiHandler;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        starterSelectUiHandler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        starterSelectUiHandler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         starterSelectUiHandler.processInput(Button.SUBMIT);
         resolve();
       });
@@ -495,11 +495,11 @@ describe("UI - Starter select", () => {
     // expect(starterSelectUiHandler.cursorObj.y).toBe(10);
 
     game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.ACTION);
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-      const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+      const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
       saveSlotSelectUiHandler.processInput(Button.ACTION);
     });
     await game.phaseInterceptor.to("EncounterPhase", false);
@@ -517,7 +517,7 @@ describe("UI - Starter select", () => {
       currentPhase.end();
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.RIGHT);
       handler.processInput(Button.RIGHT);
@@ -530,7 +530,7 @@ describe("UI - Starter select", () => {
     let optionSelectUiHandler: OptionSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.OPTION_SELECT, () => {
-        optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        optionSelectUiHandler = game.scene.ui.getCurrentHandler<OptionSelectUiHandler>();
         options = (optionSelectUiHandler as any).options;
         resolve();
       });
@@ -545,7 +545,7 @@ describe("UI - Starter select", () => {
     let starterSelectUiHandler: StarterSelectUiHandler | undefined;
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
-        starterSelectUiHandler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+        starterSelectUiHandler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
         starterSelectUiHandler.processInput(Button.SUBMIT);
         resolve();
       });
@@ -558,11 +558,11 @@ describe("UI - Starter select", () => {
     expect(starterSelectUiHandler?.cursorObj.y).toBe(31);
 
     game.onNextPrompt("SelectStarterPhase", UiMode.CONFIRM, () => {
-      const handler = game.scene.ui.getHandler() as StarterSelectUiHandler;
+      const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.ACTION);
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.SAVE_SLOT, () => {
-      const saveSlotSelectUiHandler = game.scene.ui.getHandler() as SaveSlotSelectUiHandler;
+      const saveSlotSelectUiHandler = game.scene.ui.getCurrentHandler<SaveSlotSelectUiHandler>();
       saveSlotSelectUiHandler.processInput(Button.ACTION);
     });
     await game.phaseInterceptor.to("EncounterPhase", false);

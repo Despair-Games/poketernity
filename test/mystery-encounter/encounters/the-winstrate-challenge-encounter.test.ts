@@ -1,15 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { HumanTransitableBiomes } from "#app/data/biome-utils";
-import { TheWinstrateChallengeEncounter } from "#app/data/mystery-encounters/encounters/the-winstrate-challenge-encounter";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { CommandPhase } from "#app/phases/command-phase";
-import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { PostKnockoutPhase } from "#app/phases/post-knockout-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -20,9 +10,19 @@ import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
+import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
+import { TheWinstrateChallengeEncounter } from "#mystery-encounters/the-winstrate-challenge-encounter";
+import { CommandPhase } from "#phases/command-phase";
+import { PartyHealPhase } from "#phases/party-heal-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
-import { GameManager } from "#test/test-utils/gameManager";
-import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import { GameManager } from "#test/test-utils/game-manager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/theWinstrateChallenge";
@@ -297,7 +297,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("MYSTERY_ENCOUNTER_MACHO_BRACE");
     });
@@ -337,7 +337,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+      const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("RARER_CANDY");
     });
@@ -352,7 +352,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
 async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean = false) {
   game.scene.phaseManager.clearPhaseQueue();
   game.scene.phaseManager.clearPhaseQueueSplice();
-  const commandUiHandler = game.scene.ui.getHandler<CommandUiHandler>();
+  const commandUiHandler = game.scene.ui.getCurrentHandler<CommandUiHandler>();
   commandUiHandler.stop();
   game.scene.getEnemyParty().forEach((p) => {
     p.faint();

@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import type { NumberHolder } from "#app/utils/common-utils";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveAttr } from "#moves/move-attr";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change the offensive stat used for a move's damage calculations.
@@ -12,10 +12,6 @@ import type { NumberHolder } from "#app/utils/common-utils";
  * @extends MoveAttr
  */
 export abstract class VariableAtkAttr extends MoveAttr {
-  constructor() {
-    super();
-  }
-
   /**
    * Changes the offensive stat used for the current attack's damage calculation
    * @param user the {@linkcode Pokemon} using the move

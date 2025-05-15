@@ -1,19 +1,33 @@
-import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
-import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
-import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants/ui-constants";
-import { allMoves } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
-import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
-import { pokemonFormChanges, SpeciesFormChangeCondition } from "#app/data/pokemon-forms";
-import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { tmPoolTiers, tmSpecies } from "#app/data/tms";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
+import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
+import Overrides from "#app/overrides";
+import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
+import { allMoves } from "#data/data-lists";
+import { getNatureName, getNatureStatMultiplier } from "#data/nature";
+import { getPokeballCatchMultiplier, getPokeballName } from "#data/pokeball";
+import { pokemonFormChanges, SpeciesFormChangeCondition } from "#data/pokemon-forms";
+import { tmPoolTiers, tmSpecies } from "#data/tms";
+import { BerryType } from "#enums/berry-type";
+import { ElementalType } from "#enums/elemental-type";
+import { EvolutionItem } from "#enums/evolution-item";
+import { FormChangeItem } from "#enums/form-change-item";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MoveId } from "#enums/move-id";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball-type";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
+import type { PermanentStat, TempBattleStat } from "#enums/stat";
+import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import type { VoucherType } from "#enums/voucher-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import {
   AddPokeballModifier,
   AddVoucherModifier,
@@ -48,34 +62,20 @@ import {
   TurnHeldItemTransferModifier,
   type Modifier,
   type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
-import { modifierPool } from "#app/modifier/modifier-pools";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import Overrides from "#app/overrides";
-import { settings } from "#app/system/settings/settings-manager";
-import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
-import { getModifierTierTextTint } from "#app/ui/text/text-utils";
-import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
-import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#app/utils/common-utils";
-import { getModifierPoolForType } from "#app/utils/modifier-pool-utils";
-import { getModifierType } from "#app/utils/modifier-type-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import { formatMoney, leftPad } from "#app/utils/string-utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { BerryType } from "#enums/berry-type";
-import { ElementalType } from "#enums/elemental-type";
-import { EvolutionItem } from "#enums/evolution-item";
-import { FormChangeItem } from "#enums/form-change-item";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { ModifierTier } from "#enums/modifier-tier";
-import { MoveId } from "#enums/move-id";
-import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball-type";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import { SpeciesId } from "#enums/species-id";
-import type { PermanentStat, TempBattleStat } from "#enums/stat";
-import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
-import type { VoucherType } from "#enums/voucher-type";
+} from "#modifier/modifier";
+import { modifierPool } from "#modifier/modifier-pools";
+import { modifierTypes } from "#modifier/modifier-types";
+import { settings } from "#system/settings-manager";
+import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
+import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
+import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
+import { getModifierTierTextTint } from "#ui/text-utils";
+import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
+import { clamp, getEnumKeys, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { getModifierPoolForType } from "#utils/modifier-pool-utils";
+import { getModifierType } from "#utils/modifier-type-utils";
+import { randSeedInt } from "#utils/random-utils";
+import { formatMoney, leftPad } from "#utils/string-utils";
 import i18next from "i18next";
 
 const outputModifierData = false;
@@ -194,7 +194,8 @@ export class ModifierType {
           if (weight > 0) {
             this.tier = modifier.modifierType.tier;
             return this;
-          } else if (isNil(defaultTier)) {
+          }
+          if (isNil(defaultTier)) {
             // If weight is 0, keep track of the first tier where the item was found
             defaultTier = modifier.modifierType.tier;
           }
@@ -211,7 +212,7 @@ export class ModifierType {
   }
 
   newModifier(...args: any[]): Modifier | null {
-    return this.newModifierFunc && this.newModifierFunc(this, args);
+    return this.newModifierFunc?.(this, args) ?? null; // using `| null` instead of making a param optional... ugh
   }
 
   isPokemonHeldItemModifierType(): this is PokemonHeldItemModifierType {
@@ -404,8 +405,7 @@ export class PokemonHpRestoreModifierType extends PokemonModifierType {
         || ((pokemon: PlayerPokemon) => {
           if (
             !pokemon.hp
-            || (pokemon.isFullHp()
-              && (!this.healStatus || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))))
+            || (pokemon.isFullHp() && (!this.healStatus || !pokemon.hasNonVolatileStatusEffect(true, true)))
           ) {
             return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
           }
@@ -472,7 +472,7 @@ export class PokemonStatusHealModifierType extends PokemonModifierType {
       iconImage,
       (_type, args) => new PokemonStatusHealModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
-        if (!pokemon.hp || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))) {
+        if (!pokemon.hp || !pokemon.hasNonVolatileStatusEffect(true, true)) {
           return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
@@ -742,7 +742,8 @@ enum AttackTypeBoosterItem {
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   public moveType: ElementalType;
   public boostPercent: number;
 
@@ -782,7 +783,8 @@ export type SpeciesStatBoosterItem = keyof typeof SpeciesStatBoosterModifierType
  */
 export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private key: SpeciesStatBoosterItem;
 
   constructor(key: SpeciesStatBoosterItem) {
@@ -839,7 +841,8 @@ export class AllPokemonLevelIncrementModifierType extends ModifierType {
 
 export class BaseStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private stat: PermanentStat;
   private key: string;
 
@@ -871,7 +874,8 @@ export class BaseStatBoosterModifierType
  */
 export class PokemonBaseStatTotalModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: number;
 
   constructor(statModifier: number) {
@@ -909,7 +913,8 @@ export class PokemonBaseStatTotalModifierType
  */
 export class PokemonBaseStatFlatModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: number;
   private readonly stats: Stat[];
 
@@ -1138,8 +1143,7 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
               (fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger) && fc.preFormKey === pokemon.getFormKey(),
             )
             // Returns true if any form changes match this item
-            .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
-            .flat()
+            .flatMap((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
             .flatMap((fc) => fc.item)
             .includes(this.formChangeItem)
         ) {
@@ -1173,15 +1177,13 @@ export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerato
         return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, 20);
       }
 
-      const attackMoveTypes = party
-        .map((p) =>
-          p
-            .getMoveset()
-            .map((m) => m.getMove())
-            .filter((m) => m.isAttackMove())
-            .map((m) => m.type),
-        )
-        .flat();
+      const attackMoveTypes = party.flatMap((p) =>
+        p
+          .getMoveset()
+          .map((m) => m.getMove())
+          .filter((m) => m.isAttackMove())
+          .map((m) => m.type),
+      );
       if (!attackMoveTypes.length) {
         return null;
       }
@@ -1422,7 +1424,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
         ...new Set(
           party
             .filter((p) => pokemonFormChanges.hasOwnProperty(p.species.speciesId))
-            .map((p) => {
+            .flatMap((p) => {
               const formChanges = pokemonFormChanges[p.species.speciesId];
               let formChangeItemTriggers = formChanges
                 .filter(
@@ -1441,8 +1443,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                 .map((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
                 .filter(
                   (t) =>
-                    t
-                    && t.active
+                    t?.active
                     && !globalScene.findModifier(
                       (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === p.id && m.formChangeItem === t.item,
                     ),
@@ -1475,8 +1476,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                 }
               }
               return formChangeItemTriggers;
-            })
-            .flat(),
+            }),
         ),
       ]
         .flat()
@@ -1611,13 +1611,13 @@ let modifierPoolThresholds = {};
 let ignoredPoolIndexes = {};
 
 let dailyStarterModifierPoolThresholds = {};
-let ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 let enemyModifierPoolThresholds = {};
-let enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 let enemyBuffModifierPoolThresholds = {};
-let enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 const tierWeights = [768 / 1024, 195 / 1024, 48 / 1024, 12 / 1024, 1 / 1024];
 /**
@@ -1661,8 +1661,8 @@ export function regenerateModifierPoolThresholds(
             || itemModifierType instanceof FormChangeItemModifierType
             || existingModifiers.find((m) => m.stackCount < m.getMaxStackCount(true))
               ? weightedModifierType.weight instanceof Function
-                ? (weightedModifierType.weight as Function)(party, rerollCount)
-                : (weightedModifierType.weight as number)
+                ? weightedModifierType.weight(party, rerollCount)
+                : weightedModifierType.weight
               : 0;
           if (weightedModifierType.maxWeight) {
             const modifierId = weightedModifierType.modifierType.id;
@@ -1670,10 +1670,11 @@ export function regenerateModifierPoolThresholds(
             const outputWeight = useMaxWeightForOutput ? weightedModifierType.maxWeight : weight;
             modifierTableData[modifierId] = {
               weight: outputWeight,
-              tier: parseInt(t),
+              tier: Number.parseInt(t),
               tierPercent: 0,
               totalPercent: 0,
             };
+            // @ts-expect-error - TODO: fix `outputWeight`
             tierMaxWeight += outputWeight;
           }
           if (weight) {
@@ -1711,15 +1712,15 @@ export function regenerateModifierPoolThresholds(
     case ModifierPoolType.WILD:
     case ModifierPoolType.TRAINER:
       enemyModifierPoolThresholds = thresholds;
-      enemyIgnoredPoolIndexes = ignoredIndexes;
+      _enemyIgnoredPoolIndexes = ignoredIndexes;
       break;
     case ModifierPoolType.ENEMY_BUFF:
       enemyBuffModifierPoolThresholds = thresholds;
-      enemyBuffIgnoredPoolIndexes = ignoredIndexes;
+      _enemyBuffIgnoredPoolIndexes = ignoredIndexes;
       break;
     case ModifierPoolType.DAILY_STARTER:
       dailyStarterModifierPoolThresholds = thresholds;
-      ignoredDailyStarterPoolIndexes = ignoredIndexes;
+      _ignoredDailyStarterPoolIndexes = ignoredIndexes;
       break;
   }
 }
@@ -2063,11 +2064,11 @@ function getNewModifierTypeOption(
   }
 
   const tierThresholds = Object.keys(thresholds[tier]);
-  const totalWeight = parseInt(tierThresholds[tierThresholds.length - 1]);
+  const totalWeight = Number.parseInt(tierThresholds[tierThresholds.length - 1]);
   const value = randSeedInt(totalWeight);
   let index: number | undefined;
   for (const t of tierThresholds) {
-    const threshold = parseInt(t);
+    const threshold = Number.parseInt(t);
     if (value < threshold) {
       index = thresholds[tier][threshold];
       break;
@@ -2079,20 +2080,20 @@ function getNewModifierTypeOption(
   }
 
   if (player) {
-    console.log(index, ignoredPoolIndexes[tier].filter((i) => i <= index).length, ignoredPoolIndexes[tier]);
+    logModifiers(index, ignoredPoolIndexes[tier].filter((i) => i <= index).length, ignoredPoolIndexes[tier]);
   }
   let modifierType: ModifierType | null = pool[tier][index].modifierType;
   if (modifierType instanceof ModifierTypeGenerator) {
     modifierType = (modifierType as ModifierTypeGenerator).generateType(party);
     if (modifierType === null) {
       if (player) {
-        console.log(ModifierTier[tier], upgradeCount);
+        logModifiers(ModifierTier[tier], upgradeCount);
       }
       return getNewModifierTypeOption(party, poolType, tier, upgradeCount, ++retryCount);
     }
   }
 
-  console.log(modifierType, !player ? "(enemy)" : "");
+  logModifiers(modifierType, !player ? "(enemy)" : "");
 
   return new ModifierTypeOption(modifierType as ModifierType, upgradeCount!); // TODO: is this bang correct?
 }
@@ -2134,7 +2135,7 @@ export function getPartyLuckValue(party: Pokemon[]): number {
     );
     return DailyLuck.value;
   }
-  const luck = Phaser.Math.Clamp(
+  const luck = clamp(
     party
       .map((p) => (p.isAllowedInBattle() ? p.getLuck() : 0))
       .reduce((total: number, value: number) => (total += value), 0),

@@ -1,5 +1,5 @@
+import { FieldMovePowerBoostAbAttr } from "#abilities/field-move-power-boost-ab-attr";
 import type { ElementalType } from "#enums/elemental-type";
-import { FieldMovePowerBoostAbAttr } from "./field-move-power-boost-ab-attr";
 
 /**
  * Boosts the power of a specific type of move.

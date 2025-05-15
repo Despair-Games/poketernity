@@ -1,10 +1,10 @@
-import { allMoves } from "#app/data/data-lists";
+import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -52,7 +52,7 @@ describe("Moves - Scale Shot", () => {
     expect(minccino.getStatStage(Stat.SPD)).toBe(0);
 
     //check that stats changed on last hit
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(minccino.getStatStage(Stat.DEF)).toBe(-1);
     expect(minccino.getStatStage(Stat.SPD)).toBe(1);
   });

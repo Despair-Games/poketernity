@@ -1,11 +1,12 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier } from "#app/modifier/modifier";
-import { BerryModifierType } from "#app/modifier/modifier-type";
-import { randSeedInt } from "#app/utils/random-utils";
+import type { Pokemon } from "#field/pokemon";
+import { BerryModifier } from "#modifier/modifier";
+import { BerryModifierType } from "#modifier/modifier-type";
+import { clamp } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * After the turn ends, try to create an extra item
@@ -24,15 +25,14 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
-    if (Phaser.Math.Clamp(this.procChance(pokemon), 0, 1) < pass) {
+    if (clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;
     }
 
     if (this.itemType === "EATEN_BERRIES") {
       return this.createEatenBerry(pokemon, simulated);
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**

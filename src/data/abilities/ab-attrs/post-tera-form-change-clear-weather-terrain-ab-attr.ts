@@ -1,9 +1,9 @@
-import { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * Used by Terapagos's Teraform Zero ability.

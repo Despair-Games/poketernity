@@ -1,10 +1,10 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { AbilityId } from "#enums/ability-id";
-import { Stat } from "#enums/stat";
-import { WeatherType } from "#enums/weather-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { Stat } from "#enums/stat";
+import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -56,7 +56,7 @@ describe("Abilities - Flower Gift", () => {
     const cherrimAtkStat = cherrim.getEffectiveStat(Stat.ATK);
     const cherrimSpDefStat = cherrim.getEffectiveStat(Stat.SPDEF);
 
-    // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);;
+    // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);
     // const magikarpSpDefStat = magikarp.getEffectiveStat(Stat.SPDEF);
 
     game.move.select(MoveId.SUNNY_DAY, 0);
@@ -102,10 +102,10 @@ describe("Abilities - Flower Gift", () => {
     await game.phaseInterceptor.to("TurnStartPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(cherrim.formIndex).toBe(OVERCAST_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
   });
 

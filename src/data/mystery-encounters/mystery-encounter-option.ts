@@ -1,21 +1,22 @@
-import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import { globalScene } from "#app/global-scene";
+import type { ElementalType } from "#enums/elemental-type";
+import type { MoveId } from "#enums/move-id";
+import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { CanLearnMoveRequirementOptions } from "#mystery-encounters/can-learn-move-requirement";
+import { CanLearnMoveRequirement } from "#mystery-encounters/can-learn-move-requirement";
+import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
   MoneyRequirement,
   TypeRequirement,
-} from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { isNil } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
-import type { ElementalType } from "#enums/elemental-type";
-import type { MoveId } from "#enums/move-id";
-import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { CanLearnMoveRequirementOptions } from "./requirements/can-learn-move-requirement";
-import { CanLearnMoveRequirement } from "./requirements/can-learn-move-requirement";
+} from "#mystery-encounters/mystery-encounter-requirements";
+import { isNil } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 
+// biome-ignore lint/suspicious/noConfusingVoidType: TODO: change this?
 export type OptionPhaseCallback = () => Promise<void | boolean>;
 
 /**
@@ -147,23 +148,21 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
         // always choose from the non-overlapping pokemon first
         this.primaryPokemon = truePrimaryPool[randSeedInt(truePrimaryPool.length)];
         return true;
-      } else {
-        // if there are multiple overlapping pokemon, we're okay - just choose one and take it out of the supporting pokemon pool
-        if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
-          this.primaryPokemon = overlap[randSeedInt(overlap.length)];
-          this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
-          return true;
-        }
-        console.log(
-          "Mystery Encounter Edge Case: Requirement not met due to primay pokemon overlapping with support pokemon. There's no valid primary pokemon left.",
-        );
-        return false;
       }
-    } else {
-      // Just pick the first qualifying Pokemon
-      this.primaryPokemon = qualified[0];
-      return true;
+      // if there are multiple overlapping pokemon, we're okay - just choose one and take it out of the supporting pokemon pool
+      if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
+        this.primaryPokemon = overlap[randSeedInt(overlap.length)];
+        this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
+        return true;
+      }
+      console.log(
+        "Mystery Encounter Edge Case: Requirement not met due to primay pokemon overlapping with support pokemon. There's no valid primary pokemon left.",
+      );
+      return false;
     }
+    // Just pick the first qualifying Pokemon
+    this.primaryPokemon = qualified[0];
+    return true;
   }
 
   /**

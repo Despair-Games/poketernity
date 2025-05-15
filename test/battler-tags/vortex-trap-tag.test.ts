@@ -1,11 +1,11 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { toDmgValue } from "#app/utils/common-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { GameManager } from "#test/test-utils/game-manager";
+import { toDmgValue } from "#utils/common-utils";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("BattlerTag - VortexTrapTag", () => {
   describe("lapse behavior", () => {
@@ -42,7 +42,7 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.move.select(MoveId.SPLASH, 1);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       const enemyParty = game.scene.getEnemyParty();
       const enemy0 = enemyParty[0];
@@ -85,7 +85,7 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.move.select(MoveId.SPLASH, 1);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       const enemyParty = game.scene.getEnemyParty();
       const enemy0 = enemyParty[0];
@@ -114,7 +114,7 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.move.select(MoveId.SPLASH, 1);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       const enemyParty = game.scene.getEnemyParty();
       const enemy0 = enemyParty[0];
@@ -142,7 +142,7 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.move.select(MoveId.SPLASH, 1);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-      await game.phaseInterceptor.to("MoveEndPhase", false);
+      await game.phaseInterceptor.to("PostActionPhase", false);
 
       const enemyParty = game.scene.getEnemyParty();
       const enemy0 = enemyParty[0];

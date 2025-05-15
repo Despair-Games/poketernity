@@ -1,11 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-types";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { settings } from "#app/system/settings/settings-manager";
-import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
-import { shiftCharCodes } from "#app/utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -13,8 +6,15 @@ import { MoveId } from "#enums/move-id";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/test-utils/gameManager";
-import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
+import type { CustomModifierSettings } from "#modifier/modifier-type";
+import { ModifierTypeOption } from "#modifier/modifier-type";
+import { modifierTypes } from "#modifier/modifier-types";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import { settings } from "#system/settings-manager";
+import { GameManager } from "#test/test-utils/game-manager";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { shiftCharCodes } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -61,7 +61,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(3);
   });
 
@@ -99,7 +99,7 @@ describe("SelectModifierPhase", () => {
     // TODO: nagivate the ui to reroll somehow
     //const smphase = scene.phaseManager.getCurrentPhase() as SelectModifierPhase;
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(3);
 
     modifierSelectHandler.processInput(Button.ACTION);
@@ -125,7 +125,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(3);
     const firstRollTiers: ModifierTier[] = modifierSelectHandler.options.map((o) => o.modifierTypeOption.type.tier);
 
@@ -166,7 +166,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(5);
     expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
     expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("TM_ULTRA");
@@ -195,7 +195,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(5);
     expect(
       modifierSelectHandler.options[0].modifierTypeOption.type.tier
@@ -232,7 +232,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(4);
     expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
     expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("TM_COMMON");
@@ -254,7 +254,7 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.getHandler<ModifierSelectUiHandler>();
+    const modifierSelectHandler = scene.ui.getCurrentHandler<ModifierSelectUiHandler>();
     expect(modifierSelectHandler.options.length).toEqual(3);
     expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
     expect(modifierSelectHandler.options[1].modifierTypeOption.type.tier).toEqual(ModifierTier.MASTER);

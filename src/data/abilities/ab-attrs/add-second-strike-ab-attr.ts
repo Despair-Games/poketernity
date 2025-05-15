@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
+import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PreAttackAbAttr } from "./pre-attack-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to convert single-strike moves to two-strike moves.

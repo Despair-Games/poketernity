@@ -1,7 +1,7 @@
 import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to apply a status effect to the target if they have had their stats boosted this turn.

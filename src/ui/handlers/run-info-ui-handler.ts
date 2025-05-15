@@ -1,27 +1,11 @@
-import type { SessionSaveData } from "#app/@types/SessionData";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants/game-constants";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
-import { getBiomeName } from "#app/data/biome-utils";
-import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { getTypeRgb } from "#app/data/type";
-import { getVariantTint } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
-import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
-import type PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { isNil } from "#app/utils/common-utils";
-import {
-  formatLargeNumberFixedDigits,
-  formatMoney,
-  getPlayTimeString,
-  getPokemonLevelText,
-} from "#app/utils/string-utils";
+import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import { getBiomeName } from "#data/biome-utils";
+import { getNatureName, getNatureStatMultiplier } from "#data/nature";
+import { getPokeballAtlasKey } from "#data/pokeball";
+import { getTypeRgb } from "#data/type";
+import { getVariantTint } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/buttons";
 import { Challenges } from "#enums/challenges";
@@ -37,6 +21,18 @@ import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
+import * as Modifier from "#modifier/modifier";
+import { getLuckString, getLuckTextTint } from "#modifier/modifier-type";
+import type PokemonData from "#system/pokemon-data";
+import { settings } from "#system/settings-manager";
+import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { SessionSaveData } from "#types/SessionData";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
+import { UiHandler } from "#ui/ui-handler";
+import { addWindow } from "#ui/ui-theme";
+import { clamp, isNil } from "#utils/common-utils";
+import { formatLargeNumberFixedDigits, formatMoney, getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 
@@ -72,7 +68,7 @@ export class RunInfoUiHandler extends UiHandler {
   private hallofFameContainer: Phaser.GameObjects.Container;
   private endCardContainer: Phaser.GameObjects.Container;
 
-  private partyVisibility: Boolean;
+  private partyVisibility: boolean;
   private modifiersModule: any;
 
   constructor() {
@@ -553,7 +549,7 @@ export class RunInfoUiHandler extends UiHandler {
       case GameModes.DAILY:
         modeText.appendText(`${i18next.t("gameMode:dailyRun")}`, false);
         break;
-      case GameModes.CHALLENGE:
+      case GameModes.CHALLENGE: {
         modeText.appendText(`${i18next.t("gameMode:challenge")}`, false);
         modeText.appendText(`${i18next.t("runHistory:challengeRules")}: `);
         modeText.setWrapMode("word");
@@ -568,6 +564,7 @@ export class RunInfoUiHandler extends UiHandler {
           }
         }
         break;
+      }
       case GameModes.ENDLESS:
         modeText.appendText(`${i18next.t("gameMode:endless")}`, false);
         break;
@@ -597,7 +594,7 @@ export class RunInfoUiHandler extends UiHandler {
     runInfoTextContainer.add(runInfoText);
 
     // Luck
-    const luckValue = Phaser.Math.Clamp(
+    const luckValue = clamp(
       this.runInfo.party
         .map((p) => p.toPokemon().getLuck())
         .reduce((total: number, value: number) => (total += value), 0),
@@ -663,7 +660,7 @@ export class RunInfoUiHandler extends UiHandler {
           case Challenges.SINGLE_GENERATION:
             rules.push(i18next.t(`runHistory:challengeMonoGen${this.runInfo.challenges[i].value}`));
             break;
-          case Challenges.SINGLE_TYPE:
+          case Challenges.SINGLE_TYPE: {
             const typeRule = ElementalType[this.runInfo.challenges[i].value - 1];
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
             const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
@@ -671,16 +668,18 @@ export class RunInfoUiHandler extends UiHandler {
               typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`)! + "[/color]" + "[/shadow]";
             rules.push(typeText);
             break;
+          }
           case Challenges.INVERSE_BATTLE:
             rules.push(i18next.t("challenges:inverseBattle.shortName"));
             break;
-          default:
+          default: {
             const localisationKey = Challenges[this.runInfo.challenges[i].id]
               .split("_")
               .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
               .join("");
             rules.push(i18next.t(`challenges:${localisationKey}.name`));
             break;
+          }
         }
       }
     }
@@ -785,7 +784,7 @@ export class RunInfoUiHandler extends UiHandler {
       // Shiny
       const marksContainer = globalScene.add.container(0, 0);
       if (pokemon.isShiny()) {
-        const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
+        const shinyStar = globalScene.add.image(0, 0, "shiny_star_small");
         shinyStar.setOrigin(0, 0);
         shinyStar.setScale(0.65);
         shinyStar.setPositionRelative(pokeInfoTextContainer, 28, 0);

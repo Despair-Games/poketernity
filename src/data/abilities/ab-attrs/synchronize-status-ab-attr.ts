@@ -1,7 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon,

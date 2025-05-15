@@ -1,8 +1,7 @@
-import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils/common-utils";
+import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
-import { AbAttr } from "./ab-attr";
+import type { Pokemon } from "#field/pokemon";
 
 /**
  * /**
@@ -27,14 +26,9 @@ export class ReduceSleepDurationAbAttr extends AbAttr {
    * - `[1]` - The number of turns remaining until the status is healed
    * @returns `true` if the ability was applied
    */
-  override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    statusEffect: StatusEffect,
-    turnsRemaining: NumberHolder,
-  ): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, statusEffect: StatusEffect): boolean {
     if (statusEffect === this.statusEffect) {
-      turnsRemaining.value -= 1;
+      pokemon.advanceStatusCounter();
       return true;
     }
 

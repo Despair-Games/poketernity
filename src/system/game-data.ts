@@ -1,65 +1,33 @@
-import type { DexData, DexEntry } from "#app/@types/DexData";
-import type { SessionSaveData } from "#app/@types/SessionData";
-import type { StarterData } from "#app/@types/StarterData";
-import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
+import { api } from "#api/api";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
+import { getGameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
 import {
   APP_ABBREVIATION,
+  BYPASS_LOGIN,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
-  BYPASS_LOGIN,
-} from "#app/constants/app-constants";
-import { EntryHazardTag } from "#app/data/arena-tag";
-import { allMoves, allSpecies } from "#app/data/data-lists";
-import { defaultStarterSpecies } from "#app/data/default-starters";
-import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
-import type { Egg } from "#app/data/egg";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
+} from "#constants/app-constants";
+import { EntryHazardTag } from "#data/arena-tag";
+import { allMoves, allSpecies } from "#data/data-lists";
+import { defaultStarterSpecies } from "#data/default-starters";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
+import type { Egg } from "#data/egg";
+import { speciesEggMoves } from "#data/egg-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
 import {
   STARTER_CANDY_GAIN_FROM_CATCH,
   STARTER_CANDY_MULIPLIER_FOR_BOSS,
   STARTER_CANDY_MULIPLIER_FOR_EGG,
   getCandyGainMultiplierForShinies,
   speciesStarterCosts,
-} from "#app/data/starters";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import type { Variant } from "#app/data/variant";
-import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { getGameMode } from "#app/game-mode";
-import { globalScene } from "#app/global-scene";
-import * as Modifier from "#app/modifier/modifier";
-import Overrides from "#app/overrides";
-import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import { api } from "#app/plugins/api/api";
-import { achvs } from "#app/system/achievements";
-import ArenaData from "#app/system/arena-data";
-import ChallengeData from "#app/system/challenge-data";
-import EggData from "#app/system/egg-data";
-import { GameStats } from "#app/system/game-stats";
-import PersistentModifierData from "#app/system/modifier-data";
-import PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
-import TrainerData from "#app/system/trainer-data";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-} from "#app/system/version_migration/version_converter";
-import { vouchers } from "#app/system/voucher";
-import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#app/utils/common-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
-import { randInt, randSeedItem } from "#app/utils/random-utils";
+} from "#data/starters";
+import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/devices";
@@ -77,6 +45,36 @@ import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
 import { VoucherType } from "#enums/voucher-type";
 import { WeatherType } from "#enums/weather-type";
+import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
+import * as Modifier from "#modifier/modifier";
+import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
+import { ReloadSessionPhase } from "#phases/reload-session-phase";
+import { achvs } from "#system/achievements";
+import ArenaData from "#system/arena-data";
+import ChallengeData from "#system/challenge-data";
+import EggData from "#system/egg-data";
+import { GameStats } from "#system/game-stats";
+import PersistentModifierData from "#system/modifier-data";
+import PokemonData from "#system/pokemon-data";
+import { settings } from "#system/settings-manager";
+import TrainerData from "#system/trainer-data";
+import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
+import { vouchers } from "#system/voucher";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { DexData, DexEntry } from "#types/DexData";
+import type { SessionSaveData } from "#types/SessionData";
+import type { StarterData } from "#types/StarterData";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/SystemData";
+import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
+import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { applyChallenges } from "#utils/challenge-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randInt, randSeedItem } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 
@@ -86,12 +84,13 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
   switch (dataType) {
     case GameDataType.SYSTEM:
       return "data";
-    case GameDataType.SESSION:
+    case GameDataType.SESSION: {
       let ret = "sessionData";
       if (slotId) {
         ret += slotId;
       }
       return ret;
+    }
     case GameDataType.SETTINGS:
       return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
@@ -104,15 +103,15 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
 }
 
 export function encrypt(data: string, bypassLogin: boolean): string {
-  return (bypassLogin ? (data: string) => btoa(data) : (data: string) => AES.encrypt(data, saveKey))(
-    data,
-  ) as unknown as string; // TODO: is this correct?
+  const localFunc = (data: string): string => btoa(encodeURIComponent(data));
+  const serverFunc = (data: string): string => AES.encrypt(data, saveKey) as unknown as string; // TODO: is this correct?
+  return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
 export function decrypt(data: string, bypassLogin: boolean): string {
-  return (bypassLogin ? (data: string) => atob(data) : (data: string) => AES.decrypt(data, saveKey).toString(enc.Utf8))(
-    data,
-  );
+  const localFunc = (data: string): string => decodeURIComponent(atob(data));
+  const serverFunc = (data: string): string => AES.decrypt(data, saveKey).toString(enc.Utf8);
+  return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
 /**
@@ -148,37 +147,6 @@ export interface StarterAttributes {
 
 export interface StarterPreferences {
   [key: number]: StarterAttributes;
-}
-
-// the latest data saved/loaded for the Starter Preferences. Required to reduce read/writes. Initialize as "{}", since this is the default value and no data needs to be stored if present.
-// if they ever add private static variables, move this into StarterPrefs
-const StarterPrefers_DEFAULT: string = "{}";
-let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
-
-// This is its own class as StarterPreferences...
-// - don't need to be loaded on startup
-// - isn't stored with other data
-// - don't require to be encrypted
-// - shouldn't require calls outside of the starter selection
-export class StarterPrefs {
-  // called on starter selection show once
-  static load(): StarterPreferences {
-    return JSON.parse(
-      (StarterPrefers_private_latest =
-        localStorage.getItem(`starterPrefs_${loggedInUser?.username}`) || StarterPrefers_DEFAULT),
-    );
-  }
-
-  // called on starter selection clear, always
-  static save(prefs: StarterPreferences): void {
-    const pStr: string = JSON.stringify(prefs);
-    if (pStr !== StarterPrefers_private_latest) {
-      // something changed, store the update
-      localStorage.setItem(`starterPrefs_${loggedInUser?.username}`, pStr);
-      // update the latest prefs
-      StarterPrefers_private_latest = pStr;
-    }
-  }
 }
 
 export interface SeenDialogues {
@@ -334,7 +302,8 @@ export class GameData {
                 true,
               );
               return resolve(true);
-            } else if (saveDataOrErr?.includes("Too many connections")) {
+            }
+            if (saveDataOrErr?.includes("Too many connections")) {
               globalScene.phaseManager.queueMessagePhase(
                 "Too many people are trying to connect and the server is overloaded. Please try again later.",
                 null,
@@ -476,25 +445,22 @@ export class GameData {
           return cachedRHData;
         }
         */
-      } else {
-        localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
-        return {};
       }
-    } else {
-      const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
-      const lsItem = localStorage.getItem(lsItemKey);
-      if (lsItem) {
-        const cachedResponse = lsItem;
-        if (cachedResponse) {
-          const runHistory: RunHistoryData = JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
-          return runHistory;
-        }
-        return {};
-      } else {
-        localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
-        return {};
-      }
+      localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
+      return {};
     }
+    const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
+    const lsItem = localStorage.getItem(lsItemKey);
+    if (lsItem) {
+      const cachedResponse = lsItem;
+      if (cachedResponse) {
+        const runHistory: RunHistoryData = JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
+        return runHistory;
+      }
+      return {};
+    }
+    localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, "");
+    return {};
   }
 
   /**
@@ -546,7 +512,8 @@ export class GameData {
     return JSON.parse(dataStr, (k: string, v: any) => {
       if (k === "gameStats") {
         return new GameStats(v);
-      } else if (k === "eggs") {
+      }
+      if (k === "eggs") {
         const ret: EggData[] = [];
         if (v === null) {
           v = [];
@@ -1040,19 +1007,16 @@ export class GameData {
           daily = JSON.parse(atob(localStorage.getItem("daily")!)); // TODO: is this bang correct?
           if (daily.includes(seed)) {
             return resolve(false);
-          } else {
-            daily.push(seed);
-            localStorage.setItem("daily", btoa(JSON.stringify(daily)));
-            return resolve(true);
           }
-        } else {
           daily.push(seed);
           localStorage.setItem("daily", btoa(JSON.stringify(daily)));
           return resolve(true);
         }
-      } else {
+        daily.push(seed);
+        localStorage.setItem("daily", btoa(JSON.stringify(daily)));
         return resolve(true);
       }
+      return resolve(true);
     });
   }
 
@@ -1081,7 +1045,7 @@ export class GameData {
         }
         localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
       } else {
-        if (jsonResponse && jsonResponse.error?.startsWith("session out of date")) {
+        if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
           globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
         }
@@ -1315,16 +1279,18 @@ export class GameData {
           try {
             dataName = GameDataType[dataType].toLowerCase();
             switch (dataType) {
-              case GameDataType.SYSTEM:
+              case GameDataType.SYSTEM: {
                 dataStr = this.convertSystemDataStr(dataStr);
                 const systemData = this.parseSystemData(dataStr);
                 valid = !!systemData.dexData && !!systemData.timestamp;
                 break;
-              case GameDataType.SESSION:
+              }
+              case GameDataType.SESSION: {
                 const sessionData = this.parseSessionData(dataStr);
                 valid = !!sessionData.party && !!sessionData.enemyParty && !!sessionData.timestamp;
                 break;
-              case GameDataType.RUN_HISTORY:
+              }
+              case GameDataType.RUN_HISTORY: {
                 const data = JSON.parse(dataStr);
                 const keys = Object.keys(data);
                 dataName = i18next.t("menuUiHandler:RUN_HISTORY").toLowerCase();
@@ -1334,6 +1300,7 @@ export class GameData {
                     ["isFavorite", "isVictory", "entry"].every((v) => entryKeys.includes(v)) && entryKeys.length === 3;
                 });
                 break;
+              }
               case GameDataType.SETTINGS:
               case GameDataType.TUTORIALS:
                 valid = true;
@@ -1459,7 +1426,7 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => parseInt(k) as SpeciesId);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       starterData[speciesId] = {
@@ -1533,16 +1500,15 @@ export class GameData {
     const speciesRootForm = pokemon.species.getRootSpeciesId();
     if (!isNonRentalCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
       return Promise.resolve([]);
-    } else {
-      return this.setPokemonSpeciesCaught(
-        pokemon,
-        pokemon.species,
-        isNonRentalCatch,
-        isNonRentalCatch,
-        fromEgg,
-        showMessage,
-      );
     }
+    return this.setPokemonSpeciesCaught(
+      pokemon,
+      pokemon.species,
+      isNonRentalCatch,
+      isNonRentalCatch,
+      fromEgg,
+      showMessage,
+    );
   }
 
   /**

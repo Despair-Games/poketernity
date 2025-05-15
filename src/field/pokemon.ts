@@ -1,206 +1,161 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type Battle from "#app/battle";
-import type BattleScene from "#app/battle-scene";
-import type { FaintPhase } from "#app/phases/faint-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
-
-import type { AbilityFilterOptions } from "#app/@types/AbilityFilterOptions";
-import type { DamageCalculationResult } from "#app/@types/DamageCalculationResult";
-import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
-import type { PokemonTurnData } from "#app/@types/PokemonTurnData";
-import type { PokemonWaveData } from "#app/@types/PokemonWaveData";
-import type { TurnMove } from "#app/@types/TurnMove";
+import type { AbAttr } from "#abilities/ab-attr";
+import type { Ability } from "#abilities/ability";
+import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
+import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
+import type { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
+import type { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
+import type { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
+import type { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
+import type { BonusCritAbAttr } from "#abilities/bonus-crit-ab-attr";
+import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-damage-reduction-ab-attr";
+import type { BypassParaSpeedReductionAbAttr } from "#abilities/bypass-para-speed-reduction-ab-attr";
+import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
+import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
+import type { FieldMultiplyStatAbAttr } from "#abilities/field-multiply-stat-ab-attr";
+import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
+import type { FullHpResistTypeAbAttr } from "#abilities/full-hp-resist-type-ab-attr";
+import type { IgnoreOpponentStatStagesAbAttr } from "#abilities/ignore-opponent-stat-stages-ab-attr";
+import type { IgnoreTypeImmunityAbAttr } from "#abilities/ignore-type-immunity-ab-attr";
+import type { IgnoreTypeStatusEffectImmunityAbAttr } from "#abilities/ignore-type-status-effect-immunity-ab-attr";
+import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
+import type { MockStatusEffectAbAttr } from "#abilities/mock-status-effect-ab-attr";
+import type { MoveImmunityAbAttr } from "#abilities/move-immunity-ab-attr";
+import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
+import type { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
+import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
+import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
+import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
+import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
+import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
+import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
+import type { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
+import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
+import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
+import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR } from "#app/constants/game-constants";
-import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
-import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
-import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
-import type { ArenaTrapAbAttr } from "#app/data/abilities/ab-attrs/arena-trap-ab-attr";
-import type { BattlerTagImmunityAbAttr } from "#app/data/abilities/ab-attrs/battler-tag-immunity-ab-attr";
-import type { BlockCritAbAttr } from "#app/data/abilities/ab-attrs/block-crit-ab-attr";
-import type { BonusCritAbAttr } from "#app/data/abilities/ab-attrs/bonus-crit-ab-attr";
-import type { BypassBurnDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-burn-damage-reduction-ab-attr";
-import type { BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
-import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
-import type { DamageBoostAbAttr } from "#app/data/abilities/ab-attrs/damage-boost-ab-attr";
-import type { FieldMultiplyStatAbAttr } from "#app/data/abilities/ab-attrs/field-multiply-stat-ab-attr";
-import type { FieldPriorityMoveImmunityAbAttr } from "#app/data/abilities/ab-attrs/field-priority-move-immunity-ab-attr";
-import type { FullHpResistTypeAbAttr } from "#app/data/abilities/ab-attrs/full-hp-resist-type-ab-attr";
-import type { IgnoreOpponentStatStagesAbAttr } from "#app/data/abilities/ab-attrs/ignore-opponent-stat-stages-ab-attr";
-import type { IgnoreTypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/ignore-type-immunity-ab-attr";
-import type { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ab-attrs/ignore-type-status-effect-immunity-ab-attr";
-import type { InfiltratorAbAttr } from "#app/data/abilities/ab-attrs/infiltrator-ab-attr";
-import type { MockStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/mock-status-effect-ab-attr";
-import type { MoveImmunityAbAttr } from "#app/data/abilities/ab-attrs/move-immunity-ab-attr";
-import type { MoveTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/move-type-change-ab-attr";
-import type { MultCritAbAttr } from "#app/data/abilities/ab-attrs/mult-crit-ab-attr";
-import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
-import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
-import type { PreDefendFullHpEndureAbAttr } from "#app/data/abilities/ab-attrs/pre-defend-full-hp-endure-ab-attr";
-import type { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/ab-attrs/received-move-damage-multiplier-ab-attr";
-import type { StabBoostAbAttr } from "#app/data/abilities/ab-attrs/stab-boost-ab-attr";
-import type { StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-multiplier-ab-attr";
-import type { StatusEffectImmunityAbAttr } from "#app/data/abilities/ab-attrs/status-effect-immunity-ab-attr";
-import type { SynchronizeStatusAbAttr } from "#app/data/abilities/ab-attrs/synchronize-status-ab-attr";
-import type { TypeImmunityAbAttr } from "#app/data/abilities/ab-attrs/type-immunity-ab-attr";
-import type { UserFieldBattlerTagImmunityAbAttr } from "#app/data/abilities/ab-attrs/user-field-battler-tag-immunity-ab-attr";
-import type { UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/ab-attrs/user-field-status-effect-immunity-ab-attr";
-import type { WeightMultiplierAbAttr } from "#app/data/abilities/ab-attrs/weight-multiplier-ab-attr";
-import type { Ability } from "#app/data/abilities/ability";
-import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
-import type { AutotomizedTag } from "#app/data/battler-tags/autotomized-tag";
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
-import type { CritBoostStackableTag } from "#app/data/battler-tags/crit-boost-stackable-tag";
-import { DragonCheerTag } from "#app/data/battler-tags/dragon-cheer-tag";
-import { ExposedTag } from "#app/data/battler-tags/exposed-tag";
-import { HighestStatBoostTag } from "#app/data/battler-tags/highest-stat-boost-tag";
-import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
-import { MoveRestrictionBattlerTag } from "#app/data/battler-tags/move-restriction-battler-tag";
-import { PowerTrickTag } from "#app/data/battler-tags/power-trick-tag";
-import type { RestrictingBattlerTag } from "#app/data/battler-tags/restricting-battler-tag";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import { TypeImmuneTag } from "#app/data/battler-tags/type-immune-tag";
-import type { UproarTag } from "#app/data/battler-tags/uproar-tag";
-import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
-import { getBattlerTag } from "#app/data/battler-tags/utils/get-battler-tag";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { allAbilities, allMoves } from "#app/data/data-lists";
-import { DexAttr } from "#app/data/dex-attributes";
-import { speciesEggMoves } from "#app/data/egg-moves";
-import { getLevelTotalExp } from "#app/data/exp";
-import { initMoveAnim } from "#app/data/init/init-move-anim";
-import { pokemonEvolutions } from "#app/data/init/init-pokemon-evolutions";
-import { AttackMove, getMoveTargets, type Move } from "#app/data/moves/move";
-import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
-import { CombinedPledgeStabBoostAttr } from "#app/data/moves/move-attrs/combined-pledge-stab-boost-attr";
-import { CritOnlyAttr } from "#app/data/moves/move-attrs/crit-only-attr";
-import { DoubleDamageToMaxAttr } from "#app/data/moves/move-attrs/double-damage-to-max-attr";
-import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
-import { HighCritAttr } from "#app/data/moves/move-attrs/high-crit-attr";
-import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
-import { IgnoreOpponentStatStagesAttr } from "#app/data/moves/move-attrs/ignore-opponent-stat-stages-attr";
-import { IgnoreWeatherTypeDebuffAttr } from "#app/data/moves/move-attrs/ignore-weather-type-debuff-attr";
-import { ModifiedDamageAttr } from "#app/data/moves/move-attrs/modified-damage-attr";
-import { OneHitKOAccuracyAttr } from "#app/data/moves/move-attrs/one-hit-ko-accuracy-attr";
-import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
-import { RechargeAttr } from "#app/data/moves/move-attrs/recharge-attr";
-import { RespectAttackTypeImmunityAttr } from "#app/data/moves/move-attrs/respect-attack-type-immunity-attr";
-import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
-import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
-import { TypelessAttr } from "#app/data/moves/move-attrs/typeless-attr";
-import { VariableAtkAttr } from "#app/data/moves/move-attrs/variable-atk-attr";
-import { VariableDefAttr } from "#app/data/moves/move-attrs/variable-def-attr";
-import { VariableMoveCategoryAttr } from "#app/data/moves/move-attrs/variable-move-category-attr";
-import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
-import { VariableMoveTypeChartAttr } from "#app/data/moves/move-attrs/variable-move-type-chart-attr";
-import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/variable-move-type-multiplier-attr";
-import { getNatureStatMultiplier } from "#app/data/nature";
-import { starterPassiveAbilities } from "#app/data/passives";
-import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
-import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#app/data/pokemon-forms";
-import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/pokemon-level-moves";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import {
-  BASE_HIDDEN_ABILITY_CHANCE,
-  BASE_SHINY_CHANCE,
-  SHINY_EPIC_CHANCE,
-  SHINY_VARIANT_CHANCE,
-} from "#app/data/rates";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
-import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
-import { SpeciesFormChangeStatusEffectTrigger } from "#app/data/species-form-change-triggers/species-form-change-status-effect-trigger";
-import { Status, getNonVolatileStatusEffects } from "#app/data/status-effect";
-import { tmPoolTiers, tmSpecies } from "#app/data/tms";
-import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
-import { variantData, type Variant } from "#app/data/variant";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
-import {
-  BaseStatModifier,
-  HiddenAbilityRateBoosterModifier,
-  PokemonBaseStatFlatModifier,
-  PokemonBaseStatTotalModifier,
-  PokemonIncrementingStatModifier,
-  PokemonNatureWeightModifier,
-  ShinyRateBoosterModifier,
-  StatBoosterModifier,
-  SurviveDamageModifier,
-  TempCritBoosterModifier,
-  TempStatStageBoosterModifier,
-  type PokemonHeldItemModifier,
-} from "#app/modifier/modifier";
-import Overrides from "#app/overrides";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
-import type PokemonData from "#app/system/pokemon-data";
-import { settings } from "#app/system/settings/settings-manager";
-import { timedEventManager } from "#app/timed-event-manager";
-import type { BattleInfo } from "#app/ui/components/battle-info";
-import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#app/constants/arena-tag-constants";
-import {
-  CRIT_BOOST_BATTLER_TAG_TYPES,
-  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
-  TRAPPED_BATTLER_TAG_TYPES,
-} from "#app/constants/battler-tag-constants";
-import { applyChallenges } from "#app/utils/challenge-utils";
-import {
-  BooleanHolder,
-  NumberHolder,
-  coerceArray,
-  fixedNumber,
-  getEnumValues,
-  isNil,
-  toDmgValue,
-} from "#app/utils/common-utils";
-import type { nil } from "#app/@types/nil";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { applyMoveAttrs } from "#app/utils/move-utils";
-import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-utils";
-import { randSeedInt } from "#app/utils/random-utils";
+import type { timedEventManager } from "#app/timed-event-manager";
+import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
+import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
+import type { BattlerTag } from "#battler-tags/battler-tag";
+import type { CritBoostStackableTag } from "#battler-tags/crit-boost-stackable-tag";
+import { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
+import type { ExposedTag } from "#battler-tags/exposed-tag";
+import { getBattlerTag } from "#battler-tags/get-battler-tag";
+import type { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
+import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
+import type { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
+import { PowerTrickTag } from "#battler-tags/power-trick-tag";
+import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
+import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
+import type { UproarTag } from "#battler-tags/uproar-tag";
+import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import { CRIT_BOOST_BATTLER_TAG_TYPES, type SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES, EXPOSED_TAG_TYPES } from "#constants/battler-tag-constants";
+import { MIN_STAT_STAGE, MAX_STAT_STAGE, DYNAMAX_DAMAGE_TAKEN_FACTOR, DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION } from "#constants/game-constants";
+import type { CustomPokemonData } from "#data/custom-pokemon-data";
+import type { allMoves, allAbilities } from "#data/data-lists";
+import type { DexAttr } from "#data/dex-attributes";
+import type { speciesEggMoves } from "#data/egg-moves";
+import type { getLevelTotalExp } from "#data/exp";
+import { getNatureStatMultiplier } from "#data/nature";
+import { starterPassiveAbilities } from "#data/passives";
+import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#data/pokemon-evolutions";
+import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
+import { type LevelMoves, type EVOLVE_MOVE, RELEARN_MOVE } from "#data/pokemon-level-moves";
+import type { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
+import { BASE_HIDDEN_ABILITY_CHANCE, type BASE_SHINY_CHANCE, SHINY_VARIANT_CHANCE, SHINY_EPIC_CHANCE } from "#data/rates";
+import { getNonVolatileStatusEffects } from "#data/status-effect";
+import type { tmSpecies, tmPoolTiers } from "#data/tms";
+import type { getTypeRgb, TypeDamageMultiplier, getTypeDamageMultiplier } from "#data/type";
+import type { Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { AbilityId } from "#enums/ability-id";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerIndex } from "#enums/battler-index";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { BiomeId } from "#enums/biome-id";
-import { ChallengeType } from "#enums/challenge-type";
-import { ElementalType } from "#enums/elemental-type";
-import { EventModifierType } from "#enums/event-modifier-type";
-import { FieldPosition } from "#enums/field-position";
-import { Gender } from "#enums/gender";
-import { HitResult } from "#enums/hit-result";
-import { ModifierTier } from "#enums/modifier-tier";
-import { MoveCategory } from "#enums/move-category";
-import { MoveId } from "#enums/move-id";
-import { Nature } from "#enums/nature";
-import { PhaseId } from "#enums/phase-id";
+import type { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { AbilityId } from "#enums/ability-id";
+import type { ArenaTagSide } from "#enums/arena-tag-side";
+import type { ArenaTagType } from "#enums/arena-tag-type";
+import type { BattlerIndex } from "#enums/battler-index";
+import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { BiomeId } from "#enums/biome-id";
+import type { ChallengeType } from "#enums/challenge-type";
+import type { ElementalType } from "#enums/elemental-type";
+import type { EventModifierType } from "#enums/event-modifier-type";
+import type { FieldPosition } from "#enums/field-position";
+import type { Gender } from "#enums/gender";
+import type { HitResult } from "#enums/hit-result";
+import type { ModifierTier } from "#enums/modifier-tier";
+import type { MoveCategory } from "#enums/move-category";
+import type { MoveId } from "#enums/move-id";
+import type { Nature } from "#enums/nature";
+import type { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import { SpeciesId } from "#enums/species-id";
-import {
-  BATTLE_STATS,
-  PERMANENT_STATS,
-  Stat,
-  type BattleStat,
-  type EffectiveStat,
-  type PermanentStat,
-} from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
-import { TerrainType } from "#enums/terrain-type";
-import { WeatherType } from "#enums/weather-type";
+import type { SpeciesFormKey } from "#enums/species-form-key";
+import type { SpeciesId } from "#enums/species-id";
+import { type PermanentStat, type BattleStat, type EffectiveStat, type Stat, PERMANENT_STATS, BATTLE_STATS } from "#enums/stat";
+import type { StatusEffect } from "#enums/status-effect";
+import type { TerrainType } from "#enums/terrain-type";
+import type { WeatherType } from "#enums/weather-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import type { PokemonSummonData } from "#field/pokemon-summon-data";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
+import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
+import { SpeciesFormChangeStatusEffectTrigger } from "#form-change-triggers/species-form-change-status-effect-trigger";
+import { initMoveAnim } from "#init/init-move-anim";
+import type { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import { HiddenAbilityRateBoosterModifier, type PokemonHeldItemModifier, TempCritBoosterModifier, StatBoosterModifier, type PokemonIncrementingStatModifier, PokemonNatureWeightModifier, PokemonBaseStatTotalModifier, PokemonBaseStatFlatModifier, BaseStatModifier, type ShinyRateBoosterModifier, type TempStatStageBoosterModifier, SurviveDamageModifier } from "#modifier/modifier";
+import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reduction-attr";
+import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
+import { CritOnlyAttr } from "#moves/crit-only-attr";
+import { DoubleDamageToMaxAttr } from "#moves/double-damage-to-max-attr";
+import type { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import { HighCritAttr } from "#moves/high-crit-attr";
+import type { HitsTagAttr } from "#moves/hits-tag-attr";
+import type { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages-attr";
+import { IgnoreWeatherTypeDebuffAttr } from "#moves/ignore-weather-type-debuff-attr";
+import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
+import { type Move, AttackMove, getMoveTargets } from "#moves/move";
+import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
+import type { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import { RechargeAttr } from "#moves/recharge-attr";
+import { RespectAttackTypeImmunityAttr } from "#moves/respect-attack-type-immunity-attr";
+import type { SacrificialAttr } from "#moves/sacrificial-attr";
+import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
+import type { TypelessAttr } from "#moves/typeless-attr";
+import { VariableAtkAttr } from "#moves/variable-atk-attr";
+import { VariableDefAttr } from "#moves/variable-def-attr";
+import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
+import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
+import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
+import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
+import { DamageAnimPhase } from "#phases/damage-anim-phase";
+import type { MoveEffectPhase } from "#phases/move-effect-phase";
+import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
+import type PokemonData from "#system/pokemon-data";
+import { settings } from "#system/settings-manager";
+import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";
+import type { DamageCalculationResult } from "#types/DamageCalculationResult";
+import type { DamageFunctionOptions } from "#types/DamageFunctionOptions";
+import type { nil } from "#types/nil";
+import type { PokemonTurnData } from "#types/PokemonTurnData";
+import type { PokemonWaveData } from "#types/PokemonWaveData";
+import type { Status } from "#types/Status";
+import type { TurnMove } from "#types/TurnMove";
+import type { BattleInfo } from "#ui/battle-info";
+import type { applyChallenges } from "#utils/challenge-utils";
+import { type NumberHolder, type BooleanHolder, type clamp, getEnumValues, type coerceArray, type isNil, calcAccuracyMultiplier, type toDmgValue, type fixedNumber } from "#utils/common-utils";
+import { loadMoveAnimAssets } from "#utils/move-anim-utils";
+import type { applyMoveAttrs } from "#utils/move-utils";
+import { getIvsFromId, getPokemonSpeciesForm, getPokemonSpecies } from "#utils/pokemon-utils";
+import type { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -229,7 +184,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public ivs: number[];
   public nature: Nature;
   public moveset: PokemonMove[];
-  public status: Status | null;
+  protected status: Status | null = null;
   public friendship: number;
   public metLevel: number;
   public metBiome: BiomeId | -1;
@@ -244,12 +199,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public isTerastallized: boolean = false; // TODO: put this in battle (wave) data if arena reset behavior is changed
   public stellarTypesBoosted: ElementalType[] = []; // TODO: put this in battle (wave) data if arena reset behavior is changed
 
+  /** @todo Remove this */
   private summonDataPrimer: PokemonSummonData | null;
 
   public summonData: PokemonSummonData;
   // Default data defined in `resetWaveData()`
   public waveData: PokemonWaveData;
-  public battleSummonData: PokemonBattleSummonData;
   // Default data defined in `resetTurnData()`
   public turnData: PokemonTurnData;
   public customPokemonData: CustomPokemonData;
@@ -323,7 +278,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
       this.moveset = dataSource.moveset;
-      this.status = dataSource.status!; // TODO: is this bang correct?
+      // @ts-expect-error - `Pokemon#status` is protected
+      this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
       this.luck = dataSource.luck;
@@ -393,6 +349,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * - Shedinja is always Bug
    */
   public get teraType(): ElementalType {
+    if (this.isPlayer() && Overrides.TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+      return Overrides.TERA_TYPE_OVERRIDE;
+    }
+    if (this.isEnemy() && Overrides.ENEMY_TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+      return Overrides.ENEMY_TERA_TYPE_OVERRIDE;
+    }
+
     switch (this.species.speciesId) {
       case SpeciesId.TERAPAGOS:
         return ElementalType.STELLAR;
@@ -412,6 +375,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           case 7:
             return ElementalType.ROCK;
         }
+        break;
 
       // Custom
       case SpeciesId.SHEDINJA:
@@ -423,6 +387,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   public set teraType(value: ElementalType) {
     this._teraType = value;
+  }
+
+  /**
+   * Toxic damage is `1/16 max HP * toxicTurnCount`; increases by 1 per turn.
+   * Ignored if the effect is not {@linkcode StatusEffect.TOXIC}
+   * @defaultValue 0
+   */
+  public get toxicTurnCount(): number {
+    return this.status?.toxicTurnCount ?? 0;
+  }
+
+  /**
+   * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
+   * Ignored if the effect is not sleep.
+   * @defaultValue 0
+   */
+  public get sleepTurnsRemaining(): number {
+    return this.status?.sleepTurnsRemaining ?? 0;
   }
 
   /**
@@ -777,7 +759,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       || formKey === "caph-starmobile"
     ) {
       return 1.5;
-    } else if (this.customPokemonData.spriteScale > 0) {
+    }
+    if (this.customPokemonData.spriteScale > 0) {
       return this.customPokemonData.spriteScale;
     }
     return 1;
@@ -887,15 +870,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return false;
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   /** If this Pokemon has a Substitute on the field, removes its sprite from the field. */
   destroySubstitute(): void {
     const substitute = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-    if (substitute && substitute.sprite) {
+    if (substitute?.sprite) {
       substitute.sprite.destroy();
     }
   }
@@ -1015,11 +997,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   setStatStage(stat: BattleStat, value: number): void {
     if (this.summonData) {
-      if (value >= -6) {
-        this.summonData.statStages[stat - 1] = Math.min(value, 6);
-      } else {
-        this.summonData.statStages[stat - 1] = Math.max(value, -6);
-      }
+      this.summonData.statStages[stat - 1] = clamp(value, MIN_STAT_STAGE, MAX_STAT_STAGE);
     }
   }
 
@@ -1148,7 +1126,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret *= 1.5;
         }
         break;
-      case Stat.SPD:
+      case Stat.SPD: {
         const side = this.getArenaTagSide();
         if (globalScene.arena.hasTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
@@ -1176,6 +1154,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret *= 2;
         }
         break;
+      }
     }
 
     const highestStatBoost = this.findTag(
@@ -1225,7 +1204,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         globalScene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
       }
 
-      statHolder.value = Phaser.Math.Clamp(statHolder.value, 1, Number.MAX_SAFE_INTEGER);
+      statHolder.value = clamp(statHolder.value, 1, Number.MAX_SAFE_INTEGER);
 
       this.setStat(s, statHolder.value);
     }
@@ -1337,7 +1316,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
-    let overrideArray: MoveId | Array<MoveId> = this.isPlayer()
+    let overrideArray: MoveId | MoveId[] = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
       : Overrides.ENEMY_MOVESET_OVERRIDE;
 
@@ -2515,11 +2494,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
     if (rand.value >= SHINY_VARIANT_CHANCE) {
       return 0; // 6/10
-    } else if (rand.value >= SHINY_EPIC_CHANCE) {
-      return 1; // 3/10
-    } else {
-      return 2; // 1/10
     }
+    if (rand.value >= SHINY_EPIC_CHANCE) {
+      return 1; // 3/10
+    }
+    return 2; // 1/10
   }
 
   /** Generates a semi-random moveset for a Pokemon */
@@ -2554,7 +2533,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.hasTrainer()) {
       const tms = Object.keys(tmSpecies);
       for (const tm of tms) {
-        const moveId = parseInt(tm) as MoveId;
+        const moveId = Number.parseInt(tm) as MoveId;
         let compatible = false;
         for (const p of tmSpecies[tm]) {
           if (Array.isArray(p)) {
@@ -2773,7 +2752,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   hideInfo(): Promise<void> {
     return new Promise((resolve) => {
-      if (this.battleInfo && this.battleInfo.visible) {
+      if (this.battleInfo?.visible) {
         globalScene.tweens.add({
           targets: [this.battleInfo, this.battleInfo.expMaskRect],
           x: this.isPlayer() ? "+=150" : `-=${!this.isBoss() ? 150 : 246}`,
@@ -2995,6 +2974,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param target {@linkcode Pokemon} - The target Pokémon against which the move is used.
    * @param sourceMove {@linkcode Move}  - The move being used by the user.
    * @returns The calculated accuracy multiplier.
+   *
+   * | For ACC and EVA  | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
+   * |------------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+   * | Stage (EVA)      | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
+   * | Gen V+           | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
    */
   getAccuracyMultiplier(target: Pokemon, sourceMove: Move): number {
     const isOhko = sourceMove.hasAttr(OneHitKOAccuracyAttr);
@@ -3026,20 +3011,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), Stat.ACC, userAccStage);
 
-    userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, 6);
+    userAccStage.value = ignoreAccStatStage.value ? 0 : userAccStage.value;
     targetEvaStage.value = ignoreEvaStatStage.value ? 0 : targetEvaStage.value;
 
-    if (target.findTag((t) => t instanceof ExposedTag)) {
+    if (target.hasTag(...EXPOSED_TAG_TYPES)) {
       targetEvaStage.value = Math.min(0, targetEvaStage.value);
     }
 
-    const accuracyMultiplier = new NumberHolder(1);
-    if (userAccStage.value !== targetEvaStage.value) {
-      accuracyMultiplier.value =
-        userAccStage.value > targetEvaStage.value
-          ? (3 + Math.min(userAccStage.value - targetEvaStage.value, 6)) / 3
-          : 3 / (3 + Math.min(targetEvaStage.value - userAccStage.value, 6));
-    }
+    const accuracyMultiplier = new NumberHolder(calcAccuracyMultiplier(userAccStage.value, targetEvaStage.value));
 
     applyAbAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,
@@ -3898,7 +3877,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
       if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
         return tag as MoveRestrictionBattlerTag;
-      } else if (user && target && (tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
+      }
+      if (user && target && (tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
         return tag as MoveRestrictionBattlerTag;
       }
     }
@@ -3906,7 +3886,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public getMoveHistory(): TurnMove[] {
-    return this.battleSummonData?.moveHistory ?? [];
+    return this.summonData?.moveHistory ?? [];
   }
 
   public pushMoveHistory(turnMove: TurnMove): void {
@@ -3930,9 +3910,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const moveHistory = this.getMoveHistory();
     if (moveCount >= 0) {
       return moveHistory.slice(Math.max(moveHistory.length - moveCount, 0)).reverse();
-    } else {
-      return moveHistory.slice(0).reverse();
     }
+    return moveHistory.slice(0).reverse();
   }
 
   getMoveQueue(): TurnMove[] {
@@ -3965,12 +3944,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.getSpeciesForm().cry(soundConfig);
   }
 
-  faintCry(callback: Function): void {
+  faintCry(callback: VoidFunction): void {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
     const cry = globalScene.audioManager.playSound(key, { rate: rate }) as AnySound;
     if (!cry || settings.effectiveFieldVolume === 0) {
-      return callback();
+      callback();
+      return;
     }
     const sprite = this.getSprite();
     const tintSprite = this.getTintSprite();
@@ -4070,7 +4050,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
     const statusEffect = new NumberHolder(StatusEffect.NONE);
     if (this.status) {
-      statusEffect.value = this.status.statusEffect;
+      statusEffect.value = this.status.effect;
     }
     if (!ignoreMockAbility) {
       applyAbAttrs<MockStatusEffectAbAttr>(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
@@ -4094,7 +4074,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (overrideStatus ? this.status?.statusEffect === effect : this.status) {
+    if (overrideStatus ? this.status?.effect === effect : this.status) {
       return false;
     }
     if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
@@ -4109,7 +4089,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     switch (effect) {
       case StatusEffect.POISON:
-      case StatusEffect.TOXIC:
+      case StatusEffect.TOXIC: {
         // Check if the Pokemon is immune to Poison/Toxic or if the source pokemon is canceling the immunity
         const poisonImmunity = types.map((defType) => {
           // Check if the Pokemon is not immune to Poison/Toxic
@@ -4142,12 +4122,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           }
         }
         break;
+      }
       case StatusEffect.PARALYSIS:
         if (this.isOfType(ElementalType.ELECTRIC)) {
           return false;
         }
         break;
-      case StatusEffect.SLEEP:
+      case StatusEffect.SLEEP: {
         const preventSleep = new BooleanHolder(false);
         globalScene
           .getField(true)
@@ -4157,6 +4138,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           return false;
         }
         break;
+      }
       case StatusEffect.FREEZE:
         if (
           this.isOfType(ElementalType.ICE)
@@ -4195,6 +4177,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return true;
   }
 
+  /** @todo Refactor this */
   trySetStatus(
     effect: StatusEffect,
     asPhase: boolean = false,
@@ -4227,10 +4210,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    let sleepTurnsRemaining: NumberHolder;
+    const sleepTurnsRemaining: NumberHolder = new NumberHolder(0);
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new NumberHolder(turnsRemaining !== 0 ? turnsRemaining : this.randSeedIntRange(2, 4));
+      sleepTurnsRemaining.value =
+        turnsRemaining !== 0
+          ? turnsRemaining
+          : this.randSeedIntRange(DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION);
 
       this.setFrameRate(4);
 
@@ -4242,8 +4228,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    sleepTurnsRemaining = sleepTurnsRemaining!; // tell TS compiler it's defined
-    this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
+    this.setStatus(effect, { sleepTurnsRemaining: sleepTurnsRemaining.value });
 
     globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
     if (sourcePokemon) {
@@ -4251,6 +4236,50 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return true;
+  }
+
+  protected setStatus(
+    effect: StatusEffect,
+    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
+  ): void {
+    this.status = {
+      effect,
+      toxicTurnCount,
+      sleepTurnsRemaining,
+    };
+  }
+
+  public advanceStatusCounter(): void {
+    if (!this.status) {
+      return;
+    }
+    switch (this.status.effect) {
+      case StatusEffect.TOXIC:
+        this.status.toxicTurnCount++;
+        break;
+      case StatusEffect.SLEEP:
+        if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
+          this.status.sleepTurnsRemaining = Math.max(this.status.sleepTurnsRemaining, 1);
+          break;
+        }
+        if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
+          this.status.sleepTurnsRemaining = 0;
+          break;
+        }
+        this.status.sleepTurnsRemaining--;
+        break;
+      default:
+        // intentionally left blank
+        break;
+    }
+  }
+
+  /** If the pokemon is statused, reset {@linkcode toxicTurnCount} to 0 */
+  public resetToxicTurnCounter(): void {
+    if (!this.status) {
+      return;
+    }
+    this.status.toxicTurnCount = 0;
   }
 
   /**
@@ -4307,7 +4336,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.waveData) {
       this.resetWaveData();
     }
-    this.resetBattleSummonData();
+    // TODO: why is this here?
+    if (this.getTag(BattlerTagType.SEEDED)) {
+      this.lapseTag(BattlerTagType.SEEDED);
+    }
+    if (globalScene) {
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
+    }
     if (this.summonDataPrimer) {
       for (const k of Object.keys(this.summonData)) {
         if (this.summonDataPrimer[k]) {
@@ -4341,16 +4376,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       abilitiesRevealed: [],
       revealedMoves: new Set(),
     };
-  }
-
-  resetBattleSummonData(): void {
-    this.battleSummonData = new PokemonBattleSummonData();
-    if (this.getTag(BattlerTagType.SEEDED)) {
-      this.lapseTag(BattlerTagType.SEEDED);
-    }
-    if (globalScene) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
-    }
   }
 
   resetTurnData(): void {
@@ -4496,7 +4521,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.resetTurnData();
     if (clearEffects) {
       this.destroySubstitute();
-      this.resetSummonData(); // this also calls `resetBattleSummonData`
+      this.resetSummonData();
     }
     if (hideInfo) {
       this.hideInfo();
@@ -4563,9 +4588,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, this, false);
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }
 
@@ -4574,17 +4598,4 @@ export interface TargetScoreData {
   moveId: MoveId;
   targets: BattlerIndex[];
   score: number;
-}
-
-/** @todo Move these fields into {@linkcode PokemonSummonData} */
-export class PokemonBattleSummonData {
-  /** The number of turns the pokemon has passed since entering the battle */
-  public turnCount: number = 0;
-  /**
-   * The number of turns the pokemon has passed since the start of the wave.
-   * @todo Remove this
-   */
-  public waveTurnCount: number = 0;
-  /** The list of moves the pokemon has used since entering the battle */
-  public moveHistory: TurnMove[] = [];
 }

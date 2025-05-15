@@ -1,11 +1,11 @@
-import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { Button } from "#enums/buttons";
 import { TypeEffectivenessColor } from "#enums/color";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/test-utils/gameManager";
-import type { MockText } from "#test/test-utils/mocks/mocksContainer/mockText";
+import { GameManager } from "#test/test-utils/game-manager";
+import type { MockText } from "#test/test-utils/mocks/mocksContainer/mock-text";
+import { FightUiHandler } from "#ui/fight-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -44,7 +44,7 @@ describe("UI - Type Hints", () => {
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
-      const handler = ui.getHandler<FightUiHandler>();
+      const handler = ui.getCurrentHandler<FightUiHandler>();
       handler.processInput(Button.ACTION); // select "Fight"
       game.phaseInterceptor.unlock();
     });
@@ -57,7 +57,7 @@ describe("UI - Type Hints", () => {
         .find((text) => text.text === i18next.t("move:dragonClaw.name"))! as unknown as MockText;
 
       expect.soft(dragonClawText.color).toBe(TypeEffectivenessColor.NO_EFFECT);
-      ui.getHandler().processInput(Button.ACTION);
+      ui.getCurrentHandler().processInput(Button.ACTION);
     });
     await game.phaseInterceptor.to("CommandPhase");
   });
@@ -69,7 +69,7 @@ describe("UI - Type Hints", () => {
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
-      const handler = ui.getHandler<FightUiHandler>();
+      const handler = ui.getCurrentHandler<FightUiHandler>();
       handler.processInput(Button.ACTION); // select "Fight"
       game.phaseInterceptor.unlock();
     });
@@ -82,7 +82,7 @@ describe("UI - Type Hints", () => {
         .find((text) => text.text === i18next.t("move:growl.name"))! as unknown as MockText;
 
       expect.soft(growlText.color).toBe(undefined);
-      ui.getHandler().processInput(Button.ACTION);
+      ui.getCurrentHandler().processInput(Button.ACTION);
     });
     await game.phaseInterceptor.to("CommandPhase");
   });

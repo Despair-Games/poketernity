@@ -1,7 +1,7 @@
-import { getPokemonWithWeatherBasedForms } from "#app/utils/ability-utils";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
 
 /**
  * Reverts weather-based forms to their normal forms when the user is summoned.

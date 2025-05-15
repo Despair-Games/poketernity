@@ -1,6 +1,6 @@
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { nil } from "#app/@types/nil";
+import type { Pokemon } from "#field/pokemon";
+import type { nil } from "#types/nil";
 import i18next from "i18next";
 
 /**
@@ -24,9 +24,8 @@ export function getPokemonNameWithAffix(pokemon: Pokemon | nil): string {
             pokemonName: pokemon.getNameToRender(),
           })
       : pokemon.getNameToRender();
-  } else {
-    return !pokemon.isPlayer()
-      ? i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() })
-      : pokemon.getNameToRender();
   }
+  return !pokemon.isPlayer()
+    ? i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() })
+    : pokemon.getNameToRender();
 }

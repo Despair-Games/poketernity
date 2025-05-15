@@ -1,9 +1,9 @@
-import { BATTLE_STATS } from "#enums/stat";
-import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { Move } from "#app/data/moves/move";
-import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { BATTLE_STATS } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute to increase a random stat on the user by 2 stages.

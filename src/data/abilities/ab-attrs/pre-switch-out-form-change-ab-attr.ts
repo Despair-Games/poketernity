@@ -1,7 +1,7 @@
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import type { Pokemon } from "#app/field/pokemon";
+import { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 
 /**
  * Attribute for form changes that occur on switching out

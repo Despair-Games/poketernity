@@ -3,7 +3,7 @@ import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -52,6 +52,6 @@ describe("Items - Toxic orb", () => {
     expect(i18next.t).toHaveBeenCalledWith("statusEffect:toxic.obtainSource", expect.anything());
 
     expect(player.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
-    expect(player.status?.toxicTurnCount).toBe(0);
+    expect(player.toxicTurnCount).toBe(0);
   });
 });

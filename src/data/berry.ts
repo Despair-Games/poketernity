@@ -1,19 +1,19 @@
-import type { DoubleBerryEffectAbAttr } from "#app/data/abilities/ab-attrs/double-berry-effect-ab-attr";
-import type { PostItemLostAbAttr } from "#app/data/abilities/ab-attrs/post-item-lost-ab-attr";
-import type { ReduceBerryUseThresholdAbAttr } from "#app/data/abilities/ab-attrs/reduce-berry-use-threshold-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { getStatusEffectHealText } from "#app/data/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
+import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
+import type { ReduceBerryUseThresholdAbAttr } from "#abilities/reduce-berry-use-threshold-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getBerryName } from "#app/utils/berry-utils";
-import { NumberHolder, toDmgValue } from "#app/utils/common-utils";
-import { randSeedInt } from "#app/utils/random-utils";
+import { getStatusEffectHealText } from "#data/status-effect";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { HitResult } from "#enums/hit-result";
 import { Stat, type BattleStat } from "#enums/stat";
+import type { Pokemon } from "#field/pokemon";
+import { getBerryName } from "#utils/berry-utils";
+import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 export type BerryPredicate = (pokemon: Pokemon) => boolean;

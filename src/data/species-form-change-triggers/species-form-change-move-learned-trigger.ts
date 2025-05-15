@@ -1,6 +1,6 @@
-import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
-import type { Pokemon } from "#app/field/pokemon";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 
 export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigger {
   public move: MoveId;

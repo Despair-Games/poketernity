@@ -1,3 +1,7 @@
+import type { GameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
+import i18next from "#app/plugins/i18n";
+import { TurnCommandManager } from "#app/turn-command-manager";
 import {
   CHAMPION_WAVE,
   ELITE_FOUR_1_WAVE,
@@ -18,25 +22,8 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "#app/constants/wave-constants";
-import { getLevelForWaveFunc } from "#app/data/exp";
-import type { Move } from "#app/data/moves/move";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { allTrainerConfigs } from "#app/data/trainer-configs/all-trainer-configs";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { PlayerPokemon } from "#app/field/player-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import Trainer from "#app/field/trainer";
-import type { GameMode } from "#app/game-mode";
-import { globalScene } from "#app/global-scene";
-import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import i18next from "#app/plugins/i18n";
-import { settings } from "#app/system/settings/settings-manager";
-import { TurnCommandManager } from "#app/turn-command-manager";
-import { isBetween, NumberHolder } from "#app/utils/common-utils";
-import { randInt, randomString, randSeedInt, randSeedItem } from "#app/utils/random-utils";
-import { shiftCharCodes } from "#app/utils/string-utils";
+} from "#constants/wave-constants";
+import { getLevelForWaveFunc } from "#data/exp";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import { ModifierTier } from "#enums/modifier-tier";
@@ -48,6 +35,19 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import Trainer from "#field/trainer";
+import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
+import type { CustomModifierSettings } from "#modifier/modifier-type";
+import type { Move } from "#moves/move";
+import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { settings } from "#system/settings-manager";
+import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { isBetween, NumberHolder } from "#utils/common-utils";
+import { randInt, randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
+import { shiftCharCodes } from "#utils/string-utils";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;
@@ -251,7 +251,8 @@ export default class Battle {
       // Music is overridden for MEs during ME onInit()
       // Should not use any BGM overrides before swapping from DEFAULT mode
       return null;
-    } else if (
+    }
+    if (
       this.battleType === BattleType.TRAINER
       || this.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
@@ -259,7 +260,8 @@ export default class Battle {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
       return this.trainer?.getBattleBgm() ?? null;
-    } else if (this.gameMode.isClassic && isBetween(this.waveIndex, 195, 199)) {
+    }
+    if (this.gameMode.isClassic && isBetween(this.waveIndex, 195, 199)) {
       return "end_summit";
     }
     const wildOpponents = globalScene.getEnemyParty();

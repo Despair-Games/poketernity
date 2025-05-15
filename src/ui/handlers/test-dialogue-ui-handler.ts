@@ -1,10 +1,10 @@
-import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { isNil } from "#app/utils/common-utils";
 import { UiMode } from "#enums/ui-mode";
+import type { AutoCompleteUiHandler } from "#ui/autocomplete-ui-handler";
+import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
+import type { InputFieldConfig, ModalConfig } from "#ui/modal-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
-import type { AutoCompleteUiHandler } from "./autocomplete-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 export class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];
@@ -16,7 +16,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
   protected override setup() {
     super.setup();
 
-    const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
+    const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): any[] => {
       return Object.keys(object ?? {})
         .map((t, i) => {
           const value = Object.values(object)[i];
@@ -29,7 +29,8 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
             return flattenKeys(value, topKey ?? t, topKey ? (midleKey ? [...midleKey, t] : [t]) : undefined).filter(
               (t) => t.length > 0,
             );
-          } else if (typeof value === "string" || isNil(value)) {
+          }
+          if (typeof value === "string" || isNil(value)) {
             // we check for null or undefined here as per above - the typeof is still an object but the value is null so we need to exit out of this and pass the null key
 
             // Return in the format expected by i18next
@@ -42,7 +43,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     const keysInArrays = flattenKeys(i18next.getDataByLanguage(String(i18next.resolvedLanguage))).filter(
       (t) => t.length > 0,
     ); // Array of arrays
-    const keys = keysInArrays.flat(Infinity).map(String); // One array of string
+    const keys = keysInArrays.flat(Number.POSITIVE_INFINITY).map(String); // One array of string
     this.keys = keys;
   }
 

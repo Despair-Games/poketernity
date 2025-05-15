@@ -1,7 +1,7 @@
-import type { Move } from "#app/data/moves/move";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PostAttackAbAttr } from "./post-attack-ab-attr";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 
 /**
  * Ability attribute for Gorilla Tactics

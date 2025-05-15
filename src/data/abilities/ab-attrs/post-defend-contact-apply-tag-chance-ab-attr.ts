@@ -1,8 +1,8 @@
-import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
-import type { Pokemon } from "#app/field/pokemon";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { MoveFlags } from "#enums/move-flags";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 
 export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
   private readonly chance: number;
@@ -21,9 +21,8 @@ export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && pokemon.randSeedInt(100) < this.chance) {
       if (simulated) {
         return attacker.canAddTag(this.tagType);
-      } else {
-        return attacker.addTag(this.tagType, this.turnCount, move.id, attacker.id);
       }
+      return attacker.addTag(this.tagType, this.turnCount, move.id, attacker.id);
     }
 
     return false;

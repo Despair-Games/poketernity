@@ -1,16 +1,9 @@
-import type { EggOptions } from "#app/data/egg";
-import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import { getVoucherTypeIcon } from "#app/system/voucher";
 import { handleTutorial } from "#app/tutorial";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/constants/ui-constants";
-import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
-import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getEnumKeys, getEnumValues } from "#app/utils/common-utils";
-import { randSeedShuffle } from "#app/utils/random-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-utils";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import type { EggOptions } from "#data/egg";
+import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#data/egg";
 import { Button } from "#enums/buttons";
 import { EggTier } from "#enums/egg-type";
 import { GachaType } from "#enums/gacha-types";
@@ -18,11 +11,18 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
+import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import { getVoucherTypeIcon } from "#system/voucher";
+import { MessageUiHandler } from "#ui/message-ui-handler";
+import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
+import { addWindow } from "#ui/ui-theme";
+import { fixedNumber, getEnumKeys, getEnumValues } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
-import { MessageUiHandler } from "./message-ui-handler";
 
 /**
- * TODO: this should extend AbstractOptionSelectUiHandler
+ * TODO: This should extend (Base)OptionSelectUiHandler
  */
 export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
@@ -138,7 +138,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
       gachaInfoContainer.add(gachaUpLabel);
 
       switch (gachaType as GachaType) {
-        case GachaType.LEGENDARY:
+        case GachaType.LEGENDARY: {
           if (["de", "es-ES"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
@@ -151,6 +151,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
           gachaInfoContainer.add(pokemonIcon);
           break;
+        }
         case GachaType.MOVE:
           if (["de", "es-ES", "fr", "pt-BR"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
@@ -597,11 +598,12 @@ export class EggGachaUiHandler extends MessageUiHandler {
   updateGachaInfo(gachaType: GachaType): void {
     const infoContainer = this.gachaInfoContainers[gachaType];
     switch (gachaType as GachaType) {
-      case GachaType.LEGENDARY:
+      case GachaType.LEGENDARY: {
         const species = getPokemonSpecies(getLegendaryGachaSpeciesForTimestamp(new Date().getTime()));
         const pokemonIcon = infoContainer.getAt(1) as Phaser.GameObjects.Sprite;
         pokemonIcon.setTexture(species.getIconAtlasKey(), species.getIconId(false));
         break;
+      }
     }
   }
 

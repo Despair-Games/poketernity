@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { PokeballCounts } from "#app/battle-scene";
-import { Variant } from "#app/data/variant";
-import type { Arena } from "#app/field/arena";
-import type { ModifierOverride } from "#app/modifier/modifier-type";
+import { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -25,6 +22,8 @@ import { TrainerType } from "#enums/trainer-type";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
+import type { Arena } from "#field/arena";
+import type { ModifierOverride } from "#modifier/modifier-type";
 
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
@@ -171,9 +170,14 @@ class DefaultOverrides {
   readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly GENDER_OVERRIDE: Gender | null = null;
-  readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
+  readonly MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly SHINY_OVERRIDE: boolean | null = null;
   readonly VARIANT_OVERRIDE: Variant | null = null;
+  /**
+   * If equal to `ElementalType.UNKNOWN`, then ignore this override.
+   * Otherwise, override every player Pokemon's Tera type to be this type.
+   */
+  readonly TERA_TYPE_OVERRIDE: ElementalType = ElementalType.UNKNOWN;
 
   // --------------------------
   // ENEMY OVERRIDES
@@ -185,7 +189,7 @@ class DefaultOverrides {
   readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
-  readonly ENEMY_MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
+  readonly ENEMY_MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
   readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
@@ -204,6 +208,16 @@ class DefaultOverrides {
    * enemy's moveset with only status moves.
    */
   readonly ENEMY_DISABLE_SWITCHING_OVERRIDE: boolean = false;
+  /**
+   * If `true`, every enemy Pokemon Terastallizes on the first turn that it decides to use a move.
+   * If `false`, this override is ignored.
+   */
+  readonly FORCE_ENEMY_TERA_OVERRIDE: boolean = false;
+  /**
+   * If equal to `ElementalType.UNKNOWN`, then ignore this override.
+   * Otherwise, override every enemy Pokemon's Tera type to be this type.
+   */
+  readonly ENEMY_TERA_TYPE_OVERRIDE: ElementalType = ElementalType.UNKNOWN;
 
   // -------------
   // EGG OVERRIDES
