@@ -25,6 +25,7 @@
       "#api/*": ["./plugins/api/*.ts"],
       "#abilities/*": ["./data/abilities/ab-attrs/*.ts", "./data/abilities/*.ts"],
       "#animations/*": ["./data/animations/*.ts"],
+      "#arena-tags/*": ["./data/arena-tags/*.ts"],
       "#battler-tags/*": ["./data/battler-tags/utils/*.ts", "./data/battler-tags/*.ts"],
       "#biomes/*": ["./data/biomes/*.ts"],
       "#constants/*": ["./constants/*.ts"],

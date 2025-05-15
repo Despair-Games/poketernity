@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
+import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
-import type { EntryHazardTag } from "#data/arena-tag";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
