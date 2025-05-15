@@ -8,6 +8,10 @@ import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import {
+  applySessionVersionMigration,
+  applySystemVersionMigration,
+} from "#app/system/version_migration/version-converter";
+import {
   APP_ABBREVIATION,
   BYPASS_LOGIN,
   MAPPING_CONFIG_LS_KEY,
@@ -66,7 +70,6 @@ import PersistentModifierData from "#system/modifier-data";
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
-import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
