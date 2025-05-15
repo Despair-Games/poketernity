@@ -9,7 +9,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { NumberHolder } from "#utils/common-utils";
+import { clamp, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -118,7 +118,7 @@ export class AttemptRunPhase extends PokemonPhase {
     const escapeSlope = (maxChance - minChance) / speedCap;
 
     // This will calculate the escape chance given all of the above and clamp it to the range of [`minChance`, `maxChance`]
-    escapeChance.value = Phaser.Math.Clamp(
+    escapeChance.value = clamp(
       Math.round(escapeSlope * speedRatio + minChance + escapeBonus * globalScene.currentBattle.escapeAttempts++),
       minChance,
       maxChance,

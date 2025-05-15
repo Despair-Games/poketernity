@@ -31,7 +31,7 @@ import type { SessionSaveData } from "#types/SessionData";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
-import { isNil } from "#utils/common-utils";
+import { clamp, isNil } from "#utils/common-utils";
 import { formatLargeNumberFixedDigits, formatMoney, getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
@@ -594,7 +594,7 @@ export class RunInfoUiHandler extends UiHandler {
     runInfoTextContainer.add(runInfoText);
 
     // Luck
-    const luckValue = Phaser.Math.Clamp(
+    const luckValue = clamp(
       this.runInfo.party
         .map((p) => p.toPokemon().getLuck())
         .reduce((total: number, value: number) => (total += value), 0),

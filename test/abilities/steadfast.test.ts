@@ -1,3 +1,4 @@
+import { IGNORING_ABILITIES } from "#constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -5,6 +6,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/game-manager";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -137,20 +139,12 @@ describe("Abilities - Steadfast", () => {
     // Item not yet implemented
   });
 
-  it.each([
-    {
-      abilityName: "Mold Breaker",
-      abilityId: AbilityId.MOLD_BREAKER,
-    },
-    {
-      abilityName: "Teravolt",
-      abilityId: AbilityId.TERAVOLT,
-    },
-    {
-      abilityName: "Turboblaze",
-      abilityId: AbilityId.TURBOBLAZE,
-    },
-  ])("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
+  it.each(
+    IGNORING_ABILITIES.map((abilityId) => ({
+      abilityName: capitalizeString(AbilityId[abilityId], "_", false, true),
+      abilityId,
+    })),
+  )("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
     await classicMode.startBattle([SpeciesId.FEEBAS]);

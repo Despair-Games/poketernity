@@ -1,3 +1,4 @@
+import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { BattleCommand } from "#enums/battle-command";
@@ -17,7 +18,11 @@ import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper"
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import { coerceArray } from "#utils/common-utils";
-import { vi } from "vitest";
+import chalk from "chalk";
+import { expect, vi } from "vitest";
+
+// Chalk must be set to level 3 when used with Vitest in order to properly color the console output
+chalk.level = 3;
 
 /**
  * Helper to handle a Pokemon's move
@@ -29,8 +34,13 @@ export class MoveHelper extends GameManagerHelper {
    */
   public async forceHit(): Promise<void> {
     await this.game.phaseInterceptor.to("MoveEffectPhase", false);
-    const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
-    vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy").mockReturnValue(-1);
+    const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase<MoveEffectPhase>();
+    expect(moveEffectPhase).toBeDefined();
+    const move = moveEffectPhase!.move.getMove();
+    vi.spyOn(move, "calculateBattleAccuracy").mockImplementation((user, _target, _simulated) => {
+      console.log(chalk.gray(`- Forcing hit on ${getPokemonNameWithAffix(user)}'s ${move.name}! - `));
+      return -1;
+    });
   }
 
   /**
