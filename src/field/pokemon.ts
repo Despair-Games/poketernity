@@ -1,8 +1,16 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type Battle from "#app/battle";
+import type BattleScene from "#app/battle-scene";
+import type { FaintPhase } from "#phases/faint-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { AbAttr } from "#abilities/ab-attr";
 import type { Ability } from "#abilities/ability";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
-import type { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
+import { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
 import type { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
 import type { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import type { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
@@ -36,100 +44,132 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
-import type { timedEventManager } from "#app/timed-event-manager";
+import { timedEventManager } from "#app/timed-event-manager";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
-import type { BattlerTag } from "#battler-tags/battler-tag";
+import { BattlerTag } from "#battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#battler-tags/crit-boost-stackable-tag";
 import { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
-import type { ExposedTag } from "#battler-tags/exposed-tag";
+import { ExposedTag } from "#battler-tags/exposed-tag";
 import { getBattlerTag } from "#battler-tags/get-battler-tag";
-import type { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
+import { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
-import type { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
+import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
 import { PowerTrickTag } from "#battler-tags/power-trick-tag";
 import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
+import Overrides from "#app/overrides";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
-import { CRIT_BOOST_BATTLER_TAG_TYPES, type SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES, EXPOSED_TAG_TYPES } from "#constants/battler-tag-constants";
-import { MIN_STAT_STAGE, MAX_STAT_STAGE, DYNAMAX_DAMAGE_TAKEN_FACTOR, DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION } from "#constants/game-constants";
-import type { CustomPokemonData } from "#data/custom-pokemon-data";
-import type { allMoves, allAbilities } from "#data/data-lists";
-import type { DexAttr } from "#data/dex-attributes";
-import type { speciesEggMoves } from "#data/egg-moves";
-import type { getLevelTotalExp } from "#data/exp";
+import {
+  CRIT_BOOST_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+  EXPOSED_TAG_TYPES,
+} from "#constants/battler-tag-constants";
+import {
+  MIN_STAT_STAGE,
+  MAX_STAT_STAGE,
+  DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  DEFAULT_MIN_SLEEP_DURATION,
+  DEFAULT_MAX_SLEEP_DURATION,
+} from "#constants/game-constants";
+import { CustomPokemonData } from "#data/custom-pokemon-data";
+import { allMoves, allAbilities } from "#data/data-lists";
+import { DexAttr } from "#data/dex-attributes";
+import { speciesEggMoves } from "#data/egg-moves";
+import { getLevelTotalExp } from "#data/exp";
 import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#data/pokemon-evolutions";
 import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
-import { type LevelMoves, type EVOLVE_MOVE, RELEARN_MOVE } from "#data/pokemon-level-moves";
-import type { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
+import { type LevelMoves, EVOLVE_MOVE, RELEARN_MOVE } from "#data/pokemon-level-moves";
+import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
-import { BASE_HIDDEN_ABILITY_CHANCE, type BASE_SHINY_CHANCE, SHINY_VARIANT_CHANCE, SHINY_EPIC_CHANCE } from "#data/rates";
+import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_VARIANT_CHANCE, SHINY_EPIC_CHANCE } from "#data/rates";
 import { getNonVolatileStatusEffects } from "#data/status-effect";
-import type { tmSpecies, tmPoolTiers } from "#data/tms";
-import type { getTypeRgb, TypeDamageMultiplier, getTypeDamageMultiplier } from "#data/type";
-import type { Variant, variantData } from "#data/variant";
+import { tmSpecies, tmPoolTiers } from "#data/tms";
+import { getTypeRgb, type TypeDamageMultiplier, getTypeDamageMultiplier } from "#data/type";
+import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { AbilityApplyMode } from "#enums/ability-apply-mode";
-import type { AbilityId } from "#enums/ability-id";
-import type { ArenaTagSide } from "#enums/arena-tag-side";
-import type { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
-import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { BiomeId } from "#enums/biome-id";
-import type { ChallengeType } from "#enums/challenge-type";
-import type { ElementalType } from "#enums/elemental-type";
-import type { EventModifierType } from "#enums/event-modifier-type";
-import type { FieldPosition } from "#enums/field-position";
-import type { Gender } from "#enums/gender";
-import type { HitResult } from "#enums/hit-result";
-import type { ModifierTier } from "#enums/modifier-tier";
-import type { MoveCategory } from "#enums/move-category";
-import type { MoveId } from "#enums/move-id";
-import type { Nature } from "#enums/nature";
-import type { PhaseId } from "#enums/phase-id";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { BiomeId } from "#enums/biome-id";
+import { ChallengeType } from "#enums/challenge-type";
+import { ElementalType } from "#enums/elemental-type";
+import { EventModifierType } from "#enums/event-modifier-type";
+import { FieldPosition } from "#enums/field-position";
+import { Gender } from "#enums/gender";
+import { HitResult } from "#enums/hit-result";
+import { ModifierTier } from "#enums/modifier-tier";
+import { MoveCategory } from "#enums/move-category";
+import { MoveId } from "#enums/move-id";
+import { Nature } from "#enums/nature";
+import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import type { SpeciesFormKey } from "#enums/species-form-key";
-import type { SpeciesId } from "#enums/species-id";
-import { type PermanentStat, type BattleStat, type EffectiveStat, type Stat, PERMANENT_STATS, BATTLE_STATS } from "#enums/stat";
-import type { StatusEffect } from "#enums/status-effect";
-import type { TerrainType } from "#enums/terrain-type";
-import type { WeatherType } from "#enums/weather-type";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
+import {
+  type PermanentStat,
+  type BattleStat,
+  type EffectiveStat,
+  Stat,
+  PERMANENT_STATS,
+  BATTLE_STATS,
+} from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
+import { WeatherType } from "#enums/weather-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
-import type { PokemonSummonData } from "#field/pokemon-summon-data";
+import { PokemonMove } from "#field/pokemon-move";
+import { PokemonSummonData } from "#field/pokemon-summon-data";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 import { SpeciesFormChangeStatusEffectTrigger } from "#form-change-triggers/species-form-change-status-effect-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
-import type { pokemonEvolutions } from "#init/init-pokemon-evolutions";
-import { HiddenAbilityRateBoosterModifier, type PokemonHeldItemModifier, TempCritBoosterModifier, StatBoosterModifier, type PokemonIncrementingStatModifier, PokemonNatureWeightModifier, PokemonBaseStatTotalModifier, PokemonBaseStatFlatModifier, BaseStatModifier, type ShinyRateBoosterModifier, type TempStatStageBoosterModifier, SurviveDamageModifier } from "#modifier/modifier";
+import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
+import {
+  HiddenAbilityRateBoosterModifier,
+  type PokemonHeldItemModifier,
+  PokemonIncrementingStatModifier,
+  TempCritBoosterModifier,
+  StatBoosterModifier,
+  PokemonNatureWeightModifier,
+  PokemonBaseStatTotalModifier,
+  PokemonBaseStatFlatModifier,
+  BaseStatModifier,
+  ShinyRateBoosterModifier,
+  TempStatStageBoosterModifier,
+  SurviveDamageModifier,
+} from "#modifier/modifier";
 import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { DoubleDamageToMaxAttr } from "#moves/double-damage-to-max-attr";
-import type { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { HighCritAttr } from "#moves/high-crit-attr";
-import type { HitsTagAttr } from "#moves/hits-tag-attr";
-import type { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages-attr";
+import { HitsTagAttr } from "#moves/hits-tag-attr";
+import { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages-attr";
 import { IgnoreWeatherTypeDebuffAttr } from "#moves/ignore-weather-type-debuff-attr";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
 import { type Move, AttackMove, getMoveTargets } from "#moves/move";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
-import type { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import { RechargeAttr } from "#moves/recharge-attr";
 import { RespectAttackTypeImmunityAttr } from "#moves/respect-attack-type-immunity-attr";
-import type { SacrificialAttr } from "#moves/sacrificial-attr";
+import { SacrificialAttr } from "#moves/sacrificial-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
-import type { TypelessAttr } from "#moves/typeless-attr";
+import { TypelessAttr } from "#moves/typeless-attr";
 import { VariableAtkAttr } from "#moves/variable-atk-attr";
 import { VariableDefAttr } from "#moves/variable-def-attr";
 import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
@@ -150,12 +190,22 @@ import type { PokemonWaveData } from "#types/PokemonWaveData";
 import type { Status } from "#types/Status";
 import type { TurnMove } from "#types/TurnMove";
 import type { BattleInfo } from "#ui/battle-info";
-import type { applyChallenges } from "#utils/challenge-utils";
-import { type NumberHolder, type BooleanHolder, type clamp, getEnumValues, type coerceArray, type isNil, calcAccuracyMultiplier, type toDmgValue, type fixedNumber } from "#utils/common-utils";
+import { applyChallenges } from "#utils/challenge-utils";
+import {
+  NumberHolder,
+  BooleanHolder,
+  clamp,
+  getEnumValues,
+  coerceArray,
+  isNil,
+  calcAccuracyMultiplier,
+  toDmgValue,
+  fixedNumber,
+} from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
-import type { applyMoveAttrs } from "#utils/move-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
 import { getIvsFromId, getPokemonSpeciesForm, getPokemonSpecies } from "#utils/pokemon-utils";
-import type { randSeedInt } from "#utils/random-utils";
+import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -1414,13 +1464,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const { waveIndex } = globalScene.currentBattle;
     if (waveIndex <= 20) {
       return 40;
-    } else if (waveIndex <= 40) {
-      return 60;
-    } else if (waveIndex <= 60) {
-      return 80;
-    } else {
-      return 90;
     }
+    if (waveIndex <= 40) {
+      return 60;
+    }
+    if (waveIndex <= 60) {
+      return 80;
+    }
+    return 90;
   }
 
   /**
@@ -2140,7 +2191,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (damage >= opponent.hp) {
       return this.getAttackScoreOnKnockOut(move);
-    } else if (damage <= 0) {
+    }
+    if (damage <= 0) {
       return -1;
     }
 
@@ -2148,16 +2200,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (damagePct >= 80) {
       return 2;
-    } else {
-      const minAttackScore = Math.floor(damagePct / 40);
-      const tierUpChance = (damagePct % 40) * (100 / 40);
-
-      if (this.randSeedInt(100) < tierUpChance) {
-        return minAttackScore + 1;
-      } else {
-        return minAttackScore;
-      }
     }
+    const minAttackScore = Math.floor(damagePct / 40);
+    const tierUpChance = (damagePct % 40) * (100 / 40);
+
+    if (this.randSeedInt(100) < tierUpChance) {
+      return minAttackScore + 1;
+    }
+    return minAttackScore;
   }
 
   /**
@@ -2177,12 +2227,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (damage >= opponent.hp) {
       return this.getAttackScoreOnKnockOut(move);
-    } else if (damage <= 0) {
-      return -1;
-    } else {
-      const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
-      return damagePct / 40;
     }
+    if (damage <= 0) {
+      return -1;
+    }
+    const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
+    return damagePct / 40;
   }
 
   /**
@@ -2194,9 +2244,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   protected getAttackScoreOnKnockOut(move: Move): number {
     if (move.getPriority(this) > 0) {
       return 6;
-    } else {
-      return 4;
     }
+    return 4;
   }
 
   /**
@@ -2225,15 +2274,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (this.isActive(true)) {
       if (eas >= 4 && (userCanOutspeed || oppEas < eas)) {
-        return Infinity;
-      } else if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
-        return 0;
-      } else {
-        return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
+        return Number.POSITIVE_INFINITY;
       }
-    } else {
-      return Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
+      if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
+        return 0;
+      }
+      return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
     }
+    return Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
   }
 
   /**

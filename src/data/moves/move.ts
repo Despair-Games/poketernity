@@ -57,7 +57,7 @@ import type { nil } from "#types/nil";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
-import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, COMMANDING_TARGET_PENALTY } from "#app/constants/ai-constants";
+import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, COMMANDING_TARGET_PENALTY } from "#constants/ai-constants";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { MultiHitPowerIncrementAttr } from "#moves/multi-hit-power-increment-attr";
 
@@ -822,23 +822,21 @@ export abstract class Move implements Localizable {
 
       if (allyTargetAttrs.length === 0) {
         return ALLY_TARGET_PENALTY;
-      } else {
-        return allyTargetAttrs
-          .map((attr) => attr.getEffectScore(user, target, this))
-          .reduce((total, score) => total + score, 0);
       }
-    } else {
-      let attrs: MoveAttr[] = this.attrs;
-      if (isKnockOut) {
-        attrs = attrs.filter((attr) => attr.appliesScoreOnKO);
-      }
-
-      if (isFail) {
-        attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
-      }
-
-      return attrs.map((attr) => attr.getEffectScore(user, target, this)).reduce((total, score) => total + score, 0);
+      return allyTargetAttrs
+        .map((attr) => attr.getEffectScore(user, target, this))
+        .reduce((total, score) => total + score, 0);
     }
+    let attrs: MoveAttr[] = this.attrs;
+    if (isKnockOut) {
+      attrs = attrs.filter((attr) => attr.appliesScoreOnKO);
+    }
+
+    if (isFail) {
+      attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
+    }
+
+    return attrs.map((attr) => attr.getEffectScore(user, target, this)).reduce((total, score) => total + score, 0);
   }
 
   /**
@@ -919,13 +917,14 @@ export abstract class Move implements Localizable {
     const accuracy = this.calculateBattleAccuracy(user, target, true);
     if (accuracy < 0 || accuracy >= 80) {
       return 0;
-    } else if (accuracy >= 70) {
-      return -1;
-    } else if (accuracy >= 50) {
-      return -2;
-    } else {
-      return -3;
     }
+    if (accuracy >= 70) {
+      return -1;
+    }
+    if (accuracy >= 50) {
+      return -2;
+    }
+    return -3;
   }
 
   /**
@@ -1045,7 +1044,8 @@ export abstract class Move implements Localizable {
        * their average damage output is ~4.7x the first strike.
        */
       return 5;
-    } else if (this.hasAttr(MultiHitAttr)) {
+    }
+    if (this.hasAttr(MultiHitAttr)) {
       const multiHitType = this.getAttrs(MultiHitAttr)[0].getMultiHitType();
       switch (multiHitType) {
         case MultiHitType._2:
@@ -1059,11 +1059,11 @@ export abstract class Move implements Localizable {
         case MultiHitType.BEAT_UP:
           return user.getParty().length;
       }
-    } else if (this.canBeMultiStrikeEnhanced(user) && user.hasAbility(AbilityId.PARENTAL_BOND)) {
-      return 1.25;
-    } else {
-      return 1;
     }
+    if (this.canBeMultiStrikeEnhanced(user) && user.hasAbility(AbilityId.PARENTAL_BOND)) {
+      return 1.25;
+    }
+    return 1;
   }
 
   getPriority(user: Pokemon, simulated: boolean = true) {

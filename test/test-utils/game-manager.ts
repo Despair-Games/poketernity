@@ -32,6 +32,7 @@ import type { Pokemon } from "#field/pokemon";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { EncounterPhase } from "#phases/encounter-phase";
+import type { EnemyCommandPhase } from "#phases/enemy-command-phase";
 import { FaintPhase } from "#phases/faint-phase";
 import { LoginPhase } from "#phases/login-phase";
 import { SelectStarterPhase } from "#phases/select-starter-phase";
@@ -62,7 +63,6 @@ import { isNil } from "#utils/common-utils";
 import { AES, enc } from "crypto-js";
 import fs from "node:fs";
 import { expect, vi } from "vitest";
-import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -372,7 +372,8 @@ export class GameManager {
 
     // Wait for the next EnemyCommandPhase to start
     await this.phaseInterceptor.to("EnemyCommandPhase", false);
-    const enemy = this.scene.getEnemyField()[(this.scene.phaseManager.getCurrentPhase() as EnemyCommandPhase).fieldIndex];
+    const enemy =
+      this.scene.getEnemyField()[(this.scene.phaseManager.getCurrentPhase() as EnemyCommandPhase).fieldIndex];
 
     vi.spyOn(enemy, "getNextCommand").mockReturnValueOnce({
       pokemon: enemy,

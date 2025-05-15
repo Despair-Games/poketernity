@@ -349,7 +349,7 @@ export class EnemyPokemon extends Pokemon {
 
     // If this Pokemon can safely KO at least 1 opponent, it gains an average MUS
     // of Infinity and should never switch out.
-    if (matchupScore === Infinity) {
+    if (matchupScore === Number.POSITIVE_INFINITY) {
       return undefined;
     }
 
@@ -367,9 +367,8 @@ export class EnemyPokemon extends Pokemon {
         cursor: candIndex,
         args: [false],
       };
-    } else {
-      return undefined;
     }
+    return undefined;
   }
 
   /**
@@ -392,10 +391,9 @@ export class EnemyPokemon extends Pokemon {
           type: ElementalType.UNKNOWN,
           ignorePP: queuedMove.ignorePP,
         };
-      } else {
-        this.getMoveQueue().shift();
-        return this.getNextMove();
       }
+      this.getMoveQueue().shift();
+      return this.getNextMove();
     }
 
     const movePool = this.getMoveset().filter((m) => m.isUsable(this));
@@ -452,7 +450,8 @@ export class EnemyPokemon extends Pokemon {
         targets: [BattlerIndex.ATTACKER],
         score,
       };
-    } else if (move.isFieldTarget()) {
+    }
+    if (move.isFieldTarget()) {
       /**
        * Field-targeting effects are internally self-targeted during
        * score evaluation.
@@ -500,7 +499,8 @@ export class EnemyPokemon extends Pokemon {
         targets: targets,
         score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
       };
-    } else if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
+    }
+    if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
       /**
        * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
        * but calculate score based on the average move score between all legal targets
@@ -515,21 +515,20 @@ export class EnemyPokemon extends Pokemon {
         targets: targets,
         score: averageScore,
       };
-    } else {
-      /**
-       * Single-target moves form an optimal move action with the highest-scoring
-       * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
-       * that a target is randomly selected from the highest-scoring indexes in
-       * the event of a tie.
-       */
-      const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
-
-      return {
-        moveId: move.id,
-        targets: [optTarget[0]],
-        score: optTarget[1],
-      };
     }
+    /**
+     * Single-target moves form an optimal move action with the highest-scoring
+     * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
+     * that a target is randomly selected from the highest-scoring indexes in
+     * the event of a tie.
+     */
+    const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
+
+    return {
+      moveId: move.id,
+      targets: [optTarget[0]],
+      score: optTarget[1],
+    };
   }
 
   /**

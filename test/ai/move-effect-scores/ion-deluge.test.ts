@@ -1,9 +1,9 @@
-import { ELECTRIC_IMMUNE_ABILITIES } from "#app/constants/ability-constants";
-import { capitalizeString } from "#app/utils/string-utils";
+import { ELECTRIC_IMMUNE_ABILITIES } from "#constants/ability-constants";
+import { capitalizeString } from "#utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { GameManager } from "#test/test-utils/gameManager";
+import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Move Effect Scores - Ion Deluge", () => {

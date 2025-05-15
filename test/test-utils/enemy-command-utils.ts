@@ -1,7 +1,7 @@
 import type BattleScene from "#app/battle-scene";
-import { allMoves } from "#app/data/data-lists";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import { randSeedInt } from "#app/utils/random-utils";
+import { allMoves } from "#data/data-lists";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import { randSeedInt } from "#utils/random-utils";
 import type { MoveId } from "#enums/move-id";
 import { vi } from "vitest";
 
@@ -47,7 +47,7 @@ export function getEnemyMoveChoices(pokemon: EnemyPokemon): MoveChoiceSet {
   }
 
   for (const [key, count] of Object.entries(moveChoices)) {
-    const moveId = parseInt(key) as MoveId;
+    const moveId = Number.parseInt(key) as MoveId;
     console.log(`Move: ${allMoves.get(moveId).name}   Count: ${count} (${Math.round((count / NUM_TRIALS) * 100)}%)`);
   }
 

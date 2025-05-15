@@ -1,9 +1,9 @@
-import { ELECTRIC_IMMUNE_ABILITIES } from "#app/constants/ability-constants";
-import { MINOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
-import type { Move } from "#app/data/moves/move";
-import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { ELECTRIC_IMMUNE_ABILITIES } from "#constants/ability-constants";
+import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";

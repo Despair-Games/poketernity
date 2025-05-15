@@ -1,10 +1,10 @@
-import type { Move } from "#app/data/moves/move";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
+import type { Move } from "#moves/move";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { coerceArray } from "#app/utils/common-utils";
+import { coerceArray } from "#utils/common-utils";
 import { MoveId } from "#enums/move-id";
 import { getEnemyMoveChoices } from "#test/test-utils/enemy-command-utils";
-import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
@@ -46,7 +46,7 @@ export function toNeverSelectMoveMatcher(
   const moveChoices = getEnemyMoveChoices(received);
   const actualUnusedMoveIds = Object.entries(moveChoices)
     .filter(([, count]) => count === 0)
-    .map(([moveId]) => parseInt(moveId));
+    .map(([moveId]) => Number.parseInt(moveId));
 
   const errorMoveIds = expectedUnusedMoveIds.filter((mvId) => !actualUnusedMoveIds.includes(mvId));
   const invErrorMoveIds = expectedUnusedMoveIds.filter((mvId) => !errorMoveIds.includes(mvId));

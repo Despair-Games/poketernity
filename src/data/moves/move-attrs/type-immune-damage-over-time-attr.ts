@@ -1,8 +1,8 @@
-import { MINOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
-import type { Move } from "#app/data/moves/move";
-import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 
@@ -13,10 +13,6 @@ import { ElementalType } from "#enums/elemental-type";
  * @extends AddArenaTagAttr
  */
 export class TypeImmuneDamageOverTimeAttr extends AddArenaTagAttr {
-  constructor(tagType: ArenaTagType) {
-    super(tagType);
-  }
-
   /** Grants (+1) for each opponent that is not type-immune to the effect */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return (

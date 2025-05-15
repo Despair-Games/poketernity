@@ -1,8 +1,8 @@
-import { BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT } from "#app/constants/ai-constants";
-import type { Move } from "#app/data/moves/move";
-import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

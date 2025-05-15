@@ -1,9 +1,9 @@
-import { MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS } from "#app/constants/ai-constants";
-import type { Move } from "#app/data/moves/move";
-import { AddArenaTagAttr } from "#app/data/moves/move-attrs/add-arena-tag-attr";
-import type { EnemyPokemon } from "#app/field/enemy-pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { isNil } from "#app/utils/common-utils";
+import { MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import { isNil } from "#utils/common-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
@@ -32,7 +32,7 @@ export class ScreenAttr extends AddArenaTagAttr {
       return 0;
     }
 
-    const firstTurnBonus = user.battleSummonData.waveTurnCount <= 1 ? this.getRandomScore(user, 50) : 0;
+    const firstTurnBonus = user.summonData.waveTurnCount <= 1 ? this.getRandomScore(user, 50) : 0;
 
     return baseScore + firstTurnBonus;
   }

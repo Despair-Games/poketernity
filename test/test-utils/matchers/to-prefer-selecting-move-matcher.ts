@@ -1,7 +1,7 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
 import { getEnemyMoveChoices } from "#test/test-utils/enemy-command-utils";
-import { isPokemonInstance, receivedStr } from "#test/test-utils/testUtils";
+import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
@@ -26,7 +26,7 @@ export function toPreferSelectingMoveMatcher(
   const moveChoices = getEnemyMoveChoices(received);
   const preferredMoveId = Object.entries(moveChoices).reduce((prefMoveId, [moveId, count]) => {
     if (count > (moveChoices[prefMoveId] ?? 0)) {
-      return parseInt(moveId);
+      return Number.parseInt(moveId);
     }
     return prefMoveId;
   }, MoveId.NONE);

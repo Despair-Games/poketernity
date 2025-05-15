@@ -44,7 +44,7 @@ export default tseslint.config(
         },
       ],
       "no-relative-import-paths/no-relative-import-paths": [
-        // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
+        // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#moves/move-attrs/call-move-attr")
         "error",
         { rootDir: "src", prefix: "#app" },
       ],
