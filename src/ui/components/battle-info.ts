@@ -17,7 +17,7 @@ import { settings } from "#system/settings-manager";
 import { BattleFlyout } from "#ui/battle-flyout";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber } from "#utils/common-utils";
+import { clamp, fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {
@@ -653,7 +653,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       // Plays the animation of the Pokemon's HP bar increasing or decreasing.
       const updatePokemonHp = () => {
-        let duration = !instant ? Phaser.Math.Clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
+        let duration = !instant ? clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
         const speed = settings.general.hpBarSpeed;
         if (speed) {
           duration = speed >= 3 ? 0 : duration / Math.pow(2, speed);

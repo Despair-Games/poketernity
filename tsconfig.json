@@ -23,13 +23,11 @@
     "baseUrl": "./src",
     "paths": {
       "#api/*": ["./plugins/api/*.ts"],
-      "#app/*": ["./*.ts"],
       "#abilities/*": ["./data/abilities/ab-attrs/*.ts", "./data/abilities/*.ts"],
       "#animations/*": ["./data/animations/*.ts"],
       "#battler-tags/*": ["./data/battler-tags/utils/*.ts", "./data/battler-tags/*.ts"],
       "#biomes/*": ["./data/biomes/*.ts"],
       "#constants/*": ["./constants/*.ts"],
-      "#data/*": ["./data/*.ts"],
       "#enums/*": ["./enums/*.ts"],
       "#events/*": ["./events/*.ts"],
       "#field/*": ["./field/*.ts"],
@@ -66,7 +64,9 @@
         "./ui/text/*.ts",
         "./ui/*.ts"
       ],
-      "#utils/*": ["./utils/*.ts"]
+      "#utils/*": ["./utils/*.ts"],
+      "#data/*": ["./data/*.ts"],
+      "#app/*": ["./*.ts"],
     },
     "outDir": "./build",
     "noEmit": true

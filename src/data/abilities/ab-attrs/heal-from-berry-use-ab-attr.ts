@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import { toDmgValue } from "#utils/common-utils";
+import { clamp, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -20,7 +20,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
     // Clamp healPercent so its between [0,1].
-    this.healPercent = Phaser.Math.Clamp(healPercent, 0, 1);
+    this.healPercent = clamp(healPercent, 0, 1);
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

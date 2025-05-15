@@ -150,7 +150,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, fixedNumber, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, clamp, fixedNumber, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
@@ -984,7 +984,7 @@ export default class BattleScene extends SceneBase {
       ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
     if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => Phaser.Math.Clamp(iv, IV_MIN, IV_MAX));
+      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => clamp(iv, IV_MIN, IV_MAX));
     }
 
     pokemon.init();
