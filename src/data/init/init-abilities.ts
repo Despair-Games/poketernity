@@ -865,7 +865,7 @@ export function initAbilities() {
     new Ability(AbilityId.PROTEAN, 6)
       .attr(PokemonTypeChangeAbAttr),
     new Ability(AbilityId.FUR_COAT, 6)
-      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target)
+      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target) // Doesn't boost defense on self inflicted confusion damage
       .ignorable(),
     new Ability(AbilityId.MAGICIAN, 6)
       .attr(PostAttackStealHeldItemAbAttr),
