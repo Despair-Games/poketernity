@@ -181,7 +181,11 @@ export function coerceArray<T>(input: T | T[]): T[] {
  * @returns The clamped value, between `min` and `max`
  */
 export function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
+  if (min > max) {
+    console.error(`Min (${min}) > max (${max}) in clamp function!`);
+    max = min;
+  }
+  return Math.max(min, Math.min(max, value));
 }
 
 /**
