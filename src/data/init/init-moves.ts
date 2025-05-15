@@ -1,3 +1,4 @@
+import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
@@ -5,7 +6,6 @@ import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { allMoves } from "#data/data-lists";
-import { getNonVolatileStatusEffects } from "#data/status-effect";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -2581,7 +2581,7 @@ export function initMoves() {
         return target.hasNonVolatileStatusEffect(false, true);
       })
       .attr(HealAttr, 0.5)
-      .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
+      .attr(HealStatusEffectAttr, false, [...NON_VOLATILE_STATUS_EFFECTS])
       .triageMove()
       .bounceable(),
     new AttackMove(MoveId.REVELATION_DANCE, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 15, -1, 0, 7)
@@ -3025,7 +3025,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN),
     new StatusMove(MoveId.JUNGLE_HEALING, ElementalType.GRASS, -1, 10, -1, 0, 8)
       .attr(HealAttr, 0.25, true, false)
-      .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
+      .attr(HealStatusEffectAttr, false, [...NON_VOLATILE_STATUS_EFFECTS])
       .triageMove()
       .snatchable() // Custom
       .target(MoveTarget.USER_AND_ALLIES),
@@ -3135,7 +3135,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.LUNAR_BLESSING, ElementalType.PSYCHIC, -1, 5, -1, 0, 8)
       .attr(HealAttr, 0.25, true, false)
-      .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
+      .attr(HealStatusEffectAttr, false, [...NON_VOLATILE_STATUS_EFFECTS])
       .target(MoveTarget.USER_AND_ALLIES)
       .triageMove()
       .snatchable(), // Custom
@@ -3218,7 +3218,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(MoveId.G_MAX_SWEETNESS, ElementalType.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.APPLETUN)
-      .attr(HealStatusEffectAttr, true, getNonVolatileStatusEffects()),
+      .attr(HealStatusEffectAttr, true, [...NON_VOLATILE_STATUS_EFFECTS]),
     new AttackMove(MoveId.G_MAX_SMITE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.HATTERENE)
       .attr(ConfuseAttr),

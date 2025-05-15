@@ -1,3 +1,4 @@
+import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { StatusEffect } from "#enums/status-effect";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
@@ -86,25 +87,11 @@ export function getStatusEffectCatchRateMultiplier(statusEffect: StatusEffect): 
 }
 
 /**
- * Gets all non volatile status effects
- * @returns A list containing all non volatile status effects
- */
-export function getNonVolatileStatusEffects(): StatusEffect[] {
-  return [
-    StatusEffect.POISON,
-    StatusEffect.TOXIC,
-    StatusEffect.PARALYSIS,
-    StatusEffect.SLEEP,
-    StatusEffect.FREEZE,
-    StatusEffect.BURN,
-  ];
-}
-
-/**
- * Returns whether a statuss effect is non volatile.
+ * Returns whether a status effect is non volatile.
  * Non-volatile status condition is a status that remains after being switched out.
  * @param status The status to check
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status | Non-volatile status conditions - Bulbapedia}
  */
 export function isNonVolatileStatusEffect(status: StatusEffect): boolean {
-  return getNonVolatileStatusEffects().includes(status);
+  return NON_VOLATILE_STATUS_EFFECTS.includes(status);
 }

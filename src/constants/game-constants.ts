@@ -1,11 +1,11 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { StatusEffect } from "#enums/status-effect";
 import type { SystemSaveData } from "#types/SystemData";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { StatusEffect } from "#enums/status-effect";
 
 /** Max value for an integer attribute in {@linkcode SystemSaveData} */
 export const MAX_INT_ATTR_VALUE = 0x80000000;
@@ -87,3 +87,13 @@ export const DEFAULT_MIN_SLEEP_DURATION = 2;
  * Note: This equates to `3` turns of sleep, subtract `1` from this value to get the actual duration.
  */
 export const DEFAULT_MAX_SLEEP_DURATION = 4;
+
+/** A list of all non-volatile status effects. @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status | Non-volatile status conditions - Bulbapedia} */
+export const NON_VOLATILE_STATUS_EFFECTS = Object.freeze([
+  StatusEffect.POISON,
+  StatusEffect.TOXIC,
+  StatusEffect.PARALYSIS,
+  StatusEffect.SLEEP,
+  StatusEffect.FREEZE,
+  StatusEffect.BURN,
+]);
