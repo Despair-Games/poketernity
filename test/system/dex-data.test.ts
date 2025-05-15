@@ -52,7 +52,6 @@ describe("Dex Data", () => {
 
       // Starters get all neutral natures unlocked
       const unlockedNatures = gameData.getNaturesForAttr(starterData.natureAttr);
-      expect(unlockedNatures.length).toBe(neutralNatures.length);
       expect(unlockedNatures).toEqual(neutralNatures);
 
       expect(dexData.seenCount).toBe(0);

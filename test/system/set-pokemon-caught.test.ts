@@ -63,7 +63,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(dexData.caughtCount).toBe(1);
   });
 
-  it("should update data but not stats of rental for already caught Pokemon", async () => {
+  it("should update dex data but not game statisticss for rental Pokemon of already caught species", async () => {
     await game.scene.initStarterColors();
     expect(gameData.gameStats.pokemonCaught).toBe(0);
 
