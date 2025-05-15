@@ -13,7 +13,7 @@ import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
 import type { MagicCoatTag } from "#battler-tags/magic-coat-tag";
 import type { SnatchingTag } from "#battler-tags/snatch-tag";
 import { allMoves } from "#data/data-lists";
-import { getStatusEffectActivationText, getStatusEffectHealText } from "#data/status-effect";
+import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import { getTerrainBlockMessage } from "#data/terrain";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
