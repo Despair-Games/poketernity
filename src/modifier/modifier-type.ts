@@ -71,7 +71,7 @@ import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
-import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { clamp, getEnumKeys, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -2135,7 +2135,7 @@ export function getPartyLuckValue(party: Pokemon[]): number {
     );
     return DailyLuck.value;
   }
-  const luck = Phaser.Math.Clamp(
+  const luck = clamp(
     party
       .map((p) => (p.isAllowedInBattle() ? p.getLuck() : 0))
       .reduce((total: number, value: number) => (total += value), 0),

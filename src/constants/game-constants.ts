@@ -1,5 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { BattleStat } from "#enums/stat";
 import type { StatusEffect } from "#enums/status-effect";
 import type { SystemSaveData } from "#types/SystemData";
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -92,3 +93,9 @@ export const DEFAULT_MIN_SLEEP_DURATION = 2;
  * Note: This equates to `3` turns of sleep, subtract `1` from this value to get the actual duration.
  */
 export const DEFAULT_MAX_SLEEP_DURATION = 4;
+
+/** The minimum stage a {@linkcode BattleStat} can have. */
+export const MIN_STAT_STAGE = -6;
+
+/** The maximum stage a {@linkcode BattleStat} can have. */
+export const MAX_STAT_STAGE = 6;

@@ -4,6 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import { BerryModifier } from "#modifier/modifier";
 import { BerryModifierType } from "#modifier/modifier-type";
+import { clamp } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -24,7 +25,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
-    if (Phaser.Math.Clamp(this.procChance(pokemon), 0, 1) < pass) {
+    if (clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;
     }
 

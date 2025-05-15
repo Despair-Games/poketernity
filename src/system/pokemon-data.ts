@@ -15,7 +15,7 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { PokemonSummonData } from "#field/pokemon-summon-data";
 import type { Status } from "#types/Status";
-import { isPokemon } from "#utils/common-utils";
+import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export default class PokemonData {
@@ -70,7 +70,7 @@ export default class PokemonData {
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
     this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
     this.nickname = source.nickname;
-    this.formIndex = Phaser.Math.Clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
+    this.formIndex = clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
     this.abilityIndex = source.abilityIndex;
     this.passive = source.passive;
     this.shiny = source.shiny;

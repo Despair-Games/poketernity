@@ -64,6 +64,7 @@ import type { UproarTag } from "#battler-tags/uproar-tag";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
+  EXPOSED_TAG_TYPES,
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
 } from "#constants/battler-tag-constants";
@@ -71,6 +72,8 @@ import {
   DEFAULT_MAX_SLEEP_DURATION,
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  MAX_STAT_STAGE,
+  MIN_STAT_STAGE,
 } from "#constants/game-constants";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#data/data-lists";
@@ -191,6 +194,8 @@ import { applyChallenges } from "#utils/challenge-utils";
 import {
   BooleanHolder,
   NumberHolder,
+  calcAccuracyMultiplier,
+  clamp,
   coerceArray,
   fixedNumber,
   getEnumValues,
@@ -1042,11 +1047,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   setStatStage(stat: BattleStat, value: number): void {
     if (this.summonData) {
-      if (value >= -6) {
-        this.summonData.statStages[stat - 1] = Math.min(value, 6);
-      } else {
-        this.summonData.statStages[stat - 1] = Math.max(value, -6);
-      }
+      this.summonData.statStages[stat - 1] = clamp(value, MIN_STAT_STAGE, MAX_STAT_STAGE);
     }
   }
 
@@ -1254,7 +1255,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         globalScene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
       }
 
-      statHolder.value = Phaser.Math.Clamp(statHolder.value, 1, Number.MAX_SAFE_INTEGER);
+      statHolder.value = clamp(statHolder.value, 1, Number.MAX_SAFE_INTEGER);
 
       this.setStat(s, statHolder.value);
     }
@@ -2815,6 +2816,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param target {@linkcode Pokemon} - The target Pokémon against which the move is used.
    * @param sourceMove {@linkcode Move}  - The move being used by the user.
    * @returns The calculated accuracy multiplier.
+   *
+   * | For ACC and EVA  | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
+   * |------------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+   * | Stage (EVA)      | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
+   * | Gen V+           | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
    */
   getAccuracyMultiplier(target: Pokemon, sourceMove: Move): number {
     const isOhko = sourceMove.hasAttr(OneHitKOAccuracyAttr);
@@ -2846,20 +2853,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), Stat.ACC, userAccStage);
 
-    userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, 6);
+    userAccStage.value = ignoreAccStatStage.value ? 0 : userAccStage.value;
     targetEvaStage.value = ignoreEvaStatStage.value ? 0 : targetEvaStage.value;
 
-    if (target.findTag((t) => t instanceof ExposedTag)) {
+    if (target.hasTag(...EXPOSED_TAG_TYPES)) {
       targetEvaStage.value = Math.min(0, targetEvaStage.value);
     }
 
-    const accuracyMultiplier = new NumberHolder(1);
-    if (userAccStage.value !== targetEvaStage.value) {
-      accuracyMultiplier.value =
-        userAccStage.value > targetEvaStage.value
-          ? (3 + Math.min(userAccStage.value - targetEvaStage.value, 6)) / 3
-          : 3 / (3 + Math.min(targetEvaStage.value - userAccStage.value, 6));
-    }
+    const accuracyMultiplier = new NumberHolder(calcAccuracyMultiplier(userAccStage.value, targetEvaStage.value));
 
     applyAbAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,

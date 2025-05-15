@@ -34,6 +34,7 @@ import { EggTier } from "#enums/egg-type";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
 import type { PlayerPokemon } from "#field/player-pokemon";
+import { clamp } from "#utils/common-utils";
 import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt, randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -479,7 +480,7 @@ export class Egg {
     const speciesWeights: number[] = [];
     for (const speciesId of speciesPool) {
       // Accounts for species that have starter costs outside of the normal range for their EggTier
-      const speciesCostClamped = Phaser.Math.Clamp(speciesStarterCosts[speciesId], minStarterValue, maxStarterValue);
+      const speciesCostClamped = clamp(speciesStarterCosts[speciesId], minStarterValue, maxStarterValue);
       const weight = Math.floor(
         (((maxStarterValue - speciesCostClamped) / (maxStarterValue - minStarterValue + 1)) * 1.5 + 1) * 100,
       );
