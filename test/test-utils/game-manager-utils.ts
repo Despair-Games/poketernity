@@ -1,5 +1,3 @@
-import type { StarterConfig } from "#app/@types/starter-config";
-import type { StarterMoveset } from "#app/@types/starter-data";
 import Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
@@ -10,6 +8,8 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
 import { PlayerPokemon } from "#field/player-pokemon";
+import type { StarterConfig } from "#types/starter-config";
+import type { StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 /** Function to convert Blob to string */

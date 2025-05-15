@@ -1,4 +1,3 @@
-import { signatureSpecies } from "#app/data/signature-species";
 import { globalScene } from "#app/global-scene";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
@@ -7,6 +6,7 @@ import type { EntryHazardTag } from "#data/arena-tag";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
+import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#data/trainer-config";
 import { trainerNamePools } from "#data/trainer-names";

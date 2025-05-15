@@ -1,4 +1,3 @@
-import type { PokemonSpeciesFilter } from "#app/@types/pokemon-species-filter";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
@@ -16,6 +15,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PersistentModifier } from "#modifier/modifier";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
+import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randItem, randSeedItem } from "#utils/random-utils";

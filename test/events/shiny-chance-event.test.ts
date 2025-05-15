@@ -1,9 +1,9 @@
-import type { TimedEvent } from "#app/@types/timed-event";
 import { timedEventManager } from "#app/timed-event-manager";
 import { Egg } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import type { TimedEvent } from "#types/timed-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Shiny Chance Modifier Event", () => {

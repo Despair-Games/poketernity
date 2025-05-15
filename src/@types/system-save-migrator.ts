@@ -1,4 +1,4 @@
-import type { SystemSaveData } from "#app/@types/system-data";
+import type { SystemSaveData } from "#types/system-data";
 
 export interface SystemSaveMigrator {
   version: string;

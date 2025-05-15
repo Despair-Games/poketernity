@@ -7,8 +7,6 @@ import type { MovePhase } from "#phases/move-phase";
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
-import type { TurnCommandFilter } from "#app/@types/turn-command-filter";
-import type { TurnMove } from "#app/@types/turn-move";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -33,6 +31,8 @@ import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { TerastallizationPhase } from "#phases/terastallization-phase";
 import { TurnEndPhase } from "#phases/turn-end-phase";
 import { WeatherEffectPhase } from "#phases/weather-effect-phase";
+import type { TurnCommandFilter } from "#types/turn-command-filter";
+import type { TurnMove } from "#types/turn-move";
 import { BooleanHolder, isNil } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 

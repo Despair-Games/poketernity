@@ -1,16 +1,8 @@
 import { api } from "#api/api";
-import type { DexData, DexEntry } from "#app/@types/dex-data";
-import type { SessionSaveData } from "#app/@types/session-data";
-import type { StarterData } from "#app/@types/starter-data";
-import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/system-data";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-} from "#app/system/version_migration/version-converter";
 import {
   APP_ABBREVIATION,
   BYPASS_LOGIN,
@@ -70,8 +62,13 @@ import PersistentModifierData from "#system/modifier-data";
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
+import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { DexData, DexEntry } from "#types/dex-data";
+import type { SessionSaveData } from "#types/session-data";
+import type { StarterData } from "#types/starter-data";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/system-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";

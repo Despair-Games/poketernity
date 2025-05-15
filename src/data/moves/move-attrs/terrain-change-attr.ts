@@ -1,9 +1,9 @@
-import type { MoveConditionFunc } from "#app/@types/move-condition-func";
 import { globalScene } from "#app/global-scene";
 import type { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Attribute to add terrain of a set type to the field.

@@ -1,4 +1,3 @@
-import type { MoveConditionFunc } from "#app/@types/move-condition-func";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { DelayedAttackTag } from "#data/arena-tag";
@@ -8,6 +7,7 @@ import { MoveResult } from "#enums/move-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

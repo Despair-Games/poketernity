@@ -1,11 +1,11 @@
 import { ApiBase } from "#api/api-base";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import type {
   AccountInfoResponse,
   AccountLoginRequest,
   AccountLoginResponse,
   AccountRegisterRequest,
-} from "#app/@types/account-api";
-import { SESSION_ID_COOKIE } from "#constants/app-constants";
+} from "#types/account-api";
 import { removeCookie, setCookie } from "#utils/app-utils";
 
 /**

@@ -1,4 +1,3 @@
-import type { StarterMoveset } from "#app/@types/starter-data";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -30,6 +29,7 @@ import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldI
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";
+import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { NumberHolder, isNil } from "#utils/common-utils";

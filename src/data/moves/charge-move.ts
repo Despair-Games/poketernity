@@ -1,6 +1,3 @@
-import type { AbstractConstructor } from "#app/@types/abstract-constructor";
-import type { Constructor } from "#app/@types/constructor";
-import type { SubMove } from "#app/@types/sub-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ChargeAnim } from "#enums/charge-anim";
@@ -9,6 +6,9 @@ import type { Pokemon } from "#field/pokemon";
 import type { ChargingMove } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import { MoveCondition } from "#moves/move-condition";
+import type { AbstractConstructor } from "#types/abstract-constructor";
+import type { Constructor } from "#types/constructor";
+import type { SubMove } from "#types/sub-move";
 
 export function ChargeMove<TBase extends SubMove>(Base: TBase) {
   return class extends Base {

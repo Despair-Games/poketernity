@@ -1,7 +1,7 @@
-import type { TimedEvent } from "#app/@types/timed-event";
 import { timedEventManager } from "#app/timed-event-manager";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import type { TimedEvent } from "#types/timed-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Timed Event Manager", () => {

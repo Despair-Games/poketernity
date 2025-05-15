@@ -1,4 +1,3 @@
-import type { Status } from "#app/@types/status";
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
@@ -15,6 +14,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { PokemonSummonData } from "#field/pokemon-summon-data";
+import type { Status } from "#types/status";
 import { isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 

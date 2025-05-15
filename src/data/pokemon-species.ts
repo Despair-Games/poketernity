@@ -1,4 +1,3 @@
-import type { PokemonSpeciesFilter } from "#app/@types/pokemon-species-filter";
 import type { EvolutionLevel } from "#data/pokemon-evolutions";
 import type { PokemonForm } from "#data/pokemon-form";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
@@ -12,6 +11,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { Localizable } from "#types/locales";
+import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";

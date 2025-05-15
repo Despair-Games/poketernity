@@ -1,9 +1,9 @@
 import { api } from "#api/api";
-import type { RankingEntry } from "#app/@types/ranking-entry";
 import { globalScene } from "#app/global-scene";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
 import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
+import type { RankingEntry } from "#types/ranking-entry";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { executeIf, getEnumKeys } from "#utils/common-utils";

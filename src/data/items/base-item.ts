@@ -1,5 +1,5 @@
-import type { Item } from "#app/@types/item";
 import type { ItemRarity } from "#enums/item-rarity";
+import type { Item } from "#types/item";
 
 export abstract class BaseItem implements Item {
   readonly price: number;

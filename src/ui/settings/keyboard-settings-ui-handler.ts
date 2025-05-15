@@ -1,5 +1,3 @@
-import cfg_keyboard_qwerty from "#app/configs/inputs/cfg-keyboard-qwerty";
-import { deleteBind } from "#app/configs/inputs/config-handler";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
@@ -7,6 +5,8 @@ import { Device } from "#enums/devices";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
+import { deleteBind } from "#inputs/config-handler";
 import {
   setSettingKeyboard,
   settingKeyboardBlackList,

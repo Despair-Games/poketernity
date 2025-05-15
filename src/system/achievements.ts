@@ -1,4 +1,3 @@
-import type { ConditionFn } from "#app/@types/condition-fn";
 import { globalScene } from "#app/global-scene";
 import type { Challenge } from "#data/challenge";
 import { AchvCategory } from "#enums/achv-category";
@@ -7,6 +6,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { PlayerGender } from "#enums/player-gender";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";
+import type { ConditionFn } from "#types/condition-fn";
 import i18next from "i18next";
 
 // Note: Refer to https://github.com/Despair-Games/poketernity/pull/775/files for removed achv code

@@ -1,6 +1,3 @@
-import type { DexEntry } from "#app/@types/dex-data";
-import type { StarterConfig } from "#app/@types/starter-config";
-import type { StarterMoveset } from "#app/@types/starter-data";
 import { loggedInUser } from "#app/account";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
@@ -58,6 +55,9 @@ import { EncounterPhase } from "#phases/encounter-phase";
 import { SelectChallengePhase } from "#phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { DexEntry } from "#types/dex-data";
+import type { StarterConfig } from "#types/starter-config";
+import type { StarterMoveset } from "#types/starter-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";

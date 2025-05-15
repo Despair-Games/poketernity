@@ -176,7 +176,6 @@ import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boo
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import type { AbAttrCondition } from "#app/@types/ab-attr-condition";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allAbilities, allMoves } from "#data/data-lists";
@@ -197,6 +196,7 @@ import type { Pokemon } from "#field/pokemon";
 import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
 import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";

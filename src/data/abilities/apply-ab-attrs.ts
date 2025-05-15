@@ -1,8 +1,8 @@
 import type { AbAttr } from "#abilities/ab-attr";
-import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
 import { globalScene } from "#app/global-scene";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { AbilityFilterOptions } from "#types/ability-filter-options";
 import { queueShowAbility } from "#utils/ability-utils";
 
 //#region Exports

@@ -1,5 +1,3 @@
-import type { DexEntry } from "#app/@types/dex-data";
-import type { StarterDataEntry } from "#app/@types/starter-data";
 import { globalScene } from "#app/global-scene";
 import { DexAttr } from "#data/dex-attributes";
 import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
@@ -11,6 +9,8 @@ import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import type { Pokemon } from "#field/pokemon";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
+import type { DexEntry } from "#types/dex-data";
+import type { StarterDataEntry } from "#types/starter-data";
 import { IVGraph } from "#ui/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";

@@ -1,4 +1,6 @@
 import { AdminApi } from "#api/admin-api";
+import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
+import { getApiBaseUrl } from "#test/test-utils/test-utils";
 import type {
   LinkAccountToDiscordIdRequest,
   LinkAccountToGoogledIdRequest,
@@ -6,9 +8,7 @@ import type {
   SearchAccountResponse,
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
-} from "#app/@types/admin-api";
-import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
-import { getApiBaseUrl } from "#test/test-utils/test-utils";
+} from "#types/admin-api";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

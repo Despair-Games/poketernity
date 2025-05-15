@@ -1,5 +1,5 @@
-import type { SessionSaveData } from "#app/@types/session-data";
-import type { SystemSaveData } from "#app/@types/system-data";
+import type { SessionSaveData } from "#types/session-data";
+import type { SystemSaveData } from "#types/system-data";
 
 export interface UpdateAllSavedataRequest {
   system: SystemSaveData;

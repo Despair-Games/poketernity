@@ -1,4 +1,4 @@
-import type { Settings } from "#app/@types/settings";
+import type { Settings } from "#types/settings";
 
 export interface SettingsSaveMigrator {
   version: string;

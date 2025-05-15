@@ -1,3 +1,4 @@
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import {
   assign,
   canIAssignThisKey,
@@ -9,8 +10,7 @@ import {
   getKeyWithKeycode,
   getKeyWithSettingName,
   getSettingNameWithKeycode,
-} from "#app/configs/inputs/config-handler";
-import { SettingKeyboard } from "#enums/setting-keyboard";
+} from "#inputs/config-handler";
 import { expect } from "vitest";
 
 export class MenuManip {

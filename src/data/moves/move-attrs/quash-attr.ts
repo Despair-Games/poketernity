@@ -1,7 +1,7 @@
-import type { MoveConditionFunc } from "#app/@types/move-condition-func";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import { isNil } from "#utils/common-utils";
 
 export class QuashAttr extends AddBattlerTagAttr {

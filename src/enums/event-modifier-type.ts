@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { TimedEvent } from "#app/@types/timed-event";
+import type { TimedEvent } from "#types/timed-event";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
