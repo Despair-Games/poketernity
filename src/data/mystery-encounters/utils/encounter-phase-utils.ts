@@ -1,3 +1,5 @@
+import type { HeldModifierConfig } from "#app/@types/held-modifier-config";
+import type { PokemonSelectFilter } from "#app/@types/pokemon-select-filter";
 import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -60,8 +62,6 @@ import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
 import type PokemonData from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { HeldModifierConfig } from "#types/HeldModifierConfig";
-import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";

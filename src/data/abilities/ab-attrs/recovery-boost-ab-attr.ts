@@ -1,8 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
+import type { PokemonAttackCondition } from "#app/@types/pokemon-attack-condition";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**

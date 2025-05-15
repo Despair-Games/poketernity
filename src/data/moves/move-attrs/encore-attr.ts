@@ -1,7 +1,7 @@
+import type { MoveConditionFunc } from "#app/@types/move-condition-func";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 export class EncoreAttr extends AddBattlerTagAttr {
   constructor() {

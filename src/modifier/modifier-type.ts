@@ -1,3 +1,5 @@
+import type { PokemonMoveSelectFilter } from "#app/@types/pokemon-move-select-filter";
+import type { PokemonSelectFilter } from "#app/@types/pokemon-select-filter";
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -67,8 +69,6 @@ import { modifierPool } from "#modifier/modifier-pools";
 import { modifierTypes } from "#modifier/modifier-types";
 import { settings } from "#system/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
-import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
-import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
 import { getEnumKeys, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";

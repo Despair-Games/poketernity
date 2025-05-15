@@ -1,5 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
+import type { AbstractConstructor } from "#app/@types/abstract-constructor";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -10,7 +11,6 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
 import { BooleanHolder, getEnumKeys, toDmgValue } from "#utils/common-utils";
 import { t } from "i18next";
 

@@ -1,11 +1,11 @@
 import { api } from "#api/api";
+import type { StarterConfig } from "#app/@types/starter-config";
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { speciesStarterCosts } from "#data/starters";
 import type { SpeciesId } from "#enums/species-id";
 import { PlayerPokemon } from "#field/player-pokemon";
-import type { StarterConfig } from "#types/StarterConfig";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#utils/random-utils";
 

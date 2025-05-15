@@ -1,7 +1,7 @@
-import type { InputsEvent } from "#types/InputsEvent";
-import type { LanguageEvent } from "#types/Language";
-import type { SettingsEvent } from "#types/Settings";
-import type { TouchControlsEvent } from "#types/TouchControlsEvent";
+import type { InputsEvent } from "#app/@types/inputs-event";
+import type { LanguageEvent } from "#app/@types/language";
+import type { SettingsEvent } from "#app/@types/settings";
+import type { TouchControlsEvent } from "#app/@types/touch-controls-event";
 import Phaser from "phaser";
 
 type EventName = SettingsEvent | InputsEvent | TouchControlsEvent | LanguageEvent;

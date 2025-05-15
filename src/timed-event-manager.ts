@@ -1,6 +1,6 @@
+import type { EventBanner, TimedEvent } from "#app/@types/timed-event";
 import { allTimedEvents } from "#data/all-timed-events";
 import { EventModifierType } from "#enums/event-modifier-type";
-import type { EventBanner, TimedEvent } from "#types/TimedEvent";
 import { isNil } from "#utils/common-utils";
 
 function isActive(event: TimedEvent) {

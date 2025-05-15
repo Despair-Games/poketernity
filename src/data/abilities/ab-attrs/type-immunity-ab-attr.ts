@@ -1,10 +1,10 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
+import type { AbAttrCondition } from "#app/@types/ab-attr-condition";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 /**

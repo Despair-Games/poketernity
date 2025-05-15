@@ -1,3 +1,4 @@
+import type { DamageResult } from "#app/@types/damage-result";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT } from "#constants/ui-constants";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -7,7 +8,6 @@ import { HitResult } from "#enums/hit-result";
 import { TextStyle } from "#enums/text-style";
 import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
-import type { DamageResult } from "#types/DamageResult";
 import { addTextObject } from "#ui/text-utils";
 import { fixedNumber } from "#utils/common-utils";
 import { formatStat } from "#utils/string-utils";

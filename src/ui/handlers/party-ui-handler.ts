@@ -1,3 +1,8 @@
+import type { PartyModifierTransferSelectCallback } from "#app/@types/party-modifier-transfer-select-callback";
+import type { PartySelectCallback } from "#app/@types/party-select-callback";
+import type { PokemonModifierTransferSelectFilter } from "#app/@types/pokemon-modifier-transfer-select-filter";
+import type { PokemonMoveSelectFilter } from "#app/@types/pokemon-move-select-filter";
+import type { PokemonSelectFilter } from "#app/@types/pokemon-select-filter";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { GAME_WIDTH } from "#constants/ui-constants";
@@ -27,11 +32,6 @@ import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#mo
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { CommandPhase } from "#phases/command-phase";
 import type { SelectModifierPhase } from "#phases/select-modifier-phase";
-import type { PartyModifierTransferSelectCallback } from "#types/PartyModifierTransferSelectCallback";
-import type { PartySelectCallback } from "#types/PartySelectCallback";
-import type { PokemonModifierTransferSelectFilter } from "#types/PokemonModifierTransferSelectFilter";
-import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
-import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";

@@ -1,3 +1,4 @@
+import type { SettingsUpdateEventArgs } from "#app/@types/settings";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import TouchControl from "#app/touch-controls";
@@ -14,7 +15,6 @@ import pad_procon from "#inputs/pad_procon";
 import pad_unlicensedSNES from "#inputs/pad_unlicensedSNES";
 import pad_xbox360 from "#inputs/pad_xbox360";
 import { settings } from "#system/settings-manager";
-import type { SettingsUpdateEventArgs } from "#types/Settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import { deepCopy, getEnumValues } from "#utils/common-utils";
 import Phaser from "phaser";

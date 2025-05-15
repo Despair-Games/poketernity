@@ -1,3 +1,5 @@
+import type { AbAttrCondition } from "#app/@types/ab-attr-condition";
+import type { PokemonAttackCondition } from "#app/@types/pokemon-attack-condition";
 import { globalScene } from "#app/global-scene";
 import { TERA_MOVES } from "#constants/move-constants";
 import { AbilityId } from "#enums/ability-id";
@@ -7,8 +9,6 @@ import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
 
 /**
  * @returns An array of Pokemon with weather-based forms

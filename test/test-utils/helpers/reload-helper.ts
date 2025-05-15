@@ -1,3 +1,4 @@
+import type { SessionSaveData } from "#app/@types/session-data";
 import { BattleStyle } from "#enums/battle-style";
 import { UiMode } from "#enums/ui-mode";
 import { CommandPhase } from "#phases/command-phase";
@@ -6,7 +7,6 @@ import { TurnInitPhase } from "#phases/turn-init-phase";
 import { settings } from "#system/settings-manager";
 import type { GameManager } from "#test/test-utils/game-manager";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
-import type { SessionSaveData } from "#types/SessionData";
 import { vi } from "vitest";
 
 /**

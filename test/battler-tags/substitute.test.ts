@@ -1,3 +1,5 @@
+import type { PokemonTurnData } from "#app/@types/pokemon-turn-data";
+import type { TurnMove } from "#app/@types/turn-move";
 import type BattleScene from "#app/battle-scene";
 import * as messages from "#app/messages";
 import { BindTag } from "#battler-tags/bind-tag";
@@ -14,8 +16,6 @@ import type { PokemonMove } from "#field/pokemon-move";
 import { AttackMove } from "#moves/move";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { PokemonTurnData } from "#types/PokemonTurnData";
-import type { TurnMove } from "#types/TurnMove";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**

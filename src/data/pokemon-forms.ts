@@ -6,6 +6,7 @@ import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { AbstractConstructor } from "#app/@types/abstract-constructor";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allMoves } from "#data/data-lists";
@@ -25,7 +26,6 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
 import type { nil } from "#types/nil";
 import i18next from "i18next";
 

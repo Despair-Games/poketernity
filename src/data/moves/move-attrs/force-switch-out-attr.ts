@@ -1,5 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
+import type { MoveConditionFunc } from "#app/@types/move-condition-func";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -15,7 +16,6 @@ import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { SwitchPhase } from "#phases/switch-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

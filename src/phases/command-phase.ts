@@ -1,3 +1,5 @@
+import type { FightCommand } from "#app/@types/fight-command";
+import type { TurnMove } from "#app/@types/turn-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
@@ -24,8 +26,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
 import { FieldPhase } from "#phases/abstract-field-phase";
-import type { FightCommand } from "#types/FightCommand";
-import type { TurnMove } from "#types/TurnMove";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import { isNil } from "#utils/common-utils";

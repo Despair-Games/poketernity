@@ -1,3 +1,4 @@
+import type { StarterConfig } from "#app/@types/starter-config";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
@@ -8,7 +9,6 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { overrideHeldItems, overrideModifiers } from "#modifier/modifier";
-import type { StarterConfig } from "#types/StarterConfig";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";

@@ -1,10 +1,10 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
+import type { PokemonDefendCondition } from "#app/@types/pokemon-defend-condition";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
 
 export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;

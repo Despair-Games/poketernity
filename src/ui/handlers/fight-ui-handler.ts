@@ -1,3 +1,4 @@
+import type { FightCommand } from "#app/@types/fight-command";
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH } from "#constants/ui-constants";
@@ -14,7 +15,6 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { CommandPhase } from "#phases/command-phase";
 import { settings } from "#system/settings-manager";
-import type { FightCommand } from "#types/FightCommand";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { addTextObject, setTextColor } from "#ui/text-utils";

@@ -1,7 +1,7 @@
+import type { MoveConditionFunc } from "#app/@types/move-condition-func";
 import type { Pokemon } from "#field/pokemon";
 import { HealAttr } from "#moves/heal-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 /**
  * Heals the target or the user by either {@linkcode normalHealRatio} or {@linkcode boostedHealRatio}

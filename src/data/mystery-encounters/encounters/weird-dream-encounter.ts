@@ -1,3 +1,4 @@
+import type { HeldModifierConfig } from "#app/@types/held-modifier-config";
 import { globalScene } from "#app/global-scene";
 import i18next from "#app/plugins/i18n";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -44,7 +45,6 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { HeldModifierConfig } from "#types/HeldModifierConfig";
 import { NumberHolder, isNil } from "#utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";

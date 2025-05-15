@@ -1,8 +1,8 @@
 import { AccountApi } from "#api/account-api";
+import type { AccountInfoResponse } from "#app/@types/account-api";
 import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
-import type { AccountInfoResponse } from "#types/AccountApi";
 import * as AppUtils from "#utils/app-utils";
 import { removeCookie, setCookie } from "#utils/app-utils";
 import { http, HttpResponse } from "msw";

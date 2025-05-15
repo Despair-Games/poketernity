@@ -1,3 +1,4 @@
+import type { TurnMove } from "#app/@types/turn-move";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import type { EncoreTag } from "#battler-tags/encore-tag";
@@ -28,7 +29,6 @@ import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type PokemonData from "#system/pokemon-data";
-import type { TurnMove } from "#types/TurnMove";
 import { EnemyBattleInfo } from "#ui/battle-info";
 import { isBetween, isNil, toDmgValue } from "#utils/common-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";

@@ -1,6 +1,6 @@
+import type { AbstractConstructor } from "#app/@types/abstract-constructor";
 import type { Pokemon } from "#field/pokemon";
 import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
 
 export class SpeciesFormChangeCompoundTrigger {
   public triggers: SpeciesFormChangeTrigger[];
