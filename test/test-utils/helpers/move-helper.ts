@@ -37,8 +37,8 @@ export class MoveHelper extends GameManagerHelper {
     const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase<MoveEffectPhase>();
     expect(moveEffectPhase).toBeDefined();
     const move = moveEffectPhase!.move.getMove();
-    vi.spyOn(move, "calculateBattleAccuracy").mockImplementation((_user, target, _simulated) => {
-      console.log(chalk.gray(`- Forcing hit on ${getPokemonNameWithAffix(target)}'s ${move.name}! - `));
+    vi.spyOn(move, "calculateBattleAccuracy").mockImplementation((user, _target, _simulated) => {
+      console.log(chalk.gray(`- Forcing hit on ${getPokemonNameWithAffix(user)}'s ${move.name}! - `));
       return -1;
     });
   }
