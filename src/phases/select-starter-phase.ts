@@ -43,7 +43,7 @@ export class SelectStarterPhase extends Phase {
    */
   public initBattle(starters: StarterConfig[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
-    const { dexData, gameStats } = gameData;
+    const { dexData, gameStats, starterData } = gameData;
     const { isClassic } = gameMode;
 
     const party = globalScene.getPlayerParty();
@@ -74,7 +74,10 @@ export class SelectStarterPhase extends Phase {
         starterGender = Overrides.GENDER_OVERRIDE;
       }
 
-      const starterIvs = dexData[speciesId].ivs.slice(0);
+      // Get ivs from the root species in case of an override to a non starter species
+      const starterSpeciesId = species.getRootSpeciesId(true);
+      const starterIvs = starterData[starterSpeciesId].ivs.slice(0);
+
       const starterPokemon = globalScene.addPlayerPokemon(
         species,
         gameMode.getStartingLevel(),

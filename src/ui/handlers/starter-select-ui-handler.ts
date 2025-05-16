@@ -57,7 +57,7 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#syste
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/DexData";
 import type { StarterConfig } from "#types/StarterConfig";
-import type { StarterMoveset } from "#types/StarterData";
+import type { StarterDataEntry, StarterMoveset } from "#types/StarterData";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";
@@ -314,6 +314,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private starterTeras: ElementalType[] = [];
   private starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
+  private speciesStarterDataEntry: StarterDataEntry | null;
   private speciesStarterMoves: MoveId[];
   private canToggleShiny: boolean;
   private canCycleForm: boolean;
@@ -1212,7 +1213,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     if (starterAttributes.nature !== undefined) {
-      const unlockedNatures = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr);
+      const unlockedNatures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
       if (unlockedNatures.indexOf(starterAttributes.nature as unknown as Nature) < 0) {
         // requested nature wasn't unlocked, purging setting
         // biome-ignore lint/performance/noDelete: Optimizes local storage size
@@ -1704,7 +1705,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
               ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectNature"), null, () => {
-                  const natures = globalScene.gameData.getNaturesForAttr(this.speciesStarterDexEntry?.natureAttr);
+                  const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
                   ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
                     options: natures
                       .map((n: Nature, _i: number) => {
@@ -2084,7 +2085,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             break;
           case Button.CYCLE_NATURE:
             if (this.canCycleNature) {
-              const natures = globalScene.gameData.getNaturesForAttr(this.speciesStarterDexEntry?.natureAttr);
+              const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
               const natureIndex = natures.indexOf(this.natureCursor);
               const newNature = natures[natureIndex < natures.length - 1 ? natureIndex + 1 : 0];
               // store cycled nature as default
@@ -2889,11 +2890,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         }
         case SortCriteria.IV: {
           const avgIVsA =
-            globalScene.gameData.dexData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
-            / globalScene.gameData.dexData[a.species.speciesId].ivs.length;
+            globalScene.gameData.starterData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
+            / globalScene.gameData.starterData[a.species.speciesId].ivs.length;
           const avgIVsB =
-            globalScene.gameData.dexData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
-            / globalScene.gameData.dexData[b.species.speciesId].ivs.length;
+            globalScene.gameData.starterData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
+            / globalScene.gameData.starterData[b.species.speciesId].ivs.length;
           return (avgIVsA - avgIVsB) * -sort.dir;
         }
         case SortCriteria.NAME:
@@ -3057,6 +3058,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   setSpecies(species: PokemonSpecies | null) {
     this.speciesStarterDexEntry = species ? globalScene.gameData.dexData[species.speciesId] : null;
+    this.speciesStarterDataEntry = species ? globalScene.gameData.starterData[species.speciesId] : null;
     this.dexAttrCursor = species ? this.getCurrentDexProps(species.speciesId) : 0n;
     this.abilityCursor = species ? globalScene.gameData.getStarterSpeciesDefaultAbilityIndex(species) : 0;
     this.natureCursor = species ? globalScene.gameData.getSpeciesDefaultNature(species) : 0;
@@ -3393,9 +3395,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     if (species) {
       const dexEntry = globalScene.gameData.dexData[species.speciesId];
-      const abilityAttr = globalScene.gameData.starterData[species.speciesId].abilityAttr;
+      const starterEntry = globalScene.gameData.starterData[species.speciesId];
 
-      const caughtAttr = globalScene.gameData.dexData[species.speciesId]?.caughtAttr || BigInt(0);
+      const abilityAttr = starterEntry.abilityAttr;
+      const caughtAttr = dexEntry?.caughtAttr ?? BigInt(0);
 
       if (!dexEntry.caughtAttr) {
         const props = globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId));
@@ -3509,7 +3512,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             .map((_, f) => dexEntry.caughtAttr & globalScene.gameData.getFormAttr(f))
             .filter((f) => f).length > 1;
 
-        this.canCycleNature = globalScene.gameData.getNaturesForAttr(dexEntry.natureAttr).length > 1;
+        this.canCycleNature = globalScene.gameData.getNaturesForAttr(starterEntry.natureAttr).length > 1;
 
         this.canCycleTera =
           !this.statsMode
@@ -4131,13 +4134,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   showStats(): void {
-    if (!this.speciesStarterDexEntry) {
+    if (!this.speciesStarterDataEntry) {
       return;
     }
 
     this.statsContainer.setVisible(true);
-
-    this.statsContainer.updateIvs(this.speciesStarterDexEntry.ivs);
+    this.statsContainer.updateIvs(this.speciesStarterDataEntry.ivs);
   }
 
   public override clearText() {

@@ -12,6 +12,7 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
+import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN } from "#constants/game-constants";
 import { EntryHazardTag } from "#data/arena-tag";
 import { allMoves, allSpecies } from "#data/data-lists";
 import { defaultStarterSpecies } from "#data/default-starters";
@@ -72,9 +73,9 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#utils/common-utils";
+import { NumberHolder, executeIf, fixedNumber, getEnumKeys, getEnumLength, isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randInt, randSeedItem } from "#utils/random-utils";
+import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 
@@ -340,6 +341,18 @@ export class GameData {
             systemDataStr = cachedSystemDataStr;
           } else {
             this.clearLocalData();
+          }
+        }
+
+        // TODO: Temporary starter data migration, to be removed later
+        const allNaturesAttr = Math.pow(2, getEnumLength(Nature)) - 1;
+        for (const starterData of Object.values(systemData.starterData)) {
+          if (!starterData.natureAttr || !starterData.ivs) {
+            const unlocked = starterData.abilityAttr !== 0;
+            // As a placeholder migration, unlock all natures
+            starterData.natureAttr = unlocked ? allNaturesAttr : 0;
+            // As a placeholder migration, max out all ivs
+            starterData.ivs = Array(6).fill(unlocked ? IV_MAX : IV_MIN);
           }
         }
 
@@ -1386,38 +1399,19 @@ export class GameData {
       data[species.speciesId] = {
         seenAttr: 0n,
         caughtAttr: 0n,
-        natureAttr: 0,
         seenCount: 0,
         caughtCount: 0,
         hatchedCount: 0,
-        ivs: [0, 0, 0, 0, 0, 0],
       };
     }
 
     const defaultStarterAttr =
       DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_VARIANT | DexAttr.DEFAULT_FORM;
 
-    const defaultStarterNatures: Nature[] = [];
-
-    globalScene.executeWithSeedOffset(
-      () => {
-        const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
-        for (let s = 0; s < defaultStarterSpecies.length; s++) {
-          defaultStarterNatures.push(randSeedItem(neutralNatures));
-        }
-      },
-      0,
-      "default",
-    );
-
     for (let ds = 0; ds < defaultStarterSpecies.length; ds++) {
       const entry = data[defaultStarterSpecies[ds]] as DexEntry;
       entry.seenAttr = defaultStarterAttr;
       entry.caughtAttr = defaultStarterAttr;
-      entry.natureAttr = 1 << (defaultStarterNatures[ds] + 1);
-      for (const i in entry.ivs) {
-        entry.ivs[i] = 15;
-      }
     }
 
     this.dexData = data;
@@ -1426,16 +1420,27 @@ export class GameData {
   private initStarterData(): void {
     const starterData: StarterData = {};
 
+    // Each fresh file starter (default starters) will get all neutral natures unlocked
+    const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
+    let defaultNaturesAttr = 0;
+    for (const nature of neutralNatures) {
+      defaultNaturesAttr |= 1 << nature;
+    }
+
     const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
+      const isDefaultStarter = defaultStarterSpecies.includes(speciesId);
+
       starterData[speciesId] = {
         moveset: null,
         eggMoves: 0,
         candyCount: 0,
         candyProgress: 0,
-        abilityAttr: defaultStarterSpecies.includes(speciesId) ? AbilityAttr.ABILITY_1 : 0,
+        abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
+        natureAttr: isDefaultStarter ? defaultNaturesAttr : 0,
+        ivs: Array(6).fill(isDefaultStarter ? DEFAULT_STARTER_IVS : IV_MIN),
         valueReduction: 0,
         classicWinCount: 0,
       };
@@ -1557,16 +1562,16 @@ export class GameData {
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
 
-      // Unlock ability
+      // Unlock ability and nature
       if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
-        this.starterData[species.speciesId].abilityAttr |=
+        const starterData = this.starterData[species.speciesId];
+        starterData.abilityAttr |=
           pokemon.abilityIndex !== 1 || pokemon.species.ability2
             ? 1 << pokemon.abilityIndex
             : AbilityAttr.ABILITY_HIDDEN;
-      }
 
-      // Unlock nature
-      dexEntry.natureAttr |= 1 << (pokemon.nature + 1);
+        starterData.natureAttr |= 1 << pokemon.nature;
+      }
 
       const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
       const newCatch = !caughtAttr;
@@ -1778,28 +1783,46 @@ export class GameData {
     }
 
     const _unlockSpeciesNature = (speciesId: SpeciesId) => {
-      this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
+      // If it's a starter, unlock the nature
+      if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+        this.starterData[speciesId].natureAttr |= 1 << nature;
+      }
+
+      // If it has a pre-evolution, recursively unlock the nature for it
       if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
         _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
       }
     };
+
     _unlockSpeciesNature(species.speciesId);
   }
 
+  /**
+   * Update the maximum IVs for the given Pokemon {@linkcode SpeciesId} and its pre-evolutions.
+   */
   updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
-    let dexEntry: DexEntry;
-    do {
-      dexEntry = globalScene.gameData.dexData[speciesId];
-      const dexIvs = dexEntry.ivs;
-      for (let i = 0; i < dexIvs.length; i++) {
-        if (dexIvs[i] < ivs[i]) {
-          dexIvs[i] = ivs[i];
+    const doUpdateIvs = (speciesId: SpeciesId) => {
+      // If it's a starter, update its IVs
+      if (speciesStarterCosts.hasOwnProperty(speciesId)) {
+        const starterEntry = globalScene.gameData.starterData[speciesId];
+        const starterIvs = starterEntry.ivs;
+        for (let i = 0; i < starterIvs.length; i++) {
+          if (starterIvs[i] < ivs[i]) {
+            starterIvs[i] = ivs[i];
+          }
+        }
+        if (starterIvs.filter((iv) => iv === 31).length === 6) {
+          globalScene.validateAchv(achvs.PERFECT_IVS);
         }
       }
-      if (dexIvs.filter((iv) => iv === 31).length === 6) {
-        globalScene.validateAchv(achvs.PERFECT_IVS);
+
+      // If it has a pre-evolution, recursively update its IVs
+      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+        doUpdateIvs(pokemonPreEvolutions[speciesId]);
       }
-    } while (pokemonPreEvolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPreEvolutions[speciesId]));
+    };
+
+    doUpdateIvs(speciesId);
   }
 
   getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
@@ -1890,9 +1913,9 @@ export class GameData {
   }
 
   getSpeciesDefaultNature(species: PokemonSpecies): Nature {
-    const dexEntry = this.dexData[species.speciesId];
+    const dexEntry = this.starterData[species.speciesId];
     for (let n = 0; n < 25; n++) {
-      if (dexEntry.natureAttr & (1 << (n + 1))) {
+      if (dexEntry.natureAttr & (1 << n)) {
         return n as Nature;
       }
     }
@@ -1910,7 +1933,7 @@ export class GameData {
   getNaturesForAttr(natureAttr: number = 0): Nature[] {
     const ret: Nature[] = [];
     for (let n = 0; n < 25; n++) {
-      if (natureAttr & (1 << (n + 1))) {
+      if (natureAttr & (1 << n)) {
         ret.push(n);
       }
     }
