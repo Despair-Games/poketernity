@@ -17,7 +17,7 @@ on:
 jobs:
   # Lint files with Biome - https://biomejs.dev/linter/
   biome-lint:
-    name: Lint files with Biome
+    name: Biome Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +40,7 @@ jobs:
 
   # Lint files with ESLint - https://eslint.org
   eslint:
-    name: Lint files with ESLint
+    name: ESLint
     runs-on: ubuntu-latest
 
     steps:
@@ -63,7 +63,7 @@ jobs:
 
   # Validate dependencies with depcruise - https://github.com/sverweij/dependency-cruiser
   depcruise:
-    name: Validate Dependencies with depcruise
+    name: Dependencies
     runs-on: ubuntu-latest
 
     steps:
