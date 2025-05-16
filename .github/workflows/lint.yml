@@ -17,7 +17,7 @@ on:
 jobs:
   # Lint files with Biome - https://biomejs.dev/linter/
   biome-lint:
-    name: Biome Lint
+    name: Biome-Lint
     runs-on: ubuntu-latest
 
     steps:
