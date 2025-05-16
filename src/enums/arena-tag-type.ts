@@ -1,5 +1,4 @@
 export enum ArenaTagType {
-  NONE,
   MUD_SPORT,
   WATER_SPORT,
   SPIKES,

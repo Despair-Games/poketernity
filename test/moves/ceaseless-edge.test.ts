@@ -1,4 +1,4 @@
-import type { EntryHazardTag } from "#data/arena-tag";
+import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
