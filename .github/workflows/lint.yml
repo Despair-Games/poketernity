@@ -1,0 +1,82 @@
+on:
+  # Trigger the workflow on push or pull request
+  push:
+    branches:
+      - main # Trigger on push events to the main branch
+      - beta # Trigger on push events to the beta branch
+  pull_request:
+    branches:
+      - main # Trigger on pull request events targeting the main branch
+      - beta # Trigger on pull request events targeting the beta branch
+  merge_group:
+    types: [checks_requested]
+
+
+jobs:
+  # Lint files with Biome - https://biomejs.dev/linter/
+  biome-lint:
+    name: Lint files with Biome
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run Biome
+        run: npm run biome-ci
+
+  # Lint files with ESLint - https://eslint.org
+  eslint:
+    name: Lint files with ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run eslint-ci
+
+  # Validate dependencies with depcruise - https://github.com/sverweij/dependency-cruiser
+  depcruise:
+    name: Validate Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: depcruise
+        run: npm run depcruise
