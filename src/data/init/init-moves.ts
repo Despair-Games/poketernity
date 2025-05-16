@@ -35,6 +35,7 @@ import { AddPledgeEffectAttr } from "#moves/add-pledge-effect-attr";
 import { AddSubstituteAttr } from "#moves/add-substitute-attr";
 import { AddTypeAttr } from "#moves/add-type-attr";
 import { AfterYouAttr } from "#moves/after-you-attr";
+import { AfterYouCondition } from "#moves/after-you-condition";
 import { AlwaysHitMinimizeAttr } from "#moves/always-hit-minimize-attr";
 import { AntiSunlightPowerDecreaseAttr } from "#moves/anti-sunlight-power-decrease-attr";
 import { AttackReducePpMoveAttr } from "#moves/attack-reduce-pp-move-attr";
@@ -99,7 +100,7 @@ import { failOnMaxCondition } from "#moves/fail-on-max-condition";
 import { FaintCountdownAttr } from "#moves/faint-countdown-attr";
 import { FairyLockAttr } from "#moves/fairy-lock-attr";
 import { FirstAttackDoublePowerAttr } from "#moves/first-attack-double-power-attr";
-import { FirstMoveCondition } from "#moves/first-move-condition";
+import { firstMoveCondition } from "#moves/first-move-condition";
 import { FirstMoveTypeAttr } from "#moves/first-move-type-attr";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { FlameBurstAttr } from "#moves/flame-burst-attr";
@@ -1084,7 +1085,7 @@ export function initMoves() {
       .makesContact(false),
     new AttackMove(MoveId.FAKE_OUT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 10, 100, 3, 3)
       .attr(FlinchAttr)
-      .condition(new FirstMoveCondition()),
+      .condition(firstMoveCondition),
     new AttackMove(MoveId.UPROAR, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.UPROAR, true)
       .attr(MessageHeaderAttr, (user, _move) =>
@@ -1923,7 +1924,7 @@ export function initMoves() {
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_OTHER)
       .condition(failIfSingleBattle)
-      .condition((_user, target, _move) => !target.turnData?.acted)
+      .condition(new AfterYouCondition())
       .attr(AfterYouAttr),
     new AttackMove(MoveId.ROUND, ElementalType.NORMAL, MoveCategory.SPECIAL, 60, 100, 15, -1, 0, 5)
       .attr(CueNextRoundAttr)
@@ -2165,7 +2166,7 @@ export function initMoves() {
       .target(MoveTarget.USER_SIDE)
       .attr(ConditionalProtectAttr, ArenaTagType.MAT_BLOCK)
       .snatchable()
-      .condition(new FirstMoveCondition())
+      .condition(firstMoveCondition)
       .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.BELCH, ElementalType.POISON, MoveCategory.SPECIAL, 120, 90, 10, -1, 0, 6)
       .condition((user, _target, _move) => user.waveData.berriesEaten.length > 0),
@@ -2476,7 +2477,7 @@ export function initMoves() {
       .triageMove()
       .snatchable(),
     new AttackMove(MoveId.FIRST_IMPRESSION, ElementalType.BUG, MoveCategory.PHYSICAL, 90, 100, 10, -1, 2, 7)
-      .condition(new FirstMoveCondition()),
+      .condition(firstMoveCondition),
     new SelfStatusMove(MoveId.BANEFUL_BUNKER, ElementalType.POISON, -1, 10, -1, 4, 7)
       .attr(ProtectAttr, BattlerTagType.BANEFUL_BUNKER)
       .condition(new FailIfLastCondition()),
