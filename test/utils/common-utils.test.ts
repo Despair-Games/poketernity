@@ -22,6 +22,10 @@ describe("Utils - Common Utils", () => {
       const actual = clamp(value, min, max);
       expect(actual).toBe(value);
     });
+
+    it("should not accept `min > max`", () => {
+      expect(() => clamp(0, 5, -5)).toThrowError();
+    });
   });
 
   describe("calcAccuracyMultiplier", () => {
