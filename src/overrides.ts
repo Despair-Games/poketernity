@@ -12,6 +12,7 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
@@ -173,6 +174,8 @@ class DefaultOverrides {
   readonly MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly SHINY_OVERRIDE: boolean | null = null;
   readonly VARIANT_OVERRIDE: Variant | null = null;
+  readonly IVS_OVERRIDE: number | number[] | null = null;
+  readonly NATURE_OVERRIDE: Nature | null = null;
   /**
    * If equal to `ElementalType.UNKNOWN`, then ignore this override.
    * Otherwise, override every player Pokemon's Tera type to be this type.
@@ -192,7 +195,8 @@ class DefaultOverrides {
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
-  readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
+  readonly ENEMY_IVS_OVERRIDE: number | number[] | null = null;
+  readonly ENEMY_NATURE_OVERRIDE: Nature | null = null;
   readonly ENEMY_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
   /**
    * Override to give the enemy Pokemon a given amount of health segments
