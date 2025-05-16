@@ -150,7 +150,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, clamp, fixedNumber, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, fixedNumber, getEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
@@ -936,6 +936,28 @@ export default class BattleScene extends SceneBase {
     if (postProcess) {
       postProcess(pokemon);
     }
+
+    if (Overrides.IVS_OVERRIDE === null) {
+      // do nothing
+    } else if (Array.isArray(Overrides.IVS_OVERRIDE)) {
+      if (Overrides.IVS_OVERRIDE.length !== 6) {
+        throw new Error("The Player IVs override must be an array of length 6 or a number!");
+      }
+      if (Overrides.IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+        throw new Error(`All IVs in the player IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = Overrides.IVS_OVERRIDE;
+    } else {
+      if (!isBetween(Overrides.IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+        throw new Error(`The Player IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = new Array(6).fill(Overrides.IVS_OVERRIDE);
+    }
+
+    if (Overrides.NATURE_OVERRIDE !== null) {
+      pokemon.nature = Overrides.NATURE_OVERRIDE;
+    }
+
     pokemon.init();
     return pokemon;
   }
@@ -977,14 +999,25 @@ export default class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    let ENEMY_IVS_OVERRIDE_VALIDATED: number[] = [];
-    if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
-      ENEMY_IVS_OVERRIDE_VALIDATED = Overrides.ENEMY_IVS_OVERRIDE;
-    } else if (typeof Overrides.ENEMY_IVS_OVERRIDE === "number") {
-      ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
+    if (Overrides.ENEMY_IVS_OVERRIDE === null) {
+      // do nothing
+    } else if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
+      if (Overrides.ENEMY_IVS_OVERRIDE.length !== 6) {
+        throw new Error("The Enemy IVs override must be an array of length 6 or a number!");
+      }
+      if (Overrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+        throw new Error(`All IVs in the enemy IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = Overrides.ENEMY_IVS_OVERRIDE;
+    } else {
+      if (!isBetween(Overrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+        throw new Error(`The Enemy IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
-    if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => clamp(iv, IV_MIN, IV_MAX));
+
+    if (Overrides.ENEMY_NATURE_OVERRIDE !== null) {
+      pokemon.nature = Overrides.ENEMY_NATURE_OVERRIDE;
     }
 
     pokemon.init();
