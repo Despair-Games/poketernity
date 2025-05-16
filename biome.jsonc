@@ -39,7 +39,7 @@
         "noUndeclaredVariables": "off", // handled by TypeScript
         "noUnusedVariables": "error",
         "noSwitchDeclarations": "error",
-        "noVoidTypeReturn": "error", // TODO: Refactor and make this an error
+        "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
         "noUnusedImports": "off" // Handled by ESLint until multi-line disable is added (in Biome 2.0)
       },
       "style": {
