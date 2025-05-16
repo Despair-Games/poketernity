@@ -8,7 +8,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 //#region Test Constants
 
@@ -108,5 +108,42 @@ describe("Ability - Guts", () => {
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
     expect(player).toHaveEffectiveStat(Stat.ATK, Math.floor(playerAtk * 1.5 * multiplier));
+  });
+
+  it("should prevent damage reduction from 'Burn' status effect", async () => {
+    const { override, classicMode, field } = game;
+    override.statusEffect(StatusEffect.BURN).enemyIVs(31);
+
+    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = field.getPlayerPokemon();
+    const enemy = field.getEnemyPokemon();
+    // TODO: Should use enemy/player IV & nature override instead
+    vi.spyOn(enemy, "getEffectiveStat").mockReturnValue(15);
+    vi.spyOn(player, "getEffectiveStat").mockReturnValue(15);
+    vi.spyOn(enemy, "getAttackDamage");
+    game.move.use(MoveId.TACKLE);
+    await game.toEndOfTurn();
+
+    expect(player.hasNonVolatileStatusEffect()).toBe(true);
+    expect(enemy).toHaveTakenDamage(6);
+  });
+
+  it("should not boost atk when thawing itself out", async () => {
+    const { override, classicMode, field } = game;
+    override.statusEffect(StatusEffect.FREEZE);
+
+    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    const player = field.getPlayerPokemon();
+    const enemy = field.getEnemyPokemon();
+
+    expect(player.hasNonVolatileStatusEffect()).toBe(true);
+
+    game.move.use(MoveId.FLAME_WHEEL);
+    await game.toEndOfTurn();
+    const playerAtk = player.getStat(Stat.ATK);
+
+    expect(player.hasNonVolatileStatusEffect()).toBe(false);
+    expect(player).toHaveEffectiveStat(Stat.ATK, playerAtk);
+    expect(enemy).toHaveTakenDamage(2);
   });
 });
