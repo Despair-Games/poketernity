@@ -15,9 +15,8 @@ on:
 
 
 jobs:
-  # Lint files with Biome - https://biomejs.dev/linter/
-  biome-lint:
-    name: Biome-Lint
+  run-linters:
+    name: Run all linters
     runs-on: ubuntu-latest
 
     steps:
@@ -26,59 +25,23 @@ jobs:
         with:
           submodules: "recursive"
 
-      - name: Set up Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
 
-      - name: Install Node.js dependencies
+      - name: Install Node modules
         run: npm ci
-
-      - name: Run Biome
+      
+      # Lint files with Biome-Lint - https://biomejs.dev/linter/
+      - name: Run Biome-Lint
         run: npm run biome-ci
-
-  # Lint files with ESLint - https://eslint.org
-  eslint:
-    name: ESLint
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-        with:
-          submodules: "recursive"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
-
-      - name: Install Node.js dependencies
-        run: npm ci
-
+      
+      # Lint files with ESLint - https://eslint.org
       - name: Run ESLint
         run: npm run eslint-ci
-
-  # Validate dependencies with depcruise - https://github.com/sverweij/dependency-cruiser
-  depcruise:
-    name: Dependencies
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-        with:
-          submodules: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Install Node.js dependencies
-        run: npm ci
-
-      - name: depcruise
+      
+      # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
+      - name: Run Dependency-Cruise
         run: npm run depcruise
