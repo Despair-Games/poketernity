@@ -10,9 +10,20 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
-const primalWeatherTypes = PRIMAL_WEATHER_TYPES.map((primalWeatherType) => ({
+const primalWeather = PRIMAL_WEATHER_TYPES.map((primalWeatherType) => ({
   primalWeatherName: capitalizeString(WeatherType[primalWeatherType], "_", false, true),
   primalWeatherType,
+}));
+
+const replaceableWeather = [
+  WeatherType.SUNNY,
+  WeatherType.SANDSTORM,
+  WeatherType.HAIL,
+  WeatherType.SNOW,
+  WeatherType.FOG,
+].map((weatherType) => ({
+  weatherName: capitalizeString(WeatherType[weatherType], "_", false, true),
+  weatherType,
 }));
 
 //#endregion
@@ -67,28 +78,19 @@ describe("Ability - Drizzle", () => {
     expect(game).not.toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(primalWeatherTypes)(
-    "should not override primal $primalWeatherName weather",
-    async ({ primalWeatherType }) => {
-      const { phaseInterceptor, classicMode } = game;
+  it.each(primalWeather)("should not override primal $primalWeatherName weather", async ({ primalWeatherType }) => {
+    const { phaseInterceptor, classicMode } = game;
 
-      await classicMode.runToSummon([SpeciesId.FEEBAS]);
-      game.scene.arena.trySetWeather(primalWeatherType, false);
-      expect(game).toHaveWeather(primalWeatherType);
+    await classicMode.runToSummon([SpeciesId.FEEBAS]);
+    game.scene.arena.trySetWeather(primalWeatherType, false);
+    expect(game).toHaveWeather(primalWeatherType);
 
-      await phaseInterceptor.to("PostSummonPhase");
+    await phaseInterceptor.to("PostSummonPhase");
 
-      expect(game).not.toHaveWeather(WeatherType.RAIN);
-    },
-  );
+    expect(game).not.toHaveWeather(WeatherType.RAIN);
+  });
 
-  it.each([
-    { weatherName: "Sunny", weatherType: WeatherType.SUNNY },
-    { weatherName: "Sandstorm", weatherType: WeatherType.SANDSTORM },
-    { weatherName: "Hail", weatherType: WeatherType.HAIL },
-    { weatherName: "Snow", weatherType: WeatherType.SNOW },
-    { weatherName: "Fog", weatherType: WeatherType.FOG },
-  ])("should replace $weatherName weather", async ({ weatherType }) => {
+  it.each(replaceableWeather)("should replace $weatherName weather", async ({ weatherType }) => {
     const { phaseInterceptor, classicMode } = game;
 
     await classicMode.runToSummon([SpeciesId.FEEBAS]);
