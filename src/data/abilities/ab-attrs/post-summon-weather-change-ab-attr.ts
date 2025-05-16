@@ -17,7 +17,6 @@ import type { Pokemon } from "#field/pokemon";
  * | Delta Stream      | Strong Winds |     ∞ | Primal             |
  * | Air Lock          | NONE         |     - | Suppresses all     |
  * | Cloud Nine        | NONE         |     - | Suppresses all     |
- * | Sand Spit         | Sandstorm    |     5 | Activates on hit   |
  * | Orichalcum Pulse  | Harsh Sun    |     ∞ | Primal             |
  *
  * @param weatherType The {@linkcode WeatherType} to set
