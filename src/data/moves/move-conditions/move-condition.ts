@@ -12,11 +12,6 @@ export class MoveCondition {
     this.condition = condition;
   }
 
-  /** @deprecated To be replaced by {@linkcode getConditionScore} */
-  public getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
-    return 0;
-  }
-
   /**
    * Calculates the Condition Score (CS) granted to moves with this condition.
    *

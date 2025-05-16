@@ -709,10 +709,6 @@ export abstract class Move implements Localizable {
       score += attr.getUserBenefitScore(user, target, move);
     }
 
-    for (const condition of this.conditions) {
-      score += condition.getUserBenefitScore(user, target, move);
-    }
-
     return score;
   }
 
