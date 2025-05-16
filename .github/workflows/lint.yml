@@ -37,14 +37,31 @@ jobs:
       # Lint files with Biome-Lint - https://biomejs.dev/linter/
       - name: Run Biome-Lint
         run: npm run biome-ci
+        id: biome_lint
         continue-on-error: true
       
       # Lint files with ESLint - https://eslint.org
       - name: Run ESLint
         run: npm run eslint-ci
+        id: eslint
         continue-on-error: true
       
       # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
       - name: Run Dependency-Cruise
         run: npm run depcruise
+        id: depcruise
         continue-on-error: true
+      
+      - name: Check for Errors
+        env:
+          BIOME_LINT_OUTCOME: ${{ steps.biome_lint.outcome }}
+          ESLINT_OUTCOME: ${{ steps.eslint.outcome }}
+          DEPCRUISE_OUTCOME: ${{ steps.depcruise.outcome }}
+        run: |
+            echo "Biome outcome: $BIOME_LINT_OUTCOME"
+            echo "ESLint outcome: $ESLINT_OUTCOME"
+            echo "Depcruise outcome: $DEPCRUISE_OUTCOME"
+            if [[ "$BIOME_LINT_OUTCOME" != "success" || "$ESLINT_OUTCOME" != "success" || "$DEPCRUISE_OUTCOME" != "success" ]]; then
+              echo "One or more linters failed."
+              exit 1
+            fi
