@@ -128,7 +128,7 @@ describe("Ability - Guts", () => {
     expect(enemy).toHaveTakenDamage(6);
   });
 
-  it("should not boost atk when thawing itself out", async () => {
+  it("should not boost atk when thawing itself", async () => {
     const { override, classicMode, field } = game;
     override.statusEffect(StatusEffect.FREEZE);
 
