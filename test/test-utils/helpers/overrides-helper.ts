@@ -34,10 +34,26 @@ import { expect, vi } from "vitest";
  * Helper to handle overrides in tests
  */
 export class OverridesHelper extends GameManagerHelper {
-  /** If `true`, removes the starting items from enemies at the start of each test; default `true` */
+  /**
+   * If `true`, removes the starting items from enemies at the start of each test.
+   * @defaultValue `true`
+   */
   public removeEnemyStartingItems: boolean = true;
-  /** If `true`, sets the shiny overrides to disable shinies at the start of each test; default `true` */
+  /**
+   * If `true`, sets the shiny overrides to disable shinies at the start of each test.
+   * @defaultValue `true`
+   */
   public disableShinies: boolean = true;
+  /**
+   * If `true`, will set the IV overrides for player and enemy pokemon to `31` at the start of each test.
+   * @defaultValue `true`
+   */
+  public normalizeIVs: boolean = true;
+  /**
+   * If `true`, will set the Nature overrides for player and enemy pokemon to a neutral nature at the start of each test.
+   * @defaultValue `true`
+   */
+  public normalizeNatures: boolean = true;
 
   /**
    * Override the starting biome
@@ -419,6 +435,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @returns `this`
    */
   public playerIVs(ivs: number | number[] | null): this {
+    this.normalizeIVs = false;
     vi.spyOn(Overrides, "IVS_OVERRIDE", "get").mockReturnValue(ivs);
     if (ivs === null) {
       this.log("Player IVs override disabled!");
@@ -439,6 +456,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @returns `this`
    */
   public enemyIVs(ivs: number | number[] | null): this {
+    this.normalizeIVs = false;
     vi.spyOn(Overrides, "ENEMY_IVS_OVERRIDE", "get").mockReturnValue(ivs);
     if (ivs === null) {
       this.log("Enemy IVs override disabled!");
@@ -454,6 +472,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @returns `this`
    */
   public nature(nature: Nature | null): this {
+    this.normalizeNatures = false;
     vi.spyOn(Overrides, "NATURE_OVERRIDE", "get").mockReturnValue(nature);
     if (nature === null) {
       this.log("Player Nature override disabled!");
@@ -469,6 +488,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @returns `this`
    */
   public enemyNature(nature: Nature | null): this {
+    this.normalizeNatures = false;
     vi.spyOn(Overrides, "ENEMY_NATURE_OVERRIDE", "get").mockReturnValue(nature);
     if (nature === null) {
       this.log("Enemy Nature override disabled!");
