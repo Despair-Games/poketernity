@@ -28,7 +28,7 @@ export default class ArenaData {
     this.tags = [];
 
     if (source.tags) {
-      this.tags = source.tags.map((t) => loadArenaTag(t)).filter((t) => !isNil(t));
+      this.tags = (source.tags as ArenaTag[]).map((t) => loadArenaTag(t)).filter((t) => !isNil(t));
     }
   }
 }

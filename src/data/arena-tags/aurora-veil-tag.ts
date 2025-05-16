@@ -9,7 +9,8 @@ import i18next from "i18next";
 
 /**
  * Reduces the damage of physical and special moves.
- * Used by {@linkcode MoveId.AURORA_VEIL}
+ * Used by {@linkcode MoveId.AURORA_VEIL}.
+ * @extends WeakenMoveScreenTag
  */
 export class AuroraVeilTag extends WeakenMoveScreenTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {

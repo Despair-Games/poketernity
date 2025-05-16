@@ -17,6 +17,7 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Spikes_(move) Spikes}.
  * Applies up to 3 layers of Spikes, dealing 1/8th, 1/6th, or 1/4th of the the Pokémon's HP
  * in damage for 1, 2, or 3 layers of Spikes respectively if they are summoned into this trap.
+ * @extends EntryHazardTag
  */
 export class SpikesTag extends EntryHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {
@@ -37,7 +38,7 @@ export class SpikesTag extends EntryHazardTag {
     }
   }
 
-  override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
+  protected override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);

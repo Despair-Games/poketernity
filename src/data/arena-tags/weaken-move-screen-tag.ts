@@ -14,10 +14,11 @@ import { type NumberHolder, BooleanHolder } from "#utils/common-utils";
 
 /**
  * Reduces the damage of specific move categories in the arena.
+ * @abstract
  * @extends ArenaTag
  */
 export abstract class WeakenMoveScreenTag extends ArenaTag {
-  protected weakenedCategories: MoveCategory[];
+  protected readonly weakenedCategories: MoveCategory[];
 
   /**
    * Creates a new instance of the WeakenMoveScreenTag class.

@@ -25,6 +25,7 @@ interface DelayedAttack {
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
  * Delays the attack's effect by 3 turns (including the turn the move is used),
  * and deals damage after the turn count is reached.
+ * @extends ArenaTag
  */
 export class DelayedAttackTag extends ArenaTag {
   /** Contains all queued delayed attacks on the field */
@@ -36,6 +37,12 @@ export class DelayedAttackTag extends ArenaTag {
     this.delayedAttacks = [];
   }
 
+  /**
+   * Adds a delayed attack to the field.
+   * @param source - The attacking {@linkcode Pokemon}
+   * @param moveId - The {@linkcode MoveId} for the move being used
+   * @param targetIndex - The {@linkcode BattlerIndex} targeted by the attack
+   */
   public addAttack(source: Pokemon, moveId: MoveId, targetIndex: BattlerIndex): void {
     this.delayedAttacks.push({ sourceId: source.id, moveId: moveId, targetIndex, turnCount: 3 });
   }

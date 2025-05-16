@@ -7,6 +7,7 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Abstract class to implement arena entry hazards.
+ * @abstract
  * @extends ArenaTag
  */
 export abstract class EntryHazardTag extends ArenaTag {
@@ -50,11 +51,22 @@ export abstract class EntryHazardTag extends ArenaTag {
     return this.activateTrap(pokemon, simulated);
   }
 
-  activateTrap(_pokemon: Pokemon, _simulated: boolean): boolean {
-    return false;
-  }
+  /**
+   * Inflicts the hazard's effects on a Pokemon
+   * @param _pokemon - The afflicted {@linkcode Pokemon}
+   * @param _simulated - If `true`, suppresses changes to game state
+   * @returns `true` if effects applied successfully
+   */
+  protected abstract activateTrap(_pokemon: Pokemon, _simulated: boolean): boolean;
 
-  getMatchupScoreMultiplier(pokemon: Pokemon): number {
+  /**
+   * Calculates the tag's effect on a Pokemon's matchup score (for enemy switching)
+   * @param pokemon - The {@linkcode Pokemon} to evaluate
+   * @returns the multiplier to the given Pokemon's matchup score
+   * @deprecated To be replaced in the AI Rework
+   * ({@link https://github.com/Despair-Games/poketernity/issues/945 | #945})
+   */
+  public getMatchupScoreMultiplier(pokemon: Pokemon): number {
     return pokemon.isGrounded()
       ? 1
       : Phaser.Math.Linear(0, 1 / Math.pow(2, this.layers), Math.min(pokemon.getHpRatio(), 0.5) * 2);

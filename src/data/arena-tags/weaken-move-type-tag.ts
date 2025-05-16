@@ -6,10 +6,12 @@ import type { Arena } from "#field/arena";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
- * Abstract class to implement weakened moves of a specific type.
+ * Weakens the power of moves of a specific {@linkcode ElementalType}
+ * @abstract
+ * @extends ArenaTag
  */
 export abstract class WeakenMoveTypeTag extends ArenaTag {
-  private weakenedType: ElementalType;
+  private readonly weakenedType: ElementalType;
 
   /**
    * Creates a new instance of the WeakenMoveTypeTag class.

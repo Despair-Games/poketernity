@@ -23,6 +23,7 @@ import i18next from "i18next";
  * G-Max Wildfire: Fire
  * G-Max Cannonade: Water
  * G-Max Volcalith: Rock
+ * @extends ArenaTag
  */
 export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   private immuneType: ElementalType;

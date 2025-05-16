@@ -18,8 +18,10 @@ import i18next from "i18next";
  * Class used for hazards that damage based on type. The two existing ones are
  * Stealth rock (produced by stealth rock and stone axe) and
  * Sharp steel (produced by G-Max steelsurge)
+ * @abstract
+ * @extends EntryHazardTag
  */
-export class TypeHazardTag extends EntryHazardTag {
+export abstract class TypeHazardTag extends EntryHazardTag {
   public readonly damagingType: ElementalType;
   public readonly onAddKey: string;
   public readonly activateTrapKey: string;
@@ -50,7 +52,13 @@ export class TypeHazardTag extends EntryHazardTag {
     }
   }
 
-  getDamageHpRatio(pokemon: Pokemon): number {
+  /**
+   * Calculates the damage dealt to a Pokemon as a fraction of the
+   * Pokemon's maximum HP.
+   * @param pokemon - The afflicted {@linkcode Pokemon}
+   * @returns The ratio of the Pokemon's HP dealt as damage
+   */
+  private getDamageHpRatio(pokemon: Pokemon): number {
     const effectiveness = pokemon.getAttackTypeEffectiveness(this.damagingType, undefined, true);
     return effectiveness * 0.125;
   }
