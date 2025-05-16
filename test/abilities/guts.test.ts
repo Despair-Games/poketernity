@@ -8,7 +8,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
@@ -112,20 +112,16 @@ describe("Ability - Guts", () => {
 
   it("should prevent damage reduction from 'Burn' status effect", async () => {
     const { override, classicMode, field } = game;
-    override.statusEffect(StatusEffect.BURN).enemyIVs(31);
+    override.statusEffect(StatusEffect.BURN);
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
-    // TODO: Should use enemy/player IV & nature override instead
-    vi.spyOn(enemy, "getEffectiveStat").mockReturnValue(15);
-    vi.spyOn(player, "getEffectiveStat").mockReturnValue(15);
-    vi.spyOn(enemy, "getAttackDamage");
     game.move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
-    expect(enemy).toHaveTakenDamage(6);
+    expect(enemy).toHaveTakenDamage(5);
   });
 
   it("should not boost atk when thawing itself", async () => {
