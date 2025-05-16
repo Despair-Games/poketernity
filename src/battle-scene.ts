@@ -1003,15 +1003,15 @@ export default class BattleScene extends SceneBase {
       // do nothing
     } else if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
       if (Overrides.ENEMY_IVS_OVERRIDE.length !== 6) {
-        throw new Error("The Player IVs override must be an array of length 6 or a number!");
+        throw new Error("The Enemy IVs override must be an array of length 6 or a number!");
       }
       if (Overrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
-        throw new Error(`All IVs in the player IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+        throw new Error(`All IVs in the enemy IV override must be between ${IV_MIN} and ${IV_MAX}!`);
       }
       pokemon.ivs = Overrides.ENEMY_IVS_OVERRIDE;
     } else {
       if (!isBetween(Overrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
-        throw new Error(`The Player IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+        throw new Error(`The Enemy IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
       }
       pokemon.ivs = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
