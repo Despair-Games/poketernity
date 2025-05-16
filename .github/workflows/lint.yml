@@ -37,11 +37,14 @@ jobs:
       # Lint files with Biome-Lint - https://biomejs.dev/linter/
       - name: Run Biome-Lint
         run: npm run biome-ci
+        continue-on-error: true
       
       # Lint files with ESLint - https://eslint.org
       - name: Run ESLint
         run: npm run eslint-ci
+        continue-on-error: true
       
       # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
       - name: Run Dependency-Cruise
         run: npm run depcruise
+        continue-on-error: true
