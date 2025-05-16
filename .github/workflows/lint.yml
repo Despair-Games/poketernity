@@ -63,7 +63,7 @@ jobs:
 
   # Validate dependencies with depcruise - https://github.com/sverweij/dependency-cruiser
   depcruise:
-    name: Validate Dependencies
+    name: Validate Dependencies with depcruise
     runs-on: ubuntu-latest
 
     steps:
