@@ -1435,29 +1435,27 @@ export class GameData {
     this.starterData = starterData;
   }
 
-  setPokemonSeen(pokemon: Pokemon, incrementCount: boolean = true, trainer: boolean = false): void {
+  /**
+   * Marks the given Pokemon as seen, updating the seen dex data based on its characteristics
+   * (gender, form, shinyness, variant, ...). Also updates seen Pokemon counts in game stats.
+   *
+   * The function exits early if the Pokemon is part of an event that blocks game stats updates.
+   *
+   * @param pokemon - The {@linkcode Pokemon} that was caught.
+   * @param incrementCount - Whether to increment game stats and the species's seen count. Default: `true`
+   * @param trainer - Whether the Pokemon belongs to a trainer. Default: `false`
+   */
+  public setPokemonSeen(pokemon: Pokemon, incrementCount: boolean = true, trainer: boolean = false): void {
     // Some Mystery Encounters block updates to these stats
-    if (
-      globalScene.currentBattle?.isBattleMysteryEncounter()
-      && globalScene.currentBattle.mysteryEncounter?.preventGameStatsUpdates
-    ) {
+    const battle = globalScene.currentBattle;
+    if (battle?.isBattleMysteryEncounter() && battle?.mysteryEncounter?.preventGameStatsUpdates) {
       return;
     }
     const dexEntry = this.dexData[pokemon.species.speciesId];
     dexEntry.seenAttr |= pokemon.getDexAttr();
     if (incrementCount) {
       dexEntry.seenCount++;
-      this.gameStats.pokemonSeen++;
-      if (!trainer && pokemon.species.isSubLegendary()) {
-        this.gameStats.subLegendaryPokemonSeen++;
-      } else if (!trainer && pokemon.species.isLegendary()) {
-        this.gameStats.legendaryPokemonSeen++;
-      } else if (!trainer && pokemon.species.isMythical()) {
-        this.gameStats.mythicalPokemonSeen++;
-      }
-      if (!trainer && pokemon.isShiny()) {
-        this.gameStats.shinyPokemonSeen++;
-      }
+      this.incrementSeenPokemonStats(pokemon, trainer);
     }
   }
 
@@ -1467,7 +1465,7 @@ export class GameData {
    *
    * Note: it does not update the Pokemon IVs (TODO: why??). See {@linkcode updateSpeciesDexIvs} for that.
    *
-   * By default, shows a message for each starter unlocked in the process.
+   * By default, shows a message for each starter unlocked in the process. TODO: should happen elsewhere.
    *
    * The function exits early if the Pokemon is a "rental" Pokemon (i.e. was given through an event for the current run only)
    * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
@@ -1628,7 +1626,34 @@ export class GameData {
     });
   }
 
-  private incrementCaughtPokemonStats(pokemon: Pokemon) {
+  /**
+   * Update all "seen" game statistics based on the given Pokemon.
+   * Trainer legendaries and shinies do not increment the seen legendaries and shinies counters.
+   * @param pokemon - The {@linkcode Pokemon} that was seen.
+   * @param trainer - Whether the Pokemon belongs to a trainer.
+   */
+  private incrementSeenPokemonStats(pokemon: Pokemon, trainer: boolean = false): void {
+    this.gameStats.pokemonSeen++;
+    if (trainer) {
+      return;
+    }
+    if (pokemon.species.isSubLegendary()) {
+      this.gameStats.subLegendaryPokemonSeen++;
+    } else if (pokemon.species.isLegendary()) {
+      this.gameStats.legendaryPokemonSeen++;
+    } else if (pokemon.species.isMythical()) {
+      this.gameStats.mythicalPokemonSeen++;
+    }
+    if (pokemon.isShiny()) {
+      this.gameStats.shinyPokemonSeen++;
+    }
+  }
+
+  /**
+   * Update all "caught" game statistics based on the given Pokemon.
+   * @param pokemon - The {@linkcode Pokemon} that was caught.
+   */
+  private incrementCaughtPokemonStats(pokemon: Pokemon): void {
     this.gameStats.pokemonCaught++;
     if (pokemon.species.isSubLegendary()) {
       this.gameStats.subLegendaryPokemonCaught++;
@@ -1642,7 +1667,11 @@ export class GameData {
     }
   }
 
-  private incrementHatchedPokemonStats(pokemon: Pokemon) {
+  /**
+   * Update all "hatched" game statistics based on the given Pokemon.
+   * @param pokemon - The {@linkcode Pokemon} that was hatched.
+   */
+  private incrementHatchedPokemonStats(pokemon: Pokemon): void {
     this.gameStats.pokemonHatched++;
     if (pokemon.species.isSubLegendary()) {
       this.gameStats.subLegendaryPokemonHatched++;
@@ -1656,7 +1685,13 @@ export class GameData {
     }
   }
 
-  incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
+  /**
+   * Award a win ribbon to the given Species, updating game stats and awarding ribbon count achievements as needed.
+   * @param species - The {@linkcode PokemonSpecies} that won the ribbon.
+   * @param forStarter - Whether to get the non baby form of a starter or not. Default: `false`.
+   * @returns the updated number of ribbons for that Species.
+   */
+  public incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
     const speciesIdToIncrement: SpeciesId = species.getRootSpeciesId(forStarter);
 
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
@@ -1665,24 +1700,23 @@ export class GameData {
 
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
       globalScene.gameData.gameStats.ribbonsOwned++;
-    }
 
-    const ribbonsInStats: number = globalScene.gameData.gameStats.ribbonsOwned;
-
-    if (ribbonsInStats >= 100) {
-      globalScene.validateAchv(achvs._100_RIBBONS);
-    }
-    if (ribbonsInStats >= 75) {
-      globalScene.validateAchv(achvs._75_RIBBONS);
-    }
-    if (ribbonsInStats >= 50) {
-      globalScene.validateAchv(achvs._50_RIBBONS);
-    }
-    if (ribbonsInStats >= 25) {
-      globalScene.validateAchv(achvs._25_RIBBONS);
-    }
-    if (ribbonsInStats >= 10) {
-      globalScene.validateAchv(achvs._10_RIBBONS);
+      const ribbonsInStats: number = globalScene.gameData.gameStats.ribbonsOwned;
+      if (ribbonsInStats >= 100) {
+        globalScene.validateAchv(achvs._100_RIBBONS);
+      }
+      if (ribbonsInStats >= 75) {
+        globalScene.validateAchv(achvs._75_RIBBONS);
+      }
+      if (ribbonsInStats >= 50) {
+        globalScene.validateAchv(achvs._50_RIBBONS);
+      }
+      if (ribbonsInStats >= 25) {
+        globalScene.validateAchv(achvs._25_RIBBONS);
+      }
+      if (ribbonsInStats >= 10) {
+        globalScene.validateAchv(achvs._10_RIBBONS);
+      }
     }
 
     return ++this.starterData[speciesIdToIncrement].classicWinCount;
@@ -1691,10 +1725,11 @@ export class GameData {
   /**
    * Adds a candy to the player's game data for a given {@linkcode PokemonSpecies}.
    * Will do nothing if the player does not have the Pokemon owned in their system save data.
-   * @param species
-   * @param count
+   * TODO: UI should not be called directly here, probably emit an event instead or return a boolean to say whether the candy was given.
+   * @param species - The {@linkcode PokemonSpecies} to consider.
+   * @param count - How many candies to give.
    */
-  addStarterCandy(species: PokemonSpecies, count: number): void {
+  public addStarterCandy(species: PokemonSpecies, count: number): void {
     // Only gain candies if the Pokemon has already been marked as caught in dex (ignore "rental" pokemon)
     const speciesRootForm = species.getRootSpeciesId();
     if (globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
@@ -1704,13 +1739,14 @@ export class GameData {
   }
 
   /**
-   *
-   * @param species
-   * @param eggMoveIndex
-   * @param showMessage Default true. If true, will display message for unlocked egg move
-   * @param prependSpeciesToMessage Default false. If true, will change message from "X Egg Move Unlocked!" to "Bulbasaur X Egg Move Unlocked!"
+   * Unlocks the given egg move for a Starter.
+   * TODO: sound effects and messages should not be handled here.
+   * @param species - The {@linkcode PokemonSpecies} to consider.
+   * @param eggMoveIndex - Index of the egg move to unlock, between 0 and 3.
+   * @param showMessage - Whether to display a message for the new move or not. Default: `true`
+   * @param prependSpeciesToMessage - If `true`, will change message from "X Egg Move Unlocked!" to "Bulbasaur X Egg Move Unlocked!". Default: `false`
    */
-  setEggMoveUnlocked(
+  public setEggMoveUnlocked(
     species: PokemonSpecies,
     eggMoveIndex: number,
     showMessage: boolean = true,
@@ -1753,9 +1789,9 @@ export class GameData {
   }
 
   /**
-   * Checks whether the root species of a given {@PokemonSpecies} has been unlocked in the dex
+   * Checks whether the root species of a given {@linkcode PokemonSpecies} has been unlocked in the dex
    */
-  isRootSpeciesUnlocked(species: PokemonSpecies): boolean {
+  public isRootSpeciesUnlocked(species: PokemonSpecies): boolean {
     return !!this.dexData[species.getRootSpeciesId()]?.caughtAttr;
   }
 
@@ -1763,7 +1799,7 @@ export class GameData {
    * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its pre-evolutions.
    * Will fail silently if root species has not been unlocked
    */
-  unlockSpeciesNature(species: PokemonSpecies, nature: Nature): void {
+  public unlockSpeciesNature(species: PokemonSpecies, nature: Nature): void {
     if (!this.isRootSpeciesUnlocked(species)) {
       return;
     }
@@ -1786,7 +1822,7 @@ export class GameData {
   /**
    * Update the maximum IVs for the given Pokemon {@linkcode SpeciesId} and its pre-evolutions.
    */
-  updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
+  public updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
     const doUpdateIvs = (speciesId: SpeciesId) => {
       // If it's a starter, update its IVs
       if (speciesStarterCosts.hasOwnProperty(speciesId)) {
@@ -1811,7 +1847,12 @@ export class GameData {
     doUpdateIvs(speciesId);
   }
 
-  getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
+  /**
+   * Go through all species in dex data and counts those that fit the given criteria.
+   * @param dexEntryPredicate - Function that should return `true` if the given {@linkcode DexEntry} should be counted.
+   * @returns the number of Species (all Pokemon) that fit the given predicated in the dex data.
+   */
+  public getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
     const dexKeys = Object.keys(this.dexData);
     let speciesCount = 0;
     for (const s of dexKeys) {
@@ -1822,7 +1863,12 @@ export class GameData {
     return speciesCount;
   }
 
-  getStarterCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
+  /**
+   * Go through all starters in dex data and counts those that fit the given criteria.
+   * @param dexEntryPredicate - Function that should return `true` if the given {@linkcode DexEntry} should be counted.
+   * @returns the number of Starters that fit the given predicated in the dex data.
+   */
+  public getStarterCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
     const starterKeys = Object.keys(speciesStarterCosts);
     let starterCount = 0;
     for (const s of starterKeys) {
@@ -1834,12 +1880,26 @@ export class GameData {
     return starterCount;
   }
 
-  getSpeciesDefaultDexAttr(species: PokemonSpecies, _forSeen: boolean = false, optimistic: boolean = false): bigint {
+  /**
+   * Get a stripped down version of the caught {@linkcode DexAttr} of the given species,
+   * only keeping the flag for the first unlocked element in each category (gender, form, shiny, ...).
+   * For example, even if all abilities are unlocked, will only return the first ability as unlocked.
+   * @param species - The {@linkcode PokemonSpecies} to consider
+   * @param _forSeen unused. Default: `false` | TODO: remove
+   * @param rarestVariantFirst - Whether it should return the rarest unlocked shiny variant,
+   * or prioritize the non shiny form (or the lowest unlocked variant, if non shiny is not caught). Default: `false`
+   * @returns A dex attribute containing the default unlocked flags for the given species.
+   */
+  public getSpeciesDefaultDexAttr(
+    species: PokemonSpecies,
+    _forSeen: boolean = false,
+    rarestVariantFirst: boolean = false,
+  ): bigint {
     let ret = 0n;
     const dexEntry = this.dexData[species.speciesId];
     const attr = dexEntry.caughtAttr;
 
-    if (optimistic) {
+    if (rarestVariantFirst) {
       if (attr & DexAttr.SHINY_EPIC_VARIANT) {
         ret |= DexAttr.SHINY_EPIC_VARIANT;
       } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
@@ -1869,16 +1929,26 @@ export class GameData {
     return ret;
   }
 
-  getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
+  /**
+   * Transforms a dex attribute (see {@linkcode DexAttr}) into a human readable object.
+   * Assumes that the input only has a single turned on flag per category (gender, form, variant),
+   * for example as returned by {@linkcode getSpeciesDefaultDexAttr} or obtained from a {@linkcode Pokemon}.
+   * @param _species - unused. TODO: remove
+   * @param dexAttr - The dex attribute to consider.
+   * @returns
+   */
+  public getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
+    const female = !(dexAttr & DexAttr.MALE); // TODO is that correct for genderless species?
     const shiny = !(dexAttr & DexAttr.NON_SHINY);
-    const female = !(dexAttr & DexAttr.MALE);
     let variant: Variant = 0;
-    if (dexAttr & DexAttr.SHINY_BASE_VARIANT) {
-      variant = 0;
-    } else if (dexAttr & DexAttr.SHINY_RARE_VARIANT) {
-      variant = 1;
-    } else if (dexAttr & DexAttr.SHINY_EPIC_VARIANT) {
-      variant = 2;
+    if (shiny) {
+      if (dexAttr & DexAttr.SHINY_BASE_VARIANT) {
+        variant = 0;
+      } else if (dexAttr & DexAttr.SHINY_RARE_VARIANT) {
+        variant = 1;
+      } else if (dexAttr & DexAttr.SHINY_EPIC_VARIANT) {
+        variant = 2;
+      }
     }
     const formIndex = this.getFormIndex(dexAttr);
 
@@ -1890,12 +1960,24 @@ export class GameData {
     };
   }
 
-  getStarterSpeciesDefaultAbilityIndex(species: PokemonSpecies): number {
+  /**
+   * Get the index of the first unlocked ability for a given Species.
+   * TODO: should probably check that the species is a starter
+   * @param species - The {@linkcode PokemonSpecies} to consider.
+   * @returns index of the default ability to use for that species, between 0 or 2.
+   */
+  public getStarterSpeciesDefaultAbilityIndex(species: PokemonSpecies): number {
     const abilityAttr = this.starterData[species.speciesId].abilityAttr;
     return abilityAttr & AbilityAttr.ABILITY_1 ? 0 : !species.ability2 || abilityAttr & AbilityAttr.ABILITY_2 ? 1 : 2;
   }
 
-  getSpeciesDefaultNature(species: PokemonSpecies): Nature {
+  /**
+   * Get the first unlocked nature for a given Species.
+   * TODO: should probably check that the species is a starter
+   * @param species - The {@linkcode PokemonSpecies} to consider.
+   * @returns the default {@linkcode Nature} to use for that species.
+   */
+  public getSpeciesDefaultNature(species: PokemonSpecies): Nature {
     const dexEntry = this.starterData[species.speciesId];
     for (let n = 0; n < 25; n++) {
       if (dexEntry.natureAttr & (1 << n)) {
@@ -1905,11 +1987,66 @@ export class GameData {
     return 0 as Nature;
   }
 
-  getSpeciesDefaultNatureAttr(species: PokemonSpecies): number {
-    return 1 << this.getSpeciesDefaultNature(species);
+  /**
+   * Get the list of unlocked natures based on the given dex nature attribute.
+   * @param natureAttr - The attribute to consider, as stored in starter data.
+   * @returns Array of unlocked natures
+   */
+  public getNaturesForAttr(natureAttr: number = 0): Nature[] {
+    const ret: Nature[] = [];
+    for (let n = 0; n < 25; n++) {
+      if (natureAttr & (1 << n)) {
+        ret.push(n);
+      }
+    }
+    return ret;
   }
 
-  getDexAttrLuck(dexAttr: bigint): number {
+  /**
+   * Get an ordered list of the {@linkcode DexAttr}s for all unlocked variants of the given caughtAttr.
+   * @param caughtAttr - The dex attribute to consider.
+   * @param getRarestFirst - Whether the returned array should be ordered starting from the rarest unlocked variant, or not. Default: `false`
+   * @returns array of {@linkcode DexAttr}s for the unlocked variants, if any.
+   */
+  getUnlockedVariantsAttr(caughtAttr: bigint, getRarestFirst: boolean = false): bigint[] {
+    const orderedVariants = getRarestFirst
+      ? [DexAttr.SHINY_EPIC_VARIANT, DexAttr.SHINY_RARE_VARIANT, DexAttr.SHINY_BASE_VARIANT]
+      : [DexAttr.SHINY_BASE_VARIANT, DexAttr.SHINY_RARE_VARIANT, DexAttr.SHINY_EPIC_VARIANT];
+    return orderedVariants.filter((v) => (caughtAttr & v) > 0);
+  }
+
+  /**
+   * Get the index of the first unlocked form based on the given dex attribute.
+   * @param attr - The attribute to consider, as stored in dex data.
+   * @returns index of the first form with an active flag, or 0 if none.
+   */
+  public getFormIndex(attr: bigint): number {
+    if (!attr || attr < DexAttr.DEFAULT_FORM) {
+      return 0;
+    }
+    let f = 0;
+    while (!(attr & this.getFormAttr(f))) {
+      f++;
+    }
+    return f;
+  }
+
+  /**
+   * Get the value of the dex attribute flag corresponding to the given form index.
+   * @param formIndex - The form index to consider.
+   * @returns value of the active flag for that index.
+   */
+  getFormAttr(formIndex: number): bigint {
+    return BigInt(1 << formIndex) * DexAttr.DEFAULT_FORM;
+  }
+
+  /**
+   * Get the luck value associated to a given dex attribute.
+   * Currently 0 if no shiny unlocked, 1, 2 or 3 depending on the highest unlocked shiny variant.
+   * @param dexAttr - The dex attribute to consider.
+   * @returns The luck, between 0 and 3.
+   */
+  public getDexAttrLuck(dexAttr: bigint): number {
     if (dexAttr & DexAttr.SHINY_EPIC_VARIANT) {
       return 3;
     }
@@ -1922,17 +2059,14 @@ export class GameData {
     return 0;
   }
 
-  getNaturesForAttr(natureAttr: number = 0): Nature[] {
-    const ret: Nature[] = [];
-    for (let n = 0; n < 25; n++) {
-      if (natureAttr & (1 << n)) {
-        ret.push(n);
-      }
-    }
-    return ret;
-  }
-
-  getSpeciesStarterValue(speciesId: SpeciesId): number {
+  /**
+   * Get the cost of a starter, taking into account the number of purchased cost reduction
+   * and any active challenge.
+   * TODO: should probably check that the species is a starter
+   * @param speciesId - The {@linkcode SpeciesId} to consider.
+   * @returns how many points using the given species as starter should cost.
+   */
+  public getSpeciesStarterValue(speciesId: SpeciesId): number {
     const baseValue = speciesStarterCosts[speciesId];
     let value = baseValue;
 
@@ -1953,33 +2087,5 @@ export class GameData {
     applyChallenges(globalScene.gameMode, ChallengeType.STARTER_COST, speciesId, cost);
 
     return cost.value;
-  }
-
-  getFormIndex(attr: bigint): number {
-    if (!attr || attr < DexAttr.DEFAULT_FORM) {
-      return 0;
-    }
-    let f = 0;
-    while (!(attr & this.getFormAttr(f))) {
-      f++;
-    }
-    return f;
-  }
-
-  getFormAttr(formIndex: number): bigint {
-    return BigInt(1 << formIndex) * DexAttr.DEFAULT_FORM;
-  }
-
-  /**
-   * Get an ordered list of the {@linkcode DexAttr}s for all unlocked variants of the given caughtAttr.
-   * @param caughtAttr - The dex attribute to examine
-   * @param getRarestFirst - Whether the returned array should be ordered starting from the rarest unlocked variant, or not. Default: `false`
-   * @returns array of {@linkcode DexAttr}s for the unlocked variants, if any.
-   */
-  getUnlockedVariantsAttr(caughtAttr: bigint, getRarestFirst: boolean = false): bigint[] {
-    const orderedVariants = getRarestFirst
-      ? [DexAttr.SHINY_EPIC_VARIANT, DexAttr.SHINY_RARE_VARIANT, DexAttr.SHINY_BASE_VARIANT]
-      : [DexAttr.SHINY_BASE_VARIANT, DexAttr.SHINY_RARE_VARIANT, DexAttr.SHINY_EPIC_VARIANT];
-    return orderedVariants.filter((v) => (caughtAttr & v) > 0);
   }
 }

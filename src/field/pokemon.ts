@@ -613,18 +613,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isAllowedInBattle() && (!onField || this.isOnField());
   }
 
-  getDexAttr(): bigint {
+  /**
+   * @returns {@linkcode DexAttr}s with flags corresponding to the Pokemon's gender, shiny variant and form.
+   */
+  public getDexAttr(): bigint {
     let ret = 0n;
     ret |= this.gender !== Gender.FEMALE ? DexAttr.MALE : DexAttr.FEMALE;
     if (!this.shiny) {
       ret |= DexAttr.NON_SHINY;
+    } else if (this.variant >= 2) {
+      ret |= DexAttr.SHINY_EPIC_VARIANT;
+    } else if (this.variant === 1) {
+      ret |= DexAttr.SHINY_RARE_VARIANT;
     } else {
-      ret |=
-        this.variant >= 2
-          ? DexAttr.SHINY_EPIC_VARIANT
-          : this.variant === 1
-            ? DexAttr.SHINY_RARE_VARIANT
-            : DexAttr.SHINY_BASE_VARIANT;
+      ret |= DexAttr.SHINY_BASE_VARIANT;
     }
     ret |= globalScene.gameData.getFormAttr(this.getSelectableFormIndex());
     return ret;
