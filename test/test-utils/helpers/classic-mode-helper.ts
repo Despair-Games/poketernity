@@ -2,6 +2,7 @@ import { getGameMode } from "#app/game-mode";
 import overrides from "#app/overrides";
 import { BattleStyle } from "#enums/battle-style";
 import { GameModes } from "#enums/game-modes";
+import { Nature } from "#enums/nature";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { CommandPhase } from "#phases/command-phase";
@@ -26,6 +27,12 @@ export class ClassicModeHelper extends GameManagerHelper {
 
     if (this.game.override.disableShinies) {
       this.game.override.shiny(false).enemyShiny(false);
+    }
+    if (this.game.override.normalizeIVs) {
+      this.game.override.playerIVs(31).enemyIVs(31);
+    }
+    if (this.game.override.normalizeNatures) {
+      this.game.override.nature(Nature.HARDY).enemyNature(Nature.HARDY);
     }
 
     this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
