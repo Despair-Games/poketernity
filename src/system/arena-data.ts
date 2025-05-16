@@ -1,9 +1,10 @@
-import type { ArenaTag } from "#data/arena-tag";
-import { loadArenaTag } from "#data/arena-tag";
+import type { ArenaTag } from "#arena-tags/arena-tag";
+import { loadArenaTag } from "#arena-tags/utils/load-arena-tag";
 import { Terrain } from "#data/terrain";
 import { Weather } from "#data/weather";
 import type { BiomeId } from "#enums/biome-id";
 import { Arena } from "#field/arena";
+import { isNil } from "#utils/common-utils";
 
 export default class ArenaData {
   public biome: BiomeId;
@@ -27,7 +28,7 @@ export default class ArenaData {
     this.tags = [];
 
     if (source.tags) {
-      this.tags = source.tags.map((t) => loadArenaTag(t));
+      this.tags = (source.tags as ArenaTag[]).map((t) => loadArenaTag(t)).filter((t) => !isNil(t));
     }
   }
 }
