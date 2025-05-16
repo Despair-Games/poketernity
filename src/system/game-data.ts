@@ -3,6 +3,7 @@ import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
+import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import {
   APP_ABBREVIATION,
   BYPASS_LOGIN,
@@ -13,8 +14,7 @@ import {
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
-import { DEFAULT_STARTER_IVS, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
-import { EntryHazardTag } from "#data/arena-tag";
+import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import { allMoves, allSpecies } from "#data/data-lists";
 import { defaultStarterSpecies } from "#data/default-starters";
 import { AbilityAttr, DexAttr } from "#data/dex-attributes";
@@ -1833,7 +1833,7 @@ export class GameData {
             starterIvs[i] = ivs[i];
           }
         }
-        if (starterIvs.filter((iv) => iv === 31).length === 6) {
+        if (starterIvs.filter((iv) => iv === IV_MAX).length === 6) {
           globalScene.validateAchv(achvs.PERFECT_IVS);
         }
       }

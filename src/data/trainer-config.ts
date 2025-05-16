@@ -231,10 +231,13 @@ export const trainerPartyTemplates = {
     new TrainerPartyTemplate(4, PartyMemberStrength.STRONGER),
   ),
 
-  RIVAL: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-  ),
+  /**
+   * TODO?
+   * Rival 1 showing up on floor 8 is a bit too early to use any other templates
+   * Even using WEAKER has the Pokemon showing up at level 8.
+   * Currently using the otherwise unused WEAKEST to have two level 5's
+   */
+  RIVAL: new TrainerPartyCompoundTemplate(new TrainerPartyTemplate(2, PartyMemberStrength.WEAKEST)),
   RIVAL_2: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
