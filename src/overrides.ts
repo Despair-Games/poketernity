@@ -174,7 +174,14 @@ class DefaultOverrides {
   readonly MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly SHINY_OVERRIDE: boolean | null = null;
   readonly VARIANT_OVERRIDE: Variant | null = null;
+  /**
+   * Overrides the IVs of player pokemon. Values must never be outside the range `0` to `31`!
+   * - If set to a number between `0` and `31`, set all IVs of all player pokemon to that number.
+   * - If set to an array, set the IVs of all player pokemon to that array. Array length must be exactly `6`!
+   * - If set to `null`, disable the override.
+   */
   readonly IVS_OVERRIDE: number | number[] | null = null;
+  /** Override the nature of all player pokemon to the specified nature. Disabled if `null`. */
   readonly NATURE_OVERRIDE: Nature | null = null;
   /**
    * If equal to `ElementalType.UNKNOWN`, then ignore this override.
@@ -195,7 +202,14 @@ class DefaultOverrides {
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
+  /**
+   * Overrides the IVs of enemy pokemon. Values must never be outside the range `0` to `31`!
+   * - If set to a number between `0` and `31`, set all IVs of all enemy pokemon to that number.
+   * - If set to an array, set the IVs of all enemy pokemon to that array. Array length must be exactly `6`!
+   * - If set to `null`, disable the override.
+   */
   readonly ENEMY_IVS_OVERRIDE: number | number[] | null = null;
+  /** Override the nature of all enemy pokemon to the specified nature. Disabled if `null`. */
   readonly ENEMY_NATURE_OVERRIDE: Nature | null = null;
   readonly ENEMY_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
   /**
