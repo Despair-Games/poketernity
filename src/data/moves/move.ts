@@ -345,7 +345,7 @@ export abstract class Move implements Localizable {
    */
   condition(condition: MoveCondition | MoveConditionFunc): this {
     if (typeof condition === "function") {
-      condition = new MoveCondition(condition as MoveConditionFunc);
+      condition = new MoveCondition(condition);
     }
     this.conditions.push(condition);
 
@@ -667,19 +667,13 @@ export abstract class Move implements Localizable {
 
   /**
    * Applies each {@linkcode MoveCondition} function of this move to the params, determines if the move can be used prior to calling each attribute's apply()
-   * @param user {@linkcode Pokemon} to apply conditions to
-   * @param target {@linkcode Pokemon} to apply conditions to
-   * @param move {@linkcode Move} to apply conditions to
+   * @param user - The {@linkcode Pokemon} using this move
+   * @param target - The {@linkcode Pokemon} targeted by this move
+   * @param simulated - (Default `false`) If `true`, suppresses changes to game state during the condition check
    * @returns boolean: false if any of the apply()'s return false, else true
    */
-  applyConditions(user: Pokemon, target: Pokemon, move: Move): boolean {
-    for (const condition of this.conditions) {
-      if (!condition.apply(user, target, move)) {
-        return false;
-      }
-    }
-
-    return true;
+  applyConditions(user: Pokemon, target: Pokemon, simulated: boolean = false): boolean {
+    return this.conditions.every(({ condition }) => condition(user, target, this, simulated));
   }
 
   /**
@@ -748,8 +742,28 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Calculates the move's combined effect score (ES) from all attributes,
-   * conditions, and other score modifiers. ES is used to evaluate secondary
+   * Calculates the move's combined Condition Score (CS) from all conditions.
+   * Generally, this should result in a {@linkcode BAD_MOVE_PENALTY | Bad Move Penalty}
+   * if this move is proven to fail against the given target. CS should virtually
+   * never be positive.
+   *
+   * **Note:** While this does check for move failure, move immunities are
+   * resolved during {@linkcode Pokemon.getAttackScore | Attack Score} evaluation.
+   * @param user - The {@linkcode EnemyPokemon} evaluating this move
+   * @param target - The {@linkcode Pokemon} against which the move is evaluated
+   * @returns the CS for the move action. The final score should be an integer
+   */
+  public getConditionScore(user: EnemyPokemon, target: Pokemon): number {
+    const uncappedCondScore = this.conditions
+      .map((moveCondition) => moveCondition.getConditionScore(user, target, this))
+      .reduce((total, score) => total + score, 0);
+
+    return Math.max(uncappedCondScore, BAD_MOVE_PENALTY);
+  }
+
+  /**
+   * Calculates the move's combined effect score (ES) from all attributes and
+   * other miscellaneous score modifiers. ES is used to evaluate secondary
    * effects and does not factor in damage dealt, as that is accounted for by
    * {@linkcode Pokemon.getAttackScore}.
    *
@@ -778,17 +792,10 @@ export abstract class Move implements Localizable {
     /** The combined score from all attributes of the move */
     const attrScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail);
 
-    /** The combined score from all conditions of the move */
-    const conditionScore = this.conditions
-      .map((cond) => cond.getConditionScore(user, target, this))
-      .reduce((total, score) => total + score, 0);
-
     /** The penalty given if the move is inaccurate */
     const accuracyPenalty = this.getBattleAccuracyPenalty(user, target);
 
-    const totalScore = attrScore + conditionScore + accuracyPenalty;
-
-    return totalScore;
+    return attrScore + accuracyPenalty;
   }
 
   /**
@@ -810,11 +817,11 @@ export abstract class Move implements Localizable {
        * ALLY TARGET PENALTY:
        *
        * If the user is the target's ally, a {@link ALLY_TARGET_PENALTY | massive score penalty} is applied
-       * unless the move has at least one attribute that overrides the penalty,
-       * in which case the total score is the sum of effect scores from those
+       * unless the move has at least one attribute that overrides the penalty.
+       * In that case, the total score is the sum of effect scores from those
        * overriding attributes.
        *
-       * NOTE: if at least one attribute overrides the Ally Target Penalty, ONLY
+       * **NOTE:** if at least one attribute overrides the Ally Target Penalty, ONLY
        * the overriding attributes are accounted for in scoring. Score contributions
        * from other non-overriding attributes are ignored.
        */
@@ -823,10 +830,12 @@ export abstract class Move implements Localizable {
       if (allyTargetAttrs.length === 0) {
         return ALLY_TARGET_PENALTY;
       }
+
       return allyTargetAttrs
         .map((attr) => attr.getEffectScore(user, target, this))
         .reduce((total, score) => total + score, 0);
     }
+
     let attrs: MoveAttr[] = this.attrs;
     if (isKnockOut) {
       attrs = attrs.filter((attr) => attr.appliesScoreOnKO);

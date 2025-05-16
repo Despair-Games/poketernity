@@ -14,6 +14,13 @@ export function applyAbAttrs<TAttr extends AbAttr = never>(
   return applyAbAttrsInternal<TAttr>({ canApplyOnly: true }, abAttrFlag, ...params);
 }
 
+export function applyRevealedAbAttrs<TAttr extends AbAttr = never>(
+  abAttrFlag: AbAttrFlag,
+  ...params: Parameters<TAttr["apply"]>
+): string[] {
+  return applyAbAttrsInternal<TAttr>({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
+}
+
 /**
  * Obtains the function to apply abilities corresponding to the given mode
  * @param mode - The {@linkcode AbilityApplyMode} determining how abilities are applied
@@ -101,13 +108,6 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
   });
 
   return messages;
-}
-
-function applyRevealedAbAttrs<TAttr extends AbAttr = never>(
-  abAttrFlag: AbAttrFlag,
-  ...params: Parameters<TAttr["apply"]>
-): string[] {
-  return applyAbAttrsInternal<TAttr>({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
 }
 
 //#endregion

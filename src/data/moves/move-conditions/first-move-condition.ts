@@ -8,6 +8,6 @@ export class FirstMoveCondition extends MoveCondition {
   }
 
   override getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    return this.apply(user, target, move) ? 10 : -20;
+    return this.condition(user, target, move) ? 10 : -20;
   }
 }

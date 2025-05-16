@@ -351,7 +351,7 @@ export class MovePhase extends BattlePhase {
     // Rest and Swallow are only stolen if they would have an effect on the original user
     if (
       [MoveId.REST, MoveId.SWALLOW].includes(this.move.moveId)
-      && !this.move.getMove().applyConditions(this.pokemon, this.pokemon, this.move.getMove())
+      && !this.move.getMove().applyConditions(this.pokemon, this.pokemon)
     ) {
       return;
     }
@@ -527,7 +527,7 @@ export class MovePhase extends BattlePhase {
      * Move conditions assume the move has a single target
      * TODO: is this sustainable?
      */
-    const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null, move);
+    const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null);
     const failedDueToWeather: boolean = globalScene.arena.isMoveWeatherCancelled(this.pokemon, move);
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 
@@ -604,7 +604,7 @@ export class MovePhase extends BattlePhase {
     const move = this.move.getMove();
     const targets = this.getActiveTargetPokemon();
 
-    if (move.applyConditions(this.pokemon, targets[0], move)) {
+    if (move.applyConditions(this.pokemon, targets[0])) {
       this.updateLastMoveId(true);
 
       // Protean and Libero apply on the charging turn of charge moves

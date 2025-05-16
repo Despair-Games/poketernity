@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
@@ -9,7 +8,6 @@ import { getNonVolatileStatusEffects } from "#data/status-effect";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ChargeAnim } from "#enums/charge-anim";
 import { ElementalType } from "#enums/elemental-type";
@@ -92,7 +90,7 @@ import { EncoreAttr } from "#moves/encore-attr";
 import { ExposedMoveAttr } from "#moves/exposed-move-attr";
 import { failIfDampCondition } from "#moves/fail-if-damp-condition";
 import { failIfGhostTypeCondition } from "#moves/fail-if-ghost-type-condition";
-import { failIfLastCondition } from "#moves/fail-if-last-condition";
+import { FailIfLastCondition } from "#moves/fail-if-last-condition";
 import { failIfLastInPartyCondition } from "#moves/fail-if-last-in-party-condition";
 import { failIfSingleBattle } from "#moves/fail-if-single-battle-condition";
 import { failOnBossCondition } from "#moves/fail-on-boss-condition";
@@ -107,6 +105,7 @@ import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { FlameBurstAttr } from "#moves/flame-burst-attr";
 import { FlinchAttr } from "#moves/flinch-attr";
 import { FlyingTypeMultiplierAttr } from "#moves/flying-type-multiplier-attr";
+import { FocusPunchCondition } from "#moves/focus-punch-condition";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import { FormChangeItemTypeAttr } from "#moves/form-change-item-type-attr";
 import { FreezeDryAttr } from "#moves/freeze-dry-attr";
@@ -207,6 +206,7 @@ import { SecretPowerAttr } from "#moves/secret-power-attr";
 import { SemiInvulnerableAttr } from "#moves/semi-invulnerable-attr";
 import { SheerColdAccuracyAttr } from "#moves/sheer-cold-accuracy-attr";
 import { ShellSideArmCategoryAttr } from "#moves/shell-side-arm-category-attr";
+import { ShellTrapCondition } from "#moves/shell-trap-condition";
 import { ShiftStatAttr } from "#moves/shift-stat-attr";
 import { SketchAttr } from "#moves/sketch-attr";
 import { SkyDropAttr } from "#moves/sky-drop-attr";
@@ -230,6 +230,7 @@ import { SwitchAbilitiesAttr } from "#moves/switch-abilities-attr";
 import { TailwindAttr } from "#moves/tailwind-attr";
 import { TargetAtkUserAtkAttr } from "#moves/target-atk-user-atk-attr";
 import { TargetHalfHpDamageAttr } from "#moves/target-half-hp-damage-attr";
+import { TargetIsAttackingCondition } from "#moves/target-is-attacking-condition";
 import { targetSleptOrComatoseCondition } from "#moves/target-slept-or-comatose-condition";
 import { TechnoBlastTypeAttr } from "#moves/techno-blast-type-attr";
 import { TeraBlastPowerAttr } from "#moves/tera-blast-power-attr";
@@ -835,7 +836,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new SelfStatusMove(MoveId.PROTECT, ElementalType.NORMAL, -1, 10, -1, 4, 2)
       .attr(ProtectAttr)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.MACH_PUNCH, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 40, 100, 30, -1, 1, 2)
       .punchingMove(),
     new StatusMove(MoveId.SCARY_FACE, ElementalType.NORMAL, 100, 10, -1, 0, 2)
@@ -904,7 +905,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new SelfStatusMove(MoveId.DETECT, ElementalType.FIGHTING, -1, 5, -1, 4, 2)
       .attr(ProtectAttr)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.BONE_RUSH, ElementalType.GROUND, MoveCategory.PHYSICAL, 25, 90, 10, -1, 0, 2)
       .attr(MultiHitAttr)
       .makesContact(false),
@@ -921,7 +922,7 @@ export function initMoves() {
       .triageMove(),
     new SelfStatusMove(MoveId.ENDURE, ElementalType.NORMAL, -1, 10, -1, 4, 2)
       .attr(ProtectAttr, BattlerTagType.ENDURING)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new StatusMove(MoveId.CHARM, ElementalType.FAIRY, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.ATK], -2)
       .bounceable(),
@@ -1141,7 +1142,7 @@ export function initMoves() {
         i18next.t("moveTriggers:isTighteningFocus", { pokemonName: getPokemonNameWithAffix(user) }),
       )
       .punchingMove()
-      .condition((user, _target, _move) => !user.turnData.attacksReceived.find((r) => r.damage)),
+      .condition(new FocusPunchCondition),
     new AttackMove(MoveId.SMELLING_SALTS, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasStatusEffect(StatusEffect.PARALYSIS) ? 2 : 1))
       .attr(HealStatusEffectAttr, true, StatusEffect.PARALYSIS),
@@ -1182,7 +1183,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF], -1, true),
     new SelfStatusMove(MoveId.MAGIC_COAT, ElementalType.PSYCHIC, -1, 15, -1, 4, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.MAGIC_COAT, true, { failOnOverlap: true })
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new SelfStatusMove(MoveId.RECYCLE, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .snatchable()
       .unimplemented(),
@@ -1471,7 +1472,7 @@ export function initMoves() {
       .bounceable(),
     new AttackMove(MoveId.WAKE_UP_SLAP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 4)
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
-        targetSleptOrComatoseCondition(user, target, move) ? 2 : 1,
+        targetSleptOrComatoseCondition(user, target, move, true) ? 2 : 1,
       )
       .attr(HealStatusEffectAttr, false, StatusEffect.SLEEP),
     new AttackMove(MoveId.HAMMER_ARM, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 90, 10, -1, 0, 4)
@@ -1575,19 +1576,7 @@ export function initMoves() {
       .attr(AbilityChangeAttr, AbilityId.INSOMNIA)
       .bounceable(),
     new AttackMove(MoveId.SUCKER_PUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4)
-      .condition(
-        (_user, target, _move) => {
-          const turnCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
-          if (!turnCommand || !turnCommand.turnMove) {
-            return false;
-          }
-          return (
-            turnCommand.command === BattleCommand.FIGHT
-            && !target.turnData.acted
-            && turnCommand.turnMove.move.category !== MoveCategory.STATUS
-          );
-        },
-      ),
+      .condition(new TargetIsAttackingCondition()),
     new StatusMove(MoveId.TOXIC_SPIKES, ElementalType.POISON, -1, 20, -1, 0, 4)
       .attr(AddEntryHazardTagAttr, ArenaTagType.TOXIC_SPIKES)
       .bounceable()
@@ -1823,7 +1812,7 @@ export function initMoves() {
       .target(MoveTarget.USER_SIDE)
       .attr(ConditionalProtectAttr, ArenaTagType.WIDE_GUARD)
       .snatchable()
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new StatusMove(MoveId.GUARD_SPLIT, ElementalType.PSYCHIC, -1, 10, -1, 0, 5)
       .attr(AverageStatsAttr, [Stat.DEF, Stat.SPDEF], "moveTriggers:sharedGuard"),
     new StatusMove(MoveId.POWER_SPLIT, ElementalType.PSYCHIC, -1, 10, -1, 0, 5)
@@ -1953,7 +1942,7 @@ export function initMoves() {
       .target(MoveTarget.USER_SIDE)
       .attr(ConditionalProtectAttr, ArenaTagType.QUICK_GUARD)
       .snatchable()
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new SelfStatusMove(MoveId.ALLY_SWITCH, ElementalType.PSYCHIC, -1, 15, -1, 2, 5)
       .ignoresProtect()
       .unimplemented(),
@@ -2177,7 +2166,7 @@ export function initMoves() {
       .attr(ConditionalProtectAttr, ArenaTagType.MAT_BLOCK)
       .snatchable()
       .condition(new FirstMoveCondition())
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.BELCH, ElementalType.POISON, MoveCategory.SPECIAL, 120, 90, 10, -1, 0, 6)
       .condition((user, _target, _move) => user.waveData.berriesEaten.length > 0),
     new StatusMove(MoveId.ROTOTILLER, ElementalType.GROUND, -1, 10, -1, 0, 6)
@@ -2243,7 +2232,7 @@ export function initMoves() {
     new StatusMove(MoveId.CRAFTY_SHIELD, ElementalType.FAIRY, -1, 10, -1, 3, 6)
       .target(MoveTarget.USER_SIDE)
       .attr(ConditionalProtectAttr, ArenaTagType.CRAFTY_SHIELD)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new StatusMove(MoveId.FLOWER_SHIELD, ElementalType.FAIRY, -1, 10, -1, 0, 6)
       .target(MoveTarget.ALL)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, false, {
@@ -2274,7 +2263,7 @@ export function initMoves() {
       .attr(FairyLockAttr),
     new SelfStatusMove(MoveId.KINGS_SHIELD, ElementalType.STEEL, -1, 10, -1, 4, 6)
       .attr(ProtectAttr, BattlerTagType.KINGS_SHIELD)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new StatusMove(MoveId.PLAY_NICE, ElementalType.NORMAL, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
       .ignoresSubstitute()
@@ -2302,7 +2291,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPATK], -1),
     new SelfStatusMove(MoveId.SPIKY_SHIELD, ElementalType.GRASS, -1, 10, -1, 4, 6)
       .attr(ProtectAttr, BattlerTagType.SPIKY_SHIELD)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new StatusMove(MoveId.AROMATIC_MIST, ElementalType.FAIRY, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.SPDEF], 1)
       .ignoresSubstitute()
@@ -2490,7 +2479,7 @@ export function initMoves() {
       .condition(new FirstMoveCondition()),
     new SelfStatusMove(MoveId.BANEFUL_BUNKER, ElementalType.POISON, -1, 10, -1, 4, 7)
       .attr(ProtectAttr, BattlerTagType.BANEFUL_BUNKER)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.SPIRIT_SHACKLE, ElementalType.GHOST, MoveCategory.PHYSICAL, 80, 100, 10, 100, 0, 7)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { lastHitOnly: true })
       .makesContact(false),
@@ -2655,7 +2644,7 @@ export function initMoves() {
       .attr(AddBattlerTagHeaderAttr, BattlerTagType.SHELL_TRAP)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       // Fails if the user was not hit by a physical attack during the turn
-      .condition((user, _target, _move) => user.getTag<ShellTrapTag>(BattlerTagType.SHELL_TRAP)?.activated === true),
+      .condition(new ShellTrapCondition()),
     new AttackMove(MoveId.FLEUR_CANNON, ElementalType.FAIRY, MoveCategory.SPECIAL, 130, 90, 5, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.SPATK], -2, true),
     new AttackMove(MoveId.PSYCHIC_FANGS, ElementalType.PSYCHIC, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 7)
@@ -2773,7 +2762,7 @@ export function initMoves() {
       .punchingMove(),
     new SelfStatusMove(MoveId.MAX_GUARD, ElementalType.NORMAL, -1, 10, -1, 4, 8)
       .attr(ProtectAttr)
-      .condition(failIfLastCondition)
+      .condition(new FailIfLastCondition())
       .unimplemented(),
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
       .attr(DoubleDamageToMaxAttr)
@@ -2939,7 +2928,7 @@ export function initMoves() {
       .ignoresProtect(),
     new SelfStatusMove(MoveId.OBSTRUCT, ElementalType.DARK, 100, 10, -1, 4, 8)
       .attr(ProtectAttr, BattlerTagType.OBSTRUCT)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.FALSE_SURRENDER, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 10, -1, 0, 8),
     new AttackMove(MoveId.METEOR_ASSAULT, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 150, 100, 5, -1, 0, 8)
       .attr(RechargeAttr)
@@ -3269,7 +3258,7 @@ export function initMoves() {
       }),
     new SelfStatusMove(MoveId.SILK_TRAP, ElementalType.BUG, -1, 10, -1, 4, 9)
       .attr(ProtectAttr, BattlerTagType.SILK_TRAP)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.AXE_KICK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 120, 90, 10, 30, 0, 9)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
@@ -3492,21 +3481,9 @@ export function initMoves() {
       .edgeCase(), // Needs to be rewritten to not be affected by sheer force
     new SelfStatusMove(MoveId.BURNING_BULWARK, ElementalType.FIRE, -1, 10, -1, 4, 9)
       .attr(ProtectAttr, BattlerTagType.BURNING_BULWARK)
-      .condition(failIfLastCondition),
+      .condition(new FailIfLastCondition()),
     new AttackMove(MoveId.THUNDERCLAP, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 5, -1, 1, 9)
-      .condition(
-        (_user, target, _move) => {
-          const turnCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
-          if (!turnCommand || !turnCommand.turnMove) {
-            return false;
-          }
-          return (
-            turnCommand.command === BattleCommand.FIGHT
-          && !target.turnData.acted
-          && turnCommand.turnMove.move.category !== MoveCategory.STATUS
-          );
-        },
-      ),
+      .condition(new TargetIsAttackingCondition()),
     new AttackMove(MoveId.MIGHTY_CLEAVE, ElementalType.ROCK, MoveCategory.PHYSICAL, 95, 100, 5, -1, 0, 9)
       .slicingMove()
       .ignoresProtect(),
