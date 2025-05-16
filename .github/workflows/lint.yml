@@ -1,3 +1,5 @@
+name: "Lint"
+
 on:
   # Trigger the workflow on push or pull request
   push:
