@@ -4,10 +4,12 @@ import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-
 import type { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
+import type { ArenaTag } from "#arena-tags/arena-tag";
+import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
+import { getArenaTag } from "#arena-tags/utils/get-arena-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { DEFAULT_NEW_TERRAIN_DURATION } from "#constants/game-constants";
 import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
-import { getArenaTag, type ArenaTag, type EntryHazardTag } from "#data/arena-tag";
 import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#data/biome-utils";
 import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";

@@ -1,0 +1,25 @@
+import { globalScene } from "#app/global-scene";
+import { ArenaTag } from "#arena-tags/arena-tag";
+import type { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { MoveId } from "#enums/move-id";
+import type { Arena } from "#field/arena";
+import i18next from "i18next";
+
+/**
+ * Arena Tag implementing the "swamp" effect from the combination
+ * of {@link https://bulbapedia.bulbagarden.net/wiki/Grass_Pledge_(move) | Grass Pledge}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Water_Pledge_(move) | Water Pledge}.
+ * Quarters the Speed of Pokemon on the given side of the field for 4 turns.
+ * @extends ArenaTag
+ */
+export class GrassWaterPledgeTag extends ArenaTag {
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(ArenaTagType.GRASS_WATER_PLEDGE, 4, MoveId.GRASS_PLEDGE, sourceId, side);
+  }
+
+  override onAdd(_arena: Arena): void {
+    // "A swamp enveloped your/the opposing team!"
+    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`));
+  }
+}

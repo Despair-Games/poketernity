@@ -3,6 +3,7 @@ import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
+import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import {
   APP_ABBREVIATION,
   BYPASS_LOGIN,
@@ -13,7 +14,6 @@ import {
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
 import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN } from "#constants/game-constants";
-import { EntryHazardTag } from "#data/arena-tag";
 import { allMoves, allSpecies } from "#data/data-lists";
 import { defaultStarterSpecies } from "#data/default-starters";
 import { AbilityAttr, DexAttr } from "#data/dex-attributes";
