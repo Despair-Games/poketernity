@@ -182,8 +182,7 @@ export function coerceArray<T>(input: T | T[]): T[] {
  */
 export function clamp(value: number, min: number, max: number): number {
   if (min > max) {
-    console.error(`Min (${min}) > max (${max}) in clamp function!`);
-    max = min;
+    throw new Error(`Min (${min}) > max (${max}) in clamp function!`);
   }
   return Math.max(min, Math.min(max, value));
 }
