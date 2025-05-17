@@ -4,7 +4,7 @@ import { toHaveEffectiveStatMatcher } from "#test/test-utils/matchers/to-have-ef
 import { toHaveFullHpMatcher } from "#test/test-utils/matchers/to-have-full-hp-matcher";
 import { toHaveMoveResultMatcher } from "#test/test-utils/matchers/to-have-move-result-matcher";
 import { toHaveStatMatcher } from "#test/test-utils/matchers/to-have-stat-matcher";
-import { toHaveStatStageMatcher } from "#test/test-utils/matchers/to-have-stat-stage";
+import { toHaveStatStageMatcher } from "#test/test-utils/matchers/to-have-stat-stage-matcher";
 import { toHaveStatusEffectMatcher } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import { toHaveTakenDamageMatcher } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
 import { toHaveTerrainMatcher } from "#test/test-utils/matchers/to-have-terrain-matcher";

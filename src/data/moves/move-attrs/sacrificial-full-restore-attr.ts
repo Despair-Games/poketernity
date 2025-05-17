@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { PendingHealTag } from "#data/arena-tag";
+import type { PendingHealTag } from "#arena-tags/pending-heal-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";

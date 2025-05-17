@@ -267,7 +267,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
 
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
-    const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
+    const starterIvs: number[] = globalScene.gameData.starterData[starterSpecies].ivs;
 
     // Function to wrap text in color based on comparison
     const coloredText = (text: string, isBetter: boolean, ivValue) => {

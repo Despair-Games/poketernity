@@ -1,3 +1,4 @@
+import { arrayOfRange } from "#test/test-utils/test-utils";
 import { calcAccuracyMultiplier, clamp } from "#utils/common-utils";
 import { describe, expect, it } from "vitest";
 
@@ -5,6 +6,7 @@ describe("Utils - Common Utils", () => {
   describe("clamp", () => {
     const min = -5;
     const max = 5;
+    const range = arrayOfRange(min, max);
 
     it("should not be more than max", () => {
       const actual = clamp(10, min, max);
@@ -16,9 +18,13 @@ describe("Utils - Common Utils", () => {
       expect(actual).toBe(min);
     });
 
-    it.each([-3, 0, 3])("should not alter values between min and max (%i)", (value) => {
+    it.each(range)("should not alter values between min and max (%i)", (value) => {
       const actual = clamp(value, min, max);
       expect(actual).toBe(value);
+    });
+
+    it("should not accept `min > max`", () => {
+      expect(() => clamp(0, 5, -5)).toThrowError();
     });
   });
 

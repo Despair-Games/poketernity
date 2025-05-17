@@ -70,7 +70,7 @@ export default class PokemonData {
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
     this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
     this.nickname = source.nickname;
-    this.formIndex = clamp(source.formIndex, 0, getPokemonSpecies(this.speciesId).forms.length - 1);
+    this.formIndex = clamp(source.formIndex, 0, Math.max(getPokemonSpecies(this.speciesId).forms.length - 1, 0));
     this.abilityIndex = source.abilityIndex;
     this.passive = source.passive;
     this.shiny = source.shiny;

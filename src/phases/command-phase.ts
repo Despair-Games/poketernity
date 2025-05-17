@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
+import type { FairyLockTag } from "#arena-tags/fairy-lock-tag";
 import type { EncoreTag } from "#battler-tags/encore-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
 import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-import type { FairyLockTag } from "#data/arena-tag";
 import { allMoves } from "#data/data-lists";
 import { speciesStarterCosts } from "#data/starters";
 import { AbilityId } from "#enums/ability-id";

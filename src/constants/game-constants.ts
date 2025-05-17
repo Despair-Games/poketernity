@@ -26,6 +26,11 @@ export const IV_MIN = 0;
 export const IV_MAX = 31;
 
 /**
+ * Value used for the IVs of starters unlocked by default on a fresh file.
+ */
+export const DEFAULT_STARTER_IVS = 15;
+
+/**
  * In the mainline games, dynamaxing increases HP from +50% to +100% in 5% intervals.
  * Below is a chart showing what an equivalent damage taken factor would be compared to
  * the increased HP.

@@ -311,8 +311,8 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, this.defaultTextStyle));
-      const dexNatures = dexEntry.natureAttr;
-      const newNature = 1 << (pokemon.nature + 1);
+      const dexNatures = starterEntry.natureAttr;
+      const newNature = 1 << pokemon.nature;
       if (!(dexNatures & newNature)) {
         setTextColor(this.pokemonNatureLabelText, TextStyle.SUMMARY_BLUE);
       } else {
@@ -354,15 +354,14 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       const starterSpeciesId = pokemon.species.getRootSpeciesId();
-      const originalIvs: number[] | null = eggInfo
-        ? dexEntry.caughtAttr
-          ? dexEntry.ivs
-          : null
-        : globalScene.gameData.dexData[starterSpeciesId].caughtAttr
-          ? globalScene.gameData.dexData[starterSpeciesId].ivs
-          : null;
+      let originalIvs: number[] | undefined;
+      if (eggInfo && dexEntry.caughtAttr) {
+        originalIvs = starterEntry.ivs;
+      } else if (!eggInfo && globalScene.gameData.dexData[starterSpeciesId].caughtAttr) {
+        originalIvs = globalScene.gameData.starterData[starterSpeciesId].ivs;
+      }
 
-      this.statsContainer.updateIvs(pokemon.ivs, originalIvs!); // TODO: is this bang correct?
+      this.statsContainer.updateIvs(pokemon.ivs, originalIvs);
       if (!eggInfo) {
         globalScene.tweens.add({
           targets: this,

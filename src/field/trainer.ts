@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
+import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
-import type { EntryHazardTag } from "#data/arena-tag";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
@@ -284,6 +284,10 @@ export default class Trainer extends Phaser.GameObjects.Container {
        * actually goes over the level cap
        */
       switch (strength) {
+        // Currently this is only being used by Rival 1 to make their initial team level 5
+        case PartyMemberStrength.WEAKEST:
+          multiplier = 0.625;
+          break;
         case PartyMemberStrength.WEAKER:
           multiplier = LEVEL_CAP_SCALE_FACTOR - 0.25; // 0.95
           break;

@@ -1,5 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
 import { GameManager } from "#test/test-utils/game-manager";
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -15,6 +16,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -32,14 +34,30 @@ import { expect, vi } from "vitest";
  * Helper to handle overrides in tests
  */
 export class OverridesHelper extends GameManagerHelper {
-  /** If `true`, removes the starting items from enemies at the start of each test; default `true` */
+  /**
+   * If `true`, removes the starting items from enemies at the start of each test.
+   * @defaultValue `true`
+   */
   public removeEnemyStartingItems: boolean = true;
-  /** If `true`, sets the shiny overrides to disable shinies at the start of each test; default `true` */
+  /**
+   * If `true`, sets the shiny overrides to disable shinies at the start of each test.
+   * @defaultValue `true`
+   */
   public disableShinies: boolean = true;
+  /**
+   * If `true`, will set the IV overrides for player and enemy pokemon to `31` at the start of each test.
+   * @defaultValue `true`
+   */
+  public normalizeIVs: boolean = true;
+  /**
+   * If `true`, will set the Nature overrides for player and enemy pokemon to a neutral nature at the start of each test.
+   * @defaultValue `true`
+   */
+  public normalizeNatures: boolean = true;
 
   /**
    * Override the starting biome
-   * @warning Any event listeners that are attached to [NewArenaEvent](events\battle-scene.ts) may need to be handled down the line
+   * @warning Any event listeners that are attached to {@linkcode NewArenaEvent} may need to be handled down the line
    * @param biome the biome to set
    */
   public startingBiome(biome: BiomeId): this {
@@ -407,13 +425,76 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Overrides the enemy (pokemon)'s IVs
-   * @param ivs a number or array of 6 numbers ranging from 0-31
+   * Overrides the IVs of the player pokemon
+   * @param ivs - If set to a number, all IVs are set to the same value. Must be between `0` and `31`!
+   *
+   * If set to an array, that array is applied to the pokemon's IV field as-is.
+   * All values must be between `0` and `31`, and the array must be of exactly length `6`!
+   *
+   * If set to `null`, the override is disabled.
    * @returns `this`
    */
-  public enemyIVs(ivs: number | number[]): this {
+  public playerIVs(ivs: number | number[] | null): this {
+    this.normalizeIVs = false;
+    vi.spyOn(Overrides, "IVS_OVERRIDE", "get").mockReturnValue(ivs);
+    if (ivs === null) {
+      this.log("Player IVs override disabled!");
+    } else {
+      this.log(`Player IVs set to ${ivs}!`);
+    }
+    return this;
+  }
+
+  /**
+   * Overrides the IVs of the enemy pokemon
+   * @param ivs - If set to a number, all IVs are set to the same value. Must be between `0` and `31`!
+   *
+   * If set to an array, that array is applied to the pokemon's IV field as-is.
+   * All values must be between `0` and `31`, and the array must be of exactly length `6`!
+   *
+   * If set to `null`, the override is disabled.
+   * @returns `this`
+   */
+  public enemyIVs(ivs: number | number[] | null): this {
+    this.normalizeIVs = false;
     vi.spyOn(Overrides, "ENEMY_IVS_OVERRIDE", "get").mockReturnValue(ivs);
-    this.log(`Enemy Pokemon IVs set to ${ivs}`);
+    if (ivs === null) {
+      this.log("Enemy IVs override disabled!");
+    } else {
+      this.log(`Enemy IVs set to ${ivs}!`);
+    }
+    return this;
+  }
+
+  /**
+   * Overrides the nature of the player's pokemon
+   * @param nature - The nature to set, or `null` to disable the override.
+   * @returns `this`
+   */
+  public nature(nature: Nature | null): this {
+    this.normalizeNatures = false;
+    vi.spyOn(Overrides, "NATURE_OVERRIDE", "get").mockReturnValue(nature);
+    if (nature === null) {
+      this.log("Player Nature override disabled!");
+    } else {
+      this.log(`Player Nature set to ${Nature[nature]} (=${nature})!`);
+    }
+    return this;
+  }
+
+  /**
+   * Overrides the nature of the enemy's pokemon
+   * @param nature - The nature to set, or `null` to disable the override.
+   * @returns `this`
+   */
+  public enemyNature(nature: Nature | null): this {
+    this.normalizeNatures = false;
+    vi.spyOn(Overrides, "ENEMY_NATURE_OVERRIDE", "get").mockReturnValue(nature);
+    if (nature === null) {
+      this.log("Enemy Nature override disabled!");
+    } else {
+      this.log(`Enemy Nature set to ${Nature[nature]} (=${nature})!`);
+    }
     return this;
   }
 

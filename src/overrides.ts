@@ -12,6 +12,7 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
@@ -174,6 +175,15 @@ class DefaultOverrides {
   readonly SHINY_OVERRIDE: boolean | null = null;
   readonly VARIANT_OVERRIDE: Variant | null = null;
   /**
+   * Overrides the IVs of player pokemon. Values must never be outside the range `0` to `31`!
+   * - If set to a number between `0` and `31`, set all IVs of all player pokemon to that number.
+   * - If set to an array, set the IVs of all player pokemon to that array. Array length must be exactly `6`!
+   * - If set to `null`, disable the override.
+   */
+  readonly IVS_OVERRIDE: number | number[] | null = null;
+  /** Override the nature of all player pokemon to the specified nature. Disabled if `null`. */
+  readonly NATURE_OVERRIDE: Nature | null = null;
+  /**
    * If equal to `ElementalType.UNKNOWN`, then ignore this override.
    * Otherwise, override every player Pokemon's Tera type to be this type.
    */
@@ -192,7 +202,15 @@ class DefaultOverrides {
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | MoveId[] = [];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
-  readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
+  /**
+   * Overrides the IVs of enemy pokemon. Values must never be outside the range `0` to `31`!
+   * - If set to a number between `0` and `31`, set all IVs of all enemy pokemon to that number.
+   * - If set to an array, set the IVs of all enemy pokemon to that array. Array length must be exactly `6`!
+   * - If set to `null`, disable the override.
+   */
+  readonly ENEMY_IVS_OVERRIDE: number | number[] | null = null;
+  /** Override the nature of all enemy pokemon to the specified nature. Disabled if `null`. */
+  readonly ENEMY_NATURE_OVERRIDE: Nature | null = null;
   readonly ENEMY_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
   /**
    * Override to give the enemy Pokemon a given amount of health segments
