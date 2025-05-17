@@ -469,7 +469,7 @@ export class EnemyPokemon extends Pokemon {
       return {
         moveId: move.id,
         targets: [],
-        score: -5,
+        score: BAD_MOVE_PENALTY,
       };
     }
 

@@ -44,7 +44,7 @@ describe("Move Effect Scores - Gravity", () => {
   it("should be preferred when the enemy is a Ground-type Pokemon", async () => {
     game.override.enemySpecies(SpeciesId.DRILBUR);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.AGGRON]);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.GRAVITY);

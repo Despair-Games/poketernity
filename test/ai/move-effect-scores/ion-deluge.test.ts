@@ -35,7 +35,7 @@ describe("Move Effect Scores - Ion Deluge", () => {
   it("should be preferred when the enemy is Ground-type", async () => {
     game.override.enemySpecies(SpeciesId.DRILBUR);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.AGGRON]);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.ION_DELUGE);
