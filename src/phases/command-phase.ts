@@ -69,7 +69,8 @@ export class CommandPhase extends FieldPhase {
         if (allyPokemon) {
           const allyCommand = turnManager.findCommandFromPokemon(allyPokemon);
           if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
-            return this.end();
+            this.end();
+            return;
           }
         }
       }
@@ -77,7 +78,8 @@ export class CommandPhase extends FieldPhase {
 
     // If the Pokemon has applied Commander's effects to its ally, skip this command
     if (currentBattle?.double && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === pokemon) {
-      return this.end();
+      this.end();
+      return;
     }
 
     // Checks if the Pokemon is under the effects of Encore. If so, Encore can end early if the encored move has no more PP.
@@ -133,7 +135,7 @@ export class CommandPhase extends FieldPhase {
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: BattleCommand.BALL | BattleCommand.RUN, cursor: number): boolean;
+  public handleCommand(command: typeof BattleCommand.BALL | typeof BattleCommand.RUN, cursor: number): boolean;
   /**
    * @param command - Which of {@linkcode BattleCommand.FIGHT} or {@linkcode BattleCommand.TERA} was chosen
    * @param cursor - Cursor index for the selected Move
@@ -150,7 +152,7 @@ export class CommandPhase extends FieldPhase {
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
+  public handleCommand(command: typeof BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
     // TODO: refactor this function
     const pokemon = this.getPokemon();

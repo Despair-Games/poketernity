@@ -157,27 +157,27 @@ export class CommandUiHandler extends UiHandler {
     } else {
       switch (button) {
         case Button.UP:
-          if ([BattleCommand.POKEMON, BattleCommand.RUN].includes(cursor)) {
+          if (cursor === BattleCommand.POKEMON || cursor === BattleCommand.RUN) {
             success = this.setCursor(cursor - 2);
           }
           break;
         case Button.DOWN:
-          if ([BattleCommand.FIGHT, BattleCommand.BALL].includes(cursor)) {
+          if (cursor === BattleCommand.FIGHT || cursor === BattleCommand.BALL) {
             success = this.setCursor(cursor + 2);
           }
           break;
         case Button.LEFT:
-          if ([BattleCommand.BALL, BattleCommand.RUN].includes(cursor)) {
+          if (cursor === BattleCommand.BALL || cursor === BattleCommand.RUN) {
             success = this.setCursor(cursor - 1);
-          } else if ([BattleCommand.FIGHT, BattleCommand.POKEMON].includes(cursor) && this.canTera()) {
+          } else if ((cursor === BattleCommand.FIGHT || cursor === BattleCommand.POKEMON) && this.canTera()) {
             success = this.setCursor(BattleCommand.TERA);
             this.toggleTeraButton();
           }
           break;
         case Button.RIGHT:
-          if ([BattleCommand.FIGHT, BattleCommand.POKEMON].includes(cursor)) {
+          if (cursor === BattleCommand.FIGHT || cursor === BattleCommand.POKEMON) {
             success = this.setCursor(cursor + 1);
-          } else if ([BattleCommand.TERA].includes(cursor)) {
+          } else if (cursor === BattleCommand.TERA) {
             success = this.setCursor(BattleCommand.FIGHT);
             this.toggleTeraButton();
           }
