@@ -380,7 +380,7 @@ export class GameData {
 
         if (systemData.unlocks) {
           for (const key of Object.keys(systemData.unlocks)) {
-            if (this.unlocks.hasOwnProperty(key)) {
+            if (Object.hasOwn(this.unlocks, key)) {
               this.unlocks[key] = systemData.unlocks[key];
             }
           }
@@ -388,7 +388,7 @@ export class GameData {
 
         if (systemData.achvUnlocks) {
           for (const a of Object.keys(systemData.achvUnlocks)) {
-            if (achvs.hasOwnProperty(a)) {
+            if (Object.hasOwn(achvs, a)) {
               this.achvUnlocks[a] = systemData.achvUnlocks[a];
             }
           }
@@ -396,7 +396,7 @@ export class GameData {
 
         if (systemData.voucherUnlocks) {
           for (const v of Object.keys(systemData.voucherUnlocks)) {
-            if (vouchers.hasOwnProperty(v)) {
+            if (Object.hasOwn(vouchers, v)) {
               this.voucherUnlocks[v] = systemData.voucherUnlocks[v];
             }
           }
@@ -654,7 +654,7 @@ export class GameData {
     } catch (err) {
       console.error("Error parsing mapping configs from localStorage:", err);
     }
-    if (mappingConfigs.hasOwnProperty(deviceName)) {
+    if (Object.hasOwn(mappingConfigs, deviceName)) {
       // Delete the config for this device and update local storage
       delete mappingConfigs[deviceName];
       localStorage.setItem(MAPPING_CONFIG_LS_KEY, JSON.stringify(mappingConfigs));
@@ -725,7 +725,7 @@ export class GameData {
     const key = getDataTypeKey(GameDataType.SEEN_DIALOGUES);
     const ret: SeenDialogues = {};
 
-    if (!localStorage.hasOwnProperty(key)) {
+    if (!Object.hasOwn(localStorage, key)) {
       return ret;
     }
 
@@ -1016,7 +1016,7 @@ export class GameData {
       let daily: string[] = [];
 
       if (sessionData.gameMode === GameModes.DAILY) {
-        if (localStorage.hasOwnProperty("daily")) {
+        if (Object.hasOwn(localStorage, "daily")) {
           daily = JSON.parse(atob(localStorage.getItem("daily")!)); // TODO: is this bang correct?
           if (daily.includes(seed)) {
             return resolve(false);
@@ -1083,7 +1083,7 @@ export class GameData {
         for (const pd of v) {
           // TODO: remove later, temporary to prevent devs from needing to wipe their local storage
           // due to the field in `PokemonData` being renamed from `species` to `speciesId`
-          if (pd.hasOwnProperty("species")) {
+          if (Object.hasOwn(pd, "species")) {
             pd.speciesId = pd.species;
           }
           ret.push(new PokemonData(pd));
@@ -1563,7 +1563,7 @@ export class GameData {
       dexEntry.caughtAttr |= dexAttr;
 
       // Unlock ability and nature
-      if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+      if (Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         const starterData = this.starterData[species.speciesId];
         starterData.abilityAttr |=
           pokemon.abilityIndex !== 1 || pokemon.species.ability2
@@ -1573,7 +1573,7 @@ export class GameData {
         starterData.natureAttr |= 1 << pokemon.nature;
       }
 
-      const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
+      const hasPreEvolution = Object.hasOwn(pokemonPreEvolutions, species.speciesId);
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
@@ -1622,7 +1622,7 @@ export class GameData {
         }
       };
 
-      if (newCatch && speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+      if (newCatch && Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         unlockedStarters.push(species.speciesId);
         if (!showMessage) {
           checkPreEvolution(unlockedStarters);
@@ -1732,7 +1732,7 @@ export class GameData {
   ): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       const speciesId = species.speciesId;
-      if (!speciesEggMoves.hasOwnProperty(speciesId) || !speciesEggMoves[speciesId][eggMoveIndex]) {
+      if (!Object.hasOwn(speciesEggMoves, speciesId) || !speciesEggMoves[speciesId][eggMoveIndex]) {
         resolve(false);
         return;
       }
@@ -1784,12 +1784,12 @@ export class GameData {
 
     const _unlockSpeciesNature = (speciesId: SpeciesId) => {
       // If it's a starter, unlock the nature
-      if (speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+      if (Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         this.starterData[speciesId].natureAttr |= 1 << nature;
       }
 
       // If it has a pre-evolution, recursively unlock the nature for it
-      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+      if (Object.hasOwn(pokemonPreEvolutions, speciesId)) {
         _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
       }
     };
@@ -1803,7 +1803,7 @@ export class GameData {
   updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
     const doUpdateIvs = (speciesId: SpeciesId) => {
       // If it's a starter, update its IVs
-      if (speciesStarterCosts.hasOwnProperty(speciesId)) {
+      if (Object.hasOwn(speciesStarterCosts, speciesId)) {
         const starterEntry = globalScene.gameData.starterData[speciesId];
         const starterIvs = starterEntry.ivs;
         for (let i = 0; i < starterIvs.length; i++) {
@@ -1817,7 +1817,7 @@ export class GameData {
       }
 
       // If it has a pre-evolution, recursively update its IVs
-      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+      if (Object.hasOwn(pokemonPreEvolutions, speciesId)) {
         doUpdateIvs(pokemonPreEvolutions[speciesId]);
       }
     };

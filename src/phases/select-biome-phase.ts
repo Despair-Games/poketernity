@@ -83,7 +83,7 @@ export class SelectBiomePhase extends BattlePhase {
       } else {
         setNextBiome(biomes[randSeedInt(biomes.length)]);
       }
-    } else if (biomeLinks.hasOwnProperty(currentBiome)) {
+    } else if (Object.hasOwn(biomeLinks, currentBiome)) {
       setNextBiome(biomeLinks[currentBiome]);
     } else {
       setNextBiome(this.generateNextBiome());

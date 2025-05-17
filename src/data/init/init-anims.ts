@@ -52,7 +52,7 @@ export async function populateAnims() {
     }
     const nameIndex = nameField.indexOf(":", 5) + 1;
     const animName = nameField.slice(nameIndex, nameField.indexOf("\n", nameIndex));
-    if (!moveNameToId.hasOwnProperty(animName) && !commonAnimId && !chargeAnimId) {
+    if (!Object.hasOwn(moveNameToId, animName) && !commonAnimId && !chargeAnimId) {
       continue;
     }
     const anim = commonAnimId || chargeAnimId ? new LegacyAnimConfig() : new LegacyAnimConfig();
@@ -193,7 +193,7 @@ export async function populateAnims() {
                   value = Number.parseInt(value);
                   break;
               }
-              if (timedEvent.hasOwnProperty(prop)) {
+              if (Object.hasOwn(timedEvent, prop)) {
                 timedEvent[prop] = value;
               }
             }
