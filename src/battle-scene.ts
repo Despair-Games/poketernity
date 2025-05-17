@@ -1401,7 +1401,8 @@ export default class BattleScene extends SceneBase {
         isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
       const resetArenaState =
         isNewBiome
-        || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.currentBattle.battleType)
+        || this.currentBattle.battleType === BattleType.TRAINER
+        || this.currentBattle.battleType === BattleType.MYSTERY_ENCOUNTER
         || this.currentBattle.isClassicFinalBoss;
       this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
       this.trySpreadPokerus();

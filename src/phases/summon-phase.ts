@@ -273,6 +273,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   protected onEnd(): void {
+    const { battleType, waveIndex } = globalScene.currentBattle;
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
@@ -283,8 +284,9 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     if (
       !this.loaded
-      || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)
-      || globalScene.currentBattle.waveIndex % 10 === 1
+      || battleType === BattleType.TRAINER
+      || battleType === BattleType.MYSTERY_ENCOUNTER
+      || waveIndex % 10 === 1
     ) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
       this.queuePostSummon();
