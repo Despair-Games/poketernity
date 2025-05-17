@@ -2699,7 +2699,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * @returns the {@linkcode ArenaTagSide} of the Pokemon
    */
-  getArenaTagSide(): ArenaTagSide.PLAYER | ArenaTagSide.ENEMY {
+  getArenaTagSide(): typeof ArenaTagSide.PLAYER | typeof ArenaTagSide.ENEMY {
     return this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
   }
 
@@ -2727,7 +2727,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * @returns the opposing {@linkcode ArenaTagSide} of the Pokemon
    */
-  getOpposingArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+  getOpposingArenaTagSide(): typeof ArenaTagSide.ENEMY | typeof ArenaTagSide.PLAYER {
     return this.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER;
   }
 
