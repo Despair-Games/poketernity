@@ -793,6 +793,7 @@ export class Arena {
    * @param quiet If a message should be queued on screen to announce the tag being added
    * @param targetIndex The {@linkcode BattlerIndex} of the target pokemon
    * @returns `false` if there already exists a tag of this type in the Arena
+   * @todo `sourceId` should be optional
    */
   addTag(
     tagType: ArenaTagType,

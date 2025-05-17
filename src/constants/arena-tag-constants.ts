@@ -8,10 +8,13 @@ import type { Move } from "#moves/move";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
 /** All {@linkcode ArenaTagType | ArenaTagTypes} that weaken attacks of a certain {@linkcode ElementalType}. */
-export const WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES = Object.freeze([ArenaTagType.MUD_SPORT, ArenaTagType.WATER_SPORT]);
+export const WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
+  ArenaTagType.MUD_SPORT,
+  ArenaTagType.WATER_SPORT,
+]);
 
 /** All {@linkcode ArenaTagType | ArenaTagTypes} that present an entry hazard. */
-export const ENTRY_HAZARD_ARENA_TAG_TYPES = Object.freeze([
+export const ENTRY_HAZARD_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
   ArenaTagType.SPIKES,
   ArenaTagType.TOXIC_SPIKES,
   ArenaTagType.STEALTH_ROCK,
@@ -20,14 +23,14 @@ export const ENTRY_HAZARD_ARENA_TAG_TYPES = Object.freeze([
 ]);
 
 /** All {@linkcode ArenaTagType | ArenaTagTypes} that weaken a {@linkcode Move}'s strength (as a screen). */
-export const WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES = Object.freeze([
+export const WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
   ArenaTagType.REFLECT,
   ArenaTagType.AURORA_VEIL,
   ArenaTagType.LIGHT_SCREEN,
 ]);
 
 /** All {@linkcode ArenaTagType | ArenaTagTypes} that grant protection/invulnerability under certain conditions. */
-export const CONDITIONAL_PROTECT_ARENA_TAG_TYPES = Object.freeze([
+export const CONDITIONAL_PROTECT_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
   ArenaTagType.QUICK_GUARD,
   ArenaTagType.WIDE_GUARD,
   ArenaTagType.MAT_BLOCK,

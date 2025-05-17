@@ -7,7 +7,7 @@ import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
 
-export const courtChangeArenaTags = [
+export const courtChangeArenaTags = Object.freeze<ArenaTagType[]>([
   ArenaTagType.AURORA_VEIL,
   ArenaTagType.LIGHT_SCREEN,
   ArenaTagType.MIST,
@@ -26,7 +26,7 @@ export const courtChangeArenaTags = [
   ArenaTagType.G_MAX_WILDFIRE,
   ArenaTagType.G_MAX_CANNONADE,
   ArenaTagType.G_MAX_VOLCALITH,
-];
+]);
 
 /**
  * Swaps arena effects between the player and enemy side.
@@ -34,41 +34,38 @@ export const courtChangeArenaTags = [
  * @extends MoveEffectAttr
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {
-  public swappableTags: ArenaTagType[];
-
-  constructor(SwapTags: ArenaTagType[]) {
+  constructor() {
     super(true);
-    this.swappableTags = SwapTags;
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const tagPlayerTemp = globalScene.arena.getTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.PLAYER);
-    const tagEnemyTemp = globalScene.arena.getTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.ENEMY);
+    const playerTags = globalScene.arena.getTags((t) => courtChangeArenaTags.includes(t.tagType), ArenaTagSide.PLAYER);
+    const enemyTags = globalScene.arena.getTags((t) => courtChangeArenaTags.includes(t.tagType), ArenaTagSide.ENEMY);
 
-    if (tagPlayerTemp) {
-      for (const swapTagsType of tagPlayerTemp) {
+    if (playerTags) {
+      for (const swapTagsType of playerTags) {
         globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.PLAYER, true);
         globalScene.arena.addTag(
           swapTagsType.tagType,
-          swapTagsType.sourceId!,
+          swapTagsType.sourceId!, // TODO: is the bang correct?
           swapTagsType.turnCount,
           swapTagsType.sourceMoveId,
           ArenaTagSide.ENEMY,
           true,
-        ); // TODO: is the bang correct?
+        );
       }
     }
-    if (tagEnemyTemp) {
-      for (const swapTagsType of tagEnemyTemp) {
+    if (enemyTags) {
+      for (const swapTagsType of enemyTags) {
         globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.ENEMY, true);
         globalScene.arena.addTag(
           swapTagsType.tagType,
-          swapTagsType.sourceId!,
+          swapTagsType.sourceId!, // TODO: is the bang correct?
           swapTagsType.turnCount,
           swapTagsType.sourceMoveId,
           ArenaTagSide.PLAYER,
           true,
-        ); // TODO: is the bang correct?
+        );
       }
     }
 
