@@ -2656,7 +2656,7 @@ export default class BattleScene extends SceneBase {
 
   validateAchv(achv: Achievement, ...args: unknown[]): boolean {
     if (
-      (!Object.hasOwn(this.gameData.achvUnlocks.hasOwnProperty, achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
+      (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
     ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
