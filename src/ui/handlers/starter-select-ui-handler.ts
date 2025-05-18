@@ -96,7 +96,7 @@ const StarterSelectMode = {
   FILTER: 2,
   PARTY: 3,
   START: 4,
-};
+} as const;
 
 type StarterSelectMode = (typeof StarterSelectMode)[keyof typeof StarterSelectMode];
 
