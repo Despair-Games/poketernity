@@ -232,3 +232,27 @@ export function calcAccuracyMultiplier(userAccStage: number, targetEvaStage: num
 
   return 1;
 }
+
+/**
+ * Returns the name of the key that matches the enum value.
+ *
+ * **Note**: **DO NOT** use this with TypeScript enums, only with `const` objects being used as enums.
+ * @param input - The enum to check
+ * @param val - The value to get the key of
+ * @returns The name of the key with the specified value
+ * @example
+ * const thing = {
+ *   one: 1,
+ *   two: 2,
+ * } as const;
+ * console.log(enumValueToKey(thing, thing.two)); // output: "two"
+ */
+export function enumValueToKey(input: object, val: number): string {
+  for (const [key, value] of Object.entries(input)) {
+    if (val === value) {
+      return key;
+    }
+  }
+  console.error("Invalid value passed to `enumValueToKey`!");
+  return "Invalid enum value!";
+}
