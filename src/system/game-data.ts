@@ -171,7 +171,6 @@ const systemShortKeys = {
   candyCount: "$x",
   candyProgress: "$f",
   abilityAttr: "$a",
-  passiveAttr: "$pa",
   valueReduction: "$vr",
   classicWinCount: "$wc",
 };
@@ -530,7 +529,7 @@ export class GameData {
         return ret;
       }
 
-      return k.endsWith("Attr") && !["natureAttr", "abilityAttr", "passiveAttr"].includes(k) ? BigInt(v ?? 0) : v;
+      return k.endsWith("Attr") && !["natureAttr", "abilityAttr"].includes(k) ? BigInt(v ?? 0) : v;
     }) as SystemSaveData;
   }
 
