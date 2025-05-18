@@ -1,11 +1,6 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
-/**
- * TODO: review this
- */
 export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _move) => {
   const targetMoves = target.getMoveHistory().filter((m) => !m.virtual);
   if (!targetMoves.length) {
@@ -19,14 +14,6 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
   }
 
   if (copiableMove.move?.isChargingMove() && copiableMove.result === MoveResult.OTHER) {
-    return false;
-  }
-
-  /**
-   * Bide can only be copied after it fully executes
-   * @todo Verify this interaction (on Showdown?)
-   */
-  if (copiableMove.move.id === MoveId.BIDE && target.getTag(BattlerTagType.BIDE)) {
     return false;
   }
 
