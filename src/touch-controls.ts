@@ -117,7 +117,7 @@ export default class TouchControl {
    */
   simulateKeyboardEvent(eventType: string, key: string): boolean {
     console.log("simulateKeyboardEvent", eventType, key);
-    if (!Button.hasOwnProperty(key) || this.disabled) {
+    if (!Object.hasOwn(Button, key) || this.disabled) {
       return false;
     }
     const button = Button[key];

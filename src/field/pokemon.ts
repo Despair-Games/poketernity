@@ -1572,7 +1572,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+    while (Object.hasOwn(pokemonPreEvolutions, starterSpeciesId)) {
       starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
@@ -2099,7 +2099,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getEvolution(): SpeciesFormEvolution | null {
-    if (pokemonEvolutions.hasOwnProperty(this.species.speciesId)) {
+    if (Object.hasOwn(pokemonEvolutions, this.species.speciesId)) {
       const evolutions = pokemonEvolutions[this.species.speciesId];
       for (const e of evolutions) {
         if (!e.item && this.level >= e.level && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)) {
@@ -2332,7 +2332,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Checks if there is no variant data for both the index or index with form
     if (
       !this.shiny
-      || (!variantData.hasOwnProperty(variantDataIndex) && !variantData.hasOwnProperty(this.species.speciesId))
+      || (!Object.hasOwn(variantData, variantDataIndex) && !Object.hasOwn(variantData, this.species.speciesId))
     ) {
       return 0;
     }

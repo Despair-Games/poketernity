@@ -145,7 +145,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     }
 
     // If the species cannot evolve, we are done
-    if (!pokemonEvolutions.hasOwnProperty(this.speciesId)) {
+    if (!Object.hasOwn(pokemonEvolutions, this.speciesId)) {
       return this.speciesId;
     }
 
@@ -208,7 +208,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     player: boolean = false,
   ): EvolutionLevel[] {
     const ret: EvolutionLevel[] = [];
-    if (pokemonPreEvolutions.hasOwnProperty(this.speciesId)) {
+    if (Object.hasOwn(pokemonPreEvolutions, this.speciesId)) {
       const preEvolutionLevels = this.getPreEvolutionLevels().reverse();
       const levelDiff = player ? 0 : forTrainer || isBoss ? (forTrainer && isBoss ? 2.5 : 5) : 10;
       ret.push([preEvolutionLevels[0][0], 1]);
@@ -251,14 +251,14 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   }
 
   getCompatibleFusionSpeciesFilter(): PokemonSpeciesFilter {
-    const hasEvolution = pokemonEvolutions.hasOwnProperty(this.speciesId);
-    const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(this.speciesId);
+    const hasEvolution = Object.hasOwn(pokemonEvolutions, this.speciesId);
+    const hasPreEvolution = Object.hasOwn(pokemonPreEvolutions, this.speciesId);
     const category = this.group;
     return (species) => {
       return (
         (category !== SpeciesGroups.COMMON
-          || (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution
-            && pokemonPreEvolutions.hasOwnProperty(species.speciesId) === hasPreEvolution))
+          || (Object.hasOwn(pokemonEvolutions, species.speciesId) === hasEvolution
+            && Object.hasOwn(pokemonPreEvolutions, species.speciesId) === hasPreEvolution))
         && species.group === category
         && (this.isTrainerForbidden() || !species.isTrainerForbidden())
         && species.speciesId !== SpeciesId.DITTO
@@ -274,7 +274,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         variantDataIndex = `${variantDataIndex}-${formKey}`;
       }
     }
-    return variantData.hasOwnProperty(variantDataIndex) || variantData.hasOwnProperty(this.speciesId);
+    return Object.hasOwn(variantData, variantDataIndex) || Object.hasOwn(variantData, this.speciesId);
   }
 
   getFormSpriteKey(formIndex?: number) {

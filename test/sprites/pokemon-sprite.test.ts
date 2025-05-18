@@ -48,7 +48,7 @@ describe("check if every variant's sprite are correctly set", () => {
           continue;
         }
         if (name.includes("_")) {
-        } else if (!mlist.hasOwnProperty(name)) {
+        } else if (!Object.hasOwn(mlist, name)) {
           errors.push(`[${name}] - missing key ${name} in masterlist for ${trimmedFilePath}`);
         } else {
           const raw = fs.readFileSync(filePath, { encoding: "utf8", flag: "r" });
