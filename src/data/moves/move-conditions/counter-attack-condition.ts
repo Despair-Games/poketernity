@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { MoveId } from "#enums/move-id";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -21,8 +27,19 @@ export class CounterAttackCondition extends MoveCondition {
    */
   public override getConditionScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const opponents = user.getOpponents();
-    const expAttackScores = opponents.map((opp) =>
-      opp.estimateAttackMoves().flatMap((mv) => [mv.id, opp.getExpectedAttackScore(user, mv)]),
+
+    /**
+     * The opponents' forecasted Attack Scores as an array of {@linkcode MoveId}-score pairs, e.g.
+     * ```
+     * [
+     *   [MoveId.TACKLE, 1],
+     *   [MoveId.ICE_BEAM, 2],
+     *   [MoveId.THUNDERBOLT, 4]
+     * ]
+     * ```
+     */
+    const expAttackScores = opponents.flatMap((opp) =>
+      opp.estimateAttackMoves().map((mv) => [mv.id, opp.getExpectedAttackScore(user, mv)]),
     );
 
     if (

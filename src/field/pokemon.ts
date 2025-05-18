@@ -1421,9 +1421,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode getSimulatedMoves}
    */
   public estimateAttackMoves(): Move[] {
-    const revealedAttackMoves = this.getAttackMoves(true, true);
-    revealedAttackMoves.push(...this.getSimulatedMoves());
-    return revealedAttackMoves;
+    const revealedMoves = this.getMoveset()
+      .map((pmv) => pmv.getMove())
+      .filter((mv) => this.waveData.revealedMoves.has(mv.id));
+    revealedMoves.push(...this.getSimulatedMoves());
+
+    return revealedMoves.slice(0, 4).filter((move) => !move.isStatusMove());
   }
 
   /**

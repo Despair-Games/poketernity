@@ -432,10 +432,10 @@ export class EnemyPokemon extends Pokemon {
   private getOptimalMoveAction(move: Move): TargetScoreData {
     if (move.moveTarget === MoveTarget.ATTACKER) {
       /**
-       * Counter-attacks (e.g. Metal Burst) are scored entirely
-       * based on their effect score.
+       * Counter-attack moves are scored based entirely on their
+       * Condition Score and Effect Score. Attack Score is not included.
        */
-      const score = move.getEffectScore(this, this.getOpponents()[0]);
+      const score = move.getConditionScore(this, this) + move.getEffectScore(this, this);
 
       return {
         moveId: move.id,
