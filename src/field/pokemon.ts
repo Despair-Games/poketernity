@@ -3471,7 +3471,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    const stubTag = new BattlerTag(tagType, 0, 0);
+    const stubTag = new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, 0);
 
     const cancelled = new BooleanHolder(false);
     applyAbAttrs<BattlerTagImmunityAbAttr>(AbAttrFlag.BATTLER_TAG_IMMUNITY, this, true, stubTag, cancelled);
