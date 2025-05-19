@@ -18,10 +18,10 @@ import { getEnumKeys, getEnumValues } from "#utils/common-utils";
 export async function populateAnims() {
   const commonAnimNames = getEnumKeys(CommonAnim).map((k) => k.toLowerCase());
   const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
-  const commonAnimIds = getEnumValues(CommonAnim) as CommonAnim[];
+  const commonAnimIds: CommonAnim[] = getEnumValues(CommonAnim);
   const chargeAnimNames = getEnumKeys(ChargeAnim).map((k) => k.toLowerCase());
   const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
-  const chargeAnimIds = getEnumValues(ChargeAnim) as ChargeAnim[];
+  const chargeAnimIds: ChargeAnim[] = getEnumValues(ChargeAnim);
   const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
   const moveNameToId = {};
   for (const move of getEnumValues(MoveId).slice(1)) {
