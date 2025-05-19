@@ -150,7 +150,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, fixedNumber, getEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, fixedNumber, getTSEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
@@ -1117,7 +1117,7 @@ export default class BattleScene extends SceneBase {
     this.lockModifierTiers = false;
 
     this.pokeballCounts = Object.fromEntries(
-      getEnumValues(PokeballType)
+      getTSEnumValues(PokeballType)
         .filter((p) => p <= PokeballType.MASTER_BALL)
         .map((t) => [t, 0]),
     );
@@ -1189,7 +1189,7 @@ export default class BattleScene extends SceneBase {
         ...allSpecies,
         ...allMoves.values(),
         ...allAbilities,
-        ...getEnumValues(ModifierPoolType)
+        ...getTSEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
           .flatMap((mp) =>
             Object.values(mp)

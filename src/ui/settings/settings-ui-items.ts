@@ -25,7 +25,7 @@ import type {
   SettingsUiItem,
   SettingUiItemOption,
 } from "#types/Settings";
-import { getEnumLength } from "#utils/common-utils";
+import { getTSEnumLength } from "#utils/common-utils";
 import i18next, { t } from "i18next";
 
 //#region Types
@@ -231,7 +231,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "uiWindowStyle",
     label: t("settings:windowType"),
-    options: Array.from({ length: getEnumLength(UiWindowStyle) }).map((_, i) => ({ value: i, label: `${i + 1}` })),
+    options: Array.from({ length: getTSEnumLength(UiWindowStyle) }).map((_, i) => ({ value: i, label: `${i + 1}` })),
     doWrap: true,
   },
   {

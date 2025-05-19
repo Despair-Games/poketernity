@@ -73,7 +73,7 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, getEnumLength, isNil } from "#utils/common-utils";
+import { NumberHolder, executeIf, fixedNumber, getTSEnumKeys, getTSEnumLength, isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
@@ -345,7 +345,7 @@ export class GameData {
         }
 
         // TODO: Temporary starter data migration, to be removed later
-        const allNaturesAttr = Math.pow(2, getEnumLength(Nature)) - 1;
+        const allNaturesAttr = Math.pow(2, getTSEnumLength(Nature)) - 1;
         for (const starterData of Object.values(systemData.starterData)) {
           if (!starterData.natureAttr || !starterData.ivs) {
             const unlocked = starterData.abilityAttr !== 0;
@@ -403,7 +403,7 @@ export class GameData {
         }
 
         if (systemData.voucherCounts) {
-          getEnumKeys(VoucherType).forEach((key) => {
+          getTSEnumKeys(VoucherType).forEach((key) => {
             const index = VoucherType[key];
             this.voucherCounts[index] = systemData.voucherCounts[index] || 0;
           });

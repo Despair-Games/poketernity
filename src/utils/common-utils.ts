@@ -25,7 +25,7 @@ export function getCurrentTime(): number {
  * - **DO NOT** use on an enum with string values!
  * @returns The keys of a TypeScript enum
  */
-export function getEnumKeys(enumType: any): string[] {
+export function getTSEnumKeys(enumType: any): string[] {
   return Object.values(enumType)
     .filter((v) => Number.isNaN(Number.parseInt(v!.toString())))
     .map((v) => v!.toString());
@@ -39,7 +39,7 @@ export function getEnumKeys(enumType: any): string[] {
  * - Any non-number values are discarded!
  * @returns **ONLY** the number values of a TypeScript enum
  */
-export function getEnumValues(enumType: any): number[] {
+export function getTSEnumValues(enumType: any): number[] {
   return Object.values(enumType)
     .filter((v) => !Number.isNaN(Number.parseInt(v!.toString())))
     .map((v) => Number.parseInt(v!.toString()));
@@ -48,8 +48,8 @@ export function getEnumValues(enumType: any): number[] {
 /**
  * @returns length of the TypeScript enum
  */
-export function getEnumLength(input: any): number {
-  return getEnumKeys(input).length;
+export function getTSEnumLength(input: any): number {
+  return getTSEnumKeys(input).length;
 }
 
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {

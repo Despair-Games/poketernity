@@ -71,7 +71,7 @@ import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
-import { clamp, getEnumKeys, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { clamp, getTSEnumKeys, getTSEnumValues, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -143,7 +143,7 @@ export class ModifierType {
     // Try multiple pool types in case of stolen items
     for (const type of poolTypes) {
       const pool = getModifierPoolForType(type);
-      for (const tier of getEnumValues(ModifierTier)) {
+      for (const tier of getTSEnumValues(ModifierTier)) {
         if (!Object.hasOwn(pool, tier)) {
           continue;
         }
@@ -599,7 +599,7 @@ export class PokemonNatureChangeModifierType extends PokemonModifierType {
     super(
       "",
       `mint_${
-        getEnumKeys(Stat)
+        getTSEnumKeys(Stat)
           .find((s) => getNatureStatMultiplier(nature, Stat[s]) > 1)
           ?.toLowerCase() || "neutral"
       }`,

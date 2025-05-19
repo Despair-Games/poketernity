@@ -16,7 +16,7 @@ import pad_xbox360 from "#inputs/pad_xbox360";
 import { settings } from "#system/settings-manager";
 import type { SettingsUpdateEventArgs } from "#types/Settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
-import { deepCopy, getEnumValues } from "#utils/common-utils";
+import { deepCopy, getTSEnumValues } from "#utils/common-utils";
 import Phaser from "phaser";
 
 export interface DeviceMapping {
@@ -105,7 +105,7 @@ export class InputsController {
       [Device.KEYBOARD]: "default",
     };
 
-    for (const b of getEnumValues(Button)) {
+    for (const b of getTSEnumValues(Button)) {
       this.interactions[b] = {
         pressTime: false,
         isPressed: false,

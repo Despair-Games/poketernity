@@ -11,7 +11,7 @@ import type { PokemonMove } from "#field/pokemon-move";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import type { AbstractConstructor } from "#types/AbstractConstructor";
-import { BooleanHolder, getEnumKeys, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, getTSEnumKeys, toDmgValue } from "#utils/common-utils";
 import { t } from "i18next";
 
 //#region Exports
@@ -65,7 +65,7 @@ export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
  */
 export function getGmaxMoveList(): MoveId[] {
   const ret: MoveId[] = [];
-  for (const move_name of getEnumKeys(MoveId)) {
+  for (const move_name of getTSEnumKeys(MoveId)) {
     if (move_name.startsWith("G_MAX_")) {
       ret.push(MoveId[move_name]);
     }
@@ -81,7 +81,7 @@ export function getGmaxMoveList(): MoveId[] {
  */
 export function getMaxMoveList(): MoveId[] {
   const ret = getGmaxMoveList();
-  for (const move_name of getEnumKeys(MoveId)) {
+  for (const move_name of getTSEnumKeys(MoveId)) {
     if (move_name.startsWith("MAX_")) {
       ret.push(MoveId[move_name]);
     }

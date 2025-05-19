@@ -198,7 +198,7 @@ import {
   clamp,
   coerceArray,
   fixedNumber,
-  getEnumValues,
+  getTSEnumValues,
   isNil,
   toDmgValue,
 } from "#utils/common-utils";
@@ -1289,7 +1289,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   generateNature(naturePool?: Nature[]): void {
     if (naturePool === undefined) {
-      naturePool = getEnumValues(Nature);
+      naturePool = getTSEnumValues(Nature);
     }
     const nature = naturePool[randSeedInt(naturePool.length)];
     this.setNature(nature);

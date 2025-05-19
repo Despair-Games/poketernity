@@ -6,7 +6,7 @@ import { WindowVariant } from "#enums/window-variant";
 import type { RankingEntry } from "#types/RankingEntry";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { executeIf, getEnumKeys } from "#utils/common-utils";
+import { executeIf, getTSEnumKeys } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {
@@ -79,7 +79,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
 
     this.prevCategoryButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, 6, 10), Phaser.Geom.Rectangle.Contains);
     this.prevCategoryButton.on("pointerup", () => {
-      this.update(this.category ? this.category - 1 : getEnumKeys(ScoreboardCategory).length - 1);
+      this.update(this.category ? this.category - 1 : getTSEnumKeys(ScoreboardCategory).length - 1);
     });
 
     this.nextCategoryButton = globalScene.add.sprite(window.displayWidth - 4, 4, "cursor");
@@ -88,7 +88,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
 
     this.nextCategoryButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, 6, 10), Phaser.Geom.Rectangle.Contains);
     this.nextCategoryButton.on("pointerup", () => {
-      this.update(this.category < getEnumKeys(ScoreboardCategory).length - 1 ? this.category + 1 : 0);
+      this.update(this.category < getTSEnumKeys(ScoreboardCategory).length - 1 ? this.category + 1 : 0);
     });
 
     this.prevPageButton = globalScene.add.sprite(
