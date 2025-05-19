@@ -3,7 +3,7 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
-import { getEnumValues, type BooleanHolder } from "#utils/common-utils";
+import { getTSEnumValues, type BooleanHolder } from "#utils/common-utils";
 import { getMaxMoveList } from "#utils/move-utils";
 
 /**
@@ -24,7 +24,7 @@ export class MetronomeAttr extends CallMoveAttr {
    * This function is only public for usage by automated tests. Please use {@linkcode apply} instead.
    */
   public getRandomMove(user: Pokemon): MoveId {
-    const moveIds = getEnumValues(MoveId).filter(
+    const moveIds = getTSEnumValues(MoveId).filter(
       (m) => !this.invalidMoves.has(m) && !allMoves.get(m).name.endsWith(" (N)"),
     );
 

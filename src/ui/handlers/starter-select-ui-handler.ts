@@ -711,7 +711,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     starterBoxContainer.add(this.cursorObj);
 
     for (const species of allSpecies) {
-      if (!speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+      if (!Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         continue;
       }
 
@@ -1984,7 +1984,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               options: options,
             });
           };
-          if (!pokemonPreEvolutions.hasOwnProperty(this.lastSpecies.speciesId)) {
+          if (!Object.hasOwn(pokemonPreEvolutions, this.lastSpecies.speciesId)) {
             options.push({
               label: i18next.t("starterSelectUiHandler:useCandies"),
               handler: () => {
@@ -2436,7 +2436,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const formIndex = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor).formIndex;
     const starterData = globalScene.gameData.starterData[speciesId];
 
-    if (pokemonFormLevelMoves.hasOwnProperty(speciesId)) {
+    if (Object.hasOwn(pokemonFormLevelMoves, speciesId)) {
       // Species has forms with different movesets
       if (!starterData.moveset || Array.isArray(starterData.moveset)) {
         starterData.moveset = {};
@@ -2707,7 +2707,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // First, ensure you have the caught attributes for the species else default to bigint 0
       const caughtAttr = globalScene.gameData.dexData[container.species.speciesId]?.caughtAttr || BigInt(0);
       const starterData = globalScene.gameData.starterData[container.species.speciesId];
-      const isStarterProgressable = speciesEggMoves.hasOwnProperty(container.species.speciesId);
+      const isStarterProgressable = Object.hasOwn(speciesEggMoves, container.species.speciesId);
 
       // Gen filter
       const fitsGen = this.filterBar.getVals(DropDownColumn.GEN).includes(container.species.generation);
@@ -3163,7 +3163,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonCaughtHatchedContainer.setVisible(true);
         this.pokemonFormText.setVisible(true);
 
-        if (pokemonPreEvolutions.hasOwnProperty(species.speciesId)) {
+        if (Object.hasOwn(pokemonPreEvolutions, species.speciesId)) {
           this.pokemonCaughtHatchedContainer.setY(16);
           this.pokemonShinyIcon.setY(135);
           this.pokemonShinyIcon.setFrame(getVariantTierForVariant(variant));
@@ -3516,7 +3516,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
         this.canCycleTera =
           !this.statsMode
-          // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
+          // && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id)
           && !isNil(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
       }
 
@@ -3602,16 +3602,16 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
         let levelMoves: LevelMoves;
         if (
-          pokemonFormLevelMoves.hasOwnProperty(species.speciesId)
+          Object.hasOwn(pokemonFormLevelMoves, species.speciesId)
           && formIndex
-          && pokemonFormLevelMoves[species.speciesId].hasOwnProperty(formIndex)
+          && Object.hasOwn(pokemonFormLevelMoves[species.speciesId], formIndex)
         ) {
           levelMoves = pokemonFormLevelMoves[species.speciesId][formIndex];
         } else {
           levelMoves = pokemonSpeciesLevelMoves[species.speciesId];
         }
         this.speciesStarterMoves.push(...levelMoves.filter((lm) => lm[0] > 0 && lm[0] <= 5).map((lm) => lm[1]));
-        if (speciesEggMoves.hasOwnProperty(species.speciesId)) {
+        if (Object.hasOwn(speciesEggMoves, species.speciesId)) {
           for (let em = 0; em < 4; em++) {
             if (globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em)) {
               this.speciesStarterMoves.push(speciesEggMoves[species.speciesId][em]);
@@ -3626,7 +3626,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             : speciesMoveData[formIndex!] // TODO: is this bang correct?
           : null;
         const availableStarterMoves = this.speciesStarterMoves.concat(
-          speciesEggMoves.hasOwnProperty(species.speciesId)
+          Object.hasOwn(speciesEggMoves, species.speciesId)
             ? speciesEggMoves[species.speciesId].filter(
                 (_, em: number) => globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em),
               )
@@ -3670,7 +3670,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.teraIcon.setFrame(ElementalType[this.teraCursor].toLowerCase());
         this.teraIcon.setVisible(
           !this.statsMode /*
-            && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id) */,
+            && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id) */,
         );
       } else {
         this.pokemonAbilityText.setText("");
@@ -3701,7 +3701,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       this.pokemonMoveContainers[m].setVisible(!!move);
     }
 
-    const hasEggMoves = species && speciesEggMoves.hasOwnProperty(species.speciesId);
+    const hasEggMoves = species && Object.hasOwn(speciesEggMoves, species.speciesId);
 
     for (let em = 0; em < 4; em++) {
       const eggMove = hasEggMoves ? allMoves.get(speciesEggMoves[species.speciesId][em]) : null;
@@ -4120,7 +4120,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonSprite.setVisible(!!this.speciesStarterDexEntry?.caughtAttr);
     this.statsContainer.updateIvs(null);
     this.teraIcon.setVisible(true);
-    // this.teraIcon.setVisible(globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id));
+    // this.teraIcon.setVisible(Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id));
     const props = globalScene.gameData.getSpeciesDexAttrProps(
       this.lastSpecies,
       this.getCurrentDexProps(this.lastSpecies.speciesId),
@@ -4128,7 +4128,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const formIndex = props.formIndex;
     this.canCycleTera =
       !this.statsMode
-      // && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id)
+      // && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id)
       && !isNil(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
     this.updateInstructions();
   }

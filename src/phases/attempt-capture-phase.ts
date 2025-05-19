@@ -9,7 +9,7 @@ import {
   getPokeballCatchMultiplier,
   getPokeballTintColor,
 } from "#data/pokeball";
-import { getStatusEffectCatchRateMultiplier } from "#data/status-effect";
+import { getStatusEffectCatchRateMultiplier } from "#app/utils/status-effect-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PartyOption } from "#enums/party-option";

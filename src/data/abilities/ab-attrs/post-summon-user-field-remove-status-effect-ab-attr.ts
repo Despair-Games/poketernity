@@ -1,7 +1,7 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getStatusEffectHealText } from "#data/status-effect";
+import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 

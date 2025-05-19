@@ -176,10 +176,10 @@ import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boo
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
+import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allAbilities, allMoves } from "#data/data-lists";
-import { getNonVolatileStatusEffects } from "#data/status-effect";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -865,7 +865,7 @@ export function initAbilities() {
     new Ability(AbilityId.PROTEAN, 6)
       .attr(PokemonTypeChangeAbAttr),
     new Ability(AbilityId.FUR_COAT, 6)
-      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target)
+      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target) // Doesn't boost defense on self inflicted confusion damage
       .ignorable(),
     new Ability(AbilityId.MAGICIAN, 6)
       .attr(PostAttackStealHeldItemAbAttr),
@@ -1143,7 +1143,7 @@ export function initAbilities() {
       .attr(UnswappableAbilityAbAttr)
       .attr(UnsuppressableAbilityAbAttr)
       .attr(MockStatusEffectAbAttr, StatusEffect.SLEEP)
-      .attr(StatusEffectImmunityAbAttr, ...getNonVolatileStatusEffects())
+      .attr(StatusEffectImmunityAbAttr, ...NON_VOLATILE_STATUS_EFFECTS)
       .attr(BattlerTagImmunityAbAttr, BattlerTagType.DROWSY),
     new Ability(AbilityId.QUEENLY_MAJESTY, 7)
       .attr(FieldPriorityMoveImmunityAbAttr)

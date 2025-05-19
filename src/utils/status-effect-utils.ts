@@ -2,6 +2,11 @@ import { StatusEffect } from "#enums/status-effect";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
+/**
+ * Retrieve the i18next message key for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect to get the i18next message key for
+ * @returns The message key
+ */
 function getStatusEffectMessageKey(statusEffect: StatusEffect | undefined): string {
   switch (statusEffect) {
     case StatusEffect.POISON:
@@ -21,6 +26,13 @@ function getStatusEffectMessageKey(statusEffect: StatusEffect | undefined): stri
   }
 }
 
+/**
+ * Get the localized obtain message for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect
+ * @param pokemonNameWithAffix - The name of the pokemon (with affix)
+ * @param sourceText - (Optional) The source text
+ * @returns The localized obtain message for the status effect
+ */
 export function getStatusEffectObtainText(
   statusEffect: StatusEffect | undefined,
   pokemonNameWithAffix: string,
@@ -32,12 +44,19 @@ export function getStatusEffectObtainText(
 
   if (!sourceText) {
     const i18nKey = `${getStatusEffectMessageKey(statusEffect)}.obtain` as ParseKeys;
-    return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
+    return i18next.t(i18nKey, { pokemonNameWithAffix });
   }
+
   const i18nKey = `${getStatusEffectMessageKey(statusEffect)}.obtainSource` as ParseKeys;
-  return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix, sourceText: sourceText });
+  return i18next.t(i18nKey, { pokemonNameWithAffix, sourceText });
 }
 
+/**
+ * Get the localized activation message for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect
+ * @param pokemonNameWithAffix - The name of the pokemon (with affix)
+ * @returns The localized activation message for the status effect
+ */
 export function getStatusEffectActivationText(statusEffect: StatusEffect, pokemonNameWithAffix: string): string {
   if (statusEffect === StatusEffect.NONE) {
     return "";
@@ -46,6 +65,12 @@ export function getStatusEffectActivationText(statusEffect: StatusEffect, pokemo
   return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
 }
 
+/**
+ * Get the localized overlap message for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect
+ * @param pokemonNameWithAffix - The name of the pokemon (with affix)
+ * @returns The localized overlap message for the status effect
+ */
 export function getStatusEffectOverlapText(statusEffect: StatusEffect, pokemonNameWithAffix: string): string {
   if (statusEffect === StatusEffect.NONE) {
     return "";
@@ -54,6 +79,12 @@ export function getStatusEffectOverlapText(statusEffect: StatusEffect, pokemonNa
   return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
 }
 
+/**
+ * Get the localized heal message for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect
+ * @param pokemonNameWithAffix - The name of the pokemon (with affix)
+ * @returns The localized heal message for the status effect
+ */
 export function getStatusEffectHealText(statusEffect: StatusEffect, pokemonNameWithAffix: string): string {
   if (statusEffect === StatusEffect.NONE) {
     return "";
@@ -62,6 +93,11 @@ export function getStatusEffectHealText(statusEffect: StatusEffect, pokemonNameW
   return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
 }
 
+/**
+ * GEt the localized description for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect
+ * @returns The localized description for the status effect
+ */
 export function getStatusEffectDescriptor(statusEffect: StatusEffect): string {
   if (statusEffect === StatusEffect.NONE) {
     return "";
@@ -70,6 +106,11 @@ export function getStatusEffectDescriptor(statusEffect: StatusEffect): string {
   return i18next.t(i18nKey);
 }
 
+/**
+ * Get the catch rate multiplier for a {@linkcode StatusEffect}.
+ * @param statusEffect - The status effect
+ * @returns The catch rate multiplier for the status effect
+ */
 export function getStatusEffectCatchRateMultiplier(statusEffect: StatusEffect): number {
   switch (statusEffect) {
     case StatusEffect.POISON:
@@ -83,28 +124,4 @@ export function getStatusEffectCatchRateMultiplier(statusEffect: StatusEffect): 
   }
 
   return 1;
-}
-
-/**
- * Gets all non volatile status effects
- * @returns A list containing all non volatile status effects
- */
-export function getNonVolatileStatusEffects(): StatusEffect[] {
-  return [
-    StatusEffect.POISON,
-    StatusEffect.TOXIC,
-    StatusEffect.PARALYSIS,
-    StatusEffect.SLEEP,
-    StatusEffect.FREEZE,
-    StatusEffect.BURN,
-  ];
-}
-
-/**
- * Returns whether a statuss effect is non volatile.
- * Non-volatile status condition is a status that remains after being switched out.
- * @param status The status to check
- */
-export function isNonVolatileStatusEffect(status: StatusEffect): boolean {
-  return getNonVolatileStatusEffects().includes(status);
 }

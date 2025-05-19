@@ -43,7 +43,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   ) {
     super(globalScene, -72, 80);
     this.type = "Trainer";
-    this.config = allTrainerConfigs.hasOwnProperty(trainerType)
+    this.config = Object.hasOwn(allTrainerConfigs, trainerType)
       ? allTrainerConfigs[trainerType]
       : allTrainerConfigs[TrainerType.ACE_TRAINER];
 
@@ -58,7 +58,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
         : randSeedWeightedItem(this.config.partyTemplates.map((_, i) => i)),
       this.config.partyTemplates.length - 1,
     );
-    if (trainerNamePools.hasOwnProperty(trainerType)) {
+    if (Object.hasOwn(trainerNamePools, trainerType)) {
       const namePool = trainerNamePools[trainerType];
       this.name =
         name
@@ -340,11 +340,11 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
         // If the battle is not one of the named trainer doubles
         if (!(this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly)) {
-          if (this.config.partyMemberFuncs.hasOwnProperty(index)) {
+          if (Object.hasOwn(this.config.partyMemberFuncs, index)) {
             ret = this.config.partyMemberFuncs[index](level, strength);
             return;
           }
-          if (this.config.partyMemberFuncs.hasOwnProperty(index - template.size)) {
+          if (Object.hasOwn(this.config.partyMemberFuncs, index - template.size)) {
             ret = this.config.partyMemberFuncs[index - template.size](level, template.getStrength(index));
             return;
           }
@@ -464,7 +464,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
                 ? TrainerPoolTier.SUPER_RARE
                 : TrainerPoolTier.ULTRA_RARE;
       console.log(TrainerPoolTier[tier]);
-      while (!this.config.speciesPools.hasOwnProperty(tier) || !this.config.speciesPools[tier].length) {
+      while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
         console.log(
           `Downgraded trainer Pokemon rarity tier from ${TrainerPoolTier[tier]} to ${TrainerPoolTier[tier - 1]}`,
         );
@@ -481,7 +481,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
     console.log(ret.getName());
 
-    if (pokemonPreEvolutions.hasOwnProperty(baseSpecies.speciesId) && ret.speciesId !== baseSpecies.speciesId) {
+    if (Object.hasOwn(pokemonPreEvolutions, baseSpecies.speciesId) && ret.speciesId !== baseSpecies.speciesId) {
       retry = true;
     } else if (template.isBalanced(battle.enemyParty.length)) {
       const partyMemberTypes = battle.enemyParty.flatMap((p) => p.getTypes(true));

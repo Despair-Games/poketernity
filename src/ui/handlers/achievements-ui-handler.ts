@@ -188,8 +188,8 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
   protected showAchv(achv: Achievement) {
     const achvUnlocks = globalScene.gameData.achvUnlocks;
-    const unlocked = achvUnlocks.hasOwnProperty(achv.id);
-    const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));
+    const unlocked = Object.hasOwn(achvUnlocks, achv.id);
+    const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
     this.titleText.setText(unlocked ? achv.name : "???");
     this.showText(!hidden ? achv.description : "");
     this.unlockText.setText(
@@ -199,7 +199,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
   protected showVoucher(voucher: Voucher) {
     const voucherUnlocks = globalScene.gameData.voucherUnlocks;
-    const unlocked = voucherUnlocks.hasOwnProperty(voucher.id);
+    const unlocked = Object.hasOwn(voucherUnlocks, voucher.id);
 
     this.titleText.setText(getVoucherTypeName(voucher.voucherType));
     this.showText(voucher.description);
@@ -379,8 +379,8 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
     achvRange.forEach((achv: Achievement, i: number) => {
       const icon = this.icons[i];
-      const unlocked = achvUnlocks.hasOwnProperty(achv.id);
-      const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));
+      const unlocked = Object.hasOwn(achvUnlocks, achv.id);
+      const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
       const tinted = !hidden && !unlocked;
 
       icon.setFrame(!hidden ? achv.iconImage : "unknown");
@@ -418,7 +418,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
     voucherRange.forEach((voucher: Voucher, i: number) => {
       const icon = this.icons[i];
-      const unlocked = voucherUnlocks.hasOwnProperty(voucher.id);
+      const unlocked = Object.hasOwn(voucherUnlocks, voucher.id);
 
       icon.setFrame(getVoucherTypeIcon(voucher.voucherType));
       icon.setVisible(true);

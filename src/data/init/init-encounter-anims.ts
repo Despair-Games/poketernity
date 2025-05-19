@@ -2,7 +2,7 @@ import { LegacyAnimConfig } from "#animations/anim-config";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { EncounterAnim } from "#enums/encounter-anims";
-import { coerceArray, getEnumKeys, isNil } from "#utils/common-utils";
+import { coerceArray, getTSEnumKeys, isNil } from "#utils/common-utils";
 
 /**
  * Fetches animation configs to be used in a Mystery Encounter
@@ -10,7 +10,7 @@ import { coerceArray, getEnumKeys, isNil } from "#utils/common-utils";
  */
 export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
   const anims = coerceArray(encounterAnim);
-  const encounterAnimNames = getEnumKeys(EncounterAnim);
+  const encounterAnimNames = getTSEnumKeys(EncounterAnim);
   const encounterAnimFetches: Promise<Map<EncounterAnim, LegacyAnimConfig>>[] = [];
   for (const anim of anims) {
     if (encounterAnims.has(anim) && !isNil(encounterAnims.get(anim))) {

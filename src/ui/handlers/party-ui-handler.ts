@@ -892,7 +892,7 @@ export class PartyUiHandler extends MessageUiHandler {
       this.options.push(PartyOption.SUMMARY);
       this.options.push(PartyOption.RENAME);
 
-      if (pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)) {
+      if (Object.hasOwn(pokemonEvolutions, pokemon.species.speciesId)) {
         this.options.push(PartyOption.UNPAUSE_EVOLUTION);
       }
 
