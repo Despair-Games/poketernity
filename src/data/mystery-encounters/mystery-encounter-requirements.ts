@@ -762,7 +762,7 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
 
   filterByForm(pokemon, formChangeItem) {
     if (
-      pokemonFormChanges.hasOwnProperty(pokemon.species.speciesId)
+      Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)
       // Get all form changes for this species with an item trigger, including any compound triggers
       && pokemonFormChanges[pokemon.species.speciesId]
         .filter((fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger))
@@ -829,7 +829,7 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
       return false;
     }
     if (
-      pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)
+      Object.hasOwn(pokemonEvolutions, pokemon.species.speciesId)
       && pokemonEvolutions[pokemon.species.speciesId].filter(
         (e) =>
           e.item === evolutionItem

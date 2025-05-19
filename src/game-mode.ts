@@ -293,7 +293,7 @@ export class GameMode implements GameModeConfig {
   isFixedBattle(waveIndex: number): boolean {
     const dummyConfig = new FixedBattleConfig();
     return (
-      this.battleConfig.hasOwnProperty(waveIndex)
+      Object.hasOwn(this.battleConfig, waveIndex)
       || applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, dummyConfig)
     );
   }

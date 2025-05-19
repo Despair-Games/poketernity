@@ -161,7 +161,7 @@ export function deepFreeze<T>(obj: T): Readonly<T> {
 
 /** @returns `true` if the input is a `Pokemon` object */
 export function isPokemon(data: any): data is Pokemon {
-  return data.hasOwnProperty("type") && data.type === "Pokemon";
+  return Object.hasOwn(data, "type") && data.type === "Pokemon";
 }
 
 /**

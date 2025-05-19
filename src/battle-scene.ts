@@ -2030,7 +2030,7 @@ export default class BattleScene extends SceneBase {
               .filter(speciesFilter)
               .map((s) => {
                 if (!filterAllEvolutions) {
-                  while (pokemonPreEvolutions.hasOwnProperty(s.speciesId)) {
+                  while (Object.hasOwn(pokemonPreEvolutions, s.speciesId)) {
                     s = getPokemonSpecies(pokemonPreEvolutions[s.speciesId]);
                   }
                 }
@@ -2587,7 +2587,7 @@ export default class BattleScene extends SceneBase {
     delayed: boolean = false,
     modal: boolean = false,
   ): boolean {
-    if (pokemonFormChanges.hasOwnProperty(pokemon.species.speciesId)) {
+    if (Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)) {
       // in case this is NECROZMA, determine which forms this
       const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(
         (fc) => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon),
@@ -2656,12 +2656,12 @@ export default class BattleScene extends SceneBase {
 
   validateAchv(achv: Achievement, ...args: unknown[]): boolean {
     if (
-      (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
+      (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
     ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
       this.ui.achvBar.showAchv(achv);
-      if (vouchers.hasOwnProperty(achv.id)) {
+      if (Object.hasOwn(vouchers, achv.id)) {
         this.validateVoucher(vouchers[achv.id]);
       }
       return true;
@@ -2671,7 +2671,7 @@ export default class BattleScene extends SceneBase {
   }
 
   validateVoucher(voucher: Voucher, ...args: unknown[]): boolean {
-    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(...args)) {
+    if (!Object.hasOwn(this.gameData.voucherUnlocks, voucher.id) && voucher.validate(...args)) {
       this.gameData.voucherUnlocks[voucher.id] = new Date().getTime();
       this.ui.achvBar.showAchv(voucher);
       this.gameData.voucherCounts[voucher.voucherType]++;
@@ -3003,7 +3003,7 @@ export default class BattleScene extends SceneBase {
     let encounter: MysteryEncounter | null;
     if (
       !isNil(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
-      && allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      && Object.hasOwn(allMysteryEncounters, Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
       encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
       if (canBypass) {

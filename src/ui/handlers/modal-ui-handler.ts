@@ -100,7 +100,7 @@ export abstract class ModalUiHandler extends UiHandler {
   }
 
   public override show(config: ModalConfig | any, ..._args: unknown[]): boolean {
-    if (!config.hasOwnProperty("buttonActions")) {
+    if (!Object.hasOwn(config, "buttonActions")) {
       return false;
     }
 
