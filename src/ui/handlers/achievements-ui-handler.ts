@@ -35,9 +35,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
   private iconsBg: Phaser.GameObjects.NineSlice;
   private icons: Phaser.GameObjects.Sprite[];
 
-  private titleBg: Phaser.GameObjects.NineSlice;
   private titleText: Phaser.GameObjects.Text;
-  private scoreContainer: Phaser.GameObjects.Container;
   private unlockText: Phaser.GameObjects.Text;
 
   private achvsName: string;
@@ -111,9 +109,8 @@ export class AchievementsUiHandler extends MessageUiHandler {
       this.iconsContainer.add(icon);
     }
 
-    const titleBg = addWindow(0, this.headerBg.height + this.iconsBg.height, 174, 24);
+    const titleBg = addWindow(0, this.headerBg.height + this.iconsBg.height, 220, 24);
     titleBg.setOrigin(0, 0);
-    this.titleBg = titleBg;
 
     this.titleText = addTextObject(0, 0, "", TextStyle.STATS_VALUE);
     const titleBgCenterX = titleBg.x + titleBg.width / 2;
@@ -121,12 +118,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.titleText.setOrigin(0.5, 0.5);
     this.titleText.setPosition(titleBgCenterX, titleBgCenterY);
 
-    this.scoreContainer = globalScene.add.container(titleBg.x + titleBg.width, titleBg.y);
-    const scoreBg = addWindow(0, 0, 46, 24);
-    scoreBg.setOrigin(0, 0);
-    this.scoreContainer.add(scoreBg);
-
-    const unlockBg = addWindow(this.scoreContainer.x + scoreBg.width, titleBg.y, 98, 24);
+    const unlockBg = addWindow(titleBg.x + titleBg.width, titleBg.y, 98, 24);
     unlockBg.setOrigin(0, 0);
 
     this.unlockText = addTextObject(0, 0, "", TextStyle.WINDOW);
@@ -152,7 +144,6 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.mainContainer.add(this.iconsContainer);
     this.mainContainer.add(titleBg);
     this.mainContainer.add(this.titleText);
-    this.mainContainer.add(this.scoreContainer);
     this.mainContainer.add(unlockBg);
     this.mainContainer.add(this.unlockText);
     this.mainContainer.add(descriptionBg);
@@ -308,19 +299,9 @@ export class AchievementsUiHandler extends MessageUiHandler {
     if (update || pageChange) {
       switch (this.currentPage) {
         case Page.ACHIEVEMENTS:
-          if (pageChange) {
-            this.titleBg.width = 174;
-            this.titleText.x = this.titleBg.width / 2;
-            this.scoreContainer.setVisible(true);
-          }
           this.showAchv(achvs[Object.keys(achvs)[cursor + this.scrollCursor * this.COLS]]);
           break;
         case Page.VOUCHERS:
-          if (pageChange) {
-            this.titleBg.width = 220;
-            this.titleText.x = this.titleBg.width / 2;
-            this.scoreContainer.setVisible(false);
-          }
           this.showVoucher(vouchers[Object.keys(vouchers)[cursor + this.scrollCursor * this.COLS]]);
           break;
       }
