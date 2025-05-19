@@ -15,8 +15,6 @@ import type { Pokemon } from "#field/pokemon";
  * | Desolate Land     | Harsh Sun    |     ∞ | Primal             |
  * | Primordial Sea    | Heavy Rain   |     ∞ | Primal             |
  * | Delta Stream      | Strong Winds |     ∞ | Primal             |
- * | Air Lock          | NONE         |     - | Suppresses all     |
- * | Cloud Nine        | NONE         |     - | Suppresses all     |
  * | Orichalcum Pulse  | Harsh Sun    |     ∞ | Primal             |
  *
  * @param weatherType The {@linkcode WeatherType} to set
