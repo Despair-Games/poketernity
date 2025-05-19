@@ -36,7 +36,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
-import { coerceArray, getTSEnumValues } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
 
@@ -955,13 +955,13 @@ export class Arena {
  * All that should also live in the biome class itself.
  */
 export function getBiomeKey(biomeId: BiomeId): string {
-  return BiomeId[biomeId].toLowerCase();
+  return enumValueToKey(BiomeId, biomeId).toLowerCase();
 }
 
 /**
  * Props are additional sprite images present in a biome
  */
-const biomeWithProps = [
+const biomeWithProps = Object.freeze<BiomeId[]>([
   BiomeId.METROPOLIS,
   BiomeId.BEACH,
   BiomeId.LAKE,
@@ -987,7 +987,7 @@ const biomeWithProps = [
   BiomeId.ISLAND,
   BiomeId.LABORATORY,
   BiomeId.END,
-];
+]);
 
 export function getBiomeHasProps(biomeId: BiomeId): boolean {
   return biomeWithProps.includes(biomeId);

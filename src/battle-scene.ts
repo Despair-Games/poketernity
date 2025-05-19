@@ -2047,7 +2047,7 @@ export default class BattleScene extends SceneBase {
    * TODO: Rewrite this later for weighting?
    */
   generateRandomBiome(_waveIndex: number): BiomeId {
-    const excludedBiomeIds = [BiomeId.TOWN, BiomeId.END];
+    const excludedBiomeIds: readonly BiomeId[] = [BiomeId.TOWN, BiomeId.END];
     return randSeedItem([...allBiomes.keys()].filter((b) => !excludedBiomeIds.includes(b)));
   }
 
