@@ -71,7 +71,7 @@ import type { PokemonMoveSelectFilter } from "#types/pokemon-move-select-filter"
 import type { PokemonSelectFilter } from "#types/pokemon-select-filter";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
-import { clamp, getTSEnumKeys, getTSEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { clamp, enumValueToKey, getTSEnumKeys, getTSEnumValues, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -698,7 +698,7 @@ export class BerryModifierType extends PokemonHeldItemModifierType implements Ge
   constructor(berryType: BerryType) {
     super(
       "",
-      `${BerryType[berryType].toLowerCase()}_berry`,
+      `${enumValueToKey(BerryType, berryType).toLowerCase()}_berry`,
       (type, args) => new BerryModifier(type, (args[0] as Pokemon).id, berryType),
       "berry",
     );

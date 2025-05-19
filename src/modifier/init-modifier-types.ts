@@ -81,7 +81,7 @@ import {
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { getTSEnumValues } from "#utils/common-utils";
-import { randSeedInt } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import { t } from "i18next";
 
 export function initModifierTypes() {
@@ -211,22 +211,15 @@ export function initModifierTypes() {
 
   modifierTypes.BERRY = () =>
     new ModifierTypeGenerator((_party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in BerryType) {
+      if (pregenArgs && pregenArgs.length === 1 && Object.values(BerryType).includes(pregenArgs[0])) {
         return new BerryModifierType(pregenArgs[0] as BerryType);
       }
-      const berryTypes = getTSEnumValues(BerryType);
-      let randBerryType: BerryType;
-      const rand = randSeedInt(12);
-      if (rand < 2) {
-        randBerryType = BerryType.SITRUS;
-      } else if (rand < 4) {
-        randBerryType = BerryType.LUM;
-      } else if (rand < 6) {
-        randBerryType = BerryType.LEPPA;
-      } else {
-        randBerryType = berryTypes[randSeedInt(berryTypes.length - 3) + 2];
+      // Sitrus, Lum, and Leppa have higher weight to be chosen
+      const berryTypes: BerryType[] = [BerryType.SITRUS, BerryType.LUM, BerryType.LEPPA];
+      for (const value of Object.values(BerryType)) {
+        berryTypes.push(value);
       }
-      return new BerryModifierType(randBerryType);
+      return new BerryModifierType(randSeedItem(berryTypes));
     });
 
   modifierTypes.TM_COMMON = () => new TmModifierTypeGenerator(ModifierTier.COMMON);
