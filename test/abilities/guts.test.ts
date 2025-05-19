@@ -59,7 +59,7 @@ describe("Ability - Guts", () => {
     expect(player).toHaveEffectiveStat(Stat.ATK, playerAtk);
   });
 
-  it("should not apply a defense boost with confusion status effect", async () => {
+  it("should not apply an attack boost with confusion status effect", async () => {
     const { field, classicMode, move } = game;
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
