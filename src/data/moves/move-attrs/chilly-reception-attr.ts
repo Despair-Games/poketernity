@@ -3,7 +3,7 @@ import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Attribute to set the weather to Snow, then

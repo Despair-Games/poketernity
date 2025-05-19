@@ -27,7 +27,7 @@ import { getLuckString, getLuckTextTint } from "#modifier/modifier-type";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
-import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveData } from "#types/session-data";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";

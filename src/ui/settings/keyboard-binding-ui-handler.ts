@@ -3,7 +3,7 @@ import { Device } from "#enums/devices";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getKeyWithKeycode } from "#inputs/configHandler";
+import { getKeyWithKeycode } from "#inputs/config-handler";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 

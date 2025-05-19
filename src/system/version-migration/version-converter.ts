@@ -1,10 +1,10 @@
 import { version } from "#package.json";
-import type { SessionSaveData } from "#types/SessionData";
-import type { SessionSaveMigrator } from "#types/SessionSaveMigrator";
-import type { Settings } from "#types/Settings";
-import type { SettingsSaveMigrator } from "#types/SettingsSaveMigrator";
-import type { SystemSaveData } from "#types/SystemData";
-import type { SystemSaveMigrator } from "#types/SystemSaveMigrator";
+import type { SessionSaveData } from "#types/session-data";
+import type { SessionSaveMigrator } from "#types/session-save-migrator";
+import type { Settings } from "#types/settings";
+import type { SettingsSaveMigrator } from "#types/settings-save-migrator";
+import type { SystemSaveData } from "#types/system-data";
+import type { SystemSaveMigrator } from "#types/system-save-migrator";
 import { compareVersions } from "compare-versions";
 
 /*

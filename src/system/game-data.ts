@@ -64,17 +64,17 @@ import PersistentModifierData from "#system/modifier-data";
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
-import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version_converter";
+import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { DexData, DexEntry } from "#types/DexData";
-import type { SessionSaveData } from "#types/SessionData";
-import type { StarterData } from "#types/StarterData";
-import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/SystemData";
+import type { DexData, DexEntry } from "#types/dex-data";
+import type { SessionSaveData } from "#types/session-data";
+import type { StarterData } from "#types/starter-data";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/system-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getEnumKeys, isNil } from "#utils/common-utils";
+import { NumberHolder, executeIf, fixedNumber, getTSEnumKeys, isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
@@ -394,7 +394,7 @@ export class GameData {
         }
 
         if (systemData.voucherCounts) {
-          getEnumKeys(VoucherType).forEach((key) => {
+          getTSEnumKeys(VoucherType).forEach((key) => {
             const index = VoucherType[key];
             this.voucherCounts[index] = systemData.voucherCounts[index] || 0;
           });

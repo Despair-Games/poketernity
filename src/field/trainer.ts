@@ -6,7 +6,7 @@ import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
-import { signatureSpecies } from "#data/signatureSpecies";
+import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#data/trainer-config";
 import { trainerNamePools } from "#data/trainer-names";

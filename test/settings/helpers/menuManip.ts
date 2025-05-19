@@ -10,7 +10,7 @@ import {
   getKeyWithKeycode,
   getKeyWithSettingName,
   getSettingNameWithKeycode,
-} from "#inputs/configHandler";
+} from "#inputs/config-handler";
 import { expect } from "vitest";
 
 export class MenuManip {

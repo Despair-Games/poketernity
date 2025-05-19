@@ -14,7 +14,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { CommandPhase } from "#phases/command-phase";
 import { settings } from "#system/settings-manager";
-import type { FightCommand } from "#types/FightCommand";
+import type { FightCommand } from "#types/fight-command";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { addTextObject, setTextColor } from "#ui/text-utils";

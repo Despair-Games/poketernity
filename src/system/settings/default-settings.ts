@@ -16,7 +16,7 @@ import type {
   GamepadSettings,
   GeneralSettings,
   UserFacingSettings,
-} from "#types/Settings";
+} from "#types/settings";
 
 export const defaultGeneralSettings: GeneralSettings = {
   gameSpeed: 2,

@@ -31,7 +31,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { fixedNumber, getEnumValues, isNil } from "#utils/common-utils";
+import { fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -563,7 +563,7 @@ export class SummaryUiHandler extends UiHandler {
         }
         success = true;
       } else {
-        const pages = getEnumValues(SummaryUiPage);
+        const pages = getTSEnumValues(SummaryUiPage);
         switch (button) {
           case Button.UP:
           case Button.DOWN: {

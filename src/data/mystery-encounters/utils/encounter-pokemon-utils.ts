@@ -9,7 +9,7 @@ import {
 } from "#data/pokeball";
 import type PokemonSpecies from "#data/pokemon-species";
 import { speciesStarterCosts } from "#data/starters";
-import { getStatusEffectCatchRateMultiplier } from "#data/status-effect";
+import { getStatusEffectCatchRateMultiplier } from "#app/utils/status-effect-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";

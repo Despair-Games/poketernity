@@ -3,7 +3,7 @@ import { easeFunctions } from "#animations/ease-functions";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import { MoveId } from "#enums/move-id";
-import { getEnumValues } from "#utils/common-utils";
+import { getTSEnumValues } from "#utils/common-utils";
 import type { JSONSchemaType } from "ajv";
 
 /** JSON Schema properties applicable to keyframes for any animation property. */
@@ -211,7 +211,7 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
     blendType: {
       ...getNumberKeyFrameSetSchema({
         type: "integer",
-        enum: getEnumValues(AnimBlendType),
+        enum: getTSEnumValues(AnimBlendType),
       }),
       nullable: true,
     },
@@ -364,7 +364,7 @@ export const animConfigSchema: JSONSchemaType<AnimConfig> = {
      */
     moveId: {
       type: "integer",
-      enum: getEnumValues(MoveId),
+      enum: getTSEnumValues(MoveId),
       nullable: true,
     },
 

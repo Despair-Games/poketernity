@@ -4,7 +4,7 @@ import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { ReduceBerryUseThresholdAbAttr } from "#abilities/reduce-berry-use-threshold-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getStatusEffectHealText } from "#data/status-effect";
+import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";

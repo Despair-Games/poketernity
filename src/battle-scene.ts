@@ -133,12 +133,12 @@ import { settings } from "#system/settings-manager";
 import type TrainerData from "#system/trainer-data";
 import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
-import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import type { AbstractConstructor } from "#types/abstract-constructor";
+import type { HeldModifierConfig } from "#types/held-modifier-config";
 import type { Localizable } from "#types/locales";
-import type { ModifierPredicate } from "#types/ModifierPredicate";
-import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
-import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/Settings";
+import type { ModifierPredicate } from "#types/modifier-predicate";
+import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
+import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
 import { AbilityBar } from "#ui/ability-bar";
 import { ArenaFlyout } from "#ui/arena-flyout";
 import { CandyBar } from "#ui/candy-bar";
@@ -150,7 +150,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, fixedNumber, getEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, fixedNumber, getTSEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
@@ -1117,7 +1117,7 @@ export default class BattleScene extends SceneBase {
     this.lockModifierTiers = false;
 
     this.pokeballCounts = Object.fromEntries(
-      getEnumValues(PokeballType)
+      getTSEnumValues(PokeballType)
         .filter((p) => p <= PokeballType.MASTER_BALL)
         .map((t) => [t, 0]),
     );
@@ -1189,7 +1189,7 @@ export default class BattleScene extends SceneBase {
         ...allSpecies,
         ...allMoves.values(),
         ...allAbilities,
-        ...getEnumValues(ModifierPoolType)
+        ...getTSEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
           .flatMap((mp) =>
             Object.values(mp)

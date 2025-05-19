@@ -5,7 +5,7 @@ import { Button } from "#enums/buttons";
 import type { Device } from "#enums/devices";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getIconWithSettingName } from "#inputs/configHandler";
+import { getIconWithSettingName } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
 import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
