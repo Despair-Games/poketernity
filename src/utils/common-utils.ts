@@ -17,12 +17,28 @@ export function getCurrentTime(): number {
   return ((date.getHours() * 60 + date.getMinutes()) / 1440 + 0.675) % 1;
 }
 
+/**
+ * Gets the keys of a TypeScript enum.
+ *
+ * **Warning**:
+ * - **ONLY** use with TypeScript enums.
+ * - **DO NOT** use on an enum with string values!
+ * @returns The keys of a TypeScript enum
+ */
 export function getEnumKeys(enumType: any): string[] {
   return Object.values(enumType)
     .filter((v) => Number.isNaN(Number.parseInt(v!.toString())))
     .map((v) => v!.toString());
 }
 
+/**
+ * Gets the number values of a TypeScript enum.
+ *
+ * **Warning**:
+ * - **ONLY** use with TypeScript enums.
+ * - Any non-number values are discarded!
+ * @returns **ONLY** the number values of a TypeScript enum
+ */
 export function getEnumValues(enumType: any): number[] {
   return Object.values(enumType)
     .filter((v) => !Number.isNaN(Number.parseInt(v!.toString())))
