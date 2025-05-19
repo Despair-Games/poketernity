@@ -1,7 +1,7 @@
 import { api } from "#api/api";
 import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
-import type { TitleStatsResponse } from "#types/Api";
+import type { TitleStatsResponse } from "#types/api";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

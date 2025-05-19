@@ -159,8 +159,8 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
+          !Object.hasOwn(pokemonEvolutions, species.speciesId)
+          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
           && species.baseTotal >= 450,
       ),
     ),
@@ -233,8 +233,8 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
+          !Object.hasOwn(pokemonEvolutions, species.speciesId)
+          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
           && species.baseTotal >= 450,
       ),
     )
@@ -309,8 +309,8 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
+          !Object.hasOwn(pokemonEvolutions, species.speciesId)
+          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
           && species.baseTotal >= 450,
       ),
     )
@@ -399,8 +399,8 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
+          !Object.hasOwn(pokemonEvolutions, species.speciesId)
+          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
           && species.baseTotal >= 450,
       ),
     )
@@ -503,8 +503,8 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
+          !Object.hasOwn(pokemonEvolutions, species.speciesId)
+          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
           && species.baseTotal >= 450,
       ),
     )

@@ -8,8 +8,8 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
 import { PlayerPokemon } from "#field/player-pokemon";
-import type { StarterConfig } from "#types/StarterConfig";
-import type { StarterMoveset } from "#types/StarterData";
+import type { StarterConfig } from "#types/starter-config";
+import type { StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 /** Function to convert Blob to string */

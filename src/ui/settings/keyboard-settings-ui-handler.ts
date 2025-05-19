@@ -5,8 +5,8 @@ import { Device } from "#enums/devices";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import cfg_keyboard_qwerty from "#inputs/cfg_keyboard_qwerty";
-import { deleteBind } from "#inputs/configHandler";
+import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
+import { deleteBind } from "#inputs/config-handler";
 import {
   setSettingKeyboard,
   settingKeyboardBlackList,

@@ -10,7 +10,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import type { ProtectConditionFunc } from "#types/ProtectConditionFunc";
+import type { ProtectConditionFunc } from "#types/protect-condition-func";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

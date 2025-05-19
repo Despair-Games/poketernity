@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
-import type { ProtectConditionFunc } from "#types/ProtectConditionFunc";
+import type { ProtectConditionFunc } from "#types/protect-condition-func";
 
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Guard_(move) Quick Guard's}

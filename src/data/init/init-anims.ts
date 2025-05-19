@@ -13,18 +13,18 @@ import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
-import { getEnumKeys, getEnumValues } from "#utils/common-utils";
+import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
 
 export async function populateAnims() {
-  const commonAnimNames = getEnumKeys(CommonAnim).map((k) => k.toLowerCase());
+  const commonAnimNames = getTSEnumKeys(CommonAnim).map((k) => k.toLowerCase());
   const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
-  const commonAnimIds = getEnumValues(CommonAnim) as CommonAnim[];
-  const chargeAnimNames = getEnumKeys(ChargeAnim).map((k) => k.toLowerCase());
+  const commonAnimIds: CommonAnim[] = getTSEnumValues(CommonAnim);
+  const chargeAnimNames = getTSEnumKeys(ChargeAnim).map((k) => k.toLowerCase());
   const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
-  const chargeAnimIds = getEnumValues(ChargeAnim) as ChargeAnim[];
+  const chargeAnimIds: ChargeAnim[] = getTSEnumValues(ChargeAnim);
   const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
   const moveNameToId = {};
-  for (const move of getEnumValues(MoveId).slice(1)) {
+  for (const move of getTSEnumValues(MoveId).slice(1)) {
     const moveName = MoveId[move].toUpperCase().replace(/\_/g, "");
     moveNameToId[moveName] = move;
   }
@@ -52,7 +52,7 @@ export async function populateAnims() {
     }
     const nameIndex = nameField.indexOf(":", 5) + 1;
     const animName = nameField.slice(nameIndex, nameField.indexOf("\n", nameIndex));
-    if (!moveNameToId.hasOwnProperty(animName) && !commonAnimId && !chargeAnimId) {
+    if (!Object.hasOwn(moveNameToId, animName) && !commonAnimId && !chargeAnimId) {
       continue;
     }
     const anim = commonAnimId || chargeAnimId ? new LegacyAnimConfig() : new LegacyAnimConfig();
@@ -193,7 +193,7 @@ export async function populateAnims() {
                   value = Number.parseInt(value);
                   break;
               }
-              if (timedEvent.hasOwnProperty(prop)) {
+              if (Object.hasOwn(timedEvent, prop)) {
                 timedEvent[prop] = value;
               }
             }

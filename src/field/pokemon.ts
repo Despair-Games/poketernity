@@ -181,14 +181,14 @@ import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";
-import type { DamageCalculationResult } from "#types/DamageCalculationResult";
-import type { DamageFunctionOptions } from "#types/DamageFunctionOptions";
+import type { AbilityFilterOptions } from "#types/ability-filter-options";
+import type { DamageCalculationResult } from "#types/damage-calculation-result";
+import type { DamageFunctionOptions } from "#types/damage-function-options";
 import type { nil } from "#types/nil";
-import type { PokemonTurnData } from "#types/PokemonTurnData";
-import type { PokemonWaveData } from "#types/PokemonWaveData";
-import type { Status } from "#types/Status";
-import type { TurnMove } from "#types/TurnMove";
+import type { PokemonTurnData } from "#types/pokemon-turn-data";
+import type { PokemonWaveData } from "#types/pokemon-wave-data";
+import type { Status } from "#types/status";
+import type { TurnMove } from "#types/turn-move";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
@@ -198,7 +198,7 @@ import {
   clamp,
   coerceArray,
   fixedNumber,
-  getEnumValues,
+  getTSEnumValues,
   isNil,
   toDmgValue,
 } from "#utils/common-utils";
@@ -1289,7 +1289,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   generateNature(naturePool?: Nature[]): void {
     if (naturePool === undefined) {
-      naturePool = getEnumValues(Nature);
+      naturePool = getTSEnumValues(Nature);
     }
     const nature = naturePool[randSeedInt(naturePool.length)];
     this.setNature(nature);
@@ -1562,7 +1562,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+    while (Object.hasOwn(pokemonPreEvolutions, starterSpeciesId)) {
       starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
@@ -2089,7 +2089,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getEvolution(): SpeciesFormEvolution | null {
-    if (pokemonEvolutions.hasOwnProperty(this.species.speciesId)) {
+    if (Object.hasOwn(pokemonEvolutions, this.species.speciesId)) {
       const evolutions = pokemonEvolutions[this.species.speciesId];
       for (const e of evolutions) {
         if (!e.item && this.level >= e.level && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)) {
@@ -2322,7 +2322,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Checks if there is no variant data for both the index or index with form
     if (
       !this.shiny
-      || (!variantData.hasOwnProperty(variantDataIndex) && !variantData.hasOwnProperty(this.species.speciesId))
+      || (!Object.hasOwn(variantData, variantDataIndex) && !Object.hasOwn(variantData, this.species.speciesId))
     ) {
       return 0;
     }

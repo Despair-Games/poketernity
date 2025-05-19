@@ -31,7 +31,7 @@ import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getWindowVariantSuffix } from "#ui/ui-theme";
-import { getEnumKeys, getEnumValues } from "#utils/common-utils";
+import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
@@ -53,7 +53,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("logo");
 
     /** UI Elements that change based on the {@linkcode UiWindowStyle} */
-    for (const windowVariant of getEnumValues(WindowVariant)) {
+    for (const windowVariant of getTSEnumValues(WindowVariant)) {
       this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, ImagesFolder.UI_WINDOWS, 24, 24, {
         windowStyleDependant: true,
         uiThemeDependant: true,
@@ -212,7 +212,7 @@ export class LoadingScene extends SceneBase {
 
     // Load arena images
     this.loadImage("default_bg", ImagesFolder.ARENAS);
-    getEnumValues(BiomeId).map((bt) => {
+    getTSEnumValues(BiomeId).map((bt) => {
       const btKey = BiomeId[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
@@ -273,7 +273,7 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("egg_icons", ImagesFolder.EGG);
     this.loadAtlas("egg_shard", ImagesFolder.EGG);
     this.loadAtlas("egg_lightrays", ImagesFolder.EGG);
-    getEnumKeys(GachaType).forEach((gt) => {
+    getTSEnumKeys(GachaType).forEach((gt) => {
       const key = gt.toLowerCase();
       this.loadImage(`gacha_${key}`, ImagesFolder.EGG);
       this.loadAtlas(`gacha_underlay_${key}`, ImagesFolder.EGG);

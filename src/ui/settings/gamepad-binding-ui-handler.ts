@@ -3,7 +3,7 @@ import { Device } from "#enums/devices";
 import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getIconWithSettingName, getKeyWithKeycode } from "#inputs/configHandler";
+import { getIconWithSettingName, getKeyWithKeycode } from "#inputs/config-handler";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 

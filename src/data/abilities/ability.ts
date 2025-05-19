@@ -1,8 +1,8 @@
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
-import type { Constructor } from "#types/Constructor";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { Constructor } from "#types/constructor";
 import type { Localizable } from "#types/locales";
 import i18next from "i18next";
 

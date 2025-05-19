@@ -4,7 +4,7 @@ import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 import type { PokemonMove } from "#field/pokemon-move";
-import type { TurnMove } from "#types/TurnMove";
+import type { TurnMove } from "#types/turn-move";
 
 /**
  * Data that resets whenever a Pokemon is switched out.

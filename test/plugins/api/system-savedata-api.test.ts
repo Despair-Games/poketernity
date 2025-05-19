@@ -1,13 +1,13 @@
 import { SystemSavedataApi } from "#api/system-savedata-api";
 import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
-import type { SystemSaveData } from "#types/SystemData";
+import type { SystemSaveData } from "#types/system-data";
 import type {
   GetSystemSavedataRequest,
   UpdateSystemSavedataRequest,
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
-} from "#types/SystemSavedataApi";
+} from "#types/system-savedata-api";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
