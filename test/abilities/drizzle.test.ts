@@ -107,7 +107,6 @@ describe("Ability - Drizzle", () => {
       }
 
       expect(game).not.toHaveWeather(WeatherType.RAIN);
-      console.log("NGJLFSLGBJFLSNGJLSG", enumIdsToIdNameArray([...WEATHER_SUPPRESSING_ABILITIES], AbilityId));
     },
   );
 });

@@ -115,7 +115,7 @@ export function isGameManagerInstance(received: unknown): received is GameManage
  * @param theEnum - The enum to get the name from
  * @returns An array of objects containing the name and id of each enum
  * @example
- *    enumIdsToIdNameArray([WeatherType.HARSH_SUN, WeatherType.STRONG_WINDS, WeatherType);
+ *    enumIdsToIdNameArray([WeatherType.HARSH_SUN, WeatherType.STRONG_WINDS], WeatherType);
  *    // => [
  *    //  { name: "Harsh Sun", id: WeatherType.HARSH_SUN },
  *    //  { name: "Strong Winds", id: WeatherType.STRONG_WINDS }
