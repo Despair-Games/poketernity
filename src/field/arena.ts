@@ -172,11 +172,13 @@ export class Arena {
     }
     const tierValue = randSeedInt(randVal - luckModifier);
     let tier = isBossSpecies ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
-    console.log(BiomePoolTier[tier]);
+    console.log(enumValueToKey(BiomePoolTier, tier));
 
     // If the BiomePoolTier is empty, downgrade the rarity
     while (!this.pokemonPool[tier].length) {
-      console.log(`Downgraded rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
+      console.log(
+        `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, tier - 1)}`,
+      );
       tier--;
     }
     const tierPool = this.pokemonPool[tier];
@@ -302,7 +304,9 @@ export class Arena {
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
     while (tier && !this.trainerPool[tier].length) {
-      console.log(`Downgraded trainer rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
+      console.log(
+        `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, tier - 1)}`,
+      );
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
