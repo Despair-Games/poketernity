@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { AbilityId } from "#enums/ability-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
