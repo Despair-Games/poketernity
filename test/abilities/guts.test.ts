@@ -47,11 +47,11 @@ describe("Ability - Guts", () => {
   });
 
   it("should not apply an attack boost with no status effect", async () => {
-    const { field, classicMode } = game;
+    const { field, classicMode, move } = game;
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
     const player = field.getPlayerPokemon();
-    game.move.use(MoveId.SPLASH);
+    move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
@@ -78,12 +78,12 @@ describe("Ability - Guts", () => {
   it.each(nonVolatileStatusEffects)(
     "should apply a 1.5x attack boost with $statusEffectName status effect",
     async ({ statusEffectId }) => {
-      const { override, classicMode, field } = game;
+      const { override, classicMode, field, move } = game;
       override.statusEffect(statusEffectId);
 
       await classicMode.startBattle([SpeciesId.FEEBAS]);
       const player = field.getPlayerPokemon();
-      game.move.use(MoveId.SPLASH);
+      move.use(MoveId.SPLASH);
       await game.toEndOfTurn();
       const playerAtk = player.getStat(Stat.ATK);
 
@@ -97,12 +97,12 @@ describe("Ability - Guts", () => {
     { id: AbilityId.PURE_POWER, name: "Pure Power", multiplier: 2.0 },
     { id: AbilityId.HUGE_POWER, name: "Huge Power", multiplier: 2.0 },
   ])("should stack with $name ability", async ({ id, multiplier }) => {
-    const { override, field, classicMode } = game;
+    const { override, field, classicMode, move } = game;
     override.statusEffect(StatusEffect.PARALYSIS).passiveAbility(id);
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
     const player = field.getPlayerPokemon();
-    game.move.use(MoveId.SPLASH);
+    move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
@@ -111,13 +111,13 @@ describe("Ability - Guts", () => {
   });
 
   it("should prevent damage reduction from 'Burn' status effect", async () => {
-    const { override, classicMode, field } = game;
+    const { override, classicMode, field, move } = game;
     override.statusEffect(StatusEffect.BURN);
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
-    game.move.use(MoveId.TACKLE);
+    move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
@@ -125,7 +125,7 @@ describe("Ability - Guts", () => {
   });
 
   it("should not boost atk when thawing itself", async () => {
-    const { override, classicMode, field } = game;
+    const { override, classicMode, field, move } = game;
     override.statusEffect(StatusEffect.FREEZE);
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
@@ -134,7 +134,7 @@ describe("Ability - Guts", () => {
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
 
-    game.move.use(MoveId.FLAME_WHEEL);
+    move.use(MoveId.FLAME_WHEEL);
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
