@@ -1,12 +1,12 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { BattleStat } from "#enums/stat";
-import type { StatusEffect } from "#enums/status-effect";
 import type { SystemSaveData } from "#types/SystemData";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { StatusEffect } from "#enums/status-effect";
 
 /** Max value for an integer attribute in {@linkcode SystemSaveData} */
 export const MAX_INT_ATTR_VALUE = 0x80000000;
@@ -99,3 +99,13 @@ export const MIN_STAT_STAGE = -6;
 
 /** The maximum stage a {@linkcode BattleStat} can have. */
 export const MAX_STAT_STAGE = 6;
+
+/** A list of all non-volatile status effects. @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status | Non-volatile status conditions - Bulbapedia} */
+export const NON_VOLATILE_STATUS_EFFECTS = Object.freeze([
+  StatusEffect.POISON,
+  StatusEffect.TOXIC,
+  StatusEffect.PARALYSIS,
+  StatusEffect.SLEEP,
+  StatusEffect.FREEZE,
+  StatusEffect.BURN,
+]);
