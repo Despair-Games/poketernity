@@ -29,12 +29,12 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ...args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, abilityName: string, effect: StatusEffect): string {
     return this.immuneEffects.length
       ? i18next.t("abilityTriggers:statusEffectImmunityWithName", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           abilityName,
-          statusEffectName: getStatusEffectDescriptor(args[0] as StatusEffect),
+          statusEffectName: getStatusEffectDescriptor(effect),
         })
       : i18next.t("abilityTriggers:statusEffectImmunity", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

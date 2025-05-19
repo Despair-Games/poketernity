@@ -45,7 +45,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),

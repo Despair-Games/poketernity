@@ -49,7 +49,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     return true;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:trace", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       targetName: getPokemonNameWithAffix(this.target),

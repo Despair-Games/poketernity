@@ -39,7 +39,14 @@ export abstract class AbAttr {
     return false;
   }
 
-  getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
+  /**
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param abilityName - The name of the {@linkcode Ability} with this attribute
+   * @param args - Additional parameters for the trigger message. **NOTE**: This should be a subset
+   * of the additional parameters (i.e. `args`) given in {@linkcode apply}.
+   * @returns A message to play when the ability applies successfully, or `null` if no message should play.
+   */
+  getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: unknown[]): string | null {
     return null;
   }
 

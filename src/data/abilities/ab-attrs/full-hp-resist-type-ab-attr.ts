@@ -48,7 +48,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:fullHpResistType", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
     });

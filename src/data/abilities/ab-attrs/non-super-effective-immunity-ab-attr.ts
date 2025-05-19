@@ -34,7 +34,7 @@ export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:nonSuperEffectiveImmunity", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

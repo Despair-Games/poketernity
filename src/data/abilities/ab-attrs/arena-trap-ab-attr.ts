@@ -55,7 +55,7 @@ export class ArenaTrapAbAttr extends AbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:arenaTrap", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

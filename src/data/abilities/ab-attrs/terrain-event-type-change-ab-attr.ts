@@ -67,7 +67,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     }
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]) {
+  override getTriggerMessage(pokemon: Pokemon, _abilityName: string) {
     const currentTerrain = globalScene.arena.getTerrainType();
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
     if (currentTerrain === TerrainType.NONE) {

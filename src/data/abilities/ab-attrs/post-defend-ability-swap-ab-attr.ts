@@ -29,7 +29,7 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:postDefendAbilitySwap", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
     });

@@ -30,7 +30,7 @@ export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
     return true;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:costar", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       allyName: getPokemonNameWithAffix(pokemon.getAlly()),

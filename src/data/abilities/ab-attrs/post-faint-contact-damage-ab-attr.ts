@@ -63,7 +63,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:postFaintContactDamage", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,
