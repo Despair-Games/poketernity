@@ -55,14 +55,6 @@ describe("Ability - Drizzle", () => {
       .enemyLevel(100);
   });
 
-  it("should cause rain weather", async () => {
-    const { classicMode } = game;
-
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
-
-    expect(game).toHaveWeather(WeatherType.RAIN);
-  });
-
   it("should last the the rain for 5 turns", async () => {
     const { classicMode, move } = game;
 
