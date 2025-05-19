@@ -81,7 +81,7 @@ export function updateWindowStyle(windowStyle: UiWindowStyle): void {
   document.documentElement.dataset.windowStyle = UiWindowStyle[settings.display.uiWindowStyle];
 
   const traverse = (object: any) => {
-    if (object.hasOwnProperty("children") && object.children instanceof Phaser.GameObjects.DisplayList) {
+    if (Object.hasOwn(object, "children") && object.children instanceof Phaser.GameObjects.DisplayList) {
       const children = object.children as Phaser.GameObjects.DisplayList;
       for (const child of children.getAll()) {
         traverse(child);

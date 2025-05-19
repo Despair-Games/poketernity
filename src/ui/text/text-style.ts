@@ -4,7 +4,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiTheme } from "#enums/ui-theme";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
-import type { SupportedLanguageKey } from "#types/Language";
+import type { SupportedLanguageKey } from "#types/language";
 import { allTextFormats } from "#ui/font-style";
 import { allTextColors } from "#ui/text-color";
 import type { TextStyleOptions } from "#ui/text-style-options";

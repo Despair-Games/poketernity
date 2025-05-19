@@ -1,6 +1,6 @@
 import { ApiBase } from "#api/api-base";
-import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#types/DailyApi";
-import type { RankingEntry } from "#types/RankingEntry";
+import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#types/daily-api";
+import type { RankingEntry } from "#types/ranking-entry";
 
 /**
  * A wrapper for daily-run API requests.

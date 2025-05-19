@@ -1,7 +1,7 @@
 import type { Ability } from "#abilities/ability";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
 
 export abstract class AbAttr {
   /** A set of flags for this attribute. Cascaded top to bottom. */

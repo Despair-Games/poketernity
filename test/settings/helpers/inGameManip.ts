@@ -1,5 +1,5 @@
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import { getIconForLatestInput, getSettingNameWithKeycode } from "#inputs/configHandler";
+import { getIconForLatestInput, getSettingNameWithKeycode } from "#inputs/config-handler";
 import { expect } from "vitest";
 
 export class InGameManip {

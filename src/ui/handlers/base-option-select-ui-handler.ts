@@ -91,7 +91,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
    * @param args - args[0] should be of type `OptionSelectModeConfig<T>`.
    */
   public override show(...args: unknown[]): boolean {
-    if (!args[0]?.hasOwnProperty("options")) {
+    if (!Object.hasOwn(args[0] ?? {}, "options")) {
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }

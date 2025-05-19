@@ -1,4 +1,4 @@
-import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveData } from "#types/session-data";
 
 export interface SessionSaveMigrator {
   version: string;

@@ -14,7 +14,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { PokemonSummonData } from "#field/pokemon-summon-data";
-import type { Status } from "#types/Status";
+import type { Status } from "#types/status";
 import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
@@ -102,7 +102,7 @@ export default class PokemonData {
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
-    if (source.hasOwnProperty("bossSegments")) {
+    if (Object.hasOwn(source, "bossSegments")) {
       // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object
       this.boss = source.bossSegments > 0;
       // @ts-expect-error - The `if` statement doesn't tell TS that this isn't a `Pokemon` object

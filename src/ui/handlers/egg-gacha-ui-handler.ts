@@ -16,7 +16,7 @@ import { getVoucherTypeIcon } from "#system/voucher";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, getEnumKeys, getEnumValues } from "#utils/common-utils";
+import { fixedNumber, getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
@@ -91,7 +91,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
       });
     }
 
-    getEnumValues(GachaType).forEach((gachaType, g) => {
+    getTSEnumValues(GachaType).forEach((gachaType, g) => {
       const gachaTypeKey = GachaType[gachaType].toString().toLowerCase();
       const gachaContainer = globalScene.add.container(180 * g, 18);
 
@@ -273,7 +273,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
-    new Array(getEnumKeys(VoucherType).length).fill(null).map((_, i) => {
+    new Array(getTSEnumKeys(VoucherType).length).fill(null).map((_, i) => {
       const container = globalScene.add.container(GAME_WIDTH - 56 * i, 0);
 
       const bg = addWindow(0, 0, 56, 22);
@@ -787,7 +787,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
             }
             break;
           case Button.RIGHT:
-            if (this.gachaCursor < getEnumKeys(GachaType).length - 1) {
+            if (this.gachaCursor < getTSEnumKeys(GachaType).length - 1) {
               success = this.setGachaCursor(this.gachaCursor + 1);
             }
             break;

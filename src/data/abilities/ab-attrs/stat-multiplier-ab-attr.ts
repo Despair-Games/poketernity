@@ -3,7 +3,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
@@ -21,7 +21,7 @@ import type { NumberHolder } from "#utils/common-utils";
 | Plus                  | SPATK |    1.5 | Needs ally with Minus            |
 | Minus                 | SPATK |    1.5 | Needs ally with Plus             |
 | Guts                  | ATK   |    1.5 | Needs to have status             |
-| Marvel Scale          | DEF   |    1.5 | Needs to have status             |
+| Marvel Scale          | DEF   |    1.5 | Needs to have non-vol. status    |
 | Tangled Feet          | EVA   |      2 | Needs to be confused             |
 | Snow Cloak            | EVA   |    1.2 | In snow/hail only                |
 | Solar Power           | SPATK |    1.5 | In sun only                      |
