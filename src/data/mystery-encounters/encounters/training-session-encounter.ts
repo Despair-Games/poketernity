@@ -25,7 +25,7 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import PokemonData from "#system/pokemon-data";
-import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import type { HeldModifierConfig } from "#types/held-modifier-config";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";

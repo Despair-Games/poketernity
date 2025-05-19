@@ -14,7 +14,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { PokemonSummonData } from "#field/pokemon-summon-data";
-import type { Status } from "#types/Status";
+import type { Status } from "#types/status";
 import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 

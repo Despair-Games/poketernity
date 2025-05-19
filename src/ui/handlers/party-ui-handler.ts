@@ -27,11 +27,11 @@ import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#mo
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { CommandPhase } from "#phases/command-phase";
 import type { SelectModifierPhase } from "#phases/select-modifier-phase";
-import type { PartyModifierTransferSelectCallback } from "#types/PartyModifierTransferSelectCallback";
-import type { PartySelectCallback } from "#types/PartySelectCallback";
-import type { PokemonModifierTransferSelectFilter } from "#types/PokemonModifierTransferSelectFilter";
-import type { PokemonMoveSelectFilter } from "#types/PokemonMoveSelectFilter";
-import type { PokemonSelectFilter } from "#types/PokemonSelectFilter";
+import type { PartyModifierTransferSelectCallback } from "#types/party-modifier-transfer-select-callback";
+import type { PartySelectCallback } from "#types/party-select-callback";
+import type { PokemonModifierTransferSelectFilter } from "#types/pokemon-modifier-transfer-select-filter";
+import type { PokemonMoveSelectFilter } from "#types/pokemon-move-select-filter";
+import type { PokemonSelectFilter } from "#types/pokemon-select-filter";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";

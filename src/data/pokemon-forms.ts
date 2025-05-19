@@ -25,7 +25,7 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
+import type { AbstractConstructor } from "#types/abstract-constructor";
 import type { nil } from "#types/nil";
 import i18next from "i18next";
 

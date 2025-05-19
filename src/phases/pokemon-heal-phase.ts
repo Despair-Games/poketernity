@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { HealBlockTag } from "#battler-tags/heal-block-tag";
-import { getStatusEffectHealText } from "#data/status-effect";
+import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";

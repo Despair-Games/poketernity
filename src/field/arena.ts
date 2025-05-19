@@ -36,7 +36,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
-import { coerceArray, getEnumValues } from "#utils/common-utils";
+import { coerceArray, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
 
@@ -654,7 +654,7 @@ export class Arena {
   setRandomWeather(): void {
     const weatherPool = allBiomes.get(this.biomeId).weatherPool;
     const weatherMap = new Map<WeatherType, number>();
-    for (const id of getEnumValues(WeatherType)) {
+    for (const id of getTSEnumValues(WeatherType)) {
       weatherMap.set(id, weatherPool[id] ?? 0);
     }
 
@@ -673,7 +673,7 @@ export class Arena {
   setRandomTerrain(): void {
     const terrainPool = allBiomes.get(this.biomeId).terrainPool;
     const terrainMap = new Map<TerrainType, number>();
-    for (const id of getEnumValues(TerrainType)) {
+    for (const id of getTSEnumValues(TerrainType)) {
       terrainMap.set(id, terrainPool[id] ?? 0);
     }
 

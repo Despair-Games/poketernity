@@ -1,4 +1,7 @@
-/** Specifies the type of sprite affected by an animation */
+/**
+ * Specifies the type of sprite affected by an animation
+ * @todo Start values at `1`
+ */
 export const AnimFrameTarget = {
   /**
    * Affects the animation's source or start point, e.g.

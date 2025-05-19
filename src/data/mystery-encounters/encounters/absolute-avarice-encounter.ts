@@ -36,7 +36,7 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import type { HeldModifierConfig } from "#types/held-modifier-config";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import i18next from "i18next";

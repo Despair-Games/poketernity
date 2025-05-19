@@ -80,7 +80,7 @@ import {
   TurnHeldItemTransferModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { getEnumValues } from "#utils/common-utils";
+import { getTSEnumValues } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { t } from "i18next";
 
@@ -206,7 +206,7 @@ export function initModifierTypes() {
       if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Nature) {
         return new PokemonNatureChangeModifierType(pregenArgs[0] as Nature);
       }
-      return new PokemonNatureChangeModifierType(randSeedInt(getEnumValues(Nature).length) as Nature);
+      return new PokemonNatureChangeModifierType(randSeedInt(getTSEnumValues(Nature).length) as Nature);
     });
 
   modifierTypes.BERRY = () =>
@@ -214,7 +214,7 @@ export function initModifierTypes() {
       if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in BerryType) {
         return new BerryModifierType(pregenArgs[0] as BerryType);
       }
-      const berryTypes = getEnumValues(BerryType);
+      const berryTypes = getTSEnumValues(BerryType);
       let randBerryType: BerryType;
       const rand = randSeedInt(12);
       if (rand < 2) {

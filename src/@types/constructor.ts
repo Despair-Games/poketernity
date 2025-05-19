@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { AbstractConstructor } from "#types/AbstractConstructor";
+import type { AbstractConstructor } from "#types/abstract-constructor";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 

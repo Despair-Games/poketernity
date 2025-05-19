@@ -1,7 +1,7 @@
 import { allMoves } from "#data/data-lists";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { getEnumKeys, getEnumValues } from "#utils/common-utils";
+import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
 
 export const speciesEggMoves = {
   [SpeciesId.BULBASAUR]: [MoveId.SAPPY_SEED, MoveId.MALIGNANT_CHAIN, MoveId.EARTH_POWER, MoveId.MATCHA_GOTCHA],
@@ -591,8 +591,8 @@ export const speciesEggMoves = {
 function parseEggMoves(content: string): void {
   let output = "";
 
-  const speciesNames = getEnumKeys(SpeciesId);
-  const speciesValues = getEnumValues(SpeciesId);
+  const speciesNames = getTSEnumKeys(SpeciesId);
+  const speciesValues = getTSEnumValues(SpeciesId);
   const lines = content.split(/\n/g);
 
   lines.forEach((line, _l) => {

@@ -1,5 +1,5 @@
 import type { Pokemon } from "#field/pokemon";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
+import type { AbstractConstructor } from "#types/abstract-constructor";
 
 export abstract class SpeciesFormChangeTrigger {
   canChange(_pokemon: Pokemon): boolean {

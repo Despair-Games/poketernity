@@ -6,7 +6,7 @@ import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
