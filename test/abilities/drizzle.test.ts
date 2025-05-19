@@ -50,7 +50,7 @@ describe("Ability - Drizzle", () => {
       .enemyLevel(100);
   });
 
-  it("should last the the rain for 5 turns", async () => {
+  it("should last the rain for 5 turns", async () => {
     const { classicMode, move } = game;
 
     await classicMode.startBattle([SpeciesId.FEEBAS]);
