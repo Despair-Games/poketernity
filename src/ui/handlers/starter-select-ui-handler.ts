@@ -3573,7 +3573,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const passiveAbility = allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]];
         if (passiveAbility) {
           const isUnlocked: boolean = (abilityAttr & AbilityAttr.PASSIVE) > 0;
-          const isEnabled: boolean = isUnlocked && options.passiveEnabled !== false;
+          const isEnabled: boolean = isUnlocked && this.passiveEnabled !== false;
 
           this.pokemonPassiveLabelText.setVisible(true);
           setTextColor(this.pokemonPassiveLabelText, TextStyle.SUMMARY_ALT);
