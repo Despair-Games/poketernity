@@ -5,6 +5,11 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
 
+/**
+ * Condition for the move {@link https://bulbapedia.bulbagarden.net/wiki/After_You_(move) | After You}.
+ * Requires the user to have moved before the target in turn order.
+ * @extends MoveCondition
+ */
 export class AfterYouCondition extends MoveCondition {
   constructor() {
     super((_user, target, _move) => !target.turnData?.acted);

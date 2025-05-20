@@ -7,6 +7,11 @@ import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
+/**
+ * Condition for the move {@link https://bulbapedia.bulbagarden.net/wiki/Focus_Punch_(move) | Focus Punch}.
+ * Requires the user to not have received attack damage the turn the move is used.
+ * @extends MoveCondition
+ */
 export class FocusPunchCondition extends MoveCondition {
   constructor() {
     super(focusPunchCondition);

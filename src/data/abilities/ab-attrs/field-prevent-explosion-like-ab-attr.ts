@@ -21,6 +21,8 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
 
   /**
    * Applies the effects of the AbAttr when it is called in {@linkcode failIfDampCondition}
+   * @param pokemon - (Unused) The {@linkcode Pokemon} with this ability
+   * @param simulated - (Unused) If `true`, suppresses changes to game state
    * @param cancelled - A {@linkcode BooleanHolder} that determines if the move should fail
    * @param attacker - The {@linkcode Pokemon} using the move
    * @param move - The {@linkcode Move} being used

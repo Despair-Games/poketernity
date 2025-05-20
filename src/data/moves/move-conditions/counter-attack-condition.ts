@@ -4,7 +4,7 @@ import type { MoveId } from "#enums/move-id";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, KO_ATTACK_SCORE } from "#constants/ai-constants";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -43,7 +43,7 @@ export class CounterAttackCondition extends MoveCondition {
     );
 
     if (
-      expAttackScores.every(([, score]) => score < 4)
+      expAttackScores.every(([, score]) => score < KO_ATTACK_SCORE)
       && expAttackScores.some(([moveId]) => this.moveFilter(moveId))
     ) {
       return 0;

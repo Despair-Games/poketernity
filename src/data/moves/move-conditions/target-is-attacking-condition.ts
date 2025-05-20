@@ -7,6 +7,12 @@ import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
+/**
+ * Condition for moves that require the target to have selected
+ * an attack for the turn (but not yet acted), e.g.
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Sucker_Punch_(move) | Sucker Punch}.
+ * @extends MoveCondition
+ */
 export class TargetIsAttackingCondition extends MoveCondition {
   constructor() {
     super(targetIsAttackingCondition);

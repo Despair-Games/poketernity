@@ -1,6 +1,14 @@
 import { MoveResult } from "#enums/move-result";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
+/**
+ * Condition function requiring the target's last-used move to be copiable,
+ * e.g. for {@link https://bulbapedia.bulbagarden.net/wiki/Copycat_(move) | Copycat}
+ * @param _user - (Unused) The {@linkcode Pokemon} using the move
+ * @param target - The {@linkcode Pokemon} targeted by the move
+ * @param _move - The {@linkcode Move} being used
+ * @returns `true` if the condition is met
+ */
 export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _move) => {
   const targetMoves = target.getMoveHistory().filter((m) => !m.virtual);
   if (!targetMoves.length) {

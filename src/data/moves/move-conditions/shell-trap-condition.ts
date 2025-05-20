@@ -1,4 +1,5 @@
 import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
+import { MAJOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
@@ -8,6 +9,13 @@ import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
+/**
+ * Condition for the move {@link https://bulbapedia.bulbagarden.net/wiki/Shell_Trap_(move) | Shell Trap}.
+ * Requires another Pokemon to have "activated" the user's trap
+ * by dealing physical damage to the user.
+ * @extends MoveCondition
+ * @see {@linkcode ShellTrapTag}
+ */
 export class ShellTrapCondition extends MoveCondition {
   constructor() {
     super(shellTrapCondition);
@@ -24,7 +32,7 @@ export class ShellTrapCondition extends MoveCondition {
         p.getEffectiveStat(Stat.ATK, user, move, AbilityApplyMode.REVEALED)
         > p.getEffectiveStat(Stat.SPATK, user, move, AbilityApplyMode.REVEALED)
           ? 0
-          : -2,
+          : MAJOR_EFFECT_SCORE_PENALTY,
       )
       .reduce((total, score) => total + score, 0);
   }

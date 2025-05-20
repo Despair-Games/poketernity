@@ -23,6 +23,20 @@ export const MAJOR_EFFECT_SCORE_BONUS = 2;
 export const MINOR_EFFECT_SCORE_BONUS = 1;
 
 /**
+ * A relatively major penalty to a move's score. Used when a move has
+ * a significant drawback or is likely to fail from an unresolvable condition
+ * in a given battle state.
+ */
+export const MAJOR_EFFECT_SCORE_PENALTY = -MAJOR_EFFECT_SCORE_BONUS;
+
+/**
+ * A relatively minor penalty to a move's score. Used when a move has
+ * a potential drawback or has a chance of failing from an unresolvable condition
+ * in a given battle state.
+ */
+export const MINOR_EFFECT_SCORE_PENALTY = -MINOR_EFFECT_SCORE_BONUS;
+
+/**
  * A weakly enforced upper limit for move attributes' {@link MoveAttr.getEffectScore | Effect Scores}.
  * Attributes generally shouldn't give enough of a bonus to supersede
  * attacks that can KO opponents.

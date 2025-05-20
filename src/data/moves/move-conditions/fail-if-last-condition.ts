@@ -5,6 +5,11 @@ import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
+/**
+ * Condition for moves that fail if used last in turn order,
+ * e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Protect_(move) | Protect}.
+ * @extends MoveCondition
+ */
 export class FailIfLastCondition extends MoveCondition {
   constructor() {
     super(failIfLastCondition);

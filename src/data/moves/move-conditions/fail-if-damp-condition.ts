@@ -7,6 +7,15 @@ import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 import { BooleanHolder } from "#utils/common-utils";
 
+/**
+ * Condition function for moves that are negated by an active
+ * Pokemon's {@link https://bulbapedia.bulbagarden.net/wiki/Damp_(Ability) | Damp} Ability.
+ * @param user - The {@linkcode Pokemon} using the move
+ * @param _target - (Unused) The {@linkcode Pokemon} targeted by the move
+ * @param move - The {@linkcode Move} being used
+ * @param simulated - If `true`, disables Damp's trigger messages
+ * @returns `true` if the move can be used successfully
+ */
 export const failIfDampCondition: MoveConditionFunc = (
   user: Pokemon,
   _target: Pokemon,
