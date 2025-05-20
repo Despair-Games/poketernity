@@ -73,7 +73,7 @@ export class Ability implements Localizable {
   ): Ability {
     const attr = new AttrType(...args);
     attr.source = this;
-    attr.addCondition(condition);
+    attr.setCondition(condition);
     this.attrs.push(attr);
 
     return this;

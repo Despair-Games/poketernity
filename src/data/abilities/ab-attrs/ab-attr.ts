@@ -85,7 +85,7 @@ export abstract class AbAttr {
    * @returns `this`
    * @see {@linkcode Ability.conditionalAttr}
    */
-  public addCondition(condition: AbAttrCondition): this {
+  public setCondition(condition: AbAttrCondition): this {
     this.extraCondition = condition;
     return this;
   }
