@@ -25,6 +25,10 @@ export abstract class AbAttr {
    * as a {@linkcode ShowAbilityPhase}
    */
   public showAbilityInstant: boolean;
+  /**
+   * A condition for the attribute to apply.
+   * Can be set by {@linkcode Ability.conditionalAttr}
+   */
   private extraCondition: AbAttrCondition;
 
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
