@@ -1,4 +1,4 @@
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TypeEffectivenessColor } from "#enums/color";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";

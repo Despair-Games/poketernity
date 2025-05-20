@@ -5,7 +5,7 @@ import { getTypeDamageMultiplierColor } from "#data/type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";

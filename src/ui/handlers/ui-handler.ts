@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { Button } from "#enums/buttons";
+import type { Button } from "#enums/button";
 import type { UiMode } from "#enums/ui-mode";
 import type { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 

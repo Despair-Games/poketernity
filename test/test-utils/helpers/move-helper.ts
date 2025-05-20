@@ -3,7 +3,7 @@ import Overrides from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";

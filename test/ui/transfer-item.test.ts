@@ -1,5 +1,5 @@
 import { BerryType } from "#enums/berry-type";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { MoveId } from "#enums/move-id";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";

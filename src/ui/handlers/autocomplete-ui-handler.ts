@@ -1,4 +1,4 @@
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 
