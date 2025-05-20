@@ -154,7 +154,9 @@ export class RunHistoryUiHandler extends MessageUiHandler {
       }
     }
 
-    success ? ui.playSelect() : ui.playError();
+    if (success) {
+      ui.playSelect();
+    }
 
     return success;
   }
