@@ -1,4 +1,4 @@
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { CommandPhase } from "#phases/command-phase";

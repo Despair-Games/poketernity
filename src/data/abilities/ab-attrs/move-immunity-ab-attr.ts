@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PreDefendAbAttrCondition } from "#types/PreDefendAbAttrCondition";
+import type { PreDefendAbAttrCondition } from "#types/pre-defend-ab-attr-condition";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

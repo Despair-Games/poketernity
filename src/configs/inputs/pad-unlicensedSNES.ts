@@ -1,49 +1,39 @@
+import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import { Button } from "#enums/buttons";
 
 /**
- * Dualshock mapping
+ * 081f-e401 - UnlicensedSNES
  */
-const pad_dualshock = {
-  padID: "Dualshock",
-  padType: "dualshock",
+const pad_unlicensedSNES = {
+  padID: "081f-e401",
+  padType: "xbox",
   deviceMapping: {
-    RC_S: 0,
+    RC_S: 2,
     RC_E: 1,
-    RC_W: 2,
-    RC_N: 3,
-    START: 9, // Options
-    SELECT: 8, // Share
+    RC_W: 3,
+    RC_N: 0,
+    START: 9,
+    SELECT: 8,
     LB: 4,
     RB: 5,
-    LT: 6,
-    RT: 7,
-    LS: 10,
-    RS: 11,
     LC_N: 12,
     LC_S: 13,
     LC_W: 14,
     LC_E: 15,
-    TOUCH: 17,
   },
   icons: {
-    RC_S: "CROSS.png",
-    RC_E: "CIRCLE.png",
-    RC_W: "SQUARE.png",
-    RC_N: "TRIANGLE.png",
+    RC_S: "XB_Letter_A_OL.png",
+    RC_E: "XB_Letter_B_OL.png",
+    RC_W: "XB_Letter_X_OL.png",
+    RC_N: "XB_Letter_Y_OL.png",
     START: "START.png",
     SELECT: "SELECT.png",
-    LB: "L1.png",
-    RB: "R1.png",
-    LT: "L2.png",
-    RT: "R2.png",
-    LS: "L3.png",
-    RS: "R3.png",
+    LB: "Bumper_L.png",
+    RB: "Bumper_R.png",
     LC_N: "UP.png",
     LC_S: "DOWN.png",
     LC_W: "LEFT.png",
     LC_E: "RIGHT.png",
-    TOUCH: "TOUCH.png",
   },
   settings: {
     [SettingGamepad.Button_Up]: Button.UP,
@@ -62,7 +52,6 @@ const pad_dualshock = {
     [SettingGamepad.Button_Cycle_Ability]: Button.CYCLE_ABILITY,
     [SettingGamepad.Button_Speed_Up]: Button.SPEED_UP,
     [SettingGamepad.Button_Slow_Down]: Button.SLOW_DOWN,
-    [SettingGamepad.Button_Submit]: Button.SUBMIT,
   },
   default: {
     LC_N: SettingGamepad.Button_Up,
@@ -77,12 +66,11 @@ const pad_dualshock = {
     SELECT: SettingGamepad.Button_Stats,
     LB: SettingGamepad.Button_Cycle_Form,
     RB: SettingGamepad.Button_Cycle_Shiny,
-    LT: SettingGamepad.Button_Cycle_Gender,
-    RT: SettingGamepad.Button_Cycle_Ability,
-    LS: SettingGamepad.Button_Speed_Up,
-    RS: SettingGamepad.Button_Slow_Down,
-    TOUCH: SettingGamepad.Button_Submit,
+    LT: -1,
+    RT: -1,
+    LS: -1,
+    RS: -1,
   },
 };
 
-export default pad_dualshock;
+export default pad_unlicensedSNES;

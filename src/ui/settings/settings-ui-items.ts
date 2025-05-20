@@ -24,7 +24,7 @@ import type {
   GeneralSettingsKey,
   SettingsUiItem,
   SettingUiItemOption,
-} from "#types/Settings";
+} from "#types/settings";
 import { getTSEnumLength } from "#utils/common-utils";
 import i18next, { t } from "i18next";
 

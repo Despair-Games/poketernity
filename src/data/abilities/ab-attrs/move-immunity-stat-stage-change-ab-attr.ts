@@ -4,7 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { PreDefendAbAttrCondition } from "#types/PreDefendAbAttrCondition";
+import type { PreDefendAbAttrCondition } from "#types/pre-defend-ab-attr-condition";
 import type { BooleanHolder } from "#utils/common-utils";
 
 export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {

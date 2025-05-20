@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import { BYPASS_LOGIN } from "#constants/app-constants";
-import type { UserInfo } from "#types/UserInfo";
+import type { UserInfo } from "#types/user-info";
 import { randomString } from "#utils/random-utils";
 
 export let loggedInUser: UserInfo | null = null;

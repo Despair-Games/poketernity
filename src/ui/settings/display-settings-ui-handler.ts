@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { LANGUAGE_MAX_OPTIONS } from "#constants/ui-constants";
 import { UiMode } from "#enums/ui-mode";
 import { supportedLanguages } from "#system/supported-languages";
-import type { SupportedLanguage } from "#types/Language";
+import type { SupportedLanguage } from "#types/language";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";

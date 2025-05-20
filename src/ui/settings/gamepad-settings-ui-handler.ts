@@ -6,9 +6,9 @@ import { Device } from "#enums/devices";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import pad_dualshock from "#inputs/pad_dualshock";
-import pad_unlicensedSNES from "#inputs/pad_unlicensedSNES";
-import pad_xbox360 from "#inputs/pad_xbox360";
+import pad_dualshock from "#inputs/pad-dualshock";
+import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
+import pad_xbox360 from "#inputs/pad-xbox360";
 import {
   setSettingGamepad,
   settingGamepadBlackList,

@@ -3,7 +3,7 @@ import type { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-e
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import { BooleanHolder } from "#utils/common-utils";
 
 /**

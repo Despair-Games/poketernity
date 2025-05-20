@@ -14,7 +14,7 @@ import { PokemonRegion } from "#enums/pokemon-regions";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
-import type { StarterMoveset } from "#types/StarterData";
+import type { StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 

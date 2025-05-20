@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
+import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
 
 export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
   private readonly weatherType: WeatherType;

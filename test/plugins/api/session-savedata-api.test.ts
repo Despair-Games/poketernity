@@ -1,7 +1,7 @@
 import { SessionSavedataApi } from "#api/session-savedata-api";
 import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
-import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveData } from "#types/session-data";
 import type {
   ClearSessionSavedataRequest,
   ClearSessionSavedataResponse,
@@ -9,7 +9,7 @@ import type {
   GetSessionSavedataRequest,
   NewClearSessionSavedataRequest,
   UpdateSessionSavedataRequest,
-} from "#types/SessionSavedataApi";
+} from "#types/session-savedata-api";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
