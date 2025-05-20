@@ -1,7 +1,7 @@
 import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
 import { AdminMode } from "#enums/admin-mode";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";

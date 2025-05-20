@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";

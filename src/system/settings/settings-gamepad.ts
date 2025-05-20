@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";

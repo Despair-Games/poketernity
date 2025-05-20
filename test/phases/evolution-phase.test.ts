@@ -1,5 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";

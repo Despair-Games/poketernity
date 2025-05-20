@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { settings } from "#system/settings-manager";
 import { hasTouchscreen } from "#utils/app-utils";
 import EventEmitter = Phaser.Events.EventEmitter;
