@@ -1,4 +1,4 @@
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 
 const cfg_keyboard_qwerty = {

@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import { BiomeId } from "#enums/biome-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
