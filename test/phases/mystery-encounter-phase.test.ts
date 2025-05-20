@@ -1,4 +1,4 @@
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";

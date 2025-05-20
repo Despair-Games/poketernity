@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { DexAttr } from "#data/dex-attributes";
 import { speciesStarterCosts } from "#data/starters";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import type { GameData } from "#system/game-data";

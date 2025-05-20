@@ -7,7 +7,7 @@ import { getPokeballAtlasKey } from "#data/pokeball";
 import { getTypeRgb } from "#data/type";
 import { getVariantTint } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { Challenges } from "#enums/challenges";
 import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";

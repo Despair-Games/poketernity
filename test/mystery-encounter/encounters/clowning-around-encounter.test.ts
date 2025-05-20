@@ -2,7 +2,7 @@ import type BattleScene from "#app/battle-scene";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";

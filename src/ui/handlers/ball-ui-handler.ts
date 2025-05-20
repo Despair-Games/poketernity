@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { getPokeballName } from "#data/pokeball";
 import { BattleCommand } from "#enums/battle-command";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { CommandPhase } from "#phases/command-phase";

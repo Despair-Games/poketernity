@@ -1,4 +1,4 @@
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import type { ScrollBar } from "#ui/scroll-bar";
 import type { UiHandler } from "#ui/ui-handler";
 

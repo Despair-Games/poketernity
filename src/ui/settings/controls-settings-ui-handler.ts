@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import type { Device } from "#enums/devices";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
