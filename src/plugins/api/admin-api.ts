@@ -6,7 +6,7 @@ import type {
   SearchAccountResponse,
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
-} from "#types/AdminApi";
+} from "#types/admin-api";
 
 export class AdminApi extends ApiBase {
   public readonly ERR_USERNAME_NOT_FOUND: string = "Username not found!";

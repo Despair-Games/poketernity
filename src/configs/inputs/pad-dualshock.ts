@@ -1,19 +1,19 @@
+import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import { Button } from "#enums/buttons";
 
 /**
- * Generic pad mapping
+ * Dualshock mapping
  */
-const pad_generic = {
-  padID: "Generic",
-  padType: "xbox",
+const pad_dualshock = {
+  padID: "Dualshock",
+  padType: "dualshock",
   deviceMapping: {
     RC_S: 0,
     RC_E: 1,
     RC_W: 2,
     RC_N: 3,
-    START: 9,
-    SELECT: 8,
+    START: 9, // Options
+    SELECT: 8, // Share
     LB: 4,
     RB: 5,
     LT: 6,
@@ -24,24 +24,26 @@ const pad_generic = {
     LC_S: 13,
     LC_W: 14,
     LC_E: 15,
+    TOUCH: 17,
   },
   icons: {
-    RC_S: "XB_Letter_A_OL.png",
-    RC_E: "XB_Letter_B_OL.png",
-    RC_W: "XB_Letter_X_OL.png",
-    RC_N: "XB_Letter_Y_OL.png",
+    RC_S: "CROSS.png",
+    RC_E: "CIRCLE.png",
+    RC_W: "SQUARE.png",
+    RC_N: "TRIANGLE.png",
     START: "START.png",
     SELECT: "SELECT.png",
-    LB: "Bumper_L.png",
-    RB: "Bumper_R.png",
-    LT: "Trigger_L.png",
-    RT: "Trigger_R.png",
-    LS: "LS.png",
-    RS: "RS.png",
+    LB: "L1.png",
+    RB: "R1.png",
+    LT: "L2.png",
+    RT: "R2.png",
+    LS: "L3.png",
+    RS: "R3.png",
     LC_N: "UP.png",
     LC_S: "DOWN.png",
     LC_W: "LEFT.png",
     LC_E: "RIGHT.png",
+    TOUCH: "TOUCH.png",
   },
   settings: {
     [SettingGamepad.Button_Up]: Button.UP,
@@ -60,6 +62,7 @@ const pad_generic = {
     [SettingGamepad.Button_Cycle_Ability]: Button.CYCLE_ABILITY,
     [SettingGamepad.Button_Speed_Up]: Button.SPEED_UP,
     [SettingGamepad.Button_Slow_Down]: Button.SLOW_DOWN,
+    [SettingGamepad.Button_Submit]: Button.SUBMIT,
   },
   default: {
     LC_N: SettingGamepad.Button_Up,
@@ -78,8 +81,8 @@ const pad_generic = {
     RT: SettingGamepad.Button_Cycle_Ability,
     LS: SettingGamepad.Button_Speed_Up,
     RS: SettingGamepad.Button_Slow_Down,
+    TOUCH: SettingGamepad.Button_Submit,
   },
-  blacklist: ["LC_N", "LC_S", "LC_W", "LC_E"],
 };
 
-export default pad_generic;
+export default pad_dualshock;

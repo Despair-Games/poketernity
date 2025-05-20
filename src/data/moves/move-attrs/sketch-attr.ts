@@ -6,7 +6,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { targetMoveCopiableCondition } from "#moves/target-move-copiable-condition";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import i18next from "i18next";
 
 /**

@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import type { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";

@@ -22,7 +22,7 @@ import { SelectChallengePhase } from "#phases/select-challenge-phase";
 import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { SummonPhase } from "#phases/summon-phase";
 import { vouchers } from "#system/voucher";
-import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveData } from "#types/session-data";
 import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";

@@ -3,7 +3,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**

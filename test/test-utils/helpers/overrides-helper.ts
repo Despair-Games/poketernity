@@ -25,7 +25,7 @@ import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
 import type { ModifierOverride } from "#modifier/modifier-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
-import type { TimedEvent } from "#types/TimedEvent";
+import type { TimedEvent } from "#types/timed-event";
 import { coerceArray } from "#utils/common-utils";
 import { shiftCharCodes } from "#utils/string-utils";
 import { expect, vi } from "vitest";

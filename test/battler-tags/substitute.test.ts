@@ -14,8 +14,8 @@ import type { PokemonMove } from "#field/pokemon-move";
 import { AttackMove } from "#moves/move";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { PokemonTurnData } from "#types/PokemonTurnData";
-import type { TurnMove } from "#types/TurnMove";
+import type { PokemonTurnData } from "#types/pokemon-turn-data";
+import type { TurnMove } from "#types/turn-move";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**

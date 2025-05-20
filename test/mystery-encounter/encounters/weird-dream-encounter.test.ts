@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { BiomeId } from "#enums/biome-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

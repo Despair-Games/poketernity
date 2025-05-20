@@ -1,4 +1,4 @@
-import type { SupportedLanguage, SupportedLanguageKey } from "#types/Language";
+import type { SupportedLanguage, SupportedLanguageKey } from "#types/language";
 
 export const DEFAULT_LANGUAGE_KEY: SupportedLanguageKey = "en";
 

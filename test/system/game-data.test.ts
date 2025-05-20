@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import * as account from "#app/account";
 import * as appConstants from "#constants/app-constants";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveData } from "#types/session-data";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

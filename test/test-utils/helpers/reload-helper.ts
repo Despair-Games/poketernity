@@ -6,7 +6,7 @@ import { TurnInitPhase } from "#phases/turn-init-phase";
 import { settings } from "#system/settings-manager";
 import type { GameManager } from "#test/test-utils/game-manager";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
-import type { SessionSaveData } from "#types/SessionData";
+import type { SessionSaveData } from "#types/session-data";
 import { vi } from "vitest";
 
 /**

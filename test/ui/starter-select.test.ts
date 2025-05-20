@@ -1,6 +1,6 @@
 import { allSpecies } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";

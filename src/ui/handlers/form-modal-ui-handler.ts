@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";

@@ -1,5 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { FormChangeItem } from "#enums/form-change-item";
 import { MoveId } from "#enums/move-id";

@@ -11,7 +11,7 @@ import { starterColors } from "#data/starter-colors";
 import { getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { getTypeRgb } from "#data/type";
 import { getVariantTint, type Variant } from "#data/variant";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Nature } from "#enums/nature";

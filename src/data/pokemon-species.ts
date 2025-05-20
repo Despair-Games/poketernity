@@ -11,7 +11,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { Localizable } from "#types/locales";
-import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
+import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";

@@ -47,10 +47,10 @@ import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-att
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
-import type { Constructor } from "#types/Constructor";
+import type { AbstractConstructor } from "#types/abstract-constructor";
+import type { Constructor } from "#types/constructor";
 import type { Localizable } from "#types/locales";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import type { nil } from "#types/nil";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";

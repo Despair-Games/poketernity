@@ -1,6 +1,6 @@
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
-import type { DamageResult } from "#types/DamageResult";
+import type { DamageResult } from "#types/damage-result";
 
 export interface AttackMoveResult {
   moveId: MoveId;
