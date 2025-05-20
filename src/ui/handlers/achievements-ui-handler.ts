@@ -17,8 +17,8 @@ import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 
 const Page = {
-  ACHIEVEMENTS: 0,
-  VOUCHERS: 1,
+  ACHIEVEMENTS: 1,
+  VOUCHERS: 2,
 } as const;
 
 type Page = (typeof Page)[keyof typeof Page];
