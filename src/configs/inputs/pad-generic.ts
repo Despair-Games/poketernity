@@ -1,5 +1,5 @@
+import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import { Button } from "#enums/buttons";
 
 /**
  * Generic pad mapping

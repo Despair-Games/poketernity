@@ -5,7 +5,7 @@ import { allMoves } from "#data/data-lists";
 import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
 import { getVariantTint } from "#data/variant";
 import { BattleCommand } from "#enums/battle-command";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ChallengeType } from "#enums/challenge-type";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { FormChangeItem } from "#enums/form-change-item";
