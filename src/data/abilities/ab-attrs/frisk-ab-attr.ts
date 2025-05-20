@@ -5,7 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 export class FriskAbAttr extends PostSummonAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
       for (const opponent of pokemon.getOpponents()) {
         globalScene.phaseManager.queueMessagePhase(

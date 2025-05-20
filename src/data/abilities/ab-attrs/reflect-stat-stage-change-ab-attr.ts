@@ -31,7 +31,7 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
    * stat stage change phase
    * @returns `true` if a stat stage change is successfully reflected
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     source: Pokemon | null,

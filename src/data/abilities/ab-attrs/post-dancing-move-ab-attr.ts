@@ -10,7 +10,7 @@ import type { PokemonMove } from "#field/pokemon-move";
  * @extends PostMoveUsedAbAttr
  */
 export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     move: PokemonMove,

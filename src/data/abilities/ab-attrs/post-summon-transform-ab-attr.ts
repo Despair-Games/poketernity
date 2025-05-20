@@ -11,7 +11,7 @@ import i18next from "i18next";
  * @extends PostSummonAbAttr
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const targets = pokemon.getOpponents();
     if (simulated || !targets.length) {
       return simulated;

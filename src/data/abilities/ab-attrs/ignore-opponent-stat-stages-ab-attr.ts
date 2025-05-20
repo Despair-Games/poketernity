@@ -26,7 +26,7 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
    * @param ignoreStatStage A {@linkcode BooleanHolder} that represents whether or not to ignore a stat's stat changes
    * @returns true if the stat is ignored, false otherwise
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, ignoreStatStage: BooleanHolder) {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, ignoreStatStage: BooleanHolder) {
     if (this.stats.includes(stat)) {
       ignoreStatStage.value = true;
       return true;

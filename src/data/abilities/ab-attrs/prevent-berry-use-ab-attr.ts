@@ -9,7 +9,7 @@ export class PreventBerryUseAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.PREVENT_BERRY_USE);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
 
     return true;

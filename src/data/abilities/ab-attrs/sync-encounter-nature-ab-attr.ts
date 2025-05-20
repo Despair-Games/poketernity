@@ -8,7 +8,7 @@ export class SyncEncounterNatureAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.SYNC_ENCOUNTER_NATURE);
   }
 
-  override apply(pokemon: Pokemon, _simulated: boolean, opponent: Pokemon): boolean {
+  public override apply(pokemon: Pokemon, _simulated: boolean, opponent: Pokemon): boolean {
     opponent.setNature(pokemon.getNature());
 
     return true;

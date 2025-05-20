@@ -13,7 +13,7 @@ export abstract class PreStatStageChangeAbAttr extends AbAttr {
    * the stat stage change
    * @returns `true` if effects successfully applied
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _stat: BattleStat, _cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _stat: BattleStat, _cancelled: BooleanHolder): boolean {
     return false;
   }
 }

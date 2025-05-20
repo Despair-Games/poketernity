@@ -9,7 +9,7 @@ export class DoubleBerryEffectAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.DOUBLE_BERRY_EFFECT);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, berryEffect: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, berryEffect: NumberHolder): boolean {
     berryEffect.value *= 2;
     return true;
   }

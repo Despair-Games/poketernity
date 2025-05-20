@@ -23,7 +23,7 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
    * @param move - {@linkcode Move} used by the ability holder.
    * @param showAbility - Whether to show the ability flyout or not.
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     moveChance: NumberHolder,

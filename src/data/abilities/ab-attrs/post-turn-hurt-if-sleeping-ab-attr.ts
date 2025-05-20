@@ -14,7 +14,7 @@ import i18next from "i18next";
  * @extends PostTurnAbAttr
  */
 export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     let hadEffect = false;
     for (const opp of pokemon.getOpponents()) {
       if (

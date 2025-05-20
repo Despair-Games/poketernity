@@ -26,7 +26,7 @@ export class ConditionalCritAbAttr extends AbAttr {
    * @param target {@linkcode Pokemon} Target.
    * @param move {@linkcode Move} used by ability user.
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     isCritical: BooleanHolder,
