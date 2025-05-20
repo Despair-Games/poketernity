@@ -4,7 +4,7 @@ import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import type { EggOptions } from "#data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#data/egg";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { EggTier } from "#enums/egg-type";
 import { GachaType } from "#enums/gacha-types";
 import { TextStyle } from "#enums/text-style";

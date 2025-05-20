@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { TEXT_SCALE } from "#constants/ui-constants";
 import { getTypeRgb } from "#data/type";
 import { BattleCommand } from "#enums/battle-command";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";

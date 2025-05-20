@@ -4,7 +4,7 @@ import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
 import { getPokeballAtlasKey } from "#data/pokeball";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ModifierTier } from "#enums/modifier-tier";
 import { PokeballType } from "#enums/pokeball-type";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";

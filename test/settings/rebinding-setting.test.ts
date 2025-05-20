@@ -1,5 +1,5 @@
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { Device } from "#enums/devices";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
