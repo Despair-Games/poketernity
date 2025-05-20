@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
-import type { Button } from "#enums/buttons";
+import type { Button } from "#enums/button";
 import { Device } from "#enums/devices";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";

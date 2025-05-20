@@ -5,7 +5,7 @@ import { handleTutorial } from "#app/tutorial";
 import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { GameDataType } from "#enums/game-data-type";
 import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";

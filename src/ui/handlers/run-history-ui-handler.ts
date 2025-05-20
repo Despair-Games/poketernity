@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { BattleType } from "#enums/battle-type";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { GameModes } from "#enums/game-modes";
 import { ImagesFolder } from "#enums/images-folders";
 import { PlayerGender } from "#enums/player-gender";

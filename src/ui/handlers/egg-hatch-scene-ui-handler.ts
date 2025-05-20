@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
 import { EggHatchPhase } from "#phases/egg-hatch-phase";
 import { UiHandler } from "#ui/ui-handler";
