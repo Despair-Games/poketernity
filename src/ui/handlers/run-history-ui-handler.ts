@@ -106,7 +106,6 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     let success = false;
 
     const handleAction = () => {
-      // TODO: should be `.getCursor()`?
       const cursor = this.cursor + this.scrollCursor;
       if (!this.runs[cursor]) {
         return false;
