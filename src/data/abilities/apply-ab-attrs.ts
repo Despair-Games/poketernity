@@ -7,9 +7,9 @@ import { queueShowAbility } from "#utils/ability-utils";
 
 //#region ApplyAbAttrsResult
 
-interface AppliedAbAttr {
-  /** The name of the constructor of the {@linkcode AbAttr} */
-  name: string;
+interface AppliedAbAttr<TAttr extends AbAttr> {
+  /** The ability attribute */
+  attr: TAttr;
   /** The (simulated) result of applying the attribute */
   result: boolean;
   /** The (optional) message to show if the attribute was applied */
@@ -23,14 +23,14 @@ interface AppliedAbAttr {
  * The function for using the {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} ability mode
  * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
  * @param params - The parameters for the given attribute's `apply` function
- * @returns The apply function to use
+ * @returns An array of {@linkcode AppliedAbAttr | applied ability attributes}
  *
  * @see {@linkcode applyAbAttrsInternal}
  */
 export function applyAbAttrs<TAttr extends AbAttr>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
-): AppliedAbAttr[] {
+): AppliedAbAttr<TAttr>[] {
   return applyAbAttrsInternal<TAttr>({ canApplyOnly: true }, abAttrFlag, ...params);
 }
 
@@ -77,8 +77,8 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
   abFilterOptions: AbilityFilterOptions,
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
-): AppliedAbAttr[] {
-  const applied: AppliedAbAttr[] = [];
+): AppliedAbAttr<TAttr>[] {
+  const applied: AppliedAbAttr<TAttr>[] = [];
   const [pokemon, simulated, ...args] = params;
   const abilities = pokemon.getAbilities(abFilterOptions);
 
@@ -94,7 +94,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
 
     matchingAttrs.forEach((attr) => {
       globalScene.phaseManager.setPhaseQueueSplice();
-      let message: AppliedAbAttr["message"] = null;
+      let message: AppliedAbAttr<TAttr>["message"] = null;
       const result = attr.apply(pokemon, simulated, ...args);
 
       if (result && !simulated) {
@@ -127,7 +127,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
       }
 
       globalScene.phaseManager.clearPhaseQueueSplice();
-      applied.push({ name: attr.constructor.name, result, message });
+      applied.push({ attr, result, message });
     });
   });
 
@@ -138,23 +138,23 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
  * The function for using the {@linkcode AbilityApplyMode.REVEALED | REVEALED} ability mode
  * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
  * @param params - The parameters for the given attribute's `apply` function
- * @returns The apply function to use
+ * @returns An array of {@linkcode AppliedAbAttr | applied ability attributes}
  */
 function applyRevealedAbAttrs<TAttr extends AbAttr>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
-): AppliedAbAttr[] {
+): AppliedAbAttr<TAttr>[] {
   return applyAbAttrsInternal<TAttr>({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
 }
 
 /**
  * The function for using the {@linkcode AbilityApplyMode.IGNORE | IGNORE} ability mode
- * @returns an empty object satisfying the {@linkcode AppliedAbAttr}
+ * @returns an empty array
  */
 function ignoreAbAttrs<TAttr extends AbAttr>(
   _abAttrFlag: AbAttrFlag,
   ..._params: Parameters<TAttr["apply"]>
-): AppliedAbAttr[] {
+): AppliedAbAttr<TAttr>[] {
   return [];
 }
 

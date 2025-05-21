@@ -57,6 +57,6 @@ export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, 
  */
 export function willWakeUpAtEndOfTurn(pokemon: Pokemon) {
   return applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true).some(
-    ({ name, result }) => PostTurnResetStatusAbAttr.prototype.constructor.name === name && result,
+    ({ attr, result }) => attr instanceof PostTurnResetStatusAbAttr && result,
   );
 }
