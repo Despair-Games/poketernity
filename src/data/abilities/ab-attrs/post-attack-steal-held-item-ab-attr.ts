@@ -16,7 +16,7 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
     this.stealCondition = stealCondition;
   }
 
-  override applyPostAttack(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move): boolean {
+  public override applyPostAttack(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move): boolean {
     if (!simulated && (!this.stealCondition || this.stealCondition(pokemon, defender, move))) {
       const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
       if (heldItems.length) {

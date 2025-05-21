@@ -7,7 +7,7 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import i18next from "i18next";
 
 export class ForewarnAbAttr extends PostSummonAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     let maxPowerSeen = 0;
     let maxMove = "";
     let movePower = 0;

@@ -7,7 +7,7 @@ import { type BooleanHolder, type NumberHolder, toDmgValue } from "#utils/common
 import i18next from "i18next";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     attacker: Pokemon,

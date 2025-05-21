@@ -11,7 +11,7 @@ export class StatStageChangeCopyAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.STAT_STAGE_CHANGE_COPY);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, stats: BattleStat[], stages: number): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, stats: BattleStat[], stages: number): boolean {
     if (!simulated) {
       globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, stats, stages, { canBeCopied: false }),

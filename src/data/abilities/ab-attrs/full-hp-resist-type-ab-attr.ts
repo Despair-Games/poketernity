@@ -27,7 +27,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
    * @param typeMultiplier a container for the move's current type effectiveness multiplier
    * @returns `true` if the move's effectiveness is reduced; `false` otherwise
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     _attacker: Pokemon,
@@ -48,7 +48,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:fullHpResistType", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
     });

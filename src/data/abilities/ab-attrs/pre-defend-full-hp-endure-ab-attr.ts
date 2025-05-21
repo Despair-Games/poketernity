@@ -11,7 +11,13 @@ export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
     this._flags.add(AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move, damage: NumberHolder): boolean {
+  public override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
+    _attacker: Pokemon,
+    _move: Move,
+    damage: NumberHolder,
+  ): boolean {
     if (
       pokemon.isFullHp()
       && pokemon.getMaxHp() > 1 // Checks if pokemon has Wonder Guard (which forces 1hp)

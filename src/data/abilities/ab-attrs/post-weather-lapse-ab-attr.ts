@@ -23,11 +23,11 @@ export abstract class PostWeatherLapseAbAttr extends AbAttr {
    * @param weather The {@linkcode Weather} on the field
    * @returns `true` if effects successfully apply
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather): boolean {
     return false;
   }
 
-  override getCondition(): AbAttrCondition {
+  public override getCondition(): AbAttrCondition {
     return getWeatherCondition(...this.weatherTypes);
   }
 }

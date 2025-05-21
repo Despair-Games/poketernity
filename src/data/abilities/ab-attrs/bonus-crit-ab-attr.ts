@@ -18,7 +18,7 @@ export class BonusCritAbAttr extends AbAttr {
     this.stages = stages;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, critStage: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, critStage: NumberHolder): boolean {
     critStage.value += this.stages;
     return true;
   }

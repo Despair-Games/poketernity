@@ -21,7 +21,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     this.statusEffects = statusEffect;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const allowedPokemon = pokemon.getField().filter((p) => p.isAllowedInBattle());
 
     if (allowedPokemon.length < 1) {

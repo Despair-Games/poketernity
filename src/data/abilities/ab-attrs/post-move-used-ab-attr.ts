@@ -23,7 +23,7 @@ export abstract class PostMoveUsedAbAttr extends AbAttr {
    * @param targets The targets of the move (by {@linkcode BattlerIndex})
    * @returns `true` if effects successfully apply
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _move: PokemonMove,

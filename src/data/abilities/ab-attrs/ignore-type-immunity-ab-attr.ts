@@ -15,7 +15,7 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
     this.allowedMoveTypes = allowedMoveTypes;
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,

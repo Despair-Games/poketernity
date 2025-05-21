@@ -29,7 +29,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
    * @param args N/A
    * @returns true if healing should be reversed on a healing move, false otherwise.
    */
-  override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.hasAttr(HitHealAttr)) {
       if (!simulated) {
         globalScene.phaseManager.queueMessagePhase(

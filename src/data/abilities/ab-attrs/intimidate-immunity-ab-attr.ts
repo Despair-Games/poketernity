@@ -15,7 +15,7 @@ export class IntimidateImmunityAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.INTIMIDATE_IMMUNITY);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     if (!cancelled.value) {
       cancelled.value = true;
       return true;
@@ -23,7 +23,7 @@ export class IntimidateImmunityAbAttr extends AbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
     if (this.hasTriggerMessage) {
       return i18next.t("abilityTriggers:intimidateImmunity", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

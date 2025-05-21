@@ -18,7 +18,7 @@ export class MockStatusEffectAbAttr extends AbAttr {
     this.mockedStatus = mockedStatus;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, statusEffect: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, statusEffect: NumberHolder): boolean {
     statusEffect.value = this.mockedStatus;
     return true;
   }

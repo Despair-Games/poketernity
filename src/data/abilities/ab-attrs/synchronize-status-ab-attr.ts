@@ -26,7 +26,7 @@ export class SynchronizeStatusAbAttr extends AbAttr {
    * @returns `true` if this effect attempts to copy the status effect
    * onto the source.
    */
-  override apply(pokemon: Pokemon, simulated: boolean, sourcePokemon: Pokemon, effect: StatusEffect): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, sourcePokemon: Pokemon, effect: StatusEffect): boolean {
     /** Synchronizable statuses */
     const syncStatuses = new Set<StatusEffect>([
       StatusEffect.BURN,

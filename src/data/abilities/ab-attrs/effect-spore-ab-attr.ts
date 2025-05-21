@@ -26,7 +26,7 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
    * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (attacker.hasAbility(AbilityId.OVERCOAT) || attacker.isOfType(ElementalType.GRASS)) {
       return false;
     }

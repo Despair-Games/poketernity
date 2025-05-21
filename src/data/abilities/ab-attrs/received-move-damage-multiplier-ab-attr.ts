@@ -30,7 +30,7 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
    * @param multiplier - The damage multiplier.
    * @returns `true` if the ability was applied.
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     attacker: Pokemon,

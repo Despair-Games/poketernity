@@ -17,7 +17,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     this.damageRatio = damageRatio;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
@@ -32,7 +32,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:postDefendContactDamage", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

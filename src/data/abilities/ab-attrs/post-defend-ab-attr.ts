@@ -17,7 +17,7 @@ export abstract class PostDefendAbAttr extends AbAttr {
    * @param move The {@linkcode Move} being used
    * @returns `true` if effects successfully apply
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _attacker: Pokemon, _move: Move): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _attacker: Pokemon, _move: Move): boolean {
     return false;
   }
 }

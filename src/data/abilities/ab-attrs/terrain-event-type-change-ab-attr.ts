@@ -18,7 +18,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     this._flags.add(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE);
   }
 
-  override apply(pokemon: Pokemon, _simulated: boolean, onSummon: boolean = true): boolean {
+  public override apply(pokemon: Pokemon, _simulated: boolean, onSummon: boolean = true): boolean {
     if (pokemon.isTerastallized) {
       return false;
     }
@@ -67,7 +67,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     }
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]) {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string) {
     const currentTerrain = globalScene.arena.getTerrainType();
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
     if (currentTerrain === TerrainType.NONE) {
