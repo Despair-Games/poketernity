@@ -14,7 +14,6 @@ import overrides from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
-import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/button";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
@@ -278,41 +277,6 @@ export class GameManager {
     if (!isNil(encounterType)) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
-  }
-
-  /**
-   * Transitions to the start of a battle.
-   * @param species - Optional array of species to start the battle with.
-   * @returns A promise that resolves when the battle is started.
-   * @deprecated Use `game.[mode].startBattle()` instead
-   */
-  async startBattle(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
-    await this.classicMode.runToSummon(species, ...extraSpecies);
-
-    if (settings.general.battleStyle === BattleStyle.SWITCH) {
-      this.onNextPrompt(
-        "CheckSwitchPhase",
-        UiMode.CONFIRM,
-        () => {
-          this.setMode(UiMode.MESSAGE);
-          this.endPhase();
-        },
-        () => this.isCurrentPhase("CommandPhase") || this.isCurrentPhase("TurnInitPhase"),
-      );
-
-      this.onNextPrompt(
-        "CheckSwitchPhase",
-        UiMode.CONFIRM,
-        () => {
-          this.setMode(UiMode.MESSAGE);
-          this.endPhase();
-        },
-        () => this.isCurrentPhase("CommandPhase") || this.isCurrentPhase("TurnInitPhase"),
-      );
-    }
-
-    await this.phaseInterceptor.to("CommandPhase");
-    console.log("==================[New Turn]==================");
   }
 
   /**
