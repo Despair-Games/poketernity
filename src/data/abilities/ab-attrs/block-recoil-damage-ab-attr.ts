@@ -11,12 +11,12 @@ export class BlockRecoilDamageAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.BLOCK_RECOIL_DAMAGE);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
     return true;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]) {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string) {
     return i18next.t("abilityTriggers:blockRecoilDamage", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       abilityName: abilityName,

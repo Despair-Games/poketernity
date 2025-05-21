@@ -28,7 +28,7 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
     this.effects = effects;
   }
 
-  override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
+  public override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
     /**
      * The battler tag is only applied to the target if
      * - The target does not have a secondary ability that suppresses move effects

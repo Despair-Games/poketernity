@@ -33,7 +33,7 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
    * @param hasApplied {@linkcode BooleanHolder} whether or not another multiplier has been applied to this stat
    * @returns `true` if this changed the checked stat, `false` otherwise.
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     stat: Stat,

@@ -20,7 +20,7 @@ export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
    * cancels the damage taken from weather.
    * @returns `true` if this ability's effects successfully apply.
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather, _cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather, _cancelled: BooleanHolder): boolean {
     return false;
   }
 }

@@ -38,7 +38,7 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
    * multiplier for the current attack.
    * @returns `true` if this effect modified the given move's damage
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,

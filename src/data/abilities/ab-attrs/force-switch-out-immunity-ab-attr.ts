@@ -9,7 +9,7 @@ export class ForceSwitchOutImmunityAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
     return true;
   }

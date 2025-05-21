@@ -20,7 +20,12 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
     this.immuneEffects = immuneEffects;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, effect: StatusEffect, cancelled: BooleanHolder): boolean {
+  public override apply(
+    _pokemon: Pokemon,
+    _simulated: boolean,
+    effect: StatusEffect,
+    cancelled: BooleanHolder,
+  ): boolean {
     if (this.immuneEffects.length < 1 || this.immuneEffects.includes(effect)) {
       cancelled.value = true;
       return true;
@@ -29,12 +34,12 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ...args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string, effect: StatusEffect): string {
     return this.immuneEffects.length
       ? i18next.t("abilityTriggers:statusEffectImmunityWithName", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           abilityName,
-          statusEffectName: getStatusEffectDescriptor(args[0] as StatusEffect),
+          statusEffectName: getStatusEffectDescriptor(effect),
         })
       : i18next.t("abilityTriggers:statusEffectImmunity", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

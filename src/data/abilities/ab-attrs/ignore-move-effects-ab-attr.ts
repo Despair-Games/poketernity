@@ -18,7 +18,7 @@ export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
   /**
    * @param effectChance {@linkcode NumberHolder} Move additional effect chance.
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _attacker: Pokemon,

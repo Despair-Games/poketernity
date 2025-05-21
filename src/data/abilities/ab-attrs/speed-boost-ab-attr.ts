@@ -5,7 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 export class SpeedBoostAbAttr extends PostTurnAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
       if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
         globalScene.phaseManager.unshiftPhase(

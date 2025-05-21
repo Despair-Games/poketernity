@@ -13,7 +13,7 @@ export abstract class PreApplyBattlerTagAbAttr extends AbAttr {
    * negates the battler tag's effects.
    * @returns `true` if effects apply successfully
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _tag: BattlerTag, _cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _tag: BattlerTag, _cancelled: BooleanHolder): boolean {
     return false;
   }
 }

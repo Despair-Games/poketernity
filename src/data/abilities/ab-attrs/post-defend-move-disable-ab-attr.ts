@@ -13,7 +13,7 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
     this.chance = chance;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (attacker.getTag(BattlerTagType.DISABLED) === null) {
       if (
         move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)

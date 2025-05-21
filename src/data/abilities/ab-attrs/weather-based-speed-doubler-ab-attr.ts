@@ -29,7 +29,13 @@ export class WeatherBasedSpeedDoublerAbAttr extends StatMultiplierAbAttr {
     this.weather = this.weather.concat(weather);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, stat: BattleStat, statValue: NumberHolder, move: Move): boolean {
+  public override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
+    stat: BattleStat,
+    statValue: NumberHolder,
+    move: Move,
+  ): boolean {
     if (getWeatherCondition(...this.weather)(pokemon)) {
       return super.apply(pokemon, simulated, stat, statValue, move);
     }

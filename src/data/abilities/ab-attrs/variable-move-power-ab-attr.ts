@@ -20,7 +20,7 @@ export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
    * power for the current turn
    * @returns `true` if this effect modified the move's power
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _move: Move,

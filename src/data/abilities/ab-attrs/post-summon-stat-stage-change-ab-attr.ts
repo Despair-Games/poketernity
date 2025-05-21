@@ -25,7 +25,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     this.intimidate = intimidate;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return true;
     }

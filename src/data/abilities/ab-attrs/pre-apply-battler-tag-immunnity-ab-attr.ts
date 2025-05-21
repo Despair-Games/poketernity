@@ -20,7 +20,7 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
     this.immuneTagTypes = coerceArray(immuneTagTypes);
   }
 
-  override apply(_pokemon: Pokemon, simulated: boolean, tag: BattlerTag, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean, tag: BattlerTag, cancelled: BooleanHolder): boolean {
     if (this.immuneTagTypes.includes(tag.tagType)) {
       cancelled.value = true;
       if (!simulated) {
@@ -32,7 +32,7 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:battlerTagImmunity", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

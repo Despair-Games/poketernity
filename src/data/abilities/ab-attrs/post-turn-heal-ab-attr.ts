@@ -6,7 +6,7 @@ import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class PostTurnHealAbAttr extends PostTurnAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!pokemon.isFullHp()) {
       if (!simulated) {
         const abilityName = this.source.name;

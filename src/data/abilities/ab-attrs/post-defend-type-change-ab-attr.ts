@@ -7,7 +7,7 @@ import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
       if (simulated) {
         return true;
@@ -23,7 +23,7 @@ export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:postDefendTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

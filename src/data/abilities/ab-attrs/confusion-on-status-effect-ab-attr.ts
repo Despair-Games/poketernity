@@ -32,7 +32,7 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
    * @param effect {@linkcode StatusEffect} applied by move
    * @returns true if defender is confused
    */
-  override applyPostAttack(
+  public override applyPostAttack(
     pokemon: Pokemon,
     simulated: boolean,
     defender: Pokemon,

@@ -14,7 +14,7 @@ export abstract class PreSwitchOutAbAttr extends AbAttr {
    * @param simulated If `true`, suppresses changes to game state
    * @returns `true` if effects from this attribute apply successfully
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
     return false;
   }
 }

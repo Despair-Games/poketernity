@@ -16,7 +16,7 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
     this.ability = ability;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
@@ -34,7 +34,7 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:postDefendAbilityGive", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

@@ -26,7 +26,7 @@ export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
     this.weatherTypes = weatherTypes;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, weather: Weather, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, weather: Weather, cancelled: BooleanHolder): boolean {
     if (this.weatherTypes.includes(weather.weatherType)) {
       cancelled.value = true;
     }

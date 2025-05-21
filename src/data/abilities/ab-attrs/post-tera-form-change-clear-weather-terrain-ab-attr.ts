@@ -17,7 +17,7 @@ export class PostTeraFormChangeClearWeatherTerrainAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN);
   }
 
-  override apply(_pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
       globalScene.arena.trySetWeather(WeatherType.NONE, true);
       globalScene.arena.trySetTerrain(TerrainType.NONE, true);

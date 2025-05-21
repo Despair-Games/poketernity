@@ -16,7 +16,7 @@ export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAtt
     this.terrainTypes = terrainTypes;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, terrain: TerrainType): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, terrain: TerrainType): boolean {
     if (!this.terrainTypes.find((t) => t === terrain)) {
       return false;
     }
