@@ -1,7 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
-import { PostTurnStatusHealAbAttr } from "#abilities/post-turn-status-heal-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -50,15 +49,9 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
  */
 function willWakeUpThisTurn(pokemon: Pokemon) {
   // Will wake up from Hydration ability + Rain
-  const results = applyAbAttrs<PostTurnStatusHealAbAttr>(AbAttrFlag.POST_TURN, pokemon, true);
+  const results = applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true);
 
-  return results.some(
-    ({ name, result }) =>
-      [
-        PostTurnStatusHealAbAttr.prototype.constructor.name,
-        PostTurnResetStatusAbAttr.prototype.constructor.name,
-      ].includes(name) && result,
-  );
+  return results.some(({ name, result }) => PostTurnResetStatusAbAttr.prototype.constructor.name === name && result);
 }
 
 //#endregion
