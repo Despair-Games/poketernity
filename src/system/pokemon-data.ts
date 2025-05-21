@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
+import { allMoves } from "#data/data-lists";
 import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
@@ -132,6 +133,14 @@ export default class PokemonData {
         // @ts-expect-error - `_formIndex` is protected but we can't use `.formIndex` because it's a getter and the class data is lost
         source.summonData.speciesForm._formIndex,
       );
+    }
+    for (const turnMove of this.summonData.moveHistory) {
+      // This is required because the full class object doesn't exist in save data
+      turnMove.move = allMoves.get(turnMove.move.id);
+    }
+    for (const turnMove of this.summonData.moveQueue) {
+      // This is required because the full class object doesn't exist in save data
+      turnMove.move = allMoves.get(turnMove.move.id);
     }
   }
 

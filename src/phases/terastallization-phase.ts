@@ -7,7 +7,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class TerastallizationPhase extends BattlePhase {
@@ -37,9 +36,7 @@ export class TerastallizationPhase extends BattlePhase {
 
   public override end(): void {
     this.pokemon.isTerastallized = true;
-    if (!isNil(this.pokemon.summonData.addedType)) {
-      this.pokemon.summonData.addedType = null;
-    }
+    this.pokemon.summonData.addedType = null;
     this.pokemon.updateSpritePipelineData();
 
     if (this.pokemon.isPlayer()) {
