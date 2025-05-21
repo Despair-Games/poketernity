@@ -29,25 +29,10 @@ describe("Abilities - Arena Trap", () => {
       .enemyMoveset(MoveId.TELEPORT);
   });
 
-  // TODO: Enable test when Issue #935 is addressed
-  it.todo("should not allow grounded Pokémon to flee", async () => {
-    game.override.battleType("single");
-
-    await game.classicMode.startBattle();
-
-    const enemy = game.scene.getEnemyPokemon();
-
-    game.move.select(MoveId.SPLASH);
-
-    await game.toNextTurn();
-
-    expect(enemy).toBe(game.scene.getEnemyPokemon());
-  });
-
   it("should guarantee double battle with any one LURE", async () => {
     game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });

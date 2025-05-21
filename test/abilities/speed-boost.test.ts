@@ -37,7 +37,7 @@ describe("Abilities - Speed Boost", () => {
   });
 
   it("should increase speed by 1 stage at end of turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     game.move.select(MoveId.SPLASH);

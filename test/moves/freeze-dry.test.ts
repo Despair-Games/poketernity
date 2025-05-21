@@ -28,13 +28,12 @@ describe("Moves - Freeze-Dry", () => {
       .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
-      .starterSpecies(SpeciesId.FEEBAS)
       .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.FREEZE_DRY, MoveId.FORESTS_CURSE, MoveId.SOAK]);
   });
 
   it("should deal 2x damage to pure water types", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -48,7 +47,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 4x damage to water/flying types", async () => {
     game.override.enemySpecies(SpeciesId.WINGULL);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -62,7 +61,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 1x damage to water/fire types", async () => {
     game.override.enemySpecies(SpeciesId.VOLCANION);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -83,7 +82,7 @@ describe("Moves - Freeze-Dry", () => {
       .enemyMoveset(MoveId.SPLASH)
       .starterSpecies(SpeciesId.MAGIKARP)
       .moveset([MoveId.SOAK, MoveId.FREEZE_DRY]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -101,7 +100,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 8x damage to water/ground/grass type under Forest's Curse", async () => {
     game.override.enemySpecies(SpeciesId.QUAGSIRE);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -118,7 +117,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 2x damage to steel type terastallized into water", async () => {
     game.override.enemySpecies(SpeciesId.SKARMORY);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -133,7 +132,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 0.5x damage to water type terastallized into fire", async () => {
     game.override.enemySpecies(SpeciesId.PELIPPER);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -148,7 +147,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 0.5x damage to water type Terapagos with Tera Shell", async () => {
     game.override.enemySpecies(SpeciesId.TERAPAGOS).enemyAbility(AbilityId.TERA_SHELL);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -165,7 +164,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 2x damage to water type under Normalize", async () => {
     game.override.ability(AbilityId.NORMALIZE);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -179,7 +178,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 0.25x damage to rock/steel type under Normalize", async () => {
     game.override.ability(AbilityId.NORMALIZE).enemySpecies(SpeciesId.SHIELDON);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -193,7 +192,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 0x damage to water/ghost type under Normalize", async () => {
     game.override.ability(AbilityId.NORMALIZE).enemySpecies(SpeciesId.JELLICENT);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -207,7 +206,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 2x damage to water type under Electrify", async () => {
     game.override.enemyMoveset([MoveId.ELECTRIFY]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -221,7 +220,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 4x damage to water/flying type under Electrify", async () => {
     game.override.enemyMoveset([MoveId.ELECTRIFY]).enemySpecies(SpeciesId.GYARADOS);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -235,7 +234,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 0x damage to water/ground type under Electrify", async () => {
     game.override.enemyMoveset([MoveId.ELECTRIFY]).enemySpecies(SpeciesId.BARBOACH);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -249,7 +248,7 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 0.25x damage to Grass/Dragon type under Electrify", async () => {
     game.override.enemyMoveset([MoveId.ELECTRIFY]).enemySpecies(SpeciesId.FLAPPLE);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -265,7 +264,7 @@ describe("Moves - Freeze-Dry", () => {
     game.override.moveset([MoveId.FREEZE_DRY]).enemySpecies(SpeciesId.MAGIKARP);
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -281,7 +280,7 @@ describe("Moves - Freeze-Dry", () => {
     game.override.moveset([MoveId.FREEZE_DRY]).ability(AbilityId.NORMALIZE).enemySpecies(SpeciesId.MAGIKARP);
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -297,7 +296,7 @@ describe("Moves - Freeze-Dry", () => {
     game.override.moveset([MoveId.FREEZE_DRY]).enemySpecies(SpeciesId.MAGIKARP).enemyMoveset([MoveId.ELECTRIFY]);
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -314,7 +313,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");

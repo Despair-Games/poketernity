@@ -214,7 +214,7 @@ describe("Abilities - Ice Face", () => {
 
   it("doesn't trigger if user is behind a substitute", async () => {
     game.override.enemyMoveset(MoveId.SUBSTITUTE).moveset(MoveId.POWER_TRIP);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.POWER_TRIP);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);

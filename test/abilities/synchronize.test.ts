@@ -54,7 +54,7 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("does not trigger on Sleep", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.SPORE);
 

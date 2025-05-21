@@ -79,7 +79,7 @@ describe("Test Phase Interceptor", () => {
   });
 
   it("newGame one-liner", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
   });
@@ -147,7 +147,7 @@ describe("Test Phase Interceptor", () => {
     );
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
       game.scene.gameMode = getGameMode(GameModes.CLASSIC);
-      const starters = generateStarter(game.scene);
+      const starters = generateStarter(game.scene, [SpeciesId.FEEBAS]);
       const selectStarterPhase = new SelectStarterPhase();
       game.scene.phaseManager.pushPhase(new EncounterPhase(false));
       selectStarterPhase.initBattle(starters);
@@ -182,7 +182,7 @@ describe("Test Battle Phase", () => {
     game.override.moveset([MoveId.TACKLE]);
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
   });
@@ -196,7 +196,7 @@ describe("Test Battle Phase", () => {
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TAIL_WHIP, MoveId.TAIL_WHIP, MoveId.TAIL_WHIP, MoveId.TAIL_WHIP]);
     game.override.battleType("single");
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("TurnInitPhase", false);
   });
@@ -297,7 +297,7 @@ describe("Test Battle Phase", () => {
     game.override.startingWave(3);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const turn = game.scene.currentBattle.turn;
     game.move.select(moveToUse);
     await game.toNextTurn();
@@ -317,7 +317,7 @@ describe("Test Battle Phase", () => {
       .startingBiome(BiomeId.LAKE)
       .moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const waveIndex = game.scene.currentBattle.waveIndex;
     game.move.select(moveToUse);
 
@@ -340,7 +340,7 @@ describe("Test Battle Phase", () => {
       .enemyMoveset(MoveId.SPLASH)
       .startingHeldItems([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ACC }]);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.FEEBAS]);
     game.scene.getPlayerPokemon()!.hp = 1;
     game.move.select(moveToUse);
 
