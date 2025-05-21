@@ -1814,7 +1814,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       trappedAbMessages.push(
         ...applyAbAttrs<ArenaTrapAbAttr>(AbAttrFlag.ARENA_TRAP, opponent, simulated, trappedByAbility, this)
           .map((result) => result.message)
-          .filter((message) => !isNil(message)),
+          .filter((message) => message),
       ),
     );
 
