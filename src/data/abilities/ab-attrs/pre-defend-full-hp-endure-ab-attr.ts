@@ -5,6 +5,10 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { NumberHolder } from "#utils/common-utils";
 
+/**
+ * If the pokemon with this ab-attr is full hp and hit with a move that would kill it, it will survive with 1 hp left.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
+ */
 export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
