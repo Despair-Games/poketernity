@@ -30,7 +30,7 @@ describe("EXP Modifier Items", () => {
 
   it("EXP booster items stack multiplicatively", async () => {
     game.override.startingHeldItems([{ name: "LUCKY_EGG", count: 3 }, { name: "GOLDEN_EGG" }]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const partyMember = game.scene.getPlayerPokemon()!;
     partyMember.exp = 100;

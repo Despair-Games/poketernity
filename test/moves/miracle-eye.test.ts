@@ -30,7 +30,7 @@ describe("Moves - Miracle Eye", () => {
   });
 
   it("should allow Psychic moves to hit Dark types", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

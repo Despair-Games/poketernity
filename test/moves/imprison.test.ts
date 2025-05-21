@@ -33,7 +33,7 @@ describe("Moves - Imprison", () => {
   });
 
   it("should prevent opponents from using moves shared by the user", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -55,7 +55,7 @@ describe("Moves - Imprison", () => {
   it("should not prevent allies from using moves shared by the user", async () => {
     game.override.battleType("double").moveset([MoveId.IMPRISON, MoveId.SPLASH]).enemyMoveset(MoveId.SPLASH);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -76,7 +76,7 @@ describe("Moves - Imprison", () => {
       .enemyMoveset([MoveId.SPLASH, MoveId.SLEEP_TALK])
       .enemyStatusEffect(StatusEffect.SLEEP);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 
@@ -94,7 +94,7 @@ describe("Moves - Imprison", () => {
       .moveset([]) // Moves are set manually for this test
       .enemyMoveset([MoveId.SPLASH, MoveId.CELEBRATE]);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     const [feebas, magikarp] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -125,7 +125,7 @@ describe("Moves - Imprison", () => {
   it("should disable matching moves for opponents that enter the field afterward", async () => {
     game.override.moveset([MoveId.SPLASH, MoveId.GROWL]);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.IMPRISON);

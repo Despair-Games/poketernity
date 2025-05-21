@@ -45,7 +45,7 @@ describe("Shiny Chance Modifier Event", () => {
     expect(timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)).toBeTruthy();
     expect(timedEventManager.getWildShinyChanceMultiplier()).toBe(9000);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     expect(game.field.getEnemyPokemon().isShiny()).toBeTruthy();
   });
 

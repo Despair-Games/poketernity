@@ -34,7 +34,7 @@ describe("Items - Lock Capsule", () => {
   });
 
   it("doesn't set the cost of common tier items to 0", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     game.scene.phaseManager.overridePhase(
       new SelectModifierPhase({
         customModifierSettings: {

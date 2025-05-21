@@ -42,7 +42,7 @@ describe("Moves - Tera Blast", () => {
 
   it("changes type to match user's tera type", async () => {
     game.override.enemySpecies(SpeciesId.FURRET);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
@@ -58,7 +58,7 @@ describe("Moves - Tera Blast", () => {
   });
 
   it("increases power if user is Stellar tera type", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     game.field.forceTera(player, ElementalType.STELLAR);
@@ -72,7 +72,7 @@ describe("Moves - Tera Blast", () => {
 
   it("is super effective against terastallized targets if user is Stellar tera type", async () => {
     game.override.forceEnemyTera().teraType(ElementalType.STELLAR);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
@@ -87,7 +87,7 @@ describe("Moves - Tera Blast", () => {
   // Currently abilities are bugged and can't see when a move's category is changed
   it.todo("uses the higher stat of the user's Atk and SpAtk for damage calculation", async () => {
     game.override.enemyAbility(AbilityId.TOXIC_DEBRIS);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     player.stats[Stat.ATK] = 100;
@@ -99,7 +99,7 @@ describe("Moves - Tera Blast", () => {
   });
 
   it("causes stat drops if user is Stellar tera type", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     game.field.forceTera(player, ElementalType.STELLAR);
@@ -114,7 +114,7 @@ describe("Moves - Tera Blast", () => {
 
   it("should be affected by type-changing abilities (e.g., Aerilate) if user is not Terastallized", async () => {
     game.override.enemySpecies(SpeciesId.FURRET).ability(AbilityId.AERILATE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     vi.spyOn(player, "getMoveType");
@@ -128,7 +128,7 @@ describe("Moves - Tera Blast", () => {
 
   it("should NOT be affected by type-changing abilities (e.g., Aerilate) if user is Terastallized", async () => {
     game.override.enemySpecies(SpeciesId.CHIKORITA).ability(AbilityId.AERILATE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     game.field.forceTera(player, ElementalType.NORMAL);

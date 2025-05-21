@@ -32,7 +32,7 @@ describe("Abilities - Illuminate", () => {
   it("should prevent ACC stat stage from being lowered", async () => {
     game.override.battleType("single");
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -48,7 +48,7 @@ describe("Abilities - Illuminate", () => {
   it("should guarantee double battle with any one LURE", async () => {
     game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });

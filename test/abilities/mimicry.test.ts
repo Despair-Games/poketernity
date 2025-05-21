@@ -32,7 +32,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Mimicry activates after the Pokémon with Mimicry is switched in while terrain is present, or whenever there is a change in terrain", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.ABRA);
 
     const [feebas, abra] = game.scene.getPlayerParty();
     game.move.use(MoveId.MISTY_TERRAIN);
@@ -46,7 +46,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Pokemon should revert back to its original, root type once terrain ends", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const regieleki = game.field.getPlayerPokemon();
     game.move.use(MoveId.PSYCHIC_TERRAIN);
@@ -61,7 +61,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("If the Pokemon is under the effect of a type-adding move and an equivalent terrain activates, the move's effect disappears", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const feebas = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);

@@ -29,7 +29,7 @@ describe.todo("Items - Scope Lens", () => {
   }, 20000);
 
   it("should raise CRIT stage by 1", async () => {
-    await game.startBattle([SpeciesId.GASTLY]);
+    await game.classicMode.startBattle(SpeciesId.GASTLY);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

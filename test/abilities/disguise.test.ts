@@ -34,7 +34,7 @@ describe("Abilities - Disguise", () => {
   });
 
   it("takes no damage from attacking move and transforms to Busted form, takes 1/8 max HP damage from the disguise breaking", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     const maxHp = mimikyu.getMaxHp();
@@ -51,7 +51,7 @@ describe("Abilities - Disguise", () => {
   });
 
   it("doesn't break disguise when attacked with ineffective move", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const mimikyu = game.scene.getEnemyPokemon()!;
 
@@ -66,7 +66,7 @@ describe("Abilities - Disguise", () => {
 
   it("takes no damage from the first hit of a multihit move and transforms to Busted form, then takes damage from the second hit", async () => {
     game.override.moveset([MoveId.SURGING_STRIKES]);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     const maxHp = mimikyu.getMaxHp();
@@ -88,7 +88,7 @@ describe("Abilities - Disguise", () => {
   });
 
   it("takes effects from status moves and damage from status effects", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     expect(mimikyu.hp).toBe(mimikyu.getMaxHp());
@@ -105,7 +105,7 @@ describe("Abilities - Disguise", () => {
 
   it("persists form change when switched out", async () => {
     game.override.enemyMoveset([MoveId.SHADOW_SNEAK]);
-    await game.classicMode.startBattle([SpeciesId.MIMIKYU, SpeciesId.FURRET]);
+    await game.classicMode.startBattle(SpeciesId.MIMIKYU, SpeciesId.FURRET);
 
     const mimikyu = game.scene.getPlayerPokemon()!;
     const maxHp = mimikyu.getMaxHp();
@@ -130,7 +130,7 @@ describe("Abilities - Disguise", () => {
     game.override.starterForms({
       [SpeciesId.MIMIKYU]: bustedForm,
     });
-    await game.classicMode.startBattle([SpeciesId.FURRET, SpeciesId.MIMIKYU]);
+    await game.classicMode.startBattle(SpeciesId.FURRET, SpeciesId.MIMIKYU);
 
     const mimikyu = game.scene.getPlayerParty()[1]!;
     expect(mimikyu.formIndex).toBe(bustedForm);
@@ -148,7 +148,7 @@ describe("Abilities - Disguise", () => {
       [SpeciesId.MIMIKYU]: bustedForm,
     });
 
-    await game.classicMode.startBattle([SpeciesId.MIMIKYU]);
+    await game.classicMode.startBattle(SpeciesId.MIMIKYU);
 
     const mimikyu = game.scene.getPlayerPokemon()!;
 
@@ -167,7 +167,7 @@ describe("Abilities - Disguise", () => {
       [SpeciesId.MIMIKYU]: bustedForm,
     });
 
-    await game.classicMode.startBattle([SpeciesId.MIMIKYU, SpeciesId.FURRET]);
+    await game.classicMode.startBattle(SpeciesId.MIMIKYU, SpeciesId.FURRET);
 
     const mimikyu1 = game.scene.getPlayerPokemon()!;
 
@@ -186,7 +186,7 @@ describe("Abilities - Disguise", () => {
 
   it("doesn't faint twice when fainting due to Disguise break damage, nor prevent faint from Disguise break damage if using Endure", async () => {
     game.override.enemyMoveset([MoveId.ENDURE]);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     mimikyu.hp = 1;
@@ -202,7 +202,7 @@ describe("Abilities - Disguise", () => {
     game.override.ability(AbilityId.AERILATE);
     game.override.moveset([MoveId.TACKLE]);
 
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     const maxHp = mimikyu.getMaxHp();
@@ -218,7 +218,7 @@ describe("Abilities - Disguise", () => {
 
   it("doesn't trigger if user is behind a substitute", async () => {
     game.override.enemyMoveset(MoveId.SUBSTITUTE).moveset(MoveId.POWER_TRIP);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     game.move.select(MoveId.POWER_TRIP);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);

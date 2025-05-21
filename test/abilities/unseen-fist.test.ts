@@ -51,7 +51,7 @@ describe("Abilities - Unseen Fist", () => {
     game.override.enemyLevel(1);
     game.override.moveset([MoveId.TACKLE]);
 
-    await game.startBattle([SpeciesId.URSHIFU]);
+    await game.classicMode.startBattle(SpeciesId.URSHIFU);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, MoveId.NONE, enemyPokemon.id);
@@ -74,7 +74,7 @@ async function testUnseenFistHitResult(
   game.override.moveset([attackMoveId]);
   game.override.enemyMoveset(protectMoveId);
 
-  await game.classicMode.startBattle([SpeciesId.URSHIFU]);
+  await game.classicMode.startBattle(SpeciesId.URSHIFU);
 
   const enemyPokemon = game.field.getEnemyPokemon();
 

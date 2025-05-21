@@ -79,7 +79,7 @@ describe("Test Phase Interceptor", () => {
   });
 
   it("newGame one-liner", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
   });
@@ -182,7 +182,7 @@ describe("Test Battle Phase", () => {
     game.override.moveset([MoveId.TACKLE]);
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
   });
@@ -196,7 +196,7 @@ describe("Test Battle Phase", () => {
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TAIL_WHIP, MoveId.TAIL_WHIP, MoveId.TAIL_WHIP, MoveId.TAIL_WHIP]);
     game.override.battleType("single");
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("TurnInitPhase", false);
   });
@@ -211,7 +211,7 @@ describe("Test Battle Phase", () => {
   });
 
   it("start battle with selected team", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.CHANSEY, SpeciesId.MEW]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.CHANSEY, SpeciesId.MEW);
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.CHARIZARD);
     expect(game.scene.getPlayerParty()[1].species.speciesId).toBe(SpeciesId.CHANSEY);
     expect(game.scene.getPlayerParty()[2].species.speciesId).toBe(SpeciesId.MEW);
@@ -229,7 +229,7 @@ describe("Test Battle Phase", () => {
     game.override.enemySpecies(SpeciesId.MIGHTYENA);
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.ability(AbilityId.HYDRATION);
-    await game.classicMode.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
   });
@@ -239,7 +239,7 @@ describe("Test Battle Phase", () => {
     game.override.enemySpecies(SpeciesId.MIGHTYENA);
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.ability(AbilityId.HYDRATION);
-    await game.classicMode.startBattle([SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
   });
@@ -250,7 +250,7 @@ describe("Test Battle Phase", () => {
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.ability(AbilityId.HYDRATION);
     game.override.startingWave(3);
-    await game.classicMode.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
   });
@@ -261,7 +261,7 @@ describe("Test Battle Phase", () => {
     game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.ability(AbilityId.HYDRATION);
     game.override.startingWave(3);
-    await game.classicMode.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD, SpeciesId.DARKRAI, SpeciesId.GABITE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD, SpeciesId.DARKRAI, SpeciesId.GABITE);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
   });
@@ -277,7 +277,7 @@ describe("Test Battle Phase", () => {
     game.override.startingWave(3);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle([SpeciesId.DARMANITAN, SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.DARMANITAN, SpeciesId.CHARIZARD);
 
     game.move.select(moveToUse);
     await game.phaseInterceptor.to("DamageAnimPhase", false);
@@ -297,7 +297,7 @@ describe("Test Battle Phase", () => {
     game.override.startingWave(3);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const turn = game.scene.currentBattle.turn;
     game.move.select(moveToUse);
     await game.toNextTurn();
@@ -317,7 +317,7 @@ describe("Test Battle Phase", () => {
       .startingBiome(BiomeId.LAKE)
       .moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const waveIndex = game.scene.currentBattle.waveIndex;
     game.move.select(moveToUse);
 
@@ -340,7 +340,7 @@ describe("Test Battle Phase", () => {
       .enemyMoveset(MoveId.SPLASH)
       .startingHeldItems([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ACC }]);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.FEEBAS);
     game.scene.getPlayerPokemon()!.hp = 1;
     game.move.select(moveToUse);
 
@@ -368,7 +368,7 @@ describe("Test Battle Phase", () => {
       .startingLevel(1000)
       .enemyMoveset(MoveId.SPLASH);
 
-    await game.classicMode.startBattle([SpeciesId.ARCEUS]);
+    await game.classicMode.startBattle(SpeciesId.ARCEUS);
 
     game.move.use(MoveId.FLAMETHROWER);
     await game.toNextTurn();

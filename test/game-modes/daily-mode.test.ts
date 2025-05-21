@@ -72,7 +72,7 @@ describe("Shop modifications", async () => {
   });
 
   it("should not have Eviolite and Mini Black Hole available in Classic if not unlocked", async () => {
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     game.move.select(MoveId.SPLASH);
     await game.faintOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");

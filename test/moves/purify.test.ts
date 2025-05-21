@@ -34,7 +34,7 @@ describe("Moves - Purify", () => {
   });
 
   test("Purify heals opponent status effect and restores user hp", async () => {
-    await game.classicMode.startBattle([SpeciesId.PYUKUMUKU]);
+    await game.classicMode.startBattle(SpeciesId.PYUKUMUKU);
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
     const playerPokemon: PlayerPokemon = game.scene.getPlayerPokemon()!;
@@ -52,7 +52,7 @@ describe("Moves - Purify", () => {
   });
 
   test("Purify does not heal if opponent doesnt have any status effect", async () => {
-    await game.classicMode.startBattle([SpeciesId.PYUKUMUKU]);
+    await game.classicMode.startBattle(SpeciesId.PYUKUMUKU);
 
     const playerPokemon: PlayerPokemon = game.scene.getPlayerPokemon()!;
 

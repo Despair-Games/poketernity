@@ -32,14 +32,14 @@ describe("Abilities - Sturdy", () => {
   });
 
   test("Sturdy activates when user is at full HP", async () => {
-    await game.classicMode.startBattle([SpeciesId.LUCARIO]);
+    await game.classicMode.startBattle(SpeciesId.LUCARIO);
     game.move.select(MoveId.CLOSE_COMBAT);
     await game.phaseInterceptor.to("PostActionPhase");
     expect(game.scene.getEnemyParty()[0].hp).toBe(1);
   });
 
   test("Sturdy doesn't activate when user is not at full HP", async () => {
-    await game.classicMode.startBattle([SpeciesId.LUCARIO]);
+    await game.classicMode.startBattle(SpeciesId.LUCARIO);
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyParty()[0];
     enemyPokemon.hp = enemyPokemon.getMaxHp() - 1;
@@ -52,7 +52,7 @@ describe("Abilities - Sturdy", () => {
   });
 
   test("Sturdy pokemon should be immune to OHKO moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.LUCARIO]);
+    await game.classicMode.startBattle(SpeciesId.LUCARIO);
     game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("PostActionPhase");
 
@@ -63,7 +63,7 @@ describe("Abilities - Sturdy", () => {
   test("Sturdy is ignored by pokemon with Mold Breaker", async () => {
     game.override.ability(AbilityId.MOLD_BREAKER);
 
-    await game.classicMode.startBattle([SpeciesId.LUCARIO]);
+    await game.classicMode.startBattle(SpeciesId.LUCARIO);
     game.move.select(MoveId.CLOSE_COMBAT);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
