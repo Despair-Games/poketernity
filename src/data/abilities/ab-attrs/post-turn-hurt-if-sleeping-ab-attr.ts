@@ -1,12 +1,11 @@
-import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
-import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
+import { willWakeUpAtEndOfTurn } from "#utils/ability-utils";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -23,7 +22,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
         opp.hasStatusEffect(StatusEffect.SLEEP)
         && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
         && !opp.switchOutStatus
-        && !willWakeUpThisTurn(opp)
+        && !willWakeUpAtEndOfTurn(opp)
       ) {
         if (!simulated) {
           opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
@@ -39,20 +38,3 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
     return hadEffect;
   }
 }
-
-//#region Helpers
-
-/**
- * Check if a Pokemon will wake up this turn by simulating the {@linkcode AbAttrFlag.POST_TURN} applications
- * and checking for a {@linkcode PostTurnResetStatusAbAttr} with a result of `true`.
- *
- * @param pokemon - The Pokemon to check
- * @returns `true` if the Pokemon will wake up this turn, `false` otherwise
- */
-function willWakeUpThisTurn(pokemon: Pokemon) {
-  return applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true).some(
-    ({ name, result }) => PostTurnResetStatusAbAttr.prototype.constructor.name === name && result,
-  );
-}
-
-//#endregion
