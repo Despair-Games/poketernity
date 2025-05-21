@@ -51,11 +51,6 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
 function willWakeUpThisTurn(pokemon: Pokemon) {
   // Will wake up from Hydration ability + Rain
   const results = applyAbAttrs<PostTurnStatusHealAbAttr>(AbAttrFlag.POST_TURN, pokemon, true);
-  console.log(
-    `willWakeUpThisTurn: ${PostTurnStatusHealAbAttr.prototype.constructor.name}`,
-    results,
-    results.some(({ name, result }) => name === PostTurnStatusHealAbAttr.prototype.constructor.name && result),
-  );
 
   return results.some(
     ({ name, result }) =>
