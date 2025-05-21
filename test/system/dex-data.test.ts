@@ -45,8 +45,8 @@ describe("Dex Data", () => {
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+      expect(starterData.abilityAttr & AbilityAttr.PASSIVE).toBeFalsy();
       expect(starterData.ivs).toEqual(defaultIVs);
-      expect(starterData.passiveAttr).toBe(0);
       expect(starterData.valueReduction).toBe(0);
       expect(starterData.classicWinCount).toBe(0);
 

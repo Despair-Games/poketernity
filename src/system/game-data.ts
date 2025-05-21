@@ -20,6 +20,7 @@ import { defaultStarterSpecies } from "#data/default-starters";
 import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import type { Egg } from "#data/egg";
 import { speciesEggMoves } from "#data/egg-moves";
+import { starterPassiveAbilities } from "#data/passives";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import {
@@ -139,6 +140,7 @@ export interface RunEntry {
 export interface StarterAttributes {
   nature?: number;
   ability?: number;
+  passive?: boolean;
   variant?: number;
   form?: number;
   female?: boolean;
@@ -169,7 +171,6 @@ const systemShortKeys = {
   candyCount: "$x",
   candyProgress: "$f",
   abilityAttr: "$a",
-  passiveAttr: "$pa",
   valueReduction: "$vr",
   classicWinCount: "$wc",
 };
@@ -528,7 +529,7 @@ export class GameData {
         return ret;
       }
 
-      return k.endsWith("Attr") && !["natureAttr", "abilityAttr", "passiveAttr"].includes(k) ? BigInt(v ?? 0) : v;
+      return k.endsWith("Attr") && !["natureAttr", "abilityAttr"].includes(k) ? BigInt(v ?? 0) : v;
     }) as SystemSaveData;
   }
 
@@ -1424,7 +1425,6 @@ export class GameData {
         candyCount: 0,
         candyProgress: 0,
         abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
-        passiveAttr: 0,
         natureAttr: isDefaultStarter ? defaultNaturesAttr : 0,
         ivs: Array(6).fill(isDefaultStarter ? DEFAULT_STARTER_IVS : IV_MIN),
         valueReduction: 0,
@@ -1549,11 +1549,7 @@ export class GameData {
       // Unlock ability and nature
       if (Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         const starterData = this.starterData[species.speciesId];
-        starterData.abilityAttr |=
-          pokemon.abilityIndex !== 1 || pokemon.species.ability2
-            ? 1 << pokemon.abilityIndex
-            : AbilityAttr.ABILITY_HIDDEN;
-
+        starterData.abilityAttr |= 1 << pokemon.abilityIndex;
         starterData.natureAttr |= 1 << pokemon.nature;
       }
 
@@ -1958,6 +1954,19 @@ export class GameData {
       variant,
       formIndex,
     };
+  }
+
+  /**
+   * Checks whether the given Species has a passive, and that it's unlocked.
+   * Will be false for non baby starters (Pikachu, Clefairy, ...)
+   * @param speciesId - The {@linkcode SpeciesId} to consider
+   * @returns `true` if the species is a starter with its passive unlocked.
+   */
+  public isPassiveUnlocked(speciesId: SpeciesId): boolean {
+    return (
+      Object.hasOwn(starterPassiveAbilities, speciesId)
+      && (this.starterData[speciesId]?.abilityAttr & AbilityAttr.PASSIVE) > 0
+    );
   }
 
   /**

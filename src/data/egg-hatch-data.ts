@@ -52,7 +52,6 @@ export class EggHatchData {
       candyCount: currStarterDataEntry.candyCount,
       candyProgress: currStarterDataEntry.candyProgress,
       abilityAttr: currStarterDataEntry.abilityAttr,
-      passiveAttr: currStarterDataEntry.passiveAttr,
       natureAttr: currStarterDataEntry.natureAttr,
       ivs: [...currStarterDataEntry.ivs],
       valueReduction: currStarterDataEntry.valueReduction,
