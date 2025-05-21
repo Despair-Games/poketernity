@@ -286,8 +286,8 @@ export class GameManager {
    * @returns A promise that resolves when the battle is started.
    * @deprecated Use `game.[mode].startBattle()` instead
    */
-  async startBattle(species: SpeciesId[]) {
-    await this.classicMode.runToSummon(species);
+  async startBattle(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
+    await this.classicMode.runToSummon(species, ...extraSpecies);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.onNextPrompt(

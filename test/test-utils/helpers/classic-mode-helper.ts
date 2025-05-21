@@ -22,7 +22,8 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to summon.
    * @returns A promise that resolves when the summon phase is reached.
    */
-  async runToSummon(species: SpeciesId[]): Promise<void> {
+  async runToSummon(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
+    const starterSpecies = [species, ...extraSpecies];
     await this.game.runToTitle();
 
     if (this.game.override.disableShinies) {
@@ -37,7 +38,7 @@ export class ClassicModeHelper extends GameManagerHelper {
 
     this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
       this.game.scene.gameMode = getGameMode(GameModes.CLASSIC);
-      const starters = generateStarter(this.game.scene, species);
+      const starters = generateStarter(this.game.scene, starterSpecies);
       const selectStarterPhase = new SelectStarterPhase();
       this.game.scene.phaseManager.pushPhase(new EncounterPhase(false));
       selectStarterPhase.initBattle(starters);
@@ -54,8 +55,8 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to start the battle with.
    * @returns A promise that resolves when the battle is started.
    */
-  async startBattle(species: SpeciesId[]): Promise<void> {
-    await this.runToSummon(species);
+  async startBattle(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
+    await this.runToSummon(species, ...extraSpecies);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
