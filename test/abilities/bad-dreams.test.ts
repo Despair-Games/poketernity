@@ -119,4 +119,28 @@ describe("Ability - Bad Dreams", () => {
     expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
     expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8); // didn't wake up due to rain ending in the same turn
   });
+
+  it.each([
+    ["Shed Skin", AbilityId.SHED_SKIN, WeatherType.SANDSTORM],
+    ["Healer", AbilityId.HEALER, WeatherType.NONE],
+  ])(
+    "should damage if enemy is not woken up by '%s' ability in the same turn",
+    async (_abilityName, abilityId, weatherType) => {
+      const { override, classicMode, field, move } = game;
+      override.weather(weatherType).enemyAbility(abilityId).enemyPassiveAbility(AbilityId.OVERCOAT); // overcoat to prevent sandstorm damage
+
+      await classicMode.runToSummon([SpeciesId.DARKRAI]);
+      const enemy = field.getEnemyPokemon();
+      vi.spyOn(enemy, "randSeedInt").mockReturnValueOnce(3); // Make sure that Shed Skin/Healer never triggers.
+      enemy.trySetStatus(StatusEffect.SLEEP, false, null, Number.MAX_SAFE_INTEGER);
+
+      expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+
+      move.use(MoveId.SPLASH);
+      await game.toEndOfTurn();
+
+      expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+      expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
+    },
+  );
 });
