@@ -3,9 +3,7 @@ import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr"
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type { EncoreTag } from "#battler-tags/encore-tag";
 import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
-import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
@@ -200,34 +198,28 @@ export class EnemyPokemon extends Pokemon {
 
   /**
    * Obtains the total score for the given move when used by this Pokemon
-   * against the given target. A move's total score is based on attack score (AS)
-   * and effect score (ES)
-   * @param opponent the {@linkcode Pokemon} the move is evaluated against
+   * against the given target. A move's total score is based on three major components:
+   * 1. {@linkcode Move.getConditionScore | Condition Score (CS)}: to determine whether the
+   * move is likely to succeed or fail.
+   * 2. {@linkcode getAttackScore | Attack Score (AS)}: to evaluate attacks based
+   * on their projected damage output.
+   * 3. {@linkcode Move.getEffectScore | Effect Score (ES)}: to evaluate the non-damaging
+   * effects of moves.
+   * @param target the {@linkcode Pokemon} the move is evaluated against
    * @param move the {@linkcode Move} being evaluated
-   * @returns the sum of the move's AS and ES against the given opponent
+   * @returns the sum of this move's score components against the given target
    */
-  public getMoveScore(opponent: Pokemon, move: Move): number {
-    /** @todo Exceptions should be based on conditions, not moves */
-    const meetsConditions =
-      move.applyConditions(this, opponent, move)
-      || [
-        MoveId.SUCKER_PUNCH,
-        MoveId.UPPER_HAND,
-        MoveId.THUNDERCLAP,
-        MoveId.WIDE_GUARD,
-        MoveId.QUICK_GUARD,
-        MoveId.MAT_BLOCK,
-        MoveId.CRAFTY_SHIELD,
-      ].includes(move.id);
+  public getMoveScore(target: Pokemon, move: Move): number {
+    const conditionScore = move.getConditionScore(this, target);
+    const attackScore = this.getAttackScore(target, move);
 
-    const attackScore = this.getAttackScore(opponent, move);
-    const isKnockOut = attackScore >= 4;
-    const isFail = attackScore === -1 || !meetsConditions;
-
-    const critBonus = this.getCriticalHitBonus(opponent, move, attackScore);
+    const critBonus = this.getCriticalHitBonus(target, move, attackScore);
+    const isFail = conditionScore <= BAD_MOVE_PENALTY || attackScore === -1;
+    const isKnockOut = !isFail && attackScore >= 4;
 
     return (
-      (isFail ? BAD_MOVE_PENALTY : attackScore + critBonus) + move.getEffectScore(this, opponent, isKnockOut, isFail)
+      (isFail ? BAD_MOVE_PENALTY : conditionScore + attackScore + critBonus)
+      + move.getEffectScore(this, target, isKnockOut, isFail)
     );
   }
 
@@ -440,10 +432,10 @@ export class EnemyPokemon extends Pokemon {
   private getOptimalMoveAction(move: Move): TargetScoreData {
     if (move.moveTarget === MoveTarget.ATTACKER) {
       /**
-       * Counter-attacks (e.g. Metal Burst) are scored entirely
-       * based on their effect score.
+       * Counter-attack moves are scored based entirely on their
+       * Condition Score and Effect Score. Attack Score is not included.
        */
-      const score = move.getEffectScore(this, this.getOpponents()[0]);
+      const score = move.getConditionScore(this, this) + move.getEffectScore(this, this);
 
       return {
         moveId: move.id,
@@ -477,7 +469,7 @@ export class EnemyPokemon extends Pokemon {
       return {
         moveId: move.id,
         targets: [],
-        score: -5,
+        score: BAD_MOVE_PENALTY,
       };
     }
 

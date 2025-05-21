@@ -1,14 +1,13 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { revealAllMoves } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Move Effect Scores - Gravity", () => {
+describe("Move Condition Scores - Counter", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-
-  const baseMoveset = [MoveId.GRAVITY, MoveId.SPLASH, MoveId.TACKLE];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -26,48 +25,42 @@ describe("Move Effect Scores - Gravity", () => {
       .battleType("single")
       .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(baseMoveset)
+      .enemyMoveset([MoveId.COUNTER, MoveId.SPLASH, MoveId.SPIT_UP])
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
-  it("should be preferred when the enemy has a low-accuracy move", async () => {
-    game.override.enemyMoveset([...baseMoveset, MoveId.SUPERSONIC]);
+  it("should not be penalized if the opponent knows a Physical attack", async () => {
+    game.override.moveset([MoveId.TACKLE, MoveId.SPLASH, MoveId.WATER_GUN, MoveId.GROWL]);
 
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
+    revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();
-    expect(enemy).toPreferSelectingMove(MoveId.GRAVITY);
+
+    expect(enemy).not.toNeverSelectMove(MoveId.COUNTER);
   });
 
-  it("should be preferred when the enemy is a Ground-type Pokemon", async () => {
-    game.override.enemySpecies(SpeciesId.DRILBUR);
-
-    await game.classicMode.startBattle([SpeciesId.AGGRON]);
-
-    const enemy = game.field.getEnemyPokemon();
-    expect(enemy).toPreferSelectingMove(MoveId.GRAVITY);
-  });
-
-  it("should not be preferred when none of the above conditions are present", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
-
-    const enemy = game.field.getEnemyPokemon();
-    expect(enemy).not.toPreferSelectingMove(MoveId.GRAVITY);
-  });
-
-  it("should be avoided when its effect is already active", async () => {
-    game.override.enemySpecies(SpeciesId.DRILBUR);
+  it("should be penalized if the opponent only knows Special attacks", async () => {
+    game.override.moveset([MoveId.WATER_GUN, MoveId.ABSORB, MoveId.SPLASH, MoveId.GROWL]);
 
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
+    revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(MoveId.SPLASH);
-    await game.move.selectEnemyMove(MoveId.GRAVITY);
-    await game.toNextTurn();
+    expect(enemy).toNeverSelectMove(MoveId.COUNTER);
+  });
 
-    expect(enemy).toNeverSelectMove(MoveId.GRAVITY);
+  it("should be penalized if the opponent can KO the user", async () => {
+    game.override.moveset([MoveId.TACKLE, MoveId.FISSURE]);
+
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+
+    revealAllMoves(game.scene);
+    const enemy = game.field.getEnemyPokemon();
+
+    expect(enemy).toNeverSelectMove(MoveId.COUNTER);
   });
 });

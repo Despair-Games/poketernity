@@ -39,6 +39,7 @@ export abstract class AbAttr {
     return false;
   }
 
+  /** @todo Change `args` type to `unknown[]` */
   getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
     return null;
   }
