@@ -43,15 +43,16 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
 //#region Helpers
 
 /**
- * Check if a Pokemon will wake up this turn by simulating the PostTurnAbAttrs applications.
+ * Check if a Pokemon will wake up this turn by simulating the {@linkcode AbAttrFlag.POST_TURN} applications
+ * and checking for a {@linkcode PostTurnResetStatusAbAttr} with a result of `true`.
+ *
  * @param pokemon - The Pokemon to check
  * @returns `true` if the Pokemon will wake up this turn, `false` otherwise
  */
 function willWakeUpThisTurn(pokemon: Pokemon) {
-  // Will wake up from Hydration ability + Rain
-  const results = applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true);
-
-  return results.some(({ name, result }) => PostTurnResetStatusAbAttr.prototype.constructor.name === name && result);
+  return applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true).some(
+    ({ name, result }) => PostTurnResetStatusAbAttr.prototype.constructor.name === name && result,
+  );
 }
 
 //#endregion
