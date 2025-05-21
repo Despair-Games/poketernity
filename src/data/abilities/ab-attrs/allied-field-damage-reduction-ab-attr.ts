@@ -17,7 +17,7 @@ export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _attacker: Pokemon,

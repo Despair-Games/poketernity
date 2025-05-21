@@ -34,7 +34,12 @@ export class ArenaTrapAbAttr extends AbAttr {
    * @param trappedPokemon The {@link Pokemon} that is affected by an Arena Trap ability
    * @returns `true` if enemy Pokemon is trapped
    */
-  override apply(pokemon: Pokemon, _simulated: boolean, trapped: BooleanHolder, trappedPokemon: Pokemon): boolean {
+  public override apply(
+    pokemon: Pokemon,
+    _simulated: boolean,
+    trapped: BooleanHolder,
+    trappedPokemon: Pokemon,
+  ): boolean {
     if (this.arenaTrapCondition(pokemon, trappedPokemon)) {
       if (
         trappedPokemon.getTypes(true).includes(ElementalType.GHOST)
@@ -55,7 +60,7 @@ export class ArenaTrapAbAttr extends AbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:arenaTrap", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

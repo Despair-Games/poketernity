@@ -33,7 +33,7 @@ export class StabBoostAbAttr extends AbAttr {
    * @param stabMultiplier - A {@linkcode NumberHolder} containing the move's STAB multiplier for the current attack
    * @returns `true` if the STAB multiplier was increased
    */
-  override apply(pokemon: Pokemon, _simulated: boolean, move: Move, stabMultiplier: NumberHolder): boolean {
+  public override apply(pokemon: Pokemon, _simulated: boolean, move: Move, stabMultiplier: NumberHolder): boolean {
     // Adaptability does not apply to Stellar-type moves
     if (pokemon.getMoveType(move) === ElementalType.STELLAR) {
       return false;

@@ -21,7 +21,7 @@ export class RecoveryBoostAbAttr extends AbAttr {
     this.recoveryMultiplier = recoveryMultiplier;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,

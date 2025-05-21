@@ -17,7 +17,7 @@ export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
     this.weatherType = weatherType;
   }
 
-  override apply(_pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
     return simulated
       ? !globalScene.arena.hasWeather(this.weatherType)
       : globalScene.arena.trySetWeather(this.weatherType, true);

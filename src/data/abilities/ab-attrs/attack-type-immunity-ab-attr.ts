@@ -13,7 +13,7 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
  * @extends TypeImmunityAbAttr
  */
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     attacker: Pokemon,

@@ -9,7 +9,7 @@ export class BlockNonDirectDamageAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
     return true;
   }

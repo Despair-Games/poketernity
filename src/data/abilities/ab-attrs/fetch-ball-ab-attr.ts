@@ -12,7 +12,7 @@ import i18next from "i18next";
  * @extends PostTurnAbAttr
  */
 export class FetchBallAbAttr extends PostTurnAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return false;
     }

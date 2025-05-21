@@ -90,6 +90,22 @@ interface LanguageSetting {
   starterInfoYOffset?: number;
 }
 
+/** Possible states of the handler based on which section of the UI the player is currently interacting with. */
+const StarterSelectMode = {
+  /** Handler is inactive */
+  NONE: 0,
+  /** A Pokemon in the starter grid is selected */
+  STARTER_GRID: 1,
+  /** A filter option is selected */
+  FILTER: 2,
+  /** A Pokemon in the player Party section is selected */
+  PARTY: 3,
+  /** The "Start (Run)" button is selected */
+  START: 4,
+} as const;
+
+type StarterSelectMode = (typeof StarterSelectMode)[keyof typeof StarterSelectMode];
+
 const languageSettings: { [key: string]: LanguageSetting } = {
   pt_BR: {
     starterInfoXPos: 33,
@@ -294,7 +310,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private starterIconsCursorXOffset: number = -3;
   private starterIconsCursorYOffset: number = 1;
   private starterIconsCursorIndex: number;
-  private filterMode: boolean;
   private dexAttrCursor: bigint = 0n;
   private abilityCursor: number = -1;
   private natureCursor: number = -1;
@@ -347,6 +362,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private starterPreferences: StarterPreferences;
 
   protected blockInput: boolean = false;
+  protected currentMode: StarterSelectMode = StarterSelectMode.NONE;
 
   constructor() {
     super(UiMode.STARTER_SELECT);
@@ -1112,9 +1128,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.resetFilters();
     this.updateStarters();
 
-    this.setFilterMode(false);
     this.filterBarCursor = 0;
-    this.setCursor(0);
+    this.setMode(StarterSelectMode.STARTER_GRID, 0);
     this.tryUpdateValue(0);
 
     handleTutorial(Tutorial.STARTER_SELECT);
@@ -1342,16 +1357,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         error = true;
       }
     } else if (button === Button.CANCEL) {
-      if (this.filterMode && this.filterBar.openDropDown) {
+      if (this.currentMode === StarterSelectMode.FILTER && this.filterBar.openDropDown) {
         // CANCEL with a filter menu open > close it
         this.filterBar.toggleDropDown(this.filterBarCursor);
 
         // if there are possible starters go the first one of the list
         if (numberOfStarters > 0) {
-          this.setFilterMode(false);
-          this.scrollCursor = 0;
-          this.updateScroll();
-          this.setCursor(0);
+          this.setMode(StarterSelectMode.STARTER_GRID, 0, 0);
         }
         success = true;
       } else if (this.statsMode) {
@@ -1367,15 +1379,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       }
     } else if (button === Button.STATS) {
       // if stats button is pressed, go to filter directly
-      if (!this.filterMode) {
-        this.startCursorObj.setVisible(false);
-        this.starterIconsCursorObj.setVisible(false);
-        this.setSpecies(null);
-        this.filterBarCursor = 0;
-        this.setFilterMode(true);
+      if (this.currentMode !== StarterSelectMode.FILTER) {
+        success = this.setMode(StarterSelectMode.FILTER, 0);
         this.filterBar.toggleDropDown(this.filterBarCursor);
       }
-    } else if (this.startCursorObj.visible) {
+    } else if (this.currentMode === StarterSelectMode.START) {
       // this checks to see if the start button is selected
       switch (button) {
         case Button.ACTION:
@@ -1386,43 +1394,32 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
           break;
         case Button.UP:
-          // UP from start button: go to pokemon in team if any, otherwise filter
-          this.startCursorObj.setVisible(false);
+          // UP from start button: go to pokemon in team if any, otherwise to filters
           if (this.starterSpecies.length > 0) {
-            this.starterIconsCursorIndex = this.starterSpecies.length - 1;
-            this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+            success = this.setMode(StarterSelectMode.PARTY, this.starterSpecies.length - 1);
           } else {
-            this.startCursorObj.setVisible(false);
-            this.filterBarCursor = Math.max(1, this.filterBar.numFilters - 1);
-            this.setFilterMode(true);
+            success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
           }
-          success = true;
           break;
         case Button.DOWN:
           // DOWN from start button: Go to filters
-          this.startCursorObj.setVisible(false);
-          this.filterBarCursor = Math.max(1, this.filterBar.numFilters - 1);
-          this.setFilterMode(true);
-          success = true;
+          success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
           break;
         case Button.LEFT:
+          // LEFT from start button: Go to starters grid
           if (numberOfStarters > 0) {
-            this.startCursorObj.setVisible(false);
-            this.cursorObj.setVisible(true);
-            this.setCursor(onScreenFirstIndex + (onScreenNumberOfRows - 1) * 9 + 8); // set last column
-            success = true;
+            const cursor = onScreenFirstIndex + (onScreenNumberOfRows - 1) * 9 + 8; // last column
+            success = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
           }
           break;
         case Button.RIGHT:
           if (numberOfStarters > 0) {
-            this.startCursorObj.setVisible(false);
-            this.cursorObj.setVisible(true);
-            this.setCursor(onScreenFirstIndex + (onScreenNumberOfRows - 1) * 9); // set first column
-            success = true;
+            const cursor = onScreenFirstIndex + (onScreenNumberOfRows - 1) * 9; // first column
+            success = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
           }
           break;
       }
-    } else if (this.filterMode) {
+    } else if (this.currentMode === StarterSelectMode.FILTER) {
       switch (button) {
         case Button.LEFT:
           if (this.filterBarCursor > 0) {
@@ -1442,45 +1439,33 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           if (this.filterBar.openDropDown) {
             success = this.filterBar.decDropDownCursor();
           } else if (this.filterBarCursor === this.filterBar.numFilters - 1 && this.starterSpecies.length > 0) {
-            // UP from the last filter, move to start button
-            this.setFilterMode(false);
-            this.cursorObj.setVisible(false);
-            this.startCursorObj.setVisible(true);
-            success = true;
+            // UP from the last filter with mons in the party, move to start button
+            success = this.setMode(StarterSelectMode.START);
           } else if (numberOfStarters > 0) {
             // UP from filter bar to bottom of Pokemon list
-            this.setFilterMode(false);
-            this.scrollCursor = Math.max(0, numOfRows - 9);
-            this.updateScroll();
+            let newCursor: number;
             const proportion = (this.filterBarCursor + 0.5) / this.filterBar.numFilters;
             const targetCol = Math.min(8, Math.floor(proportion * 11));
             if (numberOfStarters % 9 > targetCol) {
-              this.setCursor(numberOfStarters - (numberOfStarters % 9) + targetCol);
+              newCursor = numberOfStarters - (numberOfStarters % 9) + targetCol;
             } else {
-              this.setCursor(Math.max(numberOfStarters - (numberOfStarters % 9) + targetCol - 9, 0));
+              newCursor = Math.max(numberOfStarters - (numberOfStarters % 9) + targetCol - 9, 0);
             }
-            success = true;
+            success = this.setMode(StarterSelectMode.STARTER_GRID, newCursor, Math.max(0, numOfRows - 9));
           }
           break;
         case Button.DOWN:
           if (this.filterBar.openDropDown) {
             success = this.filterBar.incDropDownCursor();
           } else if (this.filterBarCursor === this.filterBar.numFilters - 1 && this.starterSpecies.length > 0) {
-            // DOWN from the last filter, move to Pokemon in party if any
-            this.setFilterMode(false);
-            this.cursorObj.setVisible(false);
-            this.starterIconsCursorIndex = 0;
-            this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-            success = true;
+            // DOWN from the last filter with Pokemon in party => move to first Pokemon in party
+            success = this.setMode(StarterSelectMode.PARTY, 0);
           } else if (numberOfStarters > 0) {
-            // DOWN from filter bar to top of Pokemon list
-            this.setFilterMode(false);
-            this.scrollCursor = 0;
-            this.updateScroll();
+            // DOWN from filter bar to the closest mon at the top of Starters list
             const proportion = this.filterBarCursor / Math.max(1, this.filterBar.numFilters - 1);
             const targetCol = Math.min(8, Math.floor(proportion * 11));
-            this.setCursor(Math.min(targetCol, numberOfStarters));
-            success = true;
+            const newCursor = Math.min(targetCol, numberOfStarters);
+            success = this.setMode(StarterSelectMode.STARTER_GRID, newCursor, 0);
           }
           break;
         case Button.ACTION:
@@ -1498,8 +1483,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // prepare persistent starter data to store changes
       let starterAttributes = this.starterPreferences[this.lastSpecies.speciesId];
 
-      // this gets the correct pokemon cursor depending on whether you're in the starter screen or the party icons
-      if (!this.starterIconsCursorObj.visible) {
+      // this gets the correct pokemon cursor depending on whether you're in the starter grid or the party icons
+      if (this.currentMode !== StarterSelectMode.PARTY) {
         starterContainer = this.filteredStarterContainers[this.cursor];
       } else {
         starterContainer =
@@ -2108,7 +2093,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             }
             break;
           case Button.UP:
-            if (!this.starterIconsCursorObj.visible) {
+            if (this.currentMode !== StarterSelectMode.PARTY) {
               if (currentRow > 0) {
                 if (this.scrollCursor > 0 && currentRow - this.scrollCursor === 0) {
                   this.scrollCursor--;
@@ -2116,26 +2101,22 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 }
                 success = this.setCursor(this.cursor - 9);
               } else {
-                this.filterBarCursor = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
-                this.setFilterMode(true);
-                success = true;
+                const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
+                success = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
             } else {
               if (this.starterIconsCursorIndex === 0) {
-                // Up from first Pokemon in the team > go to filter
-                this.starterIconsCursorObj.setVisible(false);
-                this.setSpecies(null);
-                this.filterBarCursor = Math.max(1, this.filterBar.numFilters - 1);
-                this.setFilterMode(true);
+                // Up from first Pokemon in the team => go to filter
+                success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
               } else {
                 this.starterIconsCursorIndex--;
                 this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+                success = true;
               }
-              success = true;
             }
             break;
           case Button.DOWN:
-            if (!this.starterIconsCursorObj.visible) {
+            if (this.currentMode !== StarterSelectMode.PARTY) {
               if (currentRow < numOfRows - 1) {
                 // not last row
                 if (currentRow - this.scrollCursor === 8) {
@@ -2151,62 +2132,50 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 success = this.setCursor(this.cursor % 9);
               } else {
                 // DOWN from single row of Pokemon > Go to filters
-                this.filterBarCursor = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
-                this.setFilterMode(true);
-                success = true;
+                const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
+                success = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
             } else {
               if (this.starterIconsCursorIndex <= this.starterSpecies.length - 2) {
                 this.starterIconsCursorIndex++;
                 this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+                success = true;
               } else {
-                this.starterIconsCursorObj.setVisible(false);
-                this.setSpecies(null);
-                this.startCursorObj.setVisible(true);
+                // DOWN from last Pokemon in party => Move to Start button
+                success = this.setMode(StarterSelectMode.START);
               }
-              success = true;
             }
             break;
           case Button.LEFT:
-            if (!this.starterIconsCursorObj.visible) {
+            if (this.currentMode !== StarterSelectMode.PARTY) {
               if (this.cursor % 9 !== 0) {
                 success = this.setCursor(this.cursor - 1);
               } else {
                 // LEFT from filtered Pokemon, on the left edge
-
                 if (this.starterSpecies.length === 0) {
-                  // no starter in team > wrap around to the last column
+                  // no starter in team => wrap around to the last column
                   success = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
                 } else if (onScreenCurrentRow < 7) {
-                  // at least one pokemon in team > for the first 7 rows, go to closest starter
-                  this.cursorObj.setVisible(false);
-                  this.starterIconsCursorIndex = findClosestStarterIndex(
-                    this.cursorObj.y - 1,
-                    this.starterSpecies.length,
-                  );
-                  this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+                  // at least one pokemon in team => for the first 7 rows, go to closest mon in party
+                  const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
+                  success = this.setMode(StarterSelectMode.PARTY, closestStarter);
                 } else {
-                  // at least one pokemon in team > from the bottom 2 rows, go to start run button
-                  this.cursorObj.setVisible(false);
-                  this.setSpecies(null);
-                  this.startCursorObj.setVisible(true);
+                  // at least one pokemon in team => from the bottom 2 rows, go to start run button
+                  success = this.setMode(StarterSelectMode.START);
                 }
-                success = true;
               }
             } else if (numberOfStarters > 0) {
-              // LEFT from team > Go to closest filtered Pokemon
+              // LEFT from team => Go to closest filtered Pokemon
               const closestRowIndex = findClosestStarterRow(this.starterIconsCursorIndex, onScreenNumberOfRows);
-              this.starterIconsCursorObj.setVisible(false);
-              this.cursorObj.setVisible(true);
-              this.setCursor(Math.min(onScreenFirstIndex + closestRowIndex * 9 + 8, onScreenLastIndex));
-              success = true;
+              const cursor = Math.min(onScreenFirstIndex + closestRowIndex * 9 + 8, onScreenLastIndex);
+              success = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
             } else {
-              // LEFT from team and no Pokemon in filter > do nothing
+              // LEFT from team and no Pokemon in filter => do nothing
               success = false;
             }
             break;
           case Button.RIGHT:
-            if (!this.starterIconsCursorObj.visible) {
+            if (this.currentMode !== StarterSelectMode.PARTY) {
               // is not right edge
               if (this.cursor % 9 < (currentRow < numOfRows - 1 ? 8 : (numberOfStarters - 1) % 9)) {
                 success = this.setCursor(this.cursor + 1);
@@ -2216,30 +2185,22 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   // no selected starter in team > wrap around to the first column
                   success = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
                 } else if (onScreenCurrentRow < 7) {
-                  // at least one pokemon in team > for the first 7 rows, go to closest starter
-                  this.cursorObj.setVisible(false);
-                  this.starterIconsCursorIndex = findClosestStarterIndex(
-                    this.cursorObj.y - 1,
-                    this.starterSpecies.length,
-                  );
-                  this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+                  // at least one pokemon in team > for the first 7 rows, go to closest mon in party
+                  const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
+                  success = this.setMode(StarterSelectMode.PARTY, closestStarter);
                 } else {
                   // at least one pokemon in team > from the bottom 2 rows, go to start run button
-                  this.cursorObj.setVisible(false);
-                  this.setSpecies(null);
-                  this.startCursorObj.setVisible(true);
+                  success = this.setMode(StarterSelectMode.START);
                 }
-                success = true;
               }
             } else if (numberOfStarters > 0) {
               // RIGHT from team > Go to closest filtered Pokemon
               const closestRowIndex = findClosestStarterRow(this.starterIconsCursorIndex, onScreenNumberOfRows);
-              this.starterIconsCursorObj.setVisible(false);
-              this.cursorObj.setVisible(true);
-              this.setCursor(
-                Math.min(onScreenFirstIndex + closestRowIndex * 9, onScreenLastIndex - (onScreenLastIndex % 9)),
+              const closestMon = Math.min(
+                onScreenFirstIndex + closestRowIndex * 9,
+                onScreenLastIndex - (onScreenLastIndex % 9),
               );
-              success = true;
+              success = this.setMode(StarterSelectMode.STARTER_GRID, closestMon);
             } else {
               // RIGHT from team and no Pokemon in filter > do nothing
               success = false;
@@ -2601,7 +2562,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     // if filter mode is inactivated and gamepadType is not undefined, update the button icons
-    if (!this.filterMode) {
+    if (this.currentMode !== StarterSelectMode.FILTER) {
       this.updateFilterButtonIcon(
         SettingKeyboard.Button_Stats,
         gamepadType,
@@ -2984,7 +2945,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   public override setCursor(cursor: number): boolean {
     let changed = false;
 
-    if (this.filterMode) {
+    if (this.currentMode === StarterSelectMode.FILTER) {
       changed = this.filterBarCursor !== cursor;
       this.filterBarCursor = cursor;
 
@@ -3015,22 +2976,75 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  setFilterMode(filterMode: boolean): boolean {
-    this.cursorObj.setVisible(!filterMode);
-    this.filterBar.cursorObj.setVisible(filterMode);
-
-    if (filterMode !== this.filterMode) {
-      this.filterMode = filterMode;
-      this.setCursor(filterMode ? this.filterBarCursor : this.cursor);
-      if (filterMode) {
-        this.setSpecies(null);
-        this.updateInstructions();
-      }
-
-      return true;
+  /**
+   * Change the current mode for Starter Selection, optionally updating the cursor(s).
+   * Hides graphical elements exclusive to the previous mode, and shows elements for the new mode.
+   * @param newMode - the {@linkcode StarterSelectMode} to set.
+   * @param cursor - Optional. The value to set the cursor to, if applicable
+   * @param scrollCursor - Optional. The value to set the scrollingcursor to, if applicable
+   * @returns `true` if the mode, was changed, `false` otherwise.
+   */
+  private setMode(newMode: StarterSelectMode, cursor?: number, scrollCursor?: number): boolean {
+    if (this.currentMode === newMode) {
+      return false;
     }
 
-    return false;
+    // Hide elements used in the previous mode
+    switch (this.currentMode) {
+      case StarterSelectMode.STARTER_GRID:
+        this.cursorObj.setVisible(false);
+        if (newMode !== StarterSelectMode.PARTY) {
+          this.setSpecies(null);
+          this.updateInstructions();
+        }
+        break;
+      case StarterSelectMode.FILTER:
+        this.filterBar.cursorObj.setVisible(false);
+        break;
+      case StarterSelectMode.PARTY:
+        this.starterIconsCursorObj.setVisible(false);
+        if (newMode !== StarterSelectMode.STARTER_GRID) {
+          this.setSpecies(null);
+          this.updateInstructions();
+        }
+        break;
+      case StarterSelectMode.START:
+        this.startCursorObj.setVisible(false);
+        break;
+    }
+
+    // Update mode, cursors and show required elements
+    this.currentMode = newMode;
+    switch (newMode) {
+      case StarterSelectMode.STARTER_GRID:
+        this.cursorObj.setVisible(true);
+        if (!isNil(scrollCursor)) {
+          this.scrollCursor = scrollCursor;
+          this.updateScroll();
+        }
+        if (!isNil(cursor)) {
+          this.setCursor(cursor);
+        }
+        break;
+      case StarterSelectMode.FILTER:
+        this.filterBar.cursorObj.setVisible(true);
+        this.filterBarCursor = cursor ?? 0;
+        this.setCursor(this.filterBarCursor);
+        break;
+      case StarterSelectMode.PARTY:
+        this.starterIconsCursorIndex = cursor ?? 0;
+        this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+        break;
+      case StarterSelectMode.START:
+        this.startCursorObj.setVisible(true);
+        break;
+      case StarterSelectMode.NONE:
+        this.hideInstructions();
+        this.cursor = -1;
+        break;
+    }
+
+    return true;
   }
 
   moveStarterIconsCursor(index: number): void {
@@ -3761,30 +3775,24 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.starterIcons[this.starterSpecies.length].setTexture("pokemon_icons_0");
     this.starterIcons[this.starterSpecies.length].setFrame("unknown");
 
-    if (this.starterIconsCursorObj.visible) {
+    if (this.currentMode === StarterSelectMode.PARTY) {
       if (this.starterIconsCursorIndex === this.starterSpecies.length) {
         if (this.starterSpecies.length > 0) {
           this.starterIconsCursorIndex--;
+          this.moveStarterIconsCursor(this.starterIconsCursorIndex);
         } else {
           // No more Pokemon selected, go back to filters
-          this.starterIconsCursorObj.setVisible(false);
-          this.setSpecies(null);
-          this.filterBarCursor = Math.max(1, this.filterBar.numFilters - 1);
-          this.setFilterMode(true);
+          this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
         }
       }
-      this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-    } else if (this.startCursorObj.visible && this.starterSpecies.length === 0) {
+    } else if (this.currentMode === StarterSelectMode.START && this.starterSpecies.length === 0) {
       // On the start button and no more Pokemon in party
-      this.startCursorObj.setVisible(false);
       if (this.filteredStarterContainers.length > 0) {
-        // Back to the first Pokemon if there is one
-        this.cursorObj.setVisible(true);
-        this.setCursor(0 + this.scrollCursor * 9);
+        // Back to the first selectable Starter in the list if there is one
+        this.setMode(StarterSelectMode.STARTER_GRID, 0 + this.scrollCursor * 9);
       } else {
-        // Back to filters
-        this.filterBarCursor = Math.max(1, this.filterBar.numFilters - 1);
-        this.setFilterMode(true);
+        // Back to last filter
+        this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
       }
     }
 
@@ -4166,8 +4174,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   protected override clear(): void {
     saveStarterPrefs(this.starterPreferences);
-    this.cursor = -1;
-    this.hideInstructions();
+    this.setMode(StarterSelectMode.NONE); // Back to no mode
     this.activeTooltip = undefined;
     globalScene.ui.hideTooltip();
 

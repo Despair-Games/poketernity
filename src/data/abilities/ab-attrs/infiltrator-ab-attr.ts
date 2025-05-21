@@ -20,7 +20,7 @@ export class InfiltratorAbAttr extends AbAttr {
    * @param bypassed a {@linkcode BooleanHolder} containing the flag
    * @returns `true` if the bypass flag was successfully set; `false` otherwise.
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, bypassed: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, bypassed: BooleanHolder): boolean {
     bypassed.value = true;
     return true;
   }

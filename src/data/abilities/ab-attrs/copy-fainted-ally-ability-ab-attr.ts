@@ -7,7 +7,7 @@ import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean, knockedOutPokemon: Pokemon): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, knockedOutPokemon: Pokemon): boolean {
     if (
       pokemon.isPlayer() === knockedOutPokemon.isPlayer()
       && !knockedOutPokemon.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)

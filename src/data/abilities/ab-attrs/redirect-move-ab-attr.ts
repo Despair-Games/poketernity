@@ -12,7 +12,13 @@ export class RedirectMoveAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.REDIRECT_MOVE);
   }
 
-  override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, user: Pokemon, target: NumberHolder): boolean {
+  public override apply(
+    pokemon: Pokemon,
+    _simulated: boolean,
+    moveId: MoveId,
+    user: Pokemon,
+    target: NumberHolder,
+  ): boolean {
     if (this.canRedirect(moveId, user)) {
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {

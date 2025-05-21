@@ -16,7 +16,7 @@ export abstract class PostTerrainChangeAbAttr extends AbAttr {
    * @param terrain The {@linkcode TerrainType | terrain} being set
    * @returns `true` if effects successfully applied
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _terrain: TerrainType): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _terrain: TerrainType): boolean {
     return false;
   }
 }

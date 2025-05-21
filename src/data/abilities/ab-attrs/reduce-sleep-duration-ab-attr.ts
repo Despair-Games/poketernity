@@ -26,7 +26,7 @@ export class ReduceSleepDurationAbAttr extends AbAttr {
    * - `[1]` - The number of turns remaining until the status is healed
    * @returns `true` if the ability was applied
    */
-  override apply(pokemon: Pokemon, _simulated: boolean, statusEffect: StatusEffect): boolean {
+  public override apply(pokemon: Pokemon, _simulated: boolean, statusEffect: StatusEffect): boolean {
     if (statusEffect === this.statusEffect) {
       pokemon.advanceStatusCounter();
       return true;

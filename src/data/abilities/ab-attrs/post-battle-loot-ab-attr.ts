@@ -6,7 +6,7 @@ import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export class PostBattleLootAbAttr extends PostBattleAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
     const postBattleLoot = globalScene.currentBattle.postBattleLoot;
 
     if (!simulated && postBattleLoot.length > 0 && isVictory) {

@@ -19,7 +19,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (
       !pokemon.isTerastallized
       && move.id !== MoveId.STRUGGLE
@@ -45,7 +45,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),

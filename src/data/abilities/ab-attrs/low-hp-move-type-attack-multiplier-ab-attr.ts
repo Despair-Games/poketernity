@@ -33,7 +33,7 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
     super(Stat.ATK, 1.5, condition);
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     stat: BattleStat,

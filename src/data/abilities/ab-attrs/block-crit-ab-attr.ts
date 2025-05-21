@@ -16,7 +16,7 @@ export class BlockCritAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.BLOCK_CRIT);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, isCritical: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, isCritical: BooleanHolder): boolean {
     if (isCritical.value) {
       isCritical.value = false;
       return true;
