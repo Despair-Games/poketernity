@@ -2255,7 +2255,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       DexAttr.SHINY_RARE_VARIANT,
       DexAttr.SHINY_EPIC_VARIANT,
     ];
-    const currentShinyVariant = isNil(starterPrefs.variant) ? props.variant : starterPrefs.variant;
+    const currentShinyVariant = starterPrefs.variant ?? props.variant;
     const previousIndex = props.shiny ? 1 + currentShinyVariant : 0;
 
     let variant = previousIndex;

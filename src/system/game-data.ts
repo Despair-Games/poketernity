@@ -11,6 +11,7 @@ import {
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
+  SEEN_DIALOGUE_LS_KEY,
   SETTINGS_LS_KEY,
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
@@ -100,7 +101,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
     case GameDataType.TUTORIALS:
       return TUTORIALS_LS_KEY;
     case GameDataType.SEEN_DIALOGUES:
-      return `${LS_PREFIX}/seenDialogues`;
+      return SEEN_DIALOGUE_LS_KEY;
     case GameDataType.RUN_HISTORY:
       return `${LS_PREFIX}/runHistoryData_${loggedInUser?.username}`;
   }
@@ -1846,7 +1847,7 @@ export class GameData {
   /**
    * Go through all species in dex data and counts those that fit the given criteria.
    * @param dexEntryPredicate - Function that should return `true` if the given {@linkcode DexEntry} should be counted.
-   * @returns the number of Species (all Pokemon) that fit the given predicated in the dex data.
+   * @returns the number of Species (all Pokemon) that fit the given predicate in the dex data.
    */
   public getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
     const dexKeys = Object.keys(this.dexData);
@@ -1862,7 +1863,7 @@ export class GameData {
   /**
    * Go through all starters in dex data and counts those that fit the given criteria.
    * @param dexEntryPredicate - Function that should return `true` if the given {@linkcode DexEntry} should be counted.
-   * @returns the number of Starters that fit the given predicated in the dex data.
+   * @returns the number of Starters that fit the given predicate in the dex data.
    */
   public getStarterCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
     const starterKeys = Object.keys(speciesStarterCosts);
@@ -1931,7 +1932,7 @@ export class GameData {
    * for example as returned by {@linkcode getSpeciesDefaultDexAttr} or obtained from a {@linkcode Pokemon}.
    * @param _species - unused. TODO: remove
    * @param dexAttr - The dex attribute to consider.
-   * @returns
+   * @returns {@linkcode DexAttrProps} corresponding to the given dex attribute.
    */
   public getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
     const female = !(dexAttr & DexAttr.MALE); // TODO is that correct for genderless species?
@@ -2033,11 +2034,11 @@ export class GameData {
     if (!attr || attr < DexAttr.DEFAULT_FORM) {
       return 0;
     }
-    let f = 0;
-    while (!(attr & this.getFormAttr(f))) {
-      f++;
+    let formIndex = 0;
+    while (!(attr & this.getFormAttr(formIndex))) {
+      formIndex++;
     }
-    return f;
+    return formIndex;
   }
 
   /**
@@ -2054,6 +2055,7 @@ export class GameData {
    * Currently 0 if no shiny unlocked, 1, 2 or 3 depending on the highest unlocked shiny variant.
    * @param dexAttr - The dex attribute to consider.
    * @returns The luck, between 0 and 3.
+   * @todo Decouple variants (and shinies entirely?) from luck
    */
   public getDexAttrLuck(dexAttr: bigint): number {
     if (dexAttr & DexAttr.SHINY_EPIC_VARIANT) {

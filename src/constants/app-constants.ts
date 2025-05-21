@@ -22,6 +22,9 @@ export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
 /** Key for the local storage item storing the seen tutorials. */
 export const TUTORIALS_LS_KEY = `${LS_PREFIX}/seenTutorials`;
 
+/** Key for the local storage item storing the seen dialogue. */
+export const SEEN_DIALOGUE_LS_KEY = `${LS_PREFIX}/seenDialogues`;
+
 /** Value used for bypassing login values */
 export const BYPASS_LOGIN = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
