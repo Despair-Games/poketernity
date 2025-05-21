@@ -49,7 +49,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
  * @param pokemon - The Pokemon to check
  * @returns `true` if the Pokemon will wake up this turn, `false` otherwise
  */
-function willWakeUpAtEndOfTurn(pokemon: Pokemon) {
+function willWakeUpAtEndOfTurn(pokemon: Pokemon): boolean {
   return applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true).some(
     ({ attr, result }) => attr instanceof PostTurnResetStatusAbAttr && result,
   );
