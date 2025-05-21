@@ -58,7 +58,7 @@ jobs:
         id: typecheck
         continue-on-error: true
       
-      - name: Check for Errors
+      - name: Evaluate for Errors
         env:
           BIOME_LINT_OUTCOME: ${{ steps.biome_lint.outcome }}
           ESLINT_OUTCOME: ${{ steps.eslint.outcome }}
@@ -89,8 +89,8 @@ jobs:
                 "$ESLINT_OUTCOME" != "success" || \
                 "$DEPCRUISE_OUTCOME" != "success" || \
                 "$TYPECHECK_OUTCOME" != "success" ]]; then
-            echo -e "${RED}❌ One or more checks failed.${NC}"
+            echo -e "\n${RED}❌ One or more checks failed.${NC}"
             exit 1
           fi
 
-          echo -e "${GREEN}✅ All checks passed.${NC}"
+          echo -e "\n${GREEN}✅ All checks passed.${NC}"
