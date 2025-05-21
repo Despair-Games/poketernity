@@ -101,4 +101,22 @@ describe("Ability - Bad Dreams", () => {
       expect(enemy).toHaveFullHp();
     },
   );
+
+  it("should damage if enemy is not woken up by 'Hydration' ability due to rain ending in the same turn", async () => {
+    const { override, classicMode, field, move } = game;
+    override.enemyAbility(AbilityId.HYDRATION).newWeatherDuration(1);
+
+    await classicMode.runToSummon([SpeciesId.DARKRAI]);
+    game.scene.arena.trySetWeather(WeatherType.RAIN, false);
+    const enemy = field.getEnemyPokemon();
+    enemy.trySetStatus(StatusEffect.SLEEP, false, null, Number.MAX_SAFE_INTEGER);
+
+    expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8); // didn't wake up due to rain ending in the same turn
+  });
 });
