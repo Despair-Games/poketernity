@@ -6,7 +6,7 @@ import type { MoveConditionFunc } from "#types/MoveConditionFunc";
 
 export class MoveCondition {
   /** The {@linkcode MoveConditionFunc | function} to determine if the move can be used */
-  public condition: MoveConditionFunc;
+  public readonly condition: MoveConditionFunc;
 
   constructor(condition: MoveConditionFunc) {
     this.condition = condition;
