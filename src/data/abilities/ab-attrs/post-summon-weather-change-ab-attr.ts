@@ -15,7 +15,7 @@ import type { Pokemon } from "#field/pokemon";
  * | Desolate Land     | Harsh Sun    |     ∞ | Primal             |
  * | Primordial Sea    | Heavy Rain   |     ∞ | Primal             |
  * | Delta Stream      | Strong Winds |     ∞ | Primal             |
- * | Orichalcum Pulse  | Harsh Sun    |     ∞ | Primal             |
+ * | Orichalcum Pulse  | Sun          |     ∞ | Primal             |
  *
  * @param weatherType The {@linkcode WeatherType} to set
  * @extends PostSummonAbAttr
