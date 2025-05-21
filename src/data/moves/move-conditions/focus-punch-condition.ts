@@ -20,8 +20,8 @@ export class FocusPunchCondition extends MoveCondition {
   /**
    * Grants a Condition Score as follows:
    * - If the user is behind a substitute, this grants no penalty.
-   * - If all opponents are asleep or frozen, this grants no penalty.
-   * - Otherwise, if all opponents are paralyzed (or worse), this grants (-3).
+   * - If all opponents are asleep, frozen, or recharging (e.g. from using Hyper Beam) this grants no penalty.
+   * - Otherwise, if all opponents are paralyzed (or under any of the above conditions), this grants (-3).
    * - If none of the above apply, this grants a {@link BAD_MOVE_PENALTY | Bad Move Penalty}.
    */
   public override getConditionScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
@@ -34,7 +34,10 @@ export class FocusPunchCondition extends MoveCondition {
     opponents.forEach((opp) => {
       if (opp.hasStatusEffect([StatusEffect.PARALYSIS])) {
         score = Math.min(score, -3);
-      } else if (!opp.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.FREEZE])) {
+      } else if (
+        !opp.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.FREEZE])
+        && !opp.hasTag(BattlerTagType.RECHARGING)
+      ) {
         score = BAD_MOVE_PENALTY;
       }
     });
