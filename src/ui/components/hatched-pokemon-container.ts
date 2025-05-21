@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { DexAttr } from "#data/dex-attributes";
 import type { EggHatchData } from "#data/egg-hatch-data";
 import type PokemonSpecies from "#data/pokemon-species";
 import { getVariantTint } from "#data/variant";
@@ -88,9 +89,16 @@ export class HatchedPokemonContainer extends Phaser.GameObjects.Container {
 
     const dexEntry = hatchData.dexEntryBeforeUpdate;
     const caughtAttr = dexEntry.caughtAttr;
-    const newShiny = BigInt(1 << (displayPokemon.shiny ? 1 : 0));
-    const newVariant = BigInt(1 << (displayPokemon.variant + 4));
-    const newShinyOrVariant = (newShiny & caughtAttr) === BigInt(0) || (newVariant & caughtAttr) === BigInt(0);
+
+    let newShinyOrVariant = false;
+    if (displayPokemon.shiny) {
+      const variantAttr = BigInt(1 << displayPokemon.variant) * DexAttr.SHINY_BASE_VARIANT;
+      newShinyOrVariant = (variantAttr & caughtAttr) === BigInt(0);
+    } else if (globalScene.gameData.getUnlockedVariantsAttr(caughtAttr).length > 0) {
+      // The Pokemon is not shiny but at least one of its shinies is already owned: highlight as new
+      newShinyOrVariant = true;
+    }
+
     const newForm = (globalScene.gameData.getFormAttr(displayPokemon.formIndex) & caughtAttr) === BigInt(0);
 
     const female = displayPokemon.gender === Gender.FEMALE;
