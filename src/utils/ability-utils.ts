@@ -1,8 +1,5 @@
-import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { TERA_MOVES } from "#constants/move-constants";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
@@ -47,16 +44,3 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
 export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
   move?.type === ElementalType.NORMAL
   && (!move.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized));
-
-/**
- * Check if a Pokemon will wake up this turn by simulating the {@linkcode AbAttrFlag.POST_TURN} applications
- * and checking for a {@linkcode PostTurnResetStatusAbAttr} with a result of `true`.
- *
- * @param pokemon - The Pokemon to check
- * @returns `true` if the Pokemon will wake up this turn, `false` otherwise
- */
-export function willWakeUpAtEndOfTurn(pokemon: Pokemon) {
-  return applyAbAttrs<PostTurnResetStatusAbAttr>(AbAttrFlag.POST_TURN, pokemon, true).some(
-    ({ attr, result }) => attr instanceof PostTurnResetStatusAbAttr && result,
-  );
-}
