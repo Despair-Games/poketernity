@@ -1,12 +1,16 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-damage-reduction-ab-attr";
 import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { BattlerIndex } from "#app/enums/battler-index";
 import { Stat } from "#app/enums/stat";
 import { StatusEffect } from "#app/enums/status-effect";
 import { capitalizeString } from "#app/utils/string-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
+import { BooleanHolder } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -122,6 +126,16 @@ describe("Ability - Guts", () => {
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
     expect(enemy).toHaveTakenDamage(5);
+
+    const burnDamageReductionCancelled = new BooleanHolder(false);
+    applyAbAttrs<BypassBurnDamageReductionAbAttr>(
+      AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION,
+      player,
+      true,
+      burnDamageReductionCancelled,
+    );
+
+    expect(burnDamageReductionCancelled.value).toBe(true);
   });
 
   it("should not boost atk when thawing itself", async () => {
