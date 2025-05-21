@@ -1,4 +1,7 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
+import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
+import { PostTurnStatusHealAbAttr } from "#abilities/post-turn-status-heal-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -21,6 +24,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
         opp.hasStatusEffect(StatusEffect.SLEEP)
         && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
         && !opp.switchOutStatus
+        && !willWakeUpThisTurn(opp)
       ) {
         if (!simulated) {
           opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
@@ -36,3 +40,30 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
     return hadEffect;
   }
 }
+
+//#region Helpers
+
+/**
+ * Check if a Pokemon will wake up this turn by simulating the PostTurnAbAttrs applications.
+ * @param pokemon - The Pokemon to check
+ * @returns `true` if the Pokemon will wake up this turn, `false` otherwise
+ */
+function willWakeUpThisTurn(pokemon: Pokemon) {
+  // Will wake up from Hydration ability + Rain
+  const results = applyAbAttrs<PostTurnStatusHealAbAttr>(AbAttrFlag.POST_TURN, pokemon, true);
+  console.log(
+    `willWakeUpThisTurn: ${PostTurnStatusHealAbAttr.prototype.constructor.name}`,
+    results,
+    results.some(({ name, result }) => name === PostTurnStatusHealAbAttr.prototype.constructor.name && result),
+  );
+
+  return results.some(
+    ({ name, result }) =>
+      [
+        PostTurnStatusHealAbAttr.prototype.constructor.name,
+        PostTurnResetStatusAbAttr.prototype.constructor.name,
+      ].includes(name) && result,
+  );
+}
+
+//#endregion
