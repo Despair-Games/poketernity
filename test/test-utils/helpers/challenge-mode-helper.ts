@@ -35,7 +35,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
    * @param gameMode - Optional game mode to set.
    * @returns A promise that resolves when the summon phase is reached.
    */
-  async runToSummon(species?: SpeciesId[]) {
+  async runToSummon(species: SpeciesId[]) {
     await this.game.runToTitle();
 
     if (this.game.override.disableShinies) {
@@ -61,7 +61,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to start the battle with.
    * @returns A promise that resolves when the battle is started.
    */
-  async startBattle(species?: SpeciesId[]) {
+  async startBattle(species: SpeciesId[]) {
     await this.runToSummon(species);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {

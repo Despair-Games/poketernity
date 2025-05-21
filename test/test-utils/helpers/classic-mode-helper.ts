@@ -22,7 +22,7 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to summon.
    * @returns A promise that resolves when the summon phase is reached.
    */
-  async runToSummon(species?: SpeciesId[]): Promise<void> {
+  async runToSummon(species: SpeciesId[]): Promise<void> {
     await this.game.runToTitle();
 
     if (this.game.override.disableShinies) {
@@ -54,7 +54,7 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @param species - Optional array of species to start the battle with.
    * @returns A promise that resolves when the battle is started.
    */
-  async startBattle(species?: SpeciesId[]): Promise<void> {
+  async startBattle(species: SpeciesId[]): Promise<void> {
     await this.runToSummon(species);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
