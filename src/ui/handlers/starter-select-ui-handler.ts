@@ -3380,17 +3380,23 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     if (species) {
       if (shiny !== undefined ? !shiny : !(shiny = oldProps?.shiny)) {
         this.dexAttrCursor |= DexAttr.NON_SHINY;
+      } else {
+        if (isNil(variant)) {
+          variant = oldProps?.variant ?? 0;
+        }
+        if (variant === 2) {
+          this.dexAttrCursor |= DexAttr.SHINY_EPIC_VARIANT;
+        } else if (variant === 1) {
+          this.dexAttrCursor |= DexAttr.SHINY_RARE_VARIANT;
+        } else {
+          this.dexAttrCursor |= DexAttr.SHINY_BASE_VARIANT;
+        }
       }
-      this.dexAttrCursor |= (variant !== undefined ? !variant : !(variant = oldProps?.variant))
-        ? DexAttr.SHINY_BASE_VARIANT
-        : variant === 1
-          ? DexAttr.SHINY_RARE_VARIANT
-          : DexAttr.SHINY_EPIC_VARIANT;
       this.dexAttrCursor |= (female !== undefined ? !female : !(female = oldProps?.female))
         ? DexAttr.MALE
         : DexAttr.FEMALE;
       this.dexAttrCursor |= globalScene.gameData.getFormAttr(
-        formIndex !== undefined ? formIndex : (formIndex = oldProps!.formIndex), // TODO: is this bang correct?
+        formIndex !== undefined ? formIndex : (formIndex = oldProps!.formIndex),
       );
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.passiveEnabled = passiveEnabled ?? this.passiveEnabled;
