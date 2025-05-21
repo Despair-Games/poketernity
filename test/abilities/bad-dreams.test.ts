@@ -1,0 +1,104 @@
+import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
+import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/test-utils/game-manager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+describe("Ability - Bad Dreams", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .ability(AbilityId.BAD_DREAMS)
+      .battleType("single")
+      .disableCrits()
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100);
+  });
+
+  it("should do 1/8 max-hp damage to sleeping enemies", async () => {
+    const { override, classicMode, field, move } = game;
+    override.enemyStatusEffect(StatusEffect.SLEEP);
+
+    await classicMode.startBattle([SpeciesId.DARKRAI]);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
+  });
+
+  it("should not damage awake enemies", async () => {
+    const { classicMode, field, move } = game;
+    await classicMode.startBattle([SpeciesId.DARKRAI]);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(enemy).toHaveFullHp();
+  });
+
+  it("should do 1/8 max-hp damage to drowsy enemies falling asleep in the same turn", async () => {
+    const { classicMode, field, move } = game;
+
+    await classicMode.startBattle([SpeciesId.DARKRAI]);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.YAWN);
+    await game.toEndOfTurn();
+
+    expect(enemy).toHaveBattlerTagType(BattlerTagType.DROWSY);
+    expect(enemy).toHaveFullHp();
+
+    for (let i = 0; i < 2; i++) {
+      move.use(MoveId.SPLASH);
+      await game.toEndOfTurn();
+    }
+
+    expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
+  });
+
+  it.each([
+    ["Hydration", AbilityId.HYDRATION, WeatherType.RAIN],
+    ["Shed Skin", AbilityId.SHED_SKIN, WeatherType.SANDSTORM],
+    ["Healer", AbilityId.HEALER, WeatherType.NONE],
+  ])(
+    "should not damage if enemy is woken up by '%s' ability in the same turn",
+    async (_abilityName, abilityId, weatherType) => {
+      const { override, classicMode, field, move } = game;
+      override.weather(weatherType).enemyAbility(abilityId).enemyPassiveAbility(AbilityId.OVERCOAT); // overcoat to prevent sandstorm damage
+
+      await classicMode.runToSummon([SpeciesId.DARKRAI]);
+      const enemy = field.getEnemyPokemon();
+      vi.spyOn(enemy, "randSeedInt").mockReturnValueOnce(0); // Make sure that Shed Skin/Healer always triggers.
+      enemy.trySetStatus(StatusEffect.SLEEP);
+
+      expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+
+      move.use(MoveId.SPLASH);
+      await game.toEndOfTurn();
+
+      expect(enemy).not.toHaveStatusEffect(StatusEffect.SLEEP);
+      expect(enemy).toHaveFullHp();
+    },
+  );
+});
