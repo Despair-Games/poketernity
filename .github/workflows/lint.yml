@@ -65,7 +65,8 @@ jobs:
           DEPCRUISE_OUTCOME: ${{ steps.depcruise.outcome }}
           TYPECHECK_OUTCOME: ${{ steps.typecheck.outcome }}
         run: |
-          # ANSI color codes
+          # Check for Errors
+
           RED='\033[0;31m'
           GREEN='\033[0;32m'
           NC='\033[0m' # No Color
