@@ -62,7 +62,7 @@ export class StatMultiplierAbAttr extends AbAttr {
    * @param target The {@linkcode Pokemon} targeted by the move
    * @returns `true` if this attribute's multiplier applies to the evaluated stat
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     stat: BattleStat,

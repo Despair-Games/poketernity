@@ -12,7 +12,7 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
     super(false, false);
   }
 
-  override applyPostAttack(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
+  public override applyPostAttack(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
     if (simulated) {
       return simulated;
     }

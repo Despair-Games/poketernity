@@ -33,7 +33,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
     this.effects = effects;
   }
 
-  override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
+  public override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
     /**
      * The status is only applied to the target if
      * - The target does not have a secondary ability that suppresses move effects

@@ -22,7 +22,7 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
     this.defenderType = defenderType;
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,

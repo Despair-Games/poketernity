@@ -34,7 +34,7 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     this.triggerMessageFunc = triggerMessageFunc;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     attacker: Pokemon,
@@ -63,10 +63,9 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
    * Gets the message triggered when the Pokémon avoids damage using the form-changing ability.
    * @param pokemon The Pokémon with the ability.
    * @param abilityName The name of the ability.
-   * @param args n/a
    * @returns The trigger message.
    */
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return this.triggerMessageFunc(pokemon, abilityName);
   }
 }

@@ -15,7 +15,7 @@ export abstract class PostBattleAbAttr extends AbAttr {
    * @param isVictory `true` if the result of the battle was a victory for the player
    * @returns `true` if effects from this ability applied successfully
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _isVictory: boolean): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _isVictory: boolean): boolean {
     return false;
   }
 }

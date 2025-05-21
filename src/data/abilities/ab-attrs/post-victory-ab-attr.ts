@@ -14,7 +14,7 @@ export abstract class PostVictoryAbAttr extends AbAttr {
    * @param simulated If `true`, suppresses changes to game state
    * @returns `true` if effects successfully applied
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
     return false;
   }
 }

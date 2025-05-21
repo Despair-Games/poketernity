@@ -18,7 +18,7 @@ export class WeightMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, weight: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, weight: NumberHolder): boolean {
     weight.value *= this.multiplier;
 
     return true;

@@ -21,7 +21,7 @@ export class CommanderAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.COMMANDER);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === SpeciesId.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
       // another Pokemon, this effect cannot apply.

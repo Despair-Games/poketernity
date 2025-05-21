@@ -19,7 +19,7 @@ export abstract class PostStatStageChangeAbAttr extends AbAttr {
    * @param isStickyWeb - `true` if and only if Sticky Web inflicted the stat change
    * @returns `true` if effects successfully applied
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _statsChanged: BattleStat[],

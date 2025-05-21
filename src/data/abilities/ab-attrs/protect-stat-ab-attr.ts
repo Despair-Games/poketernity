@@ -21,7 +21,7 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
     this.protectedStat = protectedStat;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, cancelled: BooleanHolder): boolean {
     if (isNil(this.protectedStat) || stat === this.protectedStat) {
       cancelled.value = true;
       return true;
@@ -30,7 +30,7 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
     return i18next.t("abilityTriggers:protectStat", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

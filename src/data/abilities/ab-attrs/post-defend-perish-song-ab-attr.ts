@@ -13,7 +13,7 @@ import i18next from "i18next";
  * @extends PostDefendAbAttr
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       if (attacker.getTag(BattlerTagType.PERISH_SONG)) {
         return false;
@@ -28,7 +28,7 @@ export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:perishBody", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       abilityName: abilityName,

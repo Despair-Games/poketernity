@@ -17,7 +17,7 @@ export class WonderSkinAbAttr extends PreDefendAbAttr {
     this._flags.add(AbAttrFlag.WONDER_SKIN);
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _attacker: Pokemon,

@@ -7,7 +7,7 @@ import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY)
@@ -29,7 +29,7 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:postDefendAbilitySwap", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
     });

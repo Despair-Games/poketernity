@@ -10,7 +10,7 @@ import i18next from "i18next";
  * @extends PostSummonAbAttr
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!globalScene.currentBattle.double) {
       return false;
     }
@@ -30,7 +30,7 @@ export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
     return true;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:costar", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       allyName: getPokemonNameWithAffix(pokemon.getAlly()),

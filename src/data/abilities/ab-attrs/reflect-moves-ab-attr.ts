@@ -23,7 +23,7 @@ export class ReflectMovesAbAttr extends PreDefendAbAttr {
     this._flags.add(AbAttrFlag.REFLECT_MOVES);
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _attacker: Pokemon,
@@ -37,7 +37,7 @@ export class ReflectMovesAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, _attacker: Pokemon, move: Move): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string, _attacker: Pokemon, move: Move): string {
     // "{pokemonNameWithAffix} bounced the {moveName} back!"
     return i18next.t("abilityTriggers:magicBounceOnReflect", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

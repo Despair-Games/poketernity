@@ -8,7 +8,7 @@ import type { Pokemon } from "#field/pokemon";
  * @extends PostBattleAbAttr
  */
 export class MoneyAbAttr extends PostBattleAbAttr {
-  override apply(_pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
     if (!simulated && isVictory) {
       globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
       return true;

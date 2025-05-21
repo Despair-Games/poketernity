@@ -19,7 +19,7 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
     this.ability = ability;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === SpeciesId.CASTFORM && this.ability === AbilityId.FORECAST;
     const isCherrimWithFlowerGift =
