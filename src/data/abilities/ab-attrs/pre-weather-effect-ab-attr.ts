@@ -13,7 +13,12 @@ export abstract class PreWeatherEffectAbAttr extends AbAttr {
    * cancel's the current weather's effects.
    * @returns `true` if effects from this attribute apply successfully
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather | null, _cancelled: BooleanHolder): boolean {
+  public override apply(
+    _pokemon: Pokemon,
+    _simulated: boolean,
+    _weather: Weather | null,
+    _cancelled: BooleanHolder,
+  ): boolean {
     return false;
   }
 }

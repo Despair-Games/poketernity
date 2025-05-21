@@ -31,7 +31,7 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
    * @param multiplier a {@linkcode NumberHolder} containing the damage multiplier for the current strike
    * @returns `true` if the given move is modified by this effect
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,

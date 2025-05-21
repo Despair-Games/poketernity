@@ -26,7 +26,7 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
    * @param args[0] contains the name of the move's user
    * @param args[1] contains the move's name if present
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,

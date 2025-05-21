@@ -21,7 +21,7 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.POST_TERA_FORM_CHANGE_STAT_CHANGE);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
       globalScene.phaseManager.unshiftPhase(
         new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),

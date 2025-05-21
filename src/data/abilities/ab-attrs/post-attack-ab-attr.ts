@@ -25,7 +25,13 @@ export abstract class PostAttackAbAttr extends AbAttr {
    * @param args Additional arguments for subclasses
    * @returns `true` if effects from this ability can apply successfully.
    */
-  override apply(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move, ...args: unknown[]): boolean {
+  public override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
+    defender: Pokemon,
+    move: Move,
+    ...args: unknown[]
+  ): boolean {
     if (!this.attackMovesOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS) {
       return this.applyPostAttack(pokemon, simulated, defender, move, ...args);
     }

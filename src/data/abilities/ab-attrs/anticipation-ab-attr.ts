@@ -10,7 +10,7 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
  * @extends PostSummonMessageAbAttr
  */
 export class AnticipationAbAttr extends PostSummonMessageAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     for (const opponent of pokemon.getOpponents()) {
       for (const pkmMove of opponent.getMoveset()) {
         const move = pkmMove.getMove();

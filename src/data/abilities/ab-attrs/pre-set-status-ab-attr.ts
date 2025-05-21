@@ -13,7 +13,7 @@ export abstract class PreSetStatusAbAttr extends AbAttr {
    * the effect being set
    * @returns `true` if the ability applies successfully
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _effect: StatusEffect | undefined,

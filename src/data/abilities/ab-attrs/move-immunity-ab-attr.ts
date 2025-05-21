@@ -17,7 +17,7 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
     this.immuneCondition = immuneCondition;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     attacker: Pokemon,
@@ -32,7 +32,7 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:moveImmunity", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
   }
 }

@@ -24,7 +24,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     this.chance = chance;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (move.category === MoveCategory.STATUS) {
       return false;
     }
@@ -39,7 +39,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:quickDraw", { pokemonName: getPokemonNameWithAffix(pokemon) });
   }
 }

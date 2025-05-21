@@ -17,7 +17,7 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   }
 
   // TODO: Decouple this into two attributes (type change / power boost)
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,

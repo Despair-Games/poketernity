@@ -9,7 +9,7 @@ import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
  * @extends PostSummonAbAttr
  */
 export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAttr {
-  override apply(_pokemon: Pokemon, simulated: boolean) {
+  public override apply(_pokemon: Pokemon, simulated: boolean) {
     const pokemonToTransform = getPokemonWithWeatherBasedForms();
 
     if (pokemonToTransform.length < 1) {

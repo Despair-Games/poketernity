@@ -9,7 +9,7 @@ export class RunSuccessAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.RUN_SUCCESS);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, escapeChance: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, escapeChance: NumberHolder): boolean {
     escapeChance.value = 256;
     return true;
   }

@@ -9,7 +9,7 @@ export class ReduceBerryUseThresholdAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD);
   }
 
-  override apply(pokemon: Pokemon, _simulated: boolean, threshold: NumberHolder): boolean {
+  public override apply(pokemon: Pokemon, _simulated: boolean, threshold: NumberHolder): boolean {
     const hpRatio = pokemon.getHpRatio();
 
     if (threshold.value < hpRatio) {

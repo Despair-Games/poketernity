@@ -10,7 +10,7 @@ import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
  * @extends PostFaintAbAttr
  */
 export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAttr {
-  override apply(_pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): boolean {
     const pokemonToTransform = getPokemonWithWeatherBasedForms();
 
     if (pokemonToTransform.length < 1) {

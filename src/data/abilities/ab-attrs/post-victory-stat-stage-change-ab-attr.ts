@@ -15,7 +15,7 @@ export class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
     this.stages = stages;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
       globalScene.phaseManager.unshiftPhase(

@@ -19,7 +19,7 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     this.stages = stages;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     attacker: Pokemon,

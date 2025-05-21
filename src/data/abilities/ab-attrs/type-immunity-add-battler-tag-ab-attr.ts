@@ -17,7 +17,7 @@ export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
     this.turnCount = turnCount;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     attacker: Pokemon,

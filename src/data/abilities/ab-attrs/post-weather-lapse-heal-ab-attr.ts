@@ -32,7 +32,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     this.healRatio = healRatio;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
     if (!pokemon.isFullHp()) {
       const abilityName = this.source.name;
       if (!simulated) {

@@ -17,7 +17,7 @@ export abstract class PostFaintAbAttr extends AbAttr {
    * @param move The {@linkcode Move} that caused the source to faint
    * @returns `true` if effects from this attribute successfully apply
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {
     return false;
   }
 }

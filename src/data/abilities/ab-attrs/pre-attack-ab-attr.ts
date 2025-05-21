@@ -12,7 +12,7 @@ export abstract class PreAttackAbAttr extends AbAttr {
    * @param args Any additional parameters for this effect
    * @returns `true` if effects from this attribute apply successfully
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _move: Move,

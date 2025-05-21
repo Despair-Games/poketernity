@@ -19,7 +19,7 @@ export abstract class PostSummonAbAttr extends AbAttr {
    * @param args Set of unique arguments needed by this attribute
    * @returns true if application of the ability succeeds
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
     return false;
   }
 }
