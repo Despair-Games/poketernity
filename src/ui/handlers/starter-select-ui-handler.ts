@@ -2917,7 +2917,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
       const caughtAttr = speciesId ? globalScene.gameData.dexData[speciesId].caughtAttr : 0n;
       const abilityAttr = speciesId ? globalScene.gameData.starterData[speciesId].abilityAttr : 0;
-      const unlockedVariants = speciesId ? globalScene.gameData.getUnlockedVariantsAttr(caughtAttr) : [];
+      const unlockedVariants = speciesId ? globalScene.gameData.getUnlockedVariantsAttr(caughtAttr).reverse() : [];
       for (let v = 0; v < 3; v++) {
         const hasVariant = unlockedVariants.length > v;
         container.shinyIcons[v].setVisible(hasVariant);

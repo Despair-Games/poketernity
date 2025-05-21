@@ -78,7 +78,7 @@ import {
 } from "#constants/game-constants";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#data/data-lists";
-import { DexAttr } from "#data/dex-attributes";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
 import { getNatureStatMultiplier } from "#data/nature";
@@ -4409,13 +4409,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns true if the player already has it, false otherwise
    */
   checkIfPlayerHasAbilityOfStarter(ownedAbilityAttrs: number): boolean {
-    if ((ownedAbilityAttrs & 1) > 0 && this.hasSameAbilityInRootForm(0)) {
+    if ((ownedAbilityAttrs & AbilityAttr.ABILITY_1) > 0 && this.hasSameAbilityInRootForm(0)) {
       return true;
     }
-    if ((ownedAbilityAttrs & 2) > 0 && this.hasSameAbilityInRootForm(1)) {
+    if ((ownedAbilityAttrs & AbilityAttr.ABILITY_2) > 0 && this.hasSameAbilityInRootForm(1)) {
       return true;
     }
-    if ((ownedAbilityAttrs & 4) > 0 && this.hasSameAbilityInRootForm(2)) {
+    if ((ownedAbilityAttrs & AbilityAttr.ABILITY_HIDDEN) > 0 && this.hasSameAbilityInRootForm(2)) {
       return true;
     }
     return false;
