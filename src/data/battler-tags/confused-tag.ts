@@ -1,18 +1,22 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { BattlerTag } from "#battler-tags/battler-tag";
+import { allMoves } from "#data/data-lists";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
-import type { MoveId } from "#enums/move-id";
+import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { isNil, toDmgValue } from "#utils/common-utils";
+import { isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -67,11 +71,23 @@ export class ConfusedTag extends BattlerTag {
       globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }));
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
 
-      const damage = this.getDamage(pokemon);
+      const damageHolder = new NumberHolder(this.getDamage(pokemon));
 
-      if (damage > 0) {
+      if (damageHolder.value > 0) {
         globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapseHurtItself"));
-        pokemon.damageAndUpdate(damage);
+
+        if (pokemon.isFullHp()) {
+          applyAbAttrs<PreDefendFullHpEndureAbAttr>(
+            AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE,
+            pokemon,
+            false,
+            pokemon,
+            allMoves.get(MoveId.NONE),
+            damageHolder,
+          );
+        }
+
+        pokemon.damageAndUpdate(damageHolder.value);
         pokemon.waveData.hitCount++;
         globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
       }
