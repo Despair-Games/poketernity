@@ -7,6 +7,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
+import { MoveConditionFunc } from "#types/move-condition-func";
 import i18next from "i18next";
 
 /**
@@ -17,6 +18,16 @@ import i18next from "i18next";
  * @see {@linkcode PokemonTransformPhase}
  */
 export class TransformAttr extends MoveEffectAttr {
+  override getCondition(): MoveConditionFunc {
+    /**
+     * Only works if
+     * - The user and target are both not already transformed
+     * - The target is not semi invulnerable
+     * - The target is not behind a substitute
+     */
+    return (user, target, _move) => canTransform(user, target);
+  }
+
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!canTransform(user, target)) {
       return false;
@@ -42,17 +53,13 @@ export class TransformAttr extends MoveEffectAttr {
  * @returns whether or not the transform succeeds
  */
 export function canTransform(user: Pokemon, target: Pokemon): boolean {
-  console.log("user transformed: ", user.hasTag(BattlerTagType.TRANSFORMED));
-  console.log("target transformed: ", target.hasTag(BattlerTagType.TRANSFORMED));
   if (
     user.hasTag(BattlerTagType.TRANSFORMED)
     || target.hasTag(BattlerTagType.TRANSFORMED)
     || target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
     || target.hasTag(BattlerTagType.SUBSTITUTE)
   ) {
-    console.log("can transform false");
     return false;
   }
-  console.log("can transform true");
   return true;
 }
