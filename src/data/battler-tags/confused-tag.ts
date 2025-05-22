@@ -20,7 +20,9 @@ import i18next from "i18next";
  * @extends BattlerTag
  */
 export class ConfusedTag extends BattlerTag {
+  /** Chance of self-inflicted damage `= 33%` */
   public readonly ACTIVATION_CHANCE: number = 33;
+
   constructor(turnCount: number, sourceMoveId: MoveId) {
     super(BattlerTagType.CONFUSED, BattlerTagLapseType.MOVE, turnCount, sourceMoveId, undefined, true);
   }
@@ -32,26 +34,26 @@ export class ConfusedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
+    const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
+
     globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
-    globalScene.phaseManager.queueMessagePhase(
-      i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    );
+    globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix }));
   }
 
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
-      i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    );
+    const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
+
+    globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix }));
   }
 
   override onOverlap(pokemon: Pokemon): void {
     super.onOverlap(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
-      i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    );
+    const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
+
+    globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix }));
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -60,19 +62,21 @@ export class ConfusedTag extends BattlerTag {
       || !isNil(Overrides.STATUS_ACTIVATION_OVERRIDE);
 
     if (ret) {
-      globalScene.phaseManager.queueMessagePhase(
-        i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      );
+      const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
+
+      globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }));
       globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
 
       const damage = this.getDamage(pokemon);
+
       if (damage > 0) {
         globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapseHurtItself"));
         pokemon.damageAndUpdate(damage);
         pokemon.waveData.hitCount++;
-        (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
+        globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
       }
     }
+
     return ret;
   }
 
@@ -89,10 +93,12 @@ export class ConfusedTag extends BattlerTag {
     ) {
       const atk = pokemon.getEffectiveStat(Stat.ATK, undefined, undefined, AbilityApplyMode.IGNORE);
       const def = pokemon.getEffectiveStat(Stat.DEF, undefined, undefined, AbilityApplyMode.IGNORE);
+
       return toDmgValue(
         ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
       );
     }
+
     return 0;
   }
 
