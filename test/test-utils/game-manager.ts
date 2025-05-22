@@ -237,7 +237,7 @@ export class GameManager {
   /**
    * Runs the game to a mystery encounter phase.
    * @param encounterType if specified, will expect encounter to have been spawned
-   * @param species Optional array of species for party.
+   * @param species Optional array of species for party. If not provided, a party of Feebas, Magikarp and Feebas is used.
    * @returns A promise that resolves when the EncounterPhase ends.
    * @todo Move to a `MysteryEncounter` helper class
    */

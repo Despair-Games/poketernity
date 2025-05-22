@@ -80,9 +80,8 @@ describe("Moves - Freeze-Dry", () => {
     game.override
       .enemySpecies(SpeciesId.SHEDINJA)
       .enemyMoveset(MoveId.SPLASH)
-      .starterSpecies(SpeciesId.MAGIKARP)
       .moveset([MoveId.SOAK, MoveId.FREEZE_DRY]);
-    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");

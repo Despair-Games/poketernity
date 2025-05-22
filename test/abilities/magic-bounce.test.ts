@@ -196,7 +196,6 @@ describe("Abilities - Magic Bounce", () => {
   });
 
   it("should not bounce back curse", async () => {
-    game.override.starterSpecies(SpeciesId.GASTLY);
     await game.classicMode.startBattle(SpeciesId.GASTLY);
 
     game.move.use(MoveId.CURSE);

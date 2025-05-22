@@ -27,7 +27,6 @@ describe("Moves - FILLET AWAY", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.starterSpecies(SpeciesId.MAGIKARP);
     game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);

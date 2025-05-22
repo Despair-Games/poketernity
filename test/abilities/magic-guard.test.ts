@@ -294,15 +294,10 @@ describe("Abilities - Magic Guard", () => {
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
   });
 
-  /*
-  it("Magic Guard does not prevent self-damage from confusion", async () => {
+  // TODO: write & enable once this is implemented (if it isn't already)
+  it.todo("Magic Guard does not prevent self-damage from confusion", async () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
-
-    game.move.select(MoveId.CHARM);
-
-    await game.phaseInterceptor.to("TurnEndPhase");
   });
-*/
 
   it("Magic Guard does not prevent self-damage from non-attacking moves", async () => {
     game.override.moveset([MoveId.BELLY_DRUM]);
