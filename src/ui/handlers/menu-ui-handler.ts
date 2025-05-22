@@ -62,8 +62,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
   protected manageDataConfig: OptionSelectModeConfig;
   protected communityConfig: OptionSelectModeConfig;
 
-  public bgmBar: BgmBar;
-
   constructor(mode: UiMode = UiMode.MENU) {
     super(mode);
 
@@ -82,11 +80,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     const ui = this.getUi();
 
-    this.bgmBar = new BgmBar();
-    this.bgmBar.setup();
-
-    ui.bgmBar = this.bgmBar;
-
     // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
@@ -103,7 +96,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     this.menuContainer = globalScene.add.container(2 - GAME_WIDTH, 2 - GAME_HEIGHT);
     this.menuContainer.setName("menu");
-    this.menuContainer.add(this.bgmBar);
+    this.menuContainer.add(ui.bgmBar);
 
     this.menuMessageBoxContainer = globalScene.add.container(0, 130);
     this.menuMessageBoxContainer.setName("menu-message-box");
@@ -144,7 +137,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     this.cursorObj?.setVisible(false);
     handleTutorial(Tutorial.MENU).then(() => {
       this.cursorObj?.setVisible(true);
-      this.bgmBar.toggleBgmBar(true);
+      this.getUi().bgmBar.toggleBgmBar(true);
     });
 
     return true;
@@ -713,7 +706,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   protected override clear() {
     super.clear();
-    this.bgmBar.toggleBgmBar(false);
+    this.getUi().bgmBar.toggleBgmBar(false);
   }
 }
 

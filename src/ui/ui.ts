@@ -13,7 +13,7 @@ import { AudioSettingsUiHandler } from "#ui/audio-settings-ui-handler";
 import { AutoCompleteUiHandler } from "#ui/autocomplete-ui-handler";
 import { BallUiHandler } from "#ui/ball-ui-handler";
 import { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
-import type { BgmBar } from "#ui/bgm-bar";
+import { BgmBar } from "#ui/bgm-bar";
 import { ChallengeSelectUiHandler } from "#ui/challenges-select-ui-handler";
 import { CommandUiHandler } from "#ui/command-ui-handler";
 import { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -52,7 +52,7 @@ import { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { TitleUiHandler } from "#ui/title-ui-handler";
-import type { UiHandler } from "#ui/ui-handler";
+import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
 import { executeIf } from "#utils/common-utils";
@@ -110,16 +110,18 @@ const noTransitionModes = [
   UiMode.RUN_INFO,
 ];
 
+const permanentModes = [UiMode.MESSAGE, UiMode.MENU, UiMode.MENU_OPTION_SELECT, UiMode.OPTION_SELECT, UiMode.CONFIRM];
+
 const DEFAULT_MODE = UiMode.MESSAGE;
 
 export class UI extends Phaser.GameObjects.Container {
   private mode: UiMode;
   private modeChain: UiMode[];
-  private handlers: UiHandler[];
+  private handlers: Map<UiMode, UiHandler>;
   private overlay: Phaser.GameObjects.Rectangle;
-  public achvBar: AchvBar;
-  public bgmBar: BgmBar;
-  public savingIcon: SavingIcon;
+  public achvBar: AchvBar; // TODO: make private and add helper functions
+  public bgmBar: BgmBar; // TODO: make private and add helper functions
+  public savingIcon: SavingIcon; // TODO: make private and add helper functions
 
   private tooltipContainer: Phaser.GameObjects.Container;
   private tooltipBg: Phaser.GameObjects.NineSlice;
@@ -133,58 +135,17 @@ export class UI extends Phaser.GameObjects.Container {
 
     this.mode = DEFAULT_MODE;
     this.modeChain = [];
-    this.handlers = [
-      new BattleMessageUiHandler(),
-      new TitleUiHandler(),
-      new CommandUiHandler(),
-      new FightUiHandler(),
-      new BallUiHandler(),
-      new TargetSelectUiHandler(),
-      new ModifierSelectUiHandler(),
-      new SaveSlotSelectUiHandler(),
-      new PartyUiHandler(),
-      new SummaryUiHandler(),
-      new StarterSelectUiHandler(),
-      new FormChangeSceneUiHandler(),
-      new EggHatchSceneUiHandler(),
-      new EggHatchSummaryUiHandler(),
-      new ConfirmUiHandler(),
-      new OptionSelectUiHandler(),
-      new MenuUiHandler(),
-      new OptionSelectUiHandler(UiMode.MENU_OPTION_SELECT),
-      // settings
-      new GeneralSettingsUiHandler(),
-      new DisplaySettingsUiHandler(),
-      new AudioSettingsUiHandler(),
-      new GamepadSettingsUiHandler(),
-      new GamepadBindingUiHandler(),
-      new KeyboardSettingsUiHandler(),
-      new KeyboardBindingUiHandler(),
-      new AchievementsUiHandler(),
-      new GameStatsUiHandler(),
-      new EggListUiHandler(),
-      new EggGachaUiHandler(),
-      new LoginFormUiHandler(),
-      new RegistrationFormUiHandler(),
-      new LoadingModalUiHandler(),
-      new SessionReloadModalUiHandler(),
-      new UnavailableModalUiHandler(),
-      new ChallengeSelectUiHandler(),
-      new RenamePokemonUiHandler(),
-      new RunHistoryUiHandler(),
-      new RunInfoUiHandler(),
-      new TestDialogueUiHandler(),
-      new AutoCompleteUiHandler(),
-      new AdminUiHandler(),
-      new MysteryEncounterUiHandler(),
-    ];
+    this.handlers = new Map<UiMode, UiHandler>();
   }
 
-  setup(): void {
+  // TODO ensure this is only ever called once
+  public setup(): void {
     this.setName(`ui-${UiMode[this.mode]}`);
-    for (const handler of this.handlers) {
-      handler.initialize();
-    }
+
+    this.handlers.set(this.mode, this.initHandler(this.mode));
+    this.getCurrentHandler().initialize();
+    // TODO init permanent handlers?
+
     this.overlay = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     this.overlay.setName("rect-ui-overlay");
     this.overlay.setOrigin(0, 0);
@@ -195,12 +156,115 @@ export class UI extends Phaser.GameObjects.Container {
     this.achvBar = new AchvBar();
     this.achvBar.setup();
 
+    this.bgmBar = new BgmBar();
+    this.bgmBar.setup();
+
     globalScene.uiContainer.add(this.achvBar);
 
     this.savingIcon = new SavingIcon();
     this.savingIcon.setup();
 
     globalScene.uiContainer.add(this.savingIcon);
+  }
+
+  private initHandler(mode: UiMode) {
+    switch (mode) {
+      case UiMode.MESSAGE:
+        return new BattleMessageUiHandler();
+      case UiMode.TITLE:
+        return new TitleUiHandler();
+      case UiMode.COMMAND:
+        return new CommandUiHandler();
+      case UiMode.FIGHT:
+        return new FightUiHandler();
+      case UiMode.BALL:
+        return new BallUiHandler();
+      case UiMode.TARGET_SELECT:
+        return new TargetSelectUiHandler();
+      case UiMode.MODIFIER_SELECT:
+        return new ModifierSelectUiHandler();
+      case UiMode.SAVE_SLOT:
+        return new SaveSlotSelectUiHandler();
+      case UiMode.PARTY:
+        return new PartyUiHandler();
+      case UiMode.SUMMARY:
+        return new SummaryUiHandler();
+      case UiMode.STARTER_SELECT:
+        return new StarterSelectUiHandler();
+      case UiMode.FORM_CHANGE_SCENE:
+        return new FormChangeSceneUiHandler();
+      case UiMode.EGG_HATCH_SCENE:
+        return new EggHatchSceneUiHandler();
+      case UiMode.EGG_HATCH_SUMMARY:
+        return new EggHatchSummaryUiHandler();
+      case UiMode.CONFIRM:
+        return new ConfirmUiHandler();
+      case UiMode.OPTION_SELECT:
+        return new OptionSelectUiHandler();
+      case UiMode.MENU:
+        return new MenuUiHandler();
+      case UiMode.MENU_OPTION_SELECT:
+        return new OptionSelectUiHandler(UiMode.MENU_OPTION_SELECT);
+      // settings
+      case UiMode.SETTINGS:
+        return new GeneralSettingsUiHandler();
+      case UiMode.SETTINGS_DISPLAY:
+        return new DisplaySettingsUiHandler();
+      case UiMode.SETTINGS_AUDIO:
+        return new AudioSettingsUiHandler();
+      case UiMode.SETTINGS_GAMEPAD:
+        return new GamepadSettingsUiHandler();
+      case UiMode.GAMEPAD_BINDING:
+        return new GamepadBindingUiHandler();
+      case UiMode.SETTINGS_KEYBOARD:
+        return new KeyboardSettingsUiHandler();
+      case UiMode.KEYBOARD_BINDING:
+        return new KeyboardBindingUiHandler();
+      case UiMode.ACHIEVEMENTS:
+        return new AchievementsUiHandler();
+      case UiMode.GAME_STATS:
+        return new GameStatsUiHandler();
+      case UiMode.EGG_LIST:
+        return new EggListUiHandler();
+      case UiMode.EGG_GACHA:
+        return new EggGachaUiHandler();
+      case UiMode.LOGIN_FORM:
+        return new LoginFormUiHandler();
+      case UiMode.REGISTRATION_FORM:
+        return new RegistrationFormUiHandler();
+      case UiMode.LOADING:
+        return new LoadingModalUiHandler();
+      case UiMode.SESSION_RELOAD:
+        return new SessionReloadModalUiHandler();
+      case UiMode.UNAVAILABLE:
+        return new UnavailableModalUiHandler();
+      case UiMode.CHALLENGE_SELECT:
+        return new ChallengeSelectUiHandler();
+      case UiMode.RENAME_POKEMON:
+        return new RenamePokemonUiHandler();
+      case UiMode.RUN_HISTORY:
+        return new RunHistoryUiHandler();
+      case UiMode.RUN_INFO:
+        return new RunInfoUiHandler();
+      case UiMode.TEST_DIALOGUE:
+        return new TestDialogueUiHandler();
+      case UiMode.AUTO_COMPLETE:
+        return new AutoCompleteUiHandler();
+      case UiMode.ADMIN:
+        return new AdminUiHandler();
+      case UiMode.MYSTERY_ENCOUNTER:
+        return new MysteryEncounterUiHandler();
+    }
+  }
+
+  private getHandler(mode: UiMode): UiHandler {
+    if (this.handlers.has(mode)) {
+      return this.handlers.get(mode)!;
+    }
+    const handler = this.initHandler(mode);
+    handler.initialize();
+    this.handlers.set(mode, handler);
+    return handler;
   }
 
   /**
@@ -211,10 +275,15 @@ export class UI extends Phaser.GameObjects.Container {
   public resetHandlers(): void {
     this.mode = DEFAULT_MODE;
     const currentHandler = this.getCurrentHandler();
-    for (const handler of this.handlers.filter((h) => h.active && h !== currentHandler)) {
-      handler.stop();
+    this.handlers.forEach((handler) => {
+      if (handler.active && handler !== currentHandler) {
+        handler.stop();
+      }
+    });
+
+    if (this.handlers.has(UiMode.STARTER_SELECT)) {
+      (this.handlers.get(UiMode.STARTER_SELECT) as StarterSelectUiHandler).clearStarterPreferences();
     }
-    (this.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
     this.resetModeChain();
   }
 
@@ -228,8 +297,9 @@ export class UI extends Phaser.GameObjects.Container {
     NavigationManager.getInstance().clearMenus();
 
     // Destroy all handlers
-    for (const handler of this.handlers) {
-      handler.destroy();
+    for (const uiMode of this.handlers.keys()) {
+      this.handlers.get(uiMode)?.destroy();
+      //this.handlers.delete(uiMode); TODO: can't delete because some handler's clear method do stuff on other handlers
     }
 
     super.destroy(fromScene);
@@ -259,15 +329,15 @@ export class UI extends Phaser.GameObjects.Container {
     globalScene.uiContainer.add(this.tooltipContainer);
   }
 
-  getCurrentHandler<H extends UiHandler = UiHandler>(): H {
-    return this.handlers[this.mode] as H;
+  public getCurrentHandler<H extends UiHandler = UiHandler>(): H {
+    return this.handlers.get(this.mode) as H;
   }
 
-  getMessageHandler(): BattleMessageUiHandler {
-    return this.handlers[UiMode.MESSAGE] as BattleMessageUiHandler;
+  public getMessageHandler(): BattleMessageUiHandler {
+    return this.handlers.get(UiMode.MESSAGE) as BattleMessageUiHandler;
   }
 
-  getCurrentMessageHandler(): MessageUiHandler {
+  private getCurrentMessageHandler(): MessageUiHandler {
     const handler = this.getCurrentHandler();
     if (handler instanceof MessageUiHandler && handler.message) {
       return handler;
@@ -275,7 +345,7 @@ export class UI extends Phaser.GameObjects.Container {
     return this.getMessageHandler();
   }
 
-  processInfoButton(pressed: boolean) {
+  public processInfoButton(pressed: boolean) {
     if (this.overlayActive) {
       return false;
     }
@@ -288,7 +358,7 @@ export class UI extends Phaser.GameObjects.Container {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public processInput(button: Button): boolean {
     if (this.overlayActive) {
       return false;
     }
@@ -302,7 +372,7 @@ export class UI extends Phaser.GameObjects.Container {
     return handler.processInput(button);
   }
 
-  showTextPromise(
+  public showTextPromise(
     text: string,
     callbackDelay: number = 0,
     prompt: boolean = true,
@@ -313,7 +383,7 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  showText(
+  public showText(
     text: string,
     delay?: number | null,
     callback?: VoidFunction | null,
@@ -334,7 +404,7 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  showDialogue(
+  public showDialogue(
     keyOrText: string,
     name: string | undefined,
     delay: number | null,
@@ -386,7 +456,7 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  shouldSkipDialogue(i18nKey: string): boolean {
+  public shouldSkipDialogue(i18nKey: string): boolean {
     if (i18next.exists(i18nKey)) {
       if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
         return true;
@@ -395,11 +465,11 @@ export class UI extends Phaser.GameObjects.Container {
     return false;
   }
 
-  getTooltip(): { visible: boolean; title: string; content: string } {
+  public getTooltip(): { visible: boolean; title: string; content: string } {
     return { visible: this.tooltipContainer.visible, title: this.tooltipTitle.text, content: this.tooltipContent.text };
   }
 
-  showTooltip(title: string, content: string, overlap?: boolean): void {
+  public showTooltip(title: string, content: string, overlap?: boolean): void {
     this.tooltipContainer.setVisible(true);
     this.editTooltip(title, content);
     if (overlap) {
@@ -409,7 +479,7 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  editTooltip(title: string, content: string): void {
+  public editTooltip(title: string, content: string): void {
     this.tooltipTitle.setText(title || "");
     const wrappedContent = this.tooltipContent.runWordWrap(content);
     this.tooltipContent.setText(wrappedContent);
@@ -422,7 +492,7 @@ export class UI extends Phaser.GameObjects.Container {
     this.tooltipTitle.x = this.tooltipBg.width / 2;
   }
 
-  hideTooltip(): void {
+  public hideTooltip(): void {
     this.tooltipContainer.setVisible(false);
     this.tooltipTitle.clearTint();
   }
@@ -460,11 +530,12 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  clearText(): void {
+  public clearText(): void {
     this.getCurrentMessageHandler().clearText();
   }
 
-  setCursor(cursor: number): boolean {
+  // UNUSED?
+  public setCursor(cursor: number): boolean {
     const changed = this.getCurrentHandler().setCursor(cursor);
     if (changed) {
       this.playSelect();
@@ -473,15 +544,15 @@ export class UI extends Phaser.GameObjects.Container {
     return changed;
   }
 
-  playSelect(): void {
+  public playSelect(): void {
     globalScene.audioManager.playSound("ui/select");
   }
 
-  playError(): void {
+  public playError(): void {
     globalScene.audioManager.playSound("ui/error");
   }
 
-  fadeOut(duration: number): Promise<void> {
+  public fadeOut(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (this.overlayActive) {
         return resolve();
@@ -499,7 +570,7 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  fadeIn(duration: number): Promise<void> {
+  public fadeIn(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (!this.overlayActive) {
         return resolve();
@@ -518,33 +589,36 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  getMode(): UiMode {
+  public getMode(): UiMode {
     return this.mode;
   }
 
-  setMessageMode(): Promise<void> {
+  public setMessageMode(): Promise<void> {
     return this.setMode<MessageUiHandler>(UiMode.MESSAGE);
   }
 
-  setMode<THandler extends UiHandler = never>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  public setMode<THandler extends UiHandler = never>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, false, false, ...args);
   }
 
-  setModeForceTransition<THandler extends UiHandler = never>(
+  public setModeForceTransition<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, true, false, ...args);
   }
 
-  setModeWithoutClear<THandler extends UiHandler = never>(
+  public setModeWithoutClear<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, false, ...args);
   }
 
-  setOverlayMode<THandler extends UiHandler = never>(
+  public setOverlayMode<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
@@ -567,6 +641,7 @@ export class UI extends Phaser.GameObjects.Container {
         if (this.mode !== mode) {
           if (clear && this.getCurrentHandler().active) {
             this.getCurrentHandler().stop();
+            // TODO see about destroying
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -577,9 +652,9 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getCurrentHandler().start(...params);
+          this.getHandler(mode).start(...params);
         } else if (!this.getCurrentHandler().active) {
-          this.getCurrentHandler().start(...params);
+          this.getHandler(mode).start(...params);
         }
         resolve();
       };
@@ -602,7 +677,7 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  revertMode(): Promise<boolean> {
+  public revertMode(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (!this?.modeChain?.length) {
         return resolve(false);
@@ -634,7 +709,8 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  revertModes(): Promise<void> {
+  // UNUSED?
+  public revertModes(): Promise<void> {
     return new Promise<void>((resolve) => {
       if (!this?.modeChain?.length) {
         return resolve();
@@ -653,6 +729,7 @@ export class UI extends Phaser.GameObjects.Container {
    * if inputMethod is "keyboard" or "touch", then the inputMethod is returned
    * if inputMethod is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock"
    * @returns gamepad type
+   * TODO why is this here?
    */
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {

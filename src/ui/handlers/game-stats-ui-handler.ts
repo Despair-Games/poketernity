@@ -263,6 +263,8 @@ export class GameStatsUiHandler extends UiHandler {
 
     this.statsContainer = globalScene.add.container(0, 0);
 
+    // TODO: seems like it would be best for performance to use single text objects with line breaks
+    // (2 objects with left alignment for the labels, 2 with right alignment for the values)
     new Array(18).fill(null).map((_, s) => {
       const statLabel = addTextObject(
         8 + (s % 2 === 1 ? statsBgWidth : 0),
