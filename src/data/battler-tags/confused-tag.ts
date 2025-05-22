@@ -77,6 +77,7 @@ export class ConfusedTag extends BattlerTag {
         globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapseHurtItself"));
 
         if (pokemon.isFullHp()) {
+          // `applyAbAttrs` may modify `damageHolder` by reference to adjust the damage value.
           applyAbAttrs<PreDefendFullHpEndureAbAttr>(
             AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE,
             pokemon,
