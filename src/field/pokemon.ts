@@ -2207,10 +2207,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     const move = new PokemonMove(moveId);
     this.moveset[moveIndex] = move;
-    // TODO: should this also be modifying the summon data moveset?
-    if (this.summonData.moveset.length > 0) {
-      this.summonData.moveset[moveIndex] = move;
-    }
   }
 
   /**
