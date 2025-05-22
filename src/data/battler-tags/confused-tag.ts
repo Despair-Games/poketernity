@@ -82,7 +82,7 @@ export class ConfusedTag extends BattlerTag {
             pokemon,
             false,
             pokemon,
-            allMoves.get(MoveId.NONE),
+            allMoves.get(this.sourceMoveId ?? MoveId.NONE),
             damageHolder,
           );
         }
