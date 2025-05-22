@@ -99,7 +99,7 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveFullHp();
   });
 
-  it.todo("should proc on self-inflicted damage", async () => {
+  it("should proc on self-inflicted damage", async () => {
     const { override, classicMode, field, move } = game;
     override.statusActivation(true); // Force confusion to proc
 
