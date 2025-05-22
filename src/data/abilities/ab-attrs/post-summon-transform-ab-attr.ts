@@ -1,7 +1,9 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
+import { canTransform } from "#moves/transform-attr";
 import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -27,9 +29,14 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     }
     target = target!;
 
+    if (!canTransform(pokemon, target)) {
+      return false;
+    }
+
     globalScene.phaseManager.unshiftPhase(
       new PokemonTransformPhase(pokemon.getBattlerIndex(), target.getBattlerIndex(), true),
     );
+    pokemon.addTag(BattlerTagType.TRANSFORMED, 0);
 
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("abilityTriggers:postSummonTransform", {

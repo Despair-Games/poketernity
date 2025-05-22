@@ -117,4 +117,5 @@ export enum BattlerTagType {
   SNATCHING,
   ME_FIRST_POWER_BOOST,
   BIDE,
+  TRANSFORMED,
 }

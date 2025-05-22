@@ -82,6 +82,7 @@ import { TerrainHighestStatBoostTag } from "#battler-tags/terrain-highest-stat-b
 import { ThroatChoppedTag } from "#battler-tags/throat-chopped-tag";
 import { ThunderCageTag } from "#battler-tags/thunder-cage-tag";
 import { TormentTag } from "#battler-tags/torment-tag";
+import { TransformedTag } from "#battler-tags/transformed-tag";
 import { TrappedTag } from "#battler-tags/trapped-tag";
 import { TruantTag } from "#battler-tags/truant-tag";
 import { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -322,6 +323,8 @@ export function getBattlerTag(
       return new MeFirstPowerBoostTag();
     case BattlerTagType.BIDE:
       return new BideTag();
+    case BattlerTagType.TRANSFORMED:
+      return new TransformedTag();
     case BattlerTagType.NONE:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
   }
