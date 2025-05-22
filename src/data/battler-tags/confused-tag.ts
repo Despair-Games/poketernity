@@ -82,7 +82,7 @@ export class ConfusedTag extends BattlerTag {
 
   /**
    * Helper function for checking if Confusion activates and retrieving self-inflicted damage from confusion
-   * @param pokemon the confused Pokemon
+   * @param pokemon - the confused Pokemon
    * @returns the amount of damage inflicted
    */
   public getDamage(pokemon: Pokemon): number {
