@@ -667,7 +667,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBattlerIndex(): BattlerIndex;
 
-  loadAssets(ignoreOverride: boolean = true): Promise<void> {
+  loadAssets(bypassSummonData: boolean = true): Promise<void> {
     return new Promise((resolve) => {
       const moveIds = this.getMoveset().map((m) => m.getMove().id);
       Promise.allSettled(moveIds.map((m) => initMoveAnim(m))).then(() => {
@@ -675,8 +675,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         this.getSpeciesForm().loadAssets(this.getGender() === Gender.FEMALE, this.formIndex, this.shiny, this.variant);
         if (this.isPlayer()) {
           globalScene.loadPokemonAtlas(
-            this.getBattleSpriteKey(true, ignoreOverride),
-            this.getBattleSpriteAtlasPath(true, ignoreOverride),
+            this.getBattleSpriteKey(true, bypassSummonData),
+            this.getBattleSpriteAtlasPath(true, bypassSummonData),
           );
         }
         globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
@@ -721,31 +721,31 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.species.forms[this.formIndex].formKey;
   }
 
-  getSpriteAtlasPath(ignoreOverride?: boolean): string {
-    const spriteId = this.getSpriteId(ignoreOverride).replace(/\_{2}/g, "/");
+  getSpriteAtlasPath(bypassSummonData?: boolean): string {
+    const spriteId = this.getSpriteId(bypassSummonData).replace(/\_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
-  getBattleSpriteAtlasPath(back?: boolean, ignoreOverride?: boolean): string {
-    const spriteId = this.getBattleSpriteId(back, ignoreOverride).replace(/\_{2}/g, "/");
+  getBattleSpriteAtlasPath(back?: boolean, bypassSummonData?: boolean): string {
+    const spriteId = this.getBattleSpriteId(back, bypassSummonData).replace(/\_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
-  getSpriteId(ignoreOverride?: boolean): string {
-    return this.getSpeciesForm(ignoreOverride).getSpriteId(
-      this.getGender(ignoreOverride) === Gender.FEMALE,
+  getSpriteId(bypassSummonData?: boolean): string {
+    return this.getSpeciesForm(bypassSummonData).getSpriteId(
+      this.getGender(bypassSummonData) === Gender.FEMALE,
       this.formIndex,
       this.shiny,
       this.variant,
     );
   }
 
-  getBattleSpriteId(back?: boolean, ignoreOverride?: boolean): string {
+  getBattleSpriteId(back?: boolean, bypassSummonData?: boolean): string {
     if (back === undefined) {
       back = this.isPlayer();
     }
-    return this.getSpeciesForm(ignoreOverride).getSpriteId(
-      this.getGender(ignoreOverride) === Gender.FEMALE,
+    return this.getSpeciesForm(bypassSummonData).getSpriteId(
+      this.getGender(bypassSummonData) === Gender.FEMALE,
       this.formIndex,
       this.shiny,
       this.variant,
@@ -753,34 +753,34 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
   }
 
-  getSpriteKey(ignoreOverride?: boolean): string {
-    return this.getSpeciesForm(ignoreOverride).getSpriteKey(
-      this.getGender(ignoreOverride) === Gender.FEMALE,
+  getSpriteKey(bypassSummonData?: boolean): string {
+    return this.getSpeciesForm(bypassSummonData).getSpriteKey(
+      this.getGender(bypassSummonData) === Gender.FEMALE,
       this.formIndex,
       this.shiny,
       this.variant,
     );
   }
 
-  getBattleSpriteKey(back?: boolean, ignoreOverride?: boolean): string {
-    return `pkmn__${this.getBattleSpriteId(back, ignoreOverride)}`;
+  getBattleSpriteKey(back?: boolean, bypassSummonData?: boolean): string {
+    return `pkmn__${this.getBattleSpriteId(back, bypassSummonData)}`;
   }
 
-  getIconAtlasKey(ignoreOverride?: boolean): string {
-    return this.getSpeciesForm(ignoreOverride).getIconAtlasKey(this.formIndex, this.shiny, this.variant);
+  getIconAtlasKey(bypassSummonData?: boolean): string {
+    return this.getSpeciesForm(bypassSummonData).getIconAtlasKey(this.formIndex, this.shiny, this.variant);
   }
 
-  getIconId(ignoreOverride?: boolean): string {
-    return this.getSpeciesForm(ignoreOverride).getIconId(
-      this.getGender(ignoreOverride) === Gender.FEMALE,
+  getIconId(bypassSummonData?: boolean): string {
+    return this.getSpeciesForm(bypassSummonData).getIconId(
+      this.getGender(bypassSummonData) === Gender.FEMALE,
       this.formIndex,
       this.shiny,
       this.variant,
     );
   }
 
-  getSpeciesForm(ignoreOverride?: boolean): PokemonSpeciesForm {
-    if (!ignoreOverride && this.summonData.speciesForm) {
+  getSpeciesForm(bypassSummonData: boolean = false): PokemonSpeciesForm {
+    if (!bypassSummonData && this.summonData.speciesForm) {
       return this.summonData.speciesForm;
     }
     if (this.species.forms && this.species.forms.length > 0) {
@@ -1314,8 +1314,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  getGender(ignoreOverride?: boolean): Gender {
-    if (!ignoreOverride && !isNil(this.summonData.gender)) {
+  getGender(bypassSummonData: boolean = false): Gender {
+    if (!bypassSummonData && !isNil(this.summonData.gender)) {
       return this.summonData.gender;
     }
     return this.gender;
@@ -1340,8 +1340,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegmentIndex(): number;
 
-  getMoveset(baseOnly?: boolean): PokemonMove[] {
-    const ret = !baseOnly && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
+  getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
+    const ret = !bypassSummonData && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
@@ -1408,10 +1408,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Gets the types of a pokemon
    * @param includeTeraType - `true` to include tera-formed type; Default: `false`
    * @param forDefend - `true` if the pokemon is defending from an attack; Default: `false`
-   * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
+   * @param bypassSummonData - If `true`, ignore ability changing effects; Default: `false`
    * @returns array of {@linkcode ElementalType}
    */
-  public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): ElementalType[] {
+  public getTypes(
+    includeTeraType = false,
+    forDefend: boolean = false,
+    bypassSummonData: boolean = false,
+  ): ElementalType[] {
     const types: ElementalType[] = [];
 
     if (includeTeraType && this.isTerastallized) {
@@ -1425,7 +1429,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     if (!types.length || !includeTeraType) {
-      if (!baseOnly && this.summonData.types.length > 0) {
+      if (!bypassSummonData && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
       } else if (this.customPokemonData.types && this.customPokemonData.types.length > 0) {
         // "Permanent" override for a Pokemon's normal types, currently only used by Mystery Encounters
@@ -1435,7 +1439,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           types.push(this.customPokemonData.types[1]);
         }
       } else {
-        const speciesForm = this.getSpeciesForm(baseOnly);
+        const speciesForm = this.getSpeciesForm(bypassSummonData);
 
         types.push(speciesForm.type1);
 
@@ -1459,7 +1463,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // the type added to Pokemon from moves like Forest's Curse or Trick Or Treat
-    if (!baseOnly && !isNil(this.summonData.addedType) && !types.includes(this.summonData.addedType)) {
+    if (!bypassSummonData && !isNil(this.summonData.addedType) && !types.includes(this.summonData.addedType)) {
       types.push(this.summonData.addedType);
     }
 
@@ -1476,16 +1480,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param type - {@linkcode ElementalType} to check
    * @param includeTeraType - `true` to include tera-formed type; Default: `true`
    * @param forDefend - `true` if the pokemon is defending from an attack; Default: `false`
-   * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
+   * @param bypassSummonData - If `true`, ignore ability changing effects; Default: `false`
    * @returns `true` if the Pokemon's type matches
    */
   public isOfType(
     type: ElementalType,
     includeTeraType: boolean = true,
     forDefend: boolean = false,
-    baseOnly: boolean = false,
+    bypassSummonData: boolean = false,
   ): boolean {
-    return this.getTypes(includeTeraType, forDefend, baseOnly).some((t) => t === type);
+    return this.getTypes(includeTeraType, forDefend, bypassSummonData).some((t) => t === type);
   }
 
   /**
@@ -1506,11 +1510,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * This should rarely be called, most of the time {@linkcode hasAbility} or {@linkcode hasAbilityWithAttr} are better used as
    * those check both the passive and non-passive abilities and account for ability suppression.
    * @see {@linkcode hasAbility} {@linkcode hasAbilityWithAttr} Intended ways to check abilities in most cases
-   * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
+   * @param bypassSummonData - If `true`, ignore ability changing effects; Default: `false`
    * @returns The non-passive {@linkcode Ability} of the pokemon
    */
-  public getAbility(baseOnly: boolean = false): Ability {
-    if (!baseOnly && this.summonData.ability) {
+  public getAbility(bypassSummonData: boolean = false): Ability {
+    if (!bypassSummonData && this.summonData.ability) {
       return allAbilities[this.summonData.ability];
     }
     if (Overrides.ABILITY_OVERRIDE && this.isPlayer()) {
@@ -1522,7 +1526,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!isNil(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
       return allAbilities[this.customPokemonData.ability];
     }
-    let abilityId = this.getSpeciesForm(baseOnly).getAbility(this.abilityIndex);
+    let abilityId = this.getSpeciesForm(bypassSummonData).getAbility(this.abilityIndex);
     if (abilityId === AbilityId.NONE) {
       abilityId = this.species.ability1;
     }
@@ -1561,7 +1565,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Obtains the Pokemon's abilities.
    * @param options Optional flags to filter the output:
-   * - `baseOnly`: If `true`, obtains the Pokemon's base ability instead
+   * - `bypassSummonData`: If `true`, obtains the Pokemon's base ability instead
    * of overriding abilities (e.g. obtains Trace instead of whatever Trace copies)
    * - `canApplyOnly`: If `true`, filters out abilities that are suppressed or ignored
    * - `revealedOnly`: If `true`, filters out abilities that haven't been revealed yet
@@ -1569,9 +1573,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * of {@linkcode AbilityData} entries.
    */
   public getAbilities(options: AbilityFilterOptions = {}): AbilityData[] {
-    const baseOnly = options.baseOnly ?? false;
+    const bypassSummonData = options.bypassSummonData ?? false;
     let abilities: AbilityData[] = [
-      { ability: this.getAbility(baseOnly), passive: false },
+      { ability: this.getAbility(bypassSummonData), passive: false },
       { ability: this.getPassiveAbility(), passive: true },
     ];
 
@@ -1592,18 +1596,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * in effect, and both passive and non-passive.
    * @param abAttrFlag – The {@linkcode AbAttrFlag} to verify within the abilities.
    * @param canApply - If `false`, it doesn't check whether the ability is currently active; Default `true`
-   * @param baseOnly - If `true`, it ignores ability changing effects; Default `false`
+   * @param bypassSummonData - If `true`, it ignores ability changing effects; Default `false`
    * @returns An array of all the ability attributes on this ability.
    */
   public getAbilityAttrs<T extends AbAttr = AbAttr>(
     abAttrFlag: AbAttrFlag,
     canApply: boolean = true,
-    baseOnly: boolean = false,
+    bypassSummonData: boolean = false,
   ): T[] {
     const abilityAttrs: T[] = [];
 
     if (!canApply || this.canApplyAbility()) {
-      abilityAttrs.push(...this.getAbility(baseOnly).getAttrs<T>(abAttrFlag));
+      abilityAttrs.push(...this.getAbility(bypassSummonData).getAttrs<T>(abAttrFlag));
     }
 
     if (!canApply || this.canApplyAbility(true)) {
@@ -1693,11 +1697,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * non-passive. This is the primary way to check whether a pokemon has a particular ability.
    * @param ability - The {@linkcode AbilityId | ability} to check for
    * @param canApply - (Default `true`) If `false`, it doesn't check whether the ability is currently active
-   * @param baseOnly - (Optional) If `true`, it ignores ability changing effects
+   * @param bypassSummonData - (Optional) If `true`, it ignores ability changing effects
    * @returns Whether the ability is present and active
    */
-  public hasAbility(ability: AbilityId, canApply: boolean = true, baseOnly?: boolean): boolean {
-    if (this.getAbility(baseOnly).id === ability && (!canApply || this.canApplyAbility())) {
+  public hasAbility(ability: AbilityId, canApply: boolean = true, bypassSummonData?: boolean): boolean {
+    if (this.getAbility(bypassSummonData).id === ability && (!canApply || this.canApplyAbility())) {
       return true;
     }
     if (this.getPassiveAbility().id === ability && this.hasPassive() && (!canApply || this.canApplyAbility(true))) {
@@ -1713,11 +1717,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * whether a pokemon has a particular ability.
    * @param abAttrFlag The {@linkcode AbAttrFlag} to check for
    * @param canApply If false, it doesn't check whether the ability is currently active
-   * @param baseOnly If true, it ignores ability changing effects
+   * @param bypassSummonData If true, it ignores ability changing effects
    * @returns Whether an ability with that attribute is present and active
    */
-  public hasAbilityWithAttr(abAttrFlag: AbAttrFlag, canApply: boolean = true, baseOnly?: boolean): boolean {
-    if ((!canApply || this.canApplyAbility()) && this.getAbility(baseOnly).hasAttrFlag(abAttrFlag)) {
+  public hasAbilityWithAttr(abAttrFlag: AbAttrFlag, canApply: boolean = true, bypassSummonData?: boolean): boolean {
+    if ((!canApply || this.canApplyAbility()) && this.getAbility(bypassSummonData).hasAttrFlag(abAttrFlag)) {
       return true;
     }
     if (
