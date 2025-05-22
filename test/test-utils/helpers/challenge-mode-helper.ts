@@ -32,10 +32,15 @@ export class ChallengeModeHelper extends GameManagerHelper {
 
   /**
    * Runs the Challenge game to the summon phase.
-   * @param gameMode - Optional game mode to set.
+   * @param species - The species to start the battle with. At least one must be specified, up to 6 max.
    * @returns A promise that resolves when the summon phase is reached.
    */
-  async runToSummon(species: SpeciesId, ...extraSpecies: SpeciesId[]) {
+  async runToSummon(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
+    if (overrides.STARTER_SPECIES_OVERRIDE) {
+      throw new Error(
+        "The player species override should not be used for challenge mode tests. Pass the species you want to use to the `runToSummon` or `startBattle` function.",
+      );
+    }
     const starterSpecies = [species, ...extraSpecies];
     await this.game.runToTitle();
 
@@ -59,7 +64,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
 
   /**
    * Transitions to the start of a battle.
-   * @param species - Optional array of species to start the battle with.
+   * @param species - The species to start the battle with. At least one must be specified, up to 6 max.
    * @returns A promise that resolves when the battle is started.
    */
   async startBattle(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {

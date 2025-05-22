@@ -35,6 +35,10 @@ export function holdOn(ms: number) {
 export function generateStarter(scene: BattleScene, species: SpeciesId[]): StarterConfig[] {
   const starters = getTestRunStarters(species);
   const startingLevel = scene.gameMode.getStartingLevel();
+  if (species.length > 6) {
+    console.warn("Don't pass more than 6 starters to `runToSummon` or `startBattle`! Recieved length:", species.length);
+    species.splice(6);
+  }
   for (const starter of starters) {
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
     const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
