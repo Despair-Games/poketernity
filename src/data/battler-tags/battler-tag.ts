@@ -39,7 +39,7 @@ export class BattlerTag {
   /**
    * `true` if this tag can be transferred to another Pokemon
    * via {@link http://bulbapedia.bulbagarden.net/wiki/Baton_Pass_(move) | Baton Pass}.
-   * @default false
+   * @defaultValue `false`
    */
   public isBatonPassable: boolean;
 
