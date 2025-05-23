@@ -43,7 +43,7 @@ describe("Moves - Brick Break", () => {
     { tagType: ArenaTagType.REFLECT, name: "Reflect" },
     { tagType: ArenaTagType.AURORA_VEIL, name: "Aurora Veil" },
   ])("should remove the effects of $name from the target's side of the field", async ({ tagType }) => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side),
@@ -57,7 +57,7 @@ describe("Moves - Brick Break", () => {
   });
 
   it("Reflect should not reduce Brick Break's damage when removed", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, MoveId.NONE, ArenaTagSide.ENEMY);
 
@@ -78,7 +78,7 @@ describe("Moves - Brick Break", () => {
   it("should not remove screens if the move has no effect", async () => {
     game.override.enemySpecies(SpeciesId.DUSKULL);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, MoveId.NONE, ArenaTagSide.ENEMY);
 

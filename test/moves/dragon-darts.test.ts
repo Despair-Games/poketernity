@@ -39,7 +39,7 @@ describe("Moves - Dragon Darts", () => {
   it("should hit the same enemy twice in a single battle", async () => {
     game.override.battleType("single");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -57,7 +57,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit both enemies in a double battle", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
@@ -74,7 +74,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit the user's ally twice if targeted", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const [player1, player2] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -97,7 +97,7 @@ describe("Moves - Dragon Darts", () => {
   it("should hit an opponent twice if the other opponent is type immune", async () => {
     game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.CLEFFA]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.CLEFFA);
 
     const [magikarp, cleffa] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -123,7 +123,7 @@ describe("Moves - Dragon Darts", () => {
   it("should hit an enemy twice if the other enemy is protected", async () => {
     game.override.enemyMoveset([MoveId.PROTECT, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const magikarp = game.scene.getPlayerField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
@@ -149,7 +149,7 @@ describe("Moves - Dragon Darts", () => {
   it("should hit an enemy twice if the other enemy is semi-invulnerable", async () => {
     game.override.enemyMoveset([MoveId.DIG, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const magikarp = game.scene.getPlayerField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
@@ -174,7 +174,7 @@ describe("Moves - Dragon Darts", () => {
     game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]).ability(AbilityId.COMMANDER);
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
-    await game.classicMode.startBattle([SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
+    await game.classicMode.startBattle(SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
     const enemy1 = game.scene.getEnemyField()[0];
@@ -196,7 +196,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an enemy twice if the attack against the other enemy would miss", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const magikarp = game.scene.getPlayerField()[0];
     const [enemy1, enemy2] = game.scene.getEnemyField();
@@ -220,7 +220,7 @@ describe("Moves - Dragon Darts", () => {
   it("should not be protected against by Wide Guard", async () => {
     game.override.enemyMoveset([MoveId.WIDE_GUARD, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
@@ -242,7 +242,7 @@ describe("Moves - Dragon Darts", () => {
   it("should not redirect if the original target has the Center of Attention status", async () => {
     game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.CLEFFA]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.CLEFFA);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemy1 = game.scene.getEnemyField()[0];
@@ -264,7 +264,7 @@ describe("Moves - Dragon Darts", () => {
   it("should not trigger ability effects when redirecting", async () => {
     game.override.enemyAbility(AbilityId.VOLT_ABSORB).moveset([MoveId.DRAGON_DARTS, MoveId.ELECTRIFY]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyField();
     enemyPokemon.forEach((p) => (p.hp = 100));
@@ -285,7 +285,7 @@ describe("Moves - Dragon Darts", () => {
   it("should strike the target's ally on the second hit when the target faints to the first", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP).enemyLevel(1);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
@@ -304,7 +304,7 @@ describe("Moves - Dragon Darts", () => {
   it("should not strike the user on the second hit if the user's ally faints to the first", async () => {
     game.override.startingHeldItems([{ name: "ATTACK_TYPE_BOOSTER", type: ElementalType.DRAGON, count: 99 }]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const [player1, player2] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -321,7 +321,7 @@ describe("Moves - Dragon Darts", () => {
 
   it("should not crash when used in a 1v2 battle", async () => {
     game.override.enemyMoveset(MoveId.DRAGON_DARTS);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.select(MoveId.DRAGON_DARTS);
 

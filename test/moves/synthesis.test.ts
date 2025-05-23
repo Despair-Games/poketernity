@@ -41,7 +41,7 @@ describe("Moves - Synthesis", () => {
   ])("should restore $expRatio percent of the user's HP in $weatherName weather", async ({ weather, expRatio }) => {
     game.override.weather(weather);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
     vi.spyOn(player, "getMaxHp").mockReturnValue(100);

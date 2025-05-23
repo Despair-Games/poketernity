@@ -33,7 +33,7 @@ describe("Moves - Grudge", () => {
   });
 
   it("should reduce the PP of the Pokemon's move to 0 when the user has fainted", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.EMBER);
@@ -47,7 +47,7 @@ describe("Moves - Grudge", () => {
   });
 
   it("should remain in effect until the user's next move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.SPLASH);
@@ -72,7 +72,7 @@ describe("Moves - Grudge", () => {
       .startingLevel(100)
       .enemyAbility(AbilityId.SAND_STREAM)
       .enemySpecies(SpeciesId.RATTATA);
-    await game.classicMode.startBattle([SpeciesId.GEODUDE]);
+    await game.classicMode.startBattle(SpeciesId.GEODUDE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();

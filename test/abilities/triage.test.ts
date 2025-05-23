@@ -41,7 +41,7 @@ describe("Abilities - Triage", () => {
     { moveId: MoveId.BITTER_BLADE, moveName: "Bitter Blade" },
   ])("should increase the priority of HP-recovery moves by 3", async ({ moveId }) => {
     game.override.moveset(moveId);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const moveToUse = allMoves.get(moveId);
@@ -61,7 +61,7 @@ describe("Abilities - Triage", () => {
     { moveId: MoveId.PAIN_SPLIT, moveName: "Pain Split" },
   ])("should not increase the priority of $moveName", async ({ moveId }) => {
     game.override.moveset(moveId);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const moveToUse = allMoves.get(moveId);
@@ -78,7 +78,7 @@ describe("Abilities - Triage", () => {
       .battleType("double")
       .startingLevel(10)
       .enemyMoveset(MoveId.QUICK_ATTACK);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.GOLDEEN]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.GOLDEEN);
 
     const playerPokemon = game.scene.getPlayerField()[0];
 

@@ -28,7 +28,7 @@ describe("Items - Metal Powder", () => {
   });
 
   it("METAL_POWDER held by DITTO", async () => {
-    await game.startBattle([SpeciesId.DITTO]);
+    await game.classicMode.startBattle(SpeciesId.DITTO);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -51,7 +51,7 @@ describe("Items - Metal Powder", () => {
   }, 20000);
 
   it("METAL_POWDER not held by DITTO", async () => {
-    await game.startBattle([SpeciesId.MAROWAK]);
+    await game.classicMode.startBattle(SpeciesId.MAROWAK);
 
     const partyMember = game.scene.getPlayerParty()[0];
 

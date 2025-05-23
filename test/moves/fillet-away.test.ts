@@ -27,7 +27,6 @@ describe("Moves - FILLET AWAY", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.starterSpecies(SpeciesId.MAGIKARP);
     game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
@@ -38,7 +37,7 @@ describe("Moves - FILLET AWAY", () => {
   //Bulbapedia Reference: https://bulbapedia.bulbagarden.net/wiki/fillet_away_(move)
 
   test("raises the user's ATK, SPATK, and SPD stat stages by 2 each, at the cost of 1/2 of its maximum HP", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
@@ -53,7 +52,7 @@ describe("Moves - FILLET AWAY", () => {
   });
 
   test("still takes effect if one or more of the involved stat stages are not at max", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
@@ -72,7 +71,7 @@ describe("Moves - FILLET AWAY", () => {
   });
 
   test("fails if all stat stages involved are at max", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -90,7 +89,7 @@ describe("Moves - FILLET AWAY", () => {
   });
 
   test("fails if the user's health is less than 1/2", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);

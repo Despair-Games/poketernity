@@ -34,7 +34,7 @@ describe("Abilities - Early Bird", () => {
   });
 
   it("reduces Rest's sleep time to 1 turn", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -59,7 +59,7 @@ describe("Abilities - Early Bird", () => {
   });
 
   it("reduces 3-turn sleep to 1 turn", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
     player.trySetStatus(StatusEffect.SLEEP, false, null, 3);
@@ -72,7 +72,7 @@ describe("Abilities - Early Bird", () => {
   });
 
   it("reduces 1-turn sleep to 0 turns", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
     player.trySetStatus(StatusEffect.SLEEP, false, null, 1);

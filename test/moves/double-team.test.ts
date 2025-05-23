@@ -32,7 +32,7 @@ describe("Moves - Double Team", () => {
   });
 
   it("raises the user's EVA stat stage by 1", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const ally = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

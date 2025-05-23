@@ -39,7 +39,7 @@ describe("Abilities - Volt Absorb", () => {
     game.override.enemySpecies(SpeciesId.DUSKULL);
     game.override.enemyAbility(AbilityId.BALL_FETCH);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -58,7 +58,7 @@ describe("Abilities - Volt Absorb", () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP);
     game.override.enemyAbility(AbilityId.VOLT_ABSORB);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -78,7 +78,7 @@ describe("Abilities - Volt Absorb", () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP);
     game.override.enemyAbility(AbilityId.VOLT_ABSORB);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

@@ -38,7 +38,7 @@ describe("Abilities - Rattled", () => {
     { typeName: "Bug", moveId: MoveId.BUG_BITE },
     { typeName: "Ghost", moveId: MoveId.ASTONISH },
   ])("should increase the source's Speed by 1 stage when hit by a $typeName-type move", async ({ moveId }) => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -49,7 +49,7 @@ describe("Abilities - Rattled", () => {
   });
 
   it("should not increase the source's Speed when hit by a Normal-type move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -62,7 +62,7 @@ describe("Abilities - Rattled", () => {
   it("should not increase the source's Speed from moves that have no effect", async () => {
     game.override.enemySpecies(SpeciesId.SNORLAX);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -73,7 +73,7 @@ describe("Abilities - Rattled", () => {
   });
 
   it("should increase the source's Speed by 1 stage for each hit of Beat Up", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS, SpeciesId.GOLDEEN]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS, SpeciesId.GOLDEEN);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -86,7 +86,7 @@ describe("Abilities - Rattled", () => {
   it("should increase the source's Speed after the source is Intimidated", async () => {
     game.override.ability(AbilityId.INTIMIDATE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -105,7 +105,7 @@ describe("Abilities - Rattled", () => {
   it("should not increase the source's Speed if the source's substitute blocks Intimidate", async () => {
     game.override.ability(AbilityId.INTIMIDATE).enemyMoveset(MoveId.SUBSTITUTE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy.getStatStage(Stat.SPD)).toBe(1);

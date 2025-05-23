@@ -33,7 +33,7 @@ describe("Moves - Speed Swap", () => {
   });
 
   it("should swap the user's SPD and the target's SPD stats", async () => {
-    await game.startBattle([SpeciesId.INDEEDEE]);
+    await game.classicMode.startBattle(SpeciesId.INDEEDEE);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

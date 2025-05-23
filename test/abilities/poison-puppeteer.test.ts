@@ -35,7 +35,7 @@ describe("Abilities - Poison Puppeteer", () => {
   });
 
   it("should confuse the target if the user poisons the target directly", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
+    await game.classicMode.startBattle(SpeciesId.MAREANIE);
 
     game.move.use(MoveId.MORTAL_SPIN);
     await game.toEndOfTurn();
@@ -46,7 +46,7 @@ describe("Abilities - Poison Puppeteer", () => {
   });
 
   it("should confuse the target if the user badly poisons the target directly", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
+    await game.classicMode.startBattle(SpeciesId.MAREANIE);
 
     game.move.use(MoveId.TOXIC);
     await game.toEndOfTurn();
@@ -58,7 +58,7 @@ describe("Abilities - Poison Puppeteer", () => {
 
   it("should not confuse the target if the user poisons the target via Toxic Spikes", async () => {
     game.override.startingWave(TUTORIAL_BATTLE_WAVE);
-    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
+    await game.classicMode.startBattle(SpeciesId.MAREANIE);
 
     game.move.use(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -73,7 +73,7 @@ describe("Abilities - Poison Puppeteer", () => {
   });
 
   it("should not confuse the target if the user paralyzes the target", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
+    await game.classicMode.startBattle(SpeciesId.MAREANIE);
 
     game.move.use(MoveId.NUZZLE);
     await game.toEndOfTurn();

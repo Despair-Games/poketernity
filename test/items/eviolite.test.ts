@@ -27,7 +27,7 @@ describe("Items - Eviolite", () => {
   });
 
   it("should provide 50% boost to DEF and SPDEF for unevolved, unfused pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.PICHU]);
+    await game.classicMode.startBattle(SpeciesId.PICHU);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -48,7 +48,7 @@ describe("Items - Eviolite", () => {
   });
 
   it("should not provide a boost for fully evolved, unfused pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.RAICHU]);
+    await game.classicMode.startBattle(SpeciesId.RAICHU);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -78,7 +78,7 @@ describe("Items - Eviolite", () => {
 
     const gMaxablePokemon = [SpeciesId.PIKACHU, SpeciesId.EEVEE, SpeciesId.DURALUDON, SpeciesId.MEOWTH];
 
-    await game.classicMode.startBattle([randItem(gMaxablePokemon)]);
+    await game.classicMode.startBattle(randItem(gMaxablePokemon));
 
     const partyMember = game.scene.getPlayerPokemon()!;
 

@@ -34,7 +34,7 @@ describe("Abilities - Punk Rock", () => {
   });
 
   it("should receive 50% less damage from sound-based moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
