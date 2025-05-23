@@ -1,0 +1,12 @@
+/* CSS only used for development */
+
+#branch-name {
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+  background-color: #333;
+  color: #fff;
+  padding: 0.25rem;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
