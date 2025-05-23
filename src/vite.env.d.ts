@@ -21,6 +21,8 @@ interface ImportMetaEnv {
   readonly VITE_API_DEBUG?: string;
   /** Enables Modifiers debug logging when set to `"1"` */
   readonly VITE_MODIFIERS_DEBUG?: string;
+  /** Contains the name of the current git branch (Only available in development!) */
+  readonly VITE_GIT_BRANCH?: string;
 }
 
 interface ImportMeta {
