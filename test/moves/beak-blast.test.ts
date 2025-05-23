@@ -35,7 +35,7 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should add a charge effect that burns attackers on contact", async () => {
-    await game.startBattle([SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -52,7 +52,7 @@ describe("Moves - Beak Blast", () => {
   it("should still charge and burn opponents if the user is sleeping", async () => {
     game.override.statusEffect(StatusEffect.SLEEP);
 
-    await game.startBattle([SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -69,7 +69,7 @@ describe("Moves - Beak Blast", () => {
   it("should not burn attackers that don't make contact", async () => {
     game.override.enemyMoveset([MoveId.WATER_GUN]);
 
-    await game.startBattle([SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -85,7 +85,7 @@ describe("Moves - Beak Blast", () => {
 
   it("should only hit twice with Parental Bond", async () => {
     game.override.ability(AbilityId.PARENTAL_BOND);
-    await game.classicMode.startBattle([SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -98,7 +98,7 @@ describe("Moves - Beak Blast", () => {
   it("should be blocked by Protect", async () => {
     game.override.enemyMoveset([MoveId.PROTECT]);
 
-    await game.startBattle([SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

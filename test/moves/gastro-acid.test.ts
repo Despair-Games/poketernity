@@ -40,7 +40,7 @@ describe("Moves - Gastro Acid", () => {
      * - player mon 1 should have dealt damage, player mon 2 should have not
      */
 
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.FEEBAS);
 
     game.move.select(MoveId.GASTRO_ACID, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -63,7 +63,7 @@ describe("Moves - Gastro Acid", () => {
   it("fails if used on an enemy with an already-suppressed ability", async () => {
     game.override.battleType("single");
 
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.CORE_ENFORCER);
     // Force player to be slower to enable Core Enforcer to proc its suppression effect

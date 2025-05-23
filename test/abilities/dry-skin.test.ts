@@ -28,12 +28,11 @@ describe("Abilities - Dry Skin", () => {
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(SpeciesId.CHARMANDER)
       .ability(AbilityId.BALL_FETCH)
-      .moveset([MoveId.SUNNY_DAY, MoveId.RAIN_DANCE, MoveId.SPLASH, MoveId.WATER_GUN])
-      .starterSpecies(SpeciesId.CHANDELURE);
+      .moveset([MoveId.SUNNY_DAY, MoveId.RAIN_DANCE, MoveId.SPLASH, MoveId.WATER_GUN]);
   });
 
   it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -50,7 +49,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("during rain, gain 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -70,7 +69,7 @@ describe("Abilities - Dry Skin", () => {
 
   it("opposing fire attacks do 25% more damage", async () => {
     game.override.moveset([MoveId.FLAMETHROWER]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
     const initialHP = 1000;
@@ -93,7 +92,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water attacks heal 1/4 of maximum health and deal no damage", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -107,7 +106,7 @@ describe("Abilities - Dry Skin", () => {
   it("opposing water attacks do not heal if they were protected from", async () => {
     game.override.enemyMoveset([MoveId.PROTECT]);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -121,7 +120,7 @@ describe("Abilities - Dry Skin", () => {
   it("multi-strike water attacks only heal once", async () => {
     game.override.moveset([MoveId.WATER_GUN, MoveId.WATER_SHURIKEN]);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -143,7 +142,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water moves still heal regardless of accuracy check", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

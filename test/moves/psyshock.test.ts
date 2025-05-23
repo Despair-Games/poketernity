@@ -34,7 +34,7 @@ describe("Moves - Psyshock", () => {
   });
 
   it("should deal physical damage", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -45,7 +45,7 @@ describe("Moves - Psyshock", () => {
   });
 
   it("should use the user's Sp. Atk stat stages during damage calculation", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const psyshock = allMoves.get(MoveId.PSYSHOCK);
 
     const player = game.field.getPlayerPokemon();

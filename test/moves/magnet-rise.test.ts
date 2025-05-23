@@ -21,17 +21,16 @@ describe("Moves - Magnet Rise", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.starterSpecies(SpeciesId.MAGNEZONE);
-    game.override.enemySpecies(SpeciesId.RATTATA);
-    game.override.enemyMoveset([MoveId.DRILL_RUN, MoveId.DRILL_RUN, MoveId.DRILL_RUN, MoveId.DRILL_RUN]);
-    game.override.disableCrits();
-    game.override.enemyLevel(1);
-    game.override.moveset([moveToUse, MoveId.SPLASH, MoveId.GRAVITY, MoveId.BATON_PASS]);
+    game.override
+      .battleType("single")
+      .enemySpecies(SpeciesId.RATTATA)
+      .enemyMoveset(MoveId.DRILL_RUN)
+      .disableCrits()
+      .moveset([moveToUse, MoveId.SPLASH, MoveId.GRAVITY, MoveId.BATON_PASS]);
   });
 
   it("MAGNET RISE", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.MAGNEZONE);
 
     const startingHp = game.scene.getPlayerParty()[0].hp;
     game.move.select(moveToUse);
@@ -42,7 +41,7 @@ describe("Moves - Magnet Rise", () => {
   }, 20000);
 
   it("MAGNET RISE - Gravity", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.MAGNEZONE);
 
     const startingHp = game.scene.getPlayerParty()[0].hp;
     game.move.select(moveToUse);

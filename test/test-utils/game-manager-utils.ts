@@ -1,7 +1,6 @@
 import Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
-import { getDailyRunStarters } from "#data/daily-run";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
@@ -33,10 +32,13 @@ export function holdOn(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function generateStarter(scene: BattleScene, species?: SpeciesId[]): StarterConfig[] {
-  const seed = "test";
-  const starters = getTestRunStarters(seed, species);
+export function generateStarter(scene: BattleScene, species: SpeciesId[]): StarterConfig[] {
+  const starters = getTestRunStarters(species);
   const startingLevel = scene.gameMode.getStartingLevel();
+  if (species.length > 6) {
+    console.warn("Don't pass more than 6 starters to `runToSummon` or `startBattle`! Recieved length:", species.length);
+    species.splice(6);
+  }
   for (const starter of starters) {
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
     const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
@@ -62,10 +64,7 @@ export function generateStarter(scene: BattleScene, species?: SpeciesId[]): Star
   return starters;
 }
 
-function getTestRunStarters(seed: string, species?: SpeciesId[]): StarterConfig[] {
-  if (!species) {
-    return getDailyRunStarters(seed);
-  }
+function getTestRunStarters(species: SpeciesId[]): StarterConfig[] {
   const starters: StarterConfig[] = [];
   const startingLevel = getGameMode(GameModes.CLASSIC).getStartingLevel();
 
@@ -109,7 +108,7 @@ export function getMovePosition(scene: BattleScene, pokemonIndex: 0 | 1, moveId:
 /**
  * Useful for populating party, wave index, etc. without having to spin up and run through an entire EncounterPhase
  */
-export function initSceneWithoutEncounterPhase(scene: BattleScene, species?: SpeciesId[]): void {
+export function initSceneWithoutEncounterPhase(scene: BattleScene, species: SpeciesId[]): void {
   const starters = generateStarter(scene, species);
   starters.forEach((starter) => {
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);

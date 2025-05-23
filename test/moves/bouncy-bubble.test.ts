@@ -33,7 +33,7 @@ describe("Moves - Bouncy Bubble", () => {
   });
 
   it("should heal 100% of damage dealt and be single target", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHANSEY]);
+    await game.classicMode.startBattle(SpeciesId.CHANSEY);
     const user = game.scene.getPlayerPokemon()!;
     const enemy1 = game.scene.getEnemyField()[0];
     const enemy2 = game.scene.getEnemyField()[1];

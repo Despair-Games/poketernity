@@ -37,7 +37,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should not affect the opponent if they do not switch", async () => {
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -53,7 +53,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA);
 
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -67,7 +67,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA);
 
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -82,7 +82,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
-    await game.classicMode.startBattle([SpeciesId.MUK, SpeciesId.PIDGEY]);
+    await game.classicMode.startBattle(SpeciesId.MUK, SpeciesId.PIDGEY);
 
     const muk = game.scene.getPlayerPokemon()!;
 
@@ -106,7 +106,7 @@ describe("Moves - Toxic Spikes", () => {
 
   it("shouldn't create multiple layers per use in doubles", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA);
 
     game.move.select(MoveId.TOXIC_SPIKES, 0);
     game.move.select(MoveId.SPLASH, 1);
@@ -121,7 +121,7 @@ describe("Moves - Toxic Spikes", () => {
   it("should persist through reload", async () => {
     game.override.startingWave(1);
 
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA);
 
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -138,7 +138,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should apply even if the target is fainted", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 

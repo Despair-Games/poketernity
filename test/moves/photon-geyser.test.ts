@@ -37,7 +37,7 @@ describe("Moves - Photon Geyser", () => {
   });
 
   it("should be special if the user's Special Attack is higher", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHANDELURE]);
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     game.move.select(MoveId.PHOTON_GEYSER);
     await game.toEndOfTurn();
@@ -46,7 +46,7 @@ describe("Moves - Photon Geyser", () => {
   });
 
   it("should be physical if the user's Attack is higher", async () => {
-    await game.classicMode.startBattle([SpeciesId.KARTANA]);
+    await game.classicMode.startBattle(SpeciesId.KARTANA);
 
     game.move.select(MoveId.PHOTON_GEYSER);
     await game.toEndOfTurn();
@@ -57,7 +57,7 @@ describe("Moves - Photon Geyser", () => {
   it("should ignore abilities' effects when resolving move category", async () => {
     game.override.ability(AbilityId.HUGE_POWER);
 
-    await game.classicMode.startBattle([SpeciesId.MANAPHY]);
+    await game.classicMode.startBattle(SpeciesId.MANAPHY);
 
     const player = game.field.getPlayerPokemon();
     vi.spyOn(player, "stats", "get").mockReturnValue([100, 75, 100, 100, 100, 100]);

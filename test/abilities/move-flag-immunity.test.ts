@@ -55,7 +55,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
   ])("$abilityName should provide immunity against the flagged moves", async ({ ability, moveFlag, enemyMoveId }) => {
     game.override.ability(ability).enemyMoveset(enemyMoveId);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.SPLASH);

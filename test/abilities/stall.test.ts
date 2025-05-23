@@ -37,7 +37,7 @@ describe("Abilities - Stall", () => {
    **/
 
   it("should cause the source to move last in its priority bracket", async () => {
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.select(MoveId.QUICK_ATTACK);
 
@@ -48,7 +48,7 @@ describe("Abilities - Stall", () => {
   });
 
   it("should not cause the source to move after moves in a lower priority bracket", async () => {
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.select(MoveId.TACKLE);
 
@@ -59,7 +59,7 @@ describe("Abilities - Stall", () => {
 
   it("multiple Pokemon with Stall should execute moves in speed order", async () => {
     game.override.ability(AbilityId.STALL);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.select(MoveId.QUICK_ATTACK);
 

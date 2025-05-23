@@ -35,7 +35,7 @@ describe("Abilities - Soundproof", () => {
 
   it("should not provide immunity to the ability holder's own sound moves", async () => {
     game.override.moveset(MoveId.CLANGOROUS_SOUL);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
 
     game.move.select(MoveId.CLANGOROUS_SOUL);

@@ -36,7 +36,7 @@ describe("Primal Weather", () => {
     { weatherName: "Strong Winds", ability: AbilityId.DELTA_STREAM, weatherType: WeatherType.STRONG_WINDS },
   ])("$weatherName can't be overwritten by non-primal weather", async ({ ability, weatherType }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(MoveId.SANDSTORM);
     await game.toEndOfTurn();

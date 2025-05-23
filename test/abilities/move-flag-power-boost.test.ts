@@ -86,7 +86,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
     "$abilityName should boost the damage of specific moves by a factor of $factor",
     async ({ ability, moveId: move, moveFlag, factor }) => {
       game.override.moveset(move).ability(ability);
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
       const playerPokemon = game.field.getPlayerPokemon();
       const moveUsed = allMoves.get(move);
       vi.spyOn(moveUsed, "calculateBattlePower");

@@ -33,7 +33,6 @@ describe("Moves - Copycat", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .starterSpecies(SpeciesId.FEEBAS)
       .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
@@ -41,7 +40,7 @@ describe("Moves - Copycat", () => {
 
   it("should copy the last move successfully executed", async () => {
     game.override.enemyMoveset(MoveId.SUCKER_PUNCH);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SWORDS_DANCE);
     await game.toNextTurn();
@@ -54,7 +53,7 @@ describe("Moves - Copycat", () => {
 
   it("should fail when the last move used is not a valid Copycat move", async () => {
     game.override.enemyMoveset(MoveId.PROTECT); // Protect is not a valid move for Copycat to copy
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SPIKY_SHIELD); // Spiky Shield is not a valid move for Copycat to copy
     await game.toNextTurn();
@@ -67,7 +66,7 @@ describe("Moves - Copycat", () => {
 
   it("should copy the called move when the last move successfully calls another", async () => {
     game.override.moveset([MoveId.SPLASH, MoveId.METRONOME]).enemyMoveset(MoveId.COPYCAT);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.SWORDS_DANCE);
 
     game.move.select(MoveId.METRONOME);
@@ -79,7 +78,7 @@ describe("Moves - Copycat", () => {
 
   it("should apply secondary effects of a move", async () => {
     game.override.enemyMoveset(MoveId.ACID_SPRAY); // Secondary effect lowers SpDef by 2 stages
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.COPYCAT);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);

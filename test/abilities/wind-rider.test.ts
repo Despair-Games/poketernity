@@ -31,7 +31,7 @@ describe("Abilities - Wind Rider", () => {
   });
 
   it("takes no damage from wind moves and its ATK stat stage is raised by 1 when hit by one", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
     const shiftry = game.scene.getEnemyPokemon()!;
 
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
@@ -47,7 +47,7 @@ describe("Abilities - Wind Rider", () => {
   it("ATK stat stage is raised by 1 when Tailwind is present on its side", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP).ability(AbilityId.WIND_RIDER);
 
-    await game.classicMode.startBattle([SpeciesId.SHIFTRY]);
+    await game.classicMode.startBattle(SpeciesId.SHIFTRY);
     const shiftry = game.scene.getPlayerPokemon()!;
 
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
@@ -62,7 +62,7 @@ describe("Abilities - Wind Rider", () => {
   it("does not raise ATK stat stage when Tailwind is present on opposing side", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP).ability(AbilityId.WIND_RIDER);
 
-    await game.classicMode.startBattle([SpeciesId.SHIFTRY]);
+    await game.classicMode.startBattle(SpeciesId.SHIFTRY);
     const magikarp = game.scene.getEnemyPokemon()!;
     const shiftry = game.scene.getPlayerPokemon()!;
 
@@ -80,7 +80,7 @@ describe("Abilities - Wind Rider", () => {
   it("does not raise ATK stat stage when Tailwind is present on opposing side", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP).ability(AbilityId.WIND_RIDER);
 
-    await game.classicMode.startBattle([SpeciesId.SHIFTRY]);
+    await game.classicMode.startBattle(SpeciesId.SHIFTRY);
     const magikarp = game.scene.getEnemyPokemon()!;
     const shiftry = game.scene.getPlayerPokemon()!;
 
@@ -98,7 +98,7 @@ describe("Abilities - Wind Rider", () => {
   it("does not interact with Sandstorm", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP);
 
-    await game.classicMode.startBattle([SpeciesId.SHIFTRY]);
+    await game.classicMode.startBattle(SpeciesId.SHIFTRY);
     const shiftry = game.scene.getPlayerPokemon()!;
 
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);

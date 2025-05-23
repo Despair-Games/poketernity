@@ -35,7 +35,7 @@ describe("Moves - Defog", () => {
   });
 
   it("should lower the target's Evasion stat", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -51,7 +51,7 @@ describe("Moves - Defog", () => {
     { tagType: ArenaTagType.STEALTH_ROCK, name: "Stealth Rock" },
     { tagType: ArenaTagType.STICKY_WEB, name: "Sticky Web" },
   ])("should remove the effects of $name from all sides of the field", async ({ tagType }) => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side, true),
@@ -73,7 +73,7 @@ describe("Moves - Defog", () => {
     { tagType: ArenaTagType.MIST, name: "Mist" },
     { tagType: ArenaTagType.AURORA_VEIL, name: "Aurora Veil" },
   ])("should remove the effects of $name from only the target's side of the field", async ({ tagType }) => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side, true),

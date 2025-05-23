@@ -34,7 +34,7 @@ describe("Abilities - Mega Launcher", () => {
 
   it("should boost the healing of Heal Pulse to 75% of the target's maximum HP", async () => {
     game.override.moveset(MoveId.HEAL_PULSE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
     const enemyHpRecovered = Math.floor(enemyPokemon.hp * 0.75);
