@@ -38,7 +38,7 @@ describe("Abilities - Steadfast", () => {
 
   it("should boost SPD +1 after flinching", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -60,7 +60,7 @@ describe("Abilities - Steadfast", () => {
 
   it("should NOT boost SPD when Pokemon does NOT flinch", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -82,7 +82,7 @@ describe("Abilities - Steadfast", () => {
 
   it("should NOT boost SPD if flinching occured after owner acted", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -115,7 +115,7 @@ describe("Abilities - Steadfast", () => {
   ])(`should NOT boost SPD if flinching is prevented by "$abilityName" ability`, async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.passiveAbility(abilityId);
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -147,7 +147,7 @@ describe("Abilities - Steadfast", () => {
   )("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 

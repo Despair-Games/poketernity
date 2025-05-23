@@ -38,7 +38,7 @@ describe("Flinch", () => {
 
     override.battleType("double").ability(AbilityId.DANCER);
 
-    await classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.SQUIRTLE]);
+    await classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.SQUIRTLE);
 
     const player1 = game.scene.getPlayerPokemon()!;
     move.use(MoveId.SWORDS_DANCE, BattlerIndex.PLAYER);

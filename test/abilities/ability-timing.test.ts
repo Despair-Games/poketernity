@@ -36,7 +36,7 @@ describe("Ability Timing", () => {
 
   it("should trigger after switch check", async () => {
     game.settings.battleStyle = BattleStyle.SWITCH;
-    await game.classicMode.runToSummon([SpeciesId.EEVEE, SpeciesId.FEEBAS]);
+    await game.classicMode.runToSummon(SpeciesId.EEVEE, SpeciesId.FEEBAS);
 
     game.onNextPrompt(
       "CheckSwitchPhase",

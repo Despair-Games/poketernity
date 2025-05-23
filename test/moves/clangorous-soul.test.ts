@@ -26,7 +26,6 @@ describe("Moves - Clangorous Soul", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.starterSpecies(SpeciesId.MAGIKARP);
     game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
@@ -37,7 +36,7 @@ describe("Moves - Clangorous Soul", () => {
   //Bulbapedia Reference: https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move)
 
   it("raises the user's ATK, DEF, SPATK, SPDEF, and SPD stat stages by 1 each at the cost of 1/3 of its maximum HP", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = Math.floor(leadPokemon.getMaxHp() / RATIO);
@@ -54,7 +53,7 @@ describe("Moves - Clangorous Soul", () => {
   });
 
   it("will still take effect if one or more of the involved stat stages are not at max", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = Math.floor(leadPokemon.getMaxHp() / RATIO);
@@ -77,7 +76,7 @@ describe("Moves - Clangorous Soul", () => {
   });
 
   it("fails if all stat stages involved are at max", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -99,7 +98,7 @@ describe("Moves - Clangorous Soul", () => {
   });
 
   it("fails if the user's health is less than 1/3", async () => {
-    await game.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = Math.floor(leadPokemon.getMaxHp() / RATIO);

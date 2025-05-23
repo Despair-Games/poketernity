@@ -34,7 +34,7 @@ describe("STAB", () => {
   });
 
   it("should have NO STAB (1.0) on type mismatch", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -46,7 +46,7 @@ describe("STAB", () => {
   });
 
   it("should have a STAB of 1.5 on type match", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -58,7 +58,7 @@ describe("STAB", () => {
   });
 
   it("should have a 1.5 STAB on tera type not matching default type", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.field.forceTera(playerPokemon, ElementalType.WATER);
@@ -73,7 +73,7 @@ describe("STAB", () => {
   });
 
   it("should have a 2.0 STAB on tera type MATCHING default type", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.field.forceTera(playerPokemon, ElementalType.FIRE);
@@ -89,7 +89,7 @@ describe("STAB", () => {
   });
 
   it("should have a 1.2 STAB on Stellar tera- & move-type", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.field.forceTera(playerPokemon, ElementalType.STELLAR);
@@ -107,7 +107,7 @@ describe("STAB", () => {
   it("combined Pledge moves should have a 1.5 STAB regardless of the user's type", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE);
 
     const [, enemyPkm2] = game.scene.getEnemyField();
     vi.spyOn(enemyPkm2, "calcStabMultiplierForTakingDamage");
@@ -130,7 +130,7 @@ describe("STAB", () => {
   it("should have a 1.5 STAB on pledge moves if tera type DOES NOT match user's type", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.field.forceTera(playerPokemon, ElementalType.WATER);
@@ -158,7 +158,7 @@ describe("STAB", () => {
   it("should have normal 1.5 STAB on combined pledge moves if tera type matches user's type", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE);
 
     const playerPkm = game.field.getPlayerPokemon();
     game.field.forceTera(playerPkm, ElementalType.FIRE);

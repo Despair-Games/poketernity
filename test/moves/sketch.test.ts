@@ -37,7 +37,7 @@ describe("Moves - Sketch", () => {
   });
 
   it("Sketch should not fail even if a previous Sketch failed to retrieve a valid move and ran out of PP", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     // can't use normal moveset override because we need to check moveset changes
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.SKETCH)];
@@ -59,7 +59,7 @@ describe("Moves - Sketch", () => {
 
   it("Sketch should retrieve the most recent valid move from its target history", async () => {
     game.override.enemyStatusEffect(StatusEffect.PARALYSIS);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.GROWL)];
@@ -87,7 +87,7 @@ describe("Moves - Sketch", () => {
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FALSE_SWIPE);
 
     game.override.enemyMoveset([MoveId.METRONOME]);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH)];
 

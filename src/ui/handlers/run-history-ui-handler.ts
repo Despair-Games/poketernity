@@ -96,36 +96,36 @@ export class RunHistoryUiHandler extends MessageUiHandler {
   /**
    * Performs a certain action based on the button pressed by the user
    * @param button
-   * The user can navigate through the runs with Button.UP/Button.DOWN.
-   * Button.ACTION allows the user to access more information about their runs.
-   * Button.CANCEL allows the user to go back.
+   * The user can navigate through the runs with {@linkcode Button.UP}/{@linkcode Button.DOWN}.
+   * {@linkcode Button.ACTION} allows the user to access more information about their runs.
+   * {@linkcode Button.CANCEL} allows the user to go back.
    */
   public override processInput(button: Button): boolean {
-    const ui = this.getUi();
+    const { gameData, ui } = globalScene;
 
     let success = false;
-    const error = false;
 
-    if ([Button.ACTION, Button.CANCEL].includes(button)) {
-      if (button === Button.ACTION) {
-        const cursor = this.cursor + this.scrollCursor;
-        if (this.runs[cursor]) {
-          const runEntry = this.runs[cursor].entryData;
-          globalScene.ui.setOverlayMode<RunInfoUiHandler>(
-            UiMode.RUN_INFO,
-            RunDisplayMode.RUN_HISTORY,
-            globalScene.gameData.parseSessionData(JSON.stringify(runEntry.entry)),
-            runEntry.isVictory,
-          );
-        } else {
-          return false;
-        }
-        success = true;
-        return success;
+    const handleAction = () => {
+      const cursor = this.cursor + this.scrollCursor;
+      if (!this.runs[cursor]) {
+        return false;
       }
+      const runEntry = this.runs[cursor].entryData;
+      ui.setOverlayMode<RunInfoUiHandler>(
+        UiMode.RUN_INFO,
+        RunDisplayMode.RUN_HISTORY,
+        gameData.parseSessionData(JSON.stringify(runEntry.entry)),
+        runEntry.isVictory,
+      );
+      return true;
+    };
+
+    if (button === Button.ACTION) {
+      success = handleAction();
+    } else if (button === Button.CANCEL) {
       this.runSelectCallback = null;
       success = true;
-      globalScene.ui.revertMode();
+      ui.revertMode();
     } else if (this.runs.length > 0) {
       switch (button) {
         case Button.UP:
@@ -155,10 +155,9 @@ export class RunHistoryUiHandler extends MessageUiHandler {
 
     if (success) {
       ui.playSelect();
-    } else if (error) {
-      ui.playError();
     }
-    return success || error;
+
+    return success;
   }
 
   /**

@@ -1,4 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
+import { SpeciesId } from "#enums/species-id";
 import { PokemonExpBoosterModifier } from "#modifier/modifier";
 import { GameManager } from "#test/test-utils/game-manager";
 import { NumberHolder } from "#utils/common-utils";
@@ -29,7 +30,7 @@ describe("EXP Modifier Items", () => {
 
   it("EXP booster items stack multiplicatively", async () => {
     game.override.startingHeldItems([{ name: "LUCKY_EGG", count: 3 }, { name: "GOLDEN_EGG" }]);
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const partyMember = game.scene.getPlayerPokemon()!;
     partyMember.exp = 100;

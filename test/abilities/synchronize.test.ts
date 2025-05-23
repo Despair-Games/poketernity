@@ -33,7 +33,7 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("does not trigger when no status is applied by opponent Pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -43,7 +43,7 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("sets the status of the source pokemon to Paralysis when paralyzed by it", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();
@@ -54,7 +54,7 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("does not trigger on Sleep", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SPORE);
 
@@ -71,7 +71,7 @@ describe("Abilities - Synchronize", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(Array(4).fill(MoveId.TOXIC_SPIKES));
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
@@ -85,7 +85,7 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("shows ability even if it fails to set the status of the opponent Pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.PIKACHU]);
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();

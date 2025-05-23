@@ -35,7 +35,7 @@ describe("Moves - Fusion Flare", () => {
   });
 
   it("should thaw freeze status condition", async () => {
-    await game.startBattle([SpeciesId.RESHIRAM]);
+    await game.classicMode.startBattle(SpeciesId.RESHIRAM);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 

@@ -40,7 +40,7 @@ describe("Abilities - Mycelium Might", () => {
    **/
 
   it("should make the source move last in its priority bracket and ignore protective abilities when using a status move", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
 
@@ -55,7 +55,7 @@ describe("Abilities - Mycelium Might", () => {
 
   it("should still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
 
@@ -68,7 +68,7 @@ describe("Abilities - Mycelium Might", () => {
   });
 
   it("should not affect non-status moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     game.move.select(MoveId.QUICK_ATTACK);
 

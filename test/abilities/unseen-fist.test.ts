@@ -22,12 +22,12 @@ describe("Abilities - Unseen Fist", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.starterSpecies(SpeciesId.URSHIFU);
-    game.override.enemySpecies(SpeciesId.SNORLAX);
-    game.override.enemyMoveset([MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT]);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.override
+      .battleType("single")
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyMoveset(MoveId.PROTECT)
+      .startingLevel(100)
+      .enemyLevel(100);
   });
 
   it("should cause a contact move to ignore Protect", async () =>
@@ -51,7 +51,7 @@ describe("Abilities - Unseen Fist", () => {
     game.override.enemyLevel(1);
     game.override.moveset([MoveId.TACKLE]);
 
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.URSHIFU);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, MoveId.NONE, enemyPokemon.id);
@@ -72,15 +72,11 @@ async function testUnseenFistHitResult(
   shouldSucceed: boolean = true,
 ): Promise<void> {
   game.override.moveset([attackMoveId]);
-  game.override.enemyMoveset([protectMoveId, protectMoveId, protectMoveId, protectMoveId]);
+  game.override.enemyMoveset(protectMoveId);
 
-  await game.startBattle();
+  await game.classicMode.startBattle(SpeciesId.URSHIFU);
 
-  const leadPokemon = game.scene.getPlayerPokemon()!;
-  expect(leadPokemon).not.toBe(undefined);
-
-  const enemyPokemon = game.scene.getEnemyPokemon()!;
-  expect(enemyPokemon).not.toBe(undefined);
+  const enemyPokemon = game.field.getEnemyPokemon();
 
   const enemyStartingHp = enemyPokemon.hp;
 

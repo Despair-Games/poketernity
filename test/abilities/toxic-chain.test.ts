@@ -60,7 +60,7 @@ describe("Abilities - Toxic Chain", () => {
   }
 
   it("should have a 30% chance of badly poisoning the target", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -73,7 +73,7 @@ describe("Abilities - Toxic Chain", () => {
   });
 
   it("should not apply to status moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -82,7 +82,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should still apply to phazing attacks in trainer battles", async () => {
     game.override.startingWave(5);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -92,7 +92,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should apply for each hit of a multi-hit move independently", async () => {
     game.override.moveset(MoveId.DOUBLE_IRON_BASH);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     // Force setting status to fail so that the game tries again multiple times
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -106,7 +106,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should stack with moves that already have a chance to poison", async () => {
     game.override.moveset(MoveId.POISON_FANG);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     // Force setting status to fail so that the game tries again multiple times
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -120,7 +120,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should not apply if the target is already statused", async () => {
     game.override.enemyStatusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -132,7 +132,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should not apply against a target with Shield Dust, unless the attack ignores abilities", async () => {
     game.override.enemyAbility(AbilityId.SHIELD_DUST).moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -143,7 +143,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should not normally apply against a target with Immunity", async () => {
     game.override.enemyAbility(AbilityId.IMMUNITY);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -152,7 +152,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should not normally apply against a target with active Leaf Guard", async () => {
     game.override.enemyAbility(AbilityId.LEAF_GUARD).enemyMoveset(MoveId.SUNNY_DAY);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -161,7 +161,7 @@ describe("Abilities - Toxic Chain", () => {
 
   it("should not apply if the move hits a Substitute", async () => {
     game.override.enemyMoveset(MoveId.SUBSTITUTE).moveset([MoveId.TACKLE, MoveId.DISARMING_VOICE]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -175,7 +175,7 @@ describe("Abilities - Toxic Chain", () => {
   // TODO: Fix this interaction to pass the test
   it.todo("should still apply against a target with Mummy", async () => {
     game.override.enemyAbility(AbilityId.MUMMY);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
