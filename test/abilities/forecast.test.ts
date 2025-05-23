@@ -24,7 +24,7 @@ describe("Abilities - Forecast", () => {
    */
   const testWeatherFormChange = async (game: GameManager, weather: WeatherType, form: number, initialForm?: number) => {
     game.override.weather(weather).starterForms({ [SpeciesId.CASTFORM]: initialForm });
-    await game.classicMode.startBattle([SpeciesId.CASTFORM]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM);
 
     game.move.select(MoveId.SPLASH);
 
@@ -38,7 +38,7 @@ describe("Abilities - Forecast", () => {
    */
   const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
     game.override.starterForms({ [SpeciesId.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
-    await game.classicMode.startBattle([SpeciesId.CASTFORM]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM);
 
     game.move.select(MoveId.SPLASH);
 
@@ -76,14 +76,14 @@ describe("Abilities - Forecast", () => {
           [SpeciesId.GROUDON]: 1,
           [SpeciesId.RAYQUAZA]: 1,
         });
-      await game.classicMode.startBattle([
+      await game.classicMode.startBattle(
         SpeciesId.CASTFORM,
         SpeciesId.FEEBAS,
         SpeciesId.KYOGRE,
         SpeciesId.GROUDON,
         SpeciesId.RAYQUAZA,
         SpeciesId.ALTARIA,
-      ]);
+      );
 
       game.field.mockAbility(game.scene.getPlayerParty()[5], AbilityId.CLOUD_NINE);
 
@@ -184,7 +184,7 @@ describe("Abilities - Forecast", () => {
 
   it("has no effect on Pokémon other than Castform", async () => {
     game.override.enemyAbility(AbilityId.FORECAST).enemySpecies(SpeciesId.SHUCKLE);
-    await game.classicMode.startBattle([SpeciesId.CASTFORM]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM);
 
     game.move.select(MoveId.RAIN_DANCE);
     await game.toEndOfTurn();
@@ -198,7 +198,7 @@ describe("Abilities - Forecast", () => {
       .moveset([MoveId.SKILL_SWAP, MoveId.WORRY_SEED, MoveId.SPLASH])
       .weather(WeatherType.RAIN)
       .battleType("double");
-    await game.startBattle([SpeciesId.CASTFORM, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM, SpeciesId.FEEBAS);
 
     const castform = game.scene.getPlayerField()[0];
 
@@ -226,7 +226,7 @@ describe("Abilities - Forecast", () => {
 
   it("reverts to Normal Form when Forecast is suppressed, changes form to match the weather when it regains it", async () => {
     game.override.enemyMoveset([MoveId.GASTRO_ACID]).weather(WeatherType.RAIN);
-    await game.classicMode.startBattle([SpeciesId.CASTFORM, SpeciesId.PIKACHU]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM, SpeciesId.PIKACHU);
     const castform = game.field.getPlayerPokemon();
 
     expect(castform.formIndex).toBe(RAINY_FORM);
@@ -257,7 +257,7 @@ describe("Abilities - Forecast", () => {
 
   it("does not change Castform's form until after Stealth Rock deals damage", async () => {
     game.override.weather(WeatherType.RAIN).enemyMoveset([MoveId.STEALTH_ROCK]);
-    await game.classicMode.startBattle([SpeciesId.PIKACHU, SpeciesId.CASTFORM]);
+    await game.classicMode.startBattle(SpeciesId.PIKACHU, SpeciesId.CASTFORM);
 
     // First turn - set up stealth rock
     game.move.select(MoveId.SPLASH);
@@ -281,7 +281,7 @@ describe("Abilities - Forecast", () => {
   it("should be in Normal Form after the user is switched out", async () => {
     game.override.weather(WeatherType.RAIN);
 
-    await game.classicMode.startBattle([SpeciesId.CASTFORM, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM, SpeciesId.MAGIKARP);
     const castform = game.field.getPlayerPokemon();
 
     expect(castform.formIndex).toBe(RAINY_FORM);
@@ -295,7 +295,7 @@ describe("Abilities - Forecast", () => {
   it("should revert to Normal Form after primal weather ends", async () => {
     game.override.battleType("double").starterForms({ [SpeciesId.GROUDON]: 1 }); // Primal Groudon
 
-    await game.classicMode.startBattle([SpeciesId.CASTFORM, SpeciesId.GROUDON, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.CASTFORM, SpeciesId.GROUDON, SpeciesId.MAGIKARP);
     const castform = game.field.getPlayerPokemon();
 
     expect(castform.formIndex).toBe(SUNNY_FORM);

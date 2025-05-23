@@ -49,7 +49,7 @@ describe("Moves - Future Sight", () => {
   };
 
   it("should hit 2 turns after use", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -65,7 +65,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("should not be cancelled after the user switches out", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
@@ -81,7 +81,7 @@ describe("Moves - Future Sight", () => {
   it("should inflict damage as a Psychic-type move", async () => {
     game.override.enemySpecies(SpeciesId.UMBREON);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
@@ -97,7 +97,7 @@ describe("Moves - Future Sight", () => {
   it("should inflict damage as a Normal-type move if the user is active with Normalize", async () => {
     game.override.ability(AbilityId.NORMALIZE).enemySpecies(SpeciesId.DUSCLOPS);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
@@ -113,7 +113,7 @@ describe("Moves - Future Sight", () => {
   it("the target should endure inflicted damage from this move with Sturdy", async () => {
     game.override.enemyAbility(AbilityId.STURDY).enemyLevel(1);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
@@ -130,7 +130,7 @@ describe("Moves - Future Sight", () => {
   it("can be used twice in the same turn against different targets", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -149,7 +149,7 @@ describe("Moves - Future Sight", () => {
   it("cannot be used twice in the same turn against the same target", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -165,7 +165,7 @@ describe("Moves - Future Sight", () => {
   it("can be used alongside Doom Desire against different targets", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -184,7 +184,7 @@ describe("Moves - Future Sight", () => {
   it("should redirect damage if no Pokemon is active in the original targeted index", async () => {
     game.override.battleType("double").enemyLevel(1).moveset([MoveId.FUTURE_SIGHT, MoveId.SPLASH, MoveId.HEADBUTT]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -209,7 +209,7 @@ describe("Moves - Future Sight", () => {
 
   it("doesn't crash if the user leaves the field and the hit triggers Destiny Bond", async () => {
     game.override.enemyMoveset([MoveId.DESTINY_BOND, MoveId.SPLASH]).enemyAbility(AbilityId.BALL_FETCH).enemyLevel(1);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
@@ -232,7 +232,7 @@ describe("Moves - Future Sight", () => {
 
   it("doesn't crash if the user leaves the field and the hit triggers Innards Out", async () => {
     game.override.enemyAbility(AbilityId.INNARDS_OUT).enemyLevel(1);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
@@ -257,7 +257,7 @@ describe("Moves - Future Sight", () => {
   it.todo("should not apply the user's held items when dealing damage if the user is inactive");
 
   it.todo("should invoke the move's first phase when called by Metronome", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const randomMoveAttr = allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0];
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FUTURE_SIGHT);

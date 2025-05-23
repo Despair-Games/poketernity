@@ -36,7 +36,7 @@ describe("Moves - Moongeist Beam", () => {
 
   // Also covers Photon Geyser and Sunsteel Strike
   it("should ignore enemy abilities", async () => {
-    await game.classicMode.startBattle([SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.MILOTIC);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -48,7 +48,7 @@ describe("Moves - Moongeist Beam", () => {
 
   // Also covers Photon Geyser and Sunsteel Strike
   it("should not ignore enemy abilities when called by another move, such as metronome", async () => {
-    await game.classicMode.startBattle([SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.MILOTIC);
     vi.spyOn(allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0], "getRandomMove").mockReturnValue(
       MoveId.MOONGEIST_BEAM,
     );

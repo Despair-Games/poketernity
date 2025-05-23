@@ -30,7 +30,6 @@ describe("Moves - Tidy Up", () => {
       .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.STURDY)
       .enemyMoveset(MoveId.SPLASH)
-      .starterSpecies(SpeciesId.FEEBAS)
       .ability(AbilityId.STURDY)
       .moveset([MoveId.TIDY_UP])
       .startingLevel(50);
@@ -44,7 +43,7 @@ describe("Moves - Tidy Up", () => {
     { hazardName: "Sharp Steel", moveId: MoveId.G_MAX_STEELSURGE, tagType: ArenaTagType.SHARP_STEEL },
   ])("clears $hazardName", async ({ moveId, tagType }) => {
     game.override.enemyMoveset(moveId);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(moveId);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -59,7 +58,7 @@ describe("Moves - Tidy Up", () => {
     game.override.moveset([MoveId.SUBSTITUTE, MoveId.TIDY_UP]);
     game.override.enemyMoveset(MoveId.SUBSTITUTE);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SUBSTITUTE);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -74,7 +73,7 @@ describe("Moves - Tidy Up", () => {
   });
 
   it("user's stats are raised with no traps set", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

@@ -35,7 +35,7 @@ describe("Abilities - Moxie", () => {
 
   it("should raise ATK stat stage by 1 when winning a battle", async () => {
     const moveToUse = MoveId.AERIAL_ACE;
-    await game.startBattle([SpeciesId.MIGHTYENA, SpeciesId.MIGHTYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.MIGHTYENA);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -53,7 +53,7 @@ describe("Abilities - Moxie", () => {
     async () => {
       game.override.battleType("double");
       const moveToUse = MoveId.AERIAL_ACE;
-      await game.startBattle([SpeciesId.MIGHTYENA, SpeciesId.MIGHTYENA]);
+      await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.MIGHTYENA);
 
       const [firstPokemon, secondPokemon] = game.scene.getPlayerField();
 

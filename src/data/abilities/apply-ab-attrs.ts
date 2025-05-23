@@ -98,7 +98,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
       const result = attr.apply(pokemon, simulated, ...args);
 
       if (result && !simulated) {
-        if (pokemon.summonData && !pokemon.summonData.abilitiesApplied.includes(ability.id)) {
+        if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
           pokemon.summonData.abilitiesApplied.push(ability.id);
         }
 

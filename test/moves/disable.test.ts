@@ -30,12 +30,11 @@ describe("Moves - Disable", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.DISABLE, MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH)
-      .starterSpecies(SpeciesId.PIKACHU)
       .enemySpecies(SpeciesId.SHUCKLE);
   });
 
   it("restricts moves", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
@@ -48,7 +47,7 @@ describe("Moves - Disable", () => {
   });
 
   it("fails if enemy has no move history", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const playerMon = game.scene.getPlayerPokemon()!;
     const enemyMon = game.scene.getEnemyPokemon()!;
@@ -67,7 +66,7 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("causes STRUGGLE if all usable moves are disabled", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
@@ -86,7 +85,7 @@ describe("Moves - Disable", () => {
 
   it("cannot disable STRUGGLE", async () => {
     game.override.enemyMoveset([MoveId.STRUGGLE]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const playerMon = game.scene.getPlayerPokemon()!;
     const enemyMon = game.scene.getEnemyPokemon()!;
@@ -101,7 +100,7 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("interrupts target's move when target moves after", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
@@ -126,7 +125,7 @@ describe("Moves - Disable", () => {
 
   it("disables NATURE POWER, not the move invoked by it", async () => {
     game.override.enemyMoveset([MoveId.NATURE_POWER]);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 

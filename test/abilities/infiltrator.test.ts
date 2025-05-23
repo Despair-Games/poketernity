@@ -45,7 +45,7 @@ describe("Abilities - Infiltrator", () => {
     { effectName: "Reflect", tagType: ArenaTagType.REFLECT, moveId: MoveId.TACKLE },
     { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, moveId: MoveId.TACKLE },
   ])("should bypass the target's $effectName", async ({ tagType, moveId }) => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -73,7 +73,7 @@ describe("Abilities - Infiltrator", () => {
   });
 
   it("should bypass the target's Safeguard", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -88,7 +88,7 @@ describe("Abilities - Infiltrator", () => {
   });
 
   it("should bypass the target's Mist", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -103,7 +103,7 @@ describe("Abilities - Infiltrator", () => {
   });
 
   it("should bypass the target's Substitute", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

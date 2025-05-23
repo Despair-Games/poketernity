@@ -57,7 +57,7 @@ describe("Abilities - Solar Power", () => {
 
     beforeEach(async () => {
       game.override.weather(weatherType);
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
       playerPkm = game.field.getPlayerPokemon();
       expect(game).toHaveWeather(weatherType);
     });
@@ -91,7 +91,7 @@ describe("Abilities - Solar Power", () => {
     const { override, classicMode, field, move } = game;
     override.newWeatherDuration(2);
 
-    await classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPkm = field.getPlayerPokemon();
     const expectedDamages = [playerPkm.getMaxHp() / 8, playerPkm.getMaxHp() / 4];
@@ -111,7 +111,7 @@ describe("Abilities - Solar Power", () => {
   it("should NOT deal 1/8 of max-HP damage to the owner if Harsh Sun ends in the same turn", async () => {
     const { override, classicMode, phaseInterceptor, field, move } = game;
     override.enemyAbility(AbilityId.DESOLATE_LAND);
-    await classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPkm = field.getPlayerPokemon();
     const enemyPkm = field.getEnemyPokemon();
@@ -133,7 +133,7 @@ describe("Abilities - Solar Power", () => {
 
     beforeEach(async () => {
       game.override.weather(weatherType);
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
       playerPkm = game.field.getPlayerPokemon();
       expect(game).toHaveWeather(weatherType);
     });

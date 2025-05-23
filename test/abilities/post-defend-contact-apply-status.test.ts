@@ -39,7 +39,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     { abilityName: "Static", ability: AbilityId.STATIC, status: StatusEffect.PARALYSIS },
   ])("$abilityName should status an attacking, applicable Pokemon if contact is made", async ({ ability, status }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
       pokemon!
@@ -63,7 +63,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     { abilityName: "Flame Body", ability: AbilityId.FLAME_BODY, status: StatusEffect.BURN },
   ])("$abilityName should not activate from a non-contact attack", async ({ ability }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
       pokemon!
@@ -83,7 +83,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
 
   it("Static can paralyze a Ground-type Pokemon", async () => {
     game.override.ability(AbilityId.STATIC).enemySpecies(SpeciesId.DIGLETT);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(
       pokemon!

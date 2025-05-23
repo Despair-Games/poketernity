@@ -37,7 +37,7 @@ describe.each([
 
   it("should double the attack stat of the ability-holder", async () => {
     game.override.moveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
@@ -50,7 +50,7 @@ describe.each([
 
   it("should double the attack stat when using Body Press", async () => {
     game.override.ability(ability).moveset(MoveId.BODY_PRESS);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
@@ -64,7 +64,7 @@ describe.each([
 
   it("should not double the attack stat when calculating confusion damage", async () => {
     game.override.ability(ability).moveset(MoveId.SPLASH).enemyMoveset(MoveId.SUPERSONIC).statusActivation(true);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 

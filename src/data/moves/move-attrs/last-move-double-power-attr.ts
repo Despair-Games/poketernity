@@ -23,7 +23,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   }
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    const target = user.getOpponent(0);
+    const [target] = user.getOpponents();
     const pokemonActed: Pokemon[] = [];
 
     if (target?.turnData.acted) {

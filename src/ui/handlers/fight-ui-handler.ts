@@ -139,7 +139,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     messageHandler.movesWindowContainer.setVisible(true);
 
     const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
-    if (pokemon.summonData?.turnCount > 1) {
+    if (pokemon.summonData.turnCount > 1) {
       this.setCursor(this.getCursor());
     } else {
       this.setCursor(0);

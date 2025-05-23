@@ -37,7 +37,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
     { abilityName: "Shell Armor", ability: AbilityId.SHELL_ARMOR },
   ])("$abilityName prevents all critical hits", async ({ ability }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SPLASH);

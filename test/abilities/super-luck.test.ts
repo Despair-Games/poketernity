@@ -33,7 +33,7 @@ describe("Abilities - Super Luck", () => {
   });
 
   it("should boost the ability holder's critical stage by 1", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
 

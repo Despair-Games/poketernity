@@ -36,7 +36,7 @@ describe("Moves - Rage", () => {
   });
 
   it("Rage should increase the user's attack by 1 for each time they are hit", async () => {
-    await game.classicMode.startBattle([SpeciesId.BLISSEY]);
+    await game.classicMode.startBattle(SpeciesId.BLISSEY);
     const playerPokemon = game.field.getPlayerPokemon();
     playerPokemon.setStatStage(Stat.DEF, 6); // Prevents Blissey from fainting due to its low Defense stat
 
