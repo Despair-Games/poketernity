@@ -250,7 +250,7 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveFainted();
   });
 
-  it.each(sacrificialMoves)("should not proc on sacrificial '%s' move", async (_enemyMoveName, enemyMoveId) => {
+  it.each(sacrificialMoves)("should not proc on sacrificial/self-KO '%s' move", async (_enemyMoveName, enemyMoveId) => {
     const { classicMode, field, move } = game;
     await classicMode.startBattle([SpeciesId.LUCARIO]);
 
