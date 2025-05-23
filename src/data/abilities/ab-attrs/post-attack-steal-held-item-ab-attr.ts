@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
 import i18next from "i18next";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
@@ -16,7 +16,7 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
     this.stealCondition = stealCondition;
   }
 
-  override applyPostAttack(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move): boolean {
+  public override applyPostAttack(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move): boolean {
     if (!simulated && (!this.stealCondition || this.stealCondition(pokemon, defender, move))) {
       const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
       if (heldItems.length) {

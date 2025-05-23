@@ -11,7 +11,7 @@ export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
     this._flags.add(AbAttrFlag.FIELD_PRIORITY_MOVE_IMMUNITY);
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     attacker: Pokemon,

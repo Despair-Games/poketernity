@@ -1,11 +1,11 @@
 import type { Pokemon } from "#field/pokemon";
+import { CounterAttackCondition } from "#moves/counter-attack-condition";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
-import type { MoveFilter } from "#types/MoveFilter";
-import type { AttackMoveResult } from "#types/AttackMoveResult";
-import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 import type { MoveCondition } from "#moves/move-condition";
-import { CounterAttackCondition } from "#moves/counter-attack-condition";
+import type { AttackMoveResult } from "#types/attack-move-result";
+import type { MoveFilter } from "#types/MoveFilter";
+import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Attribute to modify damage based on the damage received by the user from attacks

@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { InputsController } from "#app/inputs-controller";
 import { GAME_SPEEDS } from "#constants/app-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
 import { AudioSettingsUiHandler } from "#ui/audio-settings-ui-handler";
@@ -35,7 +35,7 @@ export class UiInputs {
   detectInputMethod(evt): void {
     if (evt.controller_type === "keyboard") {
       //if the touch property is present and defined, then this is a simulated keyboard event from the touch screen
-      if (evt.hasOwnProperty("isTouch") && evt.isTouch) {
+      if (Object.hasOwn(evt, "isTouch") && evt.isTouch) {
         globalScene.inputMethod = "touch";
       } else {
         globalScene.inputMethod = "keyboard";
@@ -52,7 +52,7 @@ export class UiInputs {
         this.detectInputMethod(event);
 
         const actions = this.getActionsKeyDown();
-        if (!actions.hasOwnProperty(event.button)) {
+        if (!Object.hasOwn(actions, event.button)) {
           return;
         }
         actions[event.button]();
@@ -64,7 +64,7 @@ export class UiInputs {
       "input_up",
       (event) => {
         const actions = this.getActionsKeyUp();
-        if (!actions.hasOwnProperty(event.button)) {
+        if (!Object.hasOwn(actions, event.button)) {
           return;
         }
         actions[event.button]();

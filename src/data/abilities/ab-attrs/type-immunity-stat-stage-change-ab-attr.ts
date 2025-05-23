@@ -5,7 +5,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
@@ -19,7 +19,7 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     this.stages = stages;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     attacker: Pokemon,

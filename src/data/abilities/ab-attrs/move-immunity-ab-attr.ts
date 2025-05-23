@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PreDefendAbAttrCondition } from "#types/PreDefendAbAttrCondition";
+import type { PreDefendAbAttrCondition } from "#types/pre-defend-ab-attr-condition";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -17,7 +17,7 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
     this.immuneCondition = immuneCondition;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     attacker: Pokemon,
@@ -32,7 +32,7 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:moveImmunity", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
   }
 }

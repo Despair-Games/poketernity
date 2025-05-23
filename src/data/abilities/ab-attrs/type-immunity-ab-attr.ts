@@ -4,7 +4,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 /**
@@ -34,7 +34,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
    * @param cancelled N/A
    * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     attacker: Pokemon,
@@ -57,7 +57,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     return this.immuneType;
   }
 
-  override getCondition(): AbAttrCondition | null {
+  public override getCondition(): AbAttrCondition | null {
     return this.condition;
   }
 }

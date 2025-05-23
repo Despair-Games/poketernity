@@ -70,7 +70,9 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 
 ## 🪧 To Do
 
-Check out [Github Issues](https://github.com/despair-games/poketernity/issues) to see how can you help us!
+- Check out our [Project Board](https://github.com/orgs/Despair-Games/projects/3/views/3) to see which issues are ready to be worked on!
+- Check out [Github Issues](https://github.com/despair-games/poketernity/issues) to see how can you help us!
+- Check out our [Checkup Board](https://github.com/orgs/Despair-Games/projects/17/views/1) to see which abilities/moves etc. need to checked and covered!
 
 # 📝 Credits
 

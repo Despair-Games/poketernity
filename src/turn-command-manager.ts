@@ -31,8 +31,8 @@ import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { TerastallizationPhase } from "#phases/terastallization-phase";
 import { TurnEndPhase } from "#phases/turn-end-phase";
 import { WeatherEffectPhase } from "#phases/weather-effect-phase";
-import type { TurnCommandFilter } from "#types/TurnCommandFilter";
-import type { TurnMove } from "#types/TurnMove";
+import type { TurnCommandFilter } from "#types/turn-command-filter";
+import type { TurnMove } from "#types/turn-move";
 import { BooleanHolder, isNil } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 

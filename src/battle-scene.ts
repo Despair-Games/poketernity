@@ -133,12 +133,12 @@ import { settings } from "#system/settings-manager";
 import type TrainerData from "#system/trainer-data";
 import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { AbstractConstructor } from "#types/AbstractConstructor";
-import type { HeldModifierConfig } from "#types/HeldModifierConfig";
+import type { AbstractConstructor } from "#types/abstract-constructor";
+import type { HeldModifierConfig } from "#types/held-modifier-config";
 import type { Localizable } from "#types/locales";
-import type { ModifierPredicate } from "#types/ModifierPredicate";
-import type { PokemonSpeciesFilter } from "#types/PokemonSpeciesFilter";
-import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/Settings";
+import type { ModifierPredicate } from "#types/modifier-predicate";
+import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
+import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
 import { AbilityBar } from "#ui/ability-bar";
 import { ArenaFlyout } from "#ui/arena-flyout";
 import { CandyBar } from "#ui/candy-bar";
@@ -150,7 +150,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, clamp, fixedNumber, getEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, fixedNumber, getTSEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
@@ -936,6 +936,28 @@ export default class BattleScene extends SceneBase {
     if (postProcess) {
       postProcess(pokemon);
     }
+
+    if (Overrides.IVS_OVERRIDE === null) {
+      // do nothing
+    } else if (Array.isArray(Overrides.IVS_OVERRIDE)) {
+      if (Overrides.IVS_OVERRIDE.length !== 6) {
+        throw new Error("The Player IVs override must be an array of length 6 or a number!");
+      }
+      if (Overrides.IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+        throw new Error(`All IVs in the player IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = Overrides.IVS_OVERRIDE;
+    } else {
+      if (!isBetween(Overrides.IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+        throw new Error(`The Player IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = new Array(6).fill(Overrides.IVS_OVERRIDE);
+    }
+
+    if (Overrides.NATURE_OVERRIDE !== null) {
+      pokemon.nature = Overrides.NATURE_OVERRIDE;
+    }
+
     pokemon.init();
     return pokemon;
   }
@@ -977,14 +999,25 @@ export default class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    let ENEMY_IVS_OVERRIDE_VALIDATED: number[] = [];
-    if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
-      ENEMY_IVS_OVERRIDE_VALIDATED = Overrides.ENEMY_IVS_OVERRIDE;
-    } else if (typeof Overrides.ENEMY_IVS_OVERRIDE === "number") {
-      ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
+    if (Overrides.ENEMY_IVS_OVERRIDE === null) {
+      // do nothing
+    } else if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
+      if (Overrides.ENEMY_IVS_OVERRIDE.length !== 6) {
+        throw new Error("The Enemy IVs override must be an array of length 6 or a number!");
+      }
+      if (Overrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+        throw new Error(`All IVs in the enemy IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = Overrides.ENEMY_IVS_OVERRIDE;
+    } else {
+      if (!isBetween(Overrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+        throw new Error(`The Enemy IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      pokemon.ivs = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
-    if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => clamp(iv, IV_MIN, IV_MAX));
+
+    if (Overrides.ENEMY_NATURE_OVERRIDE !== null) {
+      pokemon.nature = Overrides.ENEMY_NATURE_OVERRIDE;
     }
 
     pokemon.init();
@@ -1084,7 +1117,7 @@ export default class BattleScene extends SceneBase {
     this.lockModifierTiers = false;
 
     this.pokeballCounts = Object.fromEntries(
-      getEnumValues(PokeballType)
+      getTSEnumValues(PokeballType)
         .filter((p) => p <= PokeballType.MASTER_BALL)
         .map((t) => [t, 0]),
     );
@@ -1156,7 +1189,7 @@ export default class BattleScene extends SceneBase {
         ...allSpecies,
         ...allMoves.values(),
         ...allAbilities,
-        ...getEnumValues(ModifierPoolType)
+        ...getTSEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
           .flatMap((mp) =>
             Object.values(mp)
@@ -1997,7 +2030,7 @@ export default class BattleScene extends SceneBase {
               .filter(speciesFilter)
               .map((s) => {
                 if (!filterAllEvolutions) {
-                  while (pokemonPreEvolutions.hasOwnProperty(s.speciesId)) {
+                  while (Object.hasOwn(pokemonPreEvolutions, s.speciesId)) {
                     s = getPokemonSpecies(pokemonPreEvolutions[s.speciesId]);
                   }
                 }
@@ -2554,7 +2587,7 @@ export default class BattleScene extends SceneBase {
     delayed: boolean = false,
     modal: boolean = false,
   ): boolean {
-    if (pokemonFormChanges.hasOwnProperty(pokemon.species.speciesId)) {
+    if (Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)) {
       // in case this is NECROZMA, determine which forms this
       const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(
         (fc) => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon),
@@ -2623,12 +2656,12 @@ export default class BattleScene extends SceneBase {
 
   validateAchv(achv: Achievement, ...args: unknown[]): boolean {
     if (
-      (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
+      (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
     ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
       this.ui.achvBar.showAchv(achv);
-      if (vouchers.hasOwnProperty(achv.id)) {
+      if (Object.hasOwn(vouchers, achv.id)) {
         this.validateVoucher(vouchers[achv.id]);
       }
       return true;
@@ -2638,7 +2671,7 @@ export default class BattleScene extends SceneBase {
   }
 
   validateVoucher(voucher: Voucher, ...args: unknown[]): boolean {
-    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(...args)) {
+    if (!Object.hasOwn(this.gameData.voucherUnlocks, voucher.id) && voucher.validate(...args)) {
       this.gameData.voucherUnlocks[voucher.id] = new Date().getTime();
       this.ui.achvBar.showAchv(voucher);
       this.gameData.voucherCounts[voucher.voucherType]++;
@@ -2970,7 +3003,7 @@ export default class BattleScene extends SceneBase {
     let encounter: MysteryEncounter | null;
     if (
       !isNil(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
-      && allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      && Object.hasOwn(allMysteryEncounters, Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
       encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
       if (canBypass) {

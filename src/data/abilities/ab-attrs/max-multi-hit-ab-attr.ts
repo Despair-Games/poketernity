@@ -9,7 +9,7 @@ export class MaxMultiHitAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.MAX_MULTI_HIT);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, hitValue: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, hitValue: NumberHolder): boolean {
     hitValue.value = 0;
 
     return true;

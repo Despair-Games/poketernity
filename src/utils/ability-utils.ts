@@ -7,8 +7,8 @@ import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
 
 /**
  * @returns An array of Pokemon with weather-based forms

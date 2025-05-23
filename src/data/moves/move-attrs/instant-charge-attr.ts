@@ -1,7 +1,7 @@
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
-import type { UserMoveConditionFunc } from "#types/UserMoveConditionFunc";
+import type { UserMoveConditionFunc } from "#types/user-move-condition-func";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**

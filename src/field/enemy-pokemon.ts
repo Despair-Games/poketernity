@@ -34,7 +34,7 @@ import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { getMoveTargets, type Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type PokemonData from "#system/pokemon-data";
-import type { TurnMove } from "#types/TurnMove";
+import type { TurnMove } from "#types/turn-move";
 import { EnemyBattleInfo } from "#ui/battle-info";
 import { BooleanHolder, isBetween, isNil, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";

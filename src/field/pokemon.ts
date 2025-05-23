@@ -44,6 +44,7 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
@@ -60,37 +61,35 @@ import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-ta
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
-import Overrides from "#app/overrides";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
+  EXPOSED_TAG_TYPES,
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
-  EXPOSED_TAG_TYPES,
 } from "#constants/battler-tag-constants";
 import {
-  MIN_STAT_STAGE,
-  MAX_STAT_STAGE,
-  DYNAMAX_DAMAGE_TAKEN_FACTOR,
-  DEFAULT_MIN_SLEEP_DURATION,
   DEFAULT_MAX_SLEEP_DURATION,
+  DEFAULT_MIN_SLEEP_DURATION,
+  DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  MAX_STAT_STAGE,
+  MIN_STAT_STAGE,
+  NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
-import { allMoves, allAbilities } from "#data/data-lists";
+import { allAbilities, allMoves } from "#data/data-lists";
 import { DexAttr } from "#data/dex-attributes";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
 import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
-import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#data/pokemon-evolutions";
+import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
-import { type LevelMoves, EVOLVE_MOVE, RELEARN_MOVE } from "#data/pokemon-level-moves";
+import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_VARIANT_CHANCE, SHINY_EPIC_CHANCE } from "#data/rates";
-import { getNonVolatileStatusEffects } from "#data/status-effect";
-import { tmSpecies, tmPoolTiers } from "#data/tms";
 import { getTypeRgb, type TypeDamageMultiplier, getTypeDamageMultiplier } from "#data/type";
 import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -118,12 +117,12 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import {
-  type PermanentStat,
+  BATTLE_STATS,
+  PERMANENT_STATS,
+  Stat,
   type BattleStat,
   type EffectiveStat,
-  Stat,
-  PERMANENT_STATS,
-  BATTLE_STATS,
+  type PermanentStat,
 } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -139,18 +138,18 @@ import { SpeciesFormChangeStatusEffectTrigger } from "#form-change-triggers/spec
 import { initMoveAnim } from "#init/init-move-anim";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import {
-  HiddenAbilityRateBoosterModifier,
-  type PokemonHeldItemModifier,
-  PokemonIncrementingStatModifier,
-  TempCritBoosterModifier,
-  StatBoosterModifier,
-  PokemonNatureWeightModifier,
-  PokemonBaseStatTotalModifier,
-  PokemonBaseStatFlatModifier,
   BaseStatModifier,
+  HiddenAbilityRateBoosterModifier,
+  PokemonBaseStatFlatModifier,
+  PokemonBaseStatTotalModifier,
+  PokemonIncrementingStatModifier,
+  PokemonNatureWeightModifier,
   ShinyRateBoosterModifier,
-  TempStatStageBoosterModifier,
+  StatBoosterModifier,
   SurviveDamageModifier,
+  TempCritBoosterModifier,
+  TempStatStageBoosterModifier,
+  type PokemonHeldItemModifier,
 } from "#modifier/modifier";
 import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
@@ -162,7 +161,7 @@ import { HitsTagAttr } from "#moves/hits-tag-attr";
 import { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages-attr";
 import { IgnoreWeatherTypeDebuffAttr } from "#moves/ignore-weather-type-debuff-attr";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
-import { type Move, AttackMove, getMoveTargets } from "#moves/move";
+import { AttackMove, getMoveTargets, type Move } from "#moves/move";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import { RechargeAttr } from "#moves/recharge-attr";
@@ -181,30 +180,31 @@ import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import type { AbilityFilterOptions } from "#types/AbilityFilterOptions";
-import type { DamageCalculationResult } from "#types/DamageCalculationResult";
-import type { DamageFunctionOptions } from "#types/DamageFunctionOptions";
+import type { AbilityFilterOptions } from "#types/ability-filter-options";
+import type { DamageCalculationResult } from "#types/damage-calculation-result";
+import type { DamageFunctionOptions } from "#types/damage-function-options";
 import type { nil } from "#types/nil";
-import type { PokemonTurnData } from "#types/PokemonTurnData";
-import type { PokemonWaveData } from "#types/PokemonWaveData";
-import type { Status } from "#types/Status";
-import type { TurnMove } from "#types/TurnMove";
+import type { PokemonTurnData } from "#types/pokemon-turn-data";
+import type { PokemonWaveData } from "#types/pokemon-wave-data";
+import type { Status } from "#types/status";
+import type { TurnMove } from "#types/turn-move";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
-  NumberHolder,
   BooleanHolder,
-  clamp,
-  getEnumValues,
-  coerceArray,
-  isNil,
   calcAccuracyMultiplier,
-  toDmgValue,
+  clamp,
+  coerceArray,
   fixedNumber,
+  fixedNumber,
+  getEnumValues,
+  isNil,
+  NumberHolder,
+  toDmgValue,
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
-import { getIvsFromId, getPokemonSpeciesForm, getPokemonSpecies } from "#utils/pokemon-utils";
+import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -1288,7 +1288,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   generateNature(naturePool?: Nature[]): void {
     if (naturePool === undefined) {
-      naturePool = getEnumValues(Nature);
+      naturePool = getTSEnumValues(Nature);
     }
     const nature = naturePool[randSeedInt(naturePool.length)];
     this.setNature(nature);
@@ -1663,7 +1663,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+    while (Object.hasOwn(pokemonPreEvolutions, starterSpeciesId)) {
       starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
@@ -2298,7 +2298,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getEvolution(): SpeciesFormEvolution | null {
-    if (pokemonEvolutions.hasOwnProperty(this.species.speciesId)) {
+    if (Object.hasOwn(pokemonEvolutions, this.species.speciesId)) {
       const evolutions = pokemonEvolutions[this.species.speciesId];
       for (const e of evolutions) {
         if (!e.item && this.level >= e.level && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)) {
@@ -2531,7 +2531,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Checks if there is no variant data for both the index or index with form
     if (
       !this.shiny
-      || (!variantData.hasOwnProperty(variantDataIndex) && !variantData.hasOwnProperty(this.species.speciesId))
+      || (!Object.hasOwn(variantData, variantDataIndex) && !Object.hasOwn(variantData, this.species.speciesId))
     ) {
       return 0;
     }
@@ -4090,7 +4090,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the Pokemon has any of the non-volatile status effects | `false` if not
    */
   hasNonVolatileStatusEffect(includeConfusion: boolean = false, ignoreMockAbility: boolean = false): boolean {
-    return this.hasStatusEffect(getNonVolatileStatusEffects(), includeConfusion, ignoreMockAbility);
+    return this.hasStatusEffect([...NON_VOLATILE_STATUS_EFFECTS], includeConfusion, ignoreMockAbility);
   }
 
   /**

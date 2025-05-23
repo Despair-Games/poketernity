@@ -1,7 +1,7 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/PokemonAttackCondition";
+import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
@@ -22,7 +22,7 @@ export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
     this.powerMultiplier = powerMultiplier;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,

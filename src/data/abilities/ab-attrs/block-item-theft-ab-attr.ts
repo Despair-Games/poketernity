@@ -11,12 +11,12 @@ export class BlockItemTheftAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.BLOCK_ITEM_THEFT);
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
     return true;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]) {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string) {
     return i18next.t("abilityTriggers:blockItemTheft", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

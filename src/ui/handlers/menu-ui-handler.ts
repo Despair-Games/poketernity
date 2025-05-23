@@ -5,7 +5,7 @@ import { handleTutorial } from "#app/tutorial";
 import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { GameDataType } from "#enums/game-data-type";
 import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
@@ -31,7 +31,7 @@ import type { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { getCookie } from "#utils/app-utils";
-import { fixedNumber, getEnumKeys } from "#utils/common-utils";
+import { fixedNumber, getTSEnumKeys } from "#utils/common-utils";
 import i18next from "i18next";
 
 enum MenuOptions {
@@ -151,7 +151,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
   }
 
   getMenuOptionsConfig(): OptionSelectModeConfig {
-    const validOptions = getEnumKeys(MenuOptions)
+    const validOptions = getTSEnumKeys(MenuOptions)
       .map((m) => Number.parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
         return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));

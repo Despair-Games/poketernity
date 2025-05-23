@@ -5,7 +5,7 @@ import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
+import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
 import i18next from "i18next";
 
 export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
@@ -17,7 +17,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
     this.condition = condition;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       !simulated
       && attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS

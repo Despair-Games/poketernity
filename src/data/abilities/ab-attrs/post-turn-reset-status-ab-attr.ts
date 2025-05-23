@@ -1,7 +1,7 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getStatusEffectHealText } from "#data/status-effect";
+import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import type { Pokemon } from "#field/pokemon";
 
 /**
@@ -18,7 +18,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
     this.allyTarget = allyTarget;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (this.allyTarget) {
       this.target = pokemon.getAlly();
     } else {

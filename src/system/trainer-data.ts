@@ -12,7 +12,7 @@ export default class TrainerData {
   constructor(source: Trainer | any) {
     const sourceTrainer = source.type === "Trainer" ? (source as Trainer) : null;
     this.trainerType = sourceTrainer ? sourceTrainer.config.trainerType : source.trainerType;
-    this.variant = source.hasOwnProperty("variant")
+    this.variant = Object.hasOwn(source, "variant")
       ? source.variant
       : source.female
         ? TrainerVariant.FEMALE

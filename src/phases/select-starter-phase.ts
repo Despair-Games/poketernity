@@ -8,7 +8,7 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { overrideHeldItems, overrideModifiers } from "#modifier/modifier";
-import type { StarterConfig } from "#types/StarterConfig";
+import type { StarterConfig } from "#types/starter-config";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
@@ -43,7 +43,7 @@ export class SelectStarterPhase extends Phase {
    */
   public initBattle(starters: StarterConfig[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
-    const { dexData, gameStats } = gameData;
+    const { dexData, gameStats, starterData } = gameData;
     const { isClassic } = gameMode;
 
     const party = globalScene.getPlayerParty();
@@ -74,7 +74,10 @@ export class SelectStarterPhase extends Phase {
         starterGender = Overrides.GENDER_OVERRIDE;
       }
 
-      const starterIvs = dexData[speciesId].ivs.slice(0);
+      // Get ivs from the root species in case of an override to a non starter species
+      const starterSpeciesId = species.getRootSpeciesId(true);
+      const starterIvs = starterData[starterSpeciesId].ivs.slice(0);
+
       const starterPokemon = globalScene.addPlayerPokemon(
         species,
         gameMode.getStartingLevel(),

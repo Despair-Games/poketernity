@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";

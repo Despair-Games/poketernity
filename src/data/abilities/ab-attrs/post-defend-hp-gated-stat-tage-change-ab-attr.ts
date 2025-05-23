@@ -4,7 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
+import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
 
 export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;
@@ -29,7 +29,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     this.selfTarget = selfTarget;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     const hpGateFlat: number = Math.ceil(pokemon.getMaxHp() * this.hpGate);
     // TODO: Normalize `attacksReceived[]` checks
     const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];

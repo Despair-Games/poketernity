@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { getPokeballAtlasKey } from "#data/pokeball";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { PartyUiMode } from "#enums/party-ui-mode";

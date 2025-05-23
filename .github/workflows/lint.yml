@@ -1,0 +1,67 @@
+name: "Lint"
+
+on:
+  # Trigger the workflow on push or pull request
+  push:
+    branches:
+      - main # Trigger on push events to the main branch
+      - beta # Trigger on push events to the beta branch
+  pull_request:
+    branches:
+      - main # Trigger on pull request events targeting the main branch
+      - beta # Trigger on pull request events targeting the beta branch
+  merge_group:
+    types: [checks_requested]
+
+
+jobs:
+  run-linters:
+    name: Run all linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci
+      
+      # Lint files with Biome-Lint - https://biomejs.dev/linter/
+      - name: Run Biome-Lint
+        run: npm run biome-ci
+        id: biome_lint
+        continue-on-error: true
+      
+      # Lint files with ESLint - https://eslint.org
+      - name: Run ESLint
+        run: npm run eslint-ci
+        id: eslint
+        continue-on-error: true
+      
+      # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
+      - name: Run Dependency-Cruise
+        run: npm run depcruise
+        id: depcruise
+        continue-on-error: true
+      
+      - name: Check for Errors
+        env:
+          BIOME_LINT_OUTCOME: ${{ steps.biome_lint.outcome }}
+          ESLINT_OUTCOME: ${{ steps.eslint.outcome }}
+          DEPCRUISE_OUTCOME: ${{ steps.depcruise.outcome }}
+        run: |
+            echo "Biome outcome: $BIOME_LINT_OUTCOME"
+            echo "ESLint outcome: $ESLINT_OUTCOME"
+            echo "Depcruise outcome: $DEPCRUISE_OUTCOME"
+            if [[ "$BIOME_LINT_OUTCOME" != "success" || "$ESLINT_OUTCOME" != "success" || "$DEPCRUISE_OUTCOME" != "success" ]]; then
+              echo "One or more linters failed."
+              exit 1
+            fi

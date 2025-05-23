@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import type { Stat } from "#enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
@@ -267,7 +267,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
 
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
-    const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
+    const starterIvs: number[] = globalScene.gameData.starterData[starterSpecies].ivs;
 
     // Function to wrap text in color based on comparison
     const coloredText = (text: string, isBetter: boolean, ivValue) => {

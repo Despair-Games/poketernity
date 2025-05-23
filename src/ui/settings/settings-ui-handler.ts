@@ -1,11 +1,11 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
-import type { SettingsCategory, SettingsUiItem } from "#types/Settings";
+import type { SettingsCategory, SettingsUiItem } from "#types/settings";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";

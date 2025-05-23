@@ -1,10 +1,10 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
-import type { EntryHazardTag } from "#data/arena-tag";
+import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
+import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
 
 export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;
@@ -17,7 +17,7 @@ export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
     this.tagType = tagType;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (!this.condition(pokemon, attacker, move)) {
       return false;
     }

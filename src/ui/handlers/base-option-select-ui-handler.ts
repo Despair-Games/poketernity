@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { MessageUiHandler } from "#ui/message-ui-handler";
@@ -91,7 +91,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
    * @param args - args[0] should be of type `OptionSelectModeConfig<T>`.
    */
   public override show(...args: unknown[]): boolean {
-    if (!args[0]?.hasOwnProperty("options")) {
+    if (!Object.hasOwn(args[0] ?? {}, "options")) {
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }

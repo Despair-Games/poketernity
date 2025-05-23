@@ -8,7 +8,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
 import type { nil } from "#types/nil";
-import { getEnumValues, getFrameMs, isNil } from "#utils/common-utils";
+import { getFrameMs, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 interface GraphicFrameData {
@@ -656,7 +656,7 @@ export abstract class BattleAnim {
             );
           }
         }
-        const targets = getEnumValues(AnimFrameTarget);
+        const targets = Object.values(AnimFrameTarget);
         for (const i of targets) {
           const count = graphicFrameCount;
           if (count < spriteCache[i].length) {

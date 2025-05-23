@@ -2279,7 +2279,7 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
    * @returns `true` if the evolution was successful
    */
   override apply(playerPokemon: PlayerPokemon): boolean {
-    const matchingEvolution = pokemonEvolutions.hasOwnProperty(playerPokemon.species.speciesId)
+    const matchingEvolution = Object.hasOwn(pokemonEvolutions, playerPokemon.species.speciesId)
       ? pokemonEvolutions[playerPokemon.species.speciesId].find(
           (e) =>
             e.item === this.type.evolutionItem

@@ -11,7 +11,7 @@ import { starterColors } from "#data/starter-colors";
 import { getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { getTypeRgb } from "#data/type";
 import { getVariantTint, type Variant } from "#data/variant";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Nature } from "#enums/nature";
@@ -31,7 +31,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { fixedNumber, getEnumValues, isNil } from "#utils/common-utils";
+import { fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -563,7 +563,7 @@ export class SummaryUiHandler extends UiHandler {
         }
         success = true;
       } else {
-        const pages = getEnumValues(SummaryUiPage);
+        const pages = getTSEnumValues(SummaryUiPage);
         switch (button) {
           case Button.UP:
           case Button.DOWN: {
@@ -808,7 +808,7 @@ export class SummaryUiHandler extends UiHandler {
 
         if (
           !isNil(this.pokemon) /*
-          && globalScene.gameData.achvUnlocks.hasOwnProperty(achvs.TERASTALLIZE.id) */
+          && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id) */
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
           teraIcon.setName("terrastallize-icon");

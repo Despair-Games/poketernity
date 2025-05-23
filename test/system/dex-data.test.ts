@@ -1,3 +1,4 @@
+import { DEFAULT_STARTER_IVS } from "#constants/game-constants";
 import { defaultStarterSpecies } from "#data/default-starters";
 import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { Nature } from "#enums/nature";
@@ -27,7 +28,7 @@ describe("Dex Data", () => {
 
   it("should unlock default attributes for starter Pokemon", async () => {
     const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
-    const defaultIVs = new Array(6).fill(15);
+    const defaultIVs = new Array(6).fill(DEFAULT_STARTER_IVS);
 
     const caughtCount = gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(defaultStarterSpecies.length);
@@ -44,13 +45,14 @@ describe("Dex Data", () => {
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+      expect(starterData.ivs).toEqual(defaultIVs);
       expect(starterData.passiveAttr).toBe(0);
       expect(starterData.valueReduction).toBe(0);
       expect(starterData.classicWinCount).toBe(0);
 
-      const unlockedNatures = gameData.getNaturesForAttr(dexData.natureAttr);
-      expect(unlockedNatures.length).toBe(1);
-      expect(neutralNatures.includes(unlockedNatures[0])).toBeTruthy();
+      // Starters get all neutral natures unlocked
+      const unlockedNatures = gameData.getNaturesForAttr(starterData.natureAttr);
+      expect(unlockedNatures).toEqual(neutralNatures);
 
       expect(dexData.seenCount).toBe(0);
       expect(dexData.caughtCount).toBe(0);
@@ -68,7 +70,6 @@ describe("Dex Data", () => {
         expect(attr & DexAttr.DEFAULT_FORM).toBeTruthy();
         expect(gameData.getFormIndex(attr)).toBe(0);
       });
-      expect(dexData.ivs).toEqual(defaultIVs);
     }
   });
 });

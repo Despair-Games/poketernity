@@ -4,7 +4,7 @@ import type { Pokemon } from "#field/pokemon";
 import { failOnGravityCondition } from "#moves/fail-on-gravity-condition";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Attribute implementing the charging phase effects of {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}.

@@ -1,4 +1,4 @@
-import { getStatusEffectCatchRateMultiplier } from "#data/status-effect";
+import { getStatusEffectCatchRateMultiplier } from "#app/utils/status-effect-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";

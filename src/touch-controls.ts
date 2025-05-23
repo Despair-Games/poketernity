@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { settings } from "#system/settings-manager";
 import { hasTouchscreen } from "#utils/app-utils";
 import EventEmitter = Phaser.Events.EventEmitter;
@@ -117,7 +117,7 @@ export default class TouchControl {
    */
   simulateKeyboardEvent(eventType: string, key: string): boolean {
     console.log("simulateKeyboardEvent", eventType, key);
-    if (!Button.hasOwnProperty(key) || this.disabled) {
+    if (!Object.hasOwn(Button, key) || this.disabled) {
       return false;
     }
     const button = Button[key];

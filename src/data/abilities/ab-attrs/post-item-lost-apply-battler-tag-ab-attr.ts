@@ -14,7 +14,7 @@ export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
     this.tagType = tagType;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!pokemon.getTag(this.tagType)) {
       if (!simulated) {
         pokemon.addTag(this.tagType);

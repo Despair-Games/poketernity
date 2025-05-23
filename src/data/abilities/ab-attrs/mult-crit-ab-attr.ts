@@ -13,7 +13,7 @@ export class MultCritAbAttr extends AbAttr {
     this.multAmount = multAmount;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, critMultiplier: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, critMultiplier: NumberHolder): boolean {
     if (critMultiplier.value > 1) {
       critMultiplier.value *= this.multAmount;
       return true;

@@ -12,7 +12,7 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
  * @extends PostTurnAbAttr
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const canRaise = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) < 6);
     let canLower = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) > -6);
 

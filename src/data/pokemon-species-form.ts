@@ -14,7 +14,7 @@ import { PokemonRegion } from "#enums/pokemon-regions";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
-import type { StarterMoveset } from "#types/StarterData";
+import type { StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 
@@ -95,7 +95,7 @@ export abstract class PokemonSpeciesForm {
    */
   getRootSpeciesId(forStarter: boolean = false): SpeciesId {
     let ret = this.speciesId;
-    while (pokemonPreEvolutions.hasOwnProperty(ret) && (!forStarter || !speciesStarterCosts.hasOwnProperty(ret))) {
+    while (Object.hasOwn(pokemonPreEvolutions, ret) && (!forStarter || !Object.hasOwn(speciesStarterCosts, ret))) {
       ret = pokemonPreEvolutions[ret];
     }
     return ret;
@@ -148,8 +148,8 @@ export abstract class PokemonSpeciesForm {
 
   getLevelMoves(): LevelMoves {
     if (
-      pokemonFormLevelMoves.hasOwnProperty(this.speciesId)
-      && pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+      Object.hasOwn(pokemonFormLevelMoves, this.speciesId)
+      && Object.hasOwn(pokemonFormLevelMoves[this.speciesId], this.formIndex)
     ) {
       return pokemonFormLevelMoves[this.speciesId][this.formIndex].slice(0);
     }
@@ -400,15 +400,15 @@ export abstract class PokemonSpeciesForm {
   validateStarterMoveset(moveset: StarterMoveset, eggMoves: number): boolean {
     const rootSpeciesId = this.getRootSpeciesId();
     for (const moveId of moveset) {
-      if (speciesEggMoves.hasOwnProperty(rootSpeciesId)) {
+      if (Object.hasOwn(speciesEggMoves, rootSpeciesId)) {
         const eggMoveIndex = speciesEggMoves[rootSpeciesId].findIndex((m) => m === moveId);
         if (eggMoveIndex > -1 && eggMoves & (1 << eggMoveIndex)) {
           continue;
         }
       }
       if (
-        pokemonFormLevelMoves.hasOwnProperty(this.speciesId)
-        && pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+        Object.hasOwn(pokemonFormLevelMoves, this.speciesId)
+        && Object.hasOwn(pokemonFormLevelMoves[this.speciesId], this.formIndex)
       ) {
         if (!pokemonFormLevelMoves[this.speciesId][this.formIndex].find((lm) => lm[0] <= 5 && lm[1] === moveId)) {
           return false;

@@ -14,7 +14,7 @@ import i18next from "i18next";
  * @extends PostSummonAbAttr
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const target = pokemon.getAlly();
     if (target?.isActive(true)) {
       if (!simulated) {

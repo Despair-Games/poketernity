@@ -4,7 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { PokemonDefendCondition } from "#types/PokemonDefendCondition";
+import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
 
 /**
  * Activates after receiving an attack and if certain conditions are met, changes the effective stats
@@ -43,7 +43,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     this.allOthers = allOthers;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (this.condition(pokemon, attacker, move)) {
       if (simulated) {
         return true;

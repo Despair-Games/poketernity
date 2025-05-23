@@ -2,7 +2,7 @@ import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -17,7 +17,7 @@ export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
     super(null!, condition);
   }
 
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _attacker: Pokemon,
@@ -34,7 +34,7 @@ export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
     return false;
   }
 
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:nonSuperEffectiveImmunity", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

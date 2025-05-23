@@ -16,7 +16,7 @@ import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { GameModes } from "#enums/game-modes";

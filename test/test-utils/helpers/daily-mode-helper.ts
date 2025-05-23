@@ -1,6 +1,6 @@
 import overrides from "#app/overrides";
 import { BattleStyle } from "#enums/battle-style";
-import { Button } from "#enums/buttons";
+import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
 import { CommandPhase } from "#phases/command-phase";
 import { TitlePhase } from "#phases/title-phase";

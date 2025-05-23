@@ -21,7 +21,7 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
     this.formRevertingWeathers = formRevertingWeathers;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === SpeciesId.CASTFORM && this.ability === AbilityId.FORECAST;
     const isCherrimWithFlowerGift =

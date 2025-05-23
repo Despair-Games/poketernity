@@ -14,7 +14,7 @@ export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
     this.affectsPrimal = affectsPrimal;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, weather: Weather, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, weather: Weather, cancelled: BooleanHolder): boolean {
     if (this.affectsPrimal || weather.isPrimal()) {
       cancelled.value = true;
       return true;

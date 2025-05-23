@@ -20,7 +20,7 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
     this.statusEffects = effects;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.hasStatusEffect(this.statusEffects)) {
       if (!pokemon.isFullHp()) {
         if (!simulated) {

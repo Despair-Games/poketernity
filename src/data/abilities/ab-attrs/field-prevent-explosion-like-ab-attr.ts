@@ -27,7 +27,7 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
    * @param attacker - The {@linkcode Pokemon} using the move
    * @param move - The {@linkcode Move} being used
    */
-  override apply(
+  public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,

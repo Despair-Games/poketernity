@@ -27,7 +27,7 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
     this.tagType = tagType;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (globalScene.arena.hasTag(this.tagType, pokemon.getArenaTagSide())) {
       return super.apply(pokemon, simulated);
     }

@@ -4,7 +4,7 @@ import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import type { AbAttrCondition } from "#types/AbAttrCondition";
+import type { AbAttrCondition } from "#types/ab-attr-condition";
 
 export abstract class PostWeatherLapseAbAttr extends AbAttr {
   protected readonly weatherTypes: WeatherType[];
@@ -23,11 +23,11 @@ export abstract class PostWeatherLapseAbAttr extends AbAttr {
    * @param weather The {@linkcode Weather} on the field
    * @returns `true` if effects successfully apply
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather): boolean {
     return false;
   }
 
-  override getCondition(): AbAttrCondition {
+  public override getCondition(): AbAttrCondition {
     return getWeatherCondition(...this.weatherTypes);
   }
 }

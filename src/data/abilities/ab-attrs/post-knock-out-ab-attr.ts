@@ -15,7 +15,7 @@ export abstract class PostKnockOutAbAttr extends AbAttr {
    * @param knockedOutPokemon The {@linkcode Pokemon} that fainted
    * @returns `true` if effects successfully applied
    */
-  override apply(_pokemon: Pokemon, _simulated: boolean, _knockedOutPokemon: Pokemon): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _knockedOutPokemon: Pokemon): boolean {
     return false;
   }
 }

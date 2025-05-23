@@ -8,8 +8,8 @@ import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import type { SpeciesId } from "#enums/species-id";
 import { PlayerPokemon } from "#field/player-pokemon";
-import type { StarterConfig } from "#types/StarterConfig";
-import type { StarterMoveset } from "#types/StarterData";
+import type { StarterConfig } from "#types/starter-config";
+import type { StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 /** Function to convert Blob to string */
@@ -115,7 +115,8 @@ export function initSceneWithoutEncounterPhase(scene: BattleScene, species?: Spe
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
     const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
     const starterGender = Gender.MALE;
-    const starterIvs = scene.gameData.dexData[starter.species.speciesId].ivs.slice(0);
+    const starterSpeciesId = starter.species.getRootSpeciesId(true);
+    const starterIvs = scene.gameData.starterData[starterSpeciesId].ivs.slice(0);
     const starterPokemon = scene.addPlayerPokemon(
       starter.species,
       scene.gameMode.getStartingLevel(),

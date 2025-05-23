@@ -28,7 +28,7 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
     this.stages = stages;
   }
 
-  override apply(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     _statStagesChanged: BattleStat[],
