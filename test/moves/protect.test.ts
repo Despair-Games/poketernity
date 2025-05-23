@@ -43,7 +43,7 @@ describe("Moves - Protect", () => {
   });
 
   it("should protect the user from attacks", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -58,7 +58,7 @@ describe("Moves - Protect", () => {
     game.override.enemyMoveset([MoveId.CEASELESS_EDGE]);
     vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
 
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -73,7 +73,7 @@ describe("Moves - Protect", () => {
   it("should protect the user from status moves", async () => {
     game.override.enemyMoveset([MoveId.CHARM]);
 
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -87,7 +87,7 @@ describe("Moves - Protect", () => {
   it("should stop subsequent hits of a multi-hit move", async () => {
     game.override.enemyMoveset([MoveId.TACHYON_CUTTER]);
 
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -103,7 +103,7 @@ describe("Moves - Protect", () => {
   it("certain moves can bypass protect", async () => {
     game.override.enemyMoveset([MoveId.BLOCK]);
 
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -117,7 +117,7 @@ describe("Moves - Protect", () => {
   it("should fail if the user is the last to move in the turn", async () => {
     game.override.enemyMoveset([MoveId.PROTECT]);
 
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -139,7 +139,7 @@ describe("Moves - Protect", () => {
   ])(
     "should have a success rate of %d after being used %d consecutive time(s) successfully",
     async (expectedRate, numUses) => {
-      await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+      await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
       const protect = allMoves.get(MoveId.PROTECT);
       const protectAttr = protect.getAttrs(ProtectAttr)[0];

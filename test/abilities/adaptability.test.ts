@@ -33,7 +33,7 @@ describe("Abilities - Adaptability", () => {
   });
 
   it("should increase STAB to 2.0 if move type matches one of the user's types", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -45,7 +45,7 @@ describe("Abilities - Adaptability", () => {
   });
 
   it("should increase STAB to 2.0 if move type changes to a type that matches one of the user's types", async () => {
-    await game.classicMode.startBattle([SpeciesId.TYNAMO]);
+    await game.classicMode.startBattle(SpeciesId.TYNAMO);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -59,7 +59,7 @@ describe("Abilities - Adaptability", () => {
   });
 
   it("should not apply STAB if move type does not match one of the user's types", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -71,7 +71,7 @@ describe("Abilities - Adaptability", () => {
   });
 
   it("should not apply STAB to Struggle", async () => {
-    await game.classicMode.startBattle([SpeciesId.RATTATA]);
+    await game.classicMode.startBattle(SpeciesId.RATTATA);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "calcStabMultiplierForTakingDamage");
@@ -84,7 +84,7 @@ describe("Abilities - Adaptability", () => {
 
   describe("Terastallized", () => {
     it("should keep STAB at 1.5 if move type, but not tera type, is one of the user's original types", async () => {
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
       const playerPokemon = game.field.getPlayerPokemon();
       game.field.forceTera(playerPokemon, ElementalType.WATER);
@@ -99,7 +99,7 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should increase STAB to 2.0 if tera type is NOT one of the user's original types", async () => {
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
       const playerPokemon = game.field.getPlayerPokemon();
       game.field.forceTera(playerPokemon, ElementalType.WATER);
@@ -114,7 +114,7 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should increase STAB to 2.25 if tera type matches one of the user's original types", async () => {
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
       const playerPokemon = game.field.getPlayerPokemon();
       game.field.forceTera(playerPokemon, ElementalType.FIRE);
@@ -129,7 +129,7 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should not apply STAB if move type does NOT match tera type or the user's original types", async () => {
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
       const playerPokemon = game.field.getPlayerPokemon();
       game.field.forceTera(playerPokemon, ElementalType.FIRE);
@@ -144,7 +144,7 @@ describe("Abilities - Adaptability", () => {
     });
 
     it("should not apply to Stellar moves even if user is Stellar tera type", async () => {
-      await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+      await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
       const playerPokemon = game.field.getPlayerPokemon();
       game.field.forceTera(playerPokemon, ElementalType.STELLAR);

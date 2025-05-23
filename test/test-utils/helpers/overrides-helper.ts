@@ -126,8 +126,11 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode SpeciesId | species}
-   * @param species the (pokemon) {@linkcode SpeciesId | species} to set
+   * Override the player pokemon {@linkcode SpeciesId | species}.
+   *
+   * **Warning**: **DO NOT** use for Classic or Challenge mode tests,
+   * instead pass the species you want to use to `runToSummon` or `startBattle`.
+   * @param species the {@linkcode SpeciesId | species} to set
    * @returns `this`
    */
   public starterSpecies(species: SpeciesId | number): this {

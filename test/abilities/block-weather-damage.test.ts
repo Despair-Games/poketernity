@@ -42,7 +42,7 @@ describe("Ability Attribute - Block Weather Damage", () => {
     { ability: AbilityId.SNOW_CLOAK, abilityName: "Snow Cloak", weatherName: "Hail", weather: WeatherType.HAIL },
   ])("$abilityName should prevent damage from $weatherName", async ({ ability, weather }) => {
     game.override.weather(weather).ability(ability);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();

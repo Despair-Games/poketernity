@@ -31,7 +31,7 @@ describe("Moves - Parting Shot", () => {
 
   test("Parting Shot when buffed by prankster should fail against dark types", async () => {
     game.override.enemySpecies(SpeciesId.POOCHYENA).ability(AbilityId.PRANKSTER);
-    await game.startBattle([SpeciesId.MURKROW, SpeciesId.MEOWTH]);
+    await game.classicMode.startBattle(SpeciesId.MURKROW, SpeciesId.MEOWTH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon).toBeDefined();
@@ -46,7 +46,7 @@ describe("Moves - Parting Shot", () => {
 
   test("Parting shot should fail against good as gold ability", async () => {
     game.override.enemySpecies(SpeciesId.GHOLDENGO).enemyAbility(AbilityId.GOOD_AS_GOLD);
-    await game.startBattle([SpeciesId.MURKROW, SpeciesId.MEOWTH]);
+    await game.classicMode.startBattle(SpeciesId.MURKROW, SpeciesId.MEOWTH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon).toBeDefined();
@@ -64,7 +64,13 @@ describe("Moves - Parting Shot", () => {
     "Parting shot should fail if target is -6/-6 de-buffed",
     async () => {
       game.override.moveset([MoveId.PARTING_SHOT, MoveId.MEMENTO, MoveId.SPLASH]);
-      await game.startBattle([SpeciesId.MEOWTH, SpeciesId.MEOWTH, SpeciesId.MEOWTH, SpeciesId.MURKROW, SpeciesId.ABRA]);
+      await game.classicMode.startBattle(
+        SpeciesId.MEOWTH,
+        SpeciesId.MEOWTH,
+        SpeciesId.MEOWTH,
+        SpeciesId.MURKROW,
+        SpeciesId.ABRA,
+      );
 
       // use Memento 3 times to debuff enemy
       game.move.select(MoveId.MEMENTO);
@@ -107,7 +113,7 @@ describe("Moves - Parting Shot", () => {
     "Parting shot shouldn't allow switch out when mist is active",
     async () => {
       game.override.enemySpecies(SpeciesId.ALTARIA).enemyAbility(AbilityId.NONE).enemyMoveset([MoveId.MIST]);
-      await game.startBattle([SpeciesId.SNORLAX, SpeciesId.MEOWTH]);
+      await game.classicMode.startBattle(SpeciesId.SNORLAX, SpeciesId.MEOWTH);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
@@ -126,7 +132,7 @@ describe("Moves - Parting Shot", () => {
     "Parting shot shouldn't allow switch out against clear body ability",
     async () => {
       game.override.enemySpecies(SpeciesId.TENTACOOL).enemyAbility(AbilityId.CLEAR_BODY);
-      await game.startBattle([SpeciesId.SNORLAX, SpeciesId.MEOWTH]);
+      await game.classicMode.startBattle(SpeciesId.SNORLAX, SpeciesId.MEOWTH);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
@@ -144,7 +150,7 @@ describe("Moves - Parting Shot", () => {
     // TODO: fix this bug to pass the test!
     "Parting shot should de-buff and not fail if no party available to switch - party size 1",
     async () => {
-      await game.startBattle([SpeciesId.MURKROW]);
+      await game.classicMode.startBattle(SpeciesId.MURKROW);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
@@ -162,7 +168,7 @@ describe("Moves - Parting Shot", () => {
     // TODO: fix this bug to pass the test!
     "Parting shot regularly not fail if no party available to switch - party fainted",
     async () => {
-      await game.startBattle([SpeciesId.MURKROW, SpeciesId.MEOWTH]);
+      await game.classicMode.startBattle(SpeciesId.MURKROW, SpeciesId.MEOWTH);
       game.move.select(MoveId.SPLASH);
 
       // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
