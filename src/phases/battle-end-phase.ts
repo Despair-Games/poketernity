@@ -36,8 +36,8 @@ export class BattleEndPhase extends BattlePhase {
       globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
     }
 
-    for (const pokemon of globalScene.getField()) {
-      if (pokemon?.summonData) {
+    for (const pokemon of globalScene.getPlayerField()) {
+      if (pokemon) {
         pokemon.summonData.waveTurnCount = 0;
       }
     }
