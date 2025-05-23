@@ -118,7 +118,7 @@ describe("Moves - Transform", () => {
 
   it("should persist transformed attributes across reloads", async () => {
     game.override.enemySpecies(SpeciesId.UNOWN).enemyForms({ [SpeciesId.UNOWN]: 5 });
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
