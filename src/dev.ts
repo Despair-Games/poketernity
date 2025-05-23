@@ -7,9 +7,44 @@ import "../assets/dev.css";
 //#region Functions
 
 function renderBranchNameElement() {
+  const branchNameElementHeight = 21;
+  const appEl = document.getElementById("app");
+  const canvasEl = appEl?.querySelector<HTMLElement>("canvas");
   const branchNameEl = document.createElement("div");
   branchNameEl.id = "branch-name";
   branchNameEl.textContent = `Branch: ${import.meta.env.VITE_GIT_BRANCH}`; // Make sure to use the vite-git-branch plugin!
+  branchNameEl.style.display = "none";
+
+  const doPosition = (canvasEl: HTMLElement) => {
+    const { bottom } = canvasEl.getBoundingClientRect();
+    branchNameEl.style.top = `${bottom - branchNameElementHeight}px`;
+    branchNameEl.style.display = "block";
+  };
+
+  const observeCanvas = (canvasEl: HTMLElement) => {
+    const canvasResizeObserver = new ResizeObserver(() => doPosition(canvasEl));
+    canvasResizeObserver.observe(canvasEl);
+  };
+
+  if (canvasEl) {
+    doPosition(canvasEl);
+    observeCanvas(canvasEl);
+  } else if (appEl) {
+    const appMutationObserver = new MutationObserver(() => {
+      const canvasEl = appEl.querySelector<HTMLElement>("canvas");
+      if (canvasEl) {
+        doPosition(canvasEl);
+        observeCanvas(canvasEl);
+        appMutationObserver.disconnect();
+      }
+    });
+    appMutationObserver.observe(appEl, {
+      childList: true,
+      subtree: true,
+    });
+  } else {
+    console.warn("Failed to render branch-name element! No canvas or #app element found");
+  }
 
   document.body.appendChild(branchNameEl);
 }
