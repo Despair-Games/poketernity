@@ -1,4 +1,5 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
@@ -18,7 +19,7 @@ interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
  * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
-export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
+export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   public tagType: BattlerTagType;
   protected override options?: AddBattlerTagAttrOptions;
 
@@ -67,6 +68,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
     return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).getTag(this.tagType) : null;
   }
 
+  /** @deprecated Define a subclass overriding {@linkcode getEffectScore} instead */
   getTagTargetBenefitScore(): number {
     switch (this.tagType) {
       case BattlerTagType.RECHARGING:
@@ -197,4 +199,6 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
     }
     return Math.floor(this.getTagTargetBenefitScore() * (moveChance / 100));
   }
+
+  public abstract override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number;
 }

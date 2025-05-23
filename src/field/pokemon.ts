@@ -449,6 +449,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * The number of turns this Pokemon has slept since afflicted with the
+   * {@linkcode StatusEffect.SLEEP | SLEEP} condition.
+   * @defaultValue 0
+   */
+  public get turnsAsleep(): number {
+    return this.status?.turnsAsleep ?? -1;
+  }
+
+  /**
    * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
    * Ignored if the effect is not sleep.
    * @defaultValue 0
@@ -1215,6 +1224,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return Math.floor(ret);
+  }
+
+  /**
+   * @param target - The {@linkcode} to compare Speed against
+   * @returns `true` if this Pokemon has higher Speed than
+   */
+  public outspeeds(target: Pokemon): boolean {
+    return this.getEffectiveStat(Stat.SPD) > target.getEffectiveStat(Stat.SPD);
   }
 
   calculateStats(): void {
@@ -4291,11 +4308,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   protected setStatus(
     effect: StatusEffect,
-    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
+    { toxicTurnCount = 0, turnsAsleep = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
   ): void {
     this.status = {
       effect,
       toxicTurnCount,
+      turnsAsleep,
       sleepTurnsRemaining,
     };
   }
@@ -4310,6 +4328,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case StatusEffect.SLEEP:
         if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
+          this.status.turnsAsleep++;
           this.status.sleepTurnsRemaining = Math.max(this.status.sleepTurnsRemaining, 1);
           break;
         }
@@ -4317,6 +4336,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           this.status.sleepTurnsRemaining = 0;
           break;
         }
+        this.status.turnsAsleep++;
         this.status.sleepTurnsRemaining--;
         break;
       default:

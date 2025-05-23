@@ -85,7 +85,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    */
   public getLastValidMove(pokemon: Pokemon): Move | undefined {
     const turnMove = pokemon
-      .getLastXMoves()
+      .getLastXMoves(-1)
       .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
 
     return turnMove?.move;
