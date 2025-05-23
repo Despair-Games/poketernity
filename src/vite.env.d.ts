@@ -23,6 +23,8 @@ interface ImportMetaEnv {
   readonly VITE_MODIFIERS_DEBUG?: string;
   /** Contains the name of the current git branch (Only available in development!) */
   readonly VITE_GIT_BRANCH?: string;
+  /** Set to `"0"` to remove the branch-name element from the DOM. Set to `"1"` to show it. _Only available in `"development"` mode!_ */
+  readonly VITE_SHOW_BRANCH_NAME?: string;
 }
 
 interface ImportMeta {
