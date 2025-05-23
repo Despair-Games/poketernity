@@ -7,6 +7,9 @@ import "../assets/dev.css";
 //#region Functions
 
 function renderBranchNameElement() {
+  if (import.meta.env.VITE_SHOW_BRANCH_NAME !== "1") {
+    return;
+  }
   const branchNameElementHeight = 21;
   const appEl = document.getElementById("app");
   const canvasEl = appEl?.querySelector<HTMLElement>("canvas");
