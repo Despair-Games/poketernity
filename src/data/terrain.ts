@@ -9,8 +9,8 @@ import i18next from "i18next";
 
 /**
  * Class representing Terrain effects
- * @var terrainType - The {@linkcode TerrainType} that is being represented
- * @var turnsLeft - How many turns the terrain still has left
+ * @param terrainType - The {@linkcode TerrainType} that is being represented
+ * @param turnsLeft - How many turns the terrain still has left
  */
 export class Terrain {
   public terrainType: TerrainType;

@@ -11,8 +11,8 @@ import i18next from "i18next";
 
 /**
  * Class representing Weather effects
- * @var weatherType - The {@linkcode WeatherType} that is being represented
- * @var turnsLeft - How many turns the weather still has left (0 if immutable)
+ * @param weatherType - The {@linkcode WeatherType} that is being represented
+ * @param turnsLeft - How many turns the weather still has left (0 if immutable)
  */
 export class Weather {
   public weatherType: WeatherType;

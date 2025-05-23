@@ -12,7 +12,8 @@ import i18next from "i18next";
 
 /**
  * Tag for effects that ground the source, allowing Ground-type moves to hit them.
- * @description `IGNORE_FLYING`: Persistent grounding effects (i.e. from Smack Down and Thousand Waves)
+ *
+ * `IGNORE_FLYING`: Persistent grounding effects (i.e. from Smack Down and Thousand Waves)
  * @extends BattlerTag
  */
 export class GroundedTag extends BattlerTag {
