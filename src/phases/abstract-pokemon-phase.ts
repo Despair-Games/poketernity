@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { BattlerIndex } from "#enums/battler-index";
+import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/abstract-field-phase";
 import type { nil } from "#types/nil";
@@ -31,6 +32,15 @@ export abstract class PokemonPhase extends FieldPhase {
     }
     // TODO: Remove this bang
     return pokemon!;
+  }
+
+  public getTrainerSlot(): TrainerSlot | undefined {
+    switch (this.battlerIndex) {
+      case BattlerIndex.ENEMY:
+        return TrainerSlot.TRAINER;
+      case BattlerIndex.ENEMY_2:
+        return TrainerSlot.TRAINER_PARTNER;
+    }
   }
 
   public getAlliedParty(): Pokemon[] {

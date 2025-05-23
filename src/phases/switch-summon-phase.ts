@@ -16,6 +16,11 @@ import { PostSummonPhase } from "#phases/post-summon-phase";
 import { SummonPhase } from "#phases/summon-phase";
 import i18next from "i18next";
 
+/**
+ * @deprecated
+ * This phase's logic will be broken up between
+ * {@linkcode RecallPhase}, {@linkcode SwitchPhase}, and {@linkcode SummonPhase}
+ */
 export class SwitchSummonPhase extends SummonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.SWITCH_SUMMON;

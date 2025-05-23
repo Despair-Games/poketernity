@@ -4,6 +4,7 @@ import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 
+/** @deprecated Use {@linkcode RecallPhase} instead */
 export class ReturnPhase extends SwitchSummonPhase {
   override readonly id = PhaseId.RETURN;
 

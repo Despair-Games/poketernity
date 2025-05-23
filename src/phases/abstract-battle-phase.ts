@@ -7,7 +7,7 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export abstract class BattlePhase extends Phase {
-  public showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): void {
+  public async showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): Promise<void> {
     const { trainer } = globalScene.currentBattle;
     if (!trainer) {
       console.warn("Enemy trainer is missing!");
@@ -29,14 +29,18 @@ export abstract class BattlePhase extends Phase {
       sprites[i].clearTint();
       tintSprites[i].clearTint();
     }
-    globalScene.tweens.add({
-      targets: trainer,
-      x: "-=16",
-      y: "+=16",
-      alpha: 1,
-      ease: "Sine.easeInOut",
-      duration: 750,
-    });
+
+    await new Promise((resolve) =>
+      globalScene.tweens.add({
+        targets: trainer,
+        x: "-=16",
+        y: "+=16",
+        alpha: 1,
+        ease: "Sine.easeInOut",
+        duration: 750,
+        onComplete: resolve,
+      }),
+    );
   }
 
   public hideEnemyTrainer(): void {
