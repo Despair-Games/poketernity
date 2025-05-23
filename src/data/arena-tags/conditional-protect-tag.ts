@@ -62,7 +62,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
    * @returns `true` if this tag protected against the attack; `false` otherwise
    */
   override apply(
-    arena: Arena,
+    _arena: Arena,
     simulated: boolean,
     isProtected: BooleanHolder,
     attacker: Pokemon,
@@ -71,7 +71,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   ): boolean {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
-      && this.protectConditionFunc(arena, moveId)
+      && this.protectConditionFunc(moveId)
       && (this.ignoresBypass || !allMoves.get(moveId).checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
     ) {
       if (!isProtected.value) {

@@ -89,9 +89,10 @@ import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#data/pokemon-level-
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
-import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_VARIANT_CHANCE, SHINY_EPIC_CHANCE } from "#data/rates";
-import { getTypeRgb, type TypeDamageMultiplier, getTypeDamageMultiplier } from "#data/type";
-import { type Variant, variantData } from "#data/variant";
+import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
+import { tmPoolTiers, tmSpecies } from "#data/tms";
+import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#data/type";
+import { variantData, type Variant } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";
@@ -196,8 +197,7 @@ import {
   clamp,
   coerceArray,
   fixedNumber,
-  fixedNumber,
-  getEnumValues,
+  getTSEnumValues,
   isNil,
   NumberHolder,
   toDmgValue,

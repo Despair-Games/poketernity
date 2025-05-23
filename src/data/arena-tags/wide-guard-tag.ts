@@ -13,7 +13,7 @@ import type { ProtectConditionFunc } from "#types/protect-condition-func";
  * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
-const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
+export const WideGuardConditionFunc: ProtectConditionFunc = (moveId: MoveId): boolean => {
   const move = allMoves.get(moveId);
 
   switch (move.moveTarget) {

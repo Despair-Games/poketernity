@@ -1,10 +1,4 @@
 import { MAJOR_EFFECT_SCORE_BONUS, SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
-import {
-  CraftyShieldConditionFunc,
-  MatBlockConditionFunc,
-  QuickGuardConditionFunc,
-  WideGuardConditionFunc,
-} from "#data/arena-tag";
 import type { ProtectConditionFunc } from "#app/@types/ProtectConditionFunc";
 import type { Move } from "#moves/move";
 import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
@@ -13,6 +7,10 @@ import type { Pokemon } from "#field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { CraftyShieldConditionFunc } from "#arena-tags/crafty-shield-tag";
+import { MatBlockConditionFunc } from "#arena-tags/mat-block-tag";
+import { QuickGuardConditionFunc } from "#arena-tags/quick-guard-tag";
+import { WideGuardConditionFunc } from "#arena-tags/wide-guard-tag";
 
 /**
  * Attribute to apply team-wide protection against certain moves

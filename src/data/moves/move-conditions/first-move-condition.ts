@@ -1,4 +1,4 @@
-import type { MoveConditionFunc } from "#types/MoveConditionFunc";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Condition function for moves that can only be used on the

@@ -16,7 +16,7 @@ import type { ProtectConditionFunc } from "#types/protect-condition-func";
  * @returns `true` if the incoming move's priority is greater than 0.
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
-const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
+export const QuickGuardConditionFunc: ProtectConditionFunc = (moveId: MoveId) => {
   const move = allMoves.get(moveId);
   const effectPhase = globalScene.phaseManager.getCurrentPhase();
 
