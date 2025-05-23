@@ -27,9 +27,8 @@ describe("Moves - Imprison", () => {
     game.override
       .battleType("single")
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset([MoveId.IMPRISON, MoveId.SPLASH, MoveId.GROWL])
       .enemySpecies(SpeciesId.SHUCKLE)
-      .moveset([MoveId.TRANSFORM, MoveId.SPLASH]);
+      .ability(AbilityId.BALL_FETCH);
   });
 
   it("should prevent opponents from using moves shared by the user", async () => {
@@ -37,6 +36,9 @@ describe("Moves - Imprison", () => {
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(player, [MoveId.TRANSFORM, MoveId.SPLASH]);
+    game.move.changeMoveset(enemy, [MoveId.IMPRISON, MoveId.SPLASH, MoveId.GROWL]);
 
     game.move.select(MoveId.TRANSFORM);
     await game.move.selectEnemyMove(MoveId.IMPRISON);
@@ -53,15 +55,20 @@ describe("Moves - Imprison", () => {
   });
 
   it("should not prevent allies from using moves shared by the user", async () => {
-    game.override.battleType("double").moveset([MoveId.IMPRISON, MoveId.SPLASH]).enemyMoveset(MoveId.SPLASH);
+    game.override.battleType("double");
 
     await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
+    game.move.changeMoveset(playerPokemon[0], [MoveId.IMPRISON, MoveId.SPLASH]);
+    game.move.changeMoveset(playerPokemon[1], [MoveId.IMPRISON, MoveId.SPLASH]);
+    game.move.changeMoveset(enemyPokemon[0], MoveId.SPLASH);
+    game.move.changeMoveset(enemyPokemon[1], MoveId.SPLASH);
+
     game.move.select(MoveId.IMPRISON, 0);
-    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.SPLASH, 1);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -71,28 +78,26 @@ describe("Moves - Imprison", () => {
   });
 
   it("should not interrupt moves invoked by Sleep Talk", async () => {
-    game.override
-      .moveset([MoveId.IMPRISON, MoveId.SPLASH])
-      .enemyMoveset([MoveId.SPLASH, MoveId.SLEEP_TALK])
-      .enemyStatusEffect(StatusEffect.SLEEP);
+    game.override.enemyStatusEffect(StatusEffect.SLEEP);
 
     await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
-    const enemyPokemon = game.field.getEnemyPokemon();
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(player, [MoveId.IMPRISON, MoveId.SPLASH]);
+    game.move.changeMoveset(enemy, [MoveId.SPLASH, MoveId.SLEEP_TALK]);
 
     game.move.select(MoveId.IMPRISON);
     await game.move.selectEnemyMove(MoveId.SLEEP_TALK);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toNextTurn();
-    expect(enemyPokemon.getMoveHistory().map((turnMove) => turnMove.result)).toEqual(Array(2).fill(MoveResult.SUCCESS));
+    expect(enemy.getMoveHistory().map((turnMove) => turnMove.result)).toEqual(Array(2).fill(MoveResult.SUCCESS));
   });
 
   it("should not interfere with the effects of an ally's Imprison", async () => {
-    game.override
-      .battleType("double")
-      .moveset([]) // Moves are set manually for this test
-      .enemyMoveset([MoveId.SPLASH, MoveId.CELEBRATE]);
+    game.override.battleType("double");
 
     await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
@@ -101,6 +106,8 @@ describe("Moves - Imprison", () => {
 
     game.move.changeMoveset(feebas, [MoveId.IMPRISON, MoveId.SPLASH]);
     game.move.changeMoveset(magikarp, [MoveId.IMPRISON, MoveId.CELEBRATE]);
+    game.move.changeMoveset(enemyPokemon[0], [MoveId.SPLASH, MoveId.CELEBRATE]);
+    game.move.changeMoveset(enemyPokemon[1], [MoveId.SPLASH, MoveId.CELEBRATE]);
 
     game.move.select(MoveId.IMPRISON, 0);
     game.move.select(MoveId.IMPRISON, 1);
@@ -126,6 +133,13 @@ describe("Moves - Imprison", () => {
     game.override.moveset([MoveId.SPLASH, MoveId.GROWL]);
 
     await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+
+    const [feebas, magikarp] = game.scene.getPlayerParty();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(feebas, [MoveId.SPLASH, MoveId.GROWL]);
+    game.move.changeMoveset(magikarp, [MoveId.SPLASH, MoveId.GROWL]);
+    game.move.changeMoveset(enemy, [MoveId.IMPRISON, MoveId.SPLASH, MoveId.GROWL]);
 
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.IMPRISON);

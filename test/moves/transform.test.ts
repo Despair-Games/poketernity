@@ -1,5 +1,6 @@
-import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, EFFECTIVE_STATS, Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -23,25 +24,19 @@ describe("Moves - Transform", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
-      .battleType("single")
-      .enemySpecies(SpeciesId.MEW)
-      .enemyLevel(200)
-      .enemyAbility(AbilityId.BEAST_BOOST)
-      .enemyPassiveAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(MoveId.SPLASH)
-      .ability(AbilityId.INTIMIDATE)
-      .moveset([MoveId.TRANSFORM]);
+    game.override.battleType("single").enemySpecies(SpeciesId.MAGIKARP).enemyLevel(200);
   });
 
   it("should copy species, ability, gender, all stats except HP, all stat stages, moveset, and types of target", async () => {
     await game.classicMode.startBattle([SpeciesId.DITTO]);
 
-    game.move.select(MoveId.TRANSFORM);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    game.move.changeMoveset(enemy, MoveId.SPLASH);
+
+    game.move.use(MoveId.TRANSFORM);
+    await game.toEndOfTurn();
 
     expect(player.getSpeciesForm().speciesId).toBe(enemy.getSpeciesForm().speciesId);
     expect(player.getAbility()).toBe(enemy.getAbility());
@@ -74,18 +69,19 @@ describe("Moves - Transform", () => {
   });
 
   it("should copy in-battle overridden stats", async () => {
-    game.override.enemyMoveset([MoveId.POWER_SPLIT]);
-
     await game.classicMode.startBattle([SpeciesId.DITTO]);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(enemy, MoveId.POWER_SPLIT);
 
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(MoveId.TRANSFORM);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.use(MoveId.TRANSFORM);
+    await game.toEndOfTurn();
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);
     expect(enemy.getStat(Stat.ATK, false)).toBe(avgAtk);
@@ -95,24 +91,66 @@ describe("Moves - Transform", () => {
   });
 
   it("should set each move's pp to a maximum of 5", async () => {
-    game.override.enemyMoveset([MoveId.SWORDS_DANCE, MoveId.GROWL, MoveId.SKETCH, MoveId.RECOVER]);
-
     await game.classicMode.startBattle([SpeciesId.DITTO]);
-    const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(MoveId.TRANSFORM);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    player.getMoveset().forEach((move) => {
+    game.move.changeMoveset(enemy, [MoveId.SWORDS_DANCE, MoveId.GROWL, MoveId.SKETCH, MoveId.RECOVER]);
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.use(MoveId.TRANSFORM);
+    await game.phaseInterceptor.to("PostActionPhase");
+
+    const moveset = player.getMoveset();
+    expect(moveset).toHaveLength(4);
+
+    for (const move of moveset) {
       // Should set correct maximum PP without touching `ppUp`
-      if (move) {
-        if (move.moveId === MoveId.SKETCH) {
-          expect(move.getMovePp()).toBe(1);
-        } else {
-          expect(move.getMovePp()).toBe(5);
-        }
-        expect(move.ppUp).toBe(0);
+      if (move.moveId === MoveId.SKETCH) {
+        expect(move.getMovePp()).toBe(1);
+      } else {
+        expect(move.getMovePp()).toBe(5);
       }
-    });
+      expect(move.ppUp).toBe(0);
+    }
+  });
+
+  it("should persist transformed attributes across reloads", async () => {
+    game.override.enemySpecies(SpeciesId.UNOWN).enemyForms({ [SpeciesId.UNOWN]: 5 });
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(player, MoveId.TRANSFORM);
+    game.move.changeMoveset(enemy, MoveId.MEMENTO);
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.select(MoveId.TRANSFORM);
+    await game.move.selectEnemyMove(MoveId.MEMENTO);
+    await game.toNextWave();
+
+    expect(game.scene.phaseManager.getCurrentPhase()?.id).toBe(PhaseId.COMMAND);
+    expect(game.scene.currentBattle.waveIndex).toBe(2);
+
+    await game.reload.reloadSession();
+
+    const playerReloaded = game.field.getPlayerPokemon();
+    const moveset = playerReloaded.getMoveset();
+    const speciesForm = playerReloaded.getSpeciesForm();
+
+    expect(speciesForm.speciesId).toBe(enemy.getSpeciesForm().speciesId);
+    expect(speciesForm.formIndex).toBe(enemy.getSpeciesForm().formIndex);
+    expect(playerReloaded.getAbility()).toBe(enemy.getAbility());
+    expect(playerReloaded.getGender()).toBe(enemy.getGender());
+
+    expect(playerReloaded.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
+    for (const s of EFFECTIVE_STATS) {
+      expect(playerReloaded.getStat(s, false)).toBe(enemy.getStat(s, false));
+    }
+
+    expect(moveset).toHaveLength(1);
+    expect(moveset[0]?.moveId).toBe(MoveId.MEMENTO);
   });
 });

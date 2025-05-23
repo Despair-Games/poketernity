@@ -36,9 +36,7 @@ export class TerastallizationPhase extends BattlePhase {
 
   public override end(): void {
     this.pokemon.isTerastallized = true;
-    if (this.pokemon.summonData) {
-      this.pokemon.summonData.addedType = null;
-    }
+    this.pokemon.summonData.addedType = null;
     this.pokemon.updateSpritePipelineData();
 
     if (this.pokemon.isPlayer()) {
