@@ -70,7 +70,7 @@ export class QuietFormChangePhase extends BattlePhase {
       });
 
       let key = "spriteColors";
-      if (this.pokemon.summonData?.speciesForm) {
+      if (this.pokemon.summonData.speciesForm) {
         key += "Base";
       }
       sprite.pipelineData[key] = this.pokemon.getSprite().pipelineData[key];

@@ -37,7 +37,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should bring the user and target to the air, immobilizing the target", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -66,7 +66,7 @@ describe("Moves - Sky Drop", () => {
   it("should deal no damage to Flying-type Pokemon (but still immobilize them)", async () => {
     game.override.enemySpecies(SpeciesId.SKARMORY);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -96,7 +96,7 @@ describe("Moves - Sky Drop", () => {
   it("should make both the user and target semi-invulnerable", async () => {
     game.override.battleType("double").enemyMoveset([MoveId.SPLASH, MoveId.TACKLE]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -118,7 +118,7 @@ describe("Moves - Sky Drop", () => {
   it("No Guard should allow Pokemon to hit other Pokemon under Sky Drop's effect", async () => {
     game.override.battleType("double").enemyAbility(AbilityId.NO_GUARD).enemyMoveset([MoveId.SPLASH, MoveId.TACKLE]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -140,7 +140,7 @@ describe("Moves - Sky Drop", () => {
   it("Lock On should allow Pokemon to hit other Pokemon under Sky Drop's effect", async () => {
     game.override.battleType("double").enemyMoveset([MoveId.LOCK_ON, MoveId.SPLASH, MoveId.TACKLE]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -175,7 +175,7 @@ describe("Moves - Sky Drop", () => {
   it("should do nothing against type-immune targets", async () => {
     game.override.ability(AbilityId.NORMALIZE).enemySpecies(SpeciesId.DUSCLOPS);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SKY_DROP);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -191,7 +191,7 @@ describe("Moves - Sky Drop", () => {
   it("should do nothing against protected targets", async () => {
     game.override.enemyMoveset(MoveId.PROTECT);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SKY_DROP);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -207,7 +207,7 @@ describe("Moves - Sky Drop", () => {
   it("should fail when targeting the user's ally", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const [player1, player2] = game.scene.getPlayerField();
 
@@ -226,7 +226,7 @@ describe("Moves - Sky Drop", () => {
     // Snorlax is 460 kg
     game.override.enemySpecies(SpeciesId.SNORLAX);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -243,7 +243,7 @@ describe("Moves - Sky Drop", () => {
   it("should fail when the target has an active substitute", async () => {
     game.override.enemyMoveset(MoveId.SUBSTITUTE);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -259,7 +259,7 @@ describe("Moves - Sky Drop", () => {
 
   it("should be cancelled when the target Pokemon faints while airborne", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAREANIE]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.MAREANIE);
 
     const player1 = game.field.getPlayerPokemon();
     const enemy1 = game.field.getEnemyPokemon();
@@ -279,7 +279,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should be cancelled when the user Pokemon faints while airborne", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
+    await game.classicMode.startBattle(SpeciesId.MAREANIE);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -298,7 +298,7 @@ describe("Moves - Sky Drop", () => {
   it("should be cancelled when another Pokemon uses Gravity", async () => {
     game.override.battleType("double").moveset([MoveId.SKY_DROP, MoveId.GRAVITY]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const player1 = game.scene.getPlayerField()[0];
     const enemy1 = game.scene.getEnemyField()[0];
@@ -327,7 +327,7 @@ describe("Moves - Sky Drop", () => {
   it("should bypass the effects of the 'Center of Attention' status", async () => {
     game.override.battleType("double").enemyMoveset([MoveId.FOLLOW_ME, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const player1 = game.scene.getPlayerField()[0];
     const enemy1 = game.scene.getEnemyField()[0];
@@ -356,7 +356,7 @@ describe("Moves - Sky Drop", () => {
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
 
     const tatsugiri = game.scene.getPlayerField()[1];
     const enemy1 = game.scene.getEnemyField()[0];
@@ -390,7 +390,7 @@ describe("Moves - Sky Drop", () => {
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
-    await game.classicMode.startBattle([SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
+    await game.classicMode.startBattle(SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
 
     game.move.use(MoveId.SPLASH, 0);
     game.move.use(MoveId.SPLASH, 1);
@@ -406,7 +406,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should not allow the target to switch out or flee", async () => {
-    await game.classicMode.startBattle([SpeciesId.GASTLY]);
+    await game.classicMode.startBattle(SpeciesId.GASTLY);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SKY_DROP);
@@ -418,7 +418,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should make the user and target not grounded", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     for (const pokemon of game.scene.getField()) {
       pokemon.hp = 1;
@@ -437,7 +437,7 @@ describe("Moves - Sky Drop", () => {
 
   it("should stop the target's consecutive uses of frenzy moves", async () => {
     game.override.startingLevel(200); // Ensures that player Pokemon survives Thrash
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

@@ -35,7 +35,7 @@ describe("Abilities - Quick Feet", () => {
 
   it("should increase the Pokemon's speed by 50% if it has a status effect", async () => {
     game.override.statusEffect(StatusEffect.POISON);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
     const speedStat = playerPokemon.getStat(Stat.SPD);
     const effectiveSpeedStat = playerPokemon.getEffectiveStat(Stat.SPD);
@@ -45,7 +45,7 @@ describe("Abilities - Quick Feet", () => {
 
   it("should ignore Paralysis' speed reduction", async () => {
     game.override.statusEffect(StatusEffect.PARALYSIS);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
     const speedStat = playerPokemon.getStat(Stat.SPD);
     const effectiveSpeedStat = playerPokemon.getEffectiveStat(Stat.SPD);
@@ -54,7 +54,7 @@ describe("Abilities - Quick Feet", () => {
   });
 
   it("should not activate if the Pokemon does not have a status effect", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
     const speedStat = playerPokemon.getStat(Stat.SPD);
     const effectiveSpeedStat = playerPokemon.getEffectiveStat(Stat.SPD);
@@ -64,7 +64,7 @@ describe("Abilities - Quick Feet", () => {
 
   it("should synergize with Comatose", async () => {
     game.override.passiveAbility(AbilityId.COMATOSE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
     const speedStat = playerPokemon.getStat(Stat.SPD);
     const effectiveSpeedStat = playerPokemon.getEffectiveStat(Stat.SPD);

@@ -35,7 +35,6 @@ describe("Moves - Metronome", () => {
       .moveset([MoveId.METRONOME, MoveId.SPLASH])
       .battleType("single")
       .startingLevel(100)
-      .starterSpecies(SpeciesId.REGIELEKI)
       .enemyLevel(100)
       .enemySpecies(SpeciesId.SHUCKLE)
       .enemyMoveset(MoveId.SPLASH)
@@ -43,7 +42,7 @@ describe("Moves - Metronome", () => {
   });
 
   it("should have one semi-invulnerable turn and deal damage on the second turn when a semi-invulnerable move is called", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.DIVE);
@@ -59,7 +58,7 @@ describe("Moves - Metronome", () => {
   });
 
   it("should apply secondary effects of a move", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const player = game.field.getPlayerPokemon();
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.WOOD_HAMMER);
 
@@ -70,7 +69,7 @@ describe("Moves - Metronome", () => {
   });
 
   it("should recharge after using recharge move", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const player = game.field.getPlayerPokemon();
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.HYPER_BEAM);
     vi.spyOn(allMoves.get(MoveId.HYPER_BEAM), "accuracy", "get").mockReturnValue(100);
@@ -83,7 +82,7 @@ describe("Moves - Metronome", () => {
 
   it("should only target ally for Aromatic Mist", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.RATTATA]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI, SpeciesId.RATTATA);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.AROMATIC_MIST);
@@ -99,7 +98,7 @@ describe("Moves - Metronome", () => {
   });
 
   it("should cause opponent to flee, and not crash for Roar", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.ROAR);
 
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -115,7 +114,7 @@ describe("Moves - Metronome", () => {
   });
 
   it("should never call a G-Max move", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const user = game.field.getPlayerPokemon();
 

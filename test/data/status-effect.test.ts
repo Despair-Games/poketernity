@@ -327,7 +327,7 @@ describe("Status Effects", () => {
     });
 
     it("causes the pokemon's move to fail when activated", async () => {
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
       game.move.select(MoveId.QUICK_ATTACK);
       await game.move.forceStatusActivation(true);
@@ -365,7 +365,7 @@ describe("Status Effects", () => {
     });
 
     it("should last the appropriate number of turns", async () => {
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
       const player = game.scene.getPlayerPokemon()!;
       player.trySetStatus(StatusEffect.SLEEP, false, undefined, 4);
@@ -423,7 +423,7 @@ describe("Status Effects", () => {
     });
 
     it("should not inflict a 0 HP mon with a status", async () => {
-      await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
       const player = game.field.getPlayerPokemon();
       player.hp = 0;

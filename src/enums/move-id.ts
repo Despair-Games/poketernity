@@ -1133,7 +1133,7 @@ export enum MoveId {
   FELL_STINGER,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Phantom_Force_(move) | Source} */
   PHANTOM_FORCE,
-  /**{@link https://bulbapedia.bulbagarden.net/wiki/Trick_Or_Treat_(move) | Source} */
+  /**{@link https://bulbapedia.bulbagarden.net/wiki/Trick-or-Treat_(move) | Source} */
   TRICK_OR_TREAT,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Noble_Roar_(move) | Source} */
   NOBLE_ROAR,
@@ -1141,7 +1141,7 @@ export enum MoveId {
   ION_DELUGE,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Parabolic_Charge_(move) | Source} */
   PARABOLIC_CHARGE,
-  /**{@link https://bulbapedia.bulbagarden.net/wiki/Forests_Curse_(move) | Source} */
+  /**{@link https://bulbapedia.bulbagarden.net/wiki/Forest%27s_Curse_(move) | Source} */
   FORESTS_CURSE,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Petal_Blizzard_(move) | Source} */
   PETAL_BLIZZARD,

@@ -36,7 +36,7 @@ describe("Moves - Upper Hand", () => {
   });
 
   it("should flinch the opponent before they use a priority attack", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const feebas = game.scene.getPlayerPokemon()!;
     const magikarp = game.scene.getEnemyPokemon()!;
@@ -55,7 +55,7 @@ describe("Moves - Upper Hand", () => {
   ])("should fail when the opponent selects a $descriptor", async ({ moveId }) => {
     game.override.enemyMoveset(moveId);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const feebas = game.scene.getPlayerPokemon()!;
 
@@ -68,7 +68,7 @@ describe("Moves - Upper Hand", () => {
   it("should flinch the opponent before they use an attack boosted by Gale Wings", async () => {
     game.override.enemyAbility(AbilityId.GALE_WINGS).enemyMoveset(MoveId.GUST);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const feebas = game.scene.getPlayerPokemon()!;
     const magikarp = game.scene.getEnemyPokemon()!;
@@ -84,7 +84,7 @@ describe("Moves - Upper Hand", () => {
   it("should fail if the target has already moved", async () => {
     game.override.enemyMoveset(MoveId.FAKE_OUT).enemyAbility(AbilityId.SHEER_FORCE);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const feebas = game.scene.getPlayerPokemon()!;
 

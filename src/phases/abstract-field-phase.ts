@@ -10,7 +10,7 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
  */
 export abstract class FieldPhase extends BattlePhase {
   public executeForAll(func: (pokemon: Pokemon) => void): void {
-    const field = globalScene.getField(true).filter((p) => p.summonData);
+    const field = globalScene.getField(true);
     field.forEach((pokemon) => func(pokemon));
   }
 }

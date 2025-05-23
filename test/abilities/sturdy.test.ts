@@ -57,7 +57,7 @@ describe("Abilities - Sturdy", () => {
   it("should proc when user is at full HP", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     expect(enemy).toHaveFullHp();
@@ -70,7 +70,7 @@ describe("Abilities - Sturdy", () => {
 
   it("should NOT proc when user is NOT at full HP", async () => {
     const { classicMode, field, move } = game;
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
 
     const enemy = field.getEnemyPokemon();
     enemy.damageAndUpdate(1);
@@ -86,7 +86,7 @@ describe("Abilities - Sturdy", () => {
   it("should be immune to OHKO moves", async () => {
     const { classicMode, field, move } = game;
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
 
@@ -103,7 +103,7 @@ describe("Abilities - Sturdy", () => {
     const { override, classicMode, field, move } = game;
     override.statusActivation(true); // Force confusion to proc
 
-    await classicMode.runToSummon([SpeciesId.LUCARIO]);
+    await classicMode.runToSummon(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
     enemy.setStat(Stat.HP, 3);
     enemy.hp = 3;
@@ -120,7 +120,7 @@ describe("Abilities - Sturdy", () => {
   it("should proc again if healed back to full HP", async () => {
     const { classicMode, field, move } = game;
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     for (let turn = 1; turn < 3; turn++) {
@@ -144,7 +144,7 @@ describe("Abilities - Sturdy", () => {
     override.enemyHeldItems([{ name: "FOCUS_BAND", count: Number.MAX_SAFE_INTEGER }]); // Make sure Focus Band would always proc
     vi.spyOn(SurviveDamageModifier.prototype, "shouldApply");
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     expect(enemy).toHaveFullHp();
@@ -160,7 +160,7 @@ describe("Abilities - Sturdy", () => {
     const { override, classicMode, field, move } = game;
     override.ability(abilityId);
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     expect(enemy).toHaveFullHp();
@@ -174,7 +174,7 @@ describe("Abilities - Sturdy", () => {
   it("should only proc on full HP for multi-hit moves", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     expect(enemy).toHaveFullHp();
@@ -192,7 +192,7 @@ describe("Abilities - Sturdy", () => {
   it("should keep proccing for multi-hit moves as long as it is at full HP", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     expect(enemy).toHaveFullHp();
@@ -213,7 +213,7 @@ describe("Abilities - Sturdy", () => {
     vi.spyOn(FaintCountdownAttr.prototype, "turnCountMin", "get").mockReturnValue(1);
     vi.spyOn(FaintCountdownAttr.prototype, "turnCountMax", "get").mockReturnValue(1);
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
     expect(enemy).toHaveFullHp();
@@ -231,7 +231,7 @@ describe("Abilities - Sturdy", () => {
     const { classicMode, field, move } = game;
     vi.spyOn(DestinyBondTag.prototype, "lapse");
 
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
     vi.spyOn(DestinyBondTag.prototype, "apply");
     const player = field.getPlayerPokemon();
     player.damageAndUpdate(player.getMaxHp() - 1);
@@ -252,7 +252,7 @@ describe("Abilities - Sturdy", () => {
 
   it.each(sacrificialMoves)("should not proc on sacrificial/self-KO '%s' move", async (_enemyMoveName, enemyMoveId) => {
     const { classicMode, field, move } = game;
-    await classicMode.startBattle([SpeciesId.LUCARIO]);
+    await classicMode.startBattle(SpeciesId.LUCARIO);
 
     const enemy = field.getEnemyPokemon();
 

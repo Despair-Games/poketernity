@@ -36,7 +36,7 @@ describe("Moves - Fake Out", () => {
 
   it("flinches the opponent on hit", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
@@ -49,7 +49,7 @@ describe("Moves - Fake Out", () => {
   });
 
   it("can only be used on the first turn a pokemon is sent out in a battle", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -67,7 +67,7 @@ describe("Moves - Fake Out", () => {
 
   // This is a game-specific buff to Fake Out
   it("can be used at the start of every wave even if the pokemon wasn't recalled", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.damageAndUpdate(enemy.getMaxHp() - 1);
@@ -83,7 +83,7 @@ describe("Moves - Fake Out", () => {
 
   it("can be used again if recalled and sent back out", async () => {
     game.override.startingWave(4);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     const enemy1 = game.scene.getEnemyPokemon()!;
 
@@ -123,7 +123,7 @@ describe("Moves - Fake Out", () => {
   ])("can be used after the user is sent out via $moveName", async ({ moveId }) => {
     game.override.moveset([MoveId.FAKE_OUT, moveId]);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     game.move.select(moveId);
     game.selectPartyPokemon(1);
@@ -148,7 +148,7 @@ describe("Moves - Fake Out", () => {
   it("can be used after the user is sent out via Wimp Out", async () => {
     game.override.ability(AbilityId.WIMP_OUT).enemyLevel(100).enemyMoveset(MoveId.FALSE_SWIPE);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.SPLASH);
     game.selectPartyPokemon(1);

@@ -34,7 +34,7 @@ describe("Abilities - Anger Point", () => {
   });
 
   it("should maximize the ability holder's attack if it receives a critical hit", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SPLASH);
@@ -44,7 +44,7 @@ describe("Abilities - Anger Point", () => {
   });
 
   it("should not maximize the ability holder's attack if its substitute receives a critical hit", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SUBSTITUTE);

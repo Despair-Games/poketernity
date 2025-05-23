@@ -34,7 +34,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Tackle deals expected damage after gmax damage reduction", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
@@ -53,7 +53,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
   it("E-Max Eternatus does not get gmax damage reduction", async () => {
     game.override.enemySpecies(SpeciesId.ETERNATUS).enemyForms({ [SpeciesId.ETERNATUS]: 1 });
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
@@ -71,7 +71,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
   it("Attacks deal 1 damage at minimum", async () => {
     game.override.startingLevel(1).enemyLevel(100000);
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -82,7 +82,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Fixed-damage moves still get damage reduction", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "isMax").mockReturnValue(true);
@@ -94,7 +94,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Percent based damage moves still get damage reduction", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     game.move.select(MoveId.HAIL);
@@ -107,7 +107,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
   it("Perish Song should still KO G-Max Pokemon", async () => {
     game.override.moveset([MoveId.PERISH_SONG, MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.PERISH_SONG);
     await game.toNextTurn();

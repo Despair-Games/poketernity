@@ -44,7 +44,7 @@ describe("Ability Attribute - Weather Heal", () => {
     { ability: AbilityId.ICE_BODY, abilityName: "Ice Body", healRatio: 0, healStr: "0", weather: "Rain", weatherType: WeatherType.RAIN },
   ])("should make $abilityName restore $healStr of the user's HP in $weather", async ({ ability, healRatio, weatherType }) => {
     game.override.ability(ability).weather(weatherType);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const expectedHeal = Math.floor(playerPokemon.hp * healRatio);
     playerPokemon.hp = 1;
@@ -57,7 +57,7 @@ describe("Ability Attribute - Weather Heal", () => {
 
   it("should not activate if Cloud Nine is active", async () => {
     game.override.ability(AbilityId.RAIN_DISH).weather(WeatherType.RAIN).enemyAbility(AbilityId.CLOUD_NINE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.hp = 1;
 

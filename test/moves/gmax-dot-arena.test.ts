@@ -34,7 +34,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
   });
 
   it("G-Max wildfire should do 1/6th hp damage to non fire types", async () => {
-    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
+    await game.classicMode.startBattle(SpeciesId.SUNKERN, SpeciesId.SUNKERN);
 
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -53,7 +53,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
   });
 
   it("G-Max Volcalith should not damage rock types", async () => {
-    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
+    await game.classicMode.startBattle(SpeciesId.SUNKERN, SpeciesId.SUNKERN);
 
     game.move.select(MoveId.G_MAX_VOLCALITH, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
@@ -73,7 +73,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
 
   it("G-Max moves should not damage magic guard", async () => {
     game.override.enemyAbility(AbilityId.MAGIC_GUARD);
-    await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
+    await game.classicMode.startBattle(SpeciesId.SUNKERN, SpeciesId.SUNKERN);
 
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);

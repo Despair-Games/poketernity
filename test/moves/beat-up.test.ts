@@ -34,14 +34,14 @@ describe("Moves - Beat Up", () => {
   });
 
   it("should hit once for each healthy player Pokemon", async () => {
-    await game.startBattle([
+    await game.classicMode.startBattle(
       SpeciesId.MAGIKARP,
       SpeciesId.BULBASAUR,
       SpeciesId.CHARMANDER,
       SpeciesId.SQUIRTLE,
       SpeciesId.PIKACHU,
       SpeciesId.EEVEE,
-    ]);
+    );
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -62,14 +62,14 @@ describe("Moves - Beat Up", () => {
   });
 
   it("should not count player Pokemon with status effects towards hit count", async () => {
-    await game.startBattle([
+    await game.classicMode.startBattle(
       SpeciesId.MAGIKARP,
       SpeciesId.BULBASAUR,
       SpeciesId.CHARMANDER,
       SpeciesId.SQUIRTLE,
       SpeciesId.PIKACHU,
       SpeciesId.EEVEE,
-    ]);
+    );
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

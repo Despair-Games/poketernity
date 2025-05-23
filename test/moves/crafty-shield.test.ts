@@ -37,7 +37,7 @@ describe("Moves - Crafty Shield", () => {
   });
 
   test("should protect the user and allies from status moves", async () => {
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -55,7 +55,7 @@ describe("Moves - Crafty Shield", () => {
   test("should not protect the user and allies from attack moves", async () => {
     game.override.enemyMoveset([MoveId.TACKLE]);
 
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -74,7 +74,7 @@ describe("Moves - Crafty Shield", () => {
     game.override.enemySpecies(SpeciesId.DUSCLOPS);
     game.override.enemyMoveset([MoveId.CURSE]);
 
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -90,7 +90,7 @@ describe("Moves - Crafty Shield", () => {
   });
 
   test("should not block allies' self-targeted moves", async () => {
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerField();
 

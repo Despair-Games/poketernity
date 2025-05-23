@@ -34,7 +34,7 @@ describe("Moves - Tail whip", () => {
 
   it("should lower DEF stat stage by 1", async () => {
     const moveToUse = MoveId.TAIL_WHIP;
-    await game.startBattle([SpeciesId.MIGHTYENA, SpeciesId.MIGHTYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.MIGHTYENA);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(0);

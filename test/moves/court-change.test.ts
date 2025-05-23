@@ -36,7 +36,7 @@ describe("Moves - Court Change", () => {
 
   it("should swap arena tags to opponent", async () => {
     game.override.enemyMoveset([MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.use(MoveId.SAFEGUARD);
     await game.toNextTurn();
@@ -55,7 +55,7 @@ describe("Moves - Court Change", () => {
 
   it("should not miss", async () => {
     game.override.enemyMoveset([MoveId.FLY]);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();

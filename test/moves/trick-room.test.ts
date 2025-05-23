@@ -38,7 +38,7 @@ describe("Moves - Trick Room", () => {
   });
 
   it("should reverse speed order", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -60,7 +60,7 @@ describe("Moves - Trick Room", () => {
 
   it("should cancel an active Trick Room if used again", async () => {
     game.override.enemyMoveset([]);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     game.move.use(MoveId.TRICK_ROOM);
     await game.move.forceEnemyMove(MoveId.TRICK_ROOM);
@@ -76,7 +76,7 @@ describe("Moves - Trick Room", () => {
   });
 
   it("should not reverse move priority order", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     game.move.use(MoveId.TRICK_ROOM);
     await game.toNextTurn();
@@ -96,7 +96,7 @@ describe("Moves - Trick Room", () => {
     )[0];
     vi.spyOn(quickDrawAbAttr, "chance", "get").mockReturnValue(100);
 
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     game.move.use(MoveId.TRICK_ROOM);
     await game.toNextTurn();
