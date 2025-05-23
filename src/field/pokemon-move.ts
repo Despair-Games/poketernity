@@ -86,7 +86,7 @@ export class PokemonMove {
   /**
    * Copies an existing move or creates a valid PokemonMove object from json representing one
    * @param source The data for the {@linkcode PokemonMove | move} to copy
-   * @return A valid {@linkcode PokemonMove} object
+   * @returns A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
     return new PokemonMove(source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);

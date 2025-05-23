@@ -1690,8 +1690,8 @@ export class TurnStatusEffectModifier extends PokemonHeldItemModifier {
    * would be the only item able to {@linkcode apply} successfully.
    * @override
    * @param modifier {@linkcode Modifier} being type tested
-   * @return `true` if {@linkcode modifier} is an instance of
-   * TurnStatusEffectModifier, false otherwise
+   * @returns `true` if {@linkcode modifier} is an instance of
+   * {@linkcode TurnStatusEffectModifier}, `false` otherwise
    */
   matchType(modifier: Modifier): boolean {
     return modifier instanceof TurnStatusEffectModifier;
