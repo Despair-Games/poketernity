@@ -411,7 +411,6 @@ export class AddVoucherModifier extends ConsumableModifier {
  * will reset {@linkcode battleCount} back to {@linkcode maxBattles} of the
  * existing modifier instead of adding that modifier directly.
  * @extends PersistentModifier
- * @abstract
  * @see {@linkcode add}
  */
 export abstract class LapsingPersistentModifier extends PersistentModifier {

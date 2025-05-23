@@ -7,10 +7,6 @@
             "syntaxKind": "block"
         },
         {
-            "tagName": "@implements",
-            "syntaxKind": "block"
-        },
-        {
             "tagName": "@extends",
             "syntaxKind": "block"
         },
