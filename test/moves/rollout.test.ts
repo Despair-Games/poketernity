@@ -39,7 +39,7 @@ describe("Moves - Rollout", () => {
     const moveObj = allMoves.get(MoveId.ROLLOUT);
     const spy = vi.spyOn(moveObj, "calculateBattlePower");
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     for (let i = 0; i < 7; i++) {
       game.move.use(MoveId.ROLLOUT);
@@ -54,7 +54,7 @@ describe("Moves - Rollout", () => {
     const moveObj = allMoves.get(MoveId.ROLLOUT);
     vi.spyOn(moveObj, "calculateBattlePower");
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(MoveId.DEFENSE_CURL);
     await game.toNextTurn();
@@ -66,7 +66,7 @@ describe("Moves - Rollout", () => {
   });
 
   it("should lock the user into the move for 5 turns", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -93,7 +93,7 @@ describe("Moves - Rollout", () => {
   it("should stop its execution if an attack is unsuccessful", async () => {
     game.override.ability(AbilityId.BALL_FETCH);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 

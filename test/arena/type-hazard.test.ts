@@ -31,7 +31,7 @@ describe("Arena - Type Hazards", () => {
   });
 
   it("should not damage the team that set them", async () => {
-    await game.classicMode.startBattle([SpeciesId.ABRA, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.ABRA);
 
     game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
@@ -48,7 +48,7 @@ describe("Arena - Type Hazards", () => {
 
   it("should damage opposing pokemon that are forced to switch in", async () => {
     game.override.startingWave(5);
-    await game.classicMode.startBattle([SpeciesId.ABRA, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.ABRA);
 
     game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
@@ -63,7 +63,7 @@ describe("Arena - Type Hazards", () => {
 
   it("should damage opposing pokemon that choose to switch in", async () => {
     game.override.startingWave(5);
-    await game.classicMode.startBattle([SpeciesId.ABRA, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.ABRA);
 
     game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
@@ -80,7 +80,7 @@ describe("Arena - Type Hazards", () => {
   it("should not damage opposing pokemon with magic guard", async () => {
     game.override.startingWave(5);
     game.override.enemyAbility(AbilityId.MAGIC_GUARD);
-    await game.classicMode.startBattle([SpeciesId.ABRA, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.ABRA);
 
     game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
@@ -96,7 +96,7 @@ describe("Arena - Type Hazards", () => {
 
   it("should respect type matchups", async () => {
     game.override.startingWave(5);
-    await game.classicMode.startBattle([SpeciesId.ABRA, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.ABRA);
 
     game.move.select(MoveId.G_MAX_STEELSURGE);
     await game.toNextTurn();

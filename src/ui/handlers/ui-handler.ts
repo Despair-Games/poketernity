@@ -154,6 +154,7 @@ export abstract class UiHandler {
 
   public abstract processInput(button: Button): boolean;
 
+  /** @deprecated */
   public getUi() {
     return globalScene.ui;
   }

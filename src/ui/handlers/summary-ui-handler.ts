@@ -344,7 +344,7 @@ export class SummaryUiHandler extends UiHandler {
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
     let key = "spriteColors";
     delete this.pokemonSprite.pipelineData[`${key}Base`];
-    if (this.pokemon?.summonData?.speciesForm) {
+    if (this.pokemon?.summonData.speciesForm) {
       key += "Base";
     }
     this.pokemonSprite.pipelineData[key] = this.pokemon?.getSprite().pipelineData[key];

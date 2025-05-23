@@ -34,7 +34,7 @@ describe("Abilities - Download", () => {
 
   it("should boost special attack if the enemy's defense is higher", async () => {
     game.override.enemySpecies(SpeciesId.STEELIX);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -46,7 +46,7 @@ describe("Abilities - Download", () => {
 
   it("should boost attack if the enemy's special defense is higher", async () => {
     game.override.enemySpecies(SpeciesId.REGICE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
 

@@ -39,7 +39,7 @@ describe("Abilities - Sheer Force", () => {
 
   it("Sheer Force should boost the power of the move but disable secondary effects", async () => {
     game.override.moveset([MoveId.AIR_SLASH]);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     const airSlashMove = allMoves.get(MoveId.AIR_SLASH);
     vi.spyOn(airSlashMove, "calculateBattlePower");
@@ -58,7 +58,7 @@ describe("Abilities - Sheer Force", () => {
 
   it("Sheer Force does not affect the base damage or secondary effects of binding moves", async () => {
     game.override.moveset([MoveId.BIND]);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     const bindMove = allMoves.get(MoveId.BIND);
     vi.spyOn(bindMove, "calculateBattlePower");
@@ -74,7 +74,7 @@ describe("Abilities - Sheer Force", () => {
 
   it("Sheer Force does not boost the base damage of moves with no secondary effect", async () => {
     game.override.moveset([MoveId.TACKLE]);
-    await game.classicMode.startBattle([SpeciesId.PIDGEOT]);
+    await game.classicMode.startBattle(SpeciesId.PIDGEOT);
 
     const tackleMove = allMoves.get(MoveId.TACKLE);
     vi.spyOn(tackleMove, "calculateBattlePower");
@@ -94,7 +94,7 @@ describe("Abilities - Sheer Force", () => {
       .enemyLevel(10)
       .enemyAbility(AbilityId.COLOR_CHANGE);
 
-    await game.classicMode.startBattle([SpeciesId.PIDGEOT]);
+    await game.classicMode.startBattle(SpeciesId.PIDGEOT);
     const enemyPokemon = game.scene.getEnemyPokemon();
     const headbuttMove = allMoves.get(MoveId.HEADBUTT);
     vi.spyOn(headbuttMove, "calculateBattlePower");
@@ -120,7 +120,7 @@ describe("Abilities - Sheer Force", () => {
       .moveset(moveToUse)
       .enemyMoveset(moveToUse);
 
-    await game.classicMode.startBattle([SpeciesId.PIDGEOT]);
+    await game.classicMode.startBattle(SpeciesId.PIDGEOT);
 
     const pidgeot = game.scene.getPlayerParty()[0];
     const onix = game.scene.getEnemyParty()[0];
@@ -143,7 +143,7 @@ describe("Abilities - Sheer Force", () => {
       .moveset([MoveId.RELIC_SONG])
       .enemyMoveset([MoveId.SPLASH])
       .enemyLevel(100);
-    await game.classicMode.startBattle([SpeciesId.MELOETTA]);
+    await game.classicMode.startBattle(SpeciesId.MELOETTA);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const formKeyStart = playerPokemon?.getFormKey();

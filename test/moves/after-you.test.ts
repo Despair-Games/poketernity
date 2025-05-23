@@ -35,7 +35,7 @@ describe("Moves - After You", () => {
   });
 
   it("makes the target move immediately after the user", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI, SpeciesId.SHUCKLE);
 
     game.move.select(MoveId.AFTER_YOU, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SPLASH, 1);
@@ -49,7 +49,7 @@ describe("Moves - After You", () => {
 
   it("fails if target already moved", async () => {
     game.override.enemySpecies(SpeciesId.SHUCKLE);
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.PIKACHU]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI, SpeciesId.PIKACHU);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.AFTER_YOU, 1, BattlerIndex.PLAYER);

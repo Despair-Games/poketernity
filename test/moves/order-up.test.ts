@@ -49,7 +49,7 @@ describe("Moves - Order Up", () => {
     async ({ formIndex, stat }) => {
       game.override.starterForms({ [SpeciesId.TATSUGIRI]: formIndex });
 
-      await game.classicMode.startBattle([SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
+      await game.classicMode.startBattle(SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
 
       const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -73,7 +73,7 @@ describe("Moves - Order Up", () => {
   it("should be boosted by Sheer Force while still applying a stat boost", async () => {
     game.override.passiveAbility(AbilityId.SHEER_FORCE).starterForms({ [SpeciesId.TATSUGIRI]: 0 });
 
-    await game.classicMode.startBattle([SpeciesId.TATSUGIRI, SpeciesId.DONDOZO]);
+    await game.classicMode.startBattle(SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 

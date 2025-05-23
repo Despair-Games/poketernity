@@ -32,7 +32,7 @@ describe("Items - Leftovers", () => {
   });
 
   it("leftovers works", async () => {
-    await game.startBattle([SpeciesId.ARCANINE]);
+    await game.classicMode.startBattle(SpeciesId.ARCANINE);
 
     // Make sure leftovers are there
     expect(game.scene.modifiers[0].type.id).toBe("LEFTOVERS");

@@ -36,7 +36,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import { PokemonSummonData } from "#field/pokemon-summon-data";
 import Trainer from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
@@ -354,9 +353,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Set summon data fields
-      if (!enemyPokemon.summonData) {
-        enemyPokemon.summonData = new PokemonSummonData();
-      }
+      enemyPokemon.resetSummonData();
 
       // Set ability
       if (!isNil(config.abilityIndex)) {

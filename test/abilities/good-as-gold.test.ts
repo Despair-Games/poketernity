@@ -37,7 +37,7 @@ describe("Abilities - Good As Gold", () => {
   });
 
   it("should negate the effects of status moves against the source", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -50,7 +50,7 @@ describe("Abilities - Good As Gold", () => {
   });
 
   it("should not negate non-status moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -63,7 +63,7 @@ describe("Abilities - Good As Gold", () => {
   });
 
   it("should not negate the source's own status moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -77,7 +77,7 @@ describe("Abilities - Good As Gold", () => {
   });
 
   it("should not negate moves targeting the source's side of the field", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -89,7 +89,7 @@ describe("Abilities - Good As Gold", () => {
   });
 
   it("should not negate moves that target all Pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

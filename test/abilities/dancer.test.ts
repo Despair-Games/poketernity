@@ -34,7 +34,7 @@ describe("Abilities - Dancer", () => {
   // Reference Link: https://bulbapedia.bulbagarden.net/wiki/Dancer_(Ability)
 
   it("triggers when dance moves are used, doesn't consume extra PP", async () => {
-    await game.classicMode.startBattle([SpeciesId.ORICORIO, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.ORICORIO, SpeciesId.FEEBAS);
 
     const [oricorio] = game.scene.getPlayerField();
 

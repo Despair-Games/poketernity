@@ -31,7 +31,7 @@ describe("Moves - Reflect Type", () => {
       .startingLevel(60)
       .enemySpecies(SpeciesId.CHARMANDER)
       .enemyMoveset([MoveId.BURN_UP, MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();

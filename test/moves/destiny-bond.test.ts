@@ -16,7 +16,6 @@ describe("Moves - Destiny Bond", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const defaultParty = [SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE];
   const enemyFirst = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
   const playerFirst = [BattlerIndex.PLAYER, BattlerIndex.ENEMY];
 
@@ -46,7 +45,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = MoveId.TACKLE;
 
     game.override.moveset(moveToUse);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -63,7 +62,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = MoveId.TACKLE;
 
     game.override.moveset([MoveId.SPLASH, moveToUse]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -89,7 +88,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = MoveId.TACKLE;
 
     game.override.moveset([MoveId.SPLASH, moveToUse]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -116,7 +115,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = MoveId.FALSE_SWIPE;
 
     game.override.moveset(moveToUse).ability(AbilityId.SAND_STREAM);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -133,7 +132,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = MoveId.TACKLE;
 
     game.override.moveset([MoveId.SPORE, moveToUse]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -158,7 +157,7 @@ describe("Moves - Destiny Bond", () => {
 
   it("should not KO an ally", async () => {
     game.override.moveset([MoveId.DESTINY_BOND, MoveId.CRUNCH]).battleType("double");
-    await game.classicMode.startBattle([SpeciesId.SHEDINJA, SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE]);
+    await game.classicMode.startBattle(SpeciesId.SHEDINJA, SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
     const enemyPokemon1 = game.scene.getEnemyField()[1];
@@ -182,7 +181,7 @@ describe("Moves - Destiny Bond", () => {
     vi.spyOn(allMoves.get(moveToUse), "accuracy", "get").mockReturnValue(100);
 
     game.override.moveset(moveToUse);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -201,7 +200,7 @@ describe("Moves - Destiny Bond", () => {
 
   it("should not cause a crash if the user is KO'd by Pledge moves", async () => {
     game.override.moveset([MoveId.GRASS_PLEDGE, MoveId.WATER_PLEDGE]).battleType("double");
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
     const enemyPokemon1 = game.scene.getEnemyField()[1];
@@ -230,7 +229,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = MoveId.TACKLE;
 
     game.override.moveset(moveToUse).startingHeldItems([{ name: "REVIVER_SEED" }]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
