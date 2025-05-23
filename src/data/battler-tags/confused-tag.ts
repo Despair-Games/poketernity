@@ -1,5 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -78,7 +78,7 @@ export class ConfusedTag extends BattlerTag {
 
         if (pokemon.isFullHp()) {
           // `applyAbAttrs` may modify `damageHolder` by reference to adjust the damage value.
-          applyAbAttrs<PreDefendFullHpEndureAbAttr>(
+          applyAbAttrs<SturdyAbAttr>(
             AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE,
             pokemon,
             false,

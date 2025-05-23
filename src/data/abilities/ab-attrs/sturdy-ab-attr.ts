@@ -16,7 +16,7 @@ import type { NumberHolder } from "#utils/common-utils";
  *
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
  */
-export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
+export class SturdyAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
     this._flags.add(AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE);

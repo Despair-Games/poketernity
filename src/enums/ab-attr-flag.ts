@@ -71,7 +71,7 @@ import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
-import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
@@ -273,7 +273,7 @@ export enum AbAttrFlag {
   DAMAGE_BOOST,
   /** @see {@linkcode AlliedFieldDamageReductionAbAttr} */
   ALLIED_FIELD_DAMAGE_REDUCTION,
-  /** @see {@linkcode PreDefendFullHpEndureAbAttr} */
+  /** @see {@linkcode SturdyAbAttr} */
   PRE_DEFEND_FULL_HP_ENDURE,
   /** @see {@linkcode ConditionalCritAbAttr} */
   CONDITIONAL_CRIT,
