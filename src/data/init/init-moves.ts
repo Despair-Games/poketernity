@@ -39,6 +39,7 @@ import { AfterYouAttr } from "#moves/after-you-attr";
 import { AfterYouCondition } from "#moves/after-you-condition";
 import { AlwaysHitMinimizeAttr } from "#moves/always-hit-minimize-attr";
 import { AntiSunlightPowerDecreaseAttr } from "#moves/anti-sunlight-power-decrease-attr";
+import { AquaRingAttr } from "#moves/aqua-ring-attr";
 import { AttackReducePpMoveAttr } from "#moves/attack-reduce-pp-move-attr";
 import { AttackedByItemAttr } from "#moves/attacked-by-item-attr";
 import { AuraWheelTypeAttr } from "#moves/aura-wheel-type-attr";
@@ -49,13 +50,16 @@ import { BeatUpAttr } from "#moves/beat-up-attr";
 import { BideDamageAttr } from "#moves/bide-damage-attr";
 import { BideEffectAttr } from "#moves/bide-effect-attr";
 import { BideMessageAttr } from "#moves/bide-message-attr";
+import { BindingAttr } from "#moves/binding-attr";
 import { BlizzardAccuracyAttr } from "#moves/blizzard-accuracy-attr";
 import { BoostHealAttr } from "#moves/boost-heal-attr";
 import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reduction-attr";
 import { BypassRedirectAttr } from "#moves/bypass-redirect-attr";
 import { BypassSleepAttr } from "#moves/bypass-sleep-attr";
 import { CaptivateAttr } from "#moves/captivate-attr";
+import { CenterOfAttentionAttr } from "#moves/center-of-attention-attr";
 import { ChangeTypeAttr } from "#moves/change-type-attr";
+import { ChargeAttr } from "#moves/charge-attr";
 import { ChargingAttackMove } from "#moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#moves/charging-self-status-move";
 import { ChillyReceptionAttr } from "#moves/chilly-reception-attr";
@@ -87,7 +91,9 @@ import { DiscourageFrequentUseAttr } from "#moves/discourage-frequent-use-attr";
 import { DisplayMessageAttr } from "#moves/display-message-attr";
 import { DoubleDamageToMaxAttr } from "#moves/double-damage-to-max-attr";
 import { DoublePowerChanceAttr, doublePowerChanceMessageFunc } from "#moves/double-power-chance-attr";
+import { DrowsyAttr } from "#moves/drowsy-attr";
 import { EatBerryAttr } from "#moves/eat-berry-attr";
+import { ElectrifyAttr } from "#moves/electrify-attr";
 import { ElectroBallPowerAttr } from "#moves/electro-ball-power-attr";
 import { EncoreAttr } from "#moves/encore-attr";
 import { ExposedMoveAttr } from "#moves/exposed-move-attr";
@@ -107,6 +113,7 @@ import { FirstMoveTypeAttr } from "#moves/first-move-type-attr";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { FlameBurstAttr } from "#moves/flame-burst-attr";
 import { FlinchAttr } from "#moves/flinch-attr";
+import { FloatingAttr } from "#moves/floating-attr";
 import { FlyingTypeMultiplierAttr } from "#moves/flying-type-multiplier-attr";
 import { FocusEnergyAttr } from "#moves/focus-energy-attr";
 import { FocusPunchCondition } from "#moves/focus-punch-condition";
@@ -116,15 +123,19 @@ import { FreezeDryAttr } from "#moves/freeze-dry-attr";
 import { FrenzyAttr } from "#moves/frenzy-attr";
 import { FriendshipPowerAttr } from "#moves/friendship-power-attr";
 import { GravityAttr } from "#moves/gravity-attr";
+import { GroundingAttr } from "#moves/grounding-attr";
 import { GrowthStatStageChangeAttr } from "#moves/growth-stat-stage-change-attr";
+import { GrudgeAttr } from "#moves/grudge-attr";
 import { GulpMissileTagAttr } from "#moves/gulp-missile-tag-attr";
 import { GyroBallPowerAttr } from "#moves/gyro-ball-power-attr";
 import { HalfSacrificialAttr } from "#moves/half-sacrificial-attr";
 import { HappyHourAttr } from "#moves/happy-hour-attr";
 import { hasStockpileStacksCondition } from "#moves/has-stockpile-stacks-condition";
 import { HealAttr } from "#moves/heal-attr";
+import { HealBlockAttr } from "#moves/heal-block-attr";
 import { HealOnAllyAttr } from "#moves/heal-on-ally-attr";
 import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
+import { HelpingHandAttr } from "#moves/helping-hand-attr";
 import { HiddenPowerTypeAttr } from "#moves/hidden-power-type-attr";
 import { HighCritAttr } from "#moves/high-crit-attr";
 import { HitCountPowerAttr } from "#moves/hit-count-power-attr";
@@ -138,7 +149,10 @@ import { IceNoEffectTypeAttr } from "#moves/ice-no-effect-type-attr";
 import { IgnoreAccuracyAttr } from "#moves/ignore-accuracy-attr";
 import { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages-attr";
 import { IgnoreWeatherTypeDebuffAttr } from "#moves/ignore-weather-type-debuff-attr";
+import { ImprisoningAttr } from "#moves/imprisoning-attr";
 import { IncrementMovePriorityAttr } from "#moves/increment-move-priority-attr";
+import { InfatuateAttr } from "#moves/infatuate-attr";
+import { IngrainAttr } from "#moves/ingrain-attr";
 import { InvertStatsAttr } from "#moves/invert-stats-attr";
 import { IonDelugeAttr } from "#moves/ion-deluge-attr";
 import { IvyCudgelTypeAttr } from "#moves/ivy-cudgel-type-attr";
@@ -149,6 +163,7 @@ import { LeechSeedAttr } from "#moves/leech-seed-attr";
 import { LessPPMorePowerAttr } from "#moves/less-pp-more-power-attr";
 import { LevelDamageAttr } from "#moves/level-damage-attr";
 import { LowHpPowerAttr } from "#moves/low-hp-power-attr";
+import { MagicCoatAttr } from "#moves/magic-coat-attr";
 import { magnitudeMessageFunc, MagnitudePowerAttr } from "#moves/magnitude-power-attr";
 import { MatchHpAttr } from "#moves/match-hp-attr";
 import { MatchUserTypeAttr } from "#moves/match-user-type-attr";
@@ -167,6 +182,7 @@ import { MultiHitPowerIncrementAttr } from "#moves/multi-hit-power-increment-att
 import { MultiStatusEffectAttr } from "#moves/multi-status-effect-attr";
 import { NaturePowerAttr } from "#moves/nature-power-attr";
 import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#moves/neutral-damage-against-flying-type-multiplier-attr";
+import { NightmareAttr } from "#moves/nightmare-attr";
 import { NoDamageAgainstFlyingAttr } from "#moves/no-damage-against-flying-attr";
 import { NoEffectAttr } from "#moves/no-effect-attr";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
@@ -177,6 +193,7 @@ import { PartyStatusCureAttr } from "#moves/party-status-cure-attr";
 import { PlantHealAttr } from "#moves/plant-heal-attr";
 import { PositiveStatStagePowerAttr, PunishmentPowerAttr } from "#moves/positive-stat-stage-power-attr";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
+import { PowderAttr } from "#moves/powder-attr";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { PresentPowerAttr } from "#moves/present-power-attr";
 import { ProtectAttr } from "#moves/protect-attr";
@@ -201,7 +218,9 @@ import { ResetStatsAttr } from "#moves/reset-stats-attr";
 import { ResistLastMoveTypeAttr } from "#moves/resist-last-move-type-attr";
 import { RespectAttackTypeImmunityAttr } from "#moves/respect-attack-type-immunity-attr";
 import { RevivalBlessingAttr } from "#moves/revival-blessing-attr";
+import { RollingAttr } from "#moves/rolling-attr";
 import { RollingPowerMultiplierAttr } from "#moves/rolling-power-multiplier-attr";
+import { RoostAttr } from "#moves/roost-attr";
 import { RoundPowerAttr } from "#moves/round-power-attr";
 import { SacrificialAttr } from "#moves/sacrificial-attr";
 import { SacrificialFullRestoreAttr } from "#moves/sacrificial-full-restore-attr";
@@ -215,6 +234,7 @@ import { ShellTrapCondition } from "#moves/shell-trap-condition";
 import { ShiftStatAttr } from "#moves/shift-stat-attr";
 import { SketchAttr } from "#moves/sketch-attr";
 import { SkyDropAttr } from "#moves/sky-drop-attr";
+import { SnatchAttr } from "#moves/snatch-attr";
 import { SpitUpPowerAttr } from "#moves/spit-up-power-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 import { StatusCategoryOnAllyAttr } from "#moves/status-category-on-ally-attr";
@@ -223,6 +243,7 @@ import { StatusIfBoostedAttr } from "#moves/status-if-boosted-attr";
 import { StealEatBerryAttr } from "#moves/steal-eat-berry-attr";
 import { StealHeldItemAttr } from "#moves/steal-held-item-attr";
 import { StealPositiveStatsAttr } from "#moves/steal-positive-stats-attr";
+import { StockpileAttr } from "#moves/stockpile-attr";
 import { StormAccuracyAttr } from "#moves/storm-accuracy-attr";
 import { SuppressAbilitiesAttr } from "#moves/suppress-abilities-attr";
 import { SuppressAbilitiesIfActedAttr } from "#moves/suppress-abilities-if-acted-attr";
@@ -237,7 +258,9 @@ import { TargetAtkUserAtkAttr } from "#moves/target-atk-user-atk-attr";
 import { TargetHalfHpDamageAttr } from "#moves/target-half-hp-damage-attr";
 import { TargetIsAttackingCondition } from "#moves/target-is-attacking-condition";
 import { targetSleptOrComatoseCondition } from "#moves/target-slept-or-comatose-condition";
+import { TauntAttr } from "#moves/taunt-attr";
 import { TechnoBlastTypeAttr } from "#moves/techno-blast-type-attr";
+import { TelekinesisAttr } from "#moves/telekinesis-attr";
 import { TeraBlastPowerAttr } from "#moves/tera-blast-power-attr";
 import { TeraBlastTypeAttr } from "#moves/tera-blast-type-attr";
 import { TeraMoveCategoryAttr } from "#moves/tera-move-category-attr";
@@ -245,15 +268,17 @@ import { TeraStarstormTypeAttr } from "#moves/tera-starstorm-type-attr";
 import { TerrainChangeAttr } from "#moves/terrain-change-attr";
 import { TerrainPulseTypeAttr } from "#moves/terrain-pulse-type-attr";
 import { ThunderAccuracyAttr } from "#moves/thunder-accuracy-attr";
+import { TormentAttr } from "#moves/torment-attr";
 import { ToxicAccuracyAttr } from "#moves/toxic-accuracy-attr";
 import { TransformAttr } from "#moves/transform-attr";
-import { BindingAttr } from "#moves/binding-attr";
+import { TrapAttr } from "#moves/trap-attr";
 import { TrickRoomAttr } from "#moves/trick-room-attr";
 import { TurnDamagedDoublePowerAttr } from "#moves/turn-damaged-double-power-attr";
 import { TypeImmuneDamageOverTimeAttr } from "#moves/type-immune-damage-over-time-attr";
 import { TypelessAttr } from "#moves/typeless-attr";
 import { unknownTypeCondition } from "#moves/unknown-type-condition";
 import { UpperHandCondition } from "#moves/upper-hand-condition";
+import { UproarAttr } from "#moves/uproar-attr";
 import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-attr";
 import { UserHpDamageAttr } from "#moves/user-hp-damage-attr";
 import { userSleptOrComatoseCondition } from "#moves/user-slept-or-comatose-condition";
@@ -269,10 +294,6 @@ import { WishAttr } from "#moves/wish-attr";
 import { isNil } from "#utils/common-utils";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
-import { TrapAttr } from "#moves/trap-attr";
-import { NightmareAttr } from "#moves/nightmare-attr";
-import { RollingAttr } from "#moves/rolling-attr";
-import { InfatuateAttr } from "#moves/infatuate-attr";
 
 // prettier-ignore
 export function initMoves() {
@@ -1095,7 +1116,7 @@ export function initMoves() {
       .attr(FlinchAttr)
       .condition(firstMoveCondition),
     new AttackMove(MoveId.UPROAR, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.UPROAR, true)
+      .attr(UproarAttr)
       .attr(MessageHeaderAttr, (user, _move) =>
         user.hasTag(BattlerTagType.UPROAR)
           // "{pokemonNameWithAffix} is making an uproar!"
@@ -1105,8 +1126,8 @@ export function initMoves() {
       .soundMove()
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new SelfStatusMove(MoveId.STOCKPILE, ElementalType.NORMAL, -1, 20, -1, 0, 3)
+      .attr(StockpileAttr)
       .condition((user) => (user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)?.stockpiledCount ?? 0) < 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.STOCKPILING, true)
       .snatchable(),
     new AttackMove(MoveId.SPIT_UP, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, 100, 10, -1, 0, 3)
       .condition(hasStockpileStacksCondition)
@@ -1127,7 +1148,7 @@ export function initMoves() {
       .attr(WeatherChangeAttr, WeatherType.HAIL)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.TORMENT, ElementalType.DARK, 100, 15, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, { failOnOverlap: true })
+      .attr(TormentAttr)
       .ignoresSubstitute()
       .bounceable(),
     new StatusMove(MoveId.FLATTER, ElementalType.DARK, 100, 15, -1, 0, 3)
@@ -1156,21 +1177,22 @@ export function initMoves() {
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasStatusEffect(StatusEffect.PARALYSIS) ? 2 : 1))
       .attr(HealStatusEffectAttr, true, StatusEffect.PARALYSIS),
     new SelfStatusMove(MoveId.FOLLOW_ME, ElementalType.NORMAL, -1, 20, -1, 2, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.CENTER_OF_ATTENTION, true),
+      .attr(CenterOfAttentionAttr),
     new StatusMove(MoveId.NATURE_POWER, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(NaturePowerAttr),
     new SelfStatusMove(MoveId.CHARGE, ElementalType.ELECTRIC, -1, 20, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPDEF], 1, true)
-      .attr(AddBattlerTagAttr, BattlerTagType.CHARGED, true)
+      .attr(ChargeAttr)
       .snatchable(),
     new StatusMove(MoveId.TAUNT, ElementalType.DARK, 100, 20, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.TAUNT, false, { failOnOverlap: true, turnCountMin: 4 })
+      .attr(TauntAttr)
       .bounceable()
       .ignoresSubstitute(),
     new StatusMove(MoveId.HELPING_HAND, ElementalType.NORMAL, -1, 20, -1, 5, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.HELPING_HAND)
+      .attr(HelpingHandAttr)
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_ALLY)
+      .condition((_user, target, _move) => !target.turnData.acted)
       .condition(failIfSingleBattle),
     new StatusMove(MoveId.TRICK, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
       .unimplemented(),
@@ -1184,14 +1206,14 @@ export function initMoves() {
     new SelfStatusMove(MoveId.ASSIST, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(RandomMovesetMoveAttr, invalidAssistMoves, true),
     new SelfStatusMove(MoveId.INGRAIN, ElementalType.GRASS, -1, 20, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.INGRAIN, true, { failOnOverlap: true })
-      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, true, { failOnOverlap: true })
+      .attr(IngrainAttr)
+      .attr(GroundingAttr)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLOATING], true)
       .snatchable(),
     new AttackMove(MoveId.SUPERPOWER, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF], -1, true),
     new SelfStatusMove(MoveId.MAGIC_COAT, ElementalType.PSYCHIC, -1, 15, -1, 4, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.MAGIC_COAT, true, { failOnOverlap: true })
+      .attr(MagicCoatAttr)
       .condition(new FailIfLastCondition()),
     new SelfStatusMove(MoveId.RECYCLE, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .snatchable()
@@ -1201,7 +1223,7 @@ export function initMoves() {
     new AttackMove(MoveId.BRICK_BREAK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 75, 100, 15, -1, 0, 3)
       .attr(RemoveScreensAttr),
     new StatusMove(MoveId.YAWN, ElementalType.NORMAL, -1, 10, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { failOnOverlap: true })
+      .attr(DrowsyAttr)
       .bounceable()
       .condition((user, target, _move) => !target.hasNonVolatileStatusEffect() && !target.isSafeguarded(user)),
     new AttackMove(MoveId.KNOCK_OFF, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 100, 20, -1, 0, 3)
@@ -1221,7 +1243,7 @@ export function initMoves() {
       .attr(SwitchAbilitiesAttr),
     new SelfStatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
       .ignoresSubstitute()
-      .attr(AddBattlerTagAttr, BattlerTagType.IMPRISONING, true, { failOnOverlap: true })
+      .attr(ImprisoningAttr)
       .snatchable(),
     new SelfStatusMove(MoveId.REFRESH, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(HealStatusEffectAttr, true, [
@@ -1235,9 +1257,9 @@ export function initMoves() {
         user.hasStatusEffect([StatusEffect.BURN, StatusEffect.PARALYSIS, StatusEffect.POISON, StatusEffect.TOXIC]),
       ),
     new SelfStatusMove(MoveId.GRUDGE, ElementalType.GHOST, -1, 5, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.GRUDGE, true, { turnCountMin: 1 }),
+      .attr(GrudgeAttr),
     new SelfStatusMove(MoveId.SNATCH, ElementalType.DARK, -1, 10, -1, 4, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.SNATCHING, true, { failOnOverlap: true }),
+      .attr(SnatchAttr),
     new AttackMove(MoveId.SECRET_POWER, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, 30, 0, 3)
       .makesContact(false)
       .attr(SecretPowerAttr),
@@ -1274,7 +1296,7 @@ export function initMoves() {
       .attr(WeakenMoveTypeAttr, ArenaTagType.MUD_SPORT)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.ICE_BALL, ElementalType.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.ROLLING, true)
+      .attr(RollingAttr)
       .attr(RollingPowerMultiplierAttr)
       .bulletMove(),
     new AttackMove(MoveId.NEEDLE_ARM, ElementalType.GRASS, MoveCategory.PHYSICAL, 60, 100, 15, 30, 0, 3)
@@ -1467,7 +1489,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPATK], -2, true),
     new SelfStatusMove(MoveId.ROOST, ElementalType.FLYING, -1, 5, -1, 0, 4)
       .attr(HealAttr, 0.5)
-      .attr(AddBattlerTagAttr, BattlerTagType.ROOSTED, true)
+      .attr(RoostAttr)
       .triageMove()
       .snatchable(),
     new StatusMove(MoveId.GRAVITY, ElementalType.PSYCHIC, -1, 5, -1, 0, 4)
@@ -1548,14 +1570,15 @@ export function initMoves() {
       .makesContact()
       .attr(LessPPMorePowerAttr),
     new StatusMove(MoveId.HEAL_BLOCK, ElementalType.PSYCHIC, 100, 15, -1, 0, 4)
-      .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, { failOnOverlap: true, turnCountMin: 5 })
+      .attr(HealBlockAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .bounceable(),
     new AttackMove(MoveId.WRING_OUT, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, 100, 5, -1, 0, 4)
       .attr(OpponentHighHpPowerAttr, 120)
       .makesContact(),
     new SelfStatusMove(MoveId.POWER_TRICK, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
-      .attr(AddBattlerTagAttr, BattlerTagType.POWER_TRICK, true)
+      /** @todo Should this be scored by the AI? */
+      .attr(AddUnscoredBattlerTagAttr, BattlerTagType.POWER_TRICK, true)
       .snatchable(),
     new StatusMove(MoveId.GASTRO_ACID, ElementalType.POISON, 100, 10, -1, 0, 4)
       .attr(SuppressAbilitiesAttr)
@@ -1594,15 +1617,15 @@ export function initMoves() {
       .attr(SwapStatStagesAttr, BATTLE_STATS)
       .ignoresSubstitute(),
     new SelfStatusMove(MoveId.AQUA_RING, ElementalType.WATER, -1, 20, -1, 0, 4)
-      .attr(AddBattlerTagAttr, BattlerTagType.AQUA_RING, true, { failOnOverlap: true })
+      .attr(AquaRingAttr)
       .snatchable(),
     new SelfStatusMove(MoveId.MAGNET_RISE, ElementalType.ELECTRIC, -1, 10, -1, 0, 4)
-      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, true, { failOnOverlap: true, turnCountMin: 5 })
+      .attr(FloatingAttr)
       .condition(
         (user, _target, _move) =>
           !globalScene.arena.hasTag(ArenaTagType.GRAVITY)
           && [BattlerTagType.FLOATING, BattlerTagType.IGNORE_FLYING, BattlerTagType.INGRAIN].every(
-            (tag) => !user.getTag(tag),
+            (tag) => !user.hasTag(tag),
           ),
       )
       .snatchable(),
@@ -1839,11 +1862,11 @@ export function initMoves() {
       ),
     new SelfStatusMove(MoveId.AUTOTOMIZE, ElementalType.STEEL, -1, 15, -1, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPD], 2, true)
-      .attr(AddBattlerTagAttr, BattlerTagType.AUTOTOMIZED, true)
+      .attr(AddUnscoredBattlerTagAttr, BattlerTagType.AUTOTOMIZED, true)
       .snatchable(),
     new SelfStatusMove(MoveId.RAGE_POWDER, ElementalType.BUG, -1, 20, -1, 2, 5)
-      .powderMove()
-      .attr(AddBattlerTagAttr, BattlerTagType.CENTER_OF_ATTENTION, true),
+      .attr(CenterOfAttentionAttr)
+      .powderMove(),
     new StatusMove(MoveId.TELEKINESIS, ElementalType.PSYCHIC, -1, 15, -1, 0, 5)
       .condition(failOnGravityCondition)
       .condition(
@@ -1864,19 +1887,19 @@ export function initMoves() {
       )
       .condition(
         (_user, target, _move) =>
-          isNil(target.getTag(BattlerTagType.INGRAIN))
-          && isNil(target.getTag(BattlerTagType.IGNORE_FLYING)),
+          !target.hasTag(BattlerTagType.INGRAIN)
+          && !target.hasTag(BattlerTagType.IGNORE_FLYING),
       )
-      .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
-      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 })
+      .attr(TelekinesisAttr)
+      .attr(FloatingAttr, false, 3)
       .bounceable(),
     new StatusMove(MoveId.MAGIC_ROOM, ElementalType.PSYCHIC, -1, 10, -1, 0, 5)
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES)
       .unimplemented(),
     new AttackMove(MoveId.SMACK_DOWN, ElementalType.ROCK, MoveCategory.PHYSICAL, 50, 100, 15, -1, 0, 5)
-      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
-      .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
+      .attr(GroundingAttr, false, true)
+      .attr(AddUnscoredBattlerTagAttr, BattlerTagType.INTERRUPTED)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .attr(HitsTagAttr, BattlerTagType.FLYING)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
@@ -2255,7 +2278,7 @@ export function initMoves() {
       .attr(TerrainChangeAttr, TerrainType.MISTY)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.ELECTRIFY, ElementalType.ELECTRIC, -1, 20, -1, 0, 6)
-      .attr(AddBattlerTagAttr, BattlerTagType.ELECTRIFIED, false, { failOnOverlap: true }),
+      .attr(ElectrifyAttr),
     new AttackMove(MoveId.PLAY_ROUGH, ElementalType.FAIRY, MoveCategory.PHYSICAL, 90, 90, 10, 10, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK], -1),
     new AttackMove(MoveId.FAIRY_WIND, ElementalType.FAIRY, MoveCategory.SPECIAL, 40, 100, 30, -1, 0, 6)
@@ -2316,7 +2339,7 @@ export function initMoves() {
       .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.POWDER, ElementalType.BUG, 100, 20, -1, 1, 6)
-      .attr(AddBattlerTagAttr, BattlerTagType.POWDER, false, { failOnOverlap: true })
+      .attr(PowderAttr)
       .ignoresSubstitute()
       .powderMove()
       .bounceable(),
@@ -2372,11 +2395,11 @@ export function initMoves() {
       .triageMove(),
     new AttackMove(MoveId.THOUSAND_ARROWS, ElementalType.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
       .attr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
-      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
+      .attr(GroundingAttr, false, true)
       .attr(HitsTagAttr, BattlerTagType.FLYING)
       .attr(HitsTagAttr, BattlerTagType.FLOATING)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
-      .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
+      .attr(AddUnscoredBattlerTagAttr, BattlerTagType.INTERRUPTED)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
@@ -2522,7 +2545,7 @@ export function initMoves() {
     new AttackMove(MoveId.LEAFAGE, ElementalType.GRASS, MoveCategory.PHYSICAL, 40, 100, 40, -1, 0, 7)
       .makesContact(false),
     new StatusMove(MoveId.SPOTLIGHT, ElementalType.NORMAL, -1, 15, -1, 3, 7)
-      .attr(AddBattlerTagAttr, BattlerTagType.CENTER_OF_ATTENTION, false)
+      .attr(CenterOfAttentionAttr, false)
       .bounceable()
       .condition(failIfSingleBattle),
     new StatusMove(MoveId.TOXIC_THREAD, ElementalType.POISON, 100, 20, -1, 0, 7)
@@ -3214,7 +3237,7 @@ export function initMoves() {
       .attr(BindingAttr, BattlerTagType.G_MAX_SAND_TOMB),
     new AttackMove(MoveId.G_MAX_SNOOZE, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.GRIMMSNARL)
-      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
+      .attr(DrowsyAttr, true, 50)
       .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
     new AttackMove(MoveId.G_MAX_TARTNESS, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.FLAPPLE)
@@ -3230,7 +3253,7 @@ export function initMoves() {
       .attr(AddEntryHazardTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(MoveId.G_MAX_MELTDOWN, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.MELMETAL)
-      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),
+      .attr(TormentAttr),
     new AttackMove(MoveId.G_MAX_FOAM_BURST, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.KINGLER)
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
@@ -3524,7 +3547,7 @@ export function initMoves() {
       .recklessMove(),
     new AttackMove(MoveId.PSYCHIC_NOISE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 75, 100, 10, 100, 0, 9)
       .soundMove()
-      .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, { turnCountMin: 2 }),
+      .attr(HealBlockAttr, true, 2),
     new AttackMove(MoveId.UPPER_HAND, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 65, 100, 15, 100, 3, 9)
       .attr(FlinchAttr)
       .condition(new UpperHandCondition()),
