@@ -1,7 +1,6 @@
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#constants/app-constants";
 import type { Pokemon } from "#field/pokemon";
 import type { GameManager } from "#test/test-utils/game-manager";
-import { capitalizeString } from "#utils/string-utils";
 import i18next, { type ParseKeys } from "i18next";
 import fs from "node:fs";
 import path from "node:path";
@@ -107,30 +106,4 @@ export function isPokemonInstance(received: unknown): received is Pokemon {
  */
 export function isGameManagerInstance(received: unknown): received is GameManager {
   return isObject(received) && (received as GameManager).constructor.name === "GameManager";
-}
-
-/**
- * Converts an array of enum ids to an array of objects containing the name and id of each enum.
- * @param enumIds - An array of enum ids
- * @param theEnum - The enum to get the name from
- * @returns An array of objects containing the name and id of each enum
- * @example
- *    enumIdsToIdNameArray([WeatherType.HARSH_SUN, WeatherType.STRONG_WINDS], WeatherType);
- *    // => [
- *    //  { name: "Harsh Sun", id: WeatherType.HARSH_SUN },
- *    //  { name: "Strong Winds", id: WeatherType.STRONG_WINDS }
- *    // ]
- */
-export function enumIdsToIdNameArray<T extends Record<string, string | number>>(
-  enumIds: number[] | readonly number[],
-  theEnum: T,
-) {
-  return enumIds.map((id: number) => {
-    const enumKey = Object.keys(theEnum).find((key) => theEnum[key as keyof T] === id);
-
-    return {
-      name: capitalizeString(enumKey || "", "_", false, true),
-      id,
-    };
-  });
 }
