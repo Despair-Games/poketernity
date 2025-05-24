@@ -39,7 +39,7 @@ describe("Ability - Bad Dreams", () => {
     const { override, classicMode, field, move } = game;
     override.enemyStatusEffect(StatusEffect.SLEEP);
 
-    await classicMode.startBattle([SpeciesId.DARKRAI]);
+    await classicMode.startBattle(SpeciesId.DARKRAI);
     const enemy = field.getEnemyPokemon();
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -49,7 +49,7 @@ describe("Ability - Bad Dreams", () => {
 
   it("should not damage awake enemies", async () => {
     const { classicMode, field, move } = game;
-    await classicMode.startBattle([SpeciesId.DARKRAI]);
+    await classicMode.startBattle(SpeciesId.DARKRAI);
     const enemy = field.getEnemyPokemon();
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -60,7 +60,7 @@ describe("Ability - Bad Dreams", () => {
   it("should do 1/8 max-hp damage to drowsy enemies falling asleep in the same turn", async () => {
     const { classicMode, field, move } = game;
 
-    await classicMode.startBattle([SpeciesId.DARKRAI]);
+    await classicMode.startBattle(SpeciesId.DARKRAI);
     const enemy = field.getEnemyPokemon();
     move.use(MoveId.YAWN);
     await game.toEndOfTurn();
@@ -87,7 +87,7 @@ describe("Ability - Bad Dreams", () => {
       const { override, classicMode, field, move } = game;
       override.weather(weatherType).enemyAbility(abilityId).enemyPassiveAbility(AbilityId.OVERCOAT); // overcoat to prevent sandstorm damage
 
-      await classicMode.runToSummon([SpeciesId.DARKRAI]);
+      await classicMode.runToSummon(SpeciesId.DARKRAI);
       const enemy = field.getEnemyPokemon();
       vi.spyOn(enemy, "randSeedInt").mockReturnValueOnce(0); // Make sure that Shed Skin/Healer always triggers.
       enemy.trySetStatus(StatusEffect.SLEEP);
@@ -106,7 +106,7 @@ describe("Ability - Bad Dreams", () => {
     const { override, classicMode, field, move } = game;
     override.enemyAbility(AbilityId.HYDRATION).newWeatherDuration(1);
 
-    await classicMode.runToSummon([SpeciesId.DARKRAI]);
+    await classicMode.runToSummon(SpeciesId.DARKRAI);
     game.scene.arena.trySetWeather(WeatherType.RAIN, false);
     const enemy = field.getEnemyPokemon();
     enemy.trySetStatus(StatusEffect.SLEEP, false, null, Number.MAX_SAFE_INTEGER);
@@ -129,7 +129,7 @@ describe("Ability - Bad Dreams", () => {
       const { override, classicMode, field, move } = game;
       override.weather(weatherType).enemyAbility(abilityId).enemyPassiveAbility(AbilityId.OVERCOAT); // overcoat to prevent sandstorm damage
 
-      await classicMode.runToSummon([SpeciesId.DARKRAI]);
+      await classicMode.runToSummon(SpeciesId.DARKRAI);
       const enemy = field.getEnemyPokemon();
       vi.spyOn(enemy, "randSeedInt").mockReturnValueOnce(3); // Make sure that Shed Skin/Healer never triggers.
       enemy.trySetStatus(StatusEffect.SLEEP, false, null, Number.MAX_SAFE_INTEGER);
