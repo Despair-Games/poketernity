@@ -16,10 +16,10 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
-const nonVolatileStatusEffects = NON_VOLATILE_STATUS_EFFECTS.map((statusEffectId) => ({
-  statusEffectName: capitalizeString(StatusEffect[statusEffectId], "_", false, true),
-  statusEffectId,
-}));
+const nonVolatileStatusEffects = NON_VOLATILE_STATUS_EFFECTS.map<[string, StatusEffect]>((statusEffect) => [
+  capitalizeString(StatusEffect[statusEffect], "_", false, true) ?? "",
+  statusEffect,
+]);
 
 //#endregion
 
@@ -53,7 +53,7 @@ describe("Ability - Guts", () => {
   it("should not apply an attack boost with no status effect", async () => {
     const { field, classicMode, move } = game;
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -66,7 +66,7 @@ describe("Ability - Guts", () => {
   it("should not apply an attack boost with confusion status effect", async () => {
     const { field, classicMode, move } = game;
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     move.use(MoveId.SPLASH);
@@ -80,12 +80,12 @@ describe("Ability - Guts", () => {
   });
 
   it.each(nonVolatileStatusEffects)(
-    "should apply a 1.5x attack boost with $statusEffectName status effect",
-    async ({ statusEffectId }) => {
+    "should apply a 1.5x attack boost with '%s' status effect",
+    async (_name, statusEffect) => {
       const { override, classicMode, field, move } = game;
-      override.statusEffect(statusEffectId);
+      override.statusEffect(statusEffect);
 
-      await classicMode.startBattle([SpeciesId.FEEBAS]);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
       const player = field.getPlayerPokemon();
       move.use(MoveId.SPLASH);
       await game.toEndOfTurn();
@@ -104,7 +104,7 @@ describe("Ability - Guts", () => {
     const { override, field, classicMode, move } = game;
     override.statusEffect(StatusEffect.PARALYSIS).passiveAbility(id);
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -118,7 +118,7 @@ describe("Ability - Guts", () => {
     const { override, classicMode, field, move } = game;
     override.statusEffect(StatusEffect.BURN);
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
     move.use(MoveId.TACKLE);
@@ -142,7 +142,7 @@ describe("Ability - Guts", () => {
     const { override, classicMode, field, move } = game;
     override.statusEffect(StatusEffect.FREEZE);
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
 
