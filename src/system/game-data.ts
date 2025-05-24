@@ -1,5 +1,5 @@
 import { api } from "#api/api";
-import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
+import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
@@ -77,7 +77,6 @@ import { applyChallenges } from "#utils/challenge-utils";
 import { NumberHolder, executeIf, fixedNumber, getTSEnumKeys, isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
-import { getDataTypeKey } from "#utils/save-data-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 
@@ -241,7 +240,7 @@ export class GameData {
         typeof v === "bigint" ? (v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString()) : v,
       );
 
-      localStorage.setItem(getDataTypeKey(GameDataType.SYSTEM), encrypt(systemData, BYPASS_LOGIN));
+      localStorage.setItem(getLocalStorageKey(GameDataType.SYSTEM), encrypt(systemData, BYPASS_LOGIN));
 
       if (!BYPASS_LOGIN) {
         api.savedata.system.update({ clientSessionId }, systemData).then((error) => {
@@ -268,7 +267,7 @@ export class GameData {
     return new Promise<boolean>((resolve) => {
       console.log("Client Session:", clientSessionId);
 
-      if (BYPASS_LOGIN && !localStorage.getItem(getDataTypeKey(GameDataType.SYSTEM))) {
+      if (BYPASS_LOGIN && !localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM))) {
         return resolve(false);
       }
 
@@ -295,14 +294,14 @@ export class GameData {
             return resolve(false);
           }
 
-          const cachedSystem = localStorage.getItem(getDataTypeKey(GameDataType.SYSTEM));
+          const cachedSystem = localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM));
           this.initSystem(
             saveDataOrErr,
             cachedSystem ? AES.decrypt(cachedSystem, saveKey).toString(enc.Utf8) : undefined,
           ).then(resolve);
         });
       } else {
-        this.initSystem(decrypt(localStorage.getItem(getDataTypeKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
+        this.initSystem(decrypt(localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
           resolve,
         ); // TODO: is this bang correct?
       }
@@ -325,10 +324,10 @@ export class GameData {
           }
         }
 
-        localStorage.setItem(getDataTypeKey(GameDataType.SYSTEM), encrypt(systemDataStr, BYPASS_LOGIN));
+        localStorage.setItem(getLocalStorageKey(GameDataType.SYSTEM), encrypt(systemDataStr, BYPASS_LOGIN));
 
         // TODO: run history shouldn't be initialized here (and is it even needed?)
-        const lsItemKey = getDataTypeKey(GameDataType.RUN_HISTORY);
+        const lsItemKey = getLocalStorageKey(GameDataType.RUN_HISTORY);
         const lsItem = localStorage.getItem(lsItemKey);
         if (!lsItem) {
           localStorage.setItem(lsItemKey, "");
@@ -410,7 +409,7 @@ export class GameData {
       const response = await Utils.apiFetch("savedata/runHistory", true);
       const data = await response.json();
       */
-      const lsItemKey = getDataTypeKey(GameDataType.RUN_HISTORY);
+      const lsItemKey = getLocalStorageKey(GameDataType.RUN_HISTORY);
       const lsItem = localStorage.getItem(lsItemKey);
       if (lsItem) {
         const cachedResponse = lsItem;
@@ -431,7 +430,7 @@ export class GameData {
       localStorage.setItem(lsItemKey, "");
       return {};
     }
-    const lsItemKey = getDataTypeKey(GameDataType.RUN_HISTORY);
+    const lsItemKey = getLocalStorageKey(GameDataType.RUN_HISTORY);
     const lsItem = localStorage.getItem(lsItemKey);
     if (lsItem) {
       const cachedResponse = lsItem;
@@ -470,7 +469,7 @@ export class GameData {
       isFavorite: false,
     };
     localStorage.setItem(
-      getDataTypeKey(GameDataType.RUN_HISTORY),
+      getLocalStorageKey(GameDataType.RUN_HISTORY),
       encrypt(JSON.stringify(runHistoryData), BYPASS_LOGIN),
     );
     /**
@@ -547,9 +546,9 @@ export class GameData {
     if (BYPASS_LOGIN) {
       return;
     }
-    localStorage.removeItem(getDataTypeKey(GameDataType.SYSTEM));
+    localStorage.removeItem(getLocalStorageKey(GameDataType.SYSTEM));
     for (let s = 0; s < SAVE_SLOT_LIMIT; s++) {
-      localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, s));
+      localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, s));
     }
   }
 
@@ -638,7 +637,7 @@ export class GameData {
    * @returns the numbers saved in local storage if they exist, otherwise an empty {@linkcode Set}
    */
   private getSeenTutorialsSet() {
-    const key = getDataTypeKey(GameDataType.TUTORIALS);
+    const key = getLocalStorageKey(GameDataType.TUTORIALS);
     const tutorials = new Set<Tutorial>();
     const lsItem = localStorage.getItem(key);
     if (lsItem) {
@@ -658,7 +657,7 @@ export class GameData {
    * @returns `true` if saving was successful, `false` otherwise
    */
   public saveTutorialAsSeen(tutorial: Tutorial): boolean {
-    const key = getDataTypeKey(GameDataType.TUTORIALS);
+    const key = getLocalStorageKey(GameDataType.TUTORIALS);
     const tutorials = this.getSeenTutorialsSet();
     tutorials.add(tutorial);
     try {
@@ -680,7 +679,7 @@ export class GameData {
   }
 
   public saveSeenDialogue(dialogue: string): boolean {
-    const key = getDataTypeKey(GameDataType.SEEN_DIALOGUES);
+    const key = getLocalStorageKey(GameDataType.SEEN_DIALOGUES);
     const dialogues: object = this.getSeenDialogues();
 
     dialogues[dialogue] = true;
@@ -691,7 +690,7 @@ export class GameData {
   }
 
   public getSeenDialogues(): SeenDialogues {
-    const key = getDataTypeKey(GameDataType.SEEN_DIALOGUES);
+    const key = getLocalStorageKey(GameDataType.SEEN_DIALOGUES);
     const ret: SeenDialogues = {};
 
     if (!Object.hasOwn(localStorage, key)) {
@@ -751,7 +750,7 @@ export class GameData {
         }
       };
 
-      const sessionStorageKey = getDataTypeKey(GameDataType.SESSION, slotId);
+      const sessionStorageKey = getLocalStorageKey(GameDataType.SESSION, slotId);
       const sessionData = localStorage.getItem(sessionStorageKey);
       if (!BYPASS_LOGIN && !sessionData) {
         api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
@@ -940,7 +939,7 @@ export class GameData {
   deleteSession(slotId: number): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (BYPASS_LOGIN) {
-        localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
+        localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
         return resolve(true);
       }
 
@@ -961,7 +960,7 @@ export class GameData {
               loggedInUser.lastSessionSlot = -1;
             }
 
-            localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
+            localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
             resolve(true);
           }
         });
@@ -1011,7 +1010,7 @@ export class GameData {
     let result: [boolean, boolean] = [false, false];
 
     if (BYPASS_LOGIN) {
-      localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
+      localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
       result = [true, true];
     } else {
       const sessionData = this.getSessionSaveData();
@@ -1023,7 +1022,7 @@ export class GameData {
         if (loggedInUser) {
           loggedInUser!.lastSessionSlot = -1;
         }
-        localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
+        localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
       } else {
         if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
@@ -1119,8 +1118,8 @@ export class GameData {
           globalScene.ui.savingIcon.show();
         }
 
-        const sessionStorageKey = getDataTypeKey(GameDataType.SESSION, globalScene.sessionSlotId);
-        const systemStorageKey = getDataTypeKey(GameDataType.SYSTEM);
+        const sessionStorageKey = getLocalStorageKey(GameDataType.SESSION, globalScene.sessionSlotId);
+        const systemStorageKey = getLocalStorageKey(GameDataType.SYSTEM);
 
         const sessionData = useCachedSession
           ? this.parseSessionData(decrypt(localStorage.getItem(sessionStorageKey)!, BYPASS_LOGIN)) // TODO: is this bang correct?
@@ -1179,7 +1178,7 @@ export class GameData {
 
   public tryExportData(dataType: GameDataType, slotId: number = 0): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      const dataKey: string = getDataTypeKey(dataType, slotId);
+      const dataKey: string = getLocalStorageKey(dataType, slotId);
       const handleData = (dataStr: string) => {
         switch (dataType) {
           case GameDataType.SYSTEM:
@@ -1224,7 +1223,7 @@ export class GameData {
   }
 
   public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number): void {
-    const dataKey = getDataTypeKey(dataType, slotId);
+    const dataKey = getLocalStorageKey(dataType, slotId);
 
     let saveFile: any = document.getElementById("saveFile");
     if (saveFile) {
@@ -1901,7 +1900,7 @@ export class GameData {
    * @returns {@linkcode DexAttrProps} corresponding to the given dex attribute.
    */
   public getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
-    const female = !(dexAttr & DexAttr.MALE); // TODO is that correct for genderless species?
+    const female = !(dexAttr & DexAttr.MALE); // TODO: is that correct for genderless species?
     const shiny = !(dexAttr & DexAttr.NON_SHINY);
     let variant: Variant = 0;
     if (shiny) {
