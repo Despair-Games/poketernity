@@ -30,7 +30,7 @@ describe("Moves - Steamroller", () => {
 
   it("should always hit a minimzed target with double damage", async () => {
     game.override.enemySpecies(SpeciesId.DITTO).enemyMoveset(MoveId.MINIMIZE);
-    await game.classicMode.startBattle([SpeciesId.IRON_BOULDER]);
+    await game.classicMode.startBattle(SpeciesId.IRON_BOULDER);
 
     const ditto = game.scene.getEnemyPokemon()!;
     vi.spyOn(ditto, "getAttackDamage");

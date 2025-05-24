@@ -28,7 +28,7 @@ describe("Items - Light Ball", () => {
   });
 
   it("LIGHT_BALL held by PIKACHU", async () => {
-    await game.startBattle([SpeciesId.PIKACHU]);
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -57,7 +57,7 @@ describe("Items - Light Ball", () => {
   }, 20000);
 
   it("LIGHT_BALL not held by PIKACHU", async () => {
-    await game.startBattle([SpeciesId.MAROWAK]);
+    await game.classicMode.startBattle(SpeciesId.MAROWAK);
 
     const partyMember = game.scene.getPlayerParty()[0];
 

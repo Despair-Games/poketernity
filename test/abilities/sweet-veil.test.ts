@@ -32,7 +32,7 @@ describe("Abilities - Sweet Veil", () => {
 
   it("prevents the user and its allies from falling asleep", async () => {
     game.override.enemyMoveset(MoveId.SPORE);
-    await game.classicMode.startBattle([SpeciesId.SWIRLIX, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.SWIRLIX, SpeciesId.MAGIKARP);
     game.forceSpeciesSpecificAbility(SpeciesId.SWIRLIX, AbilityId.SWEET_VEIL);
 
     game.move.use(MoveId.SPLASH);
@@ -45,7 +45,7 @@ describe("Abilities - Sweet Veil", () => {
 
   it("causes Rest to fail when used by the user or its allies", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
-    await game.classicMode.startBattle([SpeciesId.SWIRLIX, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.SWIRLIX, SpeciesId.MAGIKARP);
     game.forceSpeciesSpecificAbility(SpeciesId.SWIRLIX, AbilityId.SWEET_VEIL);
     game.scene.getPlayerField().forEach((p) => (p.hp = 1)); // Damage Pokemon so they can attempt to use Rest
 
@@ -60,7 +60,7 @@ describe("Abilities - Sweet Veil", () => {
 
   it("causes Yawn to fail if used on the user or its allies", async () => {
     game.override.enemyMoveset(MoveId.YAWN);
-    await game.classicMode.startBattle([SpeciesId.SWIRLIX, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.SWIRLIX, SpeciesId.MAGIKARP);
     game.forceSpeciesSpecificAbility(SpeciesId.SWIRLIX, AbilityId.SWEET_VEIL);
 
     game.move.use(MoveId.SPLASH);
@@ -73,7 +73,7 @@ describe("Abilities - Sweet Veil", () => {
 
   it("prevents the user and its allies already drowsy due to Yawn from falling asleep.", async () => {
     game.override.enemyMoveset(MoveId.YAWN);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.SHUCKLE, SpeciesId.SWIRLIX]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.SHUCKLE, SpeciesId.SWIRLIX);
     game.forceSpeciesSpecificAbility(SpeciesId.SWIRLIX, AbilityId.SWEET_VEIL);
 
     game.move.use(MoveId.SPLASH);

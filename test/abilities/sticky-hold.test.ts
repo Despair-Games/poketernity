@@ -42,7 +42,7 @@ describe("Abilities - Sticky Hold", () => {
   )("should prevent the user from losing a held item when hit by the move $name", async ({ moveId: move }) => {
     vi.spyOn(allMoves.get(move), "chance", "get").mockReturnValue(-1);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(move);
     await game.move.forceEnemyMove(MoveId.SPLASH);
@@ -59,7 +59,7 @@ describe("Abilities - Sticky Hold", () => {
     "should prevent the user's held item from being stolen by the ability $name",
     async ({ ability }) => {
       game.override.ability(ability);
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
       game.move.use(MoveId.FALSE_SWIPE);
       await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);

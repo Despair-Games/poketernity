@@ -37,7 +37,7 @@ describe("Moves - Grassy Glide", () => {
 
   it("should have increased priority with active Grassy Terrain", async () => {
     game.override.ability(AbilityId.GRASSY_SURGE);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.use(MoveId.GRASSY_GLIDE);
     await game.toEndOfTurn();
@@ -54,7 +54,7 @@ describe("Moves - Grassy Glide", () => {
     { terrain: "no active terrain", terrainAbility: AbilityId.BALL_FETCH, terrainType: TerrainType.NONE },
   ])("should not have increased priority with $terrain", async ({ terrainAbility, terrainType }) => {
     game.override.ability(terrainAbility);
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     game.move.use(MoveId.GRASSY_GLIDE);
     await game.toEndOfTurn();
@@ -66,7 +66,7 @@ describe("Moves - Grassy Glide", () => {
 
   it("should not have increased priority if the user is ungrounded in Grassy Terrain", async () => {
     game.override.ability(AbilityId.GRASSY_SURGE);
-    await game.classicMode.startBattle([SpeciesId.VESPIQUEN]);
+    await game.classicMode.startBattle(SpeciesId.VESPIQUEN);
 
     game.move.use(MoveId.GRASSY_GLIDE);
     await game.toEndOfTurn();

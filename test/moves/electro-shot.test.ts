@@ -36,7 +36,7 @@ describe("Moves - Electro Shot", () => {
   });
 
   it("should increase the user's Sp. Atk on the first turn, then attack on the second turn", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -66,7 +66,7 @@ describe("Moves - Electro Shot", () => {
   ])("should fully resolve in one turn if $name is active", async ({ weatherType }) => {
     game.override.weather(weatherType);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

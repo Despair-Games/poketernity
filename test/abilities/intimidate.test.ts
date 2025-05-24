@@ -34,7 +34,7 @@ describe("Abilities - Intimidate", () => {
   });
 
   it("should lower ATK stat stage by 1 of enemy Pokemon on entry and player switch", async () => {
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA);
 
     let playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -54,7 +54,7 @@ describe("Abilities - Intimidate", () => {
 
   it("should lower ATK stat stage by 1 for every enemy Pokemon in a double battle on entry", async () => {
     game.override.battleType("double").startingWave(3);
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA);
 
     const playerField = game.scene.getPlayerField()!;
     const enemyField = game.scene.getEnemyField()!;
@@ -68,7 +68,7 @@ describe("Abilities - Intimidate", () => {
   it("should not activate again if there is no switch or new entry", async () => {
     game.override.startingWave(2);
     game.override.moveset([MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -85,7 +85,7 @@ describe("Abilities - Intimidate", () => {
 
   it("should lower ATK stat stage by 1 for every switch", async () => {
     game.override.moveset([MoveId.SPLASH]).enemyMoveset([MoveId.VOLT_SWITCH]).startingWave(5);
-    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     let enemyPokemon = game.scene.getEnemyPokemon()!;

@@ -57,7 +57,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
     { abilityName: "Slush Rush", ability: AbilityId.SLUSH_RUSH, weatherType: WeatherType.SNOW, weatherName: "snow" },
   ])("$abilityName should double the ability holder's speed in $weatherName", async ({ weatherType, ability }) => {
     game.override.ability(ability).weather(weatherType);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -71,7 +71,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
     { abilityName: "Slush Rush", ability: AbilityId.SLUSH_RUSH },
   ])("$abilityName should not activate without weather", async ({ ability }) => {
     game.override.ability(ability).weather(WeatherType.NONE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -85,7 +85,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
     { abilityName: "Slush Rush", ability: AbilityId.SLUSH_RUSH, weather: WeatherType.SNOW },
   ])("$abilityName should not activate if the current weather is being suppressed", async ({ ability, weather }) => {
     game.override.ability(ability).weather(weather).enemyAbility(AbilityId.CLOUD_NINE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 

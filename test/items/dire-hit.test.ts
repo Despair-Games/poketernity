@@ -37,7 +37,7 @@ describe("Items - Dire Hit", () => {
   }, 20000);
 
   it("should raise CRIT stage by 1", async () => {
-    await game.startBattle([SpeciesId.GASTLY]);
+    await game.classicMode.startBattle(SpeciesId.GASTLY);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -53,7 +53,7 @@ describe("Items - Dire Hit", () => {
   it("should renew how many battles are left of existing DIRE_HIT when picking up new DIRE_HIT", async () => {
     game.override.itemRewards([{ name: "DIRE_HIT" }]);
 
-    await game.startBattle([SpeciesId.PIKACHU]);
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     game.move.select(MoveId.SPLASH);
 

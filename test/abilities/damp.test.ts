@@ -36,7 +36,7 @@ describe("Abilities - Damp", () => {
     { moveName: "Mind Blown", moveId: MoveId.MIND_BLOWN },
   ])("should prevent the move $moveName from being used", async ({ moveId }) => {
     game.override.moveset([MoveId.SPLASH, moveId]).battleType("double").enemyMoveset(moveId);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.ABRA]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.ABRA);
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
@@ -57,7 +57,7 @@ describe("Abilities - Damp", () => {
       .battleType("single")
       .enemyMoveset([MoveId.SPLASH])
       .enemyAbility(AbilityId.AFTERMATH);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
 

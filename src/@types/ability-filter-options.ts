@@ -8,7 +8,7 @@ export interface AbilityFilterOptions {
    * If `true`, returns the Pokemon's base Ability whether or
    * not it was overridden in battle (e.g. by Skill Swap or Entrainment)
    */
-  baseOnly?: boolean;
+  bypassSummonData?: boolean;
   /**
    * If `true`, filters out Abilities that have not been revealed to the field yet
    * @see {@linkcode PokemonWaveData.abilitiesRevealed}

@@ -37,7 +37,7 @@ describe("Moves - Rapid Spin", () => {
   });
 
   it("should increase the user's Speed", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -50,7 +50,7 @@ describe("Moves - Rapid Spin", () => {
   it("should remove binding effects from the user", async () => {
     game.override.enemyMoveset(MoveId.INFESTATION);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -68,7 +68,7 @@ describe("Moves - Rapid Spin", () => {
     { tagType: ArenaTagType.STEALTH_ROCK, name: "Stealth Rock" },
     { tagType: ArenaTagType.STICKY_WEB, name: "Sticky Web" },
   ])("should remove the effects of $name only from the user's side of the field", async ({ tagType }) => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       game.scene.arena.addTag(tagType, 0, 1, MoveId.NONE, side),

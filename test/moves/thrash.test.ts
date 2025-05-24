@@ -39,7 +39,7 @@ describe("Moves - Thrash", () => {
   });
 
   it("should lock the user into using Thrash for 1-2 turns, then confuse the user", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -63,7 +63,7 @@ describe("Moves - Thrash", () => {
   it("should not lock the user into using Thrash when the move has no effect", async () => {
     game.override.enemySpecies(SpeciesId.DUSCLOPS);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -77,7 +77,7 @@ describe("Moves - Thrash", () => {
   // NOTE: this and following tests assume Frenzy's random turn count is mocked to the max turn length
   // as is currently done in GameManager's constructor
   it("should cancel future uses of Thrash if interrupted by status", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -93,7 +93,7 @@ describe("Moves - Thrash", () => {
   });
 
   it("should cancel future uses of Thrash if interrupted by flinching", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -109,7 +109,7 @@ describe("Moves - Thrash", () => {
   });
 
   it("should confuse the user if the user is interrupted on the last turn of frenzy", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 
@@ -136,7 +136,7 @@ describe("Moves - Thrash", () => {
   it("should continue execution between waves", async () => {
     game.override.enemyLevel(1);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
 

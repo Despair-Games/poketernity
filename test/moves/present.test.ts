@@ -39,7 +39,7 @@ describe("Moves - Present", () => {
   ])("should have correct probabilities on $descriptor", async ({ hitsLeft, totalOutcomes, expectedHeals }) => {
     const presentAttr = allMoves.get(MoveId.PRESENT).getAttrs(PresentPowerAttr)[0];
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -78,7 +78,7 @@ describe("Moves - Present", () => {
 
   it("should end multi-hit Present, and should not deal damage, if it heals", async () => {
     game.override.ability(AbilityId.PARENTAL_BOND).enemyAbility(AbilityId.NO_GUARD);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

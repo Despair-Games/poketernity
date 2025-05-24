@@ -3268,7 +3268,7 @@ export function initMoves() {
     new AttackMove(MoveId.AXE_KICK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 120, 90, 10, 30, 0, 9)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
-      .attr(ConfuseAttr)
+      .attr(ConfuseAttr, true)
       .recklessMove(),
     new AttackMove(MoveId.LAST_RESPECTS, ElementalType.GHOST, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 9)
       .partial() // Counter resets every wave instead of on arena reset

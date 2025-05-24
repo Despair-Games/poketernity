@@ -32,7 +32,7 @@ describe("Abilities - Corrosion", () => {
   });
 
   it("allows the user to poison a Poison or Steel type pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.MUK]);
+    await game.classicMode.startBattle(SpeciesId.MUK);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -45,7 +45,7 @@ describe("Abilities - Corrosion", () => {
 
   it("does not allow the user to get poisoned if the user is Poison or Steel type and poisons a target with Synchronize", async () => {
     game.override.ability(AbilityId.SYNCHRONIZE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -58,7 +58,7 @@ describe("Abilities - Corrosion", () => {
 
   it("does not allow the user to get poisoned if the user is Poison or Steel type and poisons a target with Magic Bounce", async () => {
     game.override.ability(AbilityId.MAGIC_BOUNCE);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -71,7 +71,7 @@ describe("Abilities - Corrosion", () => {
 
   it("allows the user to poison a Poison or Steel type if the user reflects a status move that poisons", async () => {
     game.override.enemyMoveset(MoveId.MAGIC_COAT);
-    await game.classicMode.startBattle([SpeciesId.MUK]);
+    await game.classicMode.startBattle(SpeciesId.MUK);
 
     const playerPokemon = game.field.getPlayerPokemon();
 
