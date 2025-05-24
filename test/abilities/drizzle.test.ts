@@ -53,7 +53,7 @@ describe("Ability - Drizzle", () => {
   it("should last the rain for 5 turns", async () => {
     const { classicMode, move } = game;
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     for (let i = 0; i < 5; i++) {
       expect(game).toHaveWeather(WeatherType.RAIN);
@@ -68,7 +68,7 @@ describe("Ability - Drizzle", () => {
   it.each(primalWeather)("should not override primal $name weather", async ({ id }) => {
     const { phaseInterceptor, classicMode } = game;
 
-    await classicMode.runToSummon([SpeciesId.FEEBAS]);
+    await classicMode.runToSummon(SpeciesId.FEEBAS);
     game.scene.arena.trySetWeather(id, false);
     expect(game).toHaveWeather(id);
 
@@ -80,7 +80,7 @@ describe("Ability - Drizzle", () => {
   it.each(replaceableWeather)("should replace $name weather", async ({ id }) => {
     const { phaseInterceptor, classicMode } = game;
 
-    await classicMode.runToSummon([SpeciesId.FEEBAS]);
+    await classicMode.runToSummon(SpeciesId.FEEBAS);
     game.scene.arena.trySetWeather(id, false);
     expect(game).toHaveWeather(id);
 
@@ -95,7 +95,7 @@ describe("Ability - Drizzle", () => {
       const { override, classicMode, move, textInterceptor } = game;
       override.enemyAbility(id);
 
-      await classicMode.startBattle([SpeciesId.FEEBAS]);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
 
       expect(textInterceptor.logs).toContain(t("abilityTriggers:weatherEffectDisappeared"));
 
