@@ -239,7 +239,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
 
     this.usernameInfoImage.on("pointerdown", () => {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
-      const keyToFind = SYSTEM_DATA_LS_KEY_PREFIX;
+      const keyToFind = SYSTEM_DATA_LS_KEY_PREFIX + "_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
       if (dataKeys.length > 0 && dataKeys.length <= 2) {
         const options: OptionSelectItem[] = [];

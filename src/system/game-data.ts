@@ -1179,6 +1179,7 @@ export class GameData {
   public tryExportData(dataType: GameDataType, slotId: number = 0): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       const dataKey: string = getLocalStorageKey(dataType, slotId);
+      const exportedFileName = dataKey.slice(dataKey.indexOf("/") + 1); // exclude the pkty prefix
       const handleData = (dataStr: string) => {
         switch (dataType) {
           case GameDataType.SYSTEM:
@@ -1189,7 +1190,7 @@ export class GameData {
         const blob = new Blob([encryptedData.toString()], { type: "text/json" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        link.download = `${dataKey}.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
+        link.download = `${exportedFileName}.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
         link.click();
         link.remove();
       };
