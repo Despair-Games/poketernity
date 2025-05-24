@@ -7,12 +7,14 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * If the pokemon with this ab-attr is full hp and hit with a move that would 1-hit faint it, it will survive with 1 hp left.
+ * Wonder Guard _overrules_ this ab-attr.
  *
  * #### Boss Pokemon
  * To consider a boss Pokemon as 1-hit faint, the damage calculation is different and depends on the hp segments.
  * Every segment past the first one gets a `x SegmentIndex` multiplier.
  * E.g. if the boss has 3 segments and each with 10 hp, the damage for the 1-hit faint must be at least `60`,
  * because `10 * 1 + 10 * 2 + 10 * 3 = 60`.
+ *
  *
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
  */
