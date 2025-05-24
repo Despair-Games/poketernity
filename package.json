@@ -20,7 +20,7 @@
     "eslint-ci": "eslint .",
     "biome": "biome check --write --changed --no-errors-on-unmatched",
     "biome:unsafe": "biome check --write --unsafe --changed --no-errors-on-unmatched",
-    "biome-ci": "biome ci --diagnostic-level=error --reporter=github --no-errors-on-unmatched .",
+    "biome-ci": "biome ci --diagnostic-level=error --reporter=github --no-errors-on-unmatched",
     "biome-all": "biome check --write --no-errors-on-unmatched",
     "biome-all:unsafe": "biome check --write --unsafe --no-errors-on-unmatched",
     "prettier": "prettier . --write",
