@@ -36,7 +36,9 @@ import { randSeedInt, randSeedItem } from "#utils/random-utils";
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
   public aiType: AiType;
+  /** The amount of hp-segments the boss has (if the pokemon is a boss). */
   public bossSegments: number;
+  /** The index of the current hp-segment (if the pokemon is a boss). E.g. if the boss has 5 segments and the first 2 are cleared, this will be 2 */
   public bossSegmentIndex: number;
   public initialTeamIndex: number;
   /** To indicate if the instance was populated with a dataSource -> e.g. loaded & populated from session data */
