@@ -214,12 +214,22 @@ export function initModifierTypes() {
       if (pregenArgs && pregenArgs.length === 1 && Object.values(BerryType).includes(pregenArgs[0])) {
         return new BerryModifierType(pregenArgs[0] as BerryType);
       }
-      // Sitrus, Lum, and Leppa have higher weight to be chosen
-      const berryTypes: BerryType[] = [BerryType.SITRUS, BerryType.LUM, BerryType.LEPPA];
-      for (const value of Object.values(BerryType)) {
-        berryTypes.push(value);
+      const berryTypes = Object.values(BerryType).filter((v) => {
+        const removeBerries: BerryType[] = [BerryType.SITRUS, BerryType.LUM, BerryType.LEPPA] as const;
+        return !removeBerries.includes(v);
+      });
+      let randBerryType: BerryType;
+      const rand = randSeedInt(12);
+      if (rand < 2) {
+        randBerryType = BerryType.SITRUS;
+      } else if (rand < 4) {
+        randBerryType = BerryType.LUM;
+      } else if (rand < 6) {
+        randBerryType = BerryType.LEPPA;
+      } else {
+        randBerryType = randSeedItem(berryTypes);
       }
-      return new BerryModifierType(randSeedItem(berryTypes));
+      return new BerryModifierType(randBerryType);
     });
 
   modifierTypes.TM_COMMON = () => new TmModifierTypeGenerator(ModifierTier.COMMON);
