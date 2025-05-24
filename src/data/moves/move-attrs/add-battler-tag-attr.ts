@@ -84,7 +84,7 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.DROWSY:
       case BattlerTagType.DISABLED:
       case BattlerTagType.HEAL_BLOCK:
-      case BattlerTagType.RECEIVE_DOUBLE_DAMAGE:
+      case BattlerTagType.GLAIVE_RUSH:
       case BattlerTagType.INTERRUPTED:
         return -5;
       case BattlerTagType.SEEDED:
@@ -128,7 +128,6 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.BURNED_UP:
       case BattlerTagType.DOUBLE_SHOCKED:
       case BattlerTagType.MINIMIZED:
-      case BattlerTagType.ALWAYS_GET_HIT:
       case BattlerTagType.ENDURING:
       case BattlerTagType.STURDY:
       case BattlerTagType.BYPASS_SLEEP:

@@ -903,7 +903,7 @@ export abstract class Move implements Localizable {
     if (
       [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
       || user.getTag(BattlerTagType.IGNORE_ACCURACY)
-      || target.getTag(BattlerTagType.ALWAYS_GET_HIT)
+      || target.getTag(BattlerTagType.GLAIVE_RUSH)
       || target.getTag(BattlerTagType.TELEKINESIS)
     ) {
       return 0;

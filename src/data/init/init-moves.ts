@@ -27,7 +27,6 @@ import { AbilityChangeAttr } from "#moves/ability-change-attr";
 import { AbilityCopyAttr } from "#moves/ability-copy-attr";
 import { AbilityGiveAttr } from "#moves/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#moves/acupressure-stat-stage-change-attr";
-import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "#moves/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "#moves/add-battler-tag-if-boosted-attr";
 import { AddEntryHazardTagAttr } from "#moves/add-entry-hazard-tag-attr";
@@ -78,6 +77,7 @@ import { CopyStatsAttr } from "#moves/copy-stats-attr";
 import { CopyTypeAttr } from "#moves/copy-type-attr";
 import { CopycatAttr } from "#moves/copycat-attr";
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
+import { CritBoostStackableAttr } from "#moves/crit-boost-stackable-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { CueNextRoundAttr } from "#moves/cue-next-round-attr";
 import { CurseAttr } from "#moves/curse-attr";
@@ -91,6 +91,7 @@ import { DiscourageFrequentUseAttr } from "#moves/discourage-frequent-use-attr";
 import { DisplayMessageAttr } from "#moves/display-message-attr";
 import { DoubleDamageToMaxAttr } from "#moves/double-damage-to-max-attr";
 import { DoublePowerChanceAttr, doublePowerChanceMessageFunc } from "#moves/double-power-chance-attr";
+import { DragonCheerAttr } from "#moves/dragon-cheer-attr";
 import { DrowsyAttr } from "#moves/drowsy-attr";
 import { EatBerryAttr } from "#moves/eat-berry-attr";
 import { ElectrifyAttr } from "#moves/electrify-attr";
@@ -122,6 +123,7 @@ import { FormChangeItemTypeAttr } from "#moves/form-change-item-type-attr";
 import { FreezeDryAttr } from "#moves/freeze-dry-attr";
 import { FrenzyAttr } from "#moves/frenzy-attr";
 import { FriendshipPowerAttr } from "#moves/friendship-power-attr";
+import { GlaiveRushAttr } from "#moves/glaive-rush-attr";
 import { GravityAttr } from "#moves/gravity-attr";
 import { GroundingAttr } from "#moves/grounding-attr";
 import { GrowthStatStageChangeAttr } from "#moves/growth-stat-stage-change-attr";
@@ -157,6 +159,7 @@ import { InvertStatsAttr } from "#moves/invert-stats-attr";
 import { IonDelugeAttr } from "#moves/ion-deluge-attr";
 import { IvyCudgelTypeAttr } from "#moves/ivy-cudgel-type-attr";
 import { JawLockAttr } from "#moves/jaw-lock-attr";
+import { LaserFocusAttr } from "#moves/laser-focus-attr";
 import { LastMoveDoublePowerAttr } from "#moves/last-move-double-power-attr";
 import { LastResortAttr } from "#moves/last-resort-attr";
 import { LeechSeedAttr } from "#moves/leech-seed-attr";
@@ -185,6 +188,8 @@ import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#moves/neutral-dam
 import { NightmareAttr } from "#moves/nightmare-attr";
 import { NoDamageAgainstFlyingAttr } from "#moves/no-damage-against-flying-attr";
 import { NoEffectAttr } from "#moves/no-effect-attr";
+import { NoRetreatAttr } from "#moves/no-retreat-attr";
+import { OctolockAttr } from "#moves/octolock-attr";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import { OpponentHighHpPowerAttr } from "#moves/opponent-high-hp-power-attr";
@@ -224,6 +229,7 @@ import { RoostAttr } from "#moves/roost-attr";
 import { RoundPowerAttr } from "#moves/round-power-attr";
 import { SacrificialAttr } from "#moves/sacrificial-attr";
 import { SacrificialFullRestoreAttr } from "#moves/sacrificial-full-restore-attr";
+import { SaltCureAttr } from "#moves/salt-cure-attr";
 import { SandHealAttr } from "#moves/sand-heal-attr";
 import { ScreenAttr } from "#moves/screen-attr";
 import { SecretPowerAttr } from "#moves/secret-power-attr";
@@ -253,7 +259,9 @@ import { courtChangeArenaTags, SwapArenaTagsAttr } from "#moves/swap-arena-tags-
 import { SwapStatAttr } from "#moves/swap-stat-attr";
 import { SwapStatStagesAttr } from "#moves/swap-stat-stages-attr";
 import { SwitchAbilitiesAttr } from "#moves/switch-abilities-attr";
+import { SyrupBombAttr } from "#moves/syrup-bomb-attr";
 import { TailwindAttr } from "#moves/tailwind-attr";
+import { TarShotAttr } from "#moves/tar-shot-attr";
 import { TargetAtkUserAtkAttr } from "#moves/target-atk-user-atk-attr";
 import { TargetHalfHpDamageAttr } from "#moves/target-half-hp-damage-attr";
 import { TargetIsAttackingCondition } from "#moves/target-is-attacking-condition";
@@ -267,6 +275,7 @@ import { TeraMoveCategoryAttr } from "#moves/tera-move-category-attr";
 import { TeraStarstormTypeAttr } from "#moves/tera-starstorm-type-attr";
 import { TerrainChangeAttr } from "#moves/terrain-change-attr";
 import { TerrainPulseTypeAttr } from "#moves/terrain-pulse-type-attr";
+import { ThroatChopAttr } from "#moves/throat-chop-attr";
 import { ThunderAccuracyAttr } from "#moves/thunder-accuracy-attr";
 import { TormentAttr } from "#moves/torment-attr";
 import { ToxicAccuracyAttr } from "#moves/toxic-accuracy-attr";
@@ -2553,7 +2562,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
       .bounceable(),
     new SelfStatusMove(MoveId.LASER_FOCUS, ElementalType.NORMAL, -1, 30, -1, 0, 7)
-      .attr(AddBattlerTagAttr, BattlerTagType.ALWAYS_CRIT, true)
+      .attr(LaserFocusAttr)
       .snatchable(),
     new StatusMove(MoveId.GEAR_UP, ElementalType.STEEL, -1, 20, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 1, false, {
@@ -2570,7 +2579,7 @@ export function initMoves() {
             .some((p) => [AbilityId.PLUS, AbilityId.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new AttackMove(MoveId.THROAT_CHOP, ElementalType.DARK, MoveCategory.PHYSICAL, 80, 100, 15, 100, 0, 7)
-      .attr(AddBattlerTagAttr, BattlerTagType.THROAT_CHOPPED),
+      .attr(ThroatChopAttr),
     new AttackMove(MoveId.POLLEN_PUFF, ElementalType.BUG, MoveCategory.SPECIAL, 90, 100, 15, -1, 0, 7)
       .attr(StatusCategoryOnAllyAttr)
       .attr(HealOnAllyAttr, 0.5, true, false)
@@ -2592,7 +2601,7 @@ export function initMoves() {
         return userTypes.includes(ElementalType.FIRE);
       })
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
-      .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true)
+      .attr(AddUnscoredBattlerTagAttr, BattlerTagType.BURNED_UP, true)
       .attr(RemoveTypeAttr, ElementalType.FIRE, (user) => {
         globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }),
@@ -2817,11 +2826,11 @@ export function initMoves() {
     new SelfStatusMove(MoveId.NO_RETREAT, ElementalType.FIGHTING, -1, 5, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true)
       .snatchable() // Custom
-      .attr(AddBattlerTagAttr, BattlerTagType.NO_RETREAT, true)
+      .attr(NoRetreatAttr)
       .condition((user, _target, _move) => user.getTag(...TRAPPED_BATTLER_TAG_TYPES)?.sourceMoveId !== MoveId.NO_RETREAT),
     new StatusMove(MoveId.TAR_SHOT, ElementalType.ROCK, 100, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
-      .attr(AddBattlerTagAttr, BattlerTagType.TAR_SHOT, false)
+      .attr(TarShotAttr)
       .bounceable(),
     new StatusMove(MoveId.MAGIC_POWDER, ElementalType.PSYCHIC, 100, 20, -1, 0, 8)
       .attr(ChangeTypeAttr, ElementalType.PSYCHIC)
@@ -2837,7 +2846,7 @@ export function initMoves() {
       .target(MoveTarget.ALL),
     new StatusMove(MoveId.OCTOLOCK, ElementalType.FIGHTING, 100, 15, -1, 0, 8)
       .condition(failIfGhostTypeCondition)
-      .attr(AddBattlerTagAttr, BattlerTagType.OCTOLOCK, false, { failOnOverlap: true }),
+      .attr(OctolockAttr),
     new AttackMove(MoveId.BOLT_BEAK, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 8)
       .attr(FirstAttackDoublePowerAttr),
     new AttackMove(MoveId.FISHIOUS_REND, ElementalType.WATER, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 8)
@@ -3190,7 +3199,7 @@ export function initMoves() {
       .attr(MoneyAttr), // should gives 100x user level (20x as effective as payday) as money. Rebalance later
     new AttackMove(MoveId.G_MAX_CHI_STRIKE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.MACHAMP)
-      .attr(AddBattlerTagAttr, BattlerTagType.CRIT_BOOST_STACKABLE, true),
+      .attr(CritBoostStackableAttr),
     new AttackMove(MoveId.G_MAX_TERROR, ElementalType.GHOST, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.GENGAR)
       .attr(TrapAttr, true),
@@ -3326,15 +3335,14 @@ export function initMoves() {
     new AttackMove(MoveId.ICE_SPINNER, ElementalType.ICE, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 9)
       .attr(ClearTerrainAttr),
     new AttackMove(MoveId.GLAIVE_RUSH, ElementalType.DRAGON, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.ALWAYS_GET_HIT, true, { lastHitOnly: true })
-      .attr(AddBattlerTagAttr, BattlerTagType.RECEIVE_DOUBLE_DAMAGE, true, { lastHitOnly: true }),
+      .attr(GlaiveRushAttr),
     new StatusMove(MoveId.REVIVAL_BLESSING, ElementalType.NORMAL, -1, 1, -1, 0, 9)
       .attr(RevivalBlessingAttr)
       .triageMove()
       .snatchable() // Custom
       .target(MoveTarget.USER),
     new AttackMove(MoveId.SALT_CURE, ElementalType.ROCK, MoveCategory.PHYSICAL, 40, 100, 15, 100, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.SALT_CURED)
+      .attr(SaltCureAttr)
       .makesContact(false),
     new AttackMove(MoveId.TRIPLE_DIVE, ElementalType.WATER, MoveCategory.PHYSICAL, 30, 95, 10, -1, 0, 9)
       .attr(MultiHitAttr, MultiHitType._3),
@@ -3439,7 +3447,7 @@ export function initMoves() {
         const userTypes = user.getTypes(true);
         return userTypes.includes(ElementalType.ELECTRIC);
       })
-      .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true)
+      .attr(AddUnscoredBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true)
       .attr(RemoveTypeAttr, ElementalType.ELECTRIC, (user) => {
         globalScene.phaseManager.queueMessagePhase(
           i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }),
@@ -3489,7 +3497,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .triageMove(),
     new AttackMove(MoveId.SYRUP_BOMB, ElementalType.GRASS, MoveCategory.SPECIAL, 60, 85, 10, 100, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.SYRUP_BOMB, false, { turnCountMin: 3 })
+      .attr(SyrupBombAttr)
       .bulletMove(),
     new AttackMove(MoveId.IVY_CUDGEL, ElementalType.GRASS, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 9)
       .attr(IvyCudgelTypeAttr)
@@ -3525,7 +3533,7 @@ export function initMoves() {
     new AttackMove(MoveId.HARD_PRESS, ElementalType.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(OpponentHighHpPowerAttr, 100),
     new StatusMove(MoveId.DRAGON_CHEER, ElementalType.DRAGON, -1, 15, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.DRAGON_CHEER, false, { failOnOverlap: true })
+      .attr(DragonCheerAttr)
       .target(MoveTarget.NEAR_ALLY),
     new AttackMove(MoveId.ALLURING_VOICE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 9)
       .attr(AddBattlerTagIfBoostedAttr, BattlerTagType.CONFUSED)

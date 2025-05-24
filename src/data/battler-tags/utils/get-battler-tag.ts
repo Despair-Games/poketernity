@@ -31,6 +31,7 @@ import { FormBlockDamageTag } from "#battler-tags/form-block-damage-tag";
 import { FrenzyTag } from "#battler-tags/frenzy-tag";
 import { GMaxFireSpinTag } from "#battler-tags/g-max-fire-spin-tag";
 import { GMaxSandTombTag } from "#battler-tags/g-max-sand-tomb-tag";
+import { GlaiveRushTag } from "#battler-tags/glaive-rush-tag";
 import { GorillaTacticsTag } from "#battler-tags/gorilla-tactics-tag";
 import { GroundedTag } from "#battler-tags/grounded-tag";
 import { GrudgeTag } from "#battler-tags/grudge-tag";
@@ -232,9 +233,8 @@ export function getBattlerTag(
     case BattlerTagType.ALWAYS_CRIT:
     case BattlerTagType.IGNORE_ACCURACY:
       return new BattlerTag(tagType, BattlerTagLapseType.TURN_END, 2, sourceMoveId);
-    case BattlerTagType.ALWAYS_GET_HIT:
-    case BattlerTagType.RECEIVE_DOUBLE_DAMAGE:
-      return new BattlerTag(tagType, BattlerTagLapseType.PRE_MOVE, 1, sourceMoveId);
+    case BattlerTagType.GLAIVE_RUSH:
+      return new GlaiveRushTag();
     case BattlerTagType.BYPASS_SLEEP:
       return new BattlerTag(tagType, BattlerTagLapseType.TURN_END, turnCount, sourceMoveId);
     case BattlerTagType.IGNORE_FLYING:

@@ -74,8 +74,6 @@ export enum BattlerTagType {
   ICE_FACE,
   DISGUISE,
   STOCKPILING,
-  RECEIVE_DOUBLE_DAMAGE,
-  ALWAYS_GET_HIT,
   DISABLED,
   SUBSTITUTE,
   IGNORE_GHOST,
@@ -117,4 +115,5 @@ export enum BattlerTagType {
   SNATCHING,
   ME_FIRST_POWER_BOOST,
   BIDE,
+  GLAIVE_RUSH,
 }
