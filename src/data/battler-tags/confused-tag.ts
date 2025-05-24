@@ -82,7 +82,7 @@ export class ConfusedTag extends BattlerTag {
    * @returns the amount of damage inflicted
    */
   public getDamage(pokemon: Pokemon): number {
-    // 1/3 chance of hitting self with a 40 base power move
+    // 33% chance of hitting self with a 40 base power move
     if (
       (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
       || Overrides.STATUS_ACTIVATION_OVERRIDE === true
