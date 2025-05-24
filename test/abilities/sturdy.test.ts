@@ -31,9 +31,16 @@ const sacrificialMoves = SACRIFICIAL_MOVES.map<[string, MoveId]>((moveId) => [
   moveId,
 ]);
 
-const damagingTrappedBattlerTagTypes = DAMAGING_TRAPPED_BATTLER_TAG_TYPES.map<[string, BattlerTagType]>(
-  (battlerTagType) => [capitalizeString(BattlerTagType[battlerTagType], "_", false, true) ?? "", battlerTagType],
-);
+const damagingBattlerTagTypes = [
+  ...DAMAGING_TRAPPED_BATTLER_TAG_TYPES,
+  BattlerTagType.SEEDED,
+  BattlerTagType.NIGHTMARE,
+  BattlerTagType.CURSED,
+  BattlerTagType.SALT_CURED,
+].map<[string, BattlerTagType]>((battlerTagType) => [
+  capitalizeString(BattlerTagType[battlerTagType], "_", false, true) ?? "",
+  battlerTagType,
+]);
 
 //#endregion
 
@@ -338,7 +345,7 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveFainted();
   });
 
-  it.each(damagingTrappedBattlerTagTypes)(
+  it.each(damagingBattlerTagTypes)(
     "should not proc on '%s' damaging trap battler-tag ",
     async (_name, battlerTagType) => {
       const { classicMode, field, move } = game;
@@ -346,10 +353,11 @@ describe("Abilities - Sturdy", () => {
       vi.spyOn(TrappedTag.prototype, "lapse");
 
       await classicMode.runToSummon(SpeciesId.LUCARIO);
+      const player = field.getPlayerPokemon();
       const enemy = field.getEnemyPokemon();
       enemy.setStat(Stat.HP, 1);
       enemy.hp = 1;
-      enemy.addTag(battlerTagType, Number.MAX_SAFE_INTEGER);
+      enemy.addTag(battlerTagType, Number.MAX_SAFE_INTEGER, MoveId.NONE, player.id);
 
       expect(enemy).toHaveHp(1);
       expect(enemy).toHaveFullHp();
