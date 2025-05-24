@@ -13,8 +13,10 @@ import i18next from "i18next";
  * @extends AddBattlerTagAttr
  */
 export class ConfuseAttr extends AddBattlerTagAttr {
-  constructor(selfTarget?: boolean) {
-    super(BattlerTagType.CONFUSED, selfTarget, { turnCountMin: 2, turnCountMax: 5 });
+  constructor(axeKick?: boolean) {
+    // Axe Kick has the odd mechanic of guranteeing 3 turns of confuse instead of 2
+    const minConfuseTurns = axeKick ? 3 : 2;
+    super(BattlerTagType.CONFUSED, false, { turnCountMin: minConfuseTurns, turnCountMax: 5 });
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
