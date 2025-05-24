@@ -7,13 +7,11 @@ import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import {
   APP_ABBREVIATION,
   BYPASS_LOGIN,
-  LS_PREFIX,
+  DAILY_SEED_LS_KEY,
   MAPPING_CONFIG_LS_KEY,
   RUN_HISTORY_LIMIT,
   SAVE_FILE_EXTENSION,
-  SEEN_DIALOGUE_LS_KEY,
-  SETTINGS_LS_KEY,
-  TUTORIALS_LS_KEY,
+  SAVE_SLOT_LIMIT,
 } from "#constants/app-constants";
 import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import { allMoves, allSpecies } from "#data/data-lists";
@@ -79,33 +77,11 @@ import { applyChallenges } from "#utils/challenge-utils";
 import { NumberHolder, executeIf, fixedNumber, getTSEnumKeys, isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
+import { getDataTypeKey } from "#utils/save-data-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
-
-export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): string {
-  switch (dataType) {
-    case GameDataType.SYSTEM:
-      return `${LS_PREFIX}/data_${loggedInUser?.username}`;
-    case GameDataType.SESSION: {
-      let ret = "sessionData";
-      if (slotId) {
-        ret += slotId;
-      }
-      // TODO: add LS_PREFIX and remove the speciesId temporary migration in parseSessionData
-      return `${ret}_${loggedInUser?.username}`;
-    }
-    case GameDataType.SETTINGS:
-      return SETTINGS_LS_KEY;
-    case GameDataType.TUTORIALS:
-      return TUTORIALS_LS_KEY;
-    case GameDataType.SEEN_DIALOGUES:
-      return SEEN_DIALOGUE_LS_KEY;
-    case GameDataType.RUN_HISTORY:
-      return `${LS_PREFIX}/runHistoryData_${loggedInUser?.username}`;
-  }
-}
 
 export function encrypt(data: string, bypassLogin: boolean): string {
   const localFunc = (data: string): string => btoa(encodeURIComponent(data));
@@ -572,8 +548,8 @@ export class GameData {
       return;
     }
     localStorage.removeItem(getDataTypeKey(GameDataType.SYSTEM));
-    for (let s = 0; s < 5; s++) {
-      localStorage.removeItem(`sessionData${s ? s : ""}_${loggedInUser?.username}`);
+    for (let s = 0; s < SAVE_SLOT_LIMIT; s++) {
+      localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, s));
     }
   }
 
@@ -775,22 +751,20 @@ export class GameData {
         }
       };
 
-      if (!BYPASS_LOGIN && !localStorage.getItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`)) {
+      const sessionStorageKey = getDataTypeKey(GameDataType.SESSION, slotId);
+      const sessionData = localStorage.getItem(sessionStorageKey);
+      if (!BYPASS_LOGIN && !sessionData) {
         api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
           if (!response || response?.length === 0 || response?.[0] !== "{") {
             console.error(response);
             return resolve(null);
           }
 
-          localStorage.setItem(
-            `sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`,
-            encrypt(response, BYPASS_LOGIN),
-          );
+          localStorage.setItem(sessionStorageKey, encrypt(response, BYPASS_LOGIN));
 
           await handleSessionData(response);
         });
       } else {
-        const sessionData = localStorage.getItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
         if (sessionData) {
           await handleSessionData(decrypt(sessionData, BYPASS_LOGIN));
         } else {
@@ -966,7 +940,7 @@ export class GameData {
   deleteSession(slotId: number): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (BYPASS_LOGIN) {
-        localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
+        localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
         return resolve(true);
       }
 
@@ -987,7 +961,7 @@ export class GameData {
               loggedInUser.lastSessionSlot = -1;
             }
 
-            localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
+            localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
             resolve(true);
           }
         });
@@ -1009,17 +983,17 @@ export class GameData {
       let daily: string[] = [];
 
       if (sessionData.gameMode === GameModes.DAILY) {
-        if (Object.hasOwn(localStorage, "daily")) {
-          daily = JSON.parse(atob(localStorage.getItem("daily")!)); // TODO: is this bang correct?
+        if (Object.hasOwn(localStorage, DAILY_SEED_LS_KEY)) {
+          daily = JSON.parse(atob(localStorage.getItem(DAILY_SEED_LS_KEY)!));
           if (daily.includes(seed)) {
             return resolve(false);
           }
           daily.push(seed);
-          localStorage.setItem("daily", btoa(JSON.stringify(daily)));
+          localStorage.setItem(DAILY_SEED_LS_KEY, btoa(JSON.stringify(daily)));
           return resolve(true);
         }
         daily.push(seed);
-        localStorage.setItem("daily", btoa(JSON.stringify(daily)));
+        localStorage.setItem(DAILY_SEED_LS_KEY, btoa(JSON.stringify(daily)));
         return resolve(true);
       }
       return resolve(true);
@@ -1037,7 +1011,7 @@ export class GameData {
     let result: [boolean, boolean] = [false, false];
 
     if (BYPASS_LOGIN) {
-      localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
+      localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
       result = [true, true];
     } else {
       const sessionData = this.getSessionSaveData();
@@ -1049,7 +1023,7 @@ export class GameData {
         if (loggedInUser) {
           loggedInUser!.lastSessionSlot = -1;
         }
-        localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
+        localStorage.removeItem(getDataTypeKey(GameDataType.SESSION, slotId));
       } else {
         if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
@@ -1074,11 +1048,6 @@ export class GameData {
           v = [];
         }
         for (const pd of v) {
-          // TODO: remove later, temporary to prevent devs from needing to wipe their local storage
-          // due to the field in `PokemonData` being renamed from `species` to `speciesId`
-          if (Object.hasOwn(pd, "species")) {
-            pd.speciesId = pd.species;
-          }
           ret.push(new PokemonData(pd));
         }
         return ret;
@@ -1178,10 +1147,7 @@ export class GameData {
           ),
         );
 
-        localStorage.setItem(
-          `sessionData${globalScene.sessionSlotId ? globalScene.sessionSlotId : ""}_${loggedInUser?.username}`,
-          encrypt(JSON.stringify(sessionData), BYPASS_LOGIN),
-        );
+        localStorage.setItem(sessionStorageKey, encrypt(JSON.stringify(sessionData), BYPASS_LOGIN));
 
         console.debug("Session data saved");
 

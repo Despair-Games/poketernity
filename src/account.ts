@@ -1,5 +1,5 @@
 import { api } from "#api/api";
-import { BYPASS_LOGIN } from "#constants/app-constants";
+import { BYPASS_LOGIN, SAVE_SLOT_LIMIT, SESSION_DATA_LS_KEY_PREFIX } from "#constants/app-constants";
 import type { UserInfo } from "#types/user-info";
 import { randomString } from "#utils/random-utils";
 
@@ -25,8 +25,9 @@ export function updateUserInfo(): Promise<[boolean, number]> {
         hasAdminRole: false,
       };
       let lastSessionSlot = -1;
-      for (let s = 0; s < 5; s++) {
-        if (localStorage.getItem(`sessionData${s ? s : ""}_${loggedInUser.username}`)) {
+      for (let s = 0; s < SAVE_SLOT_LIMIT; s++) {
+        // TODO: we should use getDataTypeKey(GameDataType.SESSION, s) but it creates a circular dependency
+        if (localStorage.getItem(`${SESSION_DATA_LS_KEY_PREFIX}${s ? s : ""}_${loggedInUser.username}`)) {
           lastSessionSlot = s;
           break;
         }

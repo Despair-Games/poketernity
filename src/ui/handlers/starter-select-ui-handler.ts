@@ -1,4 +1,3 @@
-import { loggedInUser } from "#app/account";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
@@ -38,6 +37,7 @@ import { DropDownState } from "#enums/drop-down-state";
 import { DropDownType } from "#enums/drop-down-type";
 import { EggSourceType } from "#enums/egg-source-types";
 import { ElementalType } from "#enums/elemental-type";
+import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
 import { GrowthRate } from "#enums/growth-rates";
@@ -76,6 +76,7 @@ import { applyChallenges } from "#utils/challenge-utils";
 import { rgbHexToRgba } from "#utils/color-utils";
 import { BooleanHolder, NumberHolder, fixedNumber, isNil } from "#utils/common-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#utils/pokemon-utils";
+import { getDataTypeKey } from "#utils/save-data-utils";
 import { capitalizeString, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -204,7 +205,7 @@ let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
 function loadStarterPrefs(): StarterPreferences {
   return JSON.parse(
     (StarterPrefers_private_latest =
-      localStorage.getItem(`starterPrefs_${loggedInUser?.username}`) || StarterPrefers_DEFAULT),
+      localStorage.getItem(getDataTypeKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT),
   );
 }
 
@@ -213,7 +214,7 @@ function saveStarterPrefs(prefs: StarterPreferences): void {
   const pStr: string = JSON.stringify(prefs);
   if (pStr !== StarterPrefers_private_latest) {
     // something changed, store the update
-    localStorage.setItem(`starterPrefs_${loggedInUser?.username}`, pStr);
+    localStorage.setItem(getDataTypeKey(GameDataType.STARTER_PREFS), pStr);
     // update the latest prefs
     StarterPrefers_private_latest = pStr;
   }
