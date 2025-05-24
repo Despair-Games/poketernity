@@ -5,21 +5,33 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
-import { enumIdsToIdNameArray } from "#test/test-utils/test-utils";
+import { capitalizeString } from "#utils/string-utils";
 import { t } from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
-const primalWeather = enumIdsToIdNameArray(PRIMAL_WEATHER_TYPES, WeatherType);
+const primalWeather = PRIMAL_WEATHER_TYPES.map<[string, WeatherType]>((weatherType) => [
+  capitalizeString(WeatherType[weatherType], "_", false, true) ?? "",
+  weatherType,
+]);
 
-const replaceableWeather = enumIdsToIdNameArray(
-  [WeatherType.SUNNY, WeatherType.SANDSTORM, WeatherType.HAIL, WeatherType.SNOW, WeatherType.FOG],
-  WeatherType,
-);
+const replaceableWeather = [
+  WeatherType.SUNNY,
+  WeatherType.SANDSTORM,
+  WeatherType.HAIL,
+  WeatherType.SNOW,
+  WeatherType.FOG,
+].map<[string, WeatherType]>((weatherType) => [
+  capitalizeString(WeatherType[weatherType], "_", false, true) ?? "",
+  weatherType,
+]);
 
-const weatherSuppressingAbilities = enumIdsToIdNameArray(WEATHER_SUPPRESSING_ABILITIES, AbilityId);
+const weatherSuppressingAbilities = WEATHER_SUPPRESSING_ABILITIES.map<[string, AbilityId]>((abilityId) => [
+  capitalizeString(AbilityId[abilityId], "_", false, true) ?? "",
+  abilityId,
+]);
 
 //#endregion
 
@@ -65,24 +77,24 @@ describe("Ability - Drizzle", () => {
     expect(game).not.toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(primalWeather)("should not override primal $name weather", async ({ id }) => {
+  it.each(primalWeather)("should not override primal $name weather", async (_name, weatherType) => {
     const { phaseInterceptor, classicMode } = game;
 
     await classicMode.runToSummon(SpeciesId.FEEBAS);
-    game.scene.arena.trySetWeather(id, false);
-    expect(game).toHaveWeather(id);
+    game.scene.arena.trySetWeather(weatherType, false);
+    expect(game).toHaveWeather(weatherType);
 
     await phaseInterceptor.to("PostSummonPhase");
 
     expect(game).not.toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(replaceableWeather)("should replace $name weather", async ({ id }) => {
+  it.each(replaceableWeather)("should replace $name weather", async (_name, weatherType) => {
     const { phaseInterceptor, classicMode } = game;
 
     await classicMode.runToSummon(SpeciesId.FEEBAS);
-    game.scene.arena.trySetWeather(id, false);
-    expect(game).toHaveWeather(id);
+    game.scene.arena.trySetWeather(weatherType, false);
+    expect(game).toHaveWeather(weatherType);
 
     await phaseInterceptor.to("PostSummonPhase");
 
@@ -91,9 +103,9 @@ describe("Ability - Drizzle", () => {
 
   it.each(weatherSuppressingAbilities)(
     "should not be suppressed by $name ability and last the rain for 5 turns",
-    async ({ id }) => {
+    async (_name, abilityId) => {
       const { override, classicMode, move, textInterceptor } = game;
-      override.enemyAbility(id);
+      override.enemyAbility(abilityId);
 
       await classicMode.startBattle(SpeciesId.FEEBAS);
 
