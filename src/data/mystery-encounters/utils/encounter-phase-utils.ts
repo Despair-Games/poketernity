@@ -1087,10 +1087,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // Otherwise, roll encounter
 
       const roll = randSeedInt(256);
-      validMEfloorsByBiome.set(
-        enumValueToKey(BiomeId, currentBiome),
-        (validMEfloorsByBiome.get(enumValueToKey(BiomeId, currentBiome)) ?? 0) + 1,
-      );
+      const biomeKey = enumValueToKey(BiomeId, currentBiome);
+      validMEfloorsByBiome.set(biomeKey, (validMEfloorsByBiome.get(biomeKey) ?? 0) + 1);
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
@@ -1126,10 +1124,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
             : tierValue > rareThreshold
               ? ++numEncounters[2]
               : ++numEncounters[3];
-        encountersByBiome.set(
-          enumValueToKey(BiomeId, currentBiome),
-          (encountersByBiome.get(enumValueToKey(BiomeId, currentBiome)) ?? 0) + 1,
-        );
+        const biomeKey = enumValueToKey(BiomeId, currentBiome);
+        encountersByBiome.set(biomeKey, (encountersByBiome.get(biomeKey) ?? 0) + 1);
       } else {
         encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }
