@@ -94,8 +94,8 @@ export class HatchedPokemonContainer extends Phaser.GameObjects.Container {
     if (displayPokemon.shiny) {
       const variantAttr = BigInt(1 << displayPokemon.variant) * DexAttr.SHINY_BASE_VARIANT;
       newShinyOrVariant = (variantAttr & caughtAttr) === BigInt(0);
-    } else if (globalScene.gameData.getUnlockedVariantsAttr(caughtAttr).length > 0) {
-      // The Pokemon is not shiny but at least one of its shinies is already owned: highlight as new
+    } else if ((caughtAttr & DexAttr.NON_SHINY) === 0n) {
+      // The non shiny form is new
       newShinyOrVariant = true;
     }
 
