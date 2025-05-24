@@ -1,5 +1,9 @@
+import { NonSuperEffectiveImmunityAbAttr } from "#abilities/non-super-effective-immunity-ab-attr";
+import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
+import { TrappedTag } from "#battler-tags/trapped-tag";
 import { IGNORING_ABILITIES } from "#constants/ability-constants";
+import { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { SACRIFICIAL_MOVES } from "#constants/move-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -7,6 +11,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
 import { SurviveDamageModifier } from "#modifier/modifier";
 import { FaintCountdownAttr } from "#moves/faint-countdown-attr";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -25,6 +30,10 @@ const sacrificialMoves = SACRIFICIAL_MOVES.map<[string, MoveId]>((moveId) => [
   capitalizeString(MoveId[moveId], "_", false, true) ?? "",
   moveId,
 ]);
+
+const damagingTrappedBattlerTagTypes = DAMAGING_TRAPPED_BATTLER_TAG_TYPES.map<[string, BattlerTagType]>(
+  (battlerTagType) => [capitalizeString(BattlerTagType[battlerTagType], "_", false, true) ?? "", battlerTagType],
+);
 
 //#endregion
 
@@ -264,4 +273,94 @@ describe("Abilities - Sturdy", () => {
 
     expect(enemy).toHaveFainted();
   });
+
+  it.todo("should proc properly on Boss Pokemon and deplete all hp-segments but the last", async () => {
+    // Known issue: Boss Pokemon sturdy triggers at the end of the first hp-segment, instead of the last (See #523)
+    const { override, classicMode, field, move, phaseInterceptor } = game;
+    override.startingWave(50);
+
+    await classicMode.startBattle(SpeciesId.LUCARIO);
+    const enemy = field.getEnemyPokemon();
+
+    expect(enemy.isBoss()).toBe(true);
+    expect(enemy.bossSegments).toBe(2);
+    expect(enemy).toHaveFullHp();
+
+    move.use(MoveId.CLOSE_COMBAT);
+    await phaseInterceptor.to("PostActionPhase");
+
+    expect(enemy.bossSegmentIndex).toBe(1);
+    expect(enemy).toHaveHp(1);
+  });
+
+  it("should not proc when 'Wonder Guard' ability is present too", async () => {
+    const { override, classicMode, field, move } = game;
+    override.enemySpecies(SpeciesId.SHEDINJA).enemyPassiveAbility(AbilityId.WONDER_GUARD);
+    vi.spyOn(SturdyAbAttr.prototype, "apply");
+    vi.spyOn(NonSuperEffectiveImmunityAbAttr.prototype, "apply");
+
+    await classicMode.startBattle(SpeciesId.LUCARIO);
+    const enemy = field.getEnemyPokemon();
+
+    expect(enemy).toHaveHp(1);
+    expect(enemy).toHaveFullHp();
+
+    move.use(MoveId.SURF);
+    await game.toEndOfTurn();
+
+    expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
+    expect(NonSuperEffectiveImmunityAbAttr.prototype.apply).toHaveReturnedWith(true);
+    expect(enemy).toHaveHp(1);
+  });
+
+  it.each([
+    ["Poison", StatusEffect.POISON],
+    ["Toxic", StatusEffect.TOXIC],
+    ["Burn", StatusEffect.BURN],
+  ])("should not proc on '%s' Status Effect damage", async () => {
+    const { override, classicMode, field, move } = game;
+    override
+      .enemySpecies(SpeciesId.SHEDINJA)
+      .enemyPassiveAbility(AbilityId.WONDER_GUARD)
+      .enemyStatusEffect(StatusEffect.BURN);
+    vi.spyOn(SturdyAbAttr.prototype, "apply");
+
+    await classicMode.startBattle(SpeciesId.LUCARIO);
+    const enemy = field.getEnemyPokemon();
+
+    expect(enemy).toHaveHp(1);
+    expect(enemy).toHaveFullHp();
+
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
+    expect(enemy).toHaveFainted();
+  });
+
+  it.each(damagingTrappedBattlerTagTypes)(
+    "should not proc on '%s' damaging trap battler-tag ",
+    async (_name, battlerTagType) => {
+      const { classicMode, field, move } = game;
+      vi.spyOn(SturdyAbAttr.prototype, "apply");
+      vi.spyOn(TrappedTag.prototype, "lapse");
+
+      await classicMode.runToSummon(SpeciesId.LUCARIO);
+      const enemy = field.getEnemyPokemon();
+      enemy.setStat(Stat.HP, 1);
+      enemy.hp = 1;
+      enemy.addTag(battlerTagType, Number.MAX_SAFE_INTEGER);
+
+      expect(enemy).toHaveHp(1);
+      expect(enemy).toHaveFullHp();
+      expect(enemy).toHaveBattlerTagType(battlerTagType);
+
+      move.use(MoveId.SPLASH);
+      await game.toEndOfTurn();
+
+      expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
+      expect(TrappedTag.prototype.lapse).toHaveBeenCalled;
+      expect(enemy).toHaveFainted();
+    },
+  );
 });
