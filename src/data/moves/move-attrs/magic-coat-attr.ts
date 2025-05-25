@@ -21,7 +21,7 @@ export class MagicCoatAttr extends AddBattlerTagAttr {
   /**
    * Grants (+1) for every 2 of the user's opponents' revealed and bounceable status moves.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const bounceableMoveCount = user
       .getOpponents()
       .flatMap((opp) =>

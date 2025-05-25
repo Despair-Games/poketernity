@@ -26,7 +26,7 @@ export class GroundingAttr extends AddBattlerTagAttr {
    * on the opposing side of the affected Pokemon. If the affected Pokemon is on the same
    * side as the user, this bonus is multiplied by -1.
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.isGrounded()) {
       return 0;

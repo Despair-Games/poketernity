@@ -21,7 +21,7 @@ export class ElectrifyAttr extends AddBattlerTagAttr {
    * Grants 60%(+2) if the user or its ally has an immunity to Electric-type moves,
    * either from its typing or ability. Otherwise, grants a {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty}
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const allyHasElectricImmunity = user
       .getField()
       .some(

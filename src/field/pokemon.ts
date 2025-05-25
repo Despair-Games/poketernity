@@ -1228,10 +1228,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * @param target - The {@linkcode} to compare Speed against
+   * @param estimate - If `true`, estimates the target's Speed only based on revealed information
    * @returns `true` if this Pokemon has higher Speed than
    */
-  public outspeeds(target: Pokemon): boolean {
-    return this.getEffectiveStat(Stat.SPD) > target.getEffectiveStat(Stat.SPD);
+  public outspeeds(target: Pokemon, estimate: boolean = false): boolean {
+    const applyMode = estimate ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT;
+    return this.getEffectiveStat(Stat.SPD, target) > target.getEffectiveStat(Stat.SPD, this, undefined, applyMode);
   }
 
   calculateStats(): void {
@@ -2282,9 +2284,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the calculated score for the matchup.
    */
   public getMatchupScore(opponent: Pokemon): number {
-    const speed = this.getEffectiveStat(Stat.SPD, opponent, undefined, AbilityApplyMode.REVEALED);
-    const oppSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, AbilityApplyMode.REVEALED);
-    const userCanOutspeed = speed >= oppSpeed;
+    const canOutspeed = this.outspeeds(opponent, true);
 
     const attackMoves = this.getAttackMoves(true);
     const oppAttackMoves = opponent.estimateAttackMoves();
@@ -2293,15 +2293,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const oppEas = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
 
     if (this.isActive(true)) {
-      if (eas >= 4 && (userCanOutspeed || oppEas < eas)) {
+      if (eas >= 4 && (canOutspeed || oppEas < eas)) {
         return Number.POSITIVE_INFINITY;
       }
-      if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
+      if (oppEas >= 4 && (!canOutspeed || eas < oppEas)) {
         return 0;
       }
-      return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
+      return eas * (3 - oppEas + (canOutspeed ? 1 : 0));
     }
-    return Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
+    return Math.max(eas * (2 - oppEas + (canOutspeed ? 1 : 0)), 0);
   }
 
   /**

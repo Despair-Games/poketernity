@@ -20,7 +20,7 @@ export class TauntAttr extends AddBattlerTagAttr {
    * (i.e. the {@linkcode Pokemon.getExpectedAttackScore | EAS} of all of the target's attacks
    * against the user is less than or equal to 1)
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const targetAttacks = target.estimateAttackMoves();
 
     if (targetAttacks.every((mv) => target.getExpectedAttackScore(user, mv) <= 1)) {

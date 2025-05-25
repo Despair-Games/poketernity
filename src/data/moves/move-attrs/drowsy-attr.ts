@@ -19,7 +19,7 @@ export class DrowsyAttr extends AddBattlerTagAttr {
   }
 
   /** Grants (+1) + 30%(+1) if the target can become Drowsy */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     if (target.canAddTag(this.tagType)) {
       return MINOR_EFFECT_SCORE_BONUS + this.getRandomScore(user, 30);
     }

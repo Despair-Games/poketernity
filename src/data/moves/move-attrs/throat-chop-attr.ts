@@ -22,7 +22,7 @@ export class ThroatChopAttr extends AddBattlerTagAttr {
    * Grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} if the target
    * is known to have a {@link MoveFlags.SOUND_MOVE | sound-based move}
    */
-  public override getEffectScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
     if ([...target.waveData.revealedMoves].some((mvId) => allMoves.get(mvId).checkFlag(MoveFlags.SOUND_MOVE, target))) {
       return MINOR_EFFECT_SCORE_BONUS;
     }

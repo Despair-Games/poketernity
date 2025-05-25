@@ -16,7 +16,7 @@ export class NoRetreatAttr extends AddBattlerTagAttr {
   }
 
   /** Grants a {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty} if the user isn't already trapped. */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return user.isTrapped() ? 0 : MINOR_EFFECT_SCORE_PENALTY;
   }
 }

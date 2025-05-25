@@ -16,7 +16,7 @@ export class SyrupBombAttr extends AddBattlerTagAttr {
   }
 
   /** Grants a 60%(+1) bonus if the target has higher Speed than the user */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     return target.outspeeds(user) ? this.getRandomScore(user, 60) : 0;
   }
 }

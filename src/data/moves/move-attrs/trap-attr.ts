@@ -25,7 +25,7 @@ export class TrapAttr extends AddBattlerTagAttr {
    * against all opponents.
    * @todo Should this only be granted in single battles?
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const userMatchupScores = user.getOpponents().map((opp) => user.getMatchupScore(opp));
 
     if (userMatchupScores.every((score) => score >= STRONG_MATCHUP_SCORE_THRESHOLD)) {

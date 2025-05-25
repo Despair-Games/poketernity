@@ -20,7 +20,7 @@ export class ImprisoningAttr extends AddBattlerTagAttr {
    * Grants (+1) for every move an opponent has revealed that is also
    * known by the user, up to the {@linkcode SOFT_EFFECT_SCORE_LIMIT}.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const numOppMatchingMoves = user
       .getOpponents()
       .flatMap((opp) => [...opp.waveData.revealedMoves])

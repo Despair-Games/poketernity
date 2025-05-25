@@ -17,7 +17,7 @@ export class TarShotAttr extends AddBattlerTagAttr {
   }
 
   /** Grants 40%(+1) if the user or its ally knows a Fire-type attack */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const userSideKnowsFireAttack = user
       .getField()
       .some((p) => p.getAttackMoves(true).some((mv) => p.getMoveType(mv) === ElementalType.FIRE));

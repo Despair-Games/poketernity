@@ -69,3 +69,9 @@ export const COMMANDING_TARGET_PENALTY = -20;
  * Pokemon is strongly favored against its opponent
  */
 export const STRONG_MATCHUP_SCORE_THRESHOLD = 4;
+
+/**
+ * A {@link Pokemon.getMatchupScore | Matchup Score} value indicating a
+ * Pokemon is favored against its opponent
+ */
+export const FAVORABLE_MATCHUP_SCORE_THRESHOLD = 3;

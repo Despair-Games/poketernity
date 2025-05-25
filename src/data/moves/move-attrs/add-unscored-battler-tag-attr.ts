@@ -9,7 +9,7 @@ import type { Move } from "#moves/move";
  * @extends AddBattlerTagAttr
  */
 export class AddUnscoredBattlerTagAttr extends AddBattlerTagAttr {
-  public override getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return 0;
   }
 }

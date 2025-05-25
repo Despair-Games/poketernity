@@ -26,7 +26,7 @@ export class FloatingAttr extends AddBattlerTagAttr {
    * - If the affected Pokemon is the user or its ally, this modifier is {@linkcode MINOR_EFFECT_SCORE_BONUS}
    * - If the affected Pokemon is an opponent of the user, this modifier is {@linkcode MINOR_EFFECT_SCORE_PENALTY}
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const pokemon = this.selfTarget ? user : target;
     if (!pokemon.isGrounded()) {
       return 0;

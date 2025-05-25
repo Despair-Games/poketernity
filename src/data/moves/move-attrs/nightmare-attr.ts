@@ -17,7 +17,7 @@ export class NightmareAttr extends AddBattlerTagAttr {
   }
 
   /** Grants (+1) if the target has been asleep for 1 turn or less */
-  public override getEffectScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
     return target.hasStatusEffect(StatusEffect.SLEEP) && target.turnsAsleep <= 1 ? 1 : 0;
   }
 }

@@ -21,7 +21,7 @@ export class StockpileAttr extends AddBattlerTagAttr {
    * Grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} for each of
    * Spit Up and Swallow that the user knows.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const synergyMoves = [MoveId.SPIT_UP, MoveId.SWALLOW];
     return synergyMoves.reduce((total, mv) => total + (user.hasMove(mv) ? MINOR_EFFECT_SCORE_BONUS : 0), 0);
   }

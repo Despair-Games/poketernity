@@ -20,7 +20,7 @@ export class GrudgeAttr extends AddBattlerTagAttr {
    * Grants a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} if the user
    * expects to faint from at least one opponent's attack
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const expectsToFaint = user
       .getOpponents()
       .some((opp) => opp.estimateAttackMoves().some((mv) => opp.getExpectedAttackScore(user, mv) >= KO_ATTACK_SCORE));

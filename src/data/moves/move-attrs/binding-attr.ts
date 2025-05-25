@@ -1,5 +1,9 @@
+import { FAVORABLE_MATCHUP_SCORE_THRESHOLD } from "#constants/ai-constants";
 import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { Move } from "#moves/move";
 
 /**
  * Attribute to add a binding effect to the target.
@@ -10,5 +14,16 @@ import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 export class BindingAttr extends AddBattlerTagAttr {
   constructor(tagType: BattlerTagType) {
     super(tagType, false, { turnCountMin: 4, turnCountMax: 5 });
+  }
+
+  /**
+   * Grants a 65%(+1) bonus if the user has a {@linkcode FAVORABLE_MATCHUP_SCORE_THRESHOLD | favorable matchup score}
+   * against all opponents.
+   */
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    if (user.getOpponents().every((opp) => user.getMatchupScore(opp) > FAVORABLE_MATCHUP_SCORE_THRESHOLD)) {
+      return this.getRandomScore(user, 65);
+    }
+    return 0;
   }
 }

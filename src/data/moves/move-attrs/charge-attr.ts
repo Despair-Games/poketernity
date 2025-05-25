@@ -17,7 +17,7 @@ export class ChargeAttr extends AddBattlerTagAttr {
   }
 
   /** Grants 30%(+2) if the user knows an Electric-type attack and isn't already "Charged" */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const userKnowsElectricAttack = user
       .getAttackMoves(true)
       .some((mv) => user.getMoveType(mv) === ElementalType.ELECTRIC);

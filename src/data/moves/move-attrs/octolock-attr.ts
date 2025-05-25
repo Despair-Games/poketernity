@@ -20,7 +20,7 @@ export class OctolockAttr extends AddBattlerTagAttr {
    * Grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} if the user has
    * a {@link STRONG_MATCHUP_SCORE_THRESHOLD | strong matchup} against all opponents.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     if (user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD) {
       return MINOR_EFFECT_SCORE_BONUS;
     }

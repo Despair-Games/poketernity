@@ -3,6 +3,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
+import type { MoveCondition } from "#moves/move-condition";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 
 interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
@@ -64,7 +65,7 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
     );
   }
 
-  override getCondition(): MoveConditionFunc | null {
+  override getCondition(): MoveCondition | MoveConditionFunc | null {
     return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).getTag(this.tagType) : null;
   }
 
@@ -199,5 +200,5 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
     return Math.floor(this.getTagTargetBenefitScore() * (moveChance / 100));
   }
 
-  public abstract override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number;
+  public abstract override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number;
 }

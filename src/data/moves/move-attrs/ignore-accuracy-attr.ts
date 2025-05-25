@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
@@ -30,5 +31,16 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
     );
 
     return true;
+  }
+
+  /**
+   * Grants an Effect Score bonus equal to the lowest
+   * {@link Move.getBattleAccuracyPenalty | Accuracy Penalty} among the user's moves, multiplied by -1.
+   * @todo Accuracy penalty is only calculated based on the left-most opponent on the field
+   */
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return Math.max(
+      ...user.getMoveset().map((mv) => -mv.getMove().getBattleAccuracyPenalty(user, user.getOpponents()[0])),
+    );
   }
 }

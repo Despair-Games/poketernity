@@ -27,7 +27,7 @@ export class RoostAttr extends AddBattlerTagAttr {
    * and {@linkcode MINOR_EFFECT_SCORE_BONUS} for the final score.
    * @see {@linkcode getOpponentScore}
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     // If the user cannot change its type from this effect, no bonus or penalty applies
     if (user.isTerastallized || !user.isOfType(ElementalType.FLYING)) {
       return 0;

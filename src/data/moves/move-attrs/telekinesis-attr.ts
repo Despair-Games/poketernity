@@ -18,7 +18,7 @@ export class TelekinesisAttr extends AddBattlerTagAttr {
    * Grants 40%(+1) if the user or its ally have a move with an expected
    * accuracy of less than 80
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     if (
       user
         .getField()

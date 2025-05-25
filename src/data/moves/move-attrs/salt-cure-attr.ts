@@ -23,7 +23,7 @@ export class SaltCureAttr extends AddBattlerTagAttr {
    * Also grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} if the target is
    * a Water- or Steel-type Pokemon.
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const targetIsWaterOrSteel = [ElementalType.WATER, ElementalType.STEEL].some((t) => target.isOfType(t, true, true));
 
     return this.getRandomScore(user, 80) + (targetIsWaterOrSteel ? MINOR_EFFECT_SCORE_BONUS : 0);

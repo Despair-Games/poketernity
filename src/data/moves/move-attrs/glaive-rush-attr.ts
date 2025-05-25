@@ -23,7 +23,7 @@ export class GlaiveRushAttr extends AddBattlerTagAttr {
    * Grants a 30%(-1) penalty.
    * Also grants a {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty} if the user is a Boss.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return -this.getRandomScore(user, 30) + (user.isBoss() ? MINOR_EFFECT_SCORE_PENALTY : 0);
   }
 }

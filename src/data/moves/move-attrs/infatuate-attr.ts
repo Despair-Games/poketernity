@@ -10,7 +10,7 @@ export class InfatuateAttr extends AddBattlerTagAttr {
   }
 
   /** Has an 80% chance to grant (+1) if the target is the opposite gender of the user */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     if (user.isOppositeGender(target)) {
       return this.getRandomScore(user, 80);
     }

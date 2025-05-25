@@ -23,7 +23,7 @@ export class UproarAttr extends AddBattlerTagAttr {
    * Grants (-1) + (# of asleep allies) - (# of asleep enemies).
    * The total score from this attribute cannot be lower than (-2).
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const otherAsleepPokemon = globalScene
       .getField(true)
       .filter((p) => p !== user && p.hasStatusEffect(StatusEffect.SLEEP));

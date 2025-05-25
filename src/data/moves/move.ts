@@ -895,7 +895,7 @@ export abstract class Move implements Localizable {
    * @returns the score penalty from accuracy
    * @see {@linkcode getEffectScore}
    */
-  protected getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
+  public getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
     /**
      * If any ongoing effect would cause the move to bypass accuracy checks, assign no penalty.
      * @todo the target's No Guard can be discovered prematurely here

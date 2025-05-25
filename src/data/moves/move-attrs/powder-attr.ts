@@ -18,7 +18,7 @@ export class PowderAttr extends AddBattlerTagAttr {
   }
 
   /** Grants (+1) + 60%(+1) if the target is estimated to have a Fire-type attack */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     if (target.estimateAttackMoves().some((mv) => target.getMoveType(mv) === ElementalType.FIRE)) {
       return this.getRandomScore(user, 60, MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS);
     }

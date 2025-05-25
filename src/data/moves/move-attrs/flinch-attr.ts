@@ -2,9 +2,11 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
+import { MAJOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
@@ -40,5 +42,17 @@ export class FlinchAttr extends AddBattlerTagAttr {
     applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
 
     return moveChance.value;
+  }
+
+  /**
+   * Grants a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} if the user outspeeds the target.
+   *
+   * **NOTE:** Most moves only have a chance to flinch the target. For more information on
+   * how this is accounted for:
+   * @see {@linkcode getEffectScore}
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const userOutspeeds = move.getPriority(user, true) > 0 || user.outspeeds(target, true);
+    return userOutspeeds ? MAJOR_EFFECT_SCORE_PENALTY : 0;
   }
 }

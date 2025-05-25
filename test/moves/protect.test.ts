@@ -155,7 +155,7 @@ describe("Moves - Protect", () => {
       let successes = 0;
       const numTrials = 1000;
       await game.rng.equalSample(numTrials, () => {
-        if (protectAttr.getCondition()(player, player, allMoves.get(MoveId.PROTECT))) {
+        if (protectAttr.getCondition().condition(player, player, allMoves.get(MoveId.PROTECT))) {
           successes++;
         }
       });

@@ -22,7 +22,7 @@ export class IngrainAttr extends AddBattlerTagAttr {
    * is above the {@linkcode STRONG_MATCHUP_SCORE_THRESHOLD}. The bonus chance increases
    * to 75% if the user is also Ghost-type.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     if (user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD) {
       const bonusChance = user.isOfType(ElementalType.GHOST, true, true) ? 75 : 55;
       return this.getRandomScore(user, bonusChance);

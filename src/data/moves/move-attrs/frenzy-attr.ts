@@ -20,7 +20,7 @@ export class FrenzyAttr extends AddBattlerTagAttr {
   }
 
   /** Grants a {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty} at all times */
-  public override getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return MINOR_EFFECT_SCORE_PENALTY;
   }
 }

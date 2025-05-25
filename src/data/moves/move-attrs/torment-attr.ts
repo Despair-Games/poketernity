@@ -15,7 +15,7 @@ export class TormentAttr extends AddBattlerTagAttr {
   }
 
   /** Has a 40% chance to grant (+1) */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return this.getRandomScore(user, 40);
   }
 }

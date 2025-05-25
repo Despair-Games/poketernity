@@ -20,7 +20,7 @@ export class FocusEnergyAttr extends AddBattlerTagAttr {
    * Has a 50% chance to grant (+1).
    * Grants an additional (+1) if the user has a move with an increased critical hit ratio.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const userHasHighCritMove = user.getMoveset().some((mv) => mv.getMove().hasAttr(HighCritAttr));
 
     return this.getRandomScore(user, 50) + (userHasHighCritMove ? MINOR_EFFECT_SCORE_BONUS : 0);

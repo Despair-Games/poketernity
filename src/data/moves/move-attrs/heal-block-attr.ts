@@ -24,7 +24,7 @@ export class HealBlockAttr extends AddBattlerTagAttr {
    * Grants 40%(+1), with an additional {@link MINOR_EFFECT_SCORE_BONUS | minor bonus}
    * if the target has the ability {@link AbilityId.TRIAGE | Triage}.
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const triageBonus = target.hasRevealedAbility(AbilityId.TRIAGE) ? MINOR_EFFECT_SCORE_BONUS : 0;
 
     return this.getRandomScore(user, 40) + triageBonus;

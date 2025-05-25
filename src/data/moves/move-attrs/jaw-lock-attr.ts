@@ -1,18 +1,14 @@
 import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
-import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
+import { TrapAttr } from "#moves/trap-attr";
 
 /**
  * Attribute to implement Jaw Lock's linked trapping effect between the user and target
- * @extends AddBattlerTagAttr
+ * @extends TrapAttr
  */
-export class JawLockAttr extends AddBattlerTagAttr {
-  constructor() {
-    super(BattlerTagType.TRAPPED);
-  }
-
+export class JawLockAttr extends TrapAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If either the user or the target already has the tag, do not apply
     if (user.getTag(...TRAPPED_BATTLER_TAG_TYPES) || target.getTag(...TRAPPED_BATTLER_TAG_TYPES)) {

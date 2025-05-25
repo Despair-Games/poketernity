@@ -1,6 +1,10 @@
+import { MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 
 export class EncoreAttr extends AddBattlerTagAttr {
@@ -8,7 +12,7 @@ export class EncoreAttr extends AddBattlerTagAttr {
     super(BattlerTagType.ENCORE, false, { failOnOverlap: true });
   }
 
-  override getCondition(): MoveConditionFunc | null {
+  public override getCondition(): MoveConditionFunc | null {
     return (_user, target, _move): boolean => {
       if (target.isMax()) {
         return false;
@@ -39,5 +43,18 @@ export class EncoreAttr extends AddBattlerTagAttr {
 
       return true;
     };
+  }
+
+  /**
+   * Grants a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} if the target's last move was a status move
+   * and the user outspeeds the target. Otherwise, grants 20%(+1).
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const lastMove = target.getLastXMoves(-1).find((turnMove) => !turnMove.virtual)?.move;
+
+    if (lastMove?.isStatusMove(target, user) && user.outspeeds(target, true)) {
+      return MAJOR_EFFECT_SCORE_BONUS;
+    }
+    return this.getRandomScore(user, 20);
   }
 }

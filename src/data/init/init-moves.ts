@@ -28,7 +28,7 @@ import { AbilityCopyAttr } from "#moves/ability-copy-attr";
 import { AbilityGiveAttr } from "#moves/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#moves/acupressure-stat-stage-change-attr";
 import { AddBattlerTagHeaderAttr } from "#moves/add-battler-tag-header-attr";
-import { AddBattlerTagIfBoostedAttr } from "#moves/add-battler-tag-if-boosted-attr";
+import { ConfuseIfBoostedAttr } from "#moves/add-battler-tag-if-boosted-attr";
 import { AddEntryHazardTagAttr } from "#moves/add-entry-hazard-tag-attr";
 import { AddPledgeEffectAttr } from "#moves/add-pledge-effect-attr";
 import { AddSubstituteAttr } from "#moves/add-substitute-attr";
@@ -442,7 +442,7 @@ export function initMoves() {
       .soundMove()
       .bounceable(),
     new StatusMove(MoveId.SUPERSONIC, ElementalType.NORMAL, 55, 20, -1, 0, 1)
-      .attr(ConfuseAttr)
+      .attr(ConfuseAttr, true)
       .soundMove()
       .bounceable(),
     new AttackMove(MoveId.SONIC_BOOM, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, 90, 20, -1, 0, 1)
@@ -635,7 +635,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
       .bounceable(),
     new StatusMove(MoveId.CONFUSE_RAY, ElementalType.GHOST, 100, 10, -1, 0, 1)
-      .attr(ConfuseAttr)
+      .attr(ConfuseAttr, true)
       .bounceable(),
     new SelfStatusMove(MoveId.WITHDRAW, ElementalType.WATER, -1, 40, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, true)
@@ -883,7 +883,7 @@ export function initMoves() {
       .bounceable(),
     new AttackMove(MoveId.FEINT_ATTACK, ElementalType.DARK, MoveCategory.PHYSICAL, 60, -1, 20, -1, 0, 2),
     new StatusMove(MoveId.SWEET_KISS, ElementalType.FAIRY, 75, 10, -1, 0, 2)
-      .attr(ConfuseAttr)
+      .attr(ConfuseAttr, true)
       .bounceable(),
     new SelfStatusMove(MoveId.BELLY_DRUM, ElementalType.NORMAL, -1, 10, -1, 0, 2)
       .attr(CutHpStatStageBoostAttr, [Stat.ATK], 12, 2,
@@ -3536,7 +3536,7 @@ export function initMoves() {
       .attr(DragonCheerAttr)
       .target(MoveTarget.NEAR_ALLY),
     new AttackMove(MoveId.ALLURING_VOICE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 9)
-      .attr(AddBattlerTagIfBoostedAttr, BattlerTagType.CONFUSED)
+      .attr(ConfuseIfBoostedAttr)
       .soundMove(),
     new AttackMove(MoveId.TEMPER_FLARE, ElementalType.FIRE, MoveCategory.PHYSICAL, 75, 100, 10, -1, 0, 9)
       .attr(

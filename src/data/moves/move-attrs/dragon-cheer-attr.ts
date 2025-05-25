@@ -23,7 +23,7 @@ export class DragonCheerAttr extends AddBattlerTagAttr {
    * Also grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} if the target is Dragon-type.
    * Also grants a minor bonus if the target has a move with an increased critical hit ratio.
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const targetIsDragon = target.isOfType(ElementalType.DRAGON, true, true);
     const targetHasHighCrit = target.getAttackMoves(true).some((mv) => mv.hasAttr(HighCritAttr));
 

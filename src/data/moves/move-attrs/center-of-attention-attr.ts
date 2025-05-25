@@ -23,7 +23,7 @@ export class CenterOfAttentionAttr extends AddBattlerTagAttr {
    * - {@linkcode MAJOR_EFFECT_SCORE_BONUS} if the user's ally can KO at least one opponent
    * - (0) if none of the above conditions are met
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     if (!globalScene.currentBattle.double) {
       return BAD_MOVE_PENALTY;
     }

@@ -19,7 +19,7 @@ export class AquaRingAttr extends AddBattlerTagAttr {
    * Grants 75%(+1) if the user's average Matchup Score against all active opponents
    * is above the {@linkcode STRONG_MATCHUP_SCORE_THRESHOLD}.
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     if (user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD) {
       return this.getRandomScore(user, 75);
     }

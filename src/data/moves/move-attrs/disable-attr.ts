@@ -21,7 +21,7 @@ export class DisableAttr extends AddBattlerTagAttr {
    * last-used move has an {@linkcode Pokemon.getExpectedAttackScore | EAS}
    * higher than 1 (i.e. the move deals >40% max HP damage).
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const lastTargetMove = target
       .getLastXMoves(-1)
       .find((m) => !m.virtual && [MoveId.NONE, MoveId.STRUGGLE].includes(m.move.id))?.move;

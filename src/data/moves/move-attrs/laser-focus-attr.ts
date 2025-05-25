@@ -20,7 +20,7 @@ export class LaserFocusAttr extends AddBattlerTagAttr {
    * Grants 40%(+1) if the user has a move of at least moderate
    * {@linkcode Pokemon.getExpectedAttackScore | EAS} against an opponent
    */
-  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const opponents = user.getOpponents();
     const userHasThreatMove = user
       .getAttackMoves(true)
