@@ -37,8 +37,7 @@ export function updateUserInfo(): Promise<[boolean, number]> {
       };
       let lastSessionSlot = -1;
       for (let s = 0; s < SAVE_SLOT_LIMIT; s++) {
-        // TODO: we should use getDataTypeKey(GameDataType.SESSION, s) but it creates a circular dependency
-        if (localStorage.getItem(`${SESSION_DATA_LS_KEY_PREFIX}${s ? s : ""}_${loggedInUser.username}`)) {
+        if (localStorage.getItem(getLocalStorageKey(GameDataType.SESSION, s))) {
           lastSessionSlot = s;
           break;
         }
@@ -63,7 +62,7 @@ export function updateUserInfo(): Promise<[boolean, number]> {
  * Retrieve the local storage key used to store the given data type.
  * For System data, Session data, Run history and starter preferences the key depends on the username.
  *
- * Note: needs to be in this file to prevent circular dependencies
+ * Note: needs to be in this file to prevent circular dependencies due to `updateDateUserInfo` calling it.
  *
  * @param dataType - The {@linkcode GameDataType} we want to store / retrieve from storage.
  * @param slotId - The save slot index, from 0 to 4 - only used for session data. Default: `0`.
