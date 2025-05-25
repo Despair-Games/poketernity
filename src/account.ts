@@ -62,7 +62,7 @@ export function updateUserInfo(): Promise<[boolean, number]> {
  * Retrieve the local storage key used to store the given data type.
  * For System data, Session data, Run history and starter preferences the key depends on the username.
  *
- * Note: needs to be in this file to prevent circular dependencies due to `updateDateUserInfo` calling it.
+ * Note: needs to be in this file to prevent circular dependencies due to `updateUserInfo` calling it.
  *
  * @param dataType - The {@linkcode GameDataType} we want to store / retrieve from storage.
  * @param slotId - The save slot index, from 0 to 4 - only used for session data. Default: `0`.
