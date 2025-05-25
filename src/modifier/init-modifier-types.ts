@@ -214,10 +214,8 @@ export function initModifierTypes() {
       if (pregenArgs && pregenArgs.length === 1 && Object.values(BerryType).includes(pregenArgs[0])) {
         return new BerryModifierType(pregenArgs[0] as BerryType);
       }
-      const berryTypes = Object.values(BerryType).filter((v) => {
-        const removeBerries: BerryType[] = [BerryType.SITRUS, BerryType.LUM, BerryType.LEPPA] as const;
-        return !removeBerries.includes(v);
-      });
+      const removeBerries: BerryType[] = [BerryType.SITRUS, BerryType.LUM, BerryType.LEPPA] as const;
+      const berryTypes = Object.values(BerryType).filter((v) => !removeBerries.includes(v));
       let randBerryType: BerryType;
       const rand = randSeedInt(12);
       if (rand < 2) {
