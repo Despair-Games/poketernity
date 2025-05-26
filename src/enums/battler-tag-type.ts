@@ -1,8 +1,3 @@
-/**
- * Remember to add the appropriate score to
- * {@linkcode getTagTargetBenefitScore}
- */
-
 export enum BattlerTagType {
   NONE,
   /** For moves that require recharging after use like Hyper Beam */
