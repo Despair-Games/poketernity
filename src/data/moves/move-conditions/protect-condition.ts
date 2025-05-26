@@ -1,11 +1,18 @@
+import { PROTECT_MOVES } from "#constants/move-constants";
 import { MoveResult } from "#enums/move-result";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
-import { ProtectAttr } from "#moves/protect-attr";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 
+/**
+ * Condition for {@link https://bulbapedia.bulbagarden.net/wiki/Protect_(move) | Protect}
+ * and its variations. Decreases the chance of success
+ * by a factor of 1/3 for every consecutive successful use
+ * of a Protect variation.
+ * @extends MoveCondition
+ */
 export class ProtectCondition extends MoveCondition {
   constructor() {
     super(protectCondition);
@@ -23,7 +30,10 @@ export class ProtectCondition extends MoveCondition {
 
 const protectCondition: MoveConditionFunc = (user, _target, _move) => {
   const moveHistory = user.getLastXMoves(-1).filter((mv) => !mv.virtual);
-  const lastNonUse = moveHistory.findIndex((mv) => mv.result !== MoveResult.SUCCESS || !mv.move.hasAttr(ProtectAttr));
+  // Note: This can't check for `ProtectAttr` directly as it would create a circular dependency
+  const lastNonUse = moveHistory.findIndex(
+    (mv) => mv.result !== MoveResult.SUCCESS || PROTECT_MOVES.includes(mv.move.id),
+  );
 
   if (lastNonUse === -1) {
     return !user.randSeedInt(Math.pow(3, moveHistory.length));
