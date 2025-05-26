@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { FairyLockTag } from "#arena-tags/fairy-lock-tag";
-import type { EncoreTag } from "#battler-tags/encore-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
 import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
@@ -69,7 +68,8 @@ export class CommandPhase extends FieldPhase {
         if (allyPokemon) {
           const allyCommand = turnManager.findCommandFromPokemon(allyPokemon);
           if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
-            return this.end();
+            this.end();
+            return;
           }
         }
       }
@@ -77,12 +77,14 @@ export class CommandPhase extends FieldPhase {
 
     // If the Pokemon has applied Commander's effects to its ally, skip this command
     if (currentBattle?.double && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === pokemon) {
-      return this.end();
+      this.end();
+      return;
     }
 
-    // Checks if the Pokemon is under the effects of Encore. If so, Encore can end early if the encored move has no more PP.
-    const encoreTag = pokemon.getTag(BattlerTagType.ENCORE) as EncoreTag;
-    if (encoreTag) {
+    // Checks if the Pokemon is under the effects of Encore.
+    // If so, Encore can end early if the encored move has no more PP.
+    // TODO: is this `if` necessary?
+    if (pokemon.hasTag(BattlerTagType.ENCORE)) {
       pokemon.lapseTag(BattlerTagType.ENCORE);
     }
 
@@ -218,7 +220,7 @@ export class CommandPhase extends FieldPhase {
             turnCommand.turnMove.targets = moveTargets.targets;
           } else if (
             turnCommand.turnMove
-            && pokemon.getTag(BattlerTagType.CHARGING)
+            && pokemon.hasTag(BattlerTagType.CHARGING)
             && pokemon.getMoveQueue().length >= 1
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;

@@ -31,7 +31,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the pokemon has a valid move and no existing {@linkcode GorillaTacticsTag}; `false` otherwise
    */
   override canAdd(pokemon: Pokemon): boolean {
-    return this.getLastValidMove(pokemon) !== undefined && !pokemon.getTag(BattlerTagType.GORILLA_TACTICS);
+    return this.getLastValidMove(pokemon) !== undefined && !pokemon.hasTag(BattlerTagType.GORILLA_TACTICS);
   }
 
   /**

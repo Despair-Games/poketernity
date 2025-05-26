@@ -12,7 +12,7 @@ export class QuashAttr extends AddBattlerTagAttr {
   override getCondition(): MoveConditionFunc | null {
     return (_user, target, _move) => {
       const { turnManager } = globalScene.currentBattle;
-      return !target.getTag(BattlerTagType.QUASHED) && !isNil(turnManager.findCommandFromPokemon(target));
+      return !target.hasTag(BattlerTagType.QUASHED) && !isNil(turnManager.findCommandFromPokemon(target));
     };
   }
 }

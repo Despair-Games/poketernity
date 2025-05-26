@@ -50,7 +50,7 @@ import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#battler-tags/crit-boost-stackable-tag";
-import { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
+import type { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
 import type { ExposedTag } from "#battler-tags/exposed-tag";
 import { getBattlerTag } from "#battler-tags/get-battler-tag";
 import type { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
@@ -1059,7 +1059,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const critBoostTag = source.getTag(...CRIT_BOOST_BATTLER_TAG_TYPES);
     if (critBoostTag) {
-      if (critBoostTag instanceof DragonCheerTag) {
+      if (critBoostTag.isType<DragonCheerTag>(BattlerTagType.DRAGON_CHEER)) {
         critStage.value += critBoostTag.typesOnAdd.includes(ElementalType.DRAGON) ? 2 : 1;
       } else {
         critStage.value += 2;
@@ -1150,7 +1150,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     switch (stat) {
       case Stat.ATK:
-        if (this.getTag(BattlerTagType.SLOW_START)) {
+        if (this.hasTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
         break;
@@ -1175,7 +1175,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret >>= 2;
         }
 
-        if (this.getTag(BattlerTagType.SLOW_START)) {
+        if (this.hasTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
         if (this.hasStatusEffect(StatusEffect.PARALYSIS)) {
@@ -1190,7 +1190,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             ret >>= 1;
           }
         }
-        if (this.getTag(BattlerTagType.UNBURDEN) && this.hasAbility(AbilityId.UNBURDEN)) {
+        if (this.hasTag(BattlerTagType.UNBURDEN) && this.hasAbility(AbilityId.UNBURDEN)) {
           ret *= 2;
         }
         break;
@@ -1746,7 +1746,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const autotomizedTag = this.getTag<AutotomizedTag>(BattlerTagType.AUTOTOMIZED);
     let weightRemoved = 0;
     if (!isNil(autotomizedTag)) {
-      weightRemoved = 100 * autotomizedTag!.autotomizeCount;
+      weightRemoved = 100 * autotomizedTag.autotomizeCount;
     }
     const minWeight = 0.1;
     const weight = new NumberHolder(this.getSpeciesForm().weight - weightRemoved);
@@ -1763,9 +1763,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.hasTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
-        && !this.getTag(BattlerTagType.FLOATING)
-        && !this.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
-        && !this.getTag(BattlerTagType.SKY_DROP))
+        && !this.hasTag(BattlerTagType.FLOATING)
+        && !this.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
+        && !this.hasTag(BattlerTagType.SKY_DROP))
     );
   }
 
@@ -1787,7 +1787,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    if (this.getTag(BattlerTagType.SKY_DROP)) {
+    if (this.hasTag(BattlerTagType.SKY_DROP)) {
       return true;
     }
 
@@ -1831,7 +1831,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbAttrs<MoveTypeChangeAbAttr>(AbAttrFlag.MOVE_TYPE_CHANGE, this, simulated, move, undefined, moveTypeHolder);
 
     globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
-    if (this.getTag(BattlerTagType.ELECTRIFIED)) {
+    if (this.hasTag(BattlerTagType.ELECTRIFIED)) {
       moveTypeHolder.value = ElementalType.ELECTRIC;
     }
 
@@ -1891,7 +1891,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       typeMultiplier.value = 0;
     }
 
-    if (this.getTag(BattlerTagType.TAR_SHOT) && this.getMoveType(move) === ElementalType.FIRE) {
+    if (this.hasTag(BattlerTagType.TAR_SHOT) && this.getMoveType(move) === ElementalType.FIRE) {
       typeMultiplier.value *= 2;
     }
 
@@ -3129,7 +3129,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
     const glaiveRushMultiplier = new NumberHolder(1);
-    if (this.getTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
+    if (this.hasTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
       glaiveRushMultiplier.value = 2;
     }
 
@@ -3189,7 +3189,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       .getAttrs(HitsTagAttr)
       .filter((hta) => hta.doubleDamage)
       .forEach((hta) => {
-        if (this.getTag(hta.tagType)) {
+        if (this.hasTag(hta.tagType)) {
           hitsTagMultiplier.value *= 2;
         }
       });
@@ -3305,7 +3305,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     const isCritical = new BooleanHolder(false);
-    if (source.getTag(BattlerTagType.ALWAYS_CRIT)) {
+    if (source.hasTag(BattlerTagType.ALWAYS_CRIT)) {
       isCritical.value = true;
     }
     applyMoveAttrs(CritOnlyAttr, source, this, move, isCritical);
@@ -3356,9 +3356,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const surviveDamage = new BooleanHolder(false);
 
     if (!preventEndure && amount >= this.hp) {
-      if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {
+      if (this.hp >= 1 && this.hasTag(BattlerTagType.ENDURING)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURING);
-      } else if (this.hp > 1 && this.getTag(BattlerTagType.STURDY)) {
+      } else if (this.hp > 1 && this.hasTag(BattlerTagType.STURDY)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.STURDY);
       }
 
@@ -3478,7 +3478,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns Whether the specified tag can be added to the pokemon
    */
   public canAddTag(tagType: BattlerTagType): boolean {
-    if (this.getTag(tagType)) {
+    if (this.hasTag(tagType)) {
       return false;
     }
 
@@ -3897,7 +3897,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     statusList = coerceArray(statusList);
     if (
       statusList.includes(this.getStatusEffect(ignoreMockAbility))
-      || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
+      || (includeConfusion && this.hasTag(BattlerTagType.CONFUSED))
     ) {
       return true;
     }
@@ -4092,7 +4092,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.setFrameRate(4);
 
-      const tag = SEMI_INVULNERABLE_BATTLER_TAG_TYPES.find((t) => this.getTag(t));
+      const tag = SEMI_INVULNERABLE_BATTLER_TAG_TYPES.find((t) => this.hasTag(t));
 
       if (tag) {
         this.removeTag(tag);
@@ -4164,12 +4164,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
-      if (this.getTag(BattlerTagType.NIGHTMARE)) {
+      // TODO: are these `if`s necessary? `.lapseTag` will just do nothing if there's no tag found of the specified type
+      if (this.hasTag(BattlerTagType.NIGHTMARE)) {
         this.lapseTag(BattlerTagType.NIGHTMARE);
       }
     }
     if (confusion) {
-      if (this.getTag(BattlerTagType.CONFUSED)) {
+      if (this.hasTag(BattlerTagType.CONFUSED)) {
         this.lapseTag(BattlerTagType.CONFUSED);
       }
     }
@@ -4195,7 +4196,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  primeSummonData(summonDataPrimer: PokemonSummonData): void {
+  public primeSummonData(summonDataPrimer: PokemonSummonData): void {
     this.summonDataPrimer = summonDataPrimer;
   }
 
@@ -4205,7 +4206,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @todo This currently checks for the existence of {@linkcode Pokemon.summonDataPrimer} and
    * applies its values to `summonData` if it exists. `summonDataPrimer` should be removed.
    */
-  resetSummonData(): void {
+  public resetSummonData(): void {
     this.summonData = {
       statStages: [0, 0, 0, 0, 0, 0, 0],
       moveQueue: [],
@@ -4225,10 +4226,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       moveHistory: [],
     };
     this.setSwitchOutStatus(false);
-    // TODO: why is this here? is it safe to remove this?
-    if (this.getTag(BattlerTagType.SEEDED)) {
-      this.lapseTag(BattlerTagType.SEEDED);
-    }
     if (globalScene) {
       globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
     }
@@ -4238,10 +4235,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           this.summonData[k] = this.summonDataPrimer[k];
         }
       }
+
       // If this Pokemon has a Substitute when loading in, play an animation to add its sprite
-      if (this.getTag(BattlerTagType.SUBSTITUTE)) {
+      const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+      if (subTag) {
         globalScene.triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
-        this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE)!.sourceInFocus = false;
+        subTag.sourceInFocus = false;
       }
 
       // If this Pokemon has Commander and Dondozo as an active ally, hide this Pokemon's sprite.
@@ -4259,7 +4258,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  resetWaveData(): void {
+  public resetWaveData(): void {
     this.waveData = {
       hitCount: 0,
       berriesEaten: [],
@@ -4268,7 +4267,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     };
   }
 
-  resetTurnData(): void {
+  public resetTurnData(): void {
     this.turnData = {
       flinched: false,
       acted: false,

@@ -30,7 +30,7 @@ export class TrappedTag extends BattlerTag {
     const move = allMoves.get(this.sourceMoveId);
 
     const isGhost = pokemon.isOfType(ElementalType.GHOST);
-    const isTrapped = pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
+    const isTrapped = pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
     return !isTrapped && !isGhost && (this.sourceMoveId === MoveId.G_MAX_TERROR || !hasSubstitute);

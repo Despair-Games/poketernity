@@ -15,7 +15,7 @@ import i18next from "i18next";
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      if (attacker.getTag(BattlerTagType.PERISH_SONG)) {
+      if (attacker.hasTag(BattlerTagType.PERISH_SONG)) {
         return false;
       }
 

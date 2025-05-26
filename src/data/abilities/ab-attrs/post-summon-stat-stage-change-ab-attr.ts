@@ -40,7 +40,8 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     for (const opponent of pokemon.getOpponents()) {
       const cancelled = new BooleanHolder(false);
       if (this.intimidate) {
-        if (opponent.getTag(BattlerTagType.SUBSTITUTE)) {
+        // TODO: this seems incorrect, doesn't this mean if either opponent has a sub up both of them won't be intimidated?
+        if (opponent.hasTag(BattlerTagType.SUBSTITUTE)) {
           return false;
         }
 
