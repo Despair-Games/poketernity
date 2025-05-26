@@ -40,7 +40,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   private evolutionBgm: AnySound;
 
   /**
-   * A {@linecode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
+   * A {@linkcode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
    */
   private cancelled: BooleanHolder = new BooleanHolder(false);
 

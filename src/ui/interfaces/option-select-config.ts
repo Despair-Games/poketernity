@@ -7,7 +7,7 @@ import type { TextStyle } from "#enums/text-style";
 /**
  * Customizations options for UI's {@linkcode UiMode.OPTION_SELECT}
  *
- * @template T the specifc type of {@linkcode OptionSelectItem} contained by this config
+ * @typeParam T - The specifc type of {@linkcode OptionSelectItem} contained by this config
  */
 export interface OptionSelectModeConfig<T extends OptionSelectItem = OptionSelectItem> extends OptionMenuSettings {
   /** The {@linkcode OptionSelectItem}s to display. */

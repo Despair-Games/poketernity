@@ -3552,7 +3552,7 @@ export function initMoves() {
 
 /**
  * All damaging (aka {@linkcode AttackMove}) Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
- * @source {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
  */
 function addFireMovesThawFrozenTargetAttribute(move: Move) {
   if (move.type === ElementalType.FIRE && move.isAttackMove()) {

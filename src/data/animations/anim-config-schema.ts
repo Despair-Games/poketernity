@@ -123,33 +123,20 @@ function getNumberArrayKeyFrameSetSchema(
 const animPropSchema: JSONSchemaType<AnimProp> = {
   type: "object",
   properties: {
-    /**
-     * For battle animations, the origin point for keyframes is defined
-     * along the line connecting the start point ("source") and end point ("target").
-     * The `u`-value is the fraction of the distance between the start and end point
-     * the origin point is away from the source. If `u = 0`, then the origin point is
-     * the source; if `u = 1`, then the origin point is the target.
-     */
     u: getNumberKeyFrameSetSchema({
       type: "number",
       minimum: 0,
       maximum: 1,
     }),
 
-    /** The horizontal coordinate relative to the keyframe's origin point. */
     x: getNumberKeyFrameSetSchema({
       type: "number",
     }),
 
-    /**
-     * The vertical coordinate relative to the keyframe's origin point.
-     * An increase in `y` will move the sprite downward.
-     */
     y: getNumberKeyFrameSetSchema({
       type: "number",
     }),
 
-    /** Horizontal scale factor (%) */
     scaleX: {
       ...getNumberKeyFrameSetSchema({
         type: "number",
@@ -158,7 +145,6 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /** Vertical scale factor (%) */
     scaleY: {
       ...getNumberKeyFrameSetSchema({
         type: "number",
@@ -167,7 +153,6 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /** The alpha value for the animated sprite, in the range [0, 255] */
     alpha: {
       ...getNumberKeyFrameSetSchema({
         type: "number",
@@ -177,12 +162,6 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /**
-     * The rotation angle of the sprite in degrees.
-     * Phaser uses a right-hand clockwise rotation system, where 0 is right,
-     * 90 is down, and -90 is up. The value of this should be in the interval
-     * [-180, 180].
-     */
     angle: {
       ...getNumberKeyFrameSetSchema({
         type: "number",
@@ -192,22 +171,16 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /** If `true`, flips the sprite horizontally */
     mirror: {
       ...getBooleanKeyFrameSetSchema({ type: "boolean" }),
       nullable: true,
     },
 
-    /** If `false`, hides the sprite */
     visible: {
       ...getBooleanKeyFrameSetSchema({ type: "boolean" }),
       nullable: true,
     },
 
-    /**
-     * The blend mode to specify how the sprite is rendered on the canvas
-     * @see {@link https://docs.phaser.io/api-documentation/constant/blendmodes}
-     */
     blendType: {
       ...getNumberKeyFrameSetSchema({
         type: "integer",
@@ -216,17 +189,11 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /**
-     * If this keyframe is for a graphic, specifies the tile index used
-     * for the graphic during the tween. This is only relevant for VFX
-     * properties.
-     */
     graphicFrame: {
       ...getNumberKeyFrameSetSchema({ type: "integer" }),
       nullable: true,
     },
 
-    /** A tone to pipeline over the animated sprite (RGBA, normalized) */
     tone: {
       ...getNumberArrayKeyFrameSetSchema({
         type: "array",
@@ -241,13 +208,6 @@ const animPropSchema: JSONSchemaType<AnimProp> = {
       nullable: true,
     },
 
-    /**
-     * The z-depth of the animated sprite during the tween
-     * - 0 is behind all other sprites (except BG)
-     * - 1 is on top of player field
-     * - 3 is on top of both fields
-     * - 5 is on top of player sprite
-     */
     priority: {
       ...getNumberKeyFrameSetSchema({
         type: "integer",
@@ -271,13 +231,11 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
   properties: {
     // Required fields
 
-    /** The type of event to execute. */
     eventType: {
       type: "string",
       enum: Object.values(AnimTimedEventType),
     },
 
-    /** The delay from the start of the animation to the given event (in frames) */
     time: {
       type: "number",
       minimum: 0,
@@ -287,10 +245,6 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
 
     // Timed Sound Event fields
 
-    /**
-     * The volume of the played sound effect
-     * @default 100
-     */
     volume: {
       type: "number",
       default: 100,
@@ -298,10 +252,6 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
       nullable: true,
     },
 
-    /**
-     * The pitch of the played sound effect
-     * @default 100
-     */
     pitch: {
       type: "number",
       default: 100,
@@ -311,27 +261,23 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
 
     // Background Image Event fields
 
-    /** The x-coordinate of the background image */
     bgX: {
       type: "number",
       default: 0,
       nullable: true,
     },
 
-    /** The y-coordinate of the background image */
     bgY: {
       type: "number",
       default: 0,
       nullable: true,
     },
 
-    /** The duration the image is displayed (in frames) */
     duration: {
       type: "number",
       nullable: true,
     },
 
-    /** Scale factor (%) for the background image */
     scale: {
       type: "number",
       default: 100,
@@ -357,44 +303,21 @@ const animTimedEventSchema: JSONSchemaType<AnimTimedEvent> = {
 export const animConfigSchema: JSONSchemaType<AnimConfig> = {
   type: "object",
   properties: {
-    /**
-     * The {@linkcode MoveId | identifier} for the move
-     * associated with the anim (if applicable).
-     * This is required for all {@linkcode MoveAnim | MoveAnims}.
-     */
     moveId: {
       type: "integer",
       enum: getTSEnumValues(MoveId),
       nullable: true,
     },
 
-    /** The name of the tileset used for the animation. */
+    // The name of the tileset used for the animation.
     graphic: { type: "string", nullable: true },
 
-    /**
-     * Contains all properties applied to the sprite of the
-     * "source" object (e.g. the {@linkcode Pokemon} using a move)
-     * @see {@linkcode animPropSchema}
-     */
     sourceProperties: { ...animPropSchema, nullable: true },
 
-    /**
-     * Contains all properties applied to the sprite of the
-     * "target" object (e.g. the {@linkcode Pokemon} attacked by a move)
-     * @see {@linkcode animPropSchema}
-     */
     targetProperties: { ...animPropSchema, nullable: true },
 
-    /**
-     * Contains all properties applied to the animation's VFX
-     * @see {@linkcode animPropSchema}
-     */
     vfxProperties: { ...animPropSchema, nullable: true },
 
-    /**
-     * Contains all timed events played during the animation.
-     * @see {@linkcode animTimedEventSchema}
-     */
     timedEvents: {
       type: "array",
       items: animTimedEventSchema,

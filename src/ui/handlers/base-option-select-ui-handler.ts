@@ -31,7 +31,7 @@ const DEFAULT_TEXT_STYLE = TextStyle.WINDOW;
  * At initialization the size of the first {@linkcode NUM_PRE_COMPUTED_OPTIONS} is measured.
  * Then the window's size is updated as needed when a non initialized option needs to be displayed.
  *
- * @template T the specifc type of {@linkcode OptionSelectItem} that this handler displays
+ * @typeParam T - The specifc type of {@linkcode OptionSelectItem} that this handler displays
  */
 export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
   private config: OptionSelectModeConfig<T> | null;
