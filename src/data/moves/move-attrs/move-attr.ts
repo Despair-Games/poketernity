@@ -6,8 +6,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
 import type { BooleanHolder } from "#utils/common-utils";
 
 export interface MoveAttrOptions {
-  /** Does this attribute contribute to AI effect score when the move KOs its target? */
-  appliesScoreOnKO?: boolean;
   /** Does this attribute contribute to AI effect score when the move fails or has no effect? */
   appliesScoreOnFail?: boolean;
   /** Does this attribute override the AI's (-20) penalty when targeting an ally? */
@@ -28,16 +26,6 @@ export abstract class MoveAttr {
   constructor(selfTarget: boolean = false, options?: MoveAttrOptions) {
     this.selfTarget = selfTarget;
     this.options = options;
-  }
-
-  /**
-   * Defines whether or not this attribute contributes to effect score even when the move
-   * KOs its target.
-   * @default false
-   * @see {@linkcode getEffectScore}
-   */
-  public get appliesScoreOnKO(): boolean {
-    return this.options?.appliesScoreOnKO ?? false;
   }
 
   /**
