@@ -133,7 +133,6 @@ export class CommandPhase extends FieldPhase {
    * @param command - Which of {@linkcode BattleCommand.BALL} or {@linkcode BattleCommand.RUN} was chosen
    * @param cursor - Cursor index for the selected Pokeball
    * @returns `true` if the command was successful
-   * @overload
    */
   public handleCommand(command: typeof BattleCommand.BALL | typeof BattleCommand.RUN, cursor: number): boolean;
   /**
@@ -142,7 +141,6 @@ export class CommandPhase extends FieldPhase {
    * @param ignorePp - (optional) `true` if the move shouldn't use PP
    * @param turnMove - (optional) A {@linkcode TurnMove} object for an existing queued move
    * @returns `true` if the command was successful
-   * @overload
    */
   public handleCommand(command: FightCommand, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
   /**
@@ -150,7 +148,6 @@ export class CommandPhase extends FieldPhase {
    * @param cursor - Cursor index for the selected Pokemon
    * @param isBaton - `true` if the pokemon being switched out is holding the Baton item
    * @returns `true` if the command was successful
-   * @overload
    */
   public handleCommand(command: typeof BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {

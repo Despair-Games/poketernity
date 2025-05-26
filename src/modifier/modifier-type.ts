@@ -779,7 +779,6 @@ export type SpeciesStatBoosterItem = keyof typeof SpeciesStatBoosterModifierType
 /**
  * Modifier type for {@linkcode SpeciesStatBoosterModifier}
  * @extends PokemonHeldItemModifierType
- * @implements GeneratedPersistentModifierType
  */
 export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType

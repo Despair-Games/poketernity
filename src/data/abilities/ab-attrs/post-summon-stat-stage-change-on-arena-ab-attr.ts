@@ -16,10 +16,7 @@ import type { Pokemon } from "#field/pokemon";
  * @extends PostSummonStatStageChangeAbAttr
  */
 export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageChangeAbAttr {
-  /**
-   * The type of arena tag that conditions the stat change.
-   * @private
-   */
+  /** The type of arena tag that conditions the stat change. */
   private readonly tagType: ArenaTagType;
 
   constructor(tagType: ArenaTagType, stats: BattleStat[] = [Stat.ATK], stages: number = 1) {
