@@ -3466,7 +3466,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return megaForms.includes(this.getFormKey());
   }
 
-  canAddTag(tagType: BattlerTagType): boolean {
+  // #region Battler Tag methods
+
+  /**
+   * @param tagType - The {@linkcode BattlerTagType | type of tag} to check
+   * @returns Whether the specified tag can be added to the pokemon
+   */
+  public canAddTag(tagType: BattlerTagType): boolean {
     if (this.getTag(tagType)) {
       return false;
     }
@@ -3490,7 +3496,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !cancelled.value;
   }
 
-  addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: MoveId, sourceId?: number): boolean {
+  /**
+   * Adds a {@linkcode BattlerTag} to the pokemon
+   * @param tagType - The {@linkcode BattlerTagType} to add
+   * @param turnCount - (Default `0`) How many turns the tag should last for
+   * @param sourceMove - (Optional) The move causing the tag to be added
+   * @param sourceId - (Optional) The ID of the pokemon adding the tag
+   * @returns Whether the tag was successfully added
+   */
+  public addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: MoveId, sourceId?: number): boolean {
     const existingTag = this.getTag(tagType);
     if (existingTag) {
       existingTag.onOverlap(this);
@@ -3523,28 +3537,52 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | undefined {
+  /**
+   * @param tagTypes - The {@linkcode BattlerTagType}s to retrieve
+   * @returns The first {@linkcode BattlerTag} found of the specified type(s), or `undefined` if none is found
+   */
+  public getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | undefined {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
   /**
    * Helper function to check if a Pokemon has any of the input tag types.
    * @param tagTypes - The battler tag types to search for
-   * @returns `true` if the Pokemon has at least one of the battler tags, `false` otherwise
+   * @returns Whether the Pokemon has at least one of the input battler tags
    */
   public hasTag(...tagTypes: BattlerTagType[]): boolean {
+    if (tagTypes.length === 0) {
+      console.warn("`Pokemon#hasTag` called with no parameters!");
+      console.trace();
+      return false;
+    }
     return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
   }
 
-  findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | undefined {
+  /**
+   * Filters the {@linkcode BattlerTag}s attached to the pokemon and returns the first result
+   * @param tagFilter - The filter to apply to the tag list
+   * @returns The first {@linkcode BattlerTag} found, or `undefined` if none is found
+   */
+  public findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | undefined {
     return this.summonData.tags.find((t) => tagFilter(t)) as T | undefined;
   }
 
-  findTags(tagFilter: (tag: BattlerTag) => boolean): BattlerTag[] {
+  /**
+   * Filters the {@linkcode BattlerTag}s attached to the pokemon and returns the result
+   * @param tagFilter - The filter to apply to the tag list
+   * @returns An array of {@linkcode BattlerTag}s matching the input filter
+   */
+  public findTags(tagFilter: (tag: BattlerTag) => boolean): BattlerTag[] {
     return this.summonData.tags.filter((t) => tagFilter(t));
   }
 
-  lapseTag(tagType: BattlerTagType): boolean {
+  /**
+   * Calls the `lapse()` method of the specified {@linkcode BattlerTag}
+   * @param tagType - The {@linkcode BattlerTagType} to lapse
+   * @returns Whether the specified tag is still active
+   */
+  public lapseTag(tagType: BattlerTagType): boolean {
     const tags = this.summonData.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag && !tag.lapse(this, BattlerTagLapseType.CUSTOM)) {
@@ -3554,7 +3592,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !!tag;
   }
 
-  lapseTags(lapseType: BattlerTagLapseType): void {
+  /**
+   * Lapses all {@linkcode BattlerTag}s attached to the pokemon with the specified lapse type
+   * and then removes the ones that should be removed
+   * @param lapseType - The {@linkcode BattlerTagLapseType} to trigger
+   */
+  public lapseTags(lapseType: BattlerTagLapseType): void {
     const tags = this.summonData.tags;
     tags
       .filter(
@@ -3568,7 +3611,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       });
   }
 
-  removeTag(tagType: BattlerTagType): boolean {
+  /**
+   * Removes a {@linkcode BattlerTag} from the pokemon without calling its `lapse()` method
+   * @param tagType - The {@linkcode BattlerTagType} to remove
+   * @returns Whether the specified tag was attached to the pokemon before being removed
+   */
+  public removeTag(tagType: BattlerTagType): boolean {
     const tags = this.summonData.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag) {
@@ -3578,25 +3626,41 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !!tag;
   }
 
-  findAndRemoveTags(tagFilter: (tag: BattlerTag) => boolean): boolean {
+  /**
+   * Removes all {@linkcode BattlerTag}s matching the input filter without calling their `lapse()` methods
+   * @param tagFilter - The filter to apply
+   */
+  public findAndRemoveTags(tagFilter: (tag: BattlerTag) => boolean): void {
     const tags = this.summonData.tags;
     const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
-      tag.turnCount = 0;
+      tag.turnCount = 0; // TODO: is this necessary?
       tag.onRemove(this);
       tags.splice(tags.indexOf(tag), 1);
     }
-    return true;
   }
 
-  removeTagsBySourceId(sourceId: number): void {
+  /**
+   * Removes all {@linkcode BattlerTag}s from the pokemon whose source was the specified pokemon ID
+   * @param sourceId - The ID of the source pokemon
+   */
+  public removeTagsBySourceId(sourceId: number): void {
     this.findAndRemoveTags((t) => t.isSourceLinked() && t.sourceId === sourceId);
   }
 
-  transferTagsBySourceId(sourceId: number, newSourceId: number): void {
+  /**
+   * Updates the source ID of all {@linkcode BattlerTag}s attached this pokemon
+   * @param sourceId - The ID of the previous source pokemon
+   * @param newSourceId - The ID of the new source pokemon
+   * @todo Think of a better name for this, the tags aren't being transferred
+   */
+  public transferTagsBySourceId(sourceId: number, newSourceId: number): void {
     const tags = this.summonData.tags;
+    // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
     tags.filter((t) => t.sourceId === sourceId).forEach((t) => (t.sourceId = newSourceId));
   }
+
+  // #endregion
 
   /**
    * Transferring stat changes and Tags
