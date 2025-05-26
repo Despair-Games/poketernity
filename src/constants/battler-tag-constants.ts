@@ -85,3 +85,23 @@ export const TYPE_BOOST_TAG_TYPES = Object.freeze([BattlerTagType.FIRE_BOOST, Ba
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that make a pokemon "exposed". */
 export const EXPOSED_TAG_TYPES = Object.freeze([BattlerTagType.IGNORE_GHOST, BattlerTagType.IGNORE_DARK]);
+
+/** All {@linkcode BattlerTagType}s that boost the pokemon's highest stat */
+export const HIGHEST_STAT_BOOST_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  BattlerTagType.PROTOSYNTHESIS,
+  BattlerTagType.QUARK_DRIVE,
+]);
+
+/** All {@linkcode BattlerTagType}s that make a pokemon immune to a type */
+export const TYPE_IMMUNE_TAG_TYPES = Object.freeze<BattlerTagType[]>([BattlerTagType.FLOATING]);
+
+/** All {@linkcode BattlerTagType}s that restrict a pokemon's move usage */
+export const RESTRICTING_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  BattlerTagType.DISABLED,
+  BattlerTagType.ENCORE,
+  BattlerTagType.GORILLA_TACTICS,
+  BattlerTagType.HEAL_BLOCK,
+  BattlerTagType.TAUNT,
+  BattlerTagType.THROAT_CHOPPED,
+  BattlerTagType.TORMENT,
+]);

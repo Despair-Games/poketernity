@@ -8,7 +8,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
-import { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -464,9 +465,9 @@ export class MoveEffectPhase extends HitCheckPhase {
       effectiveness,
     );
 
-    const typeBoost = user.findTag(
-      (t) => t instanceof TypeBoostTag && t.boostedType === user.getMoveType(move),
-    ) as TypeBoostTag;
+    const typeBoost = user.findTag<TypeBoostTag>(
+      (t) => t.isType<TypeBoostTag>(...TYPE_BOOST_TAG_TYPES) && t.boostedType === user.getMoveType(move),
+    );
     if (typeBoost?.oneUse) {
       user.removeTag(typeBoost.tagType);
     }

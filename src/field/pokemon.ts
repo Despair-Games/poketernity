@@ -51,22 +51,25 @@ import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#battler-tags/crit-boost-stackable-tag";
 import { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
-import { ExposedTag } from "#battler-tags/exposed-tag";
+import type { ExposedTag } from "#battler-tags/exposed-tag";
 import { getBattlerTag } from "#battler-tags/get-battler-tag";
-import { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
+import type { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
-import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
+import type { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
 import { PowerTrickTag } from "#battler-tags/power-trick-tag";
 import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
-import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
+import type { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
   EXPOSED_TAG_TYPES,
+  HIGHEST_STAT_BOOST_TAG_TYPES,
+  RESTRICTING_TAG_TYPES,
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
+  TYPE_IMMUNE_TAG_TYPES,
 } from "#constants/battler-tag-constants";
 import {
   DEFAULT_MAX_SLEEP_DURATION,
@@ -1194,9 +1197,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    const highestStatBoost = this.findTag(
-      (t) => t instanceof HighestStatBoostTag && (t as HighestStatBoostTag).stat === stat,
-    ) as HighestStatBoostTag;
+    const highestStatBoost = this.findTag<HighestStatBoostTag>(
+      (t) => t.isType<HighestStatBoostTag>(...HIGHEST_STAT_BOOST_TAG_TYPES) && t.stat === stat,
+    );
     if (highestStatBoost) {
       ret *= highestStatBoost.multiplier;
     }
@@ -1922,7 +1925,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    const immuneTags = this.findTags((tag) => tag instanceof TypeImmuneTag && tag.immuneType === moveType);
+    const immuneTags = this.findTags<TypeImmuneTag>(
+      (tag) => tag.isType<TypeImmuneTag>(...TYPE_IMMUNE_TAG_TYPES) && tag.immuneType === moveType,
+    );
     for (const tag of immuneTags) {
       if (move && !move.getAttrs(HitsTagAttr).some((attr) => attr.tagType === tag.tagType)) {
         typeMultiplier.value = 0;
@@ -2008,7 +2013,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             }
           }
 
-          const exposedTags = this.findTags((tag) => tag instanceof ExposedTag) as ExposedTag[];
+          const exposedTags = this.findTags<ExposedTag>((tag) => tag.isType<ExposedTag>(...EXPOSED_TAG_TYPES));
           if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType))) {
             if (multiplier.value === 0) {
               return 1;
@@ -3564,8 +3569,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param tagFilter - The filter to apply to the tag list
    * @returns The first {@linkcode BattlerTag} found, or `undefined` if none is found
    */
-  public findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | undefined {
-    return this.summonData.tags.find((t) => tagFilter(t)) as T | undefined;
+  public findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T | undefined {
+    return this.summonData.tags.find((t: T) => tagFilter(t)) as T | undefined;
   }
 
   /**
@@ -3573,8 +3578,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param tagFilter - The filter to apply to the tag list
    * @returns An array of {@linkcode BattlerTag}s matching the input filter
    */
-  public findTags(tagFilter: (tag: BattlerTag) => boolean): BattlerTag[] {
-    return this.summonData.tags.filter((t) => tagFilter(t));
+  public findTags<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T[] {
+    return this.summonData.tags.filter((t: T) => tagFilter(t)) as T[];
   }
 
   /**
@@ -3712,9 +3717,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode MoveRestrictionBattlerTag}
    */
   isMoveTargetRestricted(moveId: MoveId, user: Pokemon, target: Pokemon): boolean {
-    for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
-      if ((tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
-        return (tag as MoveRestrictionBattlerTag) !== null;
+    const restrictingTags = this.findTags<MoveRestrictionBattlerTag>((t) =>
+      t.isType<MoveRestrictionBattlerTag>(...RESTRICTING_TAG_TYPES),
+    );
+    for (const tag of restrictingTags) {
+      if (tag.isMoveTargetRestricted(moveId, user, target)) {
+        return tag !== null; // TODO: this doesn't seem correct, `Pokemon#findTags` can't return `null`
       }
     }
     return false;
@@ -3736,12 +3744,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
-      if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
-        return tag as MoveRestrictionBattlerTag;
+    const restrictingTags = this.findTags<MoveRestrictionBattlerTag>((t) =>
+      t.isType<MoveRestrictionBattlerTag>(...RESTRICTING_TAG_TYPES),
+    );
+    for (const tag of restrictingTags) {
+      if (tag.isMoveRestricted(moveId, user)) {
+        return tag;
       }
-      if (user && target && (tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
-        return tag as MoveRestrictionBattlerTag;
+      if (user && target && tag.isMoveTargetRestricted(moveId, user, target)) {
+        return tag;
       }
     }
     return null;
