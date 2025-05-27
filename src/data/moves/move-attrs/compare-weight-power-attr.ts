@@ -18,24 +18,16 @@ export class CompareWeightPowerAttr extends VariablePowerAttr {
       return false;
     }
 
-    const relativeWeight = (targetWeight / userWeight) * 100;
-
-    switch (true) {
-      case relativeWeight < 20.01:
-        power.value = 120;
-        break;
-      case relativeWeight < 25.01:
-        power.value = 100;
-        break;
-      case relativeWeight < 33.35:
-        power.value = 80;
-        break;
-      case relativeWeight < 50.01:
-        power.value = 60;
-        break;
-      default:
-        power.value = 40;
-        break;
+    if (userWeight >= targetWeight * 5) {
+      power.value = 120;
+    } else if (userWeight >= targetWeight * 4) {
+      power.value = 100;
+    } else if (userWeight >= targetWeight * 3) {
+      power.value = 80;
+    } else if (userWeight >= targetWeight * 2) {
+      power.value = 60;
+    } else {
+      power.value = 40;
     }
 
     return true;
