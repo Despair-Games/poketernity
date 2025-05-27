@@ -2742,7 +2742,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied
    * @param isCritical determines whether a critical hit has occurred or not (`false` by default)
    * @param simulated determines whether effects are applied without altering game state (`true` by default)
-   * @return the stat stage multiplier to be used for effective stat calculation
+   * @returns the stat stage multiplier to be used for effective stat calculation
    */
   getStatStageMultiplier(
     stat: EffectiveStat,

@@ -8,7 +8,7 @@
  * - `2` - Faster: Faster speed.
  * - `3` - Skip: Skip gaining exp animation.
  *
- * @default 0 - Uses the default normal speed.
+ * @defaultValue `0`
  */
 export enum ExpGainsSpeed {
   /** The normal speed. */

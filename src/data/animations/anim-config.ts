@@ -20,6 +20,8 @@ export interface AnimConfig {
   /**
    * If this is for a {@linkcode MoveAnim}, this specifies the {@linkcode MoveId}
    * associated with the animation.
+   *
+   * This is required for all {@linkcode MoveAnim | MoveAnims}.
    */
   readonly moveId?: MoveId;
 
@@ -55,9 +57,11 @@ export interface AnimProp {
   /**
    * For battle animations, the origin point for keyframes is defined
    * along the line connecting the start point ("source") and end point ("target").
+   *
    * The `u`-value is the fraction of the distance between the start and end point
-   * the origin point is away from the source. If `u = 0`, then the origin point is
-   * the source; if `u = 1`, then the origin point is the target.
+   * the origin point is away from the source.
+   *
+   * If `u = 0`, then the origin point is the source; if `u = 1`, then the origin point is the target.
    */
   readonly u: AnimKeyFrame<number>[];
 
@@ -76,14 +80,16 @@ export interface AnimProp {
   /** Vertical scale factor (%) */
   readonly scaleY?: AnimKeyFrame<number>[];
 
-  /** The alpha value for the sprite, in the range [0, 255] */
+  /** The alpha value for the sprite, in the range `[0, 255]` */
   readonly alpha?: AnimKeyFrame<number>[];
 
   /**
    * The rotation angle of the sprite in degrees.
-   * Phaser uses a right-hand clockwise rotation system, where 0 is right,
-   * 90 is down, and -90 is up. The value of this should be in the interval
-   * [-180, 180].
+   *
+   * Phaser uses a right-hand clockwise rotation system, where `0` is right,
+   * `90` is down, and `-90` is up.
+   *
+   * The value of this should be in the interval `[-180, 180]`.
    */
   readonly angle?: AnimKeyFrame<number>[];
 
@@ -99,7 +105,11 @@ export interface AnimProp {
    */
   readonly blendType?: AnimKeyFrame<AnimBlendType>[];
 
-  /** If this is a VFX property, specifies the graphic's tile index */
+  /**
+   * If this keyframe is for a graphic, specifies the tile index used for the graphic during the tween.
+   *
+   * This is only relevant for VFX properties.
+   */
   readonly graphicFrame?: AnimKeyFrame<number>[];
 
   /** A tone to pipeline over the animated sprite (normalized RGBA, A is optional) */
@@ -107,10 +117,10 @@ export interface AnimProp {
 
   /**
    * The z-depth of the animated sprite during the tween
-   * - 0 is behind all other sprites (except BG)
-   * - 1 is on top of player field
-   * - 3 is on top of both fields
-   * - 5 is on top of player sprite
+   * - `0` is behind all other sprites (except BG)
+   * - `1` is on top of player field
+   * - `3` is on top of both fields
+   * - `5` is on top of player sprite
    * @todo define the allowed priority values as an enum
    */
   readonly priority?: AnimKeyFrame<0 | 1 | 3 | 5>[];
@@ -145,7 +155,7 @@ export interface AnimTimedEvent {
    */
   readonly eventType: AnimTimedEventType;
 
-  /** The start time for the event */
+  /** The delay from the start of the animation to the given event (in frames) */
   readonly time: number;
 
   /** The name of the file containing assets used in the event */
@@ -155,13 +165,13 @@ export interface AnimTimedEvent {
 
   /**
    * The volume of the played sound effect (%).
-   * @default 100
+   * @defaultValue `100`
    */
   readonly volume?: number;
 
   /**
    * The pitch of the played sound effect (%).
-   * @default 100
+   * @defaultValue `100`
    */
   readonly pitch?: number;
 
@@ -178,7 +188,7 @@ export interface AnimTimedEvent {
 
   /**
    * Scale factor (%) for the background image.
-   * @default 100
+   * @defaultValue `100`
    */
   readonly scale?: number;
 }
