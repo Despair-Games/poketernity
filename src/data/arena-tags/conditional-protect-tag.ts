@@ -17,7 +17,6 @@ import i18next from "i18next";
 /**
  * Class to implement conditional team protection.
  * Applies protection based on the attributes of incoming moves.
- * @abstract
  * @extends ArenaTag
  */
 export abstract class ConditionalProtectTag extends ArenaTag {

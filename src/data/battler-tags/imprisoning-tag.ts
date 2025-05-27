@@ -14,7 +14,6 @@ import i18next from "i18next";
  * {@link https://bulbapedia.bulbagarden.net/wiki/Imprison_(move) | Imprison}.
  * Disables all opposing Pokemon's moves that are also found in the tag owner's moveset.
  * @extends BattlerTag
- * @implements `RestrictingBattlerTag`
  */
 export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag {
   constructor() {

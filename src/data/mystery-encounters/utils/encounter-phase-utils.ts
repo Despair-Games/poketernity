@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -464,7 +470,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
 /**
  * Load special move animations/sfx for hard-coded encounter-specific moves that a pokemon uses at the start of an encounter
- * See: [startOfBattleEffects](IMysteryEncounter.startOfBattleEffects) for more details
+ * See: {@linkcode IMysteryEncounter.startOfBattleEffects} for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
  * @param moveIds The move or moves the Pokemon uses at the start of the encounter
@@ -994,7 +1000,7 @@ export function handleMysteryEncounterBattleStartEffects() {
 /**
  * Can queue extra phases or logic during {@linkcode TurnInitPhase}
  * Should mostly just be used for injecting custom phases into the battle system on turn start
- * @return boolean - if true, will skip the remainder of the {@linkcode TurnInitPhase}
+ * @returns Whether to skip the remainder of the {@linkcode TurnInitPhase}
  */
 export function handleMysteryEncounterTurnStartEffects(): boolean {
   const encounter = globalScene.currentBattle.mysteryEncounter;

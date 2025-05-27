@@ -15,7 +15,6 @@ import type { MovePhase } from "#phases/move-phase";
  * match a condition. A restricted move gets cancelled before it is used. Players and enemies should not be allowed
  * to select restricted moves.
  * @extends BattlerTag
- * @implements `RestrictingBattlerTag`
  */
 export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
   /** @override */

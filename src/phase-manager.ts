@@ -56,7 +56,7 @@ interface ToTitleScreenInit {
 }
 
 interface ToLoginScreenInit {
-  /** Whether to show text. @default true */
+  /** Whether to show text. @defaultValue `true` */
   showText?: boolean;
   /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
   eager?: boolean;

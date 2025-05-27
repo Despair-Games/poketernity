@@ -9,7 +9,6 @@ import {
   getPokeballCatchMultiplier,
   getPokeballTintColor,
 } from "#data/pokeball";
-import { getStatusEffectCatchRateMultiplier } from "#app/utils/status-effect-utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PartyOption } from "#enums/party-option";
@@ -28,6 +27,7 @@ import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { SummaryUiHandler } from "#ui/summary-ui-handler";
+import { getStatusEffectCatchRateMultiplier } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
 /**
