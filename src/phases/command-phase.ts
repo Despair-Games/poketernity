@@ -81,12 +81,8 @@ export class CommandPhase extends FieldPhase {
       return;
     }
 
-    // Checks if the Pokemon is under the effects of Encore.
-    // If so, Encore can end early if the encored move has no more PP.
-    // TODO: is this `if` necessary?
-    if (pokemon.hasTag(BattlerTagType.ENCORE)) {
-      pokemon.lapseTag(BattlerTagType.ENCORE);
-    }
+    // Encore ends early if the encored move has no more PP.
+    pokemon.lapseTag(BattlerTagType.ENCORE);
 
     const moveQueue = pokemon.getMoveQueue();
 

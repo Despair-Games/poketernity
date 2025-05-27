@@ -4164,15 +4164,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
-      // TODO: are these `if`s necessary? `.lapseTag` will just do nothing if there's no tag found of the specified type
-      if (this.hasTag(BattlerTagType.NIGHTMARE)) {
-        this.lapseTag(BattlerTagType.NIGHTMARE);
-      }
+      this.lapseTag(BattlerTagType.NIGHTMARE);
     }
     if (confusion) {
-      if (this.hasTag(BattlerTagType.CONFUSED)) {
-        this.lapseTag(BattlerTagType.CONFUSED);
-      }
+      this.lapseTag(BattlerTagType.CONFUSED);
     }
     if (reloadAssets) {
       this.loadAssets(false).then(() => this.playAnim());
