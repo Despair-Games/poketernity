@@ -401,7 +401,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         }
       }
 
-      // Check if Player owns all genders and forms of the Pokemon
+      // Check if Player owns all genders, variants and forms of the Pokemon
       const missingDexAttrs = (dexEntry.caughtAttr & opponentPokemonDexAttr) < opponentPokemonDexAttr;
 
       const ownedAbilityAttrs = globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].abilityAttr;

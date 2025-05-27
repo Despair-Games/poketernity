@@ -1,7 +1,7 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
-import { LS_PREFIX } from "#constants/app-constants";
+import { TOUCH_CONSTROLS_LS_KEY_PREFIX } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import type { UI } from "#ui/ui";
 import { t } from "i18next";
@@ -72,7 +72,7 @@ export class MoveTouchControlsHandler {
   }
 
   public get localstorageKey() {
-    return `${LS_PREFIX}/touchControl/positions/${this.orientation}`;
+    return `${TOUCH_CONSTROLS_LS_KEY_PREFIX}/${this.orientation}`;
   }
 
   public get touchControlsEl() {

@@ -1,6 +1,12 @@
 import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#constants/app-constants";
+import {
+  APP_ABBREVIATION,
+  SAVE_FILE_EXTENSION,
+  SAVES_ZIP_PREFIX,
+  SESSION_DATA_LS_KEY_PREFIX,
+  SYSTEM_DATA_LS_KEY_PREFIX,
+} from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -233,7 +239,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
 
     this.usernameInfoImage.on("pointerdown", () => {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
-      const keyToFind = "data_";
+      const keyToFind = SYSTEM_DATA_LS_KEY_PREFIX + "_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
       if (dataKeys.length > 0 && dataKeys.length <= 2) {
         const options: OptionSelectItem[] = [];
@@ -263,8 +269,8 @@ export class LoginFormUiHandler extends FormModalUiHandler {
     this.saveDownloadImage.on("pointerdown", () => {
       // find all data_ and sessionData keys, put them in a .txt file and download everything in a single zip
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
-      const keyToFind = "data_";
-      const sessionKeyToFind = "sessionData";
+      const keyToFind = SYSTEM_DATA_LS_KEY_PREFIX;
+      const sessionKeyToFind = SESSION_DATA_LS_KEY_PREFIX;
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
       const sessionKeys = localStorageKeys.filter((ls) => ls.indexOf(sessionKeyToFind) >= 0);
       if (dataKeys.length > 0 || sessionKeys.length > 0) {
