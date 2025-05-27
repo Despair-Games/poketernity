@@ -7,6 +7,7 @@ import { StatusEffect } from "#app/enums/status-effect";
 import { capitalizeString } from "#app/utils/string-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -75,8 +76,9 @@ describe("Ability - Guts", () => {
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
-    expect(player.hasNonVolatileStatusEffect()).toBe(false);
+    expect(player).toHaveStatusEffect(StatusEffect.NONE);
     expect(player).toHaveEffectiveStat(Stat.ATK, playerAtk);
+    expect(player).toHaveBattlerTagType(BattlerTagType.CONFUSED);
   });
 
   it.each(nonVolatileStatusEffects)(
@@ -91,7 +93,7 @@ describe("Ability - Guts", () => {
       await game.toEndOfTurn();
       const playerAtk = player.getStat(Stat.ATK);
 
-      expect(player.hasNonVolatileStatusEffect()).toBe(true);
+      expect(player).toHaveStatusEffect(statusEffect);
       expect(player).toHaveEffectiveStat(Stat.ATK, Math.floor(playerAtk * 1.5));
     },
   );
@@ -110,7 +112,7 @@ describe("Ability - Guts", () => {
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
-    expect(player.hasNonVolatileStatusEffect()).toBe(true);
+    expect(player).toHaveStatusEffect(StatusEffect.PARALYSIS);
     expect(player).toHaveEffectiveStat(Stat.ATK, Math.floor(playerAtk * 1.5 * multiplier));
   });
 
@@ -124,7 +126,7 @@ describe("Ability - Guts", () => {
     move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
-    expect(player.hasNonVolatileStatusEffect()).toBe(true);
+    expect(player).toHaveStatusEffect(StatusEffect.BURN);
     expect(enemy).toHaveTakenDamage(5);
 
     const burnDamageReductionCancelled = new BooleanHolder(false);
@@ -146,14 +148,28 @@ describe("Ability - Guts", () => {
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
 
-    expect(player.hasNonVolatileStatusEffect()).toBe(true);
+    expect(player).toHaveStatusEffect(StatusEffect.FREEZE);
 
     move.use(MoveId.FLAME_WHEEL);
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
-    expect(player.hasNonVolatileStatusEffect()).toBe(false);
+    expect(player).toHaveStatusEffect(StatusEffect.NONE);
     expect(player).toHaveEffectiveStat(Stat.ATK, playerAtk);
     expect(enemy).toHaveTakenDamage(2);
+  });
+
+  it("should boost atk with 'Comatose' ability", async () => {
+    const { override, classicMode, field, move } = game;
+    override.passiveAbility(AbilityId.COMATOSE);
+
+    await classicMode.startBattle(SpeciesId.FEEBAS);
+    const player = field.getPlayerPokemon();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+    const playerAtk = player.getStat(Stat.ATK);
+
+    expect(player).toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(player).toHaveEffectiveStat(Stat.ATK, Math.floor(playerAtk * 1.5));
   });
 });

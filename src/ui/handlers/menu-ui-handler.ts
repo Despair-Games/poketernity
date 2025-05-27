@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import { loggedInUser, updateUserInfo } from "#app/account";
 import { globalScene } from "#app/global-scene";
 import { handleTutorial } from "#app/tutorial";
-import { BYPASS_LOGIN, IS_BETA, SESSION_ID_COOKIE } from "#constants/app-constants";
+import { BYPASS_LOGIN, IS_BETA, SAVE_SLOT_LIMIT, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/button";
@@ -194,7 +194,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       ui.revertMode();
       ui.showText(message, null, () => {
         const config: OptionSelectModeConfig = {
-          options: new Array(5)
+          options: new Array(SAVE_SLOT_LIMIT)
             .fill(null)
             .map((_, i) => i)
             .filter(slotFilter)
@@ -246,7 +246,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       handler: () => {
         const dataSlots: number[] = [];
         Promise.all(
-          new Array(5).fill(null).map((_, i) => {
+          new Array(SAVE_SLOT_LIMIT).fill(null).map((_, i) => {
             const slotId = i;
             return globalScene.gameData.getSession(slotId).then((data) => {
               if (data) {
