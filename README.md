@@ -55,7 +55,7 @@ We started transitioning over to [Biome](https://biomejs.dev/) as it's significa
 > [!NOTE]
 > _We still require ESLint as some rules aren't covered by Biome yet. The plan is to migrate fully to Biome in the long run._
 
-#### Dependency-Cruiser
+##### Dependency-Cruiser
 
 We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies.
 
