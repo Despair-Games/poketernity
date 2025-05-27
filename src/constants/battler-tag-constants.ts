@@ -8,7 +8,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that grant semi-invulnerability */
 export const SEMI_INVULNERABLE_BATTLER_TAG_TYPES = Object.freeze([
-  BattlerTagType.FLYING,
+  BattlerTagType.MIDAIR,
   BattlerTagType.UNDERGROUND,
   BattlerTagType.UNDERWATER,
   BattlerTagType.HIDDEN,

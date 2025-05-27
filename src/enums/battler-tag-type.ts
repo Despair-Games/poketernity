@@ -50,7 +50,7 @@ export enum BattlerTagType {
   PROTOSYNTHESIS,
   QUARK_DRIVE,
   /** Following battler tags grant semi-invulnerability */
-  FLYING,
+  MIDAIR,
   UNDERGROUND,
   UNDERWATER,
   HIDDEN,
