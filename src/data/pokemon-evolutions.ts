@@ -14,8 +14,8 @@ import { randSeedInt } from "#utils/random-utils";
 
 /**
  * Pokemon Evolution tuple type consisting of:
- * @property 0 {@linkcode SpeciesId} The species of the Pokemon.
- * @property 1 The level at which the Pokemon evolves.
+ * - `species` - The {@linkcode SpeciesId} of the Pokemon.
+ * - `level` - The level at which the Pokemon evolves.
  */
 export type EvolutionLevel = [species: SpeciesId, level: number];
 

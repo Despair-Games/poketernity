@@ -1,10 +1,3 @@
-import {
-  getStatusEffectActivationText,
-  getStatusEffectDescriptor,
-  getStatusEffectHealText,
-  getStatusEffectObtainText,
-  getStatusEffectOverlapText,
-} from "#app/utils/status-effect-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -12,6 +5,13 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/game-manager";
 import { mockI18next } from "#test/test-utils/test-utils";
+import {
+  getStatusEffectActivationText,
+  getStatusEffectDescriptor,
+  getStatusEffectHealText,
+  getStatusEffectObtainText,
+  getStatusEffectOverlapText,
+} from "#utils/status-effect-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const pokemonName = "PKM";

@@ -9,15 +9,15 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import i18next from "i18next";
 
-/**
- * Class representing Weather effects
- * @var weatherType - The {@linkcode WeatherType} that is being represented
- * @var turnsLeft - How many turns the weather still has left (0 if immutable)
- */
+/** Class representing Weather effects */
 export class Weather {
   public weatherType: WeatherType;
   public turnsLeft: number;
 
+  /**
+   * @param weatherType - The {@linkcode WeatherType} that is being represented
+   * @param turnsLeft - How many turns the weather still has left (0 if immutable)
+   */
   constructor(weatherType: WeatherType, turnsLeft: number = 0) {
     this.weatherType = weatherType;
     this.turnsLeft = !this.isPrimal() ? turnsLeft : 0;
