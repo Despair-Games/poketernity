@@ -102,7 +102,7 @@ describe("Ability - Drizzle", () => {
   });
 
   it.each(weatherSuppressingAbilities)(
-    "should not be suppressed by $name ability and last the rain for 5 turns",
+    "should not be stopped from setting weather by $name ability",
     async (_name, abilityId) => {
       const { override, classicMode, move, textInterceptor } = game;
       override.enemyAbility(abilityId);
