@@ -17,7 +17,7 @@ export function toHaveFaintedMatcher(this: MatcherState, received: unknown): Syn
 
   const { hp } = received;
   const maxHp = received.getMaxHp();
-  const pass = received.isFainted() === true && hp === 0;
+  const pass = received.isFainted();
 
   const pkmName = getPokemonNameWithAffix(received);
 
