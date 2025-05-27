@@ -246,13 +246,13 @@ export function calcAccuracyMultiplier(userAccStage: number, targetEvaStage: num
  *   two: 2,
  * } as const;
  * console.log(enumValueToKey(thing, thing.two)); // output: "two"
+ * @throws An `Error` if an invalid enum value is passed to the function
  */
-export function enumValueToKey(input: object, val: number): string {
+export function enumValueToKey(input: object, val: number | string): string | never {
   for (const [key, value] of Object.entries(input)) {
     if (val === value) {
       return key;
     }
   }
-  console.error("Invalid value passed to `enumValueToKey`!");
-  return "Invalid enum value!";
+  throw new Error(`Invalid value passed to \`enumValueToKey\`! Value: ${val}`);
 }
