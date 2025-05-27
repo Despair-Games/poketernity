@@ -10,7 +10,6 @@ import type { WeatherType } from "#enums/weather-type";
  * (i.e. {@link https://bulbapedia.bulbagarden.net/wiki/Protosynthesis_(Ability) | Protosynthesis})
  * while a given {@linkcode WeatherType | weather} is active.
  * @extends HighestStatBoostTag
- * @implements `WeatherBattlerTag`
  */
 export class WeatherHighestStatBoostTag extends HighestStatBoostTag implements WeatherBattlerTag {
   public weatherTypes: WeatherType[];

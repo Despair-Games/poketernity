@@ -8,10 +8,11 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon
- * @protected restorePP - whether or not PP is restored to the revived Pokemon. Lunar dance does this
- * @protected moveMessage - the associated key for the move trigger message
+ *
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
+ * @param restorePP - Whether or not PP is restored to the revived Pokemon. Used by Lunar Dance
+ * @param moveMessage - The associated key for the move trigger message.
  * @extends SacrificialAttr
  */
 export class SacrificialFullRestoreAttr extends SacrificialAttr {

@@ -48,10 +48,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     this.doMysteryEncounterBattle();
   }
 
-  /**
-   * Gets intro battle message for new battle
-   * @private
-   */
+  /** Gets intro battle message for new battle */
   private getBattleMessage(): string {
     const { currentBattle } = globalScene;
     const { double, mysteryEncounter, trainer } = currentBattle;
@@ -75,10 +72,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       : i18next.t("battle:multiWildAppeared", { pokemonName1: enemyField[0].name, pokemonName2: enemyField[1].name });
   }
 
-  /**
-   * Queues {@linkcode SummonPhase}s for the new battle, and handles trainer animations/dialogue if it's a Trainer battle
-   * @private
-   */
+  /** Queues {@linkcode SummonPhase}s for the new battle, and handles trainer animations/dialogue if it's a Trainer battle */
   private doMysteryEncounterBattle(): void {
     const { currentBattle, ui } = globalScene;
     const { double, mysteryEncounter, trainer } = currentBattle;
@@ -153,10 +147,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     }
   }
 
-  /**
-   * Initiate {@linkcode SummonPhase}s, {@linkcode ScanIvsPhase}, {@linkcode PostSummonPhase}s, etc.
-   * @private
-   */
+  /** Initiate {@linkcode SummonPhase}s, {@linkcode ScanIvsPhase}, {@linkcode PostSummonPhase}s, etc. */
   private endBattleSetup(): void {
     const { currentBattle } = globalScene;
     const { double, mysteryEncounter } = currentBattle;
@@ -211,10 +202,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     this.end();
   }
 
-  /**
-   * Ease in enemy trainer
-   * @private
-   */
+  /** Ease in enemy trainer */
   private showEnemyTrainer(): void {
     const { currentBattle, tweens } = globalScene;
     const { trainer } = currentBattle;

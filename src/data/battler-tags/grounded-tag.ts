@@ -11,8 +11,10 @@ import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**
- * Tag for effects that ground the source, allowing Ground-type moves to hit them.
- * @description `IGNORE_FLYING`: Persistent grounding effects (i.e. from Smack Down and Thousand Waves)
+ * Tag for effects that ground the source (i.e. from Smack Down and Thousand Waves),
+ * allowing Ground-type moves to hit them.
+ *
+ * @see {@linkcode BattlerTagType.IGNORE_FLYING}
  * @extends BattlerTag
  */
 export class GroundedTag extends BattlerTag {

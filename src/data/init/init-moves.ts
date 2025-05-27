@@ -1,10 +1,10 @@
-import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
@@ -3552,7 +3552,7 @@ export function initMoves() {
 
 /**
  * All damaging (aka {@linkcode AttackMove}) Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
- * @source {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
  */
 function addFireMovesThawFrozenTargetAttribute(move: Move) {
   if (move.type === ElementalType.FIRE && move.isAttackMove()) {
