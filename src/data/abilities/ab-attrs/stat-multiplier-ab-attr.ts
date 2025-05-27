@@ -20,7 +20,7 @@ import type { NumberHolder } from "#utils/common-utils";
 |                       | ACC   |    0.8 | Applies to Physical moves only   |
 | Plus                  | SPATK |    1.5 | Needs ally with Minus            |
 | Minus                 | SPATK |    1.5 | Needs ally with Plus             |
-| Guts                  | ATK   |    1.5 | Needs to have status             |
+| Guts                  | ATK   |    1.5 | Needs to have non-vol. status    |
 | Marvel Scale          | DEF   |    1.5 | Needs to have non-vol. status    |
 | Tangled Feet          | EVA   |      2 | Needs to be confused             |
 | Snow Cloak            | EVA   |    1.2 | In snow/hail only                |
