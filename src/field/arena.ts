@@ -303,7 +303,7 @@ export class Arena {
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
-    while (tier && !this.trainerPool[tier].length) {
+    while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
       console.log(
         `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, tier - 1)}`,
       );
