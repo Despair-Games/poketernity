@@ -1,7 +1,7 @@
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
-import type { NumberHolder } from "#utils/common-utils";
+import { clamp, type NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify move power based on the user's weight relative to the target.
@@ -18,17 +18,7 @@ export class CompareWeightPowerAttr extends VariablePowerAttr {
       return false;
     }
 
-    if (userWeight >= targetWeight * 5) {
-      power.value = 120;
-    } else if (userWeight >= targetWeight * 4) {
-      power.value = 100;
-    } else if (userWeight >= targetWeight * 3) {
-      power.value = 80;
-    } else if (userWeight >= targetWeight * 2) {
-      power.value = 60;
-    } else {
-      power.value = 40;
-    }
+    power.value = (clamp(Math.floor(userWeight / targetWeight), 1, 5) + 1) * 20;
 
     return true;
   }
