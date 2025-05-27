@@ -48,7 +48,7 @@ We are using [Prettier](https://prettier.io/) to format our code. It will run au
 
 We are _still_ using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
 
-#### Biome-Lint
+##### Biome-Lint
 
 We started transitioning over to [Biome](https://biomejs.dev/) as it's significantly faster (~15x) than ESLint. 
 
