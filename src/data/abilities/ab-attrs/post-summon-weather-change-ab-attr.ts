@@ -8,14 +8,14 @@ import type { Pokemon } from "#field/pokemon";
  *
  * | Ability           | Weather      | Turns | Notes              |
  * |-------------------|--------------|-------|--------------------|
- * | Drizzle           | Rain         |     5 | No primal override |
- * | Drought           | Sunny        |     5 | No primal override |
- * | Sand Stream       | Sandstorm    |     5 | No primal override |
- * | Snow Warning      | Hail         |     5 | No primal override |
- * | Desolate Land     | Harsh Sun    |     ∞ | Primal             |
- * | Primordial Sea    | Heavy Rain   |     ∞ | Primal             |
- * | Delta Stream      | Strong Winds |     ∞ | Primal             |
- * | Orichalcum Pulse  | Sun          |     ∞ | Primal             |
+ * | Drizzle           | Rain         |     5 |                    |
+ * | Drought           | Sun          |     5 |                    |
+ * | Sand Stream       | Sandstorm    |     5 |                    |
+ * | Snow Warning      | Hail         |     5 |                    |
+ * | Orichalcum Pulse  | Sun          |     5 |                    |
+ * | Desolate Land     | Harsh Sun    |     ∞ | Primal (permanent) |
+ * | Primordial Sea    | Heavy Rain   |     ∞ | Primal (permanent) |
+ * | Delta Stream      | Strong Winds |     ∞ | Primal (permanent) |
  *
  * @param weatherType The {@linkcode WeatherType} to set
  * @extends PostSummonAbAttr
