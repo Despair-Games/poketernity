@@ -176,9 +176,9 @@ import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boo
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";

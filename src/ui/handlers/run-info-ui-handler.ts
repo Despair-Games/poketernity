@@ -650,7 +650,7 @@ export class RunInfoUiHandler extends UiHandler {
 
   /**
    * This function parses the Challenges section of the Run Entry and returns a list of active challenge.
-   * @return string[] of active challenge names
+   * @returns An array of the active challenge names
    */
   private challengeParser(): string[] {
     const rules: string[] = [];
