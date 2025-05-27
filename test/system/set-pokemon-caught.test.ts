@@ -46,7 +46,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(naturesBefore).not.toContain(Nature.MODEST);
 
     expect(dexData.caughtCount).toBe(0);
-    expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
+    expect(gameData.getUnlockedVariantsAttr(dexData.caughtAttr)).toHaveLength(0);
 
     // bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, false, 0, [], Nature.MODEST);
@@ -81,7 +81,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(naturesBefore).not.toContain(Nature.MODEST);
 
     expect(dexData.caughtCount).toBe(0);
-    expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
+    expect(gameData.getUnlockedVariantsAttr(dexData.caughtAttr)).toHaveLength(0);
 
     // Shiny tier 3 bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, true, 2, [], Nature.MODEST);
@@ -98,8 +98,9 @@ describe("Dex Data - Set Pokemon caught", () => {
     const naturesAfter = gameData.getNaturesForAttr(starterData.natureAttr);
     expect(naturesAfter).toHaveLength(beforeNatureCount + 1);
     expect(naturesAfter).toContain(Nature.MODEST);
-    expect(dexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-    expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeTruthy();
+    const variantsAfter = gameData.getUnlockedVariantsAttr(dexData.caughtAttr);
+    expect(variantsAfter).toHaveLength(1);
+    expect(variantsAfter).toContain(DexAttr.SHINY_EPIC_VARIANT);
   });
 
   it("should update nothing for rental, not already caught Pokemon", async () => {
@@ -149,6 +150,9 @@ describe("Dex Data - Set Pokemon caught", () => {
     const ivyDexData = gameData.dexData[SpeciesId.IVYSAUR];
     const venuDexData = gameData.dexData[SpeciesId.VENUSAUR];
 
+    const variantsBefore = gameData.getUnlockedVariantsAttr(bulbaDexData.caughtAttr);
+    expect(variantsBefore).toHaveLength(0);
+
     [ivyDexData, venuDexData].forEach((dexData) => {
       expect(dexData.caughtCount).toBe(0);
       expect(dexData.hatchedCount).toBe(0);
@@ -174,17 +178,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(unlockedNatures).toContain(Nature.ADAMANT);
 
     expect(bulbaDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.VARIANT_2).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.VARIANT_3).toBeFalsy();
+    const bulbaVariantsAfter = gameData.getUnlockedVariantsAttr(bulbaDexData.caughtAttr);
+    expect(bulbaVariantsAfter).toEqual([DexAttr.SHINY_RARE_VARIANT]);
 
     [ivyDexData, venuDexData].forEach((dexData) => {
       expect(dexData.caughtAttr & DexAttr.NON_SHINY).toBeFalsy();
-      expect(dexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-      expect(dexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeFalsy();
-      expect(dexData.caughtAttr & DexAttr.VARIANT_2).toBeTruthy();
-      expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeFalsy();
+      const variantsAfter = gameData.getUnlockedVariantsAttr(dexData.caughtAttr);
+      expect(variantsAfter).toEqual([DexAttr.SHINY_RARE_VARIANT]);
       expect(dexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
       expect(dexData.caughtAttr & DexAttr.MALE).toBeFalsy();
     });
@@ -242,15 +242,15 @@ describe("Dex Data - Set Pokemon caught", () => {
 
     // Phanpy data
     expect(phanpyDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
-    expect(phanpyDexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-    expect(phanpyDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
+    const unlockedVariants = gameData.getUnlockedVariantsAttr(phanpyDexData.caughtAttr);
+    expect(unlockedVariants).toHaveLength(1);
+    expect(unlockedVariants).toContain(DexAttr.SHINY_BASE_VARIANT);
     expect(phanpyDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
     expect(phanpyDexData.caughtAttr & DexAttr.MALE).toBeTruthy();
 
     // Donphan data
     expect(donphanDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
-    expect(donphanDexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
-    expect(donphanDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
+    expect(gameData.getUnlockedVariantsAttr(donphanDexData.caughtAttr)).toHaveLength(0);
     expect(donphanDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
     expect(donphanDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
   });
