@@ -10,6 +10,7 @@ function renderBranchNameElement() {
   if (import.meta.env.VITE_SHOW_BRANCH_NAME !== "1") {
     return;
   }
+  const margin = 3;
   const branchNameElementHeight = 24;
   const appEl = document.getElementById("app");
   const canvasEl = appEl?.querySelector<HTMLElement>("canvas");
@@ -19,8 +20,9 @@ function renderBranchNameElement() {
   branchNameEl.style.display = "none";
 
   const doPosition = (canvasEl: HTMLElement) => {
-    const { bottom } = canvasEl.getBoundingClientRect();
-    branchNameEl.style.top = `${bottom - branchNameElementHeight}px`;
+    const { bottom, left } = canvasEl.getBoundingClientRect();
+    branchNameEl.style.top = `${bottom - branchNameElementHeight - margin}px`;
+    branchNameEl.style.left = `${left + margin}px`;
     branchNameEl.style.display = "block";
   };
 
