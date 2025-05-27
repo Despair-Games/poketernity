@@ -1962,7 +1962,7 @@
         "graphicFrame": 0,
         "opacity": 50,
         "priority": 1,
-        "focus": 1
+        "focus": 3
       }
     ],
     [
@@ -2001,7 +2001,7 @@
         "target": 2,
         "graphicFrame": 0,
         "priority": 1,
-        "focus": 1
+        "focus": 3
       }
     ]
   ],
