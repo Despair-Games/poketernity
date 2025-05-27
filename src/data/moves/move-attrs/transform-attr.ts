@@ -1,13 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { SemiInvulnerableTag } from "#battler-tags/semi-invulnerable-tag";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
-import { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-condition-func";
 import i18next from "i18next";
 
 /**
@@ -33,7 +32,7 @@ export class TransformAttr extends MoveEffectAttr {
       return false;
     }
     globalScene.phaseManager.unshiftPhase(new PokemonTransformPhase(user.getBattlerIndex(), target.getBattlerIndex()));
-    user.addTag(BattlerTagType.TRANSFORMED, 0, move.id, user.id);
+    user.addTag(BattlerTagType.TRANSFORMED, 1, move.id, user.id);
 
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:transformedIntoTarget", {

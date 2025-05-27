@@ -36,7 +36,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     globalScene.phaseManager.unshiftPhase(
       new PokemonTransformPhase(pokemon.getBattlerIndex(), target.getBattlerIndex(), true),
     );
-    pokemon.addTag(BattlerTagType.TRANSFORMED, 0);
+    pokemon.addTag(BattlerTagType.TRANSFORMED);
 
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("abilityTriggers:postSummonTransform", {

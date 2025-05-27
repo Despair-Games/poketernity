@@ -8,10 +8,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
  */
 export class TransformedTag extends BattlerTag {
   constructor() {
-    super(BattlerTagType.TRANSFORMED, BattlerTagLapseType.TURN_END, 1);
-  }
-
-  override lapse() {
-    return true;
+    super(BattlerTagType.TRANSFORMED, BattlerTagLapseType.CUSTOM, 1);
   }
 }
