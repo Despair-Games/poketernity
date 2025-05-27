@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { HealBlockTag } from "#battler-tags/heal-block-tag";
-import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
@@ -10,6 +9,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealingBoosterModifier } from "#modifier/modifier";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { NumberHolder } from "#utils/common-utils";
+import { getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
 export interface PokemonHealPhaseOptions {
