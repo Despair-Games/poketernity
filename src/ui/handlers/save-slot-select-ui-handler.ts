@@ -1,5 +1,6 @@
 import { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
+import { SAVE_SLOT_LIMIT } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import { RunDisplayMode } from "#enums/run-display-mode";
@@ -20,7 +21,6 @@ import { fixedNumber, isNil } from "#utils/common-utils";
 import { getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
-const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
 
 export type SaveSlotSelectCallback = (cursor: number) => void;
@@ -171,7 +171,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
         case Button.DOWN:
           if (this.cursor < SLOTS_ON_SCREEN - 1) {
             success = this.setCursor(this.cursor + 1, cursorPosition);
-          } else if (this.scrollCursor < SESSION_SLOTS_COUNT - SLOTS_ON_SCREEN) {
+          } else if (this.scrollCursor < SAVE_SLOT_LIMIT - SLOTS_ON_SCREEN) {
             success = this.setScrollCursor(this.scrollCursor + 1, cursorPosition);
           }
           break;
@@ -197,7 +197,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
   }
 
   populateSessionSlots() {
-    for (let s = 0; s < SESSION_SLOTS_COUNT; s++) {
+    for (let s = 0; s < SAVE_SLOT_LIMIT; s++) {
       const sessionSlot = new SessionSlot(s);
       globalScene.add.existing(sessionSlot);
       this.sessionSlotsContainer.add(sessionSlot);
