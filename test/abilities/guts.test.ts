@@ -59,7 +59,7 @@ describe("Ability - Guts", () => {
     await game.toEndOfTurn();
     const playerAtk = player.getStat(Stat.ATK);
 
-    expect(player.hasNonVolatileStatusEffect()).toBe(false);
+    expect(player).toHaveStatusEffect(StatusEffect.NONE);
     expect(player).toHaveEffectiveStat(Stat.ATK, playerAtk);
   });
 
