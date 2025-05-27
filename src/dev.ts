@@ -10,7 +10,7 @@ function renderBranchNameElement() {
   if (import.meta.env.VITE_SHOW_BRANCH_NAME !== "1") {
     return;
   }
-  const branchNameElementHeight = 21;
+  const branchNameElementHeight = 24;
   const appEl = document.getElementById("app");
   const canvasEl = appEl?.querySelector<HTMLElement>("canvas");
   const branchNameEl = document.createElement("div");
