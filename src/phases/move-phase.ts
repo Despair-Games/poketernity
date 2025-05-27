@@ -13,7 +13,6 @@ import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
 import type { MagicCoatTag } from "#battler-tags/magic-coat-tag";
 import type { SnatchingTag } from "#battler-tags/snatch-tag";
 import { allMoves } from "#data/data-lists";
-import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import { getTerrainBlockMessage } from "#data/terrain";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -45,6 +44,7 @@ import { MoveEffectPhase } from "#phases/move-effect-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
+import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
 /**

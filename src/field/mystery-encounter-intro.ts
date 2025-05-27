@@ -5,16 +5,17 @@ import type { SpeciesId } from "#enums/species-id";
 import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { isNil } from "#utils/common-utils";
-import type { GameObjects } from "phaser";
-import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
+import Phaser from "phaser";
 
 export class MysteryEncounterSpriteConfig {
   /** The sprite key (which is the image file name). e.g. "ace_trainer_f" */
   spriteKey: string;
   /**
-   * Refer to images in the [/public/images](../../public/images) directory for all folder names
-   * TODO: currently the 'string' type is needed for Pokemon sprites because `globalScene.loadPokemonAtlas` expects
-   * the fileroot to contain the folder + filename.
+   * Refer to images in the `/public/images/` directory for all folder names.
+   * @todo
+   * Currently the `string` type is needed for Pokemon sprites because {@linkcode globalScene.loadPokemonAtlas}
+   * expects the fileroot to contain the folder + filename.
+   *
    * However this should be changed to have a separate folder and fileNameRoot attributes, like for other loading functions.
    */
   fileRoot: ImagesFolder | string;
@@ -122,8 +123,8 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     this.spriteConfigs?.forEach((config) => {
       const { spriteKey, isItem, hasShadow, scale, x, y, yShadow, alpha, isPokemon, isShiny, variant } = config;
 
-      let sprite: GameObjects.Sprite;
-      let tintSprite: GameObjects.Sprite;
+      let sprite: Phaser.GameObjects.Sprite;
+      let tintSprite: Phaser.GameObjects.Sprite;
       let pokemonShinySparkle: Phaser.GameObjects.Sprite | undefined;
 
       if (isItem) {
@@ -348,7 +349,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     const tintSprites = this.getTintSprites();
     this.spriteConfigs.forEach((config, i) => {
       if (!config.disableAnimation) {
-        const trainerAnimConfig: PlayAnimationConfig = {
+        const trainerAnimConfig: Phaser.Types.Animations.PlayAnimationConfig = {
           key: config.spriteKey,
           repeat: config?.repeat ? -1 : 0,
           startFrame: config?.startFrame ?? 0,
