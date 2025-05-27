@@ -35,7 +35,7 @@ describe.each([
   });
 
   it("should activate multiple times in response to multiple simultaneous stat drops", async () => {
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
@@ -50,7 +50,7 @@ describe.each([
   });
 
   it("should activate exactly once in response to a single -2 stat drop", async () => {
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
@@ -65,7 +65,7 @@ describe.each([
   });
 
   it("should not activate in response to a stat increase", async () => {
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
@@ -76,7 +76,7 @@ describe.each([
   });
 
   it("should not activate if the user lowers its own stats", async () => {
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.CLOSE_COMBAT);
@@ -87,7 +87,7 @@ describe.each([
 
   it("should not activate if the user's ally lowers the user's stats", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.FLYGON, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON, SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH, 0);
@@ -98,7 +98,7 @@ describe.each([
   });
 
   it("should activate against an opponent's Octolock", async () => {
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
@@ -114,7 +114,7 @@ describe.each([
 
   it("should not activate against an ally's Octolock", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.FLYGON, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON, SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH, 0);
@@ -126,7 +126,7 @@ describe.each([
 
   it("should activate against an opponent's Syrup Bomb", async () => {
     game.override.startingLevel(100).passiveAbility(AbilityId.NO_GUARD);
-    await game.classicMode.startBattle([SpeciesId.DRAGONITE]);
+    await game.classicMode.startBattle(SpeciesId.DRAGONITE);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
@@ -153,7 +153,7 @@ describe.each([
 
   it("should not activate against an ally's Octolock", async () => {
     game.override.startingLevel(100).passiveAbility(AbilityId.NO_GUARD).battleType("double");
-    await game.classicMode.startBattle([SpeciesId.DRAGONITE, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.DRAGONITE, SpeciesId.FEEBAS);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH, 0);
@@ -172,7 +172,7 @@ describe.each([
 
   it("should activate against an opponent's Mirror Armor", async () => {
     game.override.enemyAbility(AbilityId.MIRROR_ARMOR);
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SMOKESCREEN);
@@ -187,7 +187,7 @@ describe.each([
 
   it("should not activate against an ally's Mirror Armor", async () => {
     game.override.battleType("double").passiveAbility(AbilityId.MIRROR_ARMOR);
-    await game.classicMode.startBattle([SpeciesId.FLYGON, SpeciesId.CORVIKNIGHT]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON, SpeciesId.CORVIKNIGHT);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SMOKESCREEN, 0, BattlerIndex.PLAYER_2);
@@ -198,7 +198,7 @@ describe.each([
   });
 
   it("should activate against a Sticky Web that swapped back to the user via Court Change", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     const playerPokemon = game.field.getPlayerPokemon();
 
@@ -226,7 +226,7 @@ describe.each([
 
   it("should activate before White Herb is allowed to activate", async () => {
     game.override.startingHeldItems([{ name: "WHITE_HERB" }]);
-    await game.classicMode.startBattle([SpeciesId.FLYGON]);
+    await game.classicMode.startBattle(SpeciesId.FLYGON);
 
     const playerPokemon = game.field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);

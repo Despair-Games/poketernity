@@ -35,7 +35,7 @@ describe("Moves - Retaliate", () => {
 
   it("increases power if ally died previous turn", async () => {
     vi.spyOn(retaliate, "calculateBattlePower");
-    await game.startBattle([SpeciesId.ABRA, SpeciesId.COBALION]);
+    await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.COBALION);
     game.move.select(MoveId.RETALIATE);
     await game.toEndOfTurn();
     expect(retaliate.calculateBattlePower).toHaveLastReturnedWith(70);

@@ -47,7 +47,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The condition required for the stat stage change to apply.
-   * Defaults to `null` (i.e. no condition required).
+   * @defaultValue `null` (i.e. no condition required).
    */
   private get condition() {
     return this.options?.condition ?? null;
@@ -55,7 +55,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * `true` to display a message for the stat change.
-   * @default true
+   * @defaultValue `true`
    */
   private get showMessage() {
     return this.options?.showMessage ?? true;

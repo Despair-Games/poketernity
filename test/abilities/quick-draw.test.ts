@@ -41,7 +41,7 @@ describe("Abilities - Quick Draw", () => {
   });
 
   test("should cause the source to move first in its priority bracket", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -54,7 +54,7 @@ describe("Abilities - Quick Draw", () => {
   });
 
   test("should not apply when the source uses a status move", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -67,7 +67,7 @@ describe("Abilities - Quick Draw", () => {
   });
 
   test("should not cause the source to move before higher-priority moves", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

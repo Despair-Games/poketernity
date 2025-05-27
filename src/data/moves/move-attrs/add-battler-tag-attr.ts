@@ -32,7 +32,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   /**
    * If `true`, causes the move to fail if the target already
    * has a tag of the same type.
-   * @default false
+   * @defaultValue `false`
    */
   public get failOnOverlap() {
     return this.options?.failOnOverlap ?? false;
@@ -40,7 +40,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The minimum number of turns the tag is active
-   * @default 0
+   * @defaultValue `0`
    */
   public get turnCountMin() {
     return this.options?.turnCountMin ?? 0;
@@ -48,7 +48,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The maximum number of turns the tag is active.
-   * @default turnCountMin
+   * @defaultValue {@linkcode turnCountMin}
    */
   public get turnCountMax() {
     return this.options?.turnCountMax ?? this.turnCountMin;

@@ -30,14 +30,13 @@ describe("Abilities - Heatproof", () => {
       .enemyAbility(AbilityId.HEATPROOF)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100)
-      .starterSpecies(SpeciesId.CHANDELURE)
       .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.FLAMETHROWER, MoveId.SPLASH])
       .startingLevel(100);
   });
 
   it("reduces Fire type damage by half", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
     const initialHP = 1000;
@@ -60,7 +59,7 @@ describe("Abilities - Heatproof", () => {
 
   it("reduces Burn damage by half", async () => {
     game.override.enemyStatusEffect(StatusEffect.BURN).enemySpecies(SpeciesId.ABRA);
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

@@ -35,7 +35,7 @@ describe("Moves - Haze", () => {
     });
 
     it("should reset all stat changes of all Pokemon on field", async () => {
-      await game.startBattle([SpeciesId.RATTATA]);
+      await game.classicMode.startBattle(SpeciesId.RATTATA);
       const user = game.scene.getPlayerPokemon()!;
       const enemy = game.scene.getEnemyPokemon()!;
 

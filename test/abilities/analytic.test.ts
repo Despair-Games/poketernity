@@ -36,7 +36,7 @@ describe("Abilities - Analytic", () => {
   });
 
   it("should increase damage if the user moves last", async () => {
-    await game.classicMode.startBattle([SpeciesId.ARCEUS]);
+    await game.classicMode.startBattle(SpeciesId.ARCEUS);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -54,7 +54,7 @@ describe("Abilities - Analytic", () => {
 
   it("should increase damage only if the user moves last in doubles", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.GENGAR, SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.GENGAR, SpeciesId.SHUCKLE);
 
     const [enemy] = game.scene.getEnemyField();
 

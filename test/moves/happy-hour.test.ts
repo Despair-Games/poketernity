@@ -33,7 +33,7 @@ describe("Moves - Happy Hour", () => {
   });
 
   it("should double the player's money earnings", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const moneyAmounts = [game.scene.money];
 

@@ -126,7 +126,6 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     this.eggHatchBg.setVisible(false);
     this.getUi().hideTooltip();
 
-    // Note: Questions on garbage collection go to @frutescens
     const activeKeys = globalScene.getActiveKeys();
     // Removing unnecessary sprites from animation manager
     const animKeys = Object.keys(globalScene.anims["anims"]["entries"]);
