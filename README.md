@@ -62,7 +62,7 @@ We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to c
 > [!TIP]
 > Use `npm run depcruise` to check the codebase for any runtime circular dependency.
 
-## 🌐 Localization
+#### 🌐 Localization
 
 Pokéternity's translations are managed under a dedicated repository at https://github.com/Despair-Games/poketernity-locales/. There is a specific process involved in making PRs that impacts the in game text, which can be found in the [localization.md](./docs/localization.md) file.
 
