@@ -1,4 +1,3 @@
-import { NonSuperEffectiveImmunityAbAttr } from "#abilities/non-super-effective-immunity-ab-attr";
 import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import { TrappedTag } from "#battler-tags/trapped-tag";
@@ -248,7 +247,6 @@ describe("Abilities - Sturdy", () => {
     vi.spyOn(DestinyBondTag.prototype, "lapse");
 
     await classicMode.startBattle(SpeciesId.LUCARIO);
-    vi.spyOn(DestinyBondTag.prototype, "apply");
     const player = field.getPlayerPokemon();
     player.damageAndUpdate(player.getMaxHp() - 1);
 
@@ -264,6 +262,7 @@ describe("Abilities - Sturdy", () => {
 
     expect(player).toHaveFainted();
     expect(enemy).toHaveFainted();
+    expect(DestinyBondTag.prototype.lapse).toHaveBeenCalled();
   });
 
   it.each(sacrificialMoves)("should not proc on sacrificial/self-KO '%s' move", async (_enemyMoveName, enemyMoveId) => {
@@ -304,7 +303,6 @@ describe("Abilities - Sturdy", () => {
     const { override, classicMode, field, move } = game;
     override.enemySpecies(SpeciesId.SHEDINJA).enemyPassiveAbility(AbilityId.WONDER_GUARD);
     vi.spyOn(SturdyAbAttr.prototype, "apply");
-    vi.spyOn(NonSuperEffectiveImmunityAbAttr.prototype, "apply");
 
     await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
@@ -312,12 +310,11 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveHp(1);
     expect(enemy).toHaveFullHp();
 
-    move.use(MoveId.SURF);
+    move.use(MoveId.AERIAL_ACE);
     await game.toEndOfTurn();
 
-    expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
-    expect(NonSuperEffectiveImmunityAbAttr.prototype.apply).toHaveReturnedWith(true);
-    expect(enemy).toHaveHp(1);
+    expect(SturdyAbAttr.prototype.apply).toHaveReturnedWith(false);
+    expect(enemy).toHaveFainted();
   });
 
   it.each([
