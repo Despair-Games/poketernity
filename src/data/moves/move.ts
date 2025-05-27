@@ -768,10 +768,10 @@ export abstract class Move implements Localizable {
    * This means that the ES for an attack should rarely exceed (+1) and almost
    * never exceed (+2). Status moves may have a higher ES in comparison but
    * should typically be limited to (+3) or lower.
-   * @param user the {@linkcode Pokemon} using the move
-   * @param target the {@linkcode Pokemon} targeted by the move
-   * @param isKnockOut `true` if the move is already known to KO the target (default `false`)
-   * @param isFail `true` if the move is already known to fail or have no effect (default `false`)
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - The {@linkcode Pokemon} targeted by the move
+   * @param isKnockOut - `true` if the move is already known to KO the target (default `false`)
+   * @param isFail - `true` if the move is already known to fail or have no effect (default `false`)
    * @returns a score value accumulated from effect score modifiers.
    */
   public getEffectScore(
@@ -796,8 +796,12 @@ export abstract class Move implements Localizable {
 
   /**
    * Calculates the combined score from this move's attributes' effect scores.
-   * @param user the {@linkcode Pokemon} evaluating this move
-   * @param target the {@linkcode Pokemon} this move is evaluated against
+   * @param user - The {@linkcode Pokemon} evaluating this move
+   * @param target - The {@linkcode Pokemon} this move is evaluated against
+   * @param isKnockOut - `true` if this move would knock out the target (as determined by
+   * {@linkcode Pokemon.getAttackScore | Attack Score})
+   * @param isFail - `true` if this move would fail or have no effect against the target
+   * (as determined by {@linkcode getConditionScore | Condition Score})
    * @returns the cumulative integer score from this move's attributes
    * @see {@linkcode getEffectScore}
    * @see {@linkcode MoveAttr.getEffectScore}
@@ -834,7 +838,7 @@ export abstract class Move implements Localizable {
 
     let attrs: MoveAttr[] = this.attrs;
     if (isKnockOut) {
-      attrs = attrs.filter((attr) => attr.appliesScoreOnKO);
+      attrs = attrs.filter((attr) => attr.selfTarget);
     }
 
     if (isFail) {
