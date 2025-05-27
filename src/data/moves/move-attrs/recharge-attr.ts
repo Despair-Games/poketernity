@@ -15,7 +15,6 @@ export class RechargeAttr extends AddBattlerTagAttr {
     super(BattlerTagType.RECHARGING, true, {
       turnCountMin: 1,
       lastHitOnly: true,
-      appliesScoreOnKO: true,
     });
   }
 

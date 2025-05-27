@@ -15,7 +15,6 @@ export class GlaiveRushAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.GLAIVE_RUSH, true, {
       lastHitOnly: true,
-      appliesScoreOnKO: true,
     });
   }
 

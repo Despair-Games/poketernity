@@ -15,7 +15,6 @@ export class FrenzyAttr extends AddBattlerTagAttr {
     super(BattlerTagType.FRENZY, true, {
       turnCountMin: 2,
       turnCountMax: 3,
-      appliesScoreOnKO: true,
     });
   }
 

@@ -14,9 +14,7 @@ import type { Move } from "#moves/move";
  */
 export class CritBoostStackableAttr extends AddBattlerTagAttr {
   constructor() {
-    super(BattlerTagType.CRIT_BOOST_STACKABLE, true, {
-      appliesScoreOnKO: true,
-    });
+    super(BattlerTagType.CRIT_BOOST_STACKABLE, true);
   }
 
   /**
