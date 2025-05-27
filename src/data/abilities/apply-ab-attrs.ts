@@ -38,11 +38,11 @@ export function applyAbAttrs<TAttr extends AbAttr>(
  * Obtains the function to apply abilities corresponding to the given mode
  * @param mode - The {@linkcode AbilityApplyMode} determining how abilities are applied
  * @returns The function to apply abilities based on the mode:
- * - {@linkcode AbilityApplyMode.DEFAULT DEFAULT} - Applies abilities without restriction
+ * - {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} - Applies abilities without restriction
  *     (as long as they meet conditions to apply).
- * - {@linkcode AbilityApplyMode.REVEALED REVEALED} - Only applies abilities that have
+ * - {@linkcode AbilityApplyMode.REVEALED | REVEALED} - Only applies abilities that have
  *     previously applied in the current battle.
- * - {@linkcode AbilityApplyMode.IGNORE IGNORE} - Does nothing and returns an empty array.
+ * - {@linkcode AbilityApplyMode.IGNORE | IGNORE} - Does nothing and returns an empty array.
  *
  * @see {@linkcode applyAbAttrs} (Default)
  * @see {@linkcode applyRevealedAbAttrs} (Revealed)
