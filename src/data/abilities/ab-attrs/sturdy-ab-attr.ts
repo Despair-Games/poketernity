@@ -21,7 +21,7 @@ import type { NumberHolder } from "#utils/common-utils";
 export class SturdyAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
-    this._flags.add(AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE);
+    this._flags.add(AbAttrFlag.STURDY);
   }
 
   public override apply(

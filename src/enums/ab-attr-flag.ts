@@ -274,7 +274,7 @@ export enum AbAttrFlag {
   /** @see {@linkcode AlliedFieldDamageReductionAbAttr} */
   ALLIED_FIELD_DAMAGE_REDUCTION,
   /** @see {@linkcode SturdyAbAttr} */
-  PRE_DEFEND_FULL_HP_ENDURE,
+  STURDY,
   /** @see {@linkcode ConditionalCritAbAttr} */
   CONDITIONAL_CRIT,
   /** @see {@linkcode BlockCritAbAttr} */

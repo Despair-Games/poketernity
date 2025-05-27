@@ -3254,7 +3254,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(ModifiedDamageAttr, source, this, move, damage);
 
     if (this.isFullHp()) {
-      applyAbFunc<SturdyAbAttr>(AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE, this, simulated, source, move, damage);
+      applyAbFunc<SturdyAbAttr>(AbAttrFlag.STURDY, this, simulated, source, move, damage);
     }
 
     // debug message for when damage is applied (i.e. not simulated)

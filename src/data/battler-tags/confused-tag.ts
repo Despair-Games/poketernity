@@ -78,7 +78,7 @@ export class ConfusedTag extends BattlerTag {
 
         if (pokemon.isFullHp()) {
           applyAbAttrs<SturdyAbAttr>(
-            AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE,
+            AbAttrFlag.STURDY,
             pokemon,
             false,
             pokemon,
