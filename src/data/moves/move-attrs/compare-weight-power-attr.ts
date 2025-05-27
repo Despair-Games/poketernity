@@ -14,7 +14,7 @@ export class CompareWeightPowerAttr extends VariablePowerAttr {
     const userWeight = user.getWeight();
     const targetWeight = target.getWeight();
 
-    if (!userWeight || userWeight === 0) {
+    if (!userWeight || !targetWeight) {
       return false;
     }
 
