@@ -107,7 +107,7 @@ export class MockConsole {
    * Also appends the white ANSI code as an extra argument, so that the added color does not leak to future messages.
    * @param color An ANSI escape sequence representing a color.
    * @param args The args that the color should be applied to.
-   * @return A copy of `args` with the color prepended to every argument.
+   * @returns A copy of `args` with the color prepended to every argument.
    */
   private addColor(color: string, ...args: any[]): any[] {
     return [...args.map((a) => `${color}${typeof a === "string" ? a : this.getStr(a)}`), WHITE_ANSI_CODE];

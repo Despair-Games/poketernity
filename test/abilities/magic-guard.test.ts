@@ -1,4 +1,3 @@
-import { getStatusEffectCatchRateMultiplier } from "#app/utils/status-effect-utils";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -8,6 +7,7 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import { getStatusEffectCatchRateMultiplier } from "#utils/status-effect-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

@@ -10,7 +10,6 @@ import type { TerrainType } from "#enums/terrain-type";
  * (i.e. {@link https://bulbapedia.bulbagarden.net/wiki/Quark_Drive_(Ability) | Quark Drive})
  * while a given {@linkcode TerrainType | terrain} is active.
  * @extends HighestStatBoostTag
- * @implements `TerrainBattlerTag`
  */
 export class TerrainHighestStatBoostTag extends HighestStatBoostTag implements TerrainBattlerTag {
   public terrainTypes: TerrainType[];
