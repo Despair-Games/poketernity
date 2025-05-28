@@ -23,7 +23,7 @@ export class SturdyTag extends BattlerTag {
       globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:sturdyLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      return true;
+      return false;
     }
 
     return super.lapse(pokemon, lapseType);
