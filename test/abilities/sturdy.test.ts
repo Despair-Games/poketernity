@@ -280,9 +280,9 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveFainted();
   });
 
-  it.todo("should proc properly on Boss Pokemon and deplete all hp-segments but the last", async () => {
+  it("should proc properly on Boss Pokemon and deplete all hp-segments but the last", async () => {
     // Known issue: Boss Pokemon sturdy triggers at the end of the first hp-segment, instead of the last (See #523)
-    const { override, classicMode, field, move, phaseInterceptor } = game;
+    const { override, classicMode, field, move } = game;
     override.startingWave(50);
 
     await classicMode.startBattle(SpeciesId.LUCARIO);
@@ -290,13 +290,14 @@ describe("Abilities - Sturdy", () => {
 
     expect(enemy.isBoss()).toBe(true);
     expect(enemy.bossSegments).toBe(2);
+    expect(enemy.bossSegmentIndex).toBe(1);
     expect(enemy).toHaveFullHp();
 
     move.use(MoveId.CLOSE_COMBAT);
-    await phaseInterceptor.to("PostActionPhase");
+    await game.toEndOfTurn();
 
-    expect(enemy.bossSegmentIndex).toBe(1);
-    expect(enemy).toHaveHp(1);
+    expect(enemy.bossSegmentIndex).toBe(0); // Boss is on the last hp-segment
+    expect(enemy).toHaveHp(1); // and has 1 hp left!
   });
 
   it("should not proc when 'Wonder Guard' ability is present too", async () => {
