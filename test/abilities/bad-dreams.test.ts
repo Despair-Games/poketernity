@@ -85,11 +85,7 @@ describe("Ability - Bad Dreams", () => {
     "should not damage if enemy is woken up by '%s' ability in the same turn",
     async (_abilityName, abilityId, weatherType) => {
       const { override, classicMode, field, move } = game;
-      override
-        .weather(weatherType)
-        .battleType("double")
-        .enemyAbility(abilityId)
-        .enemyPassiveAbility(AbilityId.OVERCOAT); // overcoat to prevent sandstorm damage
+      override.weather(weatherType).battleType("double").enemyAbility(abilityId);
 
       await classicMode.runToSummon(SpeciesId.DARKRAI);
       for (const enemyPkm of game.scene.getEnemyParty()) {
@@ -127,17 +123,13 @@ describe("Ability - Bad Dreams", () => {
   });
 
   it.each([
-    ["Shed Skin", AbilityId.SHED_SKIN, WeatherType.SANDSTORM],
+    ["Shed Skin", AbilityId.SHED_SKIN, WeatherType.NONE],
     ["Healer", AbilityId.HEALER, WeatherType.NONE],
   ])(
     "should damage if enemy is not woken up by '%s' ability in the same turn",
     async (_abilityName, abilityId, weatherType) => {
       const { override, classicMode, field, move } = game;
-      override
-        .weather(weatherType)
-        .battleType("double")
-        .enemyAbility(abilityId)
-        .enemyPassiveAbility(AbilityId.OVERCOAT); // overcoat to prevent sandstorm damage
+      override.weather(weatherType).battleType("double").enemyAbility(abilityId);
 
       await classicMode.runToSummon(SpeciesId.DARKRAI);
       for (const pokemon of game.scene.getEnemyParty()) {
