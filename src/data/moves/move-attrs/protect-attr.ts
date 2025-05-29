@@ -70,7 +70,7 @@ export class ProtectAttr extends AddBattlerTagAttr {
       .filter((opp) => opp.getEffectiveStat(Stat.ATK) > opp.getEffectiveStat(Stat.SPATK)).length;
 
     const tagBonusChance = numPhysicalOpponents * this.getTagBonusChanceIncrement();
-    return this.getRandomScore(user, tagBonusChance);
+    return this.getRandomScore(user, Math.min(tagBonusChance, 100));
   }
 
   private getTagBonusChanceIncrement() {

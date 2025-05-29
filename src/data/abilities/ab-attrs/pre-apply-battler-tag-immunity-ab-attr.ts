@@ -20,12 +20,10 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
     this.immuneTagTypes = coerceArray(immuneTagTypes);
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean, tag: BattlerTag, cancelled: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, tag: BattlerTag, cancelled: BooleanHolder): boolean {
     if (this.immuneTagTypes.includes(tag.tagType)) {
       cancelled.value = true;
-      if (!simulated) {
-        this.battlerTag = tag;
-      }
+      this.battlerTag = tag;
       return true;
     }
 

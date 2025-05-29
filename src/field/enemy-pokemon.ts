@@ -213,12 +213,11 @@ export class EnemyPokemon extends Pokemon {
     const conditionScore = move.getConditionScore(this, target);
     const attackScore = this.getAttackScore(target, move);
 
-    const critBonus = this.getCriticalHitBonus(target, move, attackScore);
     const isFail = conditionScore <= BAD_MOVE_PENALTY || attackScore === -1;
     const isKnockOut = !isFail && attackScore >= 4;
 
     return (
-      (isFail ? BAD_MOVE_PENALTY : conditionScore + attackScore + critBonus)
+      (isFail ? BAD_MOVE_PENALTY : conditionScore + attackScore + this.getCriticalHitBonus(target, move, attackScore))
       + move.getEffectScore(this, target, isKnockOut, isFail)
     );
   }
@@ -232,6 +231,10 @@ export class EnemyPokemon extends Pokemon {
    * @returns the score bonus from critical hit chance
    */
   protected getCriticalHitBonus(opponent: Pokemon, move: Move, attackScore?: number) {
+    if (move.isStatusMove()) {
+      return 0;
+    }
+
     const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
     if ((isNil(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
       const critChance = this.getSimulatedCriticalHitChance(opponent, move);

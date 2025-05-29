@@ -89,6 +89,10 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     /** The attribute's effect score, assuming its effect always applies */
     const rawScore = this.getRawEffectScore(user, target, move);
 
+    if (chance < 0) {
+      return rawScore;
+    }
+
     /**
      * The attribute's effect score after factoring in effect chance.
      * This may be a decimal number; the final output is either

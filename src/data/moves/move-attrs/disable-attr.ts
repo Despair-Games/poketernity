@@ -24,7 +24,7 @@ export class DisableAttr extends AddBattlerTagAttr {
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const lastTargetMove = target
       .getLastXMoves(-1)
-      .find((m) => !m.virtual && [MoveId.NONE, MoveId.STRUGGLE].includes(m.move.id))?.move;
+      .find((m) => !m.virtual && ![MoveId.NONE, MoveId.STRUGGLE].includes(m.move.id))?.move;
 
     if (lastTargetMove && target.getExpectedAttackScore(user, lastTargetMove) > 1) {
       return MINOR_EFFECT_SCORE_BONUS + (user.outspeeds(target) ? MINOR_EFFECT_SCORE_BONUS : 0);
