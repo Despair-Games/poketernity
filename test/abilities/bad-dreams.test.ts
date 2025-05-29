@@ -65,7 +65,7 @@ describe("Ability - Bad Dreams", () => {
     move.use(MoveId.YAWN);
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveBattlerTagType(BattlerTagType.DROWSY);
+    expect(enemy).toHaveBattlerTag(BattlerTagType.DROWSY);
     expect(enemy).toHaveFullHp();
 
     for (let i = 1; i < 2; i++) {
