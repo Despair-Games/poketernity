@@ -297,9 +297,9 @@ export class UI extends Phaser.GameObjects.Container {
     NavigationManager.getInstance().clearMenus();
 
     // Destroy all handlers
-    for (const uiMode of this.handlers.keys()) {
-      this.handlers.get(uiMode)?.destroy();
-      //this.handlers.delete(uiMode); TODO: can't delete because some handler's clear method do stuff on other handlers
+    for (const [uiMode, handler] of this.handlers.entries()) {
+      handler.destroy();
+      this.handlers.delete(uiMode);
     }
 
     super.destroy(fromScene);
@@ -333,7 +333,7 @@ export class UI extends Phaser.GameObjects.Container {
     return this.handlers.get(this.mode) as H;
   }
 
-  public getMessageHandler(): BattleMessageUiHandler {
+  public getMessageHandler(): BattleMessageUiHandler | undefined {
     return this.handlers.get(UiMode.MESSAGE) as BattleMessageUiHandler;
   }
 
@@ -342,7 +342,10 @@ export class UI extends Phaser.GameObjects.Container {
     if (handler instanceof MessageUiHandler && handler.message) {
       return handler;
     }
-    return this.getMessageHandler();
+    if (!this.handlers.get(UiMode.MESSAGE)) {
+      this.addUiHandler(UiMode.MESSAGE);
+    }
+    return this.getMessageHandler()!;
   }
 
   public processInfoButton(pressed: boolean) {
@@ -400,7 +403,7 @@ export class UI extends Phaser.GameObjects.Container {
       }
       showMessageAndCallback();
     } else {
-      this.getCurrentMessageHandler().showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+      this.getCurrentMessageHandler()!.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
     }
   }
 

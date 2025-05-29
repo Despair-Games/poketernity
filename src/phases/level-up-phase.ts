@@ -50,7 +50,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
 
     const promptLevelUpStats = (): Promise<void> =>
       ui
-        .getMessageHandler()
+        .getMessageHandler()!
         .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
         .then(() => this.end());
 

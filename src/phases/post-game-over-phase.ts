@@ -36,7 +36,7 @@ export class PostGameOverPhase extends Phase {
 
     if (this.endCardPhase) {
       ui.fadeOut(500).then(() => {
-        ui.getMessageHandler().bg.setVisible(true);
+        ui.getMessageHandler()?.bg.setVisible(true);
 
         this.endCardPhase?.endCard.destroy();
         this.endCardPhase?.text.destroy();

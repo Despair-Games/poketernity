@@ -23,8 +23,8 @@ export class EndCardPhase extends Phase {
 
     const { field, ui } = globalScene;
 
-    ui.getMessageHandler().bg.setVisible(false);
-    ui.getMessageHandler().nameBoxContainer.setVisible(false);
+    ui.getMessageHandler()?.bg.setVisible(false);
+    ui.getMessageHandler()?.nameBoxContainer.setVisible(false);
 
     this.endCard = globalScene.add.image(
       0,
@@ -50,7 +50,7 @@ export class EndCardPhase extends Phase {
         "",
         null,
         () => {
-          ui.getMessageHandler().bg.setVisible(true);
+          ui.getMessageHandler()?.bg.setVisible(true);
           this.end();
         },
         null,

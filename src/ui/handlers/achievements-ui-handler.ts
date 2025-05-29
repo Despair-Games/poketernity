@@ -347,6 +347,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
   protected override clear() {
     this.scrollGridHandler.reset();
     this.eraseCursor();
+    this.clearText();
     this.mainContainer.setVisible(false);
   }
 

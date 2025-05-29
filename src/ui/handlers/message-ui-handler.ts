@@ -297,6 +297,14 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     if (this.ready && this.message?.active) {
       this.message.setText("");
     }
+    if (this.textTimer) {
+      this.textTimer.remove();
+      this.textTimer = null;
+    }
+    if (this.textCallbackTimer) {
+      this.textCallbackTimer.remove();
+      this.textCallbackTimer = null;
+    }
     this.pendingPrompt = false;
   }
 }
