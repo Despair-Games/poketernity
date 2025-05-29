@@ -280,8 +280,8 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveFainted();
   });
 
+  // See Issue #523 (fixed in PR #1215)
   it("should proc properly on Boss Pokemon and deplete all hp-segments but the last", async () => {
-    // Known issue: Boss Pokemon sturdy triggers at the end of the first hp-segment, instead of the last (See #523)
     const { override, classicMode, field, move } = game;
     override.startingWave(50);
 
