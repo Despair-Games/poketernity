@@ -106,7 +106,7 @@ declare module "vitest" {
      * Matcher to check if a {@linkcode Pokemon} has a specific {@linkcode BattlerTagType}.
      * @param expectedBattlerTagType - The expected {@linkcode BattlerTagType}.
      */
-    toHaveBattlerTagType(expectedBattlerTagType: BattlerTagType): void;
+    toHaveBattlerTag(expectedBattlerTagType: BattlerTagType): void;
 
     /**
      * Matcher to check if a {@linkcode Pokemon} had a specific {@linkcode AbilityId} applied.

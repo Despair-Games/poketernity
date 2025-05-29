@@ -359,7 +359,7 @@ describe("Abilities - Sturdy", () => {
 
       expect(enemy).toHaveHp(1);
       expect(enemy).toHaveFullHp();
-      expect(enemy).toHaveBattlerTagType(battlerTagType);
+      expect(enemy).toHaveBattlerTag(battlerTagType);
 
       move.use(MoveId.SPLASH);
       await game.toEndOfTurn();

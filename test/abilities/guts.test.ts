@@ -78,7 +78,7 @@ describe("Ability - Guts", () => {
 
     expect(player).toHaveStatusEffect(StatusEffect.NONE);
     expect(player).toHaveEffectiveStat(Stat.ATK, playerAtk);
-    expect(player).toHaveBattlerTagType(BattlerTagType.CONFUSED);
+    expect(player).toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
   it.each(nonVolatileStatusEffects)(
