@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import type { Button } from "#enums/button";
 import { Device } from "#enums/devices";
 import { PlayerGender } from "#enums/player-gender";
@@ -55,7 +56,7 @@ import { TitleUiHandler } from "#ui/title-ui-handler";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
-import { executeIf } from "#utils/common-utils";
+import { coerceArray, executeIf } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
@@ -69,19 +70,28 @@ export const settingsUiModes = [
   UiMode.GAMEPAD_BINDING,
 ];
 
+/** Modes for which animations should play when changing to/from the mode. */
 const transitionModes = [
   UiMode.SAVE_SLOT,
   UiMode.PARTY,
   UiMode.SUMMARY,
+  UiMode.CHALLENGE_SELECT,
   UiMode.STARTER_SELECT,
   UiMode.FORM_CHANGE_SCENE,
   UiMode.EGG_HATCH_SCENE,
   UiMode.EGG_LIST,
   UiMode.EGG_GACHA,
-  UiMode.CHALLENGE_SELECT,
   UiMode.RUN_HISTORY,
 ];
 
+/**
+ * Modes for which animations should **not** play when changing to/from the mode.
+ *
+ * Note: this list is not strictly the opposite of `transitionModes`,
+ * as some UIs that are not in this list or transitionModes will still get animated
+ * TODO: Figure out whether that is intended. If not, only keep a single list of the two.
+ * If yes, clarify the different between the two.
+ */
 const noTransitionModes = [
   UiMode.TITLE,
   UiMode.CONFIRM,
@@ -110,8 +120,40 @@ const noTransitionModes = [
   UiMode.RUN_INFO,
 ];
 
-const permanentModes = [UiMode.MESSAGE, UiMode.MENU, UiMode.MENU_OPTION_SELECT, UiMode.OPTION_SELECT, UiMode.CONFIRM];
+/** List of ui modes that can always be destroyed after use. */
+const alwaysDestroyModes = [UiMode.UNAVAILABLE, UiMode.SESSION_RELOAD];
+/** List of ui modes used during run preparation that can be destroyed when in a run. */
+const runPrepModes = [UiMode.TITLE, UiMode.STARTER_SELECT, UiMode.CHALLENGE_SELECT, UiMode.SAVE_SLOT, UiMode.RUN_INFO];
+/** List of ui battle modes that should always stay loaded when in a run. */
+const permanentBattleModes = [
+  UiMode.COMMAND,
+  UiMode.BALL,
+  UiMode.FIGHT,
+  UiMode.TARGET_SELECT,
+  UiMode.PARTY,
+  UiMode.SUMMARY,
+  UiMode.MODIFIER_SELECT,
+];
+/** List of ui battle modes that can be destroyed after each wave. */
+const temporaryBattleModes = [
+  UiMode.MYSTERY_ENCOUNTER,
+  UiMode.FORM_CHANGE_SCENE,
+  UiMode.EGG_HATCH_SCENE,
+  UiMode.EGG_HATCH_SUMMARY,
+];
+/** List of ui modes accessed only from the main menu, that can be destroyed once the menu is closed. */
+const mainMenuAccessedModes = [
+  UiMode.ACHIEVEMENTS,
+  UiMode.GAME_STATS,
+  UiMode.EGG_GACHA,
+  UiMode.EGG_LIST,
+  UiMode.RUN_HISTORY,
+  UiMode.RUN_INFO,
+  UiMode.ADMIN,
+  UiMode.TEST_DIALOGUE,
+];
 
+/** Mode that will be set by default when initializing the UI. */
 const DEFAULT_MODE = UiMode.MESSAGE;
 
 export class UI extends Phaser.GameObjects.Container {
@@ -130,6 +172,11 @@ export class UI extends Phaser.GameObjects.Container {
 
   private overlayActive: boolean;
 
+  /** Callback used to destroy no longer needed handlers on new encounters. */
+  private readonly onNextEncounterEvent = () => this.deleteUiHandlers([...runPrepModes, ...temporaryBattleModes]);
+  /** Callback used to destroy no longer needed handlers on run end (win or loss). */
+  private readonly onRunEndEvent = () => this.deleteUiHandlers([...permanentBattleModes, ...temporaryBattleModes]);
+
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
 
@@ -138,36 +185,60 @@ export class UI extends Phaser.GameObjects.Container {
     this.handlers = new Map<UiMode, UiHandler>();
   }
 
-  // TODO ensure this is only ever called once
   public setup(): void {
+    if (this.handlers.size > 0) {
+      return; // Only setup once
+    }
+
     this.setName(`ui-${UiMode[this.mode]}`);
 
-    this.handlers.set(this.mode, this.initHandler(this.mode));
-    this.getCurrentHandler().initialize();
-    // TODO init permanent handlers?
+    // Initialize the default handler
+    this.addUiHandler(this.mode);
+    // The settings Ui handlers are inefficient and take a while to initialize
+    // so for now we initialize them all during loading and never stop them.
+    for (const mode of settingsUiModes) {
+      this.addUiHandler(mode);
+    }
+    // If the handler gets initialized just before being shown the input text flashes
+    // so for now we initialize it during loading and never stop it.
+    // note: all form modals that use 'inputText.setText' have this issue, but this is the only one players can see
+    this.addUiHandler(UiMode.RENAME_POKEMON);
 
+    // Init UI overlay
     this.overlay = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     this.overlay.setName("rect-ui-overlay");
     this.overlay.setOrigin(0, 0);
-    globalScene.uiContainer.add(this.overlay);
     this.overlay.setVisible(false);
+    globalScene.uiContainer.add(this.overlay);
+
+    // Init tooltip window
     this.setupTooltip();
 
+    // Init achievement bar
     this.achvBar = new AchvBar();
     this.achvBar.setup();
+    globalScene.uiContainer.add(this.achvBar);
 
+    // Init bgm bar (it will be added to the UI by the menu handler)
     this.bgmBar = new BgmBar();
     this.bgmBar.setup();
 
-    globalScene.uiContainer.add(this.achvBar);
-
+    // Init saving icon
     this.savingIcon = new SavingIcon();
     this.savingIcon.setup();
-
     globalScene.uiContainer.add(this.savingIcon);
+
+    // Register listener to new encounter events and run end events
+    globalScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
+    globalScene.eventTarget.addEventListener(BattleSceneEventType.RUN_END, this.onRunEndEvent);
   }
 
-  private initHandler(mode: UiMode) {
+  /**
+   * Instanciate a new UiHandler corresponding the the given mode.
+   * @param mode - The {@linkcode UiMode} to consider
+   * @returns the {@linkcode UiHandler} for that mode
+   */
+  private createUiHandler(mode: UiMode): UiHandler {
     switch (mode) {
       case UiMode.MESSAGE:
         return new BattleMessageUiHandler();
@@ -257,14 +328,48 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  private getHandler(mode: UiMode): UiHandler {
+  /**
+   * Initialize a new UiHandler for the given mode, and add it the handlers list.
+   * @param mode - The {@linkcode UiMode} to a create handler for
+   * @returns a ready to use {@linkcode UiHandler} for that mode
+   */
+  private addUiHandler(mode: UiMode): UiHandler {
+    const handler = this.createUiHandler(mode);
+    console.log(`Initializing UI handler for mode: ${UiMode[mode]}`, mode);
+    this.handlers.set(mode, handler);
+    handler.initialize();
+    return handler;
+  }
+
+  /**
+   * Destroy the handlers for the given modes if they exist, and remove them from the handlers list.
+   * @param modes - one or more {@linkcode UiMode}s
+   */
+  private deleteUiHandlers(modes: UiMode | UiMode[]): void {
+    const deleteHandler = (mode: UiMode) => {
+      const handler = this.handlers.get(mode);
+      if (handler && !handler.active) {
+        console.log(`Destroying UI handler for mode: ${UiMode[mode]}`);
+        this.handlers.delete(mode);
+        if (handler.ready) {
+          handler.destroy();
+        }
+      }
+    };
+    const toDelete = coerceArray(modes);
+    toDelete.forEach((mode: UiMode) => deleteHandler(mode));
+  }
+
+  /**
+   * Get a handler from the list of active handlers if it exists, otherwise initialize it.
+   * @param mode - The {@linkcode UiMode} we need the handler for
+   * @returns an initialized {@linkcode UiHandler} for that mode
+   */
+  private getUiHandler(mode: UiMode): UiHandler {
     if (this.handlers.has(mode)) {
       return this.handlers.get(mode)!;
     }
-    const handler = this.initHandler(mode);
-    handler.initialize();
-    this.handlers.set(mode, handler);
-    return handler;
+    return this.addUiHandler(mode);
   }
 
   /**
@@ -301,6 +406,9 @@ export class UI extends Phaser.GameObjects.Container {
       handler.destroy();
       this.handlers.delete(uiMode);
     }
+
+    globalScene.eventTarget.removeEventListener(BattleSceneEventType.RUN_END, this.onRunEndEvent);
+    globalScene.eventTarget.removeEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
 
     super.destroy(fromScene);
   }
@@ -635,6 +743,7 @@ export class UI extends Phaser.GameObjects.Container {
     chainMode: boolean,
     ...params: Parameters<THandler["show"]>
   ): Promise<void> {
+    console.log("SET MODE", UiMode[this.mode], "=>", UiMode[mode], clear, forceTransition, chainMode);
     return new Promise((resolve) => {
       if (this.mode === mode && !forceTransition) {
         resolve();
@@ -643,8 +752,7 @@ export class UI extends Phaser.GameObjects.Container {
       const doSetMode = () => {
         if (this.mode !== mode) {
           if (clear && this.getCurrentHandler().active) {
-            this.getCurrentHandler().stop();
-            // TODO see about destroying
+            this.stopCurrentHandler();
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -655,18 +763,23 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getHandler(mode).start(...params);
+          this.getUiHandler(mode).start(...params);
+          // Arriving on title screen, remove login handlers from memory
+          if (mode === UiMode.TITLE) {
+            this.deleteUiHandlers([UiMode.LOGIN_FORM, UiMode.REGISTRATION_FORM]);
+          }
         } else if (!this.getCurrentHandler().active) {
-          this.getHandler(mode).start(...params);
+          this.getUiHandler(mode).start(...params);
         }
         resolve();
       };
+
       if (
         (!chainMode
-          && (transitionModes.indexOf(this.mode) > -1 || transitionModes.indexOf(mode) > -1)
-          && noTransitionModes.indexOf(this.mode) === -1
-          && noTransitionModes.indexOf(mode) === -1)
-        || (chainMode && noTransitionModes.indexOf(mode) === -1)
+          && (transitionModes.includes(this.mode) || transitionModes.includes(mode))
+          && !noTransitionModes.includes(this.mode)
+          && !noTransitionModes.includes(mode))
+        || (chainMode && !noTransitionModes.includes(mode))
       ) {
         this.fadeOut(250).then(() => {
           globalScene.time.delayedCall(100, () => {
@@ -689,8 +802,8 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.getCurrentHandler().stop();
-        this.mode = this.modeChain.pop()!; // TODO: is this bang correct?
+        this.stopCurrentHandler();
+        this.mode = this.modeChain.pop()!;
         globalScene.updateGameInfo();
         const touchControls = document.getElementById("touchControls");
         if (touchControls) {
@@ -699,7 +812,7 @@ export class UI extends Phaser.GameObjects.Container {
         resolve(true);
       };
 
-      if (noTransitionModes.indexOf(lastMode) === -1) {
+      if (!noTransitionModes.includes(lastMode)) {
         this.fadeOut(250).then(() => {
           globalScene.time.delayedCall(100, () => {
             doRevertMode();
@@ -710,6 +823,16 @@ export class UI extends Phaser.GameObjects.Container {
         doRevertMode();
       }
     });
+  }
+
+  private stopCurrentHandler() {
+    this.getCurrentHandler().stop();
+    if (alwaysDestroyModes.includes(this.mode)) {
+      this.deleteUiHandlers(this.mode);
+    } else if (this.mode === UiMode.MENU) {
+      // When stopping the menu destroy all handlers that depend on it
+      this.deleteUiHandlers(mainMenuAccessedModes);
+    }
   }
 
   // UNUSED?

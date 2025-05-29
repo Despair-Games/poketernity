@@ -59,8 +59,9 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   private excludedMenus: () => ConditionalMenu[];
 
-  protected manageDataConfig: OptionSelectModeConfig;
-  protected communityConfig: OptionSelectModeConfig;
+  private manageDataConfig: OptionSelectModeConfig;
+  private communityConfig: OptionSelectModeConfig;
+  private communityWindowWidth: number;
 
   constructor(mode: UiMode = UiMode.MENU) {
     super(mode);
@@ -491,6 +492,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           });
           globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options: options,
+            xOffset: this.optionSelectBg.displayWidth + this.communityWindowWidth,
             yOffset: this.menuMessageBox.displayHeight + 1,
           });
           return true;
@@ -510,6 +512,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       options: communityOptions,
       xOffset: this.optionSelectBg.displayWidth,
       yOffset: this.menuMessageBox.displayHeight + 1,
+      onResize: (w) => (this.communityWindowWidth = w),
     };
   }
 
@@ -535,7 +538,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         break;
       case MenuOptions.EGG_LIST:
         if (globalScene.gameData.eggs.length) {
-          ui.revertMode();
           ui.setOverlayMode<EggListUiHandler>(UiMode.EGG_LIST);
           success = true;
         } else {
@@ -543,7 +545,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         }
         break;
       case MenuOptions.EGG_GACHA:
-        ui.revertMode();
         ui.setOverlayMode<EggGachaUiHandler>(UiMode.EGG_GACHA);
         success = true;
         break;
