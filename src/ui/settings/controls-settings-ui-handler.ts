@@ -146,6 +146,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     this.settingsContainer.add(resetText);
 
     /// Initialize a new configuration "screen" for each type of gamepad.
+    // TODO: this is inefficient as it creates text objects for each configuration instead of reusing them.
     for (const config of this.configs) {
       // Create a map to store layout settings based on the pad type.
       this.layout[config.padType] = new Map();
@@ -413,15 +414,6 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
   protected setLayout(activeConfig: InterfaceConfig): boolean {
-    // Check if there is no active configuration (e.g., no gamepad connected).
-    if (!activeConfig) {
-      // Retrieve the layout for when no gamepads are connected.
-      const layout = this.layout["noGamepads"];
-      // Make the options container visible to show message.
-      layout.optionsContainer.setVisible(true);
-      // Return false indicating the layout application was not successful due to lack of gamepad.
-      return false;
-    }
     // Extract the type of the gamepad from the active configuration.
     const configType = activeConfig.padType;
 

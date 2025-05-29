@@ -16,7 +16,6 @@ import type { AchievementsUiHandler } from "#ui/achievements-ui-handler";
 import type { AdminUiHandler } from "#ui/admin-ui-handler";
 import { getAdminModeName } from "#ui/admin-ui-handler";
 import type { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
-import { BgmBar } from "#ui/bgm-bar";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { EggGachaUiHandler } from "#ui/egg-gacha-ui-handler";

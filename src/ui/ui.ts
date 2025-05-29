@@ -53,7 +53,7 @@ import { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { TitleUiHandler } from "#ui/title-ui-handler";
-import { UiHandler } from "#ui/ui-handler";
+import type { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
 import { coerceArray, executeIf } from "#utils/common-utils";
@@ -855,7 +855,7 @@ export class UI extends Phaser.GameObjects.Container {
    * if inputMethod is "keyboard" or "touch", then the inputMethod is returned
    * if inputMethod is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock"
    * @returns gamepad type
-   * TODO why is this here?
+   * TODO: why is this here?
    */
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {
