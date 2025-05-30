@@ -2,7 +2,7 @@
 
 Pokéternity is a browser based Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, fighting trainers, bosses, and more!
 
-# Contributing
+## 🤝 Contributing
 
 Make sure to read our [Code of Conduct](./CODE_OF_CONDUCT.md) before contributing!
 
@@ -44,26 +44,42 @@ We are using [Prettier](https://prettier.io/) to format our code. It will run au
 
 #### Linting
 
-We're using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
+##### ESLint
 
-#### Localization
+We are _still_ using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
+
+##### Biome-Lint
+
+We started transitioning over to [Biome](https://biomejs.dev/) as it's significantly faster (~15x) than ESLint. 
+
+> [!NOTE]
+> _We still require ESLint as some rules aren't covered by Biome yet. The plan is to migrate fully to Biome in the long run._
+
+##### Dependency-Cruiser
+
+We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies.
+
+> [!TIP]
+> Use `npm run depcruise` to check the codebase for any runtime circular dependency.
+
+#### 🌐 Localization
 
 Pokéternity's translations are managed under a dedicated repository at https://github.com/Despair-Games/poketernity-locales/. There is a specific process involved in making PRs that impacts the in game text, which can be found in the [localization.md](./docs/localization.md) file.
 
 
-<!-- ### 📚 Documentation
+<!-- ## 📚 Documentation
 
 You can find the auto-generated documentation [here](https://despair-games.github.io/poketernity/main/index.html).
 For information on enemy AI, check out the [enemy-ai.md](./docs/enemy-ai.md) file.
 For detailed guidelines on documenting your code, refer to the [comments.md](./docs/comments.md) file. -->
 
-### ❔ FAQ
+## ❔ FAQ
 
-**How do I test a new **\_\_\_**?**
+### How do I test a new \_\_\_?
 
 - In the `src/overrides.ts` file there are overrides for most values you'll need to change for testing
 
-**How do I retrieve the translations?**
+### How do I retrieve the translations?
 
 - The translations are found in a [dedicated repository](https://github.com/despair-games/poketernity-locales) and are applied as a submodule in this project.
 - The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out in [TBD].-->
@@ -74,8 +90,9 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 - Check out [Github Issues](https://github.com/despair-games/poketernity/issues) to see how can you help us!
 - Check out our [Checkup Board](https://github.com/orgs/Despair-Games/projects/17/views/1) to see which abilities/moves etc. need to checked and covered!
 
-# 📝 Credits
+## 📝 Credits
 
+> [!IMPORTANT]
 > If this project contains assets you have produced and you do not see your name, **please** reach out [here on GitHub](https://github.com/despair-games/poketernity/issues/new).
 
 Thank you to all the wonderful people that have contributed to the project! You can find the credits [here](./CREDITS.md).
