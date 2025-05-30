@@ -3554,12 +3554,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Helper function to check if a Pokemon has any of the input tag types.
    * @param tagTypes - The battler tag types to search for
    * @returns Whether the Pokemon has at least one of the input battler tags
+   * @throws An error if no tag types were passed in to the params
    */
-  public hasTag(...tagTypes: BattlerTagType[]): boolean {
+  public hasTag(...tagTypes: BattlerTagType[]): boolean | never {
     if (tagTypes.length === 0) {
-      console.warn("`Pokemon#hasTag` called with no parameters!");
-      console.trace();
-      return false;
+      throw new Error("`Pokemon#hasTag` called with no parameters!");
     }
     return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
   }
