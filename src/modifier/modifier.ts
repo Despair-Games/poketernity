@@ -1843,7 +1843,8 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
-    if ([BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA].includes(this.berryType)) {
+    const twoStackBerries: readonly BerryType[] = [BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA];
+    if (twoStackBerries.includes(this.berryType)) {
       return 2;
     }
     return 3;

@@ -7,7 +7,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that grant semi-invulnerability */
-export const SEMI_INVULNERABLE_BATTLER_TAG_TYPES = Object.freeze([
+export const SEMI_INVULNERABLE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.FLYING,
   BattlerTagType.UNDERGROUND,
   BattlerTagType.UNDERWATER,
@@ -15,7 +15,7 @@ export const SEMI_INVULNERABLE_BATTLER_TAG_TYPES = Object.freeze([
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that grant protection/invulnerability */
-export const PROTECTION_BATTLER_TAG_TYPES = Object.freeze([
+export const PROTECTION_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.PROTECTED,
   BattlerTagType.BANEFUL_BUNKER,
   BattlerTagType.SPIKY_SHIELD,
@@ -26,7 +26,7 @@ export const PROTECTION_BATTLER_TAG_TYPES = Object.freeze([
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that lock a move in.  */
-export const MOVE_LOCK_TAG_TYPES = Object.freeze([
+export const MOVE_LOCK_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.FRENZY,
   BattlerTagType.ROLLING,
   BattlerTagType.UPROAR,
@@ -34,25 +34,31 @@ export const MOVE_LOCK_TAG_TYPES = Object.freeze([
 ]);
 
 /** All unstackable {@linkcode BattlerTagType | BattlerTagTypes} that boost critical hit rate. */
-export const CRIT_BOOST_BATTLER_TAG_TYPES = Object.freeze([BattlerTagType.CRIT_BOOST, BattlerTagType.DRAGON_CHEER]);
+export const CRIT_BOOST_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  BattlerTagType.CRIT_BOOST,
+  BattlerTagType.DRAGON_CHEER,
+]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that remove an {@linkcode ElementalType}. */
-export const REMOVE_TYPE_BATTLER_TAG_TYPES = Object.freeze([BattlerTagType.BURNED_UP, BattlerTagType.DOUBLE_SHOCKED]);
+export const REMOVE_TYPE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  BattlerTagType.BURNED_UP,
+  BattlerTagType.DOUBLE_SHOCKED,
+]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that trap in a fire spin. */
-export const FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
+export const FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.FIRE_SPIN,
   BattlerTagType.G_MAX_FIRE_SPIN,
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that trap in a vortex. */
-export const VORTEX_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
+export const VORTEX_TRAPPED_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.WHIRLPOOL,
   ...FIRE_SPIN_TRAPPED_BATTLER_TAG_TYPES,
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that trap and deal damage. */
-export const DAMAGING_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
+export const DAMAGING_TRAPPED_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.BIND,
   BattlerTagType.WRAP,
   BattlerTagType.CLAMP,
@@ -66,7 +72,7 @@ export const DAMAGING_TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that trap. */
-export const TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
+export const TRAPPED_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.TRAPPED,
   BattlerTagType.NO_RETREAT,
   BattlerTagType.OCTOLOCK,
@@ -75,13 +81,19 @@ export const TRAPPED_BATTLER_TAG_TYPES = Object.freeze([
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that are a Gulp Missile. */
-export const GULP_MISSILE_BATTLER_TAG_TYPES = Object.freeze([
+export const GULP_MISSILE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.GULP_MISSILE_ARROKUDA,
   BattlerTagType.GULP_MISSILE_PIKACHU,
 ]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that boost an {@linkcode ElementalType}. */
-export const TYPE_BOOST_TAG_TYPES = Object.freeze([BattlerTagType.FIRE_BOOST, BattlerTagType.CHARGED]);
+export const TYPE_BOOST_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  BattlerTagType.FIRE_BOOST,
+  BattlerTagType.CHARGED,
+]);
 
 /** All {@linkcode BattlerTagType | BattlerTagTypes} that make a pokemon "exposed". */
-export const EXPOSED_TAG_TYPES = Object.freeze([BattlerTagType.IGNORE_GHOST, BattlerTagType.IGNORE_DARK]);
+export const EXPOSED_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  BattlerTagType.IGNORE_GHOST,
+  BattlerTagType.IGNORE_DARK,
+]);
