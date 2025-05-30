@@ -575,7 +575,7 @@ export class EncounterPhase extends BattlePhase {
       }
     });
 
-    if (![BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
+    if (battleType !== BattleType.TRAINER && battleType !== BattleType.MYSTERY_ENCOUNTER) {
       enemyField.map((p) =>
         globalScene.phaseManager.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
           if (!globalScene.getPlayerParty().length) {

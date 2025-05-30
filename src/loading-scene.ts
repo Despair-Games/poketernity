@@ -31,7 +31,7 @@ import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getWindowVariantSuffix } from "#ui/ui-theme";
-import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
+import { enumValueToKey, getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
@@ -212,8 +212,8 @@ export class LoadingScene extends SceneBase {
 
     // Load arena images
     this.loadImage("default_bg", ImagesFolder.ARENAS);
-    getTSEnumValues(BiomeId).map((bt) => {
-      const btKey = BiomeId[bt].toLowerCase();
+    Object.values(BiomeId).map((bt) => {
+      const btKey = enumValueToKey(BiomeId, bt).toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
       const baseBKey = `${btKey}_b`;
