@@ -89,10 +89,17 @@ export class HatchedPokemonContainer extends Phaser.GameObjects.Container {
 
     const dexEntry = hatchData.dexEntryBeforeUpdate;
     const caughtAttr = dexEntry.caughtAttr;
-    const newShiny = BigInt(1 << (displayPokemon.shiny ? 1 : 0));
-    const newVariant = BigInt(1 << (displayPokemon.variant + 4));
-    const newShinyOrVariant = (newShiny & caughtAttr) === BigInt(0) || (newVariant & caughtAttr) === BigInt(0);
-    const newForm = ((BigInt(1 << displayPokemon.formIndex) * DexAttr.DEFAULT_FORM) & caughtAttr) === BigInt(0);
+
+    let newShinyOrVariant = false;
+    if (displayPokemon.shiny) {
+      const variantAttr = BigInt(1 << displayPokemon.variant) * DexAttr.SHINY_BASE_VARIANT;
+      newShinyOrVariant = (variantAttr & caughtAttr) === BigInt(0);
+    } else if ((caughtAttr & DexAttr.NON_SHINY) === 0n) {
+      // The non shiny form is new
+      newShinyOrVariant = true;
+    }
+
+    const newForm = (globalScene.gameData.getFormAttr(displayPokemon.formIndex) & caughtAttr) === BigInt(0);
 
     const female = displayPokemon.gender === Gender.FEMALE;
     const formIndex = displayPokemon.formIndex;
