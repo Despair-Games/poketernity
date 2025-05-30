@@ -27,7 +27,7 @@ interface AppliedAbAttr<TAttr extends AbAttr> {
  *
  * @see {@linkcode applyAbAttrsInternal}
  */
-export function applyAbAttrs<TAttr extends AbAttr>(
+export function applyAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): AppliedAbAttr<TAttr>[] {
