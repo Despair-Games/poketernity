@@ -20,7 +20,7 @@ import { PokemonMove } from "#field/pokemon-move";
 import Trainer from "#field/trainer";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { DexAttrProps, GameData } from "#system/game-data";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { type BooleanHolder, enumValueToKey, type NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -71,7 +71,7 @@ export abstract class Challenge {
    * @returns The i18n key for this challenge
    */
   geti18nKey(): string {
-    return Challenges[this.id]
+    return enumValueToKey(Challenges, this.id)
       .split("_")
       .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
       .join("");
