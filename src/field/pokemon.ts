@@ -3570,7 +3570,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The first {@linkcode BattlerTag} found, or `undefined` if none is found
    */
   public findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T | undefined {
-    return this.summonData.tags.find((t: T) => tagFilter(t)) as T | undefined;
+    return this.summonData.tags.find(tagFilter) as T | undefined;
   }
 
   /**
@@ -3579,7 +3579,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns An array of {@linkcode BattlerTag}s matching the input filter
    */
   public findTags<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T[] {
-    return this.summonData.tags.filter((t: T) => tagFilter(t)) as T[];
+    return this.summonData.tags.filter(tagFilter) as T[];
   }
 
   /**
@@ -3601,6 +3601,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Lapses all {@linkcode BattlerTag}s attached to the pokemon with the specified lapse type
    * and then removes the ones that should be removed
    * @param lapseType - The {@linkcode BattlerTagLapseType} to trigger
+   * @see {@linkcode BattlerTag.lapse}
    */
   public lapseTags(lapseType: BattlerTagLapseType): void {
     const tags = this.summonData.tags;
@@ -3620,6 +3621,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Removes a {@linkcode BattlerTag} from the pokemon without calling its `lapse()` method
    * @param tagType - The {@linkcode BattlerTagType} to remove
    * @returns Whether the specified tag was attached to the pokemon before being removed
+   * @see {@linkcode BattlerTag.onRemove}
    */
   public removeTag(tagType: BattlerTagType): boolean {
     const tags = this.summonData.tags;
@@ -3639,7 +3641,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const tags = this.summonData.tags;
     const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
-      tag.turnCount = 0; // TODO: is this necessary?
+      tag.turnCount = 0;
       tag.onRemove(this);
       tags.splice(tags.indexOf(tag), 1);
     }
@@ -3720,12 +3722,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const restrictingTags = this.findTags<MoveRestrictionBattlerTag>((t) =>
       t.isType<MoveRestrictionBattlerTag>(...RESTRICTING_TAG_TYPES),
     );
-    for (const tag of restrictingTags) {
-      if (tag.isMoveTargetRestricted(moveId, user, target)) {
-        return tag !== null; // TODO: this doesn't seem correct, `Pokemon#findTags` can't return `null`
-      }
-    }
-    return false;
+    return restrictingTags.some((tag) => tag.isMoveTargetRestricted(moveId, user, target));
   }
 
   /**

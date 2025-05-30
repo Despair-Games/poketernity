@@ -6,6 +6,7 @@ import type { Move } from "#moves/move";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
   // TODO: create a generic way to do ability chances, like with moves
+  /** Works the same as move effect chances: `-1` for "always", otherwise % chance to activate */
   private readonly chance: number;
 
   constructor(chance: number) {
