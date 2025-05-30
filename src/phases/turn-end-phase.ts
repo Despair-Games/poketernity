@@ -40,7 +40,8 @@ export class TurnEndPhase extends FieldPhase {
           );
         }
         applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.POST_TURN, pokemon, false);
-        applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.BAD_DREAMS, pokemon, false); // TODO: THIS IS A WORKAROUND SO BAD DREAMS DOESN'T HURT POKEMON WAKING UP IN THE SAME TURN. Has to be fixed with #1211
+       // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. Has to be fixed with #1211
+        applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.BAD_DREAMS, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);
