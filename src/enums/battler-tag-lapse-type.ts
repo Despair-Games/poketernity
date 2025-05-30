@@ -1,11 +1,13 @@
-export enum BattlerTagLapseType {
-  FAINT,
-  MOVE,
-  PRE_MOVE,
-  AFTER_MOVE,
-  MOVE_EFFECT,
-  TURN_END,
-  HIT,
-  AFTER_HIT,
-  CUSTOM,
-}
+export const BattlerTagLapseType = {
+  FAINT: 1,
+  MOVE: 2,
+  PRE_MOVE: 3,
+  AFTER_MOVE: 4,
+  MOVE_EFFECT: 5,
+  TURN_END: 6,
+  HIT: 7,
+  AFTER_HIT: 8,
+  CUSTOM: 9,
+} as const;
+
+export type BattlerTagLapseType = (typeof BattlerTagLapseType)[keyof typeof BattlerTagLapseType];

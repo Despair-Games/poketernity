@@ -9,6 +9,7 @@ import {
 import { chargeAnims } from "#animations/charge-anims";
 import { commonAnims } from "#animations/common-anims";
 import { moveAnims } from "#animations/move-anims";
+import type { AnimBlendType } from "#enums/anim-blend-type";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
@@ -92,7 +93,7 @@ export async function populateAnims() {
                 Number.parseFloat(values[3]),
                 Number.parseInt(values[4]) === 1,
                 Number.parseInt(values[6]) === 1,
-                Number.parseInt(values[5]),
+                Number.parseInt(values[5]) as AnimBlendType,
                 Number.parseInt(values[7]),
                 Number.parseInt(values[8]),
                 Number.parseInt(values[12]),

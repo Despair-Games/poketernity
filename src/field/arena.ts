@@ -36,7 +36,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
-import { coerceArray, getTSEnumValues } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
 
@@ -172,11 +172,13 @@ export class Arena {
     }
     const tierValue = randSeedInt(randVal - luckModifier);
     let tier = isBossSpecies ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
-    console.log(BiomePoolTier[tier]);
+    console.log(enumValueToKey(BiomePoolTier, tier));
 
     // If the BiomePoolTier is empty, downgrade the rarity
     while (!this.pokemonPool[tier].length) {
-      console.log(`Downgraded rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
+      console.log(
+        `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
+      );
       tier--;
     }
     const tierPool = this.pokemonPool[tier];
@@ -301,8 +303,10 @@ export class Arena {
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
-    while (tier && !this.trainerPool[tier].length) {
-      console.log(`Downgraded trainer rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
+    while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
+      console.log(
+        `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
+      );
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
@@ -793,6 +797,7 @@ export class Arena {
    * @param quiet If a message should be queued on screen to announce the tag being added
    * @param targetIndex The {@linkcode BattlerIndex} of the target pokemon
    * @returns `false` if there already exists a tag of this type in the Arena
+   * @todo `sourceId` should be optional
    */
   addTag(
     tagType: ArenaTagType,
@@ -954,13 +959,13 @@ export class Arena {
  * All that should also live in the biome class itself.
  */
 export function getBiomeKey(biomeId: BiomeId): string {
-  return BiomeId[biomeId].toLowerCase();
+  return enumValueToKey(BiomeId, biomeId).toLowerCase();
 }
 
 /**
  * Props are additional sprite images present in a biome
  */
-const biomeWithProps = [
+const biomeWithProps = Object.freeze<BiomeId[]>([
   BiomeId.METROPOLIS,
   BiomeId.BEACH,
   BiomeId.LAKE,
@@ -986,7 +991,7 @@ const biomeWithProps = [
   BiomeId.ISLAND,
   BiomeId.LABORATORY,
   BiomeId.END,
-];
+]);
 
 export function getBiomeHasProps(biomeId: BiomeId): boolean {
   return biomeWithProps.includes(biomeId);
