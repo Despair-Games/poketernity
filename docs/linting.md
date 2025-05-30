@@ -46,6 +46,6 @@
 
 # Biome
 
-We started transitioning over to [Biome](https://biomejs.dev/) for linting as it's performance far exceeds the performance of ESLint (~15x faster).
+We started transitioning over to [Biome](https://biomejs.dev/) for linting as its performance far exceeds ESLint's (~15x faster).
 
-The idea is to have Biome replace ESLint completely in the future, but not all rules are supported yet so for now we're using both/a hybrid approach.
+The end goal is to have Biome replace ESLint completely in the future, but not all rules are supported by Biome yet so for now we're using a hybrid approach.
