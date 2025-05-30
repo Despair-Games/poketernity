@@ -22,7 +22,7 @@ interface ApplyAbAttrResult<TAttr extends AbAttr> {
 
 /**
  * Apply abilities with the {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} ability mode.
- * @template TAttr - The specific ability attribute type.
+ * @typeParam TAttr - The specific ability attribute type.
  * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
  * @param params - The parameters for the given attribute's `apply` function
  * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
@@ -66,7 +66,7 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
 
 /**
  * Applies a Pokemon's ability attributes of matching type
- * @template TAttr - The specific ability attribute type.
+ * @typeParam TAttr - The specific ability attribute type.
  * @param abAttrFlag - The type of attribute to apply
  * @param params - The parameters for the given attribute's `apply` function. This should include:
  * - `pokemon`: The {@linkcode Pokemon} with the ability
@@ -136,7 +136,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
 
 /**
  * Apply abilities with the {@linkcode AbilityApplyMode.REVEALED | REVEALED} ability mode.
- * @template TAttr - The specific ability attribute type.
+ * @typeParam TAttr - The specific ability attribute type.
  * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
  * @param params - The parameters for the given attribute's `apply` function
  * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
@@ -150,7 +150,7 @@ function applyRevealedAbAttrs<TAttr extends AbAttr>(
 
 /**
  * Apply abilities with the {@linkcode AbilityApplyMode.IGNORE | IGNORE} ability mode.
- * @template TAttr - The specific ability attribute type.
+ * @typeParam TAttr - The specific ability attribute type.
  * @returns an empty array
  */
 function applyNoAbAttrs<TAttr extends AbAttr>(
