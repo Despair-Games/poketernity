@@ -73,7 +73,7 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
  * @returns An array of {@linkcode AppliedAbAttr | applied ability attributes}
  * @see {@linkcode AbAttr}
  */
-function applyAbAttrsInternal<TAttr extends AbAttr>(
+function applyAbAttrsInternal<TAttr extends AbAttr = never>(
   abFilterOptions: AbilityFilterOptions,
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
