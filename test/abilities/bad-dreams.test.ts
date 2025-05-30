@@ -49,6 +49,7 @@ describe("Ability - Bad Dreams", () => {
 
   it("should not damage awake enemies", async () => {
     const { classicMode, field, move } = game;
+
     await classicMode.startBattle(SpeciesId.DARKRAI);
     const enemy = field.getEnemyPokemon();
     move.use(MoveId.SPLASH);
@@ -74,6 +75,18 @@ describe("Ability - Bad Dreams", () => {
     }
 
     // expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP); TODO: Currently drowsy sets the sleep status effect after applying bad dreams due to "asPhase=true"
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
+  });
+
+  it("should do 1/8 max-hp damage to enemy with 'Comatose' ability", async () => {
+    const { override, classicMode, field, move } = game;
+    override.enemyPassiveAbility(AbilityId.COMATOSE);
+
+    await classicMode.startBattle(SpeciesId.DARKRAI);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
     expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
   });
 
