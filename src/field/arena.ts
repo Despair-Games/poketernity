@@ -177,7 +177,7 @@ export class Arena {
     // If the BiomePoolTier is empty, downgrade the rarity
     while (!this.pokemonPool[tier].length) {
       console.log(
-        `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, tier - 1)}`,
+        `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
       tier--;
     }
@@ -305,7 +305,7 @@ export class Arena {
 
     while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
       console.log(
-        `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, tier - 1)}`,
+        `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
       tier--;
     }
