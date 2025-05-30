@@ -266,8 +266,8 @@ export class CommandUiHandler extends UiHandler {
     this.commandsContainer.setVisible(false);
     const messageHandler = this.getUi().getMessageHandler();
     if (messageHandler?.ready) {
-      messageHandler?.commandWindow.setVisible(false);
-      messageHandler?.clearText();
+      messageHandler.commandWindow.setVisible(false);
+      messageHandler.clearText();
     }
     this.eraseCursor();
   }

@@ -36,12 +36,12 @@ export class BerryUsedEvent extends Event {
 }
 
 /**
- * Container class for {@linkcode BattleSceneEventType.RUN_END} events
+ * Container class for {@linkcode BattleSceneEventType.POST_GAME_OVER} events
  * @extends Event
  */
-export class RunEndEvent extends Event {
+export class GameOverEvent extends Event {
   constructor() {
-    super(BattleSceneEventType.RUN_END);
+    super(BattleSceneEventType.POST_GAME_OVER);
   }
 }
 /**

@@ -175,7 +175,7 @@ export class UI extends Phaser.GameObjects.Container {
   /** Callback used to destroy no longer needed handlers on new encounters. */
   private readonly onNextEncounterEvent = () => this.deleteUiHandlers([...runPrepModes, ...temporaryBattleModes]);
   /** Callback used to destroy no longer needed handlers on run end (win or loss). */
-  private readonly onRunEndEvent = () => this.deleteUiHandlers([...permanentBattleModes, ...temporaryBattleModes]);
+  private readonly onGameOverEvent = () => this.deleteUiHandlers([...permanentBattleModes, ...temporaryBattleModes]);
 
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
@@ -230,7 +230,7 @@ export class UI extends Phaser.GameObjects.Container {
 
     // Register listener to new encounter events and run end events
     globalScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
-    globalScene.eventTarget.addEventListener(BattleSceneEventType.RUN_END, this.onRunEndEvent);
+    globalScene.eventTarget.addEventListener(BattleSceneEventType.POST_GAME_OVER, this.onGameOverEvent);
   }
 
   /**
@@ -407,7 +407,7 @@ export class UI extends Phaser.GameObjects.Container {
       this.handlers.delete(uiMode);
     }
 
-    globalScene.eventTarget.removeEventListener(BattleSceneEventType.RUN_END, this.onRunEndEvent);
+    globalScene.eventTarget.removeEventListener(BattleSceneEventType.POST_GAME_OVER, this.onGameOverEvent);
     globalScene.eventTarget.removeEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
 
     super.destroy(fromScene);

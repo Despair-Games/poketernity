@@ -5,9 +5,9 @@ import type { Arena } from "#field/arena";
 import type {
   BerryUsedEvent,
   EncounterPhaseEvent,
+  GameOverEvent,
   MoveUsedEvent,
   NewArenaEvent,
-  RunEndEvent,
   TurnEndEvent,
   TurnInitEvent,
 } from "#events/battle-scene";
@@ -28,10 +28,10 @@ export const BattleSceneEventType = {
   BERRY_USED: "onBerryUsed",
 
   /**
-   * Triggers when a run end either through winning or losing (but not save and quitting)
-   * @see {@linkcode RunEndEvent}
+   * Triggers when after run ends either through winning or losing (but not save and quitting)
+   * @see {@linkcode GameOverEvent}
    */
-  RUN_END = "onRunEnd",
+  POST_GAME_OVER: "onGameOver",
 
   /**
    * Triggers at the start of each new encounter
