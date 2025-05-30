@@ -13,7 +13,9 @@ export interface ToHaveTakenDamageMatcherOptions {
 //#endregion
 
 /**
- * Matcher to check if a Pokemon has taken a specific amount of damage
+ * Matcher to check if a Pokemon has taken a specific amount of damage.
+ * Unless specified, will run the expected damage value through {@linkcode toDmgValue}
+ * to round it down and make it a minimum of 1.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
  * @param expectedDamageTaken - The expected amount of damage the {@linkcode Pokemon} has taken
  * @returns Whether the matcher passed
