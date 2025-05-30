@@ -20,7 +20,7 @@ interface AppliedAbAttr<TAttr extends AbAttr> {
 //#region Exports
 
 /**
- * The function for using the {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} ability mode
+ * Apply abilities with the {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} ability mode.
  * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
  * @param params - The parameters for the given attribute's `apply` function
  * @returns An array of {@linkcode AppliedAbAttr | applied ability attributes}
