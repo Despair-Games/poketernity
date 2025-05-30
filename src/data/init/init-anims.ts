@@ -20,9 +20,9 @@ export async function populateAnims() {
   const commonAnimNames = getTSEnumKeys(CommonAnim).map((k) => k.toLowerCase());
   const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
   const commonAnimIds: CommonAnim[] = getTSEnumValues(CommonAnim);
-  const chargeAnimNames = getTSEnumKeys(ChargeAnim).map((k) => k.toLowerCase());
+  const chargeAnimNames = Object.keys(ChargeAnim).map((k) => k.toLowerCase());
   const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
-  const chargeAnimIds: ChargeAnim[] = getTSEnumValues(ChargeAnim);
+  const chargeAnimIds: ChargeAnim[] = Object.values(ChargeAnim);
   const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
   const moveNameToId = {};
   for (const move of getTSEnumValues(MoveId).slice(1)) {
