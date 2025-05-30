@@ -28,7 +28,8 @@ export class BadDreamsAbAttr extends AbAttr {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
       const blocksNonDirectDamage = opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE);
       // TODO: Workaround because Drowsy sets the sleep status AFTER applying bad dreams due to "asPhase = true"
-      const willFallAsleep = opp.getTag<DrowsyTag>(BattlerTagType.DROWSY)?.turnCount === 1;
+      const willFallAsleep =
+        opp.getTag<DrowsyTag>(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP);
 
       if ((isAsleep || willFallAsleep) && !blocksNonDirectDamage && !opp.switchOutStatus) {
         if (!simulated) {

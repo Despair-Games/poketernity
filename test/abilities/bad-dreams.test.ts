@@ -69,13 +69,30 @@ describe("Ability - Bad Dreams", () => {
     expect(enemy).toHaveBattlerTag(BattlerTagType.DROWSY);
     expect(enemy).toHaveFullHp();
 
-    for (let i = 1; i < 2; i++) {
-      move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
-    }
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
     // expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP); TODO: Currently drowsy sets the sleep status effect after applying bad dreams due to "asPhase=true"
     expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
+  });
+
+  it("should NOT do 1/8 max-hp damage to drowsy enemies who can't fall asleep in the same turn", async () => {
+    const { classicMode, field, move } = game;
+
+    await classicMode.startBattle(SpeciesId.DARKRAI);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.YAWN);
+    await game.toEndOfTurn();
+
+    expect(enemy).toHaveBattlerTag(BattlerTagType.DROWSY);
+    expect(enemy).toHaveFullHp();
+
+    move.use(MoveId.SPLASH);
+    await move.forceEnemyMove(MoveId.UPROAR);
+    await game.toEndOfTurn();
+
+    expect(enemy).toHaveStatusEffect(StatusEffect.NONE); // TODO: Currently drowsy sets the sleep status effect after applying bad dreams due to "asPhase=true"
+    expect(enemy).toHaveFullHp();
   });
 
   it("should do 1/8 max-hp damage to enemy with 'Comatose' ability", async () => {
