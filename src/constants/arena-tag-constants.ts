@@ -36,3 +36,25 @@ export const CONDITIONAL_PROTECT_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>
   ArenaTagType.MAT_BLOCK,
   ArenaTagType.CRAFTY_SHIELD,
 ]);
+
+/** All {@linkcode ArenaTagType}s that can be swapped by {@linkcode MoveId.COURT_CHANGE}. */
+export const COURT_CHANGE_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
+  ArenaTagType.AURORA_VEIL,
+  ArenaTagType.LIGHT_SCREEN,
+  ArenaTagType.MIST,
+  ArenaTagType.REFLECT,
+  ArenaTagType.SPIKES,
+  ArenaTagType.STEALTH_ROCK,
+  ArenaTagType.SHARP_STEEL,
+  ArenaTagType.STICKY_WEB,
+  ArenaTagType.TAILWIND,
+  ArenaTagType.TOXIC_SPIKES,
+  ArenaTagType.SAFEGUARD,
+  ArenaTagType.GRASS_WATER_PLEDGE,
+  ArenaTagType.FIRE_GRASS_PLEDGE,
+  ArenaTagType.WATER_FIRE_PLEDGE,
+  ArenaTagType.G_MAX_VINE_LASH,
+  ArenaTagType.G_MAX_WILDFIRE,
+  ArenaTagType.G_MAX_CANNONADE,
+  ArenaTagType.G_MAX_VOLCALITH,
+]);
