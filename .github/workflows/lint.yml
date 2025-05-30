@@ -51,17 +51,47 @@ jobs:
         run: npm run depcruise
         id: depcruise
         continue-on-error: true
+
+      # Validate types with tsc - https://www.typescriptlang.org/docs/handbook/compiler-options.html#using-the-cli
+      - name: Run Typecheck
+        run: npm run typecheck
+        id: typecheck
+        continue-on-error: true
       
-      - name: Check for Errors
+      - name: Evaluate for Errors
         env:
           BIOME_LINT_OUTCOME: ${{ steps.biome_lint.outcome }}
           ESLINT_OUTCOME: ${{ steps.eslint.outcome }}
           DEPCRUISE_OUTCOME: ${{ steps.depcruise.outcome }}
+          TYPECHECK_OUTCOME: ${{ steps.typecheck.outcome }}
         run: |
-            echo "Biome outcome: $BIOME_LINT_OUTCOME"
-            echo "ESLint outcome: $ESLINT_OUTCOME"
-            echo "Depcruise outcome: $DEPCRUISE_OUTCOME"
-            if [[ "$BIOME_LINT_OUTCOME" != "success" || "$ESLINT_OUTCOME" != "success" || "$DEPCRUISE_OUTCOME" != "success" ]]; then
-              echo "One or more linters failed."
-              exit 1
+          # Check for Errors
+
+          RED='\033[0;31m'
+          GREEN='\033[0;32m'
+          NC='\033[0m' # No Color
+
+          print_result() {
+            local name=$1
+            local outcome=$2
+            if [ "$outcome" == "success" ]; then
+              echo -e "${GREEN}✅ $name: $outcome${NC}"
+            else
+              echo -e "${RED}❌ $name: $outcome${NC}"
             fi
+          }
+
+          print_result "Biome" "$BIOME_LINT_OUTCOME"
+          print_result "ESLint" "$ESLINT_OUTCOME"
+          print_result "Depcruise" "$DEPCRUISE_OUTCOME"
+          print_result "Typecheck" "$TYPECHECK_OUTCOME"
+
+          if [[ "$BIOME_LINT_OUTCOME" != "success" || \
+                "$ESLINT_OUTCOME" != "success" || \
+                "$DEPCRUISE_OUTCOME" != "success" || \
+                "$TYPECHECK_OUTCOME" != "success" ]]; then
+            echo -e "\n${RED}❌ One or more checks failed.${NC}"
+            exit 1
+          fi
+
+          echo -e "\n${GREEN}✅ All checks passed.${NC}"

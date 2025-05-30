@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
-import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES, COURT_CHANGE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
@@ -217,7 +217,7 @@ import { SuppressAbilitiesAttr } from "#moves/suppress-abilities-attr";
 import { SuppressAbilitiesIfActedAttr } from "#moves/suppress-abilities-if-acted-attr";
 import { SurviveDamageAttr } from "#moves/survive-damage-attr";
 import { SwallowHealAttr } from "#moves/swallow-heal-attr";
-import { courtChangeArenaTags, SwapArenaTagsAttr } from "#moves/swap-arena-tags-attr";
+import { SwapArenaTagsAttr } from "#moves/swap-arena-tags-attr";
 import { SwapStatAttr } from "#moves/swap-stat-attr";
 import { SwapStatStagesAttr } from "#moves/swap-stat-stages-attr";
 import { SwitchAbilitiesAttr } from "#moves/switch-abilities-attr";
@@ -2818,9 +2818,9 @@ export function initMoves() {
       .attr(FirstAttackDoublePowerAttr)
       .bitingMove(),
     new StatusMove(MoveId.COURT_CHANGE, ElementalType.NORMAL, -1, 10, -1, 0, 8)
-      .attr(SwapArenaTagsAttr, courtChangeArenaTags)
+      .attr(SwapArenaTagsAttr)
       .condition((_user, _target, _move) =>
-        globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
+        globalScene.arena.tags.some((arenaTag) => COURT_CHANGE_ARENA_TAG_TYPES.includes(arenaTag.tagType)),
       )
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.MAX_FLARE, ElementalType.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)

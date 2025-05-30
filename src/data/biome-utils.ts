@@ -2,6 +2,7 @@ import { allBiomes } from "#data/data-lists";
 import { BiomeId } from "#enums/biome-id";
 import type { SpeciesId } from "#enums/species-id";
 import type { TrainerType } from "#enums/trainer-type";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 export function getBiomeName(biomeId: BiomeId | -1) {
@@ -16,7 +17,7 @@ export function getBiomeName(biomeId: BiomeId | -1) {
     case BiomeId.END:
       return i18next.t("biome:END");
     default:
-      return i18next.t(`biome:${BiomeId[biomeId].toUpperCase()}`);
+      return i18next.t(`biome:${enumValueToKey(BiomeId, biomeId).toUpperCase()}`);
   }
 }
 
@@ -55,7 +56,7 @@ export interface BiomeTrainerPools {
 /**
  * Whether or not a biome is indoors affects tinting
  */
-export const IndoorBiomes = Object.freeze([
+export const IndoorBiomes = Object.freeze<BiomeId[]>([
   BiomeId.SEABED,
   BiomeId.CAVE,
   BiomeId.CHARGESTONE_CAVE,
@@ -72,14 +73,14 @@ export const IndoorBiomes = Object.freeze([
 // #region Alcremie Evolutions
 
 /** The biome determines what form Alcremie will be when evolving */
-export const VanillaAlcremieBiomes = Object.freeze([
+export const VanillaAlcremieBiomes = Object.freeze<BiomeId[]>([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
   BiomeId.TALL_GRASS,
   BiomeId.METROPOLIS,
 ]);
-export const RubyAlcremieBiomes = Object.freeze([
+export const RubyAlcremieBiomes = Object.freeze<BiomeId[]>([
   BiomeId.BADLANDS,
   BiomeId.VOLCANO,
   BiomeId.STEAM_VENT,
@@ -87,9 +88,14 @@ export const RubyAlcremieBiomes = Object.freeze([
   BiomeId.FACTORY,
   BiomeId.SLUM,
 ]);
-export const MatchaAlcremieBiomes = Object.freeze([BiomeId.FOREST, BiomeId.SWAMP, BiomeId.MEADOW, BiomeId.JUNGLE]);
-export const MintAlcremieBiomes = Object.freeze([BiomeId.SEA, BiomeId.BEACH, BiomeId.LAKE, BiomeId.SEABED]);
-export const LemonAlcremieBiomes = Object.freeze([
+export const MatchaAlcremieBiomes = Object.freeze<BiomeId[]>([
+  BiomeId.FOREST,
+  BiomeId.SWAMP,
+  BiomeId.MEADOW,
+  BiomeId.JUNGLE,
+]);
+export const MintAlcremieBiomes = Object.freeze<BiomeId[]>([BiomeId.SEA, BiomeId.BEACH, BiomeId.LAKE, BiomeId.SEABED]);
+export const LemonAlcremieBiomes = Object.freeze<BiomeId[]>([
   BiomeId.DESERT,
   BiomeId.POWER_PLANT,
   BiomeId.CHARGESTONE_CAVE,
@@ -97,22 +103,22 @@ export const LemonAlcremieBiomes = Object.freeze([
   BiomeId.RUINS,
   BiomeId.CONSTRUCTION_SITE,
 ]);
-export const SaltedCreamAlcremieBiomes = Object.freeze([
+export const SaltedCreamAlcremieBiomes = Object.freeze<BiomeId[]>([
   BiomeId.MOUNTAIN,
   BiomeId.CAVE,
   BiomeId.ICE_CAVE,
   BiomeId.FAIRY_CAVE,
   BiomeId.SNOWY_FOREST,
 ]);
-export const RubySwirlAlcremieBiomes = Object.freeze([BiomeId.WASTELAND, BiomeId.LABORATORY]);
-export const CaramelSwirlAlcremieBiomes = Object.freeze([BiomeId.TEMPLE, BiomeId.ISLAND]);
-export const RainbowSwirlAlcremieBiomes = Object.freeze([BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END]);
+export const RubySwirlAlcremieBiomes = Object.freeze<BiomeId[]>([BiomeId.WASTELAND, BiomeId.LABORATORY]);
+export const CaramelSwirlAlcremieBiomes = Object.freeze<BiomeId[]>([BiomeId.TEMPLE, BiomeId.ISLAND]);
+export const RainbowSwirlAlcremieBiomes = Object.freeze<BiomeId[]>([BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END]);
 
 // #region ME biome mappings
 /**
  * Biomes in here get access to {@linkcode extremeBiomeEncounters} (nothing right now)
  */
-export const ExtremeEncounterBiomes = Object.freeze([
+export const ExtremeEncounterBiomes = Object.freeze<BiomeId[]>([
   BiomeId.SEA,
   BiomeId.SEABED,
   BiomeId.BADLANDS,
@@ -130,7 +136,7 @@ export const ExtremeEncounterBiomes = Object.freeze([
  * - Field Trip
  * - Dancing Lessons
  */
-export const NonExtremeEncounterBiomes = Object.freeze([
+export const NonExtremeEncounterBiomes = Object.freeze<BiomeId[]>([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
@@ -168,7 +174,7 @@ export const NonExtremeEncounterBiomes = Object.freeze([
  * - Winstrate challenge
  * - Expert Breeder
  */
-export const HumanTransitableBiomes = Object.freeze([
+export const HumanTransitableBiomes = Object.freeze<BiomeId[]>([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
@@ -208,7 +214,7 @@ export const HumanTransitableBiomes = Object.freeze([
  * - Fun and games
  * - Global Trade System
  */
-export const CivilizationEncounterBiomes = Object.freeze([
+export const CivilizationEncounterBiomes = Object.freeze<BiomeId[]>([
   BiomeId.TOWN,
   BiomeId.PLAINS,
   BiomeId.GRASS,
@@ -282,7 +288,7 @@ export function getOricorioFormIndexForBiome(biomeId: BiomeId): number {
 
 // #region teleporting hijinks ME
 
-export const TeleportingHijinksBiomeCandidates = Object.freeze([
+export const TeleportingHijinksBiomeCandidates = Object.freeze<BiomeId[]>([
   BiomeId.SPACE,
   BiomeId.FAIRY_CAVE,
   BiomeId.LABORATORY,

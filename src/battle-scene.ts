@@ -1401,7 +1401,8 @@ export default class BattleScene extends SceneBase {
         isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
       const resetArenaState =
         isNewBiome
-        || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.currentBattle.battleType)
+        || this.currentBattle.battleType === BattleType.TRAINER
+        || this.currentBattle.battleType === BattleType.MYSTERY_ENCOUNTER
         || this.currentBattle.isClassicFinalBoss;
       this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
       this.trySpreadPokerus();
@@ -2046,7 +2047,7 @@ export default class BattleScene extends SceneBase {
    * TODO: Rewrite this later for weighting?
    */
   generateRandomBiome(_waveIndex: number): BiomeId {
-    const excludedBiomeIds = [BiomeId.TOWN, BiomeId.END];
+    const excludedBiomeIds: readonly BiomeId[] = [BiomeId.TOWN, BiomeId.END];
     return randSeedItem([...allBiomes.keys()].filter((b) => !excludedBiomeIds.includes(b)));
   }
 

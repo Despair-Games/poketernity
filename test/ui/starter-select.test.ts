@@ -35,7 +35,7 @@ describe("UI - Starter select", () => {
     game = new GameManager(phaserGame);
   });
 
-  it("Bulbasaur - shiny - variant 2 male", async () => {
+  it("Bulbasaur - shiny - variant 0 male", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
@@ -88,11 +88,11 @@ describe("UI - Starter select", () => {
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
-    expect(game.scene.getPlayerParty()[0].variant).toBe(2);
+    expect(game.scene.getPlayerParty()[0].variant).toBe(0);
     expect(game.scene.getPlayerParty()[0].gender).toBe(Gender.MALE);
   });
 
-  it("Bulbasaur - shiny - variant 2 female hardy overgrow", async () => {
+  it("Bulbasaur - shiny - variant 0 female hardy overgrow", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
@@ -146,12 +146,12 @@ describe("UI - Starter select", () => {
 
     expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
-    expect(game.scene.getPlayerParty()[0].variant).toBe(2);
+    expect(game.scene.getPlayerParty()[0].variant).toBe(0);
     expect(game.scene.getPlayerParty()[0].nature).toBe(Nature.HARDY);
     expect(game.scene.getPlayerParty()[0].getAbility().id).toBe(AbilityId.OVERGROW);
   });
 
-  it("Bulbasaur - shiny - variant 2 female lonely chlorophyl", async () => {
+  it("Charmander - shiny - variant 2 female lonely solar power", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
@@ -163,8 +163,7 @@ describe("UI - Starter select", () => {
     });
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
       const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
-      handler.processInput(Button.RIGHT);
-      handler.processInput(Button.LEFT);
+      handler.processInput(Button.RIGHT); // move to Charmander
       handler.processInput(Button.CYCLE_GENDER);
       handler.processInput(Button.CYCLE_NATURE);
       handler.processInput(Button.CYCLE_ABILITY);
@@ -205,15 +204,15 @@ describe("UI - Starter select", () => {
     });
     await game.phaseInterceptor.to("EncounterPhase", false);
 
-    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
+    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.CHARMANDER);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
     expect(game.scene.getPlayerParty()[0].variant).toBe(2);
     expect(game.scene.getPlayerParty()[0].gender).toBe(Gender.FEMALE);
     expect(game.scene.getPlayerParty()[0].nature).toBe(Nature.LONELY);
-    expect(game.scene.getPlayerParty()[0].getAbility().id).toBe(AbilityId.CHLOROPHYLL);
+    expect(game.scene.getPlayerParty()[0].getAbility().id).toBe(AbilityId.SOLAR_POWER);
   });
 
-  it("Bulbasaur - shiny - variant 2 female", async () => {
+  it("Charmander - shiny - variant 2 female", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
@@ -226,7 +225,6 @@ describe("UI - Starter select", () => {
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
       const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
-      handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_GENDER);
       handler.processInput(Button.ACTION);
       game.phaseInterceptor.unlock();
@@ -265,7 +263,7 @@ describe("UI - Starter select", () => {
     });
     await game.phaseInterceptor.to("EncounterPhase", false);
 
-    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
+    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.CHARMANDER);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
     expect(game.scene.getPlayerParty()[0].variant).toBe(2);
     expect(game.scene.getPlayerParty()[0].gender).toBe(Gender.FEMALE);
@@ -328,7 +326,7 @@ describe("UI - Starter select", () => {
     expect(game.scene.getPlayerParty()[0].variant).toBe(0);
   });
 
-  it("Bulbasaur - shiny - variant 1", async () => {
+  it("Charmander - shiny - variant 1", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
@@ -341,7 +339,6 @@ describe("UI - Starter select", () => {
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
       const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
-      handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_SHINY);
       handler.processInput(Button.CYCLE_SHINY);
       handler.processInput(Button.CYCLE_SHINY);
@@ -382,12 +379,12 @@ describe("UI - Starter select", () => {
     });
     await game.phaseInterceptor.to("EncounterPhase", false);
 
-    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
+    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.CHARMANDER);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
     expect(game.scene.getPlayerParty()[0].variant).toBe(1);
   });
 
-  it("Bulbasaur - shiny - variant 0", async () => {
+  it("Charmander - shiny - variant 0", async () => {
     await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = game.scene.gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
     expect(caughtCount).toBe(Object.keys(allSpecies).length);
@@ -400,7 +397,6 @@ describe("UI - Starter select", () => {
     game.onNextPrompt("SelectStarterPhase", UiMode.STARTER_SELECT, () => {
       const handler = game.scene.ui.getCurrentHandler<StarterSelectUiHandler>();
       handler.processInput(Button.RIGHT);
-      handler.processInput(Button.LEFT);
       handler.processInput(Button.CYCLE_SHINY);
       handler.processInput(Button.CYCLE_SHINY);
       handler.processInput(Button.ACTION);
@@ -440,7 +436,7 @@ describe("UI - Starter select", () => {
     });
     await game.phaseInterceptor.to("EncounterPhase", false);
 
-    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.BULBASAUR);
+    expect(game.scene.getPlayerParty()[0].species.speciesId).toBe(SpeciesId.CHARMANDER);
     expect(game.scene.getPlayerParty()[0].shiny).toBe(true);
     expect(game.scene.getPlayerParty()[0].variant).toBe(0);
   });
