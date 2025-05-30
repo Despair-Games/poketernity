@@ -241,7 +241,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
       const party = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
       return (
-        (!player && !globalScene.currentBattle.battleType)
+        (!player && globalScene.currentBattle.battleType === BattleType.WILD)
         || party.filter(
           (p) =>
             p.isAllowedInBattle()
