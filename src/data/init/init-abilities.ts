@@ -678,7 +678,8 @@ export function initAbilities() {
       .partial() // Should also boosts stats of ally
       .ignorable(),
     new Ability(AbilityId.BAD_DREAMS, 4)
-      .attr(BadDreamsAbAttr),
+      .attr(BadDreamsAbAttr)
+      .edgeCase(), // When falling asleep, due to being drowsy, the ability flyout appears BEFORE the pokemon falls asleep
     new Ability(AbilityId.PICKPOCKET, 5)
       .attr(PostDefendStealHeldItemAbAttr, (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target))
       .condition(getSheerForceHitDisableAbCondition()),
