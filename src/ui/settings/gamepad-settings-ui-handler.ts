@@ -2,7 +2,7 @@ import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { MAPPING_CONFIG_LS_KEY } from "#constants/app-constants";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
