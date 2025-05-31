@@ -203,10 +203,9 @@ let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
 
 /** called on starter selection show once */
 function loadStarterPrefs(): StarterPreferences {
-  return JSON.parse(
-    (StarterPrefers_private_latest =
-      localStorage.getItem(getLocalStorageKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT),
-  );
+  StarterPrefers_private_latest =
+    localStorage.getItem(getLocalStorageKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT;
+  return JSON.parse(StarterPrefers_private_latest);
 }
 
 /** called on starter selection clear, always */
