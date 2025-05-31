@@ -31,7 +31,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -773,7 +773,7 @@ export class SummaryUiHandler extends UiHandler {
         const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, "type_icons", ElementalType[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, "type_icons", enumValueToKey(ElementalType, type).toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -812,7 +812,7 @@ export class SummaryUiHandler extends UiHandler {
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
           teraIcon.setName("terrastallize-icon");
-          teraIcon.setFrame(ElementalType[this.pokemon.teraType].toLowerCase());
+          teraIcon.setFrame(enumValueToKey(ElementalType, this.pokemon.teraType).toLowerCase());
           profileContainer.add(teraIcon);
         }
 
@@ -1034,7 +1034,12 @@ export class SummaryUiHandler extends UiHandler {
 
           if (this.newMove && this.pokemon) {
             const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
+            const newMoveTypeIcon = globalScene.add.sprite(
+              0,
+              0,
+              "type_icons",
+              enumValueToKey(ElementalType, moveType).toLowerCase(),
+            );
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1059,7 +1064,12 @@ export class SummaryUiHandler extends UiHandler {
 
           if (move && this.pokemon) {
             const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
+            const typeIcon = globalScene.add.sprite(
+              0,
+              0,
+              "type_icons",
+              enumValueToKey(ElementalType, moveType).toLowerCase(),
+            );
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }

@@ -92,7 +92,7 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
     it("should fail if the user has no challenge-eligible allies", async () => {
       game.override.battleType("single");
       // Mono normal challenge
-      game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.NORMAL + 1, 0);
+      game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.NORMAL, 0);
       await game.challengeMode.startBattle(SpeciesId.RATICATE, SpeciesId.ODDISH);
 
       const [raticate] = game.scene.getPlayerParty();

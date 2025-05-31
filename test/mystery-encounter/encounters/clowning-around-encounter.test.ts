@@ -368,11 +368,11 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       expect(leadTypesAfter.length).toBe(2);
       expect(leadTypesAfter[0]).toBe(ElementalType.WATER);
-      expect([ElementalType.WATER, ElementalType.ICE].includes(leadTypesAfter[1])).toBeFalsy();
+      expect([ElementalType.WATER, ElementalType.ICE]).not.toContain(leadTypesAfter[1]);
       expect(secondaryTypesAfter.length).toBe(2);
       expect(secondaryTypesAfter[0]).toBe(ElementalType.GHOST);
-      expect([ElementalType.GHOST, ElementalType.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
-      expect([ElementalType.GRASS, ElementalType.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
+      expect([ElementalType.GHOST, ElementalType.POISON]).not.toContain(secondaryTypesAfter[1]);
+      expect([ElementalType.GRASS, ElementalType.ELECTRIC]).toContain(secondaryTypesAfter[1]);
       expect(thirdTypesAfter.length).toBe(2);
       expect(thirdTypesAfter[0]).toBe(ElementalType.PSYCHIC);
       expect(secondaryTypesAfter[1]).not.toBe(ElementalType.PSYCHIC);

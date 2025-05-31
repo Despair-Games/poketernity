@@ -661,11 +661,11 @@ export class RunInfoUiHandler extends UiHandler {
             rules.push(i18next.t(`runHistory:challengeMonoGen${this.runInfo.challenges[i].value}`));
             break;
           case Challenges.SINGLE_TYPE: {
-            const typeRule = ElementalType[this.runInfo.challenges[i].value - 1];
+            const typeRule = enumValueToKey(ElementalType, this.runInfo.challenges[i].value as ElementalType);
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
             const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
             const typeText =
-              typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`)! + "[/color]" + "[/shadow]";
+              typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`) + "[/color]" + "[/shadow]";
             rules.push(typeText);
             break;
           }
@@ -819,7 +819,9 @@ export class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
         const move = pokemonMoveset[m]?.getMove();
-        pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
+        pokemonMoveBgs[m].setFrame(
+          enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
+        );
         pokemonMoveLabels[m].setText(move ? move.name : "-");
       }
 
