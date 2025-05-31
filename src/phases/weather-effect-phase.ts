@@ -34,16 +34,18 @@ export class WeatherEffectPhase extends FieldPhase {
     const weather = arena?.weather;
 
     if (!weather) {
-      return this.end();
+      this.end();
+      return;
     }
 
     if (!weather.lapse()) {
       arena.trySetWeather(WeatherType.NONE, false);
       arena.triggerWeatherBasedFormChangesToNormal();
-      return this.end();
+      this.end();
+      return;
     }
 
-    const weatherAnimType: CommonAnim = CommonAnim.SUNNY + (weather.weatherType - 1);
+    const weatherAnimType = (CommonAnim.SUNNY + (weather.weatherType - 1)) as CommonAnim;
     /** @todo Rework animation params so that the placeholder "user" can be removed */
     const weatherAnim = new CommonBattleAnim(weatherAnimType, globalScene.getPlayerPokemon()!, undefined, true);
 
