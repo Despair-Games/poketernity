@@ -18,7 +18,7 @@ export class SettingsHelper extends GameManagerHelper {
    * Change the battle style to Switch or Set mode (tests default to {@linkcode BattleStyle.SET})
    * @param mode {@linkcode BattleStyle.SWITCH} or {@linkcode BattleStyle.SET}
    */
-  set battleStyle(mode: BattleStyle.SWITCH | BattleStyle.SET) {
+  set battleStyle(mode: BattleStyle) {
     this._battleStyle = mode;
   }
 

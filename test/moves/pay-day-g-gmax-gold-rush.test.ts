@@ -28,7 +28,6 @@ describe.each([
     game.override
       .ability(AbilityId.BALL_FETCH)
       .moveset(moveId)
-      .starterSpecies(SpeciesId.CHARMANDER)
       .battleType("single")
       .disableCrits()
       .enemySpecies(SpeciesId.SHUCKLE)
@@ -39,7 +38,7 @@ describe.each([
   });
 
   it("should award money on KO victory", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     vi.spyOn(game.scene, "addMoney");
 
@@ -52,7 +51,7 @@ describe.each([
 
   it("should award money on successful capture", async () => {
     game.override.enemyAbility(AbilityId.STURDY);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     game.move.select(moveId);
     await game.move.forceHit();
@@ -65,7 +64,7 @@ describe.each([
 
   it("should NOT award money when player runs away", async () => {
     game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     game.move.select(moveId);
     await game.move.forceHit();
@@ -79,7 +78,7 @@ describe.each([
 
   it("should NOT award money when forcing foe to flee", async () => {
     game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     vi.spyOn(game.scene, "addMoney");
 
@@ -94,7 +93,7 @@ describe.each([
 
   it("should NOT award money when foe flees", async () => {
     game.override.enemyMoveset(MoveId.TELEPORT).enemyLevel(999).enemyAbility(AbilityId.STURDY);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     vi.spyOn(game.scene, "addMoney");
 

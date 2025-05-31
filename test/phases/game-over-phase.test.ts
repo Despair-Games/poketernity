@@ -37,7 +37,7 @@ describe("Game Over Phase", () => {
   });
 
   it("winning a run should give rewards", async () => {
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     vi.spyOn(game.scene, "validateAchv");
 
     // Note: `game.doKillOpponents()` does not properly handle final boss
@@ -60,7 +60,7 @@ describe("Game Over Phase", () => {
   });
 
   it("losing a run should not give rewards", async () => {
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     vi.spyOn(game.scene, "validateAchv");
 
     game.move.select(MoveId.MEMENTO);

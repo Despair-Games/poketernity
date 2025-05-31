@@ -1,12 +1,14 @@
 /** Alias for all {@linkcode ArenaEvent} type strings */
-export enum ArenaEventType {
+export const ArenaEventType = {
   /** Triggers when a {@linkcode WeatherType} is added, overlapped, or removed */
-  WEATHER_CHANGED = "onWeatherChanged",
+  WEATHER_CHANGED: "onWeatherChanged",
   /** Triggers when a {@linkcode TerrainType} is added, overlapped, or removed */
-  TERRAIN_CHANGED = "onTerrainChanged",
+  TERRAIN_CHANGED: "onTerrainChanged",
 
-  /** Triggers when a {@linkcode ArenaTagType} is added */
-  TAG_ADDED = "onTagAdded",
-  /** Triggers when a {@linkcode ArenaTagType} is removed */
-  TAG_REMOVED = "onTagRemoved",
-}
+  /** Triggers when an {@linkcode ArenaTagType} is added */
+  TAG_ADDED: "onTagAdded",
+  /** Triggers when an {@linkcode ArenaTagType} is removed */
+  TAG_REMOVED: "onTagRemoved",
+} as const;
+
+export type ArenaEventType = (typeof ArenaEventType)[keyof typeof ArenaEventType];

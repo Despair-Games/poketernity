@@ -34,7 +34,7 @@ describe("Moves - Captivate should give -2 spA to valid opponents", () => {
   });
 
   it("Captivate should drop stats on valid targets", async () => {
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     const playerPokemon = game.scene.getPlayerField()[0];
     playerPokemon.gender = Gender.FEMALE;
 
@@ -51,7 +51,7 @@ describe("Moves - Captivate should give -2 spA to valid opponents", () => {
 
   it("Captivate does not affect oblivious", async () => {
     game.override.enemyAbility(AbilityId.OBLIVIOUS);
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     const playerPokemon = game.scene.getPlayerField()[0];
     playerPokemon.gender = Gender.FEMALE;
 
@@ -67,7 +67,7 @@ describe("Moves - Captivate should give -2 spA to valid opponents", () => {
   });
 
   it("Captivate succeeds with no effect if user is genderless", async () => {
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     const playerPokemon = game.scene.getPlayerField()[0];
     playerPokemon.gender = Gender.GENDERLESS;
 

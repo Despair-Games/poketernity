@@ -24,19 +24,17 @@ describe("Moves - Purify", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-
-    game.override.starterSpecies(SpeciesId.PYUKUMUKU);
-    game.override.startingLevel(10);
-    game.override.moveset([MoveId.PURIFY, MoveId.SIZZLY_SLIDE]);
-
-    game.override.enemySpecies(SpeciesId.MAGIKARP);
-    game.override.enemyLevel(10);
-    game.override.enemyMoveset([MoveId.SPLASH, MoveId.NONE, MoveId.NONE, MoveId.NONE]);
+    game.override
+      .battleType("single")
+      .startingLevel(10)
+      .moveset([MoveId.PURIFY, MoveId.SIZZLY_SLIDE])
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyLevel(10)
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   test("Purify heals opponent status effect and restores user hp", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PYUKUMUKU);
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
     const playerPokemon: PlayerPokemon = game.scene.getPlayerPokemon()!;
@@ -54,7 +52,7 @@ describe("Moves - Purify", () => {
   });
 
   test("Purify does not heal if opponent doesnt have any status effect", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle(SpeciesId.PYUKUMUKU);
 
     const playerPokemon: PlayerPokemon = game.scene.getPlayerPokemon()!;
 

@@ -196,6 +196,10 @@ export class SummonPhase extends PartyMemberPokemonPhase {
                 pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
                 pokemon.getSprite().clearTint();
                 pokemon.resetSummonData();
+                // required to load the proper assets when loading from save data
+                if (pokemon.summonData.speciesForm) {
+                  pokemon.loadAssets(false);
+                }
                 time.delayedCall(1000, () => this.end());
               },
             });
@@ -269,6 +273,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   protected onEnd(): void {
+    const { battleType, waveIndex } = globalScene.currentBattle;
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
@@ -279,8 +284,9 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     if (
       !this.loaded
-      || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)
-      || globalScene.currentBattle.waveIndex % 10 === 1
+      || battleType === BattleType.TRAINER
+      || battleType === BattleType.MYSTERY_ENCOUNTER
+      || waveIndex % 10 === 1
     ) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
       this.queuePostSummon();

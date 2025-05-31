@@ -3,6 +3,6 @@ import { SpeciesFormChangeMoveTrigger } from "#form-change-triggers/species-form
 
 export class SpeciesFormChangePostMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
-    return pokemon.summonData && pokemon.getLastXMoves(1).some((m) => this.movePredicate(m.move.id)) === this.used;
+    return pokemon.getLastXMoves(1).some((m) => this.movePredicate(m.move.id)) === this.used;
   }
 }

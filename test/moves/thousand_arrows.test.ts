@@ -31,7 +31,7 @@ describe("Moves - Thousand Arrows", () => {
   });
 
   it("move should hit and ground Flying-type targets", async () => {
-    await game.startBattle([SpeciesId.ILLUMISE]);
+    await game.classicMode.startBattle(SpeciesId.ILLUMISE);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -51,7 +51,7 @@ describe("Moves - Thousand Arrows", () => {
     game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.enemyAbility(AbilityId.LEVITATE);
 
-    await game.startBattle([SpeciesId.ILLUMISE]);
+    await game.classicMode.startBattle(SpeciesId.ILLUMISE);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -70,7 +70,7 @@ describe("Moves - Thousand Arrows", () => {
   it("move should hit and ground targets under the effects of Magnet Rise", async () => {
     game.override.enemySpecies(SpeciesId.SNORLAX);
 
-    await game.startBattle([SpeciesId.ILLUMISE]);
+    await game.classicMode.startBattle(SpeciesId.ILLUMISE);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

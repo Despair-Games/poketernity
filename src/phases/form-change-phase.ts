@@ -70,7 +70,7 @@ export class FormChangePhase extends FormChangeBasePhase {
         sprite.setPipelineData("ignoreTimeTint", true);
         sprite.setPipelineData("spriteKey", formChangedPokemon.getSpriteKey());
         let key = "spriteColors";
-        if (formChangedPokemon.summonData?.speciesForm) {
+        if (formChangedPokemon.summonData.speciesForm) {
           key += "Base";
         }
         sprite.pipelineData[key] = formChangedPokemon.getSprite().pipelineData[key];

@@ -1,13 +1,13 @@
-import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
-import { BattlerIndex } from "#app/enums/battler-index";
-import { Stat } from "#app/enums/stat";
-import { StatusEffect } from "#app/enums/status-effect";
-import { TerrainType } from "#app/enums/terrain-type";
-import { capitalizeString } from "#app/utils/string-utils";
+import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -50,7 +50,7 @@ describe("Ability - Marvel Scale", () => {
   it("should not apply a defense boost with no status effect", async () => {
     const { field, classicMode } = game;
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -63,7 +63,7 @@ describe("Ability - Marvel Scale", () => {
   it("should not apply a defense boost with confusion status effect", async () => {
     const { field, classicMode, move } = game;
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     move.use(MoveId.SPLASH);
@@ -82,7 +82,7 @@ describe("Ability - Marvel Scale", () => {
       const { override, classicMode, field } = game;
       override.statusEffect(statusEffectId);
 
-      await classicMode.startBattle([SpeciesId.FEEBAS]);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
       const player = field.getPlayerPokemon();
       game.move.use(MoveId.SPLASH);
       await game.toEndOfTurn();
@@ -97,7 +97,7 @@ describe("Ability - Marvel Scale", () => {
     const { override, field, classicMode } = game;
     override.statusEffect(StatusEffect.PARALYSIS).passiveAbility(AbilityId.FUR_COAT);
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
     game.move.use(MoveId.SPLASH);
@@ -112,7 +112,7 @@ describe("Ability - Marvel Scale", () => {
     const { override, field, classicMode } = game;
     override.statusEffect(StatusEffect.PARALYSIS).passiveAbility(AbilityId.GRASS_PELT);
 
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
     const enemy = field.getEnemyPokemon();
     game.move.use(MoveId.GRASSY_TERRAIN);

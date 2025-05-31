@@ -32,7 +32,7 @@ describe("Abilities - Screen Cleaner", () => {
     game.override.moveset([MoveId.HAIL]);
     game.override.enemyMoveset([MoveId.AURORA_VEIL, MoveId.AURORA_VEIL, MoveId.AURORA_VEIL, MoveId.AURORA_VEIL]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.HAIL);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -49,7 +49,7 @@ describe("Abilities - Screen Cleaner", () => {
   it("removes Light Screen", async () => {
     game.override.enemyMoveset(MoveId.LIGHT_SCREEN);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -66,7 +66,7 @@ describe("Abilities - Screen Cleaner", () => {
   it("removes Reflect", async () => {
     game.override.enemyMoveset(MoveId.REFLECT);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");

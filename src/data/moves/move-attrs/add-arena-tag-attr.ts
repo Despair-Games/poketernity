@@ -38,7 +38,7 @@ export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The number of turns the added tag remains in effect.
-   * @default 0, which denotes an arena tag that lasts indefinitely until the next arena reset.
+   * @defaultValue `0`, which denotes an arena tag that lasts indefinitely until the next arena reset.
    */
   public get turnCount() {
     return this.options?.turnCount ?? 0;
@@ -47,7 +47,7 @@ export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
   /**
    * If `true`, causes the move to fail when a tag already exists
    * where it would otherwise be added on the field.
-   * @default false
+   * @defaultValue `false`
    */
   public get failOnOverlap() {
     return this.options?.failOnOverlap ?? false;

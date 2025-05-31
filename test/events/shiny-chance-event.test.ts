@@ -2,6 +2,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import { Egg } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EventModifierType } from "#enums/event-modifier-type";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
 import type { TimedEvent } from "#types/timed-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -44,7 +45,7 @@ describe("Shiny Chance Modifier Event", () => {
     expect(timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)).toBeTruthy();
     expect(timedEventManager.getWildShinyChanceMultiplier()).toBe(9000);
 
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     expect(game.field.getEnemyPokemon().isShiny()).toBeTruthy();
   });
 

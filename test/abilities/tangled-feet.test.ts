@@ -60,7 +60,7 @@ describe("Ability - Tangled Feet", () => {
   describe("When NOT Confused", () => {
     it("Should NOT affect enemy accuracy", async () => {
       const { classicMode, move, field } = game;
-      await classicMode.startBattle([SpeciesId.FEEBAS]);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
       const playerPkm = field.getPlayerPokemon();
       const enemyPkm = field.getEnemyPokemon();
       vi.spyOn(enemyPkm, "getAccuracyMultiplier");
@@ -78,7 +78,7 @@ describe("Ability - Tangled Feet", () => {
   describe("When Confused", () => {
     it.each(statStages)("should half enemy accuracy (EVA = $stageStr)", async ({ stage }) => {
       const { classicMode, move, field } = game;
-      await classicMode.startBattle([SpeciesId.FEEBAS]);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
       const playerPkm = field.getPlayerPokemon();
       playerPkm.setStatStage(Stat.EVA, stage);
       const enemyPkm = field.getEnemyPokemon();
@@ -107,7 +107,7 @@ describe("Ability - Tangled Feet", () => {
     it.each(ignoringAbilities)("should be bypassed by $abilityName Ability", async ({ abilityId }) => {
       const { override, classicMode, move, field } = game;
       override.enemyAbility(abilityId);
-      await classicMode.startBattle([SpeciesId.FEEBAS]);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
       const playerPkm = field.getPlayerPokemon();
       const enemyPkm = field.getEnemyPokemon();
       vi.spyOn(enemyPkm, "getAccuracyMultiplier");
@@ -143,7 +143,7 @@ describe("Ability - Tangled Feet", () => {
       async ({ passiveAbilityId, weatherType, passiveAbilityMultiplier }) => {
         const { override, classicMode, move, field } = game;
         override.passiveAbility(passiveAbilityId).weather(weatherType);
-        await classicMode.startBattle([SpeciesId.FEEBAS]);
+        await classicMode.startBattle(SpeciesId.FEEBAS);
         const playerPkm = field.getPlayerPokemon();
         const enemyPkm = field.getEnemyPokemon();
         vi.spyOn(enemyPkm, "getAccuracyMultiplier");

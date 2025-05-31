@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -36,7 +42,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import { PokemonSummonData } from "#field/pokemon-summon-data";
 import Trainer from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
@@ -66,7 +71,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, isNil } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -354,9 +359,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Set summon data fields
-      if (!enemyPokemon.summonData) {
-        enemyPokemon.summonData = new PokemonSummonData();
-      }
+      enemyPokemon.resetSummonData();
 
       // Set ability
       if (!isNil(config.abilityIndex)) {
@@ -467,7 +470,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
 /**
  * Load special move animations/sfx for hard-coded encounter-specific moves that a pokemon uses at the start of an encounter
- * See: [startOfBattleEffects](IMysteryEncounter.startOfBattleEffects) for more details
+ * See: {@linkcode IMysteryEncounter.startOfBattleEffects} for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
  * @param moveIds The move or moves the Pokemon uses at the start of the encounter
@@ -997,7 +1000,7 @@ export function handleMysteryEncounterBattleStartEffects() {
 /**
  * Can queue extra phases or logic during {@linkcode TurnInitPhase}
  * Should mostly just be used for injecting custom phases into the battle system on turn start
- * @return boolean - if true, will skip the remainder of the {@linkcode TurnInitPhase}
+ * @returns Whether to skip the remainder of the {@linkcode TurnInitPhase}
  */
 export function handleMysteryEncounterTurnStartEffects(): boolean {
   const encounter = globalScene.currentBattle.mysteryEncounter;
@@ -1017,7 +1020,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
   const biomes = Object.keys(BiomeId).filter((key) => Number.isNaN(Number(key)));
-  const alwaysPickTheseBiomes = [
+  const alwaysPickTheseBiomes: readonly BiomeId[] = [
     BiomeId.ISLAND,
     BiomeId.ABYSS,
     BiomeId.WASTELAND,
@@ -1034,7 +1037,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     let mostRecentEncounterWave = 0;
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
-    let currentBiome = BiomeId.TOWN;
+    let currentBiome: BiomeId = BiomeId.TOWN;
     let currentArena = globalScene.newArena(currentBiome);
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
@@ -1090,7 +1093,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // Otherwise, roll encounter
 
       const roll = randSeedInt(256);
-      validMEfloorsByBiome.set(BiomeId[currentBiome], (validMEfloorsByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
+      const biomeKey = enumValueToKey(BiomeId, currentBiome);
+      validMEfloorsByBiome.set(biomeKey, (validMEfloorsByBiome.get(biomeKey) ?? 0) + 1);
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
@@ -1126,7 +1130,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
             : tierValue > rareThreshold
               ? ++numEncounters[2]
               : ++numEncounters[3];
-        encountersByBiome.set(BiomeId[currentBiome], (encountersByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
+        const biomeKey = enumValueToKey(BiomeId, currentBiome);
+        encountersByBiome.set(biomeKey, (encountersByBiome.get(biomeKey) ?? 0) + 1);
       } else {
         encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }

@@ -37,7 +37,7 @@ describe("Abilities - Teraform Zero", () => {
     { weatherName: "Rain", weatherType: WeatherType.RAIN },
     { weatherName: "Strong Winds", weatherType: WeatherType.STRONG_WINDS },
   ])("should clear weather upon Terastallization if the current weather is $weatherName", async ({ weatherType }) => {
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     // Set weather manually. We cannot use the weather override because it also overrides Teraform Zero's effect.
     game.scene.arena.trySetWeather(weatherType, false);
@@ -53,7 +53,7 @@ describe("Abilities - Teraform Zero", () => {
 
   it("should not clear weather if the ability is suppressed", async () => {
     game.override.enemyAbility(AbilityId.NEUTRALIZING_GAS);
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     // Set weather manually. We cannot use the weather override because it also overrides Teraform Zero's effect.
     game.scene.arena.trySetWeather(WeatherType.RAIN, false);
@@ -68,7 +68,7 @@ describe("Abilities - Teraform Zero", () => {
   });
 
   it("should allow weather to be set again after Terastallization", async () => {
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.use(MoveId.RAIN_DANCE, 0, null, true); // Activate Terastallization
@@ -87,7 +87,7 @@ describe("Abilities - Teraform Zero", () => {
     { terrainName: "No Terrain", terrainType: TerrainType.NONE },
     { terrainName: "Psychic Terrain", terrainType: TerrainType.PSYCHIC },
   ])("should clear terrain upon Terastallization if the current terrain is $terrainName", async ({ terrainType }) => {
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     // Set terrain manually. We cannot use the terrain override because it also overrides Teraform Zero's effect.
     game.scene.arena.trySetTerrain(terrainType, false);
@@ -103,7 +103,7 @@ describe("Abilities - Teraform Zero", () => {
 
   it("should not clear terrain if the ability is suppressed", async () => {
     game.override.enemyAbility(AbilityId.NEUTRALIZING_GAS);
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     // Set terrain manually. We cannot use the terrain override because it also overrides Teraform Zero's effect.
     game.scene.arena.trySetTerrain(TerrainType.MISTY, false);
@@ -118,7 +118,7 @@ describe("Abilities - Teraform Zero", () => {
   });
 
   it("should allow terrain to be set again after Terastallization", async () => {
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.use(MoveId.ELECTRIC_TERRAIN, 0, null, true); // Activate Terastallization

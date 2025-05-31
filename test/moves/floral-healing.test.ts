@@ -34,7 +34,7 @@ describe("Moves - Floral Healing", () => {
   });
 
   it("should heal the target by half of their maximum HP", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMaxHp").mockReturnValue(100);
@@ -49,7 +49,7 @@ describe("Moves - Floral Healing", () => {
   it("should heal the target by 2/3 of their maximum HP under Grassy Terrain", async () => {
     game.override.enemyAbility(AbilityId.GRASSY_SURGE);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMaxHp").mockReturnValue(100);

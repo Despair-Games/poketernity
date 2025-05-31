@@ -29,7 +29,7 @@ describe.todo("Items - Leek", () => {
   });
 
   it("should raise CRIT stage by 2 when held by FARFETCHD", async () => {
-    await game.startBattle([SpeciesId.FARFETCHD]);
+    await game.classicMode.startBattle(SpeciesId.FARFETCHD);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -43,7 +43,7 @@ describe.todo("Items - Leek", () => {
   }, 20000);
 
   it("should raise CRIT stage by 2 when held by GALAR_FARFETCHD", async () => {
-    await game.startBattle([SpeciesId.GALAR_FARFETCHD]);
+    await game.classicMode.startBattle(SpeciesId.GALAR_FARFETCHD);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -57,7 +57,7 @@ describe.todo("Items - Leek", () => {
   }, 20000);
 
   it("should raise CRIT stage by 2 when held by SIRFETCHD", async () => {
-    await game.startBattle([SpeciesId.SIRFETCHD]);
+    await game.classicMode.startBattle(SpeciesId.SIRFETCHD);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -71,7 +71,7 @@ describe.todo("Items - Leek", () => {
   }, 20000);
 
   it("should not raise CRIT stage when held by a Pokemon outside of FARFETCHD line", async () => {
-    await game.startBattle([SpeciesId.PIKACHU]);
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 

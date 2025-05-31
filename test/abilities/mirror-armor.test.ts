@@ -35,7 +35,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should reflect moves' stat-lowering effects onto the source", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -51,7 +51,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should reflect abilities' stat-lowering effects onto the source", async () => {
     game.override.ability(AbilityId.INTIMIDATE);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -61,7 +61,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should not divert self-targeted stat-lowering effects", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -77,7 +77,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should only reflect stat-lowering effects from Spicy Extract", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -92,7 +92,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should not reflect the stat-lowering effect from Octolock", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -109,7 +109,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should not reflect stat-lowering effects from another Pokemon's Mirror Armor", async () => {
     game.override.ability(AbilityId.MIRROR_ARMOR);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -125,7 +125,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should reflect Sticky Web's Speed drop if the source is on the field", async () => {
     game.override.startingWave(8);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(MoveId.STICKY_WEB);
     await game.move.forceEnemyMove(MoveId.U_TURN);
@@ -143,7 +143,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should prevent Sticky Web from activating if its source is not on the field", async () => {
     game.override.startingWave(8);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     game.move.use(MoveId.STICKY_WEB);
     await game.toNextTurn();
@@ -165,7 +165,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should not reflect stat-lowering effects targeting the ability source's ally", async () => {
     game.override.battleType("double").enemyAbility(AbilityId.NONE);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.scene.getEnemyField();
     game.field.mockAbility(enemyPokemon[0], AbilityId.MIRROR_ARMOR);
@@ -183,7 +183,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should not reflect stat stage changes for which the source already has -6 stages", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -199,7 +199,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should not reflect stat stage changes if the source has a Substitute", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -216,7 +216,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should be ignored by the attacker's Mold Breaker", async () => {
     game.override.ability(AbilityId.MOLD_BREAKER);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -231,7 +231,7 @@ describe("Abilities - Mirror Armor", () => {
   it("reflected stat changes should be blocked by the attacker's Clear Body", async () => {
     game.override.ability(AbilityId.CLEAR_BODY);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

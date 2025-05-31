@@ -1401,7 +1401,8 @@ export default class BattleScene extends SceneBase {
         isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
       const resetArenaState =
         isNewBiome
-        || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.currentBattle.battleType)
+        || this.currentBattle.battleType === BattleType.TRAINER
+        || this.currentBattle.battleType === BattleType.MYSTERY_ENCOUNTER
         || this.currentBattle.isClassicFinalBoss;
       this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
       this.trySpreadPokerus();
@@ -2046,7 +2047,7 @@ export default class BattleScene extends SceneBase {
    * TODO: Rewrite this later for weighting?
    */
   generateRandomBiome(_waveIndex: number): BiomeId {
-    const excludedBiomeIds = [BiomeId.TOWN, BiomeId.END];
+    const excludedBiomeIds: readonly BiomeId[] = [BiomeId.TOWN, BiomeId.END];
     return randSeedItem([...allBiomes.keys()].filter((b) => !excludedBiomeIds.includes(b)));
   }
 
@@ -2709,8 +2710,8 @@ export default class BattleScene extends SceneBase {
 
   /**
    * This function retrieves the sprite and audio keys for active Pokemon.
+   *
    * Active Pokemon include both enemy and player Pokemon of the current wave.
-   * Note: Questions on garbage collection go to @frutescens
    * @returns a string array of active sprite and audio keys that should not be deleted
    */
   getActiveKeys(): string[] {

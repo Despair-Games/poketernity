@@ -31,13 +31,12 @@ describe("Moves - Alluring Voice", () => {
       .enemyMoveset([MoveId.HOWL])
       .startingLevel(10)
       .enemyLevel(10)
-      .starterSpecies(SpeciesId.FEEBAS)
       .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.ALLURING_VOICE]);
   });
 
   it("should confuse the opponent if their stat stages were raised", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

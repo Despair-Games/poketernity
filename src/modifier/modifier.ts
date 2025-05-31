@@ -411,7 +411,6 @@ export class AddVoucherModifier extends ConsumableModifier {
  * will reset {@linkcode battleCount} back to {@linkcode maxBattles} of the
  * existing modifier instead of adding that modifier directly.
  * @extends PersistentModifier
- * @abstract
  * @see {@linkcode add}
  */
 export abstract class LapsingPersistentModifier extends PersistentModifier {
@@ -1607,8 +1606,7 @@ export class FlinchChanceModifier extends PokemonHeldItemModifier {
    * @returns `true` if {@linkcode FlinchChanceModifier} has been applied
    */
   override apply(pokemon: Pokemon, flinched: BooleanHolder): boolean {
-    // The check for pokemon.summonData is to ensure that a crash doesn't occur when a Pokemon with King's Rock procs a flinch
-    if (pokemon.summonData && !flinched.value && pokemon.randSeedInt(100) < this.getStackCount() * this.chance) {
+    if (!flinched.value && pokemon.randSeedInt(100) < this.getStackCount() * this.chance) {
       flinched.value = true;
       return true;
     }
@@ -1692,8 +1690,8 @@ export class TurnStatusEffectModifier extends PokemonHeldItemModifier {
    * would be the only item able to {@linkcode apply} successfully.
    * @override
    * @param modifier {@linkcode Modifier} being type tested
-   * @return `true` if {@linkcode modifier} is an instance of
-   * TurnStatusEffectModifier, false otherwise
+   * @returns `true` if {@linkcode modifier} is an instance of
+   * {@linkcode TurnStatusEffectModifier}, `false` otherwise
    */
   matchType(modifier: Modifier): boolean {
     return modifier instanceof TurnStatusEffectModifier;
@@ -1845,7 +1843,8 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
-    if ([BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA].includes(this.berryType)) {
+    const twoStackBerries: readonly BerryType[] = [BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA];
+    if (twoStackBerries.includes(this.berryType)) {
       return 2;
     }
     return 3;

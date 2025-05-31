@@ -45,7 +45,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   });
 
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT", async () => {
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.ZEKROM);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
     game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
@@ -65,7 +65,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_BOLT should double power of subsequent FUSION_FLARE", async () => {
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.ZEKROM);
 
     game.move.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
     game.move.select(fusionFlare.id, 1, BattlerIndex.ENEMY);
@@ -85,7 +85,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT if a move failed in between", async () => {
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.ZEKROM);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.PLAYER);
     game.move.select(fusionBolt.id, 1, BattlerIndex.PLAYER);
@@ -111,7 +111,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   it("FUSION_FLARE should not double power of subsequent FUSION_BOLT if a move succeeded in between", async () => {
     game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.ZEKROM);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
     game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
@@ -135,7 +135,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT if moves are aimed at allies", async () => {
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.RESHIRAM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.RESHIRAM);
 
     game.move.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
     game.move.select(fusionFlare.id, 1, BattlerIndex.PLAYER);
@@ -156,7 +156,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves", async () => {
     game.override.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.ZEKROM);
 
     const party = game.scene.getPlayerParty();
     const enemyParty = game.scene.getEnemyParty();
@@ -210,7 +210,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves if moves are aimed at allies", async () => {
     game.override.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
-    await game.startBattle([SpeciesId.ZEKROM, SpeciesId.ZEKROM]);
+    await game.classicMode.startBattle(SpeciesId.ZEKROM, SpeciesId.ZEKROM);
 
     const party = game.scene.getPlayerParty();
     const enemyParty = game.scene.getEnemyParty();

@@ -14,7 +14,6 @@ import overrides from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
-import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/button";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
@@ -24,7 +23,7 @@ import { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { PokeballType } from "#enums/pokeball-type";
-import type { SpeciesId } from "#enums/species-id";
+import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -238,14 +237,15 @@ export class GameManager {
   /**
    * Runs the game to a mystery encounter phase.
    * @param encounterType if specified, will expect encounter to have been spawned
-   * @param species Optional array of species for party.
+   * @param species Optional array of species for party. If not provided, a party of Feebas, Magikarp and Feebas is used.
    * @returns A promise that resolves when the EncounterPhase ends.
+   * @todo Move to a `MysteryEncounter` helper class
    */
   async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
     if (!isNil(encounterType)) {
-      this.override.trainerChance(0);
-      this.override.mysteryEncounter(encounterType);
+      this.override.trainerChance(0).mysteryEncounter(encounterType);
     }
+    species ??= [SpeciesId.FEEBAS, SpeciesId.MAGIKARP, SpeciesId.FEEBAS];
 
     await this.runToTitle();
 
@@ -277,42 +277,6 @@ export class GameManager {
     if (!isNil(encounterType)) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
-  }
-
-  /**
-   * @deprecated Use `game.classicMode.startBattle()` or `game.dailyMode.startBattle()` instead
-   *
-   * Transitions to the start of a battle.
-   * @param species - Optional array of species to start the battle with.
-   * @returns A promise that resolves when the battle is started.
-   */
-  async startBattle(species?: SpeciesId[]) {
-    await this.classicMode.runToSummon(species);
-
-    if (settings.general.battleStyle === BattleStyle.SWITCH) {
-      this.onNextPrompt(
-        "CheckSwitchPhase",
-        UiMode.CONFIRM,
-        () => {
-          this.setMode(UiMode.MESSAGE);
-          this.endPhase();
-        },
-        () => this.isCurrentPhase("CommandPhase") || this.isCurrentPhase("TurnInitPhase"),
-      );
-
-      this.onNextPrompt(
-        "CheckSwitchPhase",
-        UiMode.CONFIRM,
-        () => {
-          this.setMode(UiMode.MESSAGE);
-          this.endPhase();
-        },
-        () => this.isCurrentPhase("CommandPhase") || this.isCurrentPhase("TurnInitPhase"),
-      );
-    }
-
-    await this.phaseInterceptor.to("CommandPhase");
-    console.log("==================[New Turn]==================");
   }
 
   /**
