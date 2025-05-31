@@ -45,12 +45,12 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
    * @todo Move types are only derived from their base type, not {@linkcode Pokemon.getMoveType}
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    const { ignoreImmunity } = getBattlerTag(this.tagType, 0, move.id, 0) as ExposedTag;
+    const stubTag = getBattlerTag(this.tagType, 0, move.id, 0) as ExposedTag;
     const targetTypes = target.getTypes(true, true);
     const allyAttacks = user.getField().flatMap((p) => p.getAttackMoves(true));
 
     for (const t of targetTypes) {
-      if (allyAttacks.some((mv) => ignoreImmunity(t, mv.type))) {
+      if (allyAttacks.some((mv) => stubTag.ignoreImmunity(t, mv.type))) {
         return MINOR_EFFECT_SCORE_BONUS;
       }
     }
