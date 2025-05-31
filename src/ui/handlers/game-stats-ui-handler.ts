@@ -215,8 +215,14 @@ const displayStats: DisplayStats = {
 };
 
 export class GameStatsUiHandler extends UiHandler {
+  private readonly ROWS_ON_SCREEN = 9;
+  private readonly NUM_COLUMNS = 2;
+  private readonly MAX_STATS_ON_SCREEN = this.ROWS_ON_SCREEN * this.NUM_COLUMNS;
+  private readonly MAX_CURSOR = Math.ceil(
+    (Object.keys(displayStats).length - this.MAX_STATS_ON_SCREEN) / this.NUM_COLUMNS,
+  );
+
   private gameStatsContainer: Phaser.GameObjects.Container;
-  private statsContainer: Phaser.GameObjects.Container;
 
   private statLabels: Phaser.GameObjects.Text[];
   private statValues: Phaser.GameObjects.Text[];
@@ -238,60 +244,57 @@ export class GameStatsUiHandler extends UiHandler {
 
     const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
+    this.gameStatsContainer.add(headerBg);
 
     const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
+    this.gameStatsContainer.add(headerText);
 
-    const statsBgWidth = (GAME_WIDTH - 2) / 2;
-    const [statsBgLeft, statsBgRight] = new Array(2).fill(null).map((_, i) => {
-      const width = statsBgWidth + 2;
-      const height = Math.floor(GAME_HEIGHT - headerBg.height - 2);
+    const statsBgWidth = Math.floor((GAME_WIDTH - 2) / this.NUM_COLUMNS);
+    const statsBgHeight = Math.floor(GAME_HEIGHT - headerBg.height - 2);
+
+    for (let i = 0; i < this.NUM_COLUMNS; i++) {
+      const xPosition = (statsBgWidth - 2) * i;
+      // Create the background window for each panel
       const statsBg = addWindow(
-        (statsBgWidth - 2) * i,
+        xPosition,
         headerBg.height,
-        width,
-        height,
+        statsBgWidth + (i > 0 ? 2 : 0) + (i < this.NUM_COLUMNS - 1 ? 2 : 0),
+        statsBgHeight,
         false,
         false,
         i > 0 ? -3 : 0,
         1,
       );
       statsBg.setOrigin(0, 0);
-      return statsBg;
-    });
+      this.gameStatsContainer.add(statsBg);
 
-    this.statsContainer = globalScene.add.container(0, 0);
-
-    // TODO: seems like it would be best for performance to use single text objects with line breaks
-    // (2 objects with left alignment for the labels, 2 with right alignment for the values)
-    new Array(18).fill(null).map((_, s) => {
-      const statLabel = addTextObject(
-        8 + (s % 2 === 1 ? statsBgWidth : 0),
-        28 + Math.floor(s / 2) * 16,
-        "",
-        TextStyle.STATS_LABEL,
-      );
+      // Create a single text object for all labels to save on resources
+      const statLabel = addTextObject(statsBg.x + 8, statsBg.y + 5, "", TextStyle.STATS_LABEL, {
+        lineSpacing: 12,
+        maxLines: this.ROWS_ON_SCREEN,
+      });
       statLabel.setOrigin(0, 0);
-      this.statsContainer.add(statLabel);
+      this.gameStatsContainer.add(statLabel);
       this.statLabels.push(statLabel);
 
-      const statValue = addTextObject(statsBgWidth * ((s % 2) + 1) - 8, statLabel.y, "", TextStyle.STATS_VALUE);
+      // Create a single text object for all values to save on resources
+      const statValue = addTextObject(statsBg.x + statsBgWidth - 5, statsBg.y + 5, "", TextStyle.STATS_VALUE, {
+        align: "right",
+        lineSpacing: 12,
+        maxLines: this.ROWS_ON_SCREEN,
+      });
       statValue.setOrigin(1, 0);
-      this.statsContainer.add(statValue);
+      this.gameStatsContainer.add(statValue);
       this.statValues.push(statValue);
-    });
+    }
 
-    this.gameStatsContainer.add(headerBg);
-    this.gameStatsContainer.add(headerText);
-    this.gameStatsContainer.add(statsBgLeft);
-    this.gameStatsContainer.add(statsBgRight);
-    this.gameStatsContainer.add(this.statsContainer);
-
-    // arrows to show that we can scroll through the stats
-    this.arrowDown = globalScene.add.sprite(statsBgWidth, GAME_HEIGHT - 5, "prompt");
+    // Create arrows to show that we can scroll through the stats. TODO: replace with scrollbar?
+    const centerX = Math.floor(headerBg.width / 2);
+    this.arrowDown = globalScene.add.sprite(centerX, GAME_HEIGHT - 5, "prompt");
     this.gameStatsContainer.add(this.arrowDown);
-    this.arrowUp = globalScene.add.sprite(statsBgWidth, headerBg.height + 3, "prompt");
+    this.arrowUp = globalScene.add.sprite(centerX, headerBg.height + 3, "prompt");
     this.arrowUp.flipY = true;
     this.gameStatsContainer.add(this.arrowUp);
 
@@ -326,22 +329,27 @@ export class GameStatsUiHandler extends UiHandler {
   }
 
   updateStats(): void {
-    const statKeys = Object.keys(displayStats).slice(this.cursor * 2, this.cursor * 2 + 18);
-    statKeys.forEach((key, s) => {
+    const labels = new Array(this.NUM_COLUMNS);
+    const values = new Array(this.NUM_COLUMNS);
+    for (let col = 0; col < this.NUM_COLUMNS; col++) {
+      labels[col] = [];
+      values[col] = [];
+    }
+
+    const startIndex = this.cursor * this.NUM_COLUMNS;
+    const statKeys = Object.keys(displayStats).slice(startIndex, startIndex + this.MAX_STATS_ON_SCREEN);
+    statKeys.forEach((key, i) => {
       const stat = displayStats[key] as DisplayStat;
-      const value = stat.sourceFunc!(globalScene.gameData); // TODO: is this bang correct?
-      this.statLabels[s].setText(
-        !stat.hidden || Number.isNaN(Number.parseInt(value)) || Number.parseInt(value)
-          ? i18next.t(`gameStatsUiHandler:${stat.label_key}`)
-          : "???",
-      );
-      this.statValues[s].setText(value);
+      const column = i % this.NUM_COLUMNS;
+      const value = stat.sourceFunc(globalScene.gameData);
+      const showStat = !stat.hidden || Number.isNaN(Number.parseInt(value)) || Number.parseInt(value);
+      labels[column].push(showStat ? i18next.t(`gameStatsUiHandler:${stat.label_key}`) : "???");
+      values[column].push(value);
     });
-    if (statKeys.length < 18) {
-      for (let s = statKeys.length; s < 18; s++) {
-        this.statLabels[s].setText("");
-        this.statValues[s].setText("");
-      }
+
+    for (let col = 0; col < this.NUM_COLUMNS; col++) {
+      this.statLabels[col].setText(labels[col].join("\n"));
+      this.statValues[col].setText(values[col].join("\n"));
     }
   }
 
@@ -352,7 +360,7 @@ export class GameStatsUiHandler extends UiHandler {
     const showUpArrow = this.cursor > 0;
     this.arrowUp.setVisible(showUpArrow);
 
-    const showDownArrow = this.cursor < Math.ceil((Object.keys(displayStats).length - 18) / 2);
+    const showDownArrow = this.cursor < this.MAX_CURSOR;
     this.arrowDown.setVisible(showDownArrow);
   }
 
@@ -372,7 +380,7 @@ export class GameStatsUiHandler extends UiHandler {
           }
           break;
         case Button.DOWN:
-          if (this.cursor < Math.ceil((Object.keys(displayStats).length - 18) / 2)) {
+          if (this.cursor < this.MAX_CURSOR) {
             success = this.setCursor(this.cursor + 1);
           }
           break;
