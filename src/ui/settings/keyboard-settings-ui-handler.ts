@@ -1,7 +1,7 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
