@@ -14,12 +14,12 @@ import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
-import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
+import { getTSEnumValues } from "#utils/common-utils";
 
 export async function populateAnims() {
-  const commonAnimNames = getTSEnumKeys(CommonAnim).map((k) => k.toLowerCase());
+  const commonAnimNames = Object.keys(CommonAnim).map((k) => k.toLowerCase());
   const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
-  const commonAnimIds: CommonAnim[] = getTSEnumValues(CommonAnim);
+  const commonAnimIds: CommonAnim[] = Object.values(CommonAnim);
   const chargeAnimNames = Object.keys(ChargeAnim).map((k) => k.toLowerCase());
   const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
   const chargeAnimIds: ChargeAnim[] = Object.values(ChargeAnim);

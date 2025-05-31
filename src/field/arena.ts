@@ -384,7 +384,7 @@ export class Arena {
    */
   tryOverrideWeather(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
+    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase((CommonAnim.SUNNY + (weather - 1)) as CommonAnim));
     globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
     return true;
   }
@@ -396,7 +396,9 @@ export class Arena {
    */
   tryOverrideTerrain(terrain: TerrainType): boolean {
     this.terrain = new Terrain(terrain, 0);
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+    globalScene.phaseManager.unshiftPhase(
+      new CommonAnimPhase((CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim),
+    );
     globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     return true;
   }
@@ -449,7 +451,9 @@ export class Arena {
     }
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
+      globalScene.phaseManager.unshiftPhase(
+        new CommonAnimPhase((CommonAnim.SUNNY + (newWeatherType - 1)) as CommonAnim),
+      );
       globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
@@ -539,7 +543,9 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.phaseManager.unshiftPhase(
+          new CommonAnimPhase((CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim),
+        );
       }
       globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     } else {
