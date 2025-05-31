@@ -4,6 +4,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";
+import { enumValueToKey } from "#utils/common-utils";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -76,8 +77,8 @@ describe("All Moves", async () => {
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
       expect(
         pktyMove.type,
-        `Elemntal type of ${MoveId[pktyMove.id]} should be ${ElementalType[move.type_id - 1]} but is ${ElementalType[pktyMove.type]}`,
-      ).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
+        `Elemntal type of ${MoveId[pktyMove.id]} should be ${enumValueToKey(ElementalType, move.type_id as ElementalType)} but is ${enumValueToKey(ElementalType, pktyMove.type)}`,
+      ).toBe(move.type_id); // PokeAPI begins its list of types with the number 1
       expect(
         pktyMove.accuracy,
         `Accuracy of ${MoveId[pktyMove.id]} should be ${move.accuracy} but is ${pktyMove.accuracy}`,

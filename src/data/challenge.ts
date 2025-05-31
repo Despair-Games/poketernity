@@ -576,7 +576,7 @@ export class SingleTypeChallenge extends Challenge {
         }
       }
     }
-    if (!types.includes(this.value - 1)) {
+    if (!types.includes(this.value as ElementalType)) {
       valid.value = false;
       return true;
     }
@@ -586,9 +586,9 @@ export class SingleTypeChallenge extends Challenge {
   override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     if (
       pokemon.isPlayer()
-      && !pokemon.isOfType(this.value - 1, false, false, true)
+      && !pokemon.isOfType(this.value as ElementalType, false, false, true)
       && !SingleTypeChallenge.TYPE_OVERRIDES.some(
-        (o) => o.type === this.value - 1 && pokemon.species.speciesId === o.species,
+        (o) => o.type === this.value && pokemon.species.speciesId === o.species,
       )
     ) {
       valid.value = false;
@@ -608,7 +608,7 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    return ElementalType[value - 1].toLowerCase();
+    return enumValueToKey(ElementalType, value as ElementalType).toLowerCase();
   }
 
   /**
@@ -617,12 +617,12 @@ export class SingleTypeChallenge extends Challenge {
    * @returns The localised description for the current value.
    */
   override getDescription(overrideValue?: number): string {
-    const value = overrideValue ?? this.value;
-    const type = i18next.t(`pokemonInfo:Type.${ElementalType[value - 1]}`);
-    const typeColor = `[color=${TypeColor[ElementalType[value - 1]]}][shadow=${TypeShadowColor[ElementalType[value - 1]]}]${type}[/shadow][/color]`;
+    const value = (overrideValue ?? this.value) as ElementalType;
+    const type = i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, value)}`);
+    const typeColor = `[color=${TypeColor[enumValueToKey(ElementalType, value)]}][shadow=${TypeShadowColor[enumValueToKey(ElementalType, value)]}]${type}[/shadow][/color]`;
     const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
-    return value === 0 ? defaultDesc : typeDesc;
+    return (value as number) === 0 ? defaultDesc : typeDesc;
   }
 
   static override loadChallenge(source: SingleTypeChallenge | any): SingleTypeChallenge {

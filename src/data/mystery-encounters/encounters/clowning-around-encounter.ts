@@ -152,7 +152,10 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         {
           // Blacephalon has the random ability from pool, and 2 entirely random types to fit with the theme of the encounter
           species: getPokemonSpecies(SpeciesId.BLACEPHALON),
-          customPokemonData: new CustomPokemonData({ ability: ability, types: [randSeedInt(18), randSeedInt(18)] }),
+          customPokemonData: new CustomPokemonData({
+            ability: ability,
+            types: [randSeedInt(18, 1) as ElementalType, randSeedInt(18, 1) as ElementalType],
+          }),
           isBoss: true,
           moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
         },
