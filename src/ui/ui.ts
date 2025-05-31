@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { logUiEvent } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import type { Button } from "#enums/button";
@@ -190,6 +191,8 @@ export class UI extends Phaser.GameObjects.Container {
       return; // Only setup once
     }
 
+    logUiEvent("Initializing UI and default handlers");
+
     this.setName(`ui-${UiMode[this.mode]}`);
 
     // Initialize the default handler
@@ -335,7 +338,7 @@ export class UI extends Phaser.GameObjects.Container {
    */
   private addUiHandler(mode: UiMode): UiHandler {
     const handler = this.createUiHandler(mode);
-    console.log(`Initializing UI handler for mode: ${UiMode[mode]}`, mode);
+    logUiEvent(`Initializing Handler for mode: ${UiMode[mode]} (${mode})`);
     this.handlers.set(mode, handler);
     handler.initialize();
     return handler;
@@ -349,7 +352,7 @@ export class UI extends Phaser.GameObjects.Container {
     const deleteHandler = (mode: UiMode) => {
       const handler = this.handlers.get(mode);
       if (handler && !handler.active) {
-        console.log(`Destroying UI handler for mode: ${UiMode[mode]}`);
+        logUiEvent(`Destroying Handler for mode: ${UiMode[mode]} (${mode})`);
         this.handlers.delete(mode);
         if (handler.ready) {
           handler.destroy();
@@ -398,6 +401,7 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   public override destroy(fromScene?: boolean): void {
+    logUiEvent("Destroying UI and all handlers");
     // Clear references to current handlers in the NavigationManager
     NavigationManager.getInstance().clearMenus();
 
@@ -743,7 +747,10 @@ export class UI extends Phaser.GameObjects.Container {
     chainMode: boolean,
     ...params: Parameters<THandler["show"]>
   ): Promise<void> {
-    console.log("SET MODE", UiMode[this.mode], "=>", UiMode[mode], clear, forceTransition, chainMode);
+    logUiEvent(
+      `Set ${UiMode[mode]} (${mode}) Mode${chainMode ? " as overlay" : ""}`,
+      `(${clear ? "" : "not "}clearing ${UiMode[this.mode]})`,
+    );
     return new Promise((resolve) => {
       if (this.mode === mode && !forceTransition) {
         resolve();
@@ -805,6 +812,7 @@ export class UI extends Phaser.GameObjects.Container {
         this.stopCurrentHandler();
         this.mode = this.modeChain.pop()!;
         globalScene.updateGameInfo();
+        logUiEvent(`Set ${UiMode[this.mode]} (${this.mode}) Mode (reverting from ${UiMode[lastMode]})`);
         const touchControls = document.getElementById("touchControls");
         if (touchControls) {
           touchControls.dataset.uiMode = UiMode[this.mode];

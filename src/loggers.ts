@@ -74,3 +74,9 @@ export function logModifiers(...args: any[]): void {
     console.log(...args);
   }
 }
+
+export function logUiEvent(...args: any[]): void {
+  if (import.meta.env.VITE_UI_DEBUG === "1") {
+    console.log("[UI]", ...args);
+  }
+}
