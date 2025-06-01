@@ -4,7 +4,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * BattlerTag to keep track if a Pokemon is transformed.
- * A transformed Pokemon cannot be the target of Transform/Imposter
+ * A transformed Pokemon cannot be the target of Transform/Imposter.
  */
 export class TransformedTag extends BattlerTag {
   constructor() {

@@ -54,9 +54,12 @@ export class TransformAttr extends MoveEffectAttr {
 export function canTransform(user: Pokemon, target: Pokemon): boolean {
   if (
     user.hasTag(BattlerTagType.TRANSFORMED)
-    || target.hasTag(BattlerTagType.TRANSFORMED)
-    || target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
-    || target.hasTag(BattlerTagType.SUBSTITUTE)
+    || target.hasTag(
+      BattlerTagType.TRANSFORMED,
+      BattlerTagType.SUBSTITUTE,
+      BattlerTagType.SKY_DROP, // Sky drop is not part of the semi invuln tag array at the moment
+      ...SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+    )
   ) {
     return false;
   }
