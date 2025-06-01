@@ -296,7 +296,7 @@ export function initMoves() {
     new AttackMove(MoveId.CUT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 95, 30, -1, 0, 1)
       .slicingMove(),
     new AttackMove(MoveId.GUST, ElementalType.FLYING, MoveCategory.SPECIAL, 40, 100, 35, -1, 0, 1)
-      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.FLYING)
+      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .windMove(),
     new AttackMove(MoveId.WING_ATTACK, ElementalType.FLYING, MoveCategory.PHYSICAL, 60, 100, 35, -1, 0, 1),
@@ -308,7 +308,7 @@ export function initMoves() {
       .bounceable(),
     new ChargingAttackMove(MoveId.FLY, ElementalType.FLYING, MoveCategory.PHYSICAL, 90, 95, 15, -1, 0, 1)
       .chargeText(i18next.t("moveTriggers:flewUpHigh", { pokemonName: "{USER}" }))
-      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.FLYING)
+      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.MID_AIR)
       .condition(failOnGravityCondition),
     new AttackMove(MoveId.BIND, ElementalType.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1)
       .attr(TrapAttr, BattlerTagType.BIND),
@@ -515,7 +515,7 @@ export function initMoves() {
     new AttackMove(MoveId.THUNDER, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .attr(ThunderAccuracyAttr)
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP),
     new AttackMove(MoveId.ROCK_THROW, ElementalType.ROCK, MoveCategory.PHYSICAL, 50, 90, 15, -1, 0, 1)
       .makesContact(false),
@@ -1030,7 +1030,7 @@ export function initMoves() {
     new AttackMove(MoveId.CROSS_CHOP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 80, 5, -1, 0, 2)
       .attr(HighCritAttr),
     new AttackMove(MoveId.TWISTER, ElementalType.DRAGON, MoveCategory.SPECIAL, 40, 100, 20, 20, 0, 2)
-      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.FLYING)
+      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .attr(FlinchAttr)
       .windMove()
@@ -1354,7 +1354,7 @@ export function initMoves() {
     new AttackMove(MoveId.EXTRASENSORY, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 20, 10, 0, 3)
       .attr(FlinchAttr),
     new AttackMove(MoveId.SKY_UPPERCUT, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 85, 90, 15, -1, 0, 3)
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .punchingMove(),
     new AttackMove(MoveId.SAND_TOMB, ElementalType.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
@@ -1397,7 +1397,7 @@ export function initMoves() {
       .snatchable(),
     new ChargingAttackMove(MoveId.BOUNCE, ElementalType.FLYING, MoveCategory.PHYSICAL, 85, 85, 5, 30, 0, 3)
       .chargeText(i18next.t("moveTriggers:sprangUp", { pokemonName: "{USER}" }))
-      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.FLYING)
+      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.MID_AIR)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .condition(failOnGravityCondition),
     new AttackMove(MoveId.MUD_SHOT, ElementalType.GROUND, MoveCategory.SPECIAL, 55, 95, 15, 100, 0, 3)
@@ -1871,8 +1871,8 @@ export function initMoves() {
     new AttackMove(MoveId.SMACK_DOWN, ElementalType.ROCK, MoveCategory.PHYSICAL, 50, 100, 15, -1, 0, 5)
       .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
-      .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.MID_AIR, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .makesContact(false)
       .edgeCase(), // Should hit a Pokemon lifted up by Sky Drop without permanently grounding it
@@ -2106,7 +2106,7 @@ export function initMoves() {
     new AttackMove(MoveId.HURRICANE, ElementalType.FLYING, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 5)
       .attr(ThunderAccuracyAttr)
       .attr(ConfuseAttr)
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .windMove(),
     new AttackMove(MoveId.HEAD_CHARGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 5)
@@ -2370,11 +2370,11 @@ export function initMoves() {
     new AttackMove(MoveId.THOUSAND_ARROWS, ElementalType.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
       .attr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
       .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.FLOATING)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
-      .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.MID_AIR, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .edgeCase(), // Should hit a Pokemon lifted up by Sky Drop without permanently grounding it
