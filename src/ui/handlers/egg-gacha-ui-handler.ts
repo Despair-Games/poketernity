@@ -6,7 +6,7 @@ import type { EggOptions } from "#data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#data/egg";
 import { Button } from "#enums/button";
 import type { EggSourceType } from "#enums/egg-source-types";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { GachaType } from "#enums/gacha-types";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";

@@ -30,7 +30,7 @@ import {
 import { speciesEggTiers } from "#data/species-egg-tiers";
 import { speciesStarterCosts } from "#data/starters";
 import { EggSourceType } from "#enums/egg-source-types";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
 import type { PlayerPokemon } from "#field/player-pokemon";

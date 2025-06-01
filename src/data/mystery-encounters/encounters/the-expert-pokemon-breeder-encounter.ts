@@ -5,7 +5,7 @@ import { getPokeballTintColor } from "#data/pokeball";
 import { speciesStarterCosts } from "#data/starters";
 import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-types";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
