@@ -6,6 +6,7 @@ export const AnimFrameTarget = {
   /**
    * Affects the animation's source or start point, e.g.
    * a Pokemon using a move.
+   * @todo make this start at 1
    */
   SOURCE: 0,
   /**

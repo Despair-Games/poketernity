@@ -78,7 +78,7 @@ import {
 } from "#constants/game-constants";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#data/data-lists";
-import { DexAttr } from "#data/dex-attributes";
+import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
 import { getNatureStatMultiplier } from "#data/nature";
@@ -613,11 +613,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isAllowedInBattle() && (!onField || this.isOnField());
   }
 
-  getDexAttr(): bigint {
+  /**
+   * @returns {@linkcode DexAttr}s with flags corresponding to the Pokemon's gender, shiny variant and form.
+   */
+  public getDexAttr(): bigint {
     let ret = 0n;
     ret |= this.gender !== Gender.FEMALE ? DexAttr.MALE : DexAttr.FEMALE;
-    ret |= !this.shiny ? DexAttr.NON_SHINY : DexAttr.SHINY;
-    ret |= this.variant >= 2 ? DexAttr.VARIANT_3 : this.variant === 1 ? DexAttr.VARIANT_2 : DexAttr.DEFAULT_VARIANT;
+    if (!this.shiny) {
+      ret |= DexAttr.NON_SHINY;
+    } else if (this.variant >= 2) {
+      ret |= DexAttr.SHINY_EPIC_VARIANT;
+    } else if (this.variant === 1) {
+      ret |= DexAttr.SHINY_RARE_VARIANT;
+    } else {
+      ret |= DexAttr.SHINY_BASE_VARIANT;
+    }
     ret |= globalScene.gameData.getFormAttr(this.getSelectableFormIndex());
     return ret;
   }
@@ -2699,7 +2709,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * @returns the {@linkcode ArenaTagSide} of the Pokemon
    */
-  getArenaTagSide(): ArenaTagSide.PLAYER | ArenaTagSide.ENEMY {
+  getArenaTagSide(): typeof ArenaTagSide.PLAYER | typeof ArenaTagSide.ENEMY {
     return this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
   }
 
@@ -2727,7 +2737,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * @returns the opposing {@linkcode ArenaTagSide} of the Pokemon
    */
-  getOpposingArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+  getOpposingArenaTagSide(): typeof ArenaTagSide.ENEMY | typeof ArenaTagSide.PLAYER {
     return this.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER;
   }
 
@@ -3471,7 +3481,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    const stubTag = new BattlerTag(tagType, 0, 0);
+    const stubTag = new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, 0);
 
     const cancelled = new BooleanHolder(false);
     applyAbAttrs<BattlerTagImmunityAbAttr>(AbAttrFlag.BATTLER_TAG_IMMUNITY, this, true, stubTag, cancelled);
@@ -4374,13 +4384,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns true if the player already has it, false otherwise
    */
   checkIfPlayerHasAbilityOfStarter(ownedAbilityAttrs: number): boolean {
-    if ((ownedAbilityAttrs & 1) > 0 && this.hasSameAbilityInRootForm(0)) {
+    if ((ownedAbilityAttrs & AbilityAttr.ABILITY_1) > 0 && this.hasSameAbilityInRootForm(0)) {
       return true;
     }
-    if ((ownedAbilityAttrs & 2) > 0 && this.hasSameAbilityInRootForm(1)) {
+    if ((ownedAbilityAttrs & AbilityAttr.ABILITY_2) > 0 && this.hasSameAbilityInRootForm(1)) {
       return true;
     }
-    if ((ownedAbilityAttrs & 4) > 0 && this.hasSameAbilityInRootForm(2)) {
+    if ((ownedAbilityAttrs & AbilityAttr.ABILITY_HIDDEN) > 0 && this.hasSameAbilityInRootForm(2)) {
       return true;
     }
     return false;
