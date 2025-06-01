@@ -2,7 +2,7 @@ import type BattleScene from "#app/battle-scene";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
