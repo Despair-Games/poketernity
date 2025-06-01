@@ -103,7 +103,9 @@ describe("Moves - Transform", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const moveset = player.getMoveset();
-    expect(moveset).toHaveLength(4);
+    const playerMovesetNames = moveset.map((m) => m.getName());
+    const enemyMovesetNames = enemy.getMoveset().map((m) => m.getName());
+    expect(moveset, `Player moveset: ${playerMovesetNames} | Enemy moveset: ${enemyMovesetNames}`).toHaveLength(4);
 
     for (const move of moveset) {
       // Should set correct maximum PP without touching `ppUp`

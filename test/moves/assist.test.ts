@@ -86,10 +86,11 @@ describe("Moves - Assist", () => {
   });
 
   it("should apply secondary effects of a move", async () => {
-    game.override.moveset([MoveId.ASSIST, MoveId.WOOD_HAMMER, MoveId.WOOD_HAMMER, MoveId.WOOD_HAMMER]);
     await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.SHUCKLE);
 
-    const [feebas] = game.scene.getPlayerField();
+    const [feebas, shuckle] = game.scene.getPlayerField();
+    game.move.changeMoveset(feebas, [MoveId.ASSIST, MoveId.WOOD_HAMMER]);
+    game.move.changeMoveset(shuckle, [MoveId.ASSIST, MoveId.WOOD_HAMMER]);
 
     game.move.select(MoveId.ASSIST, 0);
     game.move.select(MoveId.ASSIST, 1);
