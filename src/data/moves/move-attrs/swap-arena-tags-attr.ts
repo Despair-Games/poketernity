@@ -1,32 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { COURT_CHANGE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import i18next from "i18next";
-
-export const courtChangeArenaTags = [
-  ArenaTagType.AURORA_VEIL,
-  ArenaTagType.LIGHT_SCREEN,
-  ArenaTagType.MIST,
-  ArenaTagType.REFLECT,
-  ArenaTagType.SPIKES,
-  ArenaTagType.STEALTH_ROCK,
-  ArenaTagType.SHARP_STEEL,
-  ArenaTagType.STICKY_WEB,
-  ArenaTagType.TAILWIND,
-  ArenaTagType.TOXIC_SPIKES,
-  ArenaTagType.SAFEGUARD,
-  ArenaTagType.GRASS_WATER_PLEDGE,
-  ArenaTagType.FIRE_GRASS_PLEDGE,
-  ArenaTagType.WATER_FIRE_PLEDGE,
-  ArenaTagType.G_MAX_VINE_LASH,
-  ArenaTagType.G_MAX_WILDFIRE,
-  ArenaTagType.G_MAX_CANNONADE,
-  ArenaTagType.G_MAX_VOLCALITH,
-];
 
 /**
  * Swaps arena effects between the player and enemy side.
@@ -34,45 +13,44 @@ export const courtChangeArenaTags = [
  * @extends MoveEffectAttr
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {
-  public swappableTags: ArenaTagType[];
-
-  constructor(SwapTags: ArenaTagType[]) {
+  constructor() {
     super(true);
-    this.swappableTags = SwapTags;
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const tagPlayerTemp = globalScene.arena.getTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.PLAYER);
-    const tagEnemyTemp = globalScene.arena.getTags((t) => this.swappableTags.includes(t.tagType), ArenaTagSide.ENEMY);
+    const { arena, phaseManager } = globalScene;
 
-    if (tagPlayerTemp) {
-      for (const swapTagsType of tagPlayerTemp) {
-        globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.PLAYER, true);
-        globalScene.arena.addTag(
+    const playerTags = arena.getTags((t) => COURT_CHANGE_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.PLAYER);
+    const enemyTags = arena.getTags((t) => COURT_CHANGE_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.ENEMY);
+
+    if (playerTags) {
+      for (const swapTagsType of playerTags) {
+        arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.PLAYER, true);
+        arena.addTag(
           swapTagsType.tagType,
-          swapTagsType.sourceId!,
+          swapTagsType.sourceId!, // TODO: is the bang correct?
           swapTagsType.turnCount,
           swapTagsType.sourceMoveId,
           ArenaTagSide.ENEMY,
           true,
-        ); // TODO: is the bang correct?
+        );
       }
     }
-    if (tagEnemyTemp) {
-      for (const swapTagsType of tagEnemyTemp) {
-        globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.ENEMY, true);
-        globalScene.arena.addTag(
+    if (enemyTags) {
+      for (const swapTagsType of enemyTags) {
+        arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.ENEMY, true);
+        arena.addTag(
           swapTagsType.tagType,
-          swapTagsType.sourceId!,
+          swapTagsType.sourceId!, // TODO: is the bang correct?
           swapTagsType.turnCount,
           swapTagsType.sourceMoveId,
           ArenaTagSide.PLAYER,
           true,
-        ); // TODO: is the bang correct?
+        );
       }
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:swapArenaTags", { pokemonName: getPokemonNameWithAffix(user) }),
     );
     return true;

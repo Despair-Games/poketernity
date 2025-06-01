@@ -71,7 +71,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, isNil } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -1020,7 +1020,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
   const biomes = Object.keys(BiomeId).filter((key) => Number.isNaN(Number(key)));
-  const alwaysPickTheseBiomes = [
+  const alwaysPickTheseBiomes: readonly BiomeId[] = [
     BiomeId.ISLAND,
     BiomeId.ABYSS,
     BiomeId.WASTELAND,
@@ -1037,7 +1037,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     let mostRecentEncounterWave = 0;
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
-    let currentBiome = BiomeId.TOWN;
+    let currentBiome: BiomeId = BiomeId.TOWN;
     let currentArena = globalScene.newArena(currentBiome);
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
@@ -1093,7 +1093,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // Otherwise, roll encounter
 
       const roll = randSeedInt(256);
-      validMEfloorsByBiome.set(BiomeId[currentBiome], (validMEfloorsByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
+      const biomeKey = enumValueToKey(BiomeId, currentBiome);
+      validMEfloorsByBiome.set(biomeKey, (validMEfloorsByBiome.get(biomeKey) ?? 0) + 1);
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
@@ -1129,7 +1130,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
             : tierValue > rareThreshold
               ? ++numEncounters[2]
               : ++numEncounters[3];
-        encountersByBiome.set(BiomeId[currentBiome], (encountersByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
+        const biomeKey = enumValueToKey(BiomeId, currentBiome);
+        encountersByBiome.set(biomeKey, (encountersByBiome.get(biomeKey) ?? 0) + 1);
       } else {
         encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }
