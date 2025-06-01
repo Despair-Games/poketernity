@@ -49,7 +49,7 @@ export const BattlerTagType = {
   PROTOSYNTHESIS: 41,
   QUARK_DRIVE: 42,
   /** Following battler tags grant semi-invulnerability (TODO: what of Sky Drop?) */
-  MIDAIR: 43,
+  MID_AIR: 43,
   UNDERGROUND: 44,
   UNDERWATER: 45,
   HIDDEN: 46,
