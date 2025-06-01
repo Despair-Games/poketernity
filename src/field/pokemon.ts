@@ -72,6 +72,8 @@ import {
   DEFAULT_MAX_SLEEP_DURATION,
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  IV_MAX,
+  IV_MIN,
   MAX_STAT_STAGE,
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
@@ -481,7 +483,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
   public generateIvs(): number[] {
-    return new Array(6).fill(null).map(() => this.randSeedIntRange(0, 31));
+    return new Array(6).fill(null).map(() => this.randSeedIntRange(IV_MIN, IV_MAX));
   }
 
   /**
