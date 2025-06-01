@@ -373,7 +373,7 @@ describe("Moves - Sky Drop", () => {
 
     [tatsugiri, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
 
-    game.selectPartyPokemon(2, "SwitchPhase");
+    game.selectPartyPokemon(2, "LegacySwitchPhase");
     await game.phaseInterceptor.to("PostActionPhase");
 
     [tatsugiri, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());

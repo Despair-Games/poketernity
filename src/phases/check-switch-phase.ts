@@ -8,7 +8,7 @@ import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { SummonMissingPhase } from "#phases/summon-missing-phase";
-import { SwitchPhase } from "#phases/switch-phase";
+import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -79,7 +79,7 @@ export class CheckSwitchPhase extends BattlePhase {
           yesHandler: () => {
             globalScene.ui.setMessageMode();
             globalScene.phaseManager.unshiftPhase(
-              new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true),
+              new LegacySwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true),
             );
             this.end();
           },

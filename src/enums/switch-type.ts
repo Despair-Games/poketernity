@@ -1,5 +1,5 @@
 /**
- * Indicates the type of switch functionality that a {@linkcode SwitchPhase}
+ * Indicates the type of switch functionality that a {@linkcode LegacySwitchPhase}
  * or {@linkcode SwitchSummonPhase} will carry out.
  */
 export enum SwitchType {

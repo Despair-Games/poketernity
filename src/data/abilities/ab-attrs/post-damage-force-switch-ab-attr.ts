@@ -14,7 +14,7 @@ import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { SwitchPhase } from "#phases/switch-phase";
+import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -140,7 +140,7 @@ class ForceSwitchOutHelper {
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
-     * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
+     * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new LegacySwitchPhase is initiated.
      */
     if (switchOutTarget.isPlayer()) {
       if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
@@ -150,7 +150,7 @@ class ForceSwitchOutHelper {
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         globalScene.phaseManager.prependToPhase(
-          new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
+          new LegacySwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
           PhaseId.POST_ACTION,
         );
         return true;

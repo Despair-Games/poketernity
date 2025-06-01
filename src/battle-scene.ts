@@ -53,6 +53,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
+import type { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { PokeballType } from "#enums/pokeball-type";
@@ -62,6 +63,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { UiMode } from "#enums/ui-mode";
 import { NewArenaEvent } from "#events/battle-scene";
 import { Arena, ArenaBase } from "#field/arena";
 import DamageNumberHandler from "#field/damage-number-handler";
@@ -120,7 +122,7 @@ import { SelectBiomePhase } from "#phases/select-biome-phase";
 import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { SummonPhase } from "#phases/summon-phase";
-import type { SwitchPhase } from "#phases/switch-phase";
+import type { LegacySwitchPhase } from "#phases/legacy-switch-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import FieldSpritePipeline from "#pipelines/field-sprite";
 import InvertPostFX from "#pipelines/invert";
@@ -137,6 +139,7 @@ import type { AbstractConstructor } from "#types/abstract-constructor";
 import type { HeldModifierConfig } from "#types/held-modifier-config";
 import type { Localizable } from "#types/locales";
 import type { ModifierPredicate } from "#types/modifier-predicate";
+import type { PartySelectCallback } from "#types/party-select-callback";
 import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
 import { AbilityBar } from "#ui/ability-bar";
@@ -144,6 +147,7 @@ import { ArenaFlyout } from "#ui/arena-flyout";
 import { CandyBar } from "#ui/candy-bar";
 import { CharSprite } from "#ui/char-sprite";
 import { PartyExpBar } from "#ui/party-exp-bar";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { PokeballTray } from "#ui/pokeball-tray";
 import { PokemonInfoContainer } from "#ui/pokemon-info-container";
 import { addTextObject } from "#ui/text-utils";
@@ -1374,7 +1378,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.phaseManager.tryRemovePhase((p) => p.is<SwitchPhase>(PhaseId.SWITCH));
+      this.phaseManager.tryRemovePhase((p) => p.is<LegacySwitchPhase>(PhaseId.SWITCH));
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 
@@ -2882,6 +2886,32 @@ export default class BattleScene extends SceneBase {
         }
       }
     }
+  }
+
+  /**
+   * Prompts the Player to select a Pokemon in their party
+   * @param partyUiMode - The {@linkcode PartyUiMode | mode} determining the Party UI's behavior
+   * @param fieldIndex - (Default -1) The field index of the Pokemon that prompted
+   * this selection. Some Party UI Modes will prevent this Pokemon from being selected.
+   * @returns The exposed parameters for {@linkcode PartySelectCallback}, including:
+   * - `slotIndex`: The index of the selected party slot, or `-1` if the Player escaped
+   * the party menu without selecting a slot
+   * - `option`: The {@linkcode PartyOption | menu option} the Player selected for the party slot
+   */
+  public async promptSelectPlayerPokemon(
+    partyUiMode: PartyUiMode,
+    fieldIndex: number = -1,
+  ): Promise<Parameters<PartySelectCallback>> {
+    return new Promise<Parameters<PartySelectCallback>>((resolve) => {
+      this.ui.setMode<PartyUiHandler>(
+        UiMode.PARTY,
+        partyUiMode,
+        fieldIndex,
+        (...args: Parameters<PartySelectCallback>) => {
+          this.ui.setMessageMode().then(() => resolve(args));
+        },
+      );
+    });
   }
 
   /**

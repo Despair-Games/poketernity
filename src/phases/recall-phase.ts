@@ -34,6 +34,11 @@ export class RecallPhase extends PokemonPhase {
   // #endregion
   // #region Private methods
 
+  /**
+   * Recalls the Phase's target {@linkcode Pokemon}.
+   * This plays a return animation and message, then removes
+   * the Pokemon and related assets from the field container.
+   */
   private async recall(): Promise<void> {
     await this.playRecallMessage();
     await this.playRecallAnimation();
@@ -71,23 +76,7 @@ export class RecallPhase extends PokemonPhase {
     this.pokemon.tint(getPokeballTintColor(this.pokemon.pokeball), 1, 250, "Sine.easeIn");
 
     if (![SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType)) {
-      const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-      if (substitute) {
-        promises.push(
-          new Promise<void>((resolve) =>
-            tweens.add({
-              targets: substitute.sprite,
-              duration: 250,
-              scale: substitute.sprite.scale * 0.5,
-              ease: "Sine.easeIn",
-              onComplete: () => {
-                substitute.sprite.destroy();
-                resolve();
-              },
-            }),
-          ),
-        );
-      }
+      promises.push(this.removeSubstitute());
     }
 
     promises.push(
@@ -103,6 +92,27 @@ export class RecallPhase extends PokemonPhase {
     );
 
     await Promise.allSettled(promises);
+  }
+
+  private async removeSubstitute(): Promise<void> {
+    await new Promise<void>((resolve) => {
+      const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+      if (!substitute) {
+        resolve();
+        return;
+      }
+
+      globalScene.tweens.add({
+        targets: substitute.sprite,
+        duration: 250,
+        scale: substitute.sprite.scale * 0.5,
+        ease: "Sine.easeIn",
+        onComplete: () => {
+          substitute.sprite.destroy();
+          resolve();
+        },
+      });
+    });
   }
 
   // #endregion
