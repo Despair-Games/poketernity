@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#data/pokemon-forms";
+import { AchvCategory } from "#enums/achv-category";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
@@ -9,7 +10,6 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
 import type { EvolutionPhase } from "#phases/evolution-phase";
-import { achvs } from "#system/achievements";
 import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { delay, playNumberTween, playTween } from "#utils/anim-utils";
@@ -156,16 +156,10 @@ export class FormChangePhase extends FormChangeBasePhase {
     this.pokemon.cry();
     await delay(1250);
 
-    let playEvolutionFanfare = false;
-    if (this.formChange.formKey.includes(SpeciesFormKey.MEGA)) {
-      globalScene.validateAchv(achvs.MEGA_EVOLVE);
-      playEvolutionFanfare = true;
-    } else if (
-      [SpeciesFormKey.GIGANTAMAX, SpeciesFormKey.ETERNAMAX].some((key) => this.formChange.formKey.includes(key))
-    ) {
-      globalScene.validateAchv(achvs.GIGANTAMAX);
-      playEvolutionFanfare = true;
-    }
+    const fanfareFormChangeKeys = [SpeciesFormKey.MEGA, SpeciesFormKey.GIGANTAMAX, SpeciesFormKey.ETERNAMAX] as const;
+    const playEvolutionFanfare = fanfareFormChangeKeys.some((key) => this.formChange.formKey.includes(key));
+
+    globalScene.validateAchievements(AchvCategory.FORM_CHANGE, this.formChange);
 
     const fanfareDelay = playEvolutionFanfare ? 4000 : 1750;
     audioManager.playSoundWithoutBgm(playEvolutionFanfare ? "evolution_fanfare" : "minor_fanfare");

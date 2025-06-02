@@ -1,8 +1,10 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
+import { achievementsBus } from "#achievements/achievements-events";
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import { Battle, type FixedBattleConfig } from "#app/battle";
+import { battleSceneBus } from "#app/battle-scene-bus";
 import { eventBus } from "#app/event-bus";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
@@ -23,6 +25,7 @@ import {
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { ELITE_FOUR_1_WAVE } from "#constants/wave-constants";
 import { getBiomeName } from "#data/biome-utils";
+import type { Challenge } from "#data/challenge";
 import { allBiomes, allSpecies } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
@@ -107,7 +110,7 @@ import type { MovePhase } from "#phases/move-phase";
 import { FieldSpritePipeline } from "#pipelines/field-sprite";
 import { InvertPostFX } from "#pipelines/invert";
 import { SpritePipeline } from "#pipelines/sprite";
-import { type Achievement, achvs } from "#system/achievements";
+import { achvs, type OldAchievement } from "#system/achievements";
 import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
 import { settings } from "#system/settings-manager";
@@ -116,6 +119,7 @@ import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig, ModifierPredicate } from "#types/modifiers-types";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
+import type { StarterDataEntry } from "#types/starter-data";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { AbstractConstructor } from "#types/utility-types";
 import { AbilityBar } from "#ui/ability-bar";
@@ -2589,6 +2593,86 @@ export class BattleScene extends SceneBase {
     return true;
   }
 
+  /**
+   * Checks to see if the player has unlocked any party-based achievements
+   * @param achievementCategory - {@linkcode AchvCategory.PARTY}
+   * @param party - The {@linkcode PlayerPokemon | player's party}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.PARTY, party: PlayerPokemon[]): void;
+  /**
+   * Checks to see if the player has unlocked any achievements relating to encountering enemy pokemon
+   * @param achievementCategory - {@linkcode AchvCategory.ENCOUNTER}
+   * @param enemyPokemon - The {@linkcode EnemyPokemon | enemy team}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.ENCOUNTER, enemyPokemon: EnemyPokemon[]): void;
+  /**
+   * Checks to see if the player has unlocked any achievements relating to catching pokemon
+   * @param achievementCategory - {@linkcode AchvCategory.CATCH}
+   * @param pokemon - The caught {@linkcode Pokemon}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.CATCH, pokemon: Pokemon): void;
+  /**
+   * Checks to see if the player has unlocked any achievements relating to completing challenges
+   * @param achievementCategory - {@linkcode AchvCategory.CHALLENGE_VICTORY}
+   * @param challenges - The active {@linkcode Challenge}s
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.CHALLENGE_VICTORY, challenges: Challenge[]): void;
+  /**
+   * Checks to see if the player has unlocked any achievements related to completing classic mode
+   * @param achievementCategory - {@linkcode AchvCategory.CLASSIC_VICTORY}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.CLASSIC_VICTORY): void;
+  /**
+   * Checks to see if the player has unlocked any achievements relating to changing a pokemon's form
+   * @param achievementCategory - {@linkcode AchvCategory.FORM_CHANGE}
+   * @param formChange - The {@linkcode SpeciesFormChange | form change} that occurred
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.FORM_CHANGE, formChange: SpeciesFormChange): void;
+  /**
+   * Checks to see if the player has unlocked any achievements relating to Terastallizing a pokemon
+   * @param achievementCategory - {@linkcode AchvCategory.TERASTALLIZE}
+   * @param teraType - The pokemon's {@linkcode ElementalType | tera type}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.TERASTALLIZE, teraType: ElementalType): void;
+  /**
+   * Checks to see if the plyaer has unlocked any achievements relating to having a pokemon with high friendship
+   * @param achievementCategory - {@linkcode AchvCategory.FRIENDSHIP}
+   * @param pokemon - The {@linkcode PlayerPokemon | player's pokemon}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.FRIENDSHIP, pokemon: PlayerPokemon): void;
+  /**
+   * Checks to see if the player has unlocked any achievements relating to have specific starter data
+   * @param achievementCategory - {@linkcode AchvCategory.STARTER}
+   * @param starterEntry - The {@linkcode StarterDataEntry}
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.STARTER, starterEntry: StarterDataEntry): void;
+  /**
+   * Checks to see if the player has unlocked any achivements relating to having a specific number of ribbons
+   * @param achievementCategory - {@linkcode AchvCategory.RIBBON_COUNT}
+   * @param ribbonCount - The number of ribbons the player has
+   */
+  validateAchievements(achievementCategory: typeof AchvCategory.RIBBON_COUNT, ribbonCount: number): void;
+  /**
+   * Function that checks if any achievements based on a specific context can be unlocked
+   * @param achievementCategory - The in-game context of the achievement's unlock condition
+   * @param data - Relevant data needed for the game to determine if an achievement has been unlocked.
+   *   Not used by every achievement category.
+   */
+  validateAchievements(achievementCategory: AchvCategory, data?: unknown): void {
+    this.scene.launch("Achievements_Manager", {
+      context: achievementCategory,
+      unlockedAchievements: this.gameData.achvUnlocks,
+    });
+    battleSceneBus.once("scene/achievement_manager/ready", () => achievementsBus.emit("achievements/validate", data));
+    battleSceneBus.once("game_data/update/achievements", (unlocks: string[]) =>
+      this.gameData.addUnlockedAchievements(unlocks),
+    );
+    battleSceneBus.once("scene/achievement_manager/stop", () => {
+      this.scene.stop("Achievements_Manager");
+    });
+  }
+
+  /** @deprecated */
   validateAchvs(achvFlag: AchvCategory, ...args: unknown[]): void {
     const filteredAchvs = Object.values(achvs).filter((a) => a.flag === achvFlag);
     for (const achv of filteredAchvs) {
@@ -2596,7 +2680,8 @@ export class BattleScene extends SceneBase {
     }
   }
 
-  validateAchv(achv: Achievement, ...args: unknown[]): boolean {
+  /** @deprecated */
+  validateAchv(achv: OldAchievement, ...args: unknown[]): boolean {
     if (
       (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || activeOverrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)

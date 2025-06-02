@@ -1,3 +1,4 @@
+import { newAchvs } from "#achievements/achievements";
 import { api } from "#api/api";
 import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
@@ -13,13 +14,7 @@ import {
   SAVE_FILE_EXTENSION,
   SAVE_SLOT_LIMIT,
 } from "#constants/app-constants";
-import {
-  DEFAULT_STARTER_IVS,
-  DEFAULT_STARTER_SPECIES,
-  IV_MAX,
-  IV_MIN,
-  MAX_INT_ATTR_VALUE,
-} from "#constants/game-constants";
+import { DEFAULT_STARTER_IVS, DEFAULT_STARTER_SPECIES, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import { allMoves, allSpecies } from "#data/data-lists";
 import type { Egg } from "#data/egg";
 import { speciesEggMoves } from "#data/egg-moves";
@@ -35,6 +30,7 @@ import {
 } from "#data/starters";
 import type { Variant } from "#data/variant";
 import { AbilityAttr } from "#enums/ability-attr";
+import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/device";
@@ -1689,32 +1685,29 @@ export class GameData {
   public incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
     const speciesIdToIncrement: SpeciesId = species.getRootSpeciesId(forStarter);
 
+    const { gameStats } = globalScene.gameData;
+
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
       this.starterData[speciesIdToIncrement].classicWinCount = 0;
     }
 
     if (!this.starterData[speciesIdToIncrement].classicWinCount) {
-      globalScene.gameData.gameStats.ribbonsOwned++;
-
-      const ribbonsInStats: number = globalScene.gameData.gameStats.ribbonsOwned;
-      if (ribbonsInStats >= 100) {
-        globalScene.validateAchv(achvs._100_RIBBONS);
-      }
-      if (ribbonsInStats >= 75) {
-        globalScene.validateAchv(achvs._75_RIBBONS);
-      }
-      if (ribbonsInStats >= 50) {
-        globalScene.validateAchv(achvs._50_RIBBONS);
-      }
-      if (ribbonsInStats >= 25) {
-        globalScene.validateAchv(achvs._25_RIBBONS);
-      }
-      if (ribbonsInStats >= 10) {
-        globalScene.validateAchv(achvs._10_RIBBONS);
-      }
+      gameStats.ribbonsOwned++;
     }
 
+    globalScene.validateAchievements(AchvCategory.RIBBON_COUNT, gameStats.ribbonsOwned);
+
     return ++this.starterData[speciesIdToIncrement].classicWinCount;
+  }
+
+  /**
+   * Updates the player's data with newly unlocked achievements
+   * @param achvs the list of unlocked achievements
+   */
+  addUnlockedAchievements(achvs: string[]): void {
+    achvs.forEach((aName) => {
+      this.achvUnlocks[newAchvs[aName]] = Date.now();
+    });
   }
 
   /**
@@ -1828,9 +1821,7 @@ export class GameData {
             starterIvs[i] = ivs[i];
           }
         }
-        if (starterIvs.filter((iv) => iv === IV_MAX).length === 6) {
-          globalScene.validateAchv(achvs.PERFECT_IVS);
-        }
+        globalScene.validateAchievements(AchvCategory.STARTER, starterEntry);
       }
 
       // If it has a pre-evolution, recursively update its IVs

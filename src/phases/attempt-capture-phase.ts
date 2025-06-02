@@ -9,6 +9,7 @@ import {
   getPokeballCatchMultiplier,
   getPokeballTintColor,
 } from "#data/pokeball";
+import { AchvCategory } from "#enums/achv-category";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PartyOption } from "#enums/party-option";
@@ -20,7 +21,6 @@ import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
-import { achvs } from "#system/achievements";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
@@ -235,23 +235,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     const pokemon = this.getPokemon() as EnemyPokemon;
 
-    const speciesForm = pokemon.getSpeciesForm();
-
-    if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
-      globalScene.validateAchv(achvs.HIDDEN_ABILITY);
-    }
-
-    if (pokemon.species.isSubLegendary()) {
-      globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
-    }
-
-    if (pokemon.species.isLegendary()) {
-      globalScene.validateAchv(achvs.CATCH_LEGENDARY);
-    }
-
-    if (pokemon.species.isMythical()) {
-      globalScene.validateAchv(achvs.CATCH_MYTHICAL);
-    }
+    globalScene.validateAchievements(AchvCategory.CATCH, pokemon);
 
     pokemonInfoContainer.show(pokemon, true);
 
@@ -273,9 +257,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
           const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
-          if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
-            globalScene.validateAchv(achvs.SHINY_PARTY);
-          }
+          globalScene.validateAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
           modifiers.forEach((m) => globalScene.addModifier(m, true));
           globalScene.updateModifiers(true);
           removePokemon();

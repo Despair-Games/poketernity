@@ -1,3 +1,4 @@
+import { UnlockAchievementsManager } from "#achievements/unlock-achievements-manager";
 import { BattleScene } from "#app/battle-scene";
 import { LoadingScene } from "#app/loading-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -57,6 +58,6 @@ export const game = new Phaser.Game({
   },
   antialias: false,
   pipeline: [InvertPostFX] as unknown as Phaser.Types.Core.PipelineConfig,
-  scene: [LoadingScene, BattleScene],
+  scene: [LoadingScene, BattleScene, UnlockAchievementsManager],
   version: pkg.version,
 });

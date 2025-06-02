@@ -13,7 +13,6 @@ import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { modifierTypes } from "#modifier/modifier-types";
 import { BattlePhase } from "#phases/base/battle-phase";
 import type { EndCardPhase } from "#phases/end-card-phase";
-import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import { TrainerData } from "#system/trainer-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
@@ -94,12 +93,12 @@ export class GameOverPhase extends BattlePhase {
     const doGameOver = (newClear: boolean): void => {
       globalScene.disableMenu = true;
       globalScene.time.delayedCall(1000, () => {
-        let firstClear = false;
+        let isFirstClear = false;
 
         if (this.isVictory && newClear) {
           if (gameMode.isClassic) {
-            firstClear = globalScene.validateAchv(achvs.CLASSIC_VICTORY);
-            globalScene.validateAchv(achvs.UNEVOLVED_CLASSIC_VICTORY);
+            isFirstClear = globalScene.gameData.gameStats.sessionsWon === 0;
+            globalScene.validateAchievements(AchvCategory.CLASSIC_VICTORY);
             gameData.gameStats.sessionsWon++;
             for (const pokemon of globalScene.getPlayerParty()) {
               this.awardRibbon(pokemon);
@@ -125,7 +124,7 @@ export class GameOverPhase extends BattlePhase {
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {
-            gameMode.challenges.forEach((c) => globalScene.validateAchvs(AchvCategory.CHALLENGE, c));
+            globalScene.validateAchievements(AchvCategory.CHALLENGE_VICTORY, globalScene.gameMode.challenges);
           }
 
           const clear = (endCardPhase?: EndCardPhase): void => {
@@ -140,7 +139,7 @@ export class GameOverPhase extends BattlePhase {
                 );
               }
 
-              if (!firstClear) {
+              if (!isFirstClear) {
                 globalScene.phaseManager.createAndUnshiftPhase(
                   "GameOverModifierRewardPhase",
                   modifierTypes.VOUCHER_PREMIUM,

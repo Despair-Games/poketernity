@@ -1,3 +1,4 @@
+import { initNewAchvs } from "#achievements/achievements";
 import { api } from "#api/api";
 import { CacheBustedLoaderPlugin } from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
@@ -361,6 +362,7 @@ export class LoadingScene extends SceneBase {
 
     initModifierTypes();
     initModifierPools();
+    initNewAchvs();
     initAchievements();
     initVouchers();
     initPokemonPreEvolutions();

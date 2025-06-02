@@ -4,7 +4,7 @@ import { Button } from "#enums/button";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import type { Achievement } from "#system/achievements";
+import type { OldAchievement } from "#system/achievements";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { Voucher } from "#system/voucher";
@@ -199,7 +199,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     }
   }
 
-  private showAchv(achv: Achievement) {
+  private showAchv(achv: OldAchievement) {
     const achvUnlocks = globalScene.gameData.achvUnlocks;
     const unlocked = Object.hasOwn(achvUnlocks, achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
@@ -292,7 +292,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
     const achvRange = Object.values(achvs).slice(itemOffset, itemLimit + itemOffset);
 
-    achvRange.forEach((achv: Achievement, i: number) => {
+    achvRange.forEach((achv: OldAchievement, i: number) => {
       const icon = this.icons[i];
       const unlocked = Object.hasOwn(achvUnlocks, achv.id);
       const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
