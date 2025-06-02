@@ -142,7 +142,7 @@ describe("Arena - Gravity", () => {
     game.move.select(MoveId.SPLASH);
 
     await game.toNextTurn();
-    expect(snorlax.getTag(BattlerTagType.FLYING)).toBeDefined();
+    expect(snorlax.getTag(BattlerTagType.MID_AIR)).toBeDefined();
 
     game.move.select(MoveId.GRAVITY);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
