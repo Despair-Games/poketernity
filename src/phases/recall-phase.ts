@@ -4,6 +4,7 @@ import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#data/pokeball";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
@@ -15,6 +16,8 @@ import i18next from "i18next";
  * @extends PokemonPhase
  */
 export class RecallPhase extends PokemonPhase {
+  override readonly id = PhaseId.RECALL;
+
   private readonly switchType: SwitchType;
   private readonly pokemon: Pokemon;
 

@@ -51,7 +51,7 @@ export class SwitchSummonPhase extends SummonPhase {
     super.start();
   }
 
-  protected override preSummon(): void {
+  protected override async preSummon(): Promise<void> {
     const { currentBattle, pbTrayEnemy, time, tweens, ui } = globalScene;
     const { trainer } = currentBattle;
 

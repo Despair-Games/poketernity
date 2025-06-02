@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { RecallPhase } from "#phases/recall-phase";
+import type BattleScene from "#app/battle-scene";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -21,7 +22,7 @@ import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { SummonPhase } from "#phases/summon-phase";
 
 export class SwitchPhase extends PokemonPhase {
-  override readonly id: PhaseId = PhaseId.SWITCH;
+  override readonly id = PhaseId.SWITCH;
 
   private switchType: SwitchType;
   private switchInIndex: number;
@@ -34,9 +35,18 @@ export class SwitchPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    this.resolveSwitchInIndex().then(this.playEnemyTrainerAnim).then(this.updatePokemonData).then(this.end);
+    // prettier-ignore - Prettier makes this 1 line
+    this.resolveSwitchInIndex().then(this.updatePokemonData).then(this.playEnemyTrainerAnim).then(this.end);
   }
 
+  /**
+   * Finalizes the party slot to switch in if it isn't already defined.
+   * - If a Player Pokemon is switching, this prompts the Player to select a Pokemon
+   * from the {@linkcode BattleScene.promptSelectPlayerPokemon | Party UI} to switch in.
+   * - If an Enemy (Trainer) Pokemon is switching, this directs the Trainer AI to select
+   * a Pokemon to switch in.
+   * @async
+   */
   private async resolveSwitchInIndex(): Promise<void> {
     if (this.switchInIndex !== -1) {
       return;
@@ -66,11 +76,13 @@ export class SwitchPhase extends PokemonPhase {
 
   public override end(): void {
     globalScene.phaseManager.unshiftPhase(new SummonPhase(this.fieldIndex, this.isPlayer, false));
+    super.end();
   }
 
   /**
    * If the switched Pokemon is an enemy, shows an animation where
    * the Pokemon's trainer enters the field
+   * @async
    */
   private async playEnemyTrainerAnim(): Promise<void> {
     if (this.isPlayer) {

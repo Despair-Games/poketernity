@@ -35,10 +35,15 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
   /**
    * Sends out a Pokemon before the battle begins and shows the appropriate messages
+   * @async
+   * @todo Reorganize and/or rename this. `preSummon` can be confused with similar methods
+   * in `SwitchPhase`, and the animations should only be played when the respective
+   * Trainer is already showing.
    */
-  protected preSummon(): void {
-    const { currentBattle, pbTray, pbTrayEnemy, time, trainer, tweens, ui } = globalScene;
+  protected async preSummon(): Promise<void> {
+    const { currentBattle, pbTrayEnemy } = globalScene;
 
+    /** @todo Is the failsafe below necessary? */
     const partyMember = this.getPokemon();
     // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
     if (
@@ -77,43 +82,57 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     }
 
     if (this.isPlayer) {
-      ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
-      pbTray.hide();
-      trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
-
-      time.delayedCall(562, () => {
-        trainer.setFrame("2");
-        time.delayedCall(64, () => {
-          trainer.setFrame("3");
-        });
-      });
-
-      tweens.add({
-        targets: trainer,
-        x: -36,
-        duration: 1000,
-        onComplete: () => trainer.setVisible(false),
-      });
-
-      time.delayedCall(750, () => this.summon());
+      await this.playPlayerTrainerThrowSequence();
+      this.summon();
     } else if (
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
-      const trainerName = currentBattle.trainer?.getName(this.getTrainerSlot());
-      const pokemonName = this.getPokemon().getNameToRender();
-      const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
-
-      pbTrayEnemy.hide();
-      ui.showText(message, null, () => this.summon());
+      await this.playEnemyTrainerThrowSequence();
+      this.summon();
     } else if (currentBattle.isBattleMysteryEncounter()) {
       pbTrayEnemy.hide();
       this.summonWild();
     }
   }
 
+  private async playPlayerTrainerThrowSequence(): Promise<void> {
+    const { pbTray, time, trainer, tweens, ui } = globalScene;
+
+    ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
+    pbTray.hide();
+    trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+
+    time.delayedCall(562, () => {
+      trainer.setFrame("2");
+      time.delayedCall(64, () => {
+        trainer.setFrame("3");
+      });
+    });
+
+    tweens.add({
+      targets: trainer,
+      x: -36,
+      duration: 1000,
+      onComplete: () => trainer.setVisible(false),
+    });
+
+    await new Promise<void>((resolve) => time.delayedCall(750, resolve));
+  }
+
+  private async playEnemyTrainerThrowSequence(): Promise<void> {
+    await Promise.allSettled([this.hideEnemyTrainer, globalScene.pbTrayEnemy.hide]);
+
+    const trainerName = globalScene.currentBattle.trainer?.getName(this.getTrainerSlot());
+    const pokemonName = this.getPokemon().getNameToRender();
+    const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
+
+    await new Promise<void>((resolve) => globalScene.ui.showText(message, null, resolve));
+  }
+
   /**
    * Enemy trainer or player trainer will do animations to throw Pokeball and summon a Pokemon to the field.
+   * @todo Make this `async` and Promisify the tween animations in this method
    */
   protected summon(): void {
     const { add, currentBattle, field, time, tweens, animations } = globalScene;
@@ -213,6 +232,9 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * Handles tweening and battle setup for a wild Pokemon that appears outside of the normal screen transition.
    * Wild Pokemon will ease and fade in onto the field, then perform standard summon behavior.
    * Currently only used by Mystery Encounters, as all other battle types pre-summon wild pokemon before screen transitions.
+   * @todo Make this `async` and Promisify animations
+   * @todo Are any of these animations recycled from other phases? If so, can they be
+   * implemented as `Pokemon` methods?
    */
   protected summonWild(): void {
     const { add, currentBattle, field, time, tweens } = globalScene;

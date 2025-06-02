@@ -43,14 +43,17 @@ export abstract class BattlePhase extends Phase {
     );
   }
 
-  public hideEnemyTrainer(): void {
-    globalScene.tweens.add({
-      targets: globalScene.currentBattle.trainer,
-      x: "+=16",
-      y: "-=16",
-      alpha: 0,
-      ease: "Sine.easeInOut",
-      duration: 750,
-    });
+  public async hideEnemyTrainer(): Promise<void> {
+    await new Promise((resolve) =>
+      globalScene.tweens.add({
+        targets: globalScene.currentBattle.trainer,
+        x: "+=16",
+        y: "-=16",
+        alpha: 0,
+        ease: "Sine.easeInOut",
+        duration: 750,
+        onComplete: resolve,
+      }),
+    );
   }
 }

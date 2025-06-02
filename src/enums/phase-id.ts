@@ -59,6 +59,7 @@ import type { PostSummonPhase } from "#phases/post-summon-phase";
 import type { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
 import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 import type { ReloadSessionPhase } from "#phases/reload-session-phase";
+import type { RecallPhase } from "#phases/recall-phase";
 import type { ReturnPhase } from "#phases/return-phase";
 import type { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
 import type { RibbonModifierRewardPhase } from "#phases/ribbon-modifier-reward-phase";
@@ -208,6 +209,8 @@ export enum PhaseId {
   POST_TURN_STATUS_EFFECT,
   /** {@linkcode QuietFormChangePhase} */
   QUIET_FORM_CHANGE,
+  /** {@linkcode RecallPhase} */
+  RECALL,
   /** {@linkcode ReloadSessionPhase} */
   RELOAD_SESSION,
   /** {@linkcode ReturnPhase} */
