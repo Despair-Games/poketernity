@@ -42,3 +42,10 @@
 - **Consistency**: Ensures consistent coding style across the project.
 - **Code Quality**: Helps catch potential errors and improve overall code quality.
 - **Readability**: Makes the codebase easier to read and maintain.
+
+
+# Biome
+
+We started transitioning over to [Biome](https://biomejs.dev/) for linting as its performance far exceeds ESLint's (~15x faster).
+
+The end goal is to have Biome replace ESLint completely in the future, but not all rules are supported by Biome yet so for now we're using a hybrid approach.

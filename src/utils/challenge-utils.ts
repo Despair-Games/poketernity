@@ -21,7 +21,7 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_CHOICE,
+  challengeType: typeof ChallengeType.STARTER_CHOICE,
   pokemon: PokemonSpecies,
   valid: BooleanHolder,
   dexAttr: DexAttrProps,
@@ -37,7 +37,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_POINTS,
+  challengeType: typeof ChallengeType.STARTER_POINTS,
   points: NumberHolder,
 ): boolean;
 
@@ -51,7 +51,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_COST,
+  challengeType: typeof ChallengeType.STARTER_COST,
   species: SpeciesId,
   cost: NumberHolder,
 ): boolean;
@@ -65,7 +65,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_MODIFY,
+  challengeType: typeof ChallengeType.STARTER_MODIFY,
   pokemon: Pokemon,
 ): boolean;
 
@@ -79,7 +79,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.POKEMON_IN_BATTLE,
+  challengeType: typeof ChallengeType.POKEMON_IN_BATTLE,
   pokemon: Pokemon,
   valid: BooleanHolder,
 ): boolean;
@@ -94,7 +94,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.FIXED_BATTLES,
+  challengeType: typeof ChallengeType.FIXED_BATTLES,
   waveIndex: number,
   battleConfig: FixedBattleConfig,
 ): boolean;
@@ -108,7 +108,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.TYPE_EFFECTIVENESS,
+  challengeType: typeof ChallengeType.TYPE_EFFECTIVENESS,
   effectiveness: NumberHolder,
 ): boolean;
 
@@ -124,7 +124,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.AI_LEVEL,
+  challengeType: typeof ChallengeType.AI_LEVEL,
   level: NumberHolder,
   levelCap: number,
   isTrainer: boolean,
@@ -141,7 +141,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.AI_MOVE_SLOTS,
+  challengeType: typeof ChallengeType.AI_MOVE_SLOTS,
   pokemon: Pokemon,
   moveSlots: NumberHolder,
 ): boolean;
@@ -156,7 +156,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.PASSIVE_ACCESS,
+  challengeType: typeof ChallengeType.PASSIVE_ACCESS,
   pokemon: Pokemon,
   hasPassive: BooleanHolder,
 ): boolean;
@@ -167,7 +167,7 @@ export function applyChallenges(
  * @param challengeType {@linkcode ChallengeType.GAME_MODE_MODIFY}
  * @returns `true` if any challenge was successfully applied.
  */
-export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.GAME_MODE_MODIFY): boolean;
+export function applyChallenges(gameMode: GameMode, challengeType: typeof ChallengeType.GAME_MODE_MODIFY): boolean;
 
 /**
  * Apply all challenges that modify what level a pokemon can access a move.
@@ -181,7 +181,7 @@ export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.MOVE_ACCESS,
+  challengeType: typeof ChallengeType.MOVE_ACCESS,
   pokemon: Pokemon,
   moveSource: MoveSourceType,
   moveId: MoveId,
@@ -200,7 +200,7 @@ export function applyChallenges(
  */
 export function applyChallenges(
   gameMode: GameMode,
-  challengeType: ChallengeType.MOVE_WEIGHT,
+  challengeType: typeof ChallengeType.MOVE_WEIGHT,
   pokemon: Pokemon,
   moveSource: MoveSourceType,
   moveId: MoveId,

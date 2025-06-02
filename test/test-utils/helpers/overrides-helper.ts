@@ -26,7 +26,7 @@ import { WeatherType } from "#enums/weather-type";
 import type { ModifierOverride } from "#modifier/modifier-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
 import type { TimedEvent } from "#types/timed-event";
-import { coerceArray } from "#utils/common-utils";
+import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { shiftCharCodes } from "#utils/string-utils";
 import { expect, vi } from "vitest";
 
@@ -62,7 +62,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public startingBiome(biome: BiomeId): this {
     this.game.scene.newArena(biome);
-    this.log(`Starting biome set to ${BiomeId[biome]} (=${biome})!`);
+    this.log(`Starting biome set to ${enumValueToKey(BiomeId, biome)} (=${biome})!`);
     return this;
   }
 

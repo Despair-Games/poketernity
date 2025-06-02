@@ -175,7 +175,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SILK_TRAP:
       case BattlerTagType.BANEFUL_BUNKER:
       case BattlerTagType.BURNING_BULWARK:
-      case BattlerTagType.FLYING:
+      case BattlerTagType.MID_AIR:
       case BattlerTagType.UNDERGROUND:
       case BattlerTagType.UNDERWATER:
       case BattlerTagType.HIDDEN:
