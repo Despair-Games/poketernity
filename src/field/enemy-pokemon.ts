@@ -545,6 +545,10 @@ export class EnemyPokemon extends Pokemon {
     amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount * DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
     if (this.isBoss() && !ignoreSegments) {
+      // To consider a boss Pokemon as 1-hit faint, the damage calculation is different and depends on the hp segments.
+      // Every segment past the first one gets a `x SegmentIndex` multiplier.
+      // E.g. if the boss has 3 segments and each with 10 hp, the damage for the 1-hit faint must be at least `60`,
+      // because `10 * 1 + 10 * 2 + 10 * 3 = 60`.
       const segmentSize = this.getMaxHp() / this.bossSegments;
       for (let s = this.bossSegmentIndex; s > 0; s--) {
         const hpThreshold = segmentSize * s;
