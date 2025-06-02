@@ -141,7 +141,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
  * @param params - The parameters for the given attribute's `apply` function
  * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
  */
-function applyRevealedAbAttrs<TAttr extends AbAttr>(
+function applyRevealedAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): ApplyAbAttrResult<TAttr>[] {
