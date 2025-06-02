@@ -11,7 +11,7 @@ import { queueShowAbility } from "#utils/ability-utils";
 interface ApplyAbAttrResult<TAttr extends AbAttr> {
   /** The ability attribute that was processed */
   attr: TAttr;
-  /** Whether the ability was applied (or would have be applied, if the check wasn't simulated) */
+  /** Whether the ability was applied (or would have been applied, if the check wasn't simulated) */
   applied: boolean;
   /** (Optional) Message to display when the attribute is applied */
   message: string | null;
