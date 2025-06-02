@@ -48,14 +48,14 @@ describe("Moves - Fly", () => {
     game.move.select(MoveId.FLY);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeDefined();
+    expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeDefined();
     expect(enemyPokemon).toHaveMoveResult(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.FLY);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
+    expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
@@ -88,7 +88,7 @@ describe("Moves - Fly", () => {
     game.move.select(MoveId.FLY);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
+    expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeUndefined();
     expect(playerPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.FLY);
