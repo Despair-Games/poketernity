@@ -6,9 +6,12 @@ import type { ElementalType } from "#enums/elemental-type";
 
 import { BattlerTagType } from "#enums/battler-tag-type";
 
-/** All {@linkcode BattlerTagType | BattlerTagTypes} that grant semi-invulnerability */
+/**
+ * All {@linkcode BattlerTagType | BattlerTagTypes} that grant semi-invulnerability
+ * TODO: should SKY_DROP be part of it?
+ */
 export const SEMI_INVULNERABLE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
-  BattlerTagType.FLYING,
+  BattlerTagType.MID_AIR,
   BattlerTagType.UNDERGROUND,
   BattlerTagType.UNDERWATER,
   BattlerTagType.HIDDEN,
