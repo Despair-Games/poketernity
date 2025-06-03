@@ -86,7 +86,7 @@ export class ClassicModeHelper extends GameManagerHelper {
       );
     }
 
-    if (this.game.override.disableLevelUp) {
+    if (this.game.override.disableExpGain) {
       vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
 

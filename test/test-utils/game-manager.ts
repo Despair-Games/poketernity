@@ -278,7 +278,7 @@ export class GameManager {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
 
-    if (this.override.disableLevelUp) {
+    if (this.override.disableExpGain) {
       vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
   }

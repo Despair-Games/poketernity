@@ -55,10 +55,11 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public normalizeNatures: boolean = true;
   /**
-   * If `true`, will automatically set the level cap to `1` at the start of each test (effectively disabling level ups).
+   * If `true`, will automatically set the level cap to `1` at the start of each test
+   * (effectively disabling experience gain and thus level ups as well).
    * @defaultValue `true`
    */
-  public disableLevelUp: boolean = true;
+  public disableExpGain: boolean = true;
 
   /**
    * Override the starting biome

@@ -163,7 +163,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
     });
 
     it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
-      game.override.disableLevelUp = false;
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon1.friendship;
@@ -248,7 +248,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
     });
 
     it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
-      game.override.disableLevelUp = false;
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon2.friendship;
@@ -332,7 +332,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
     });
 
     it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
-      game.override.disableLevelUp = false;
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon3.friendship;

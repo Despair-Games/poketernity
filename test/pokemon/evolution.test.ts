@@ -27,7 +27,7 @@ describe("Evolution", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.disableLevelUp = false;
+    game.override.disableExpGain = false;
     game.override
       .battleType("single")
       .enemySpecies(SpeciesId.MAGIKARP)

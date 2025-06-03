@@ -24,7 +24,7 @@ describe("Evolution Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.disableLevelUp = false;
+    game.override.disableExpGain = false;
     game.override
       .levelCap(-1)
       .ability(AbilityId.BALL_FETCH)
