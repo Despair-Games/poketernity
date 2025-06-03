@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Phase } from "#app/phase";
+import { playTween } from "#utils/anim-utils";
 
 /**
  * Adds functions to display and hide the enemy trainer
@@ -30,30 +31,24 @@ export abstract class BattlePhase extends Phase {
       tintSprites[i].clearTint();
     }
 
-    await new Promise((resolve) =>
-      globalScene.tweens.add({
-        targets: trainer,
-        x: "-=16",
-        y: "+=16",
-        alpha: 1,
-        ease: "Sine.easeInOut",
-        duration: 750,
-        onComplete: resolve,
-      }),
-    );
+    await playTween({
+      targets: trainer,
+      x: "-=16",
+      y: "+=16",
+      alpha: 1,
+      ease: "Sine.easeInOut",
+      duration: 750,
+    });
   }
 
   public async hideEnemyTrainer(): Promise<void> {
-    await new Promise((resolve) =>
-      globalScene.tweens.add({
-        targets: globalScene.currentBattle.trainer,
-        x: "+=16",
-        y: "-=16",
-        alpha: 0,
-        ease: "Sine.easeInOut",
-        duration: 750,
-        onComplete: resolve,
-      }),
-    );
+    await playTween({
+      targets: globalScene.currentBattle.trainer,
+      x: "+=16",
+      y: "-=16",
+      alpha: 0,
+      ease: "Sine.easeInOut",
+      duration: 750,
+    });
   }
 }
