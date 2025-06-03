@@ -1,0 +1,10 @@
+/* CSS only used for development */
+
+#branch-name {
+  position: fixed;
+  left: 1px;
+  background-color: #333;
+  color: #fff;
+  padding: 0.2rem;
+  font-size: 1rem;
+}
