@@ -43,4 +43,9 @@ fetch("/manifest.json")
   .catch(() => {
     // Manifest not found (likely local build)
     startGame();
+  })
+  .finally(() => {
+    if (import.meta.env.MODE === "development") {
+      import("./dev");
+    }
   });
