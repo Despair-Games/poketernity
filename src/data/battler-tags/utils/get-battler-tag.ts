@@ -214,7 +214,7 @@ export function getBattlerTag(
       );
     case BattlerTagType.QUARK_DRIVE:
       return new TerrainHighestStatBoostTag(tagType, AbilityId.QUARK_DRIVE, TerrainType.ELECTRIC);
-    case BattlerTagType.FLYING:
+    case BattlerTagType.MID_AIR:
     case BattlerTagType.UNDERGROUND:
     case BattlerTagType.UNDERWATER:
     case BattlerTagType.HIDDEN:
