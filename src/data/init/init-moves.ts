@@ -3262,7 +3262,7 @@ export function initMoves() {
       .attr(AddEntryHazardTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(MoveId.G_MAX_MELTDOWN, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.MELMETAL)
-      .attr(TormentAttr),
+      .attr(TormentAttr, true),
     new AttackMove(MoveId.G_MAX_FOAM_BURST, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.KINGLER)
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
