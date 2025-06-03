@@ -23,8 +23,9 @@ export class CompareWeightPowerAttr extends VariablePowerAttr {
     const userWeight = user.getWeight();
     const targetWeight = target.getWeight();
 
-    if (!userWeight || !targetWeight) {
-      return false;
+    if (targetWeight === 0) {
+      power.value = 120;
+      return true;
     }
 
     power.value = (clamp(Math.floor(userWeight / targetWeight), 1, 5) + 1) * 20;
