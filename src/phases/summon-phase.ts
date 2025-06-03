@@ -13,6 +13,7 @@ import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-p
 import { PostSummonPhase } from "#phases/post-summon-phase";
 import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
 import { settings } from "#system/settings-manager";
+import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
@@ -30,7 +31,28 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   public override start(): void {
     super.start();
 
-    this.preSummon();
+    this.preSummon().then(this.end);
+  }
+
+  public override end(): void {
+    const { battleType, waveIndex } = globalScene.currentBattle;
+    const pokemon = this.getPokemon();
+
+    if (pokemon.isShiny()) {
+      globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+    }
+
+    pokemon.resetTurnData();
+
+    if (
+      !this.loaded
+      || battleType === BattleType.TRAINER
+      || battleType === BattleType.MYSTERY_ENCOUNTER
+      || waveIndex % 10 === 1
+    ) {
+      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
+      this.queuePostSummon();
+    }
   }
 
   /**
@@ -40,7 +62,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * in `SwitchPhase`, and the animations should only be played when the respective
    * Trainer is already showing.
    */
-  protected async preSummon(): Promise<void> {
+  private async preSummon(): Promise<void> {
     const { currentBattle, pbTrayEnemy } = globalScene;
 
     /** @todo Is the failsafe below necessary? */
@@ -83,16 +105,16 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     if (this.isPlayer) {
       await this.playPlayerTrainerThrowSequence();
-      this.summon();
+      await this.summon();
     } else if (
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
       await this.playEnemyTrainerThrowSequence();
-      this.summon();
+      await this.summon();
     } else if (currentBattle.isBattleMysteryEncounter()) {
       pbTrayEnemy.hide();
-      this.summonWild();
+      await this.summonWild();
     }
   }
 
@@ -117,6 +139,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       onComplete: () => trainer.setVisible(false),
     });
 
+    // Resolve 750 ms into the above Tween animation
     await new Promise<void>((resolve) => time.delayedCall(750, resolve));
   }
 
@@ -131,11 +154,14 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   /**
-   * Enemy trainer or player trainer will do animations to throw Pokeball and summon a Pokemon to the field.
-   * @todo Make this `async` and Promisify the tween animations in this method
+   * Animates the following:
+   * - The Poke Ball being thrown to summon the Pokemon
+   * - The Pokemon entering the field from the Poke Ball.
+   * - The Pokemon's cry and entrance animation after entering the field.
+   * @async
    */
-  protected summon(): void {
-    const { add, currentBattle, field, time, tweens, animations } = globalScene;
+  private async summon(): Promise<void> {
+    const { add, currentBattle, field, time, animations } = globalScene;
     const pokemon = this.getPokemon();
 
     const pokeball = globalScene.addFieldSprite(
@@ -161,90 +187,91 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     pokeball.setVisible(true);
 
-    tweens.add({
-      targets: pokeball,
-      duration: 650,
-      x: (this.isPlayer ? 100 : 236) + fpOffset[0],
-    });
+    await Promise.allSettled([
+      playTween({
+        targets: pokeball,
+        duration: 650,
+        x: (this.isPlayer ? 100 : 236) + fpOffset[0],
+      }),
+      async () => {
+        await playTween({
+          targets: pokeball,
+          duration: 150,
+          ease: "Cubic.easeOut",
+          y: (this.isPlayer ? 70 : 34) + fpOffset[1],
+        });
 
-    tweens.add({
-      targets: pokeball,
-      duration: 150,
-      ease: "Cubic.easeOut",
-      y: (this.isPlayer ? 70 : 34) + fpOffset[1],
-      onComplete: () => {
-        tweens.add({
+        await playTween({
           targets: pokeball,
           duration: 500,
           ease: "Cubic.easeIn",
           angle: 1440,
           y: (this.isPlayer ? 132 : 86) + fpOffset[1],
-          onComplete: () => {
-            globalScene.audioManager.playSound("se/pb_rel");
-            pokeball.destroy();
-
-            add.existing(pokemon);
-            field.add(pokemon);
-
-            if (!this.isPlayer) {
-              const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
-              if (playerPokemon?.isOnField()) {
-                field.moveBelow(pokemon, playerPokemon);
-              }
-              currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
-            }
-            animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
-            globalScene.updateModifiers(this.isPlayer);
-            globalScene.updateFieldScale();
-
-            pokemon.showInfo();
-            pokemon.playAnim();
-            pokemon.setVisible(true);
-            pokemon.getSprite().setVisible(true);
-            pokemon.setScale(0.5);
-            pokemon.tint(getPokeballTintColor(pokemon.pokeball));
-            pokemon.untint(250, "Sine.easeIn");
-
-            globalScene.updateFieldScale();
-            tweens.add({
-              targets: pokemon,
-              duration: 250,
-              ease: "Sine.easeIn",
-              scale: pokemon.getSpriteScale(),
-              onComplete: () => {
-                pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
-                pokemon.getSprite().clearTint();
-                pokemon.resetSummonData();
-                // required to load the proper assets when loading from save data
-                if (pokemon.summonData.speciesForm) {
-                  pokemon.loadAssets(false);
-                }
-                time.delayedCall(1000, () => this.end());
-              },
-            });
-          },
         });
+
+        globalScene.audioManager.playSound("se/pb_rel");
+        pokeball.destroy();
+        add.existing(pokemon);
+        field.add(pokemon);
+
+        if (!this.isPlayer) {
+          const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
+          if (playerPokemon?.isOnField()) {
+            field.moveBelow(pokemon, playerPokemon);
+          }
+          currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
+        }
+
+        animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+        globalScene.updateModifiers(this.isPlayer);
+        globalScene.updateFieldScale();
+
+        pokemon.showInfo();
+        pokemon.playAnim();
+        pokemon.setVisible(true);
+        pokemon.getSprite().setVisible(true);
+        pokemon.setScale(0.5);
+        pokemon.tint(getPokeballTintColor(pokemon.pokeball));
+        pokemon.untint(250, "Sine.easeIn");
+
+        globalScene.updateFieldScale();
+
+        await playTween({
+          targets: pokemon,
+          duration: 250,
+          ease: "Sine.easeIn",
+          scale: pokemon.getSpriteScale(),
+        });
+
+        pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
+        pokemon.getSprite().clearTint();
+        pokemon.resetSummonData();
+        // required to load the proper assets when loading from save data
+        if (pokemon.summonData.speciesForm) {
+          pokemon.loadAssets(false);
+        }
+
+        await new Promise((resolve) => time.delayedCall(1000, resolve));
       },
-    });
+    ]);
   }
 
   /**
    * Handles tweening and battle setup for a wild Pokemon that appears outside of the normal screen transition.
    * Wild Pokemon will ease and fade in onto the field, then perform standard summon behavior.
    * Currently only used by Mystery Encounters, as all other battle types pre-summon wild pokemon before screen transitions.
-   * @todo Make this `async` and Promisify animations
    * @todo Are any of these animations recycled from other phases? If so, can they be
    * implemented as `Pokemon` methods?
    */
-  protected summonWild(): void {
-    const { add, currentBattle, field, time, tweens } = globalScene;
+  private async summonWild(): Promise<void> {
+    const { add, currentBattle, field, time } = globalScene;
     const pokemon = this.getPokemon();
 
     if (this.fieldIndex === 1) {
-      pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
+      await pokemon.setFieldPosition(FieldPosition.RIGHT);
     } else {
       const availablePartyMembers = this.getAlliedParty().filter((p) => !p.isFainted()).length;
-      pokemon.setFieldPosition(
+      await pokemon.setFieldPosition(
         !currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
       );
     }
@@ -276,7 +303,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     pokemon.alpha = 0;
 
     // Ease pokemon in
-    tweens.add({
+    await playTween({
       targets: pokemon,
       x: "-=16",
       y: "+=16",
@@ -284,48 +311,22 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       duration: 1000,
       ease: "Sine.easeIn",
       scale: pokemon.getSpriteScale(),
-      onComplete: () => {
-        pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
-        pokemon.getSprite().clearTint();
-        pokemon.resetSummonData();
-        globalScene.updateFieldScale();
-        time.delayedCall(1000, () => this.end());
-      },
     });
+
+    pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
+    pokemon.getSprite().clearTint();
+    /** @todo Should this be removed? */
+    pokemon.resetSummonData();
+    globalScene.updateFieldScale();
+
+    await new Promise((resolve) => time.delayedCall(1000, resolve));
   }
 
-  protected onEnd(): void {
-    const { battleType, waveIndex } = globalScene.currentBattle;
-    const pokemon = this.getPokemon();
-
-    if (pokemon.isShiny()) {
-      globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
-    }
-
-    pokemon.resetTurnData();
-
-    if (
-      !this.loaded
-      || battleType === BattleType.TRAINER
-      || battleType === BattleType.MYSTERY_ENCOUNTER
-      || waveIndex % 10 === 1
-    ) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
-      this.queuePostSummon();
-    }
-  }
-
-  protected queuePostSummon(): void {
+  private queuePostSummon(): void {
     globalScene.phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 
-  public getTrainerSlot(): TrainerSlot {
+  private getTrainerSlot(): TrainerSlot {
     return !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER;
-  }
-
-  public override end(): void {
-    this.onEnd();
-
-    super.end();
   }
 }

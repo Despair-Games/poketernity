@@ -206,6 +206,7 @@ import { applyMoveAttrs } from "#utils/move-utils";
 import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
+import { playTween } from "#utils/anim-utils";
 
 interface AbilityData {
   ability: Ability;
@@ -942,50 +943,46 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  setFieldPosition(fieldPosition: FieldPosition, duration?: number): Promise<void> {
-    return new Promise((resolve) => {
-      if (fieldPosition === this.fieldPosition) {
-        resolve();
-        return;
+  public async setFieldPosition(fieldPosition: FieldPosition, duration: number = 0): Promise<void> {
+    if (fieldPosition === this.fieldPosition) {
+      return;
+    }
+
+    const initialOffset = this.getFieldPositionOffset();
+
+    this.fieldPosition = fieldPosition;
+
+    this.battleInfo.setMini(fieldPosition !== FieldPosition.CENTER);
+    this.battleInfo.setOffset(fieldPosition === FieldPosition.RIGHT);
+
+    const newOffset = this.getFieldPositionOffset();
+
+    const relX = newOffset[0] - initialOffset[0];
+    const relY = newOffset[1] - initialOffset[1];
+
+    const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+
+    if (duration > 0) {
+      // TODO: can this use stricter typing?
+      const targets: any[] = [this];
+      if (subTag?.sprite) {
+        targets.push(subTag.sprite);
       }
-
-      const initialOffset = this.getFieldPositionOffset();
-
-      this.fieldPosition = fieldPosition;
-
-      this.battleInfo.setMini(fieldPosition !== FieldPosition.CENTER);
-      this.battleInfo.setOffset(fieldPosition === FieldPosition.RIGHT);
-
-      const newOffset = this.getFieldPositionOffset();
-
-      const relX = newOffset[0] - initialOffset[0];
-      const relY = newOffset[1] - initialOffset[1];
-
-      const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-
-      if (duration) {
-        // TODO: can this use stricter typing?
-        const targets: any[] = [this];
-        if (subTag?.sprite) {
-          targets.push(subTag.sprite);
-        }
-        globalScene.tweens.add({
-          targets: targets,
-          x: (_target, _key, value: number) => value + relX,
-          y: (_target, _key, value: number) => value + relY,
-          duration: duration,
-          ease: "Sine.easeOut",
-          onComplete: () => resolve(),
-        });
-      } else {
-        this.x += relX;
-        this.y += relY;
-        if (subTag?.sprite) {
-          subTag.sprite.x += relX;
-          subTag.sprite.y += relY;
-        }
+      await playTween({
+        targets: targets,
+        x: (_target, _key, value: number) => value + relX,
+        y: (_target, _key, value: number) => value + relY,
+        duration: duration,
+        ease: "Sine.easeOut",
+      });
+    } else {
+      this.x += relX;
+      this.y += relY;
+      if (subTag?.sprite) {
+        subTag.sprite.x += relX;
+        subTag.sprite.y += relY;
       }
-    });
+    }
   }
 
   /**

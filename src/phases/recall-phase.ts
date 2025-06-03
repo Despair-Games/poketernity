@@ -8,6 +8,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
 /**
@@ -71,10 +72,9 @@ export class RecallPhase extends PokemonPhase {
    * the phase's {@linkcode SwitchType}).
    */
   private async playRecallAnimation(): Promise<void> {
-    const { tweens, audioManager } = globalScene;
     const promises: Promise<void>[] = [];
 
-    audioManager.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     promises.push(this.pokemon.hideInfo());
     this.pokemon.tint(getPokeballTintColor(this.pokemon.pokeball), 1, 250, "Sine.easeIn");
 
@@ -83,39 +83,31 @@ export class RecallPhase extends PokemonPhase {
     }
 
     promises.push(
-      new Promise<void>((resolve) =>
-        tweens.add({
-          targets: this.pokemon,
-          duration: 250,
-          ease: "Sine.easeIn",
-          scale: 0.5,
-          onComplete: () => resolve,
-        }),
-      ),
+      playTween({
+        targets: this.pokemon,
+        duration: 250,
+        ease: "Sine.easeIn",
+        scale: 0.5,
+      }),
     );
 
     await Promise.allSettled(promises);
   }
 
   private async removeSubstitute(): Promise<void> {
-    await new Promise<void>((resolve) => {
-      const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-      if (!substitute) {
-        resolve();
-        return;
-      }
+    const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+    if (!substitute) {
+      return;
+    }
 
-      globalScene.tweens.add({
-        targets: substitute.sprite,
-        duration: 250,
-        scale: substitute.sprite.scale * 0.5,
-        ease: "Sine.easeIn",
-        onComplete: () => {
-          substitute.sprite.destroy();
-          resolve();
-        },
-      });
+    await playTween({
+      targets: substitute.sprite,
+      duration: 250,
+      scale: substitute.sprite.scale * 0.5,
+      ease: "Sine.easeIn",
     });
+
+    substitute.sprite.destroy();
   }
 
   // #endregion

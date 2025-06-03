@@ -10,7 +10,7 @@ import { commonAnims } from "#animations/common-anims";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { ImagesFolder } from "#enums/images-folders";
-import Phaser from "phaser";
+import type { SceneBase } from "#app/scene-base";
 
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
@@ -67,4 +67,19 @@ export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
  */
 export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void> {
   await loadAnimAssets(Array.from(encounterAnims.values()), startLoad);
+}
+
+/**
+ * Plays a Tween animation, resolving once the animation completes.
+ * @param config - The config for a single Tween
+ * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
+ * @async
+ */
+export async function playTween(config: Phaser.Types.Tweens.TweenBuilderConfig, scene: SceneBase = globalScene) {
+  await new Promise((resolve) =>
+    scene.tweens.add({
+      ...config,
+      onComplete: resolve,
+    }),
+  );
 }
