@@ -21,6 +21,10 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { SummonPhase } from "#phases/summon-phase";
 
+/**
+ * Phase to handle all logical elements of switching a Pokemon.
+ * @extends PokemonPhase
+ */
 export class SwitchPhase extends PokemonPhase {
   override readonly id = PhaseId.SWITCH;
 
@@ -35,8 +39,11 @@ export class SwitchPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    // prettier-ignore - Prettier makes this 1 line
-    this.resolveSwitchInIndex().then(this.updatePokemonData).then(this.playEnemyTrainerAnim).then(this.end);
+    // prettier-ignore
+    this.resolveSwitchInIndex()
+      .then(this.updatePokemonData)
+      .then(this.playEnemyTrainerAnim)
+      .then(this.end);
   }
 
   /**

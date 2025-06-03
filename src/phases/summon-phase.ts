@@ -16,6 +16,11 @@ import { settings } from "#system/settings-manager";
 import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
+/**
+ * Phase to visually summon the Pokemon at the given {@linkcode fieldIndex} onto the field.
+ * @extends PartyMemberPokemonPhase
+ * @todo Should this extend {@linkcode PokemonPhase} instead?
+ */
 export class SummonPhase extends PartyMemberPokemonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.SUMMON;
