@@ -7,7 +7,7 @@ import type { Move } from "#moves/move";
 
 /**
  * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Glaive_Rush_(move) | Glaive Rush's}
- * secondary effect. Causes attacks against the user to deal double damage
+ * secondary effects. Causes attacks against the user to deal double damage
  * and bypass accuracy checks to always hit until the user uses another move.
  * @extends AddBattlerTagAttr
  */

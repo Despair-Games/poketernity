@@ -10,8 +10,8 @@ import type { Move } from "#moves/move";
  * @extends AddBattlerTagAttr
  */
 export class TormentAttr extends AddBattlerTagAttr {
-  constructor() {
-    super(BattlerTagType.TORMENT, false, { failOnOverlap: true });
+  constructor(isAttack = false) {
+    super(BattlerTagType.TORMENT, false, { failOnOverlap: !isAttack });
   }
 
   /** Has a 40% chance to grant (+1) */

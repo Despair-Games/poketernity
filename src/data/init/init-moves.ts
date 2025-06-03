@@ -58,7 +58,7 @@ import { BypassSleepAttr } from "#moves/bypass-sleep-attr";
 import { CaptivateAttr } from "#moves/captivate-attr";
 import { CenterOfAttentionAttr } from "#moves/center-of-attention-attr";
 import { ChangeTypeAttr } from "#moves/change-type-attr";
-import { ChargeAttr } from "#moves/charge-attr";
+import { ChargedAttr } from "#moves/charged-attr";
 import { ChargingAttackMove } from "#moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#moves/charging-self-status-move";
 import { ChillyReceptionAttr } from "#moves/chilly-reception-attr";
@@ -1191,7 +1191,7 @@ export function initMoves() {
       .attr(NaturePowerAttr),
     new SelfStatusMove(MoveId.CHARGE, ElementalType.ELECTRIC, -1, 20, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPDEF], 1, true)
-      .attr(ChargeAttr)
+      .attr(ChargedAttr)
       .snatchable(),
     new StatusMove(MoveId.TAUNT, ElementalType.DARK, 100, 20, -1, 0, 3)
       .attr(TauntAttr)

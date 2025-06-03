@@ -11,7 +11,7 @@ import type { Move } from "#moves/move";
  * Doubles the power of the user's next Electric-type attack.
  * @extends AddBattlerTagAttr
  */
-export class ChargeAttr extends AddBattlerTagAttr {
+export class ChargedAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.CHARGED, true);
   }

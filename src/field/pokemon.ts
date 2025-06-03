@@ -1228,7 +1228,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * @param target - The {@linkcode} to compare Speed against
-   * @param estimate - If `true`, estimates the target's Speed only based on revealed information
+   * @param estimate - If `true`, estimates the target's Speed, not accounting for unrevealed Abilities
    * @returns `true` if this Pokemon has higher Speed than
    */
   public outspeeds(target: Pokemon, estimate: boolean = false): boolean {

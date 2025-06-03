@@ -11,7 +11,7 @@ export interface Status {
    */
   toxicTurnCount: number;
   /**
-   * The number of turns the affected Pokemon has slept since
+   * The number of turns the affected Pokemon has been sleeping.
    * @defaultValue 0
    */
   turnsAsleep: number;
