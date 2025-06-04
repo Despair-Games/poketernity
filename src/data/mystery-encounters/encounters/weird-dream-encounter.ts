@@ -512,9 +512,9 @@ async function postProcessTransformedPokemon(
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
   const newTypes = [newPokemon.getTypes()[0]];
-  let newType = randSeedInt(18) as ElementalType;
+  let newType = randSeedInt(18, 1) as ElementalType;
   while (newType === newTypes[0]) {
-    newType = randSeedInt(18) as ElementalType;
+    newType = randSeedInt(18, 1) as ElementalType;
   }
   newTypes.push(newType);
   if (!newPokemon.customPokemonData) {

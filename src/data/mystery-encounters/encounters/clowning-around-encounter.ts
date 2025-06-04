@@ -385,7 +385,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
             if (priorityTypes.length > 0) {
               secondType = priorityTypes.pop() ?? null;
             } else {
-              secondType = randSeedInt(18) as ElementalType;
+              secondType = randSeedInt(18, 1) as ElementalType;
             }
           }
           newTypes.push(secondType);
