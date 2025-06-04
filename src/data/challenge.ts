@@ -608,6 +608,9 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
+    if (value === 0) {
+      return enumValueToKey(ElementalType, ElementalType.UNKNOWN).toLowerCase();
+    }
     return enumValueToKey(ElementalType, value as ElementalType).toLowerCase();
   }
 
@@ -617,12 +620,14 @@ export class SingleTypeChallenge extends Challenge {
    * @returns The localised description for the current value.
    */
   override getDescription(overrideValue?: number): string {
-    const value = (overrideValue ?? this.value) as ElementalType;
-    const type = i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, value)}`);
-    const typeColor = `[color=${TypeColor[enumValueToKey(ElementalType, value)]}][shadow=${TypeShadowColor[enumValueToKey(ElementalType, value)]}]${type}[/shadow][/color]`;
-    const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
-    const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
-    return (value as number) === 0 ? defaultDesc : typeDesc;
+    const value = overrideValue ?? this.value;
+    if (value === 0) {
+      return i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
+    }
+    const typeKey = enumValueToKey(ElementalType, value as ElementalType);
+    const typeName = i18next.t(`pokemonInfo:Type.${typeKey}`);
+    const typeColor = `[color=${TypeColor[typeKey]}][shadow=${TypeShadowColor[typeKey]}]${typeName}[/shadow][/color]`;
+    return i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
   }
 
   static override loadChallenge(source: SingleTypeChallenge | any): SingleTypeChallenge {
