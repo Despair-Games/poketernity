@@ -1033,13 +1033,8 @@ export class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.setVisible(true);
 
           if (this.newMove && this.pokemon) {
-            const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(
-              0,
-              0,
-              "type_icons",
-              enumValueToKey(ElementalType, moveType).toLowerCase(),
-            );
+            const moveTypeKey = enumValueToKey(ElementalType, this.pokemon.getMoveType(this.newMove)).toLowerCase();
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "type_icons", moveTypeKey);
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1063,13 +1058,8 @@ export class SummaryUiHandler extends UiHandler {
           this.moveRowsContainer.add(moveRowContainer);
 
           if (move && this.pokemon) {
-            const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(
-              0,
-              0,
-              "type_icons",
-              enumValueToKey(ElementalType, moveType).toLowerCase(),
-            );
+            const moveTypeKey = enumValueToKey(ElementalType, this.pokemon.getMoveType(move.getMove())).toLowerCase();
+            const typeIcon = globalScene.add.sprite(0, 0, "type_icons", moveTypeKey);
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }
