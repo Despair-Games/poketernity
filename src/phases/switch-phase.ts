@@ -42,7 +42,6 @@ export class SwitchPhase extends PokemonPhase {
     // prettier-ignore
     this.resolveSwitchInIndex()
       .then(this.updatePokemonData)
-      .then(this.playEnemyTrainerAnim)
       .then(this.end);
   }
 
@@ -84,20 +83,6 @@ export class SwitchPhase extends PokemonPhase {
   public override end(): void {
     globalScene.phaseManager.unshiftPhase(new SummonPhase(this.fieldIndex, this.isPlayer, false));
     super.end();
-  }
-
-  /**
-   * If the switched Pokemon is an enemy, shows an animation where
-   * the Pokemon's trainer enters the field
-   * @async
-   */
-  private async playEnemyTrainerAnim(): Promise<void> {
-    if (this.isPlayer) {
-      return;
-    }
-
-    await this.showEnemyTrainer(this.getTrainerSlot());
-    await globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
   }
 
   /**

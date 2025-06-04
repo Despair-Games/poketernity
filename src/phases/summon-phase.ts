@@ -36,7 +36,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   public override start(): void {
     super.start();
 
-    this.preSummon().then(this.end);
+    this.playSummonSequence().then(this.end);
   }
 
   public override end(): void {
@@ -61,68 +61,37 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   /**
-   * Sends out a Pokemon before the battle begins and shows the appropriate messages
+   * Plays animations for the Trainer summoning the Pokemon, then plays
+   * summon animations for the Pokemon.
    * @async
-   * @todo Reorganize and/or rename this. `preSummon` can be confused with similar methods
-   * in `SwitchPhase`, and the animations should only be played when the respective
-   * Trainer is already showing.
    */
-  private async preSummon(): Promise<void> {
-    const { currentBattle, pbTrayEnemy } = globalScene;
-
-    /** @todo Is the failsafe below necessary? */
-    const partyMember = this.getPokemon();
-    // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
-    if (
-      !partyMember.isAllowedInBattle()
-      || (this.isPlayer && !this.getAlliedParty().some((p) => p.id === partyMember.id))
-    ) {
-      console.warn(
-        "The Pokemon about to be sent out is fainted or illegal under a challenge. Attempting to resolve...",
-      );
-
-      // First check if they're somehow still in play, if so remove them.
-      if (partyMember.isOnField()) {
-        partyMember.leaveField();
-      }
-
-      const party = this.getAlliedParty();
-
-      // Find the first non-fainted Pokemon index above the current one
-      const legalIndex = party.findIndex((p, i) => i > this.partyMemberIndex && p.isAllowedInBattle());
-      if (legalIndex === -1) {
-        console.error("Party Details:\n", party);
-        console.error("All available Pokemon were fainted or illegal!");
-        globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
-        return this.end();
-      }
-
-      // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party
-      [party[this.partyMemberIndex], party[legalIndex]] = [party[legalIndex], party[this.partyMemberIndex]];
-      console.warn(
-        "Swapped %s %O with %s %O",
-        getPokemonNameWithAffix(partyMember),
-        partyMember,
-        getPokemonNameWithAffix(party[0]),
-        party[0],
-      );
-    }
-
+  private async playSummonSequence(): Promise<void> {
+    const { currentBattle, pbTrayEnemy, trainer } = globalScene;
     if (this.isPlayer) {
-      await this.playPlayerTrainerThrowSequence();
-      await this.summon();
+      if (trainer.visible) {
+        await this.playPlayerTrainerThrowSequence();
+      }
+      await this.playPokeBallSummonFX();
     } else if (
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
       await this.playEnemyTrainerThrowSequence();
-      await this.summon();
-    } else if (currentBattle.isBattleMysteryEncounter()) {
+      await this.playPokeBallSummonFX();
+    } else {
+      // At the moment, this is only reached during Mystery Encounters where the Player
+      // may battle "wild" Pokemon. The enemy's Poke Ball tray is shown during prior phases
+      // of the encounter.
       pbTrayEnemy.hide();
-      await this.summonWild();
+      await this.playWildSummonFX();
     }
   }
 
+  /**
+   * Plays all animations targeting the Player Trainer during the summon
+   * sequence. This assumes the Player Trainer sprite is already visible and
+   * on the field, e.g. after the animation sequence in {@linkcode EncounterPhase}
+   */
   private async playPlayerTrainerThrowSequence(): Promise<void> {
     const { pbTray, time, trainer, tweens, ui } = globalScene;
 
@@ -148,24 +117,51 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     await new Promise<void>((resolve) => time.delayedCall(750, resolve));
   }
 
+  /**
+   * Plays all animations targeting the Enemy Trainer during the summon
+   * sequence. The Trainer first enters the field while showing its Poke Ball tray,
+   * then hides itself as it announces the Pokemon entering the field.
+   * @async
+   */
   private async playEnemyTrainerThrowSequence(): Promise<void> {
-    await Promise.allSettled([this.hideEnemyTrainer, globalScene.pbTrayEnemy.hide]);
+    const { currentBattle, pbTrayEnemy, ui } = globalScene;
+    const { trainer } = currentBattle;
+    if (!trainer) {
+      console.warn("SummonPhase: Enemy Trainer is missing!");
+      return;
+    }
 
-    const trainerName = globalScene.currentBattle.trainer?.getName(this.getTrainerSlot());
+    if (!trainer.visible) {
+      await this.playEnemyTrainerEntranceAnim();
+    }
+
+    await Promise.allSettled([this.hideEnemyTrainer, pbTrayEnemy.hide]);
+
+    const trainerName = trainer.getName(this.getTrainerSlot());
     const pokemonName = this.getPokemon().getNameToRender();
     const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
-    await new Promise<void>((resolve) => globalScene.ui.showText(message, null, resolve));
+    await new Promise<void>((resolve) => ui.showText(message, null, resolve));
   }
 
   /**
-   * Animates the following:
-   * - The Poke Ball being thrown to summon the Pokemon
-   * - The Pokemon entering the field from the Poke Ball.
-   * - The Pokemon's cry and entrance animation after entering the field.
+   * Plays an animation to move the enemy Trainer onto the field.
+   * This, of course, assumes the Pokemon to switch in is an enemy
    * @async
    */
-  private async summon(): Promise<void> {
+  private async playEnemyTrainerEntranceAnim(): Promise<void> {
+    await this.showEnemyTrainer(this.getTrainerSlot());
+    await globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
+    await new Promise((resolve) => globalScene.time.delayedCall(1000, resolve));
+  }
+
+  /**
+   * Plays animations to summon this phase's Pokemon from its Poke Ball.
+   * More specifically, this animates the Poke Ball's movement to the Pokemon's field position,
+   * the Pokemon exiting from the Poke Ball, and the Pokemon's entrance animation and cry.
+   * @async
+   */
+  private async playPokeBallSummonFX(): Promise<void> {
     const { add, currentBattle, field, time, animations } = globalScene;
     const pokemon = this.getPokemon();
 
@@ -268,7 +264,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * @todo Are any of these animations recycled from other phases? If so, can they be
    * implemented as `Pokemon` methods?
    */
-  private async summonWild(): Promise<void> {
+  private async playWildSummonFX(): Promise<void> {
     const { add, currentBattle, field, time } = globalScene;
     const pokemon = this.getPokemon();
 

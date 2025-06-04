@@ -42,13 +42,21 @@ export abstract class BattlePhase extends Phase {
   }
 
   public async hideEnemyTrainer(): Promise<void> {
+    const { trainer } = globalScene.currentBattle;
+    if (!trainer) {
+      console.warn("Enemy Trainer is missing!");
+      return;
+    }
+
     await playTween({
-      targets: globalScene.currentBattle.trainer,
+      targets: trainer,
       x: "+=16",
       y: "-=16",
       alpha: 0,
       ease: "Sine.easeInOut",
       duration: 750,
     });
+
+    trainer.setVisible(false);
   }
 }
