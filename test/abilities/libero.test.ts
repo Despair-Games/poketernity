@@ -96,8 +96,8 @@ describe.each([
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
-    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]),
-      moveType = enumValueToKey(ElementalType, ElementalType.FIRE);
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, ElementalType.FIRE);
     expect(leadPokemonType).toBe(moveType);
   });
 
@@ -113,8 +113,8 @@ describe.each([
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
-    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]),
-      moveType = enumValueToKey(ElementalType, ElementalType.ICE);
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, ElementalType.ICE);
     expect(leadPokemonType).toBe(moveType);
   });
 
@@ -268,8 +268,8 @@ describe.each([
   function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
     expect(pokemon.summonData.abilitiesApplied).toContain(ability);
     expect(pokemon.getTypes()).toHaveLength(1);
-    const pokemonType = enumValueToKey(ElementalType, pokemon.getTypes()[0]),
-      moveType = enumValueToKey(ElementalType, allMoves.get(moveId).type);
+    const pokemonType = enumValueToKey(ElementalType, pokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, allMoves.get(moveId).type);
     expect(pokemonType).toBe(moveType);
   }
 });
