@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { RESTRICTING_TAG_TYPES } from "#constants/battler-tag-constants";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
@@ -8,13 +14,17 @@ import type { Move } from "#moves/move";
 import type { MovePhase } from "#phases/move-phase";
 
 /**
- * Base class for tags that restrict the usage of moves. This effect is generally referred to as "disabling" a move
- * in-game. This is not to be confused with {@linkcode MoveId.DISABLE}.
+ * Base class for tags that restrict the usage of moves.
+ * This effect is generally referred to as "disabling" a move in-game.
+ * This is not to be confused with {@linkcode MoveId.DISABLE}.
  *
- * Descendants can override {@linkcode isMoveRestricted} to restrict moves that
- * match a condition. A restricted move gets cancelled before it is used. Players and enemies should not be allowed
- * to select restricted moves.
- * @extends BattlerTag
+ * Descendants can override {@linkcode isMoveRestricted} to restrict moves that match a condition.
+ * A restricted move gets cancelled before it is used.
+ *
+ * Players and enemies should not be allowed to select restricted moves.
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode RESTRICTING_TAG_TYPES}
  */
 export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
   /** @override */

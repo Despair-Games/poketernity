@@ -12,7 +12,9 @@ import i18next from "i18next";
 
 /**
  * Tag to prevent the owner from switching out or fleeing from battle.
- * @extends BattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode TRAPPED_BATTLER_TAG_TYPES}
  */
 export class TrappedTag extends BattlerTag {
   constructor(
