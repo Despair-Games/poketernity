@@ -12,6 +12,7 @@ import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/game-manager-utils";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
 import { copyChallenge } from "data/challenge";
+import { vi } from "vitest";
 
 /**
  * Helper to handle Challenge mode specifics
@@ -90,6 +91,10 @@ export class ChallengeModeHelper extends GameManagerHelper {
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
       );
+    }
+
+    if (this.game.override.disableExpGain) {
+      vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
 
     await this.game.phaseInterceptor.to("CommandPhase");
