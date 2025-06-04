@@ -4096,10 +4096,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.setFrameRate(4);
 
-      const tag = SEMI_INVULNERABLE_BATTLER_TAG_TYPES.find((t) => this.hasTag(t));
+      const tag = this.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES);
 
       if (tag) {
-        this.removeTag(tag);
+        this.removeTag(tag.tagType);
         this.getMoveQueue().pop();
       }
     }
