@@ -109,6 +109,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     });
 
     it("should award exp to surfable PKM (Blastoise)", async () => {
+      game.override.disableExpGain = false;
       const laprasSpecies = getPokemonSpecies(SpeciesId.LAPRAS);
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
@@ -174,6 +175,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     it("should award exp to flyable PKM (Pidgeot)", async () => {
       const laprasBaseExp = 187;
       const wave = 33;
+      game.override.disableExpGain = false;
       game.override.startingWave(wave);
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);

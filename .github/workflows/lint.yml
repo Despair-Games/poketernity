@@ -24,37 +24,42 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: "recursive"
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "npm"
+          cache: "pnpm"
 
       - name: Install Node modules
-        run: npm ci
+        run: pnpm i
       
       # Lint files with Biome-Lint - https://biomejs.dev/linter/
       - name: Run Biome-Lint
-        run: npm run biome-ci
+        run: pnpm biome-ci
         id: biome_lint
         continue-on-error: true
       
       # Lint files with ESLint - https://eslint.org
       - name: Run ESLint
-        run: npm run eslint-ci
+        run: pnpm eslint-ci
         id: eslint
         continue-on-error: true
       
       # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
       - name: Run Dependency-Cruise
-        run: npm run depcruise
+        run: pnpm depcruise
         id: depcruise
         continue-on-error: true
 
       # Validate types with tsc - https://www.typescriptlang.org/docs/handbook/compiler-options.html#using-the-cli
       - name: Run Typecheck
-        run: npm run typecheck
+        run: pnpm typecheck
         id: typecheck
         continue-on-error: true
       
