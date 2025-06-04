@@ -14,29 +14,29 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 #### Prerequisites
 
-- node: 22.14.0
-- npm: [how to install](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- node: 22.14.0 - [manage with pnpm](https://pnpm.io/cli/env) | [manage with fnm](https://github.com/Schniz/fnm) | [manage with nvm](https://github.com/nvm-sh/nvm)
+- pnpm: 10.x - [how to install](https://pnpm.io/installation) (not recommended to install via `npm` on Windows native) | [alternate method - volta.sh](https://volta.sh/)
 - git: [how to install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (needed to retrieve the translations)
 
 #### Running Locally
 
-1. Clone the repo through git and in the root directory run `npm install`.
+1. Clone the repo through git and in the root directory run `pnpm install` (alias `pnpm i`).
 If the install process seems to hang at the post-install step, you likely just need to press `Enter` for it continue.
 <!--   - _if you run into any errors, reach out in [TBD]_-->
-2. Run `npm run start:dev` to locally run the project. You can then access it from the same machine by putting `http://localhost:8000/` in your browser's address bar.
-If you want to access the game from other devices on your local network, you can run `npm run start:dev -- --host` instead. You can then connect via `http://[IP of your device]:8000/` (e.g.: `http://192.168.1.101:8000/`).
+2. Run `pnpm start:dev` to locally run the project. You can then access it from the same machine by putting `http://localhost:8000/` in your browser's address bar.
+If you want to access the game from other devices on your local network, you can run `pnpm start:dev --host` instead. You can then connect via `http://[IP of your device]:8000/` (e.g.: `http://192.168.1.101:8000/`).
 
 ### Development Guidelines
 
 #### Continuous Integration
 
 Github Workflows are used on every PR to enforce the test suite being successful, proper linting, no compilation errors and no circular dependencies in the codebase.
-- Use `npm run typecheck` to invoke the Typescript compiler to check for basic code errors.
-- Use `npm run depcruise` to check the codebase for any runtime circular dependency.
-- Use `npm run docs` to generate html documentation for the game, which can then be found in the `typedoc` folder.
-- Use `npm run test:silent` to run the full test suite.
+- Use `pnpm typecheck` to invoke the Typescript compiler to check for basic code errors.
+- Use `pnpm depcruise` to check the codebase for any runtime circular dependency.
+- Use `pnpm run docs` to generate html documentation for the game, which can then be found in the `typedoc` folder.
+- Use `pnpm test:silent` to run the full test suite.
 
-We are using [Vitest](https://vitest.dev/) as a testing framework for the game. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `npm run test:create` command.
+We are using [Vitest](https://vitest.dev/) as a testing framework for the game. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `pnpm test:create` command.
 
 #### Code-Style
 
@@ -46,7 +46,7 @@ We are using [Prettier](https://prettier.io/) to format our code. It will run au
 
 ##### ESLint
 
-We are _still_ using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
+We are _still_ using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `pnpm eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
 
 ##### Biome-Lint
 

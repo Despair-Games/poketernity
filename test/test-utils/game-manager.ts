@@ -277,6 +277,10 @@ export class GameManager {
     if (!isNil(encounterType)) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
+
+    if (this.override.disableExpGain) {
+      vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
+    }
   }
 
   /**
