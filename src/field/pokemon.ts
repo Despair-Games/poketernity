@@ -1773,9 +1773,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.hasTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
-        && !this.hasTag(BattlerTagType.FLOATING)
-        && !this.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
-        && !this.hasTag(BattlerTagType.SKY_DROP))
+        && !this.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.FLOATING, BattlerTagType.SKY_DROP))
     );
   }
 

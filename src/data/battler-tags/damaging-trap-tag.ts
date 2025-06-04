@@ -52,7 +52,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES) && !pokemon.hasTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES, BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {

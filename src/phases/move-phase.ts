@@ -805,7 +805,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    if (this.pokemon.hasTag(BattlerTagType.RECHARGING) || this.pokemon.hasTag(BattlerTagType.INTERRUPTED)) {
+    if (this.pokemon.hasTag(BattlerTagType.RECHARGING, BattlerTagType.INTERRUPTED)) {
       return;
     }
 

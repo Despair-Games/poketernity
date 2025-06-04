@@ -1856,11 +1856,7 @@ export function initMoves() {
       .condition(
         (_user, target, _move) => !(target.species.speciesId === SpeciesId.GENGAR && target.getFormKey() === "mega"),
       )
-      .condition(
-        (_user, target, _move) =>
-          !target.hasTag(BattlerTagType.INGRAIN)
-          && !target.hasTag(BattlerTagType.IGNORE_FLYING),
-      )
+      .condition((_user, target, _move) => !target.hasTag(BattlerTagType.INGRAIN, BattlerTagType.IGNORE_FLYING))
       .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
       .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 })
       .bounceable(),

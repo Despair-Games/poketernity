@@ -40,8 +40,7 @@ export class SkyDropAttr extends MoveEffectAttr {
       failOnGravityCondition(user, target, move)
       && target.isPlayer() !== user.isPlayer()
       && target.species.weight < 200
-      && !target.hasTag(BattlerTagType.SUBSTITUTE)
-      && !target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
+      && !target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.SUBSTITUTE)
       && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon()?.id !== target.id
       && (!target.hasTag(BattlerTagType.SKY_DROP) || target.getTag(BattlerTagType.SKY_DROP)?.sourceId === user.id);
   }
