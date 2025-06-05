@@ -397,8 +397,7 @@ export class CommandPhase extends FieldPhase {
 
   public cancel(): void {
     if (this.fieldIndex) {
-      globalScene.phaseManager.unshiftPhase(new CommandPhase(0));
-      globalScene.phaseManager.unshiftPhase(new CommandPhase(1));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(0), new CommandPhase(1));
       this.end();
     }
   }

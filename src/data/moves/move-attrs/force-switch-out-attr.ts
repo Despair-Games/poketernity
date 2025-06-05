@@ -82,14 +82,14 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.phaseManager.prependToPhase(
-            new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
             PhaseId.POST_ACTION,
+            new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
           globalScene.phaseManager.prependToPhase(
-            new LegacySwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
             PhaseId.POST_ACTION,
+            new LegacySwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
           );
           return true;
         }
@@ -115,12 +115,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.phaseManager.prependToPhase(
-            new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
             PhaseId.POST_ACTION,
+            new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
           globalScene.phaseManager.prependToPhase(
+            PhaseId.POST_ACTION,
             new SwitchSummonPhase(
               this.switchType,
               switchOutTarget.getFieldIndex(),
@@ -128,7 +129,6 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
               false,
               false,
             ),
-            PhaseId.POST_ACTION,
           );
         }
       }
