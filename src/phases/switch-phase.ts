@@ -81,7 +81,7 @@ export class SwitchPhase extends PokemonPhase {
   }
 
   public override end(): void {
-    globalScene.phaseManager.unshiftPhase(new SummonPhase(this.fieldIndex, this.isPlayer, false));
+    globalScene.phaseManager.unshiftPhase(new SummonPhase(this.battlerIndex, false));
     super.end();
   }
 

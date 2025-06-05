@@ -22,7 +22,7 @@ export class RecallPhase extends PokemonPhase {
   private readonly switchType: SwitchType;
   private readonly pokemon: Pokemon;
 
-  constructor(battlerIndex: BattlerIndex, switchType: SwitchType) {
+  constructor(battlerIndex: BattlerIndex, switchType: SwitchType = SwitchType.SWITCH) {
     super(battlerIndex);
 
     this.switchType = switchType;
