@@ -1,5 +1,5 @@
-import { TrappedTag } from "#battler-tags/trapped-tag";
 import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
@@ -102,13 +102,13 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // before Octolock - enemy should not be trapped
-    expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
+    expect(enemyPokemon).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
 
     game.move.select(MoveId.OCTOLOCK);
 
     // after Octolock - enemy should be trapped
     await game.phaseInterceptor.to("PostActionPhase");
-    expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
+    expect(enemyPokemon).toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
   });
 
   it("does not work on ghost type pokemon", async () => {
@@ -118,13 +118,13 @@ describe("Moves - Octolock", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // before Octolock - player should not be trapped
-    expect(playerPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
+    expect(playerPokemon).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     // after Octolock - player should still not be trapped, and no stat loss
-    expect(playerPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
+    expect(playerPokemon).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(0);
     expect(playerPokemon.getStatStage(Stat.SPDEF)).toBe(0);
   });
@@ -135,7 +135,7 @@ describe("Moves - Octolock", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // before Octolock - pokemon should not be trapped
-    expect(enemy.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
+    expect(enemy).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
 
     game.move.select(MoveId.TRICK_OR_TREAT);
     await game.toNextTurn();
@@ -143,7 +143,7 @@ describe("Moves - Octolock", () => {
     await game.toNextTurn();
 
     // after Octolock - pokemon should still not be trapped, and no stat loss
-    expect(enemy.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
+    expect(enemy).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(enemy.getStatStage(Stat.SPDEF)).toBe(0);
   });

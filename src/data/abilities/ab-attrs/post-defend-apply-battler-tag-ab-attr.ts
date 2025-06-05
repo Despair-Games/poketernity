@@ -19,7 +19,7 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
 
   public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (this.condition(pokemon, attacker, move)) {
-      if (!pokemon.getTag(this.tagType) && !simulated) {
+      if (!pokemon.hasTag(this.tagType) && !simulated) {
         pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
         globalScene.phaseManager.queueMessagePhase(
           i18next.t("abilityTriggers:windPowerCharged", {

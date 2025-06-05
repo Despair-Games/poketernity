@@ -82,7 +82,8 @@ export class PokemonHealPhase extends CommonAnimPhase {
     const pokemon = this.getPokemon();
 
     if (!pokemon.isOnField() || (!this.revive && !pokemon.isActive())) {
-      return super.end();
+      super.end();
+      return;
     }
 
     // TODO: This seems weird, why are we storing the message check way before we use it

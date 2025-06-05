@@ -2,14 +2,14 @@ pre-commit:
   commands:
     prettier:
       glob: "*.{js,jsx,ts,tsx}"
-      run: npx prettier --write {staged_files}
+      run: pnpm exec prettier --write {staged_files}
       priority: 1
       stage_fixed: true
       skip:
         - merge
         - rebase
     biome-lint:
-      run: npx biome check --write --reporter=summary --staged --no-errors-on-unmatched
+      run: pnpm exec biome check --write --reporter=summary --staged --no-errors-on-unmatched
       stage_fixed: true
       priority: 2
       skip:
@@ -19,8 +19,7 @@ pre-commit:
 pre-push:
   commands:
     biome-lint:
-      glob: "*.{js,ts,jsx,tsx}"
-      run: npx biome ci --changed --no-errors-on-unmatched --diagnostic-level=error {push_files}
+      run: pnpm exec biome ci --changed --no-errors-on-unmatched --diagnostic-level=error
 
 post-merge:
   commands:

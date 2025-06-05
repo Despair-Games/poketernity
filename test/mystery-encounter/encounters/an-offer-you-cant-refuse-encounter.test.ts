@@ -193,6 +193,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
     });
 
     it("should award EXP to a pokemon with an ability in EXTORTION_ABILITIES", async () => {
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, defaultParty);
       const party = scene.getPlayerParty();
       const gyarados = party.find((pkm) => pkm.species.speciesId === SpeciesId.GYARADOS)!;
@@ -207,6 +208,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
     });
 
     it("should award EXP to a pokemon with a move in EXTORTION_MOVES", async () => {
+      game.override.disableExpGain = false;
       game.override.ability(AbilityId.SYNCHRONIZE); // Not an extortion ability, so we can test extortion move
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, [SpeciesId.ABRA]);
       const party = scene.getPlayerParty();

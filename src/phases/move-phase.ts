@@ -153,7 +153,8 @@ export class MovePhase extends BattlePhase {
     // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
     const skyDropTag = this.pokemon.getTag(BattlerTagType.SKY_DROP);
     if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
-      return this.end();
+      this.end();
+      return;
     }
 
     console.log(MoveId[this.move.moveId], `(${getPokemonNameWithAffix(this.pokemon)})`);
@@ -165,7 +166,8 @@ export class MovePhase extends BattlePhase {
         this.showMoveText();
         this.showFailedText();
       }
-      return this.end();
+      this.end();
+      return;
     }
 
     this.pokemon.turnData.acted = true;
@@ -208,7 +210,7 @@ export class MovePhase extends BattlePhase {
 
     if (this.cancelled || this.failed) {
       this.handlePreMoveFailures();
-    } else if (this.move.getMove().isChargingMove() && !this.pokemon.getTag(BattlerTagType.CHARGING)) {
+    } else if (this.move.getMove().isChargingMove() && !this.pokemon.hasTag(BattlerTagType.CHARGING)) {
       this.chargeMove();
     } else {
       this.useMove();
@@ -267,7 +269,7 @@ export class MovePhase extends BattlePhase {
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           applyAbAttrs<ReduceSleepDurationAbAttr>(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect);
           healed = this.pokemon.sleepTurnsRemaining <= 0;
-          activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
+          activated = !healed && !this.pokemon.hasTag(BattlerTagType.BYPASS_SLEEP);
           break;
         case StatusEffect.FREEZE:
           healed =
@@ -362,7 +364,7 @@ export class MovePhase extends BattlePhase {
      */
     const otherPokemon = globalScene
       .getField(true)
-      .filter((p) => p !== this.pokemon && p.turnData.acted && !p.getTag(BattlerTagType.SKY_DROP))
+      .filter((p) => p !== this.pokemon && p.turnData.acted && !p.hasTag(BattlerTagType.SKY_DROP))
       .sort((pokemonA, pokemonB) => {
         const [orderA, orderB] = [pokemonA, pokemonB].map((p) => p.turnData.order);
         return orderA - orderB;
@@ -803,7 +805,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    if (this.pokemon.getTag(BattlerTagType.RECHARGING) || this.pokemon.getTag(BattlerTagType.INTERRUPTED)) {
+    if (this.pokemon.hasTag(BattlerTagType.RECHARGING, BattlerTagType.INTERRUPTED)) {
       return;
     }
 

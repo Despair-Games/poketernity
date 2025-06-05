@@ -61,11 +61,11 @@ export class AddSubstituteAttr extends MoveEffectAttr {
      * - THe user has more than 1 max hp (wonder guard users)
      */
     return (user, _target, _move) =>
-      !user.getTag(BattlerTagType.SUBSTITUTE) && user.hp > this.getHpCost(user) && user.getMaxHp() > 1;
+      !user.hasTag(BattlerTagType.SUBSTITUTE) && user.hp > this.getHpCost(user) && user.getMaxHp() > 1;
   }
 
   override getFailedText(user: Pokemon, _target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
-    if (user.getTag(BattlerTagType.SUBSTITUTE)) {
+    if (user.hasTag(BattlerTagType.SUBSTITUTE)) {
       return i18next.t("moveTriggers:substituteOnOverlap", { pokemonName: getPokemonNameWithAffix(user) });
     }
     if (user.hp <= this.getHpCost(user) || user.getMaxHp() === 1) {

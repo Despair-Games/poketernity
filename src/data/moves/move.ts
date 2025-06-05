@@ -321,7 +321,7 @@ export abstract class Move implements Localizable {
   hitsSubstitute(user: Pokemon, target: Pokemon | nil): boolean {
     if (
       [MoveTarget.USER, MoveTarget.USER_SIDE, MoveTarget.ENEMY_SIDE, MoveTarget.BOTH_SIDES].includes(this.moveTarget)
-      || !target?.getTag(BattlerTagType.SUBSTITUTE)
+      || !target?.hasTag(BattlerTagType.SUBSTITUTE)
     ) {
       return false;
     }
@@ -863,7 +863,7 @@ export abstract class Move implements Localizable {
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 
-    if (source.getTag(BattlerTagType.HELPING_HAND)) {
+    if (source.hasTag(BattlerTagType.HELPING_HAND)) {
       power.value *= 1.5;
     }
 

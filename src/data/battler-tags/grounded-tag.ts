@@ -31,8 +31,7 @@ export class GroundedTag extends BattlerTag {
     const wasNotGrounded =
       pokemon.isOfType(ElementalType.FLYING, true, true)
       || pokemon.hasAbility(AbilityId.LEVITATE)
-      || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES);
+      || pokemon.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.FLOATING);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.phaseManager.queueMessagePhase(

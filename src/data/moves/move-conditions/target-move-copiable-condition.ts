@@ -26,7 +26,7 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
    * Bide can only be copied after it fully executes
    * @todo Verify this interaction (on Showdown?)
    */
-  if (copiableMove.move.id === MoveId.BIDE && target.getTag(BattlerTagType.BIDE)) {
+  if (copiableMove.move.id === MoveId.BIDE && target.hasTag(BattlerTagType.BIDE)) {
     return false;
   }
 
