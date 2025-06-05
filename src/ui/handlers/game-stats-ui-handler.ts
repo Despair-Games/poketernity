@@ -385,13 +385,17 @@ export class GameStatsUiHandler extends UiHandler {
     } else {
       switch (button) {
         case Button.UP:
-          if (this.cursor) {
+          if (this.cursor > 0) {
             success = this.setCursor(this.cursor - 1);
+          } else if (this.cursor === 0) {
+            success = this.setCursor(this.MAX_CURSOR);
           }
           break;
         case Button.DOWN:
           if (this.cursor < this.MAX_CURSOR) {
             success = this.setCursor(this.cursor + 1);
+          } else {
+            success = this.setCursor(0);
           }
           break;
       }
