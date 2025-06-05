@@ -1,3 +1,4 @@
+import { ReceivedTypeDamageMultiplierAbAttr } from "#abilities/received-type-damage-multiplier-ab-attr";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -5,7 +6,7 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
 import { toDmgValue } from "#utils/common-utils";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Abilities - Dry Skin", () => {
   let phaserGame: Phaser.Game;
@@ -29,8 +30,7 @@ describe("Abilities - Dry Skin", () => {
       .enemyAbility(AbilityId.DRY_SKIN)
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(SpeciesId.CHARMANDER)
-      .ability(AbilityId.BALL_FETCH)
-      .moveset([MoveId.SUNNY_DAY, MoveId.RAIN_DANCE, MoveId.SPLASH, MoveId.WATER_GUN]);
+      .ability(AbilityId.BALL_FETCH);
   });
 
   it.each([
@@ -42,7 +42,7 @@ describe("Abilities - Dry Skin", () => {
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
-    move.select(MoveId.SPLASH);
+    move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
     expect(enemy).toHaveTakenDamage(toDmgValue(enemy.getMaxHp() / 8));
@@ -58,35 +58,44 @@ describe("Abilities - Dry Skin", () => {
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
     enemy.hp = enemy.getMaxHp() - toDmgValue(enemy.getMaxHp() / 8); // remove 1/8 of max health
-    move.select(MoveId.SPLASH);
+    move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
     expect(enemy).toHaveFullHp();
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
+    const initialHP = 1000;
     const { override, classicMode, field, move } = game;
-    override.moveset([MoveId.FLAMETHROWER]);
+    vi.spyOn(ReceivedTypeDamageMultiplierAbAttr.prototype, "apply");
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const player = field.getPlayerPokemon();
+    // Mock the random multiplier to always return 1 (100%)
+    vi.spyOn(player, "randSeedIntRange").mockReturnValue(100);
     const enemy = field.getEnemyPokemon();
-    const initialHP = 1000;
-    enemy.hp = initialHP;
+    // Mock the random multiplier to always return 1 (100%)
+    vi.spyOn(enemy, "randSeedIntRange").mockReturnValue(100);
 
     // first turn
-    move.select(MoveId.FLAMETHROWER);
+    enemy.hp = initialHP;
+    move.use(MoveId.FLAMETHROWER);
     await game.toEndOfTurn();
     const fireDamageTakenWithDrySkin = initialHP - enemy.hp;
 
+    // second turn
     enemy.hp = initialHP;
     override.enemyAbility(AbilityId.NONE);
-
-    // second turn
-    move.select(MoveId.FLAMETHROWER);
+    move.use(MoveId.FLAMETHROWER);
     await game.toEndOfTurn();
     const fireDamageTakenWithoutDrySkin = initialHP - enemy.hp;
+    const expectedPreToDmgValue = fireDamageTakenWithoutDrySkin * 1.25;
+    const expectedDamage = toDmgValue(expectedPreToDmgValue);
 
-    expect(fireDamageTakenWithDrySkin).toBeGreaterThan(fireDamageTakenWithoutDrySkin);
+    // Allow for ±1 tolerance
+    expect(fireDamageTakenWithDrySkin).toBeGreaterThanOrEqual(expectedDamage - 1);
+    expect(fireDamageTakenWithDrySkin).toBeLessThanOrEqual(expectedDamage + 1);
+    expect(ReceivedTypeDamageMultiplierAbAttr.prototype.apply).toHaveLastReturnedWith(true);
   });
 
   it("heals 1/4 of max health and deals no damage if hit by opposing water move", async () => {
@@ -95,7 +104,7 @@ describe("Abilities - Dry Skin", () => {
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
     enemy.hp = enemy.getMaxHp() - toDmgValue(enemy.getMaxHp() / 4);
-    move.select(MoveId.WATER_GUN);
+    move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
     expect(enemy).toHaveFullHp();
@@ -108,7 +117,7 @@ describe("Abilities - Dry Skin", () => {
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
     enemy.hp = 1;
-    move.select(MoveId.WATER_GUN);
+    move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
     expect(enemy.hp).toBe(1);
@@ -122,13 +131,13 @@ describe("Abilities - Dry Skin", () => {
     const enemy = field.getEnemyPokemon();
     // first turn
     enemy.hp = 1;
-    move.select(MoveId.WATER_SHURIKEN);
+    move.use(MoveId.WATER_SHURIKEN);
     await game.toEndOfTurn();
     const healthGainedFromWaterShuriken = enemy.hp - 1;
 
     // second turn
     enemy.hp = 1;
-    move.select(MoveId.WATER_GUN);
+    move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
     const healthGainedFromWaterGun = enemy.hp - 1;
 
@@ -140,7 +149,7 @@ describe("Abilities - Dry Skin", () => {
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
-    move.select(MoveId.WATER_GUN);
+    move.use(MoveId.WATER_GUN);
     enemy.hp = enemy.hp - 1;
     await phaseInterceptor.to("MoveEffectPhase");
     await move.forceMiss();
