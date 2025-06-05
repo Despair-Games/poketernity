@@ -98,11 +98,11 @@ describe("Moves - Baton Pass", () => {
     game.move.select(MoveId.BATON_PASS);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("PostActionPhase");
-    expect(player1.hasTag(BattlerTagType.SALT_CURED)).toBeTruthy();
+    expect(player1).toHaveBattlerTagType(BattlerTagType.SALT_CURED);
     game.selectPartyPokemon(1);
     await game.toNextTurn();
 
-    expect(player2.hasTag(BattlerTagType.SALT_CURED)).toBeFalsy();
+    expect(player2).not.toHaveBattlerTagType(BattlerTagType.SALT_CURED);
   });
 
   it("doesn't allow binding effects from the user to persist", async () => {

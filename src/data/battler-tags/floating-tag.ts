@@ -18,6 +18,7 @@ import i18next from "i18next";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Magnet_Rise_(move) | Magnet Rise}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Telekinesis_(move) | Telekinesis}
  *
+ * @privateRemarks
  * Tags that use or subclass this should be added to {@linkcode TYPE_IMMUNE_TAG_TYPES}
  */
 export class FloatingTag extends TypeImmuneTag {

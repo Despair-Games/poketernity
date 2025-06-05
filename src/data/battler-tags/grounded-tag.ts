@@ -28,7 +28,6 @@ export class GroundedTag extends BattlerTag {
    */
   override onAdd(pokemon: Pokemon) {
     const isSmackDownOrThousandArrows = [MoveId.SMACK_DOWN, MoveId.THOUSAND_ARROWS].includes(this.sourceMoveId);
-    // TODO: Should Sky Drop be here?
     const wasNotGrounded =
       pokemon.isOfType(ElementalType.FLYING, true, true)
       || pokemon.hasAbility(AbilityId.LEVITATE)
