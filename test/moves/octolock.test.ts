@@ -102,13 +102,13 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // before Octolock - enemy should not be trapped
-    expect(enemyPokemon).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
+    expect(enemyPokemon).not.toHaveBattlerTag(BattlerTagType.OCTOLOCK);
 
     game.move.select(MoveId.OCTOLOCK);
 
     // after Octolock - enemy should be trapped
     await game.phaseInterceptor.to("PostActionPhase");
-    expect(enemyPokemon).toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
+    expect(enemyPokemon).toHaveBattlerTag(BattlerTagType.OCTOLOCK);
   });
 
   it("does not work on ghost type pokemon", async () => {
@@ -118,13 +118,13 @@ describe("Moves - Octolock", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // before Octolock - player should not be trapped
-    expect(playerPokemon).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
+    expect(playerPokemon).not.toHaveBattlerTag(BattlerTagType.OCTOLOCK);
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     // after Octolock - player should still not be trapped, and no stat loss
-    expect(playerPokemon).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
+    expect(playerPokemon).not.toHaveBattlerTag(BattlerTagType.OCTOLOCK);
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(0);
     expect(playerPokemon.getStatStage(Stat.SPDEF)).toBe(0);
   });
@@ -135,7 +135,7 @@ describe("Moves - Octolock", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // before Octolock - pokemon should not be trapped
-    expect(enemy).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
+    expect(enemy).not.toHaveBattlerTag(BattlerTagType.OCTOLOCK);
 
     game.move.select(MoveId.TRICK_OR_TREAT);
     await game.toNextTurn();
@@ -143,7 +143,7 @@ describe("Moves - Octolock", () => {
     await game.toNextTurn();
 
     // after Octolock - pokemon should still not be trapped, and no stat loss
-    expect(enemy).not.toHaveBattlerTagType(BattlerTagType.OCTOLOCK);
+    expect(enemy).not.toHaveBattlerTag(BattlerTagType.OCTOLOCK);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(enemy.getStatStage(Stat.SPDEF)).toBe(0);
   });
