@@ -62,7 +62,7 @@ export class TormentTag extends MoveRestrictionBattlerTag {
       lastMoveTurn.move.id === moveId
       && validLastMoveResult
       && lastMoveTurn.move.id !== MoveId.STRUGGLE
-      && !user.getTag(...MOVE_LOCK_TAG_TYPES)
+      && !user.hasTag(...MOVE_LOCK_TAG_TYPES)
     ) {
       return true;
     }

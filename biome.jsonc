@@ -26,6 +26,7 @@
       "docs/*",
       "node_modules/*",
       "public/*",
+      "typedoc/*",
       "src/data/tms.ts" // this file is just too big
     ]
   },

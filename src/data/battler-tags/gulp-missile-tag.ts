@@ -28,7 +28,7 @@ export class GulpMissileTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
-    if (pokemon.getTag(BattlerTagType.UNDERWATER)) {
+    if (pokemon.hasTag(BattlerTagType.UNDERWATER)) {
       return true;
     }
 
@@ -71,7 +71,7 @@ export class GulpMissileTag extends BattlerTag {
    */
   override canAdd(pokemon: Pokemon): boolean {
     const isSurfOrDive = [MoveId.SURF, MoveId.DIVE].includes(this.sourceMoveId);
-    const isNormalForm = pokemon.formIndex === 0 && !pokemon.getTag(...GULP_MISSILE_BATTLER_TAG_TYPES);
+    const isNormalForm = pokemon.formIndex === 0 && !pokemon.hasTag(...GULP_MISSILE_BATTLER_TAG_TYPES);
     const isCramorant = pokemon.species.speciesId === SpeciesId.CRAMORANT;
 
     return isSurfOrDive && isNormalForm && isCramorant;

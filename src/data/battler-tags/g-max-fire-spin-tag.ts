@@ -21,6 +21,6 @@ export class GMaxFireSpinTag extends FireSpinTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES);
   }
 }

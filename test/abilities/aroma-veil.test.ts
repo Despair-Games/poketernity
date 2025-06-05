@@ -45,7 +45,7 @@ describe("Moves - Aroma Veil", () => {
     await game.toNextTurn();
 
     playerPokemon.forEach((p) => {
-      expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
+      expect(p).not.toHaveBattlerTagType(BattlerTagType.HEAL_BLOCK);
       expect(p).toHaveMoveResult(MoveResult.SUCCESS);
     });
   });

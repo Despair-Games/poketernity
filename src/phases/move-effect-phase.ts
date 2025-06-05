@@ -8,7 +8,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
-import { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -69,7 +70,8 @@ export class MoveEffectPhase extends HitCheckPhase {
     const user = this.getUserPokemon();
 
     if (!user) {
-      return super.end();
+      super.end();
+      return;
     }
 
     /**
@@ -78,7 +80,8 @@ export class MoveEffectPhase extends HitCheckPhase {
      * apply their effects without a specific target
      */
     if (isFieldTargeted(this.targets)) {
-      return this.applyFieldMoveEffects(user);
+      this.applyFieldMoveEffects(user);
+      return;
     }
 
     /** All Pokemon targeted by this phase's invoked move */
@@ -87,7 +90,8 @@ export class MoveEffectPhase extends HitCheckPhase {
     const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
     // If the user was somehow removed from the field and it's not a delayed attack, end this phase
     if (!user.isOnField() && !isDelayedAttack) {
-      return super.end();
+      super.end();
+      return;
     }
 
     /**
@@ -110,7 +114,8 @@ export class MoveEffectPhase extends HitCheckPhase {
         type: user.getMoveType(move),
       };
       user.pushMoveHistory(this.moveHistoryEntry);
-      return this.end();
+      this.end();
+      return;
     }
 
     // Lapse `MOVE_EFFECT` effects (i.e. semi-invulnerability) when applicable
@@ -153,6 +158,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     // Update hit checks for each target
+    // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
     targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t, this.canApplySmartTargeting())));
 
     /**
@@ -422,7 +428,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     firstTarget?: boolean | null,
     selfTarget?: boolean,
   ): void {
-    return applyFilteredMoveAttrs(
+    applyFilteredMoveAttrs(
       (attr: MoveAttr) =>
         attr instanceof MoveEffectAttr
         && attr.trigger === triggerType
@@ -434,6 +440,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       target,
       this.move.getMove(),
     );
+    return;
   }
 
   /**
@@ -464,9 +471,9 @@ export class MoveEffectPhase extends HitCheckPhase {
       effectiveness,
     );
 
-    const typeBoost = user.findTag(
-      (t) => t instanceof TypeBoostTag && t.boostedType === user.getMoveType(move),
-    ) as TypeBoostTag;
+    const typeBoost = user.findTag<TypeBoostTag>(
+      (t) => t.isType<TypeBoostTag>(...TYPE_BOOST_TAG_TYPES) && t.boostedType === user.getMoveType(move),
+    );
     if (typeBoost?.oneUse) {
       user.removeTag(typeBoost.tagType);
     }
@@ -626,6 +633,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         }
         globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets
+        // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
         this.getTargets().forEach((target) => (target.turnData.moveEffectiveness = null));
       }
     }
@@ -677,7 +685,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       && !isNil(targetAlly)
       && targetAlly.isActive(true)
       && targetAlly !== this.getUserPokemon()
-      && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)
+      && !target?.hasTag(BattlerTagType.CENTER_OF_ATTENTION)
     );
   }
 

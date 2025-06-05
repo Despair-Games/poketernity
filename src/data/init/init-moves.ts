@@ -464,7 +464,7 @@ export function initMoves() {
     new StatusMove(MoveId.LEECH_SEED, ElementalType.GRASS, 90, 10, -1, 0, 1)
       .attr(LeechSeedAttr)
       .condition(
-        (_user, target, _move) => !target.getTag(BattlerTagType.SEEDED) && !target.isOfType(ElementalType.GRASS),
+        (_user, target, _move) => !target.hasTag(BattlerTagType.SEEDED) && !target.isOfType(ElementalType.GRASS),
       )
       .bounceable(),
     new SelfStatusMove(MoveId.GROWTH, ElementalType.NORMAL, -1, 20, -1, 0, 1)
@@ -703,7 +703,7 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.TRANSFORM, ElementalType.NORMAL, -1, 10, -1, 0, 1)
       .attr(TransformAttr)
-      .condition((_user, target, _move) => !target.getTag(BattlerTagType.SUBSTITUTE))
+      .condition((_user, target, _move) => !target.hasTag(BattlerTagType.SUBSTITUTE))
       .ignoresProtect(),
     new AttackMove(MoveId.BUBBLE, ElementalType.WATER, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
@@ -1596,7 +1596,7 @@ export function initMoves() {
         (user, _target, _move) =>
           !globalScene.arena.hasTag(ArenaTagType.GRAVITY)
           && [BattlerTagType.FLOATING, BattlerTagType.IGNORE_FLYING, BattlerTagType.INGRAIN].every(
-            (tag) => !user.getTag(tag),
+            (tag) => !user.hasTag(tag),
           ),
       )
       .snatchable(),
@@ -1856,11 +1856,7 @@ export function initMoves() {
       .condition(
         (_user, target, _move) => !(target.species.speciesId === SpeciesId.GENGAR && target.getFormKey() === "mega"),
       )
-      .condition(
-        (_user, target, _move) =>
-          isNil(target.getTag(BattlerTagType.INGRAIN))
-          && isNil(target.getTag(BattlerTagType.IGNORE_FLYING)),
-      )
+      .condition((_user, target, _move) => !target.hasTag(BattlerTagType.INGRAIN, BattlerTagType.IGNORE_FLYING))
       .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
       .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 })
       .bounceable(),
@@ -2243,7 +2239,7 @@ export function initMoves() {
       .target(MoveTarget.ALL)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, false, {
         condition: (_user, target, _move) =>
-          target.getTypes().includes(ElementalType.GRASS) && !target.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES),
+          target.getTypes().includes(ElementalType.GRASS) && !target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES),
       }),
     new StatusMove(MoveId.GRASSY_TERRAIN, ElementalType.GRASS, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.GRASSY)

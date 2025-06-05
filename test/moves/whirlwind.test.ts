@@ -42,7 +42,7 @@ describe("Moves - Whirlwind", () => {
 
     await game.toEndOfTurn();
 
-    expect(staraptor.findTag((t) => t.tagType === BattlerTagType.MID_AIR)).toBeDefined();
+    expect(staraptor).toHaveBattlerTagType(BattlerTagType.MID_AIR);
     expect(game.field.getEnemyPokemon()).toHaveMoveResult(MoveResult.MISS);
   });
 

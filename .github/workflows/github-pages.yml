@@ -29,6 +29,11 @@ jobs:
           submodules: "recursive"
           path: poketernity_docs
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
@@ -45,13 +50,13 @@ jobs:
         working-directory: ${{env.api-dir}}
         run: |
           cd poketernity_docs
-          npm ci
+          pnpm i
 
       - name: Generate Typedoc docs
         working-directory: ${{env.api-dir}}
         run: |
           cd poketernity_docs
-          npm run docs -- --out /tmp/docs --githubPages false --entryPoints ./src/
+          pnpm run docs --out /tmp/docs --githubPages false --entryPoints ./src/
 
       - name: Commit & Push docs
         if: github.event_name == 'push'

@@ -12,7 +12,9 @@ import i18next from "i18next";
 
 /**
  * Tag to prevent the owner from switching out or fleeing from battle.
- * @extends BattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode TRAPPED_BATTLER_TAG_TYPES}
  */
 export class TrappedTag extends BattlerTag {
   constructor(
@@ -30,7 +32,7 @@ export class TrappedTag extends BattlerTag {
     const move = allMoves.get(this.sourceMoveId);
 
     const isGhost = pokemon.isOfType(ElementalType.GHOST);
-    const isTrapped = pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
+    const isTrapped = pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
     return !isTrapped && !isGhost && (this.sourceMoveId === MoveId.G_MAX_TERROR || !hasSubstitute);

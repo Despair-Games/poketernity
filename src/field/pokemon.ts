@@ -50,23 +50,26 @@ import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import type { CritBoostStackableTag } from "#battler-tags/crit-boost-stackable-tag";
-import { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
-import { ExposedTag } from "#battler-tags/exposed-tag";
+import type { DragonCheerTag } from "#battler-tags/dragon-cheer-tag";
+import type { ExposedTag } from "#battler-tags/exposed-tag";
 import { getBattlerTag } from "#battler-tags/get-battler-tag";
-import { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
+import type { HighestStatBoostTag } from "#battler-tags/highest-stat-boost-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
-import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
+import type { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
 import { PowerTrickTag } from "#battler-tags/power-trick-tag";
 import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
-import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
+import type { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
   EXPOSED_TAG_TYPES,
+  HIGHEST_STAT_BOOST_TAG_TYPES,
+  RESTRICTING_TAG_TYPES,
   SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
   TRAPPED_BATTLER_TAG_TYPES,
+  TYPE_IMMUNE_TAG_TYPES,
 } from "#constants/battler-tag-constants";
 import {
   DEFAULT_MAX_SLEEP_DURATION,
@@ -1066,7 +1069,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const critBoostTag = source.getTag(...CRIT_BOOST_BATTLER_TAG_TYPES);
     if (critBoostTag) {
-      if (critBoostTag instanceof DragonCheerTag) {
+      if (critBoostTag.isType<DragonCheerTag>(BattlerTagType.DRAGON_CHEER)) {
         critStage.value += critBoostTag.typesOnAdd.includes(ElementalType.DRAGON) ? 2 : 1;
       } else {
         critStage.value += 2;
@@ -1157,7 +1160,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     switch (stat) {
       case Stat.ATK:
-        if (this.getTag(BattlerTagType.SLOW_START)) {
+        if (this.hasTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
         break;
@@ -1182,7 +1185,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret >>= 2;
         }
 
-        if (this.getTag(BattlerTagType.SLOW_START)) {
+        if (this.hasTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
         if (this.hasStatusEffect(StatusEffect.PARALYSIS)) {
@@ -1197,16 +1200,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             ret >>= 1;
           }
         }
-        if (this.getTag(BattlerTagType.UNBURDEN) && this.hasAbility(AbilityId.UNBURDEN)) {
+        if (this.hasTag(BattlerTagType.UNBURDEN) && this.hasAbility(AbilityId.UNBURDEN)) {
           ret *= 2;
         }
         break;
       }
     }
 
-    const highestStatBoost = this.findTag(
-      (t) => t instanceof HighestStatBoostTag && (t as HighestStatBoostTag).stat === stat,
-    ) as HighestStatBoostTag;
+    const highestStatBoost = this.findTag<HighestStatBoostTag>(
+      (t) => t.isType<HighestStatBoostTag>(...HIGHEST_STAT_BOOST_TAG_TYPES) && t.stat === stat,
+    );
     if (highestStatBoost) {
       ret *= highestStatBoost.multiplier;
     }
@@ -1753,7 +1756,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const autotomizedTag = this.getTag<AutotomizedTag>(BattlerTagType.AUTOTOMIZED);
     let weightRemoved = 0;
     if (!isNil(autotomizedTag)) {
-      weightRemoved = 100 * autotomizedTag!.autotomizeCount;
+      weightRemoved = 100 * autotomizedTag.autotomizeCount;
     }
     const minWeight = 0.1;
     const weight = new NumberHolder(this.getSpeciesForm().weight - weightRemoved);
@@ -1770,9 +1773,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.hasTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(AbilityId.LEVITATE)
-        && !this.getTag(BattlerTagType.FLOATING)
-        && !this.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES)
-        && !this.getTag(BattlerTagType.SKY_DROP))
+        && !this.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.FLOATING, BattlerTagType.SKY_DROP))
     );
   }
 
@@ -1794,7 +1795,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    if (this.getTag(BattlerTagType.SKY_DROP)) {
+    if (this.hasTag(BattlerTagType.SKY_DROP)) {
       return true;
     }
 
@@ -1838,7 +1839,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbAttrs<MoveTypeChangeAbAttr>(AbAttrFlag.MOVE_TYPE_CHANGE, this, simulated, move, undefined, moveTypeHolder);
 
     globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
-    if (this.getTag(BattlerTagType.ELECTRIFIED)) {
+    if (this.hasTag(BattlerTagType.ELECTRIFIED)) {
       moveTypeHolder.value = ElementalType.ELECTRIC;
     }
 
@@ -1898,7 +1899,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       typeMultiplier.value = 0;
     }
 
-    if (this.getTag(BattlerTagType.TAR_SHOT) && this.getMoveType(move) === ElementalType.FIRE) {
+    if (this.hasTag(BattlerTagType.TAR_SHOT) && this.getMoveType(move) === ElementalType.FIRE) {
       typeMultiplier.value *= 2;
     }
 
@@ -1932,7 +1933,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    const immuneTags = this.findTags((tag) => tag instanceof TypeImmuneTag && tag.immuneType === moveType);
+    const immuneTags = this.findTags<TypeImmuneTag>(
+      (tag) => tag.isType<TypeImmuneTag>(...TYPE_IMMUNE_TAG_TYPES) && tag.immuneType === moveType,
+    );
     for (const tag of immuneTags) {
       if (move && !move.getAttrs(HitsTagAttr).some((attr) => attr.tagType === tag.tagType)) {
         typeMultiplier.value = 0;
@@ -2018,7 +2021,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             }
           }
 
-          const exposedTags = this.findTags((tag) => tag instanceof ExposedTag) as ExposedTag[];
+          const exposedTags = this.findTags<ExposedTag>((tag) => tag.isType<ExposedTag>(...EXPOSED_TAG_TYPES));
           if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType))) {
             if (multiplier.value === 0) {
               return 1;
@@ -3134,7 +3137,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
     const glaiveRushMultiplier = new NumberHolder(1);
-    if (this.getTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
+    if (this.hasTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
       glaiveRushMultiplier.value = 2;
     }
 
@@ -3194,7 +3197,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       .getAttrs(HitsTagAttr)
       .filter((hta) => hta.doubleDamage)
       .forEach((hta) => {
-        if (this.getTag(hta.tagType)) {
+        if (this.hasTag(hta.tagType)) {
           hitsTagMultiplier.value *= 2;
         }
       });
@@ -3310,7 +3313,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     const isCritical = new BooleanHolder(false);
-    if (source.getTag(BattlerTagType.ALWAYS_CRIT)) {
+    if (source.hasTag(BattlerTagType.ALWAYS_CRIT)) {
       isCritical.value = true;
     }
     applyMoveAttrs(CritOnlyAttr, source, this, move, isCritical);
@@ -3361,9 +3364,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const surviveDamage = new BooleanHolder(false);
 
     if (!preventEndure && amount >= this.hp) {
-      if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {
+      if (this.hp >= 1 && this.hasTag(BattlerTagType.ENDURING)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURING);
-      } else if (this.hp > 1 && this.getTag(BattlerTagType.STURDY)) {
+      } else if (this.hp > 1 && this.hasTag(BattlerTagType.STURDY)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.STURDY);
       }
 
@@ -3476,8 +3479,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return megaForms.includes(this.getFormKey());
   }
 
-  canAddTag(tagType: BattlerTagType): boolean {
-    if (this.getTag(tagType)) {
+  // #region Battler Tag methods
+
+  /**
+   * @param tagType - The {@linkcode BattlerTagType | type of tag} to check
+   * @returns Whether the specified tag can be added to the pokemon
+   */
+  public canAddTag(tagType: BattlerTagType): boolean {
+    if (this.hasTag(tagType)) {
       return false;
     }
 
@@ -3500,7 +3509,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !cancelled.value;
   }
 
-  addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: MoveId, sourceId?: number): boolean {
+  /**
+   * Adds a {@linkcode BattlerTag} to the pokemon
+   * @param tagType - The {@linkcode BattlerTagType} to add
+   * @param turnCount - (Default `0`) How many turns the tag should last for
+   * @param sourceMove - (Optional) The move causing the tag to be added
+   * @param sourceId - (Optional) The ID of the pokemon adding the tag
+   * @returns Whether the tag was successfully added
+   */
+  public addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: MoveId, sourceId?: number): boolean {
     const existingTag = this.getTag(tagType);
     if (existingTag) {
       existingTag.onOverlap(this);
@@ -3533,28 +3550,51 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | undefined {
+  /**
+   * @param tagTypes - The {@linkcode BattlerTagType}s to retrieve
+   * @returns The first {@linkcode BattlerTag} found of the specified type(s), or `undefined` if none is found
+   */
+  public getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | undefined {
     return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | undefined;
   }
 
   /**
    * Helper function to check if a Pokemon has any of the input tag types.
    * @param tagTypes - The battler tag types to search for
-   * @returns `true` if the Pokemon has at least one of the battler tags, `false` otherwise
+   * @returns Whether the Pokemon has at least one of the input battler tags
+   * @throws An error if no tag types were passed in to the params
    */
-  public hasTag(...tagTypes: BattlerTagType[]): boolean {
+  public hasTag(...tagTypes: BattlerTagType[]): boolean | never {
+    if (tagTypes.length === 0) {
+      throw new Error("`Pokemon#hasTag` called with no parameters!");
+    }
     return this.summonData.tags.some((t) => tagTypes.includes(t.tagType));
   }
 
-  findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | undefined {
-    return this.summonData.tags.find((t) => tagFilter(t)) as T | undefined;
+  /**
+   * Filters the {@linkcode BattlerTag}s attached to the pokemon and returns the first result
+   * @param tagFilter - The filter to apply to the tag list
+   * @returns The first {@linkcode BattlerTag} found, or `undefined` if none is found
+   */
+  public findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T | undefined {
+    return this.summonData.tags.find(tagFilter) as T | undefined;
   }
 
-  findTags(tagFilter: (tag: BattlerTag) => boolean): BattlerTag[] {
-    return this.summonData.tags.filter((t) => tagFilter(t));
+  /**
+   * Filters the {@linkcode BattlerTag}s attached to the pokemon and returns the result
+   * @param tagFilter - The filter to apply to the tag list
+   * @returns An array of {@linkcode BattlerTag}s matching the input filter
+   */
+  public findTags<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T[] {
+    return this.summonData.tags.filter(tagFilter) as T[];
   }
 
-  lapseTag(tagType: BattlerTagType): boolean {
+  /**
+   * Calls the `lapse()` method of the specified {@linkcode BattlerTag}
+   * @param tagType - The {@linkcode BattlerTagType} to lapse
+   * @returns Whether the specified tag is still active
+   */
+  public lapseTag(tagType: BattlerTagType): boolean {
     const tags = this.summonData.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag && !tag.lapse(this, BattlerTagLapseType.CUSTOM)) {
@@ -3564,7 +3604,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !!tag;
   }
 
-  lapseTags(lapseType: BattlerTagLapseType): void {
+  /**
+   * Lapses all {@linkcode BattlerTag}s attached to the pokemon with the specified lapse type
+   * and then removes the ones that should be removed
+   * @param lapseType - The {@linkcode BattlerTagLapseType} to trigger
+   * @see {@linkcode BattlerTag.lapse}
+   */
+  public lapseTags(lapseType: BattlerTagLapseType): void {
     const tags = this.summonData.tags;
     tags
       .filter(
@@ -3578,7 +3624,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       });
   }
 
-  removeTag(tagType: BattlerTagType): boolean {
+  /**
+   * Removes a {@linkcode BattlerTag} from the pokemon without calling its `lapse()` method
+   * @param tagType - The {@linkcode BattlerTagType} to remove
+   * @returns Whether the specified tag was attached to the pokemon before being removed
+   * @see {@linkcode BattlerTag.onRemove}
+   */
+  public removeTag(tagType: BattlerTagType): boolean {
     const tags = this.summonData.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag) {
@@ -3588,7 +3640,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !!tag;
   }
 
-  findAndRemoveTags(tagFilter: (tag: BattlerTag) => boolean): boolean {
+  /**
+   * Removes all {@linkcode BattlerTag}s matching the input filter without calling their `lapse()` methods
+   * @param tagFilter - The filter to apply
+   */
+  public findAndRemoveTags(tagFilter: (tag: BattlerTag) => boolean): void {
     const tags = this.summonData.tags;
     const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
@@ -3596,17 +3652,29 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       tag.onRemove(this);
       tags.splice(tags.indexOf(tag), 1);
     }
-    return true;
   }
 
-  removeTagsBySourceId(sourceId: number): void {
+  /**
+   * Removes all {@linkcode BattlerTag}s from the pokemon whose source was the specified pokemon ID
+   * @param sourceId - The ID of the source pokemon
+   */
+  public removeTagsBySourceId(sourceId: number): void {
     this.findAndRemoveTags((t) => t.isSourceLinked() && t.sourceId === sourceId);
   }
 
-  transferTagsBySourceId(sourceId: number, newSourceId: number): void {
+  /**
+   * Updates the source ID of all {@linkcode BattlerTag}s attached this pokemon
+   * @param sourceId - The ID of the previous source pokemon
+   * @param newSourceId - The ID of the new source pokemon
+   * @todo Think of a better name for this, the tags aren't being transferred
+   */
+  public transferTagsBySourceId(sourceId: number, newSourceId: number): void {
     const tags = this.summonData.tags;
+    // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
     tags.filter((t) => t.sourceId === sourceId).forEach((t) => (t.sourceId = newSourceId));
   }
+
+  // #endregion
 
   /**
    * Transferring stat changes and Tags
@@ -3658,12 +3726,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode MoveRestrictionBattlerTag}
    */
   isMoveTargetRestricted(moveId: MoveId, user: Pokemon, target: Pokemon): boolean {
-    for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
-      if ((tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
-        return (tag as MoveRestrictionBattlerTag) !== null;
-      }
-    }
-    return false;
+    const restrictingTags = this.findTags<MoveRestrictionBattlerTag>((t) =>
+      t.isType<MoveRestrictionBattlerTag>(...RESTRICTING_TAG_TYPES),
+    );
+    return restrictingTags.some((tag) => tag.isMoveTargetRestricted(moveId, user, target));
   }
 
   /**
@@ -3682,12 +3748,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
-      if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
-        return tag as MoveRestrictionBattlerTag;
+    const restrictingTags = this.findTags<MoveRestrictionBattlerTag>((t) =>
+      t.isType<MoveRestrictionBattlerTag>(...RESTRICTING_TAG_TYPES),
+    );
+    for (const tag of restrictingTags) {
+      if (tag.isMoveRestricted(moveId, user)) {
+        return tag;
       }
-      if (user && target && (tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
-        return tag as MoveRestrictionBattlerTag;
+      if (user && target && tag.isMoveTargetRestricted(moveId, user, target)) {
+        return tag;
       }
     }
     return null;
@@ -3832,7 +3901,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     statusList = coerceArray(statusList);
     if (
       statusList.includes(this.getStatusEffect(ignoreMockAbility))
-      || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
+      || (includeConfusion && this.hasTag(BattlerTagType.CONFUSED))
     ) {
       return true;
     }
@@ -4027,10 +4096,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.setFrameRate(4);
 
-      const tag = SEMI_INVULNERABLE_BATTLER_TAG_TYPES.find((t) => this.getTag(t));
+      const tag = this.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES);
 
       if (tag) {
-        this.removeTag(tag);
+        this.removeTag(tag.tagType);
         this.getMoveQueue().pop();
       }
     }
@@ -4099,14 +4168,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
-      if (this.getTag(BattlerTagType.NIGHTMARE)) {
-        this.lapseTag(BattlerTagType.NIGHTMARE);
-      }
+      this.lapseTag(BattlerTagType.NIGHTMARE);
     }
     if (confusion) {
-      if (this.getTag(BattlerTagType.CONFUSED)) {
-        this.lapseTag(BattlerTagType.CONFUSED);
-      }
+      this.lapseTag(BattlerTagType.CONFUSED);
     }
     if (reloadAssets) {
       this.loadAssets(false).then(() => this.playAnim());
@@ -4130,7 +4195,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  primeSummonData(summonDataPrimer: PokemonSummonData): void {
+  public primeSummonData(summonDataPrimer: PokemonSummonData): void {
     this.summonDataPrimer = summonDataPrimer;
   }
 
@@ -4140,7 +4205,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @todo This currently checks for the existence of {@linkcode Pokemon.summonDataPrimer} and
    * applies its values to `summonData` if it exists. `summonDataPrimer` should be removed.
    */
-  resetSummonData(): void {
+  public resetSummonData(): void {
     this.summonData = {
       statStages: [0, 0, 0, 0, 0, 0, 0],
       moveQueue: [],
@@ -4160,10 +4225,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       moveHistory: [],
     };
     this.setSwitchOutStatus(false);
-    // TODO: why is this here? is it safe to remove this?
-    if (this.getTag(BattlerTagType.SEEDED)) {
-      this.lapseTag(BattlerTagType.SEEDED);
-    }
     if (globalScene) {
       globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
     }
@@ -4173,10 +4234,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           this.summonData[k] = this.summonDataPrimer[k];
         }
       }
+
       // If this Pokemon has a Substitute when loading in, play an animation to add its sprite
-      if (this.getTag(BattlerTagType.SUBSTITUTE)) {
+      const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+      if (subTag) {
         globalScene.triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
-        this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE)!.sourceInFocus = false;
+        subTag.sourceInFocus = false;
       }
 
       // If this Pokemon has Commander and Dondozo as an active ally, hide this Pokemon's sprite.
@@ -4194,7 +4257,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  resetWaveData(): void {
+  public resetWaveData(): void {
     this.waveData = {
       hitCount: 0,
       berriesEaten: [],
@@ -4203,7 +4266,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     };
   }
 
-  resetTurnData(): void {
+  public resetTurnData(): void {
     this.turnData = {
       flinched: false,
       acted: false,
