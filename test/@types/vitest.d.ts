@@ -66,7 +66,7 @@ declare module "vitest" {
      *
      * @param stat - The {@linkcode EffectiveStat} to check
      * @param expectedValue - The expected value of the {@linkcode stat}
-     * @param options - (Optional) The {@linkcode ToHaveStatMatcherOptions}
+     * @param options - (Optional) The {@linkcode ToHaveEffectiveStatMatcherOptions}
      */
     toHaveEffectiveStat(stat: EffectiveStat, expectedValue: number, options?: ToHaveEffectiveStatMatcherOptions): void;
 
