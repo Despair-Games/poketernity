@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { HIGHEST_STAT_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
@@ -11,11 +17,13 @@ import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**
- * Tag representing the stat boost granted from abilities such as
- * {@link https://bulbapedia.bulbagarden.net/wiki/Protosynthesis_(Ability) | Protosynthesis}
+ * Boosts the owner's highest {@linkcode EFFECTIVE_STATS | effective stat} by 30%.
+ *
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Protosynthesis_(Ability) | Protosynthesis}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Quark_Drive_(Ability) | Quark Drive}.
- * Boosts the owner's highest {@linkcode EFFECTIVE_STATS | effective stat} by 30%
- * @extends AbilityBattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode HIGHEST_STAT_BOOST_TAG_TYPES}
  */
 export abstract class HighestStatBoostTag extends AbilityBattlerTag {
   public stat: Stat;

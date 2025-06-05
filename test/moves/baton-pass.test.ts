@@ -55,7 +55,7 @@ describe("Moves - Baton Pass", () => {
     playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.species.speciesId).toEqual(SpeciesId.SHUCKLE);
     expect(playerPokemon.getStatStage(Stat.SPATK)).toEqual(2);
-  }, 20000);
+  });
 
   it("passes stat stage buffs when AI uses it", async () => {
     // arrange
@@ -87,7 +87,7 @@ describe("Moves - Baton Pass", () => {
       "SummonPhase",
       "PostSummonPhase",
     ]);
-  }, 20000);
+  });
 
   it("doesn't transfer effects that aren't transferrable", async () => {
     game.override.enemyMoveset([MoveId.SALT_CURE]);
@@ -98,12 +98,12 @@ describe("Moves - Baton Pass", () => {
     game.move.select(MoveId.BATON_PASS);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("PostActionPhase");
-    expect(player1.findTag((t) => t.tagType === BattlerTagType.SALT_CURED)).toBeTruthy();
+    expect(player1).toHaveBattlerTagType(BattlerTagType.SALT_CURED);
     game.selectPartyPokemon(1);
     await game.toNextTurn();
 
-    expect(player2.findTag((t) => t.tagType === BattlerTagType.SALT_CURED)).toBeUndefined();
-  }, 20000);
+    expect(player2).not.toHaveBattlerTagType(BattlerTagType.SALT_CURED);
+  });
 
   it("doesn't allow binding effects from the user to persist", async () => {
     game.override.moveset([MoveId.FIRE_SPIN, MoveId.BATON_PASS]);

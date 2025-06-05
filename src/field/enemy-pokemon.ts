@@ -156,8 +156,8 @@ export class EnemyPokemon extends Pokemon {
   }
 
   override generateAndPopulateMoveset(formIndex?: number): void {
-    switch (true) {
-      case this.species.speciesId === SpeciesId.SMEARGLE:
+    switch (this.species.speciesId) {
+      case SpeciesId.SMEARGLE:
         this.moveset = [
           new PokemonMove(MoveId.SKETCH),
           new PokemonMove(MoveId.SKETCH),
@@ -165,7 +165,7 @@ export class EnemyPokemon extends Pokemon {
           new PokemonMove(MoveId.SKETCH),
         ];
         break;
-      case this.species.speciesId === SpeciesId.ETERNATUS:
+      case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
               new PokemonMove(MoveId.DYNAMAX_CANNON),

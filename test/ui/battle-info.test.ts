@@ -29,6 +29,7 @@ describe("UI - Battle Info", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
+    game.override.disableExpGain = false;
     game.override
       .moveset([MoveId.GUILLOTINE, MoveId.SPLASH])
       .battleType("single")

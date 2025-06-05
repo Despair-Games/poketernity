@@ -19,7 +19,7 @@ export class CopyStatsAttr extends MoveEffectAttr {
       user.setStatStage(s, target.getStatStage(s));
     }
 
-    if (target.getTag(BattlerTagType.CRIT_BOOST)) {
+    if (target.hasTag(BattlerTagType.CRIT_BOOST)) {
       user.addTag(BattlerTagType.CRIT_BOOST, 0, move.id);
     } else {
       user.removeTag(BattlerTagType.CRIT_BOOST);
