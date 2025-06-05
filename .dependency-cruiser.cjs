@@ -30,7 +30,7 @@ module.exports = {
     {
       name: "no-orphans",
       comment:
-        "This is an orphan module - it's likely not used [any more]. Either use it or "
+        "This is an orphan module - it's likely not used [anymore]. Either use it or "
         + "remove it. If it's logical this module is an orphan (i.e. it's a config file), "
         + "add an exception for it in your dependency-cruiser configuration. By default "
         + "this rule does not scrutinize dot-files (e.g. .eslintrc.js), TypeScript declaration "
