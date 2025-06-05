@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#data/pokemon-species";
+import { Gender } from "#enums/gender";
 import { TextStyle } from "#enums/text-style";
 import { addTextObject } from "#ui/text-utils";
 
@@ -21,6 +22,8 @@ export class StarterContainer extends Phaser.GameObjects.Container {
 
     const defaultDexAttr = globalScene.gameData.getSpeciesDefaultDexAttr(species, false, true);
     const defaultProps = globalScene.gameData.getSpeciesDexAttrProps(species, defaultDexAttr);
+    const { formIndex, shiny, variant } = defaultProps;
+    const isFemale = defaultProps.gender === Gender.FEMALE;
 
     // starter passive bg
     const starterPassiveBg = globalScene.add.image(2, 5, "passive_bg");
@@ -30,18 +33,12 @@ export class StarterContainer extends Phaser.GameObjects.Container {
     this.add(starterPassiveBg);
     this.starterPassiveBgs = starterPassiveBg;
 
-    // icon
-    this.icon = globalScene.add.sprite(
-      -2,
-      2,
-      species.getIconAtlasKey(defaultProps.formIndex, defaultProps.shiny, defaultProps.variant),
-    );
+    // pokemon icon
+    this.icon = globalScene.add.sprite(-2, 2, species.getIconAtlasKey(formIndex, shiny, variant));
     this.icon.setScale(0.5);
     this.icon.setOrigin(0, 0);
-    this.icon.setFrame(
-      species.getIconId(defaultProps.female, defaultProps.formIndex, defaultProps.shiny, defaultProps.variant),
-    );
-    this.checkIconId(defaultProps.female, defaultProps.formIndex, defaultProps.shiny, defaultProps.variant);
+    this.icon.setFrame(species.getIconId(isFemale, formIndex, shiny, variant));
+    this.checkIconId(isFemale, formIndex, shiny, variant);
     this.icon.setTint(0);
     this.add(this.icon);
 
