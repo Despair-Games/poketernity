@@ -22,7 +22,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 /**
  * All {@linkcode BattlerTagType}s that grant semi-invulnerability.
  * @see {@linkcode SemiInvulnerableTag}
- * @todo Should `SKY_DROP` be part of it? It doesn't inherit from `SemiInvulnerableTag` currently.
  */
 export const SEMI_INVULNERABLE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
   BattlerTagType.MID_AIR,
