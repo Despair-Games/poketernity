@@ -32,7 +32,7 @@ import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/enco
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { PartyHealPhase } from "#phases/party-heal-phase";
-import { ReturnPhase } from "#phases/return-phase";
+import { RecallPhase } from "#phases/recall-phase";
 import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
@@ -201,7 +201,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
       globalScene.arena.resetArenaEffects();
       const playerField = globalScene.getPlayerField();
       playerField.forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-      playerField.forEach((_, p) => globalScene.phaseManager.unshiftPhase(new ReturnPhase(p)));
+      playerField.forEach((_, p) => globalScene.phaseManager.unshiftPhase(new RecallPhase(p)));
 
       for (const pokemon of globalScene.getPlayerParty()) {
         // Only trigger form change when Eiscue is in Noice form

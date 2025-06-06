@@ -46,7 +46,6 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";
 import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ReturnPhase } from "#phases/return-phase";
 import { ScanIvsPhase } from "#phases/scan-ivs-phase";
 import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
 import { SummonPhase } from "#phases/summon-phase";
@@ -56,6 +55,7 @@ import { settings } from "#system/settings-manager";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
+import { RecallPhase } from "#phases/recall-phase";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -618,7 +618,7 @@ export class EncounterPhase extends BattlePhase {
         }
       } else {
         if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.pushPhase(new ReturnPhase(1));
+          globalScene.phaseManager.pushPhase(new RecallPhase(1));
         }
         globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
       }

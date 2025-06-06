@@ -7,8 +7,6 @@ export enum SwitchType {
   INITIAL_SWITCH,
   /** Basic switchout where the Pokemon to switch in is selected */
   SWITCH,
-  /** Recalls a Pokemon without switching in another Pokemon to take its place */
-  RECALL,
   /** Transfers stat stages and other effects from the returning Pokemon to the switched in Pokemon */
   BATON_PASS,
   /** Transfers the returning Pokemon's Substitute to the switched in Pokemon */

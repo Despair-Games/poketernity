@@ -117,7 +117,6 @@ import { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#phases/next-encounter-phase";
 import { PokemonAnimPhase } from "#phases/pokemon-anim-phase";
 import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
-import { ReturnPhase } from "#phases/return-phase";
 import { SelectBiomePhase } from "#phases/select-biome-phase";
 import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#phases/show-trainer-phase";
@@ -163,6 +162,7 @@ import { randItem, randomString, randSeedInt, randSeedItem } from "#utils/random
 import { formatMoney, shiftCharCodes } from "#utils/string-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
+import { RecallPhase } from "#phases/recall-phase";
 
 //#region Types
 
@@ -1420,7 +1420,7 @@ export default class BattleScene extends SceneBase {
 
         playerField.forEach((pokemon, p) => {
           if (pokemon.isOnField()) {
-            this.phaseManager.pushPhase(new ReturnPhase(p));
+            this.phaseManager.pushPhase(new RecallPhase(p));
           }
         });
 

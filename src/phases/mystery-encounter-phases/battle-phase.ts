@@ -12,12 +12,12 @@ import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";
-import { ReturnPhase } from "#phases/return-phase";
 import { ScanIvsPhase } from "#phases/scan-ivs-phase";
 import { SummonPhase } from "#phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
+import { RecallPhase } from "#phases/recall-phase";
 
 /**
  * Will handle (in order):
@@ -184,7 +184,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     } else {
       if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
         globalScene.getPlayerField().forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-        globalScene.phaseManager.pushPhase(new ReturnPhase(1));
+        globalScene.phaseManager.pushPhase(new RecallPhase(1));
       }
       globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
     }
