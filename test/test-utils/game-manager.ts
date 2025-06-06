@@ -466,10 +466,10 @@ export class GameManager {
    * Action twice - navigating any menus that come up after you select a party member
    * is not supported.
    * @param slot - The index of the pokemon in your party to switch to
-   * @param inPhase - (Default `"LegacySwitchPhase"`) Which phase to expect the selection to occur in.
+   * @param inPhase - (Default `"SwitchPhase"`) Which phase to expect the selection to occur in.
    *   Typically non-command switch actions happen in `SwitchPhase`.
    */
-  selectPartyPokemon(slot: number, inPhase = "LegacySwitchPhase"): void {
+  selectPartyPokemon(slot: number, inPhase = "SwitchPhase"): void {
     this.onNextPrompt(inPhase, UiMode.PARTY, () => {
       const partyHandler = this.scene.ui.getCurrentHandler<PartyUiHandler>();
 

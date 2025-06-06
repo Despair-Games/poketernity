@@ -13,8 +13,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
-import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 
 /**
  * Runs at the beginning of an Encounter's battle.
@@ -73,7 +73,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const playerField = globalScene.getPlayerField();
     playerField.forEach((pokemon, i) => {
       if (!pokemon.isAllowedInBattle() && legalPlayerPartyPokemon.length > i) {
-        globalScene.phaseManager.unshiftPhase(new LegacySwitchPhase(SwitchType.SWITCH, i, true, false));
+        globalScene.phaseManager.unshiftPhase(new SwitchPhase(i, SwitchType.SWITCH));
       }
     });
 

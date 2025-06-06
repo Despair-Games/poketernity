@@ -121,7 +121,6 @@ import { SelectBiomePhase } from "#phases/select-biome-phase";
 import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { SummonPhase } from "#phases/summon-phase";
-import type { LegacySwitchPhase } from "#phases/legacy-switch-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import FieldSpritePipeline from "#pipelines/field-sprite";
 import InvertPostFX from "#pipelines/invert";
@@ -163,6 +162,7 @@ import { formatMoney, shiftCharCodes } from "#utils/string-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { RecallPhase } from "#phases/recall-phase";
+import type { SwitchPhase } from "#phases/switch-phase";
 
 //#region Types
 
@@ -1378,7 +1378,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.phaseManager.tryRemovePhase((p) => p.is<LegacySwitchPhase>(PhaseId.SWITCH));
+      this.phaseManager.tryRemovePhase((p) => p.is<SwitchPhase>(PhaseId.SWITCH));
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 

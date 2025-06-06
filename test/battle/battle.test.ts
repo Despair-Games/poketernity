@@ -343,14 +343,14 @@ describe("Test Battle Phase", () => {
     game.doSelectModifier();
 
     game.onNextPrompt(
-      "LegacySwitchPhase",
+      "SwitchPhase",
       UiMode.PARTY,
       () => {
         expect.fail("Switch was forced");
       },
       () => game.isCurrentPhase("NextEncounterPhase"),
     );
-    await game.phaseInterceptor.to("LegacySwitchPhase");
+    await game.phaseInterceptor.to("SwitchPhase");
   });
 
   it("moves between waves normally", async () => {

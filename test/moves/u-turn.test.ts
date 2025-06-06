@@ -60,7 +60,7 @@ describe("Moves - U-turn", () => {
     // act
     game.move.select(MoveId.U_TURN);
     game.selectPartyPokemon(1);
-    await game.phaseInterceptor.to("LegacySwitchPhase", false);
+    await game.phaseInterceptor.to("SwitchPhase", false);
 
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;
@@ -78,7 +78,7 @@ describe("Moves - U-turn", () => {
 
     // act
     game.move.select(MoveId.U_TURN);
-    await game.phaseInterceptor.to("LegacySwitchPhase", false);
+    await game.phaseInterceptor.to("SwitchPhase", false);
 
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;

@@ -14,7 +14,7 @@ import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -134,13 +134,14 @@ class ForceSwitchOutHelper {
    *
    * @param pokemon The {@linkcode Pokemon} attempting to switch out.
    * @returns `true` if the switch is successful
+   * @todo Nuke this. The logic for all switch-out effects should be centralized, e.g. as a {@linkcode BattleScene} method
    */
   public switchOutLogic(switchOutTarget: Pokemon): boolean {
     const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
-     * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new LegacySwitchPhase is initiated.
+     * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
      */
     if (switchOutTarget.isPlayer()) {
       if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
@@ -151,7 +152,7 @@ class ForceSwitchOutHelper {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         globalScene.phaseManager.prependToPhase(
           PhaseId.POST_ACTION,
-          new LegacySwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
+          new SwitchPhase(switchOutTarget.getBattlerIndex(), this.switchType),
         );
         return true;
       }

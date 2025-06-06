@@ -50,7 +50,7 @@ import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { SummonPhase } from "#phases/summon-phase";
-import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { TitlePhase } from "#phases/title-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
@@ -116,7 +116,7 @@ const PHASES = [
   SelectTargetPhase,
   UnavailablePhase,
   QuietFormChangePhase,
-  LegacySwitchPhase,
+  SwitchPhase,
   SwitchSummonPhase,
   PartyHealPhase,
   FormChangePhase,

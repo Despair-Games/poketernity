@@ -39,7 +39,7 @@ describe("Moves - Revival Blessing", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.MEMENTO);
-    game.selectPartyPokemon(1, "LegacySwitchPhase");
+    game.selectPartyPokemon(1, "SwitchPhase");
     await game.toNextTurn();
 
     const player = game.scene.getPlayerPokemon()!;

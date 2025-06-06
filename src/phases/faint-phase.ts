@@ -34,11 +34,11 @@ import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-c
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { DamageAnimPhase } from "#phases/damage-anim-phase";
 import { PostKnockoutPhase } from "#phases/post-knockout-phase";
-import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
+import { SwitchPhase } from "#phases/switch-phase";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -53,7 +53,7 @@ import i18next from "i18next";
  * - Applies {@linkcode PostVictoryAbAttr}s
  * - If the fainted pokemon was the player's:
  *   - If the player's last valid pokemon just fainted then unshift a {@linkcode GameOverPhase},
- *     otherwise push a {@linkcode LegacySwitchPhase} or {@linkcode ToggleDoublePositionPhase} as needed.
+ *     otherwise push a {@linkcode SwitchPhase} or {@linkcode ToggleDoublePositionPhase} as needed.
  * - If the fainted pokemon was the AI's:
  *   - Unshift a {@linkcode PostKnockoutPhase}, then if this is a trainer battle and the AI
  *     has unfainted pokemon in reserve, push a {@linkcode SwitchSummonPhase}
@@ -213,7 +213,7 @@ export class FaintPhase extends PokemonPhase {
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
          * push a phase that prompts the player to summon a Pokemon from their party.
          */
-        globalScene.phaseManager.pushPhase(new LegacySwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
+        globalScene.phaseManager.pushPhase(new SwitchPhase(this.fieldIndex, SwitchType.SWITCH));
       }
     } else {
       globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));

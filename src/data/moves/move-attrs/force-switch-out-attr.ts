@@ -13,7 +13,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { LegacySwitchPhase } from "#phases/legacy-switch-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 import { BooleanHolder } from "#utils/common-utils";
@@ -37,6 +37,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     return this.switchType === SwitchType.BATON_PASS;
   }
 
+  /** @todo Rewrite this. Logic for switch-out effects should be consolidated */
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     // Check if the move category is not STATUS or if the switch out condition is not met
@@ -89,7 +90,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
           globalScene.phaseManager.prependToPhase(
             PhaseId.POST_ACTION,
-            new LegacySwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
+            new SwitchPhase(switchOutTarget.getBattlerIndex(), this.switchType),
           );
           return true;
         }
