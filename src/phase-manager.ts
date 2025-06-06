@@ -125,8 +125,7 @@ export class PhaseManager {
    * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
    */
   public pushPhase(phase: Phase, ...otherPhases: Phase[]): void {
-    const phases = [phase, ...otherPhases];
-    this.phaseQueue.push(...phases);
+    this.phaseQueue.push(phase, ...otherPhases);
   }
 
   /**
@@ -136,11 +135,10 @@ export class PhaseManager {
    * @param otherPhases - Additional (optional) phases to queue. These phases are scheduled after {@linkcode phase} in array order.
    */
   public unshiftPhase(phase: Phase, ...otherPhases: Phase[]): void {
-    const phases = [phase, ...otherPhases];
     if (this.phaseQueuePrependSpliceIndex === -1) {
-      this.phaseQueuePrepend.push(...phases);
+      this.phaseQueuePrepend.push(phase, ...otherPhases);
     } else {
-      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, ...phases);
+      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, phase, ...otherPhases);
     }
   }
 
