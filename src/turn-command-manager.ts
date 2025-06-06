@@ -27,7 +27,8 @@ import { BerryPhase } from "#phases/berry-phase";
 import { CheckStatusEffectPhase } from "#phases/check-status-effect-phase";
 import { MoveHeaderPhase } from "#phases/move-header-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { RecallPhase } from "#phases/recall-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 import { TerastallizationPhase } from "#phases/terastallization-phase";
 import { TurnEndPhase } from "#phases/turn-end-phase";
 import { WeatherEffectPhase } from "#phases/weather-effect-phase";
@@ -214,7 +215,11 @@ export class TurnCommandManager {
    */
   public preemptCommand(commandFilter: TurnCommandFilter): boolean {
     const turnCommand = this.tryRemoveCommand(commandFilter);
-    return !!turnCommand && this.handleCommand(turnCommand);
+    if (!!turnCommand && this.handleCommand(turnCommand)) {
+      turnCommand.pokemon.turnData.order === this.orderIndex++;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -365,7 +370,11 @@ export class TurnCommandManager {
    */
   private shiftNextCommand(): boolean {
     const nextCommand = this.turnCommands.shift();
-    return !!nextCommand && this.handleCommand(nextCommand);
+    if (!!nextCommand && this.handleCommand(nextCommand)) {
+      nextCommand.pokemon.turnData.order === this.orderIndex++;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -376,56 +385,17 @@ export class TurnCommandManager {
    * @returns `true` if the turn command is scheduled successfully
    */
   private handleCommand(turnCommand: TurnCommand): boolean {
-    let success: boolean = false;
     switch (turnCommand.command) {
       case BattleCommand.TERA:
-        success = this.handleTeraCommand(turnCommand);
-        break;
+        return this.handleTeraCommand(turnCommand);
       case BattleCommand.FIGHT:
-        success = this.handleFightCommand(turnCommand);
-        break;
+        return this.handleFightCommand(turnCommand);
       case BattleCommand.BALL:
-        success = this.handleBallCommand(turnCommand);
-        break;
+        return this.handleBallCommand(turnCommand);
       case BattleCommand.POKEMON:
-        success = this.handlePokemonCommand(turnCommand);
-        break;
+        return this.handlePokemonCommand(turnCommand);
       case BattleCommand.RUN:
-        success = this.handleRunCommand(turnCommand);
-        break;
-    }
-
-    if (success) {
-      turnCommand.pokemon.turnData.order = this.orderIndex++;
-
-      const forMove = turnCommand.command === BattleCommand.FIGHT;
-      globalScene.phaseManager.appendToPhase(
-        this.getNextTurnCommandPhaseId(turnCommand),
-        new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove),
-      );
-      this.commandsInProgress++;
-    }
-
-    return success;
-  }
-
-  /**
-   * Obtains the ID for the Phase corresponding to the scheduled turn command.
-   * @param turnCommand the scheduled {@linkcode TurnCommand}
-   * @returns the {@linkcode PhaseId} for the {@linkcode Phase} to handle the turn command
-   */
-  private getNextTurnCommandPhaseId(turnCommand: TurnCommand): PhaseId {
-    switch (turnCommand.command) {
-      case BattleCommand.TERA:
-        return PhaseId.TERASTALLIZATION;
-      case BattleCommand.FIGHT:
-        return PhaseId.MOVE;
-      case BattleCommand.BALL:
-        return PhaseId.ATTEMPT_CAPTURE;
-      case BattleCommand.POKEMON:
-        return PhaseId.SWITCH_SUMMON;
-      case BattleCommand.RUN:
-        return PhaseId.ATTEMPT_RUN;
+        return this.handleRunCommand(turnCommand);
     }
   }
 
@@ -442,7 +412,11 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.phaseManager.unshiftPhase(new TerastallizationPhase(pokemon));
+    globalScene.phaseManager.appendToPhase(
+      PhaseId.POST_ACTION,
+      new TerastallizationPhase(pokemon),
+      new PostActionPhase(pokemon.getBattlerIndex()),
+    );
 
     const newCommand = turnCommand;
     newCommand.command = BattleCommand.FIGHT;
@@ -476,6 +450,8 @@ export class TurnCommandManager {
       phaseId: PhaseId.POST_ACTION,
     });
 
+    globalScene.phaseManager.appendToPhase(PhaseId.MOVE, new PostActionPhase(pokemon.getBattlerIndex(), true));
+
     return true;
   }
 
@@ -486,7 +462,7 @@ export class TurnCommandManager {
    * @returns `true` if the turn command is scheduled successfully
    */
   private handleBallCommand(turnCommand: TurnCommand): boolean {
-    const { cursor, targets } = turnCommand;
+    const { pokemon, cursor, targets } = turnCommand;
 
     if (isNil(cursor) || isNil(targets)) {
       console.error("Error encountered when trying to throw Pokeball!");
@@ -494,7 +470,11 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.phaseManager.appendToPhase(PhaseId.POST_ACTION, new AttemptCapturePhase(targets[0] % 2, cursor));
+    globalScene.phaseManager.appendToPhase(
+      PhaseId.POST_ACTION,
+      new AttemptCapturePhase(targets[0] % 2, cursor),
+      new PostActionPhase(pokemon.getBattlerIndex()),
+    );
     return true;
   }
 
@@ -515,7 +495,9 @@ export class TurnCommandManager {
     const switchType = args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
     globalScene.phaseManager.appendToPhase(
       PhaseId.POST_ACTION,
-      new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
+      new RecallPhase(pokemon.getBattlerIndex(), switchType),
+      new SwitchPhase(pokemon.getBattlerIndex(), switchType, cursor),
+      new PostActionPhase(pokemon.getBattlerIndex()),
     );
     return true;
   }
@@ -538,7 +520,11 @@ export class TurnCommandManager {
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.phaseManager.appendToPhase(PhaseId.POST_ACTION, new AttemptRunPhase(runningPokemon.getFieldIndex()));
+    globalScene.phaseManager.appendToPhase(
+      PhaseId.POST_ACTION,
+      new AttemptRunPhase(runningPokemon.getFieldIndex()),
+      new PostActionPhase(runningPokemon.getBattlerIndex()),
+    );
     return true;
   }
 
