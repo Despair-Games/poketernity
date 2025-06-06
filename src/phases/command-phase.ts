@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { FairyLockTag } from "#arena-tags/fairy-lock-tag";
-import type { EncoreTag } from "#battler-tags/encore-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
 import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
@@ -82,11 +81,8 @@ export class CommandPhase extends FieldPhase {
       return;
     }
 
-    // Checks if the Pokemon is under the effects of Encore. If so, Encore can end early if the encored move has no more PP.
-    const encoreTag = pokemon.getTag(BattlerTagType.ENCORE) as EncoreTag;
-    if (encoreTag) {
-      pokemon.lapseTag(BattlerTagType.ENCORE);
-    }
+    // Encore ends early if the encored move has no more PP.
+    pokemon.lapseTag(BattlerTagType.ENCORE);
 
     const moveQueue = pokemon.getMoveQueue();
 
@@ -220,7 +216,7 @@ export class CommandPhase extends FieldPhase {
             turnCommand.turnMove.targets = moveTargets.targets;
           } else if (
             turnCommand.turnMove
-            && pokemon.getTag(BattlerTagType.CHARGING)
+            && pokemon.hasTag(BattlerTagType.CHARGING)
             && pokemon.getMoveQueue().length >= 1
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;

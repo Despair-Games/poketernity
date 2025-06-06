@@ -24,7 +24,7 @@ export class IngrainTag extends TrappedTag {
    * @returns boolean True if the tag can be added, false otherwise
    */
   override canAdd(pokemon: Pokemon): boolean {
-    const isTrapped = pokemon.getTag(BattlerTagType.TRAPPED);
+    const isTrapped = pokemon.hasTag(BattlerTagType.TRAPPED);
 
     return !isTrapped;
   }

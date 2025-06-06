@@ -25,7 +25,7 @@ export class CommanderAbAttr extends AbAttr {
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === SpeciesId.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
       // another Pokemon, this effect cannot apply.
-      if (pokemon.getAlly()?.isFainted() || pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)) {
+      if (pokemon.getAlly()?.isFainted() || pokemon.getAlly()?.hasTag(BattlerTagType.COMMANDED)) {
         return false;
       }
 

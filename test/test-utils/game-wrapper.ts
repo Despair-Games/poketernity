@@ -74,7 +74,7 @@ export class GameWrapper {
         ret > 0
         && this.getHpRatio() < 0.2
         && !this.isFainted()
-        && !this.getTag(BattlerTagType.ENDURING)
+        && !this.hasTag(BattlerTagType.ENDURING)
         && !isLowHpMove
       ) {
         const line1 = `Caution: ${side} ${this.name} was damaged to low HP (${this.hp}/${this.getMaxHp()}) by the move ${moveName}!\n`;

@@ -42,7 +42,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
       return (pokemon: Pokemon) => {
         const threshold = new NumberHolder(0.25);
         applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
-        return pokemon.getHpRatio() < 0.25 && !pokemon.getTag(BattlerTagType.CRIT_BOOST);
+        return pokemon.getHpRatio() < 0.25 && !pokemon.hasTag(BattlerTagType.CRIT_BOOST);
       };
     case BerryType.STARF:
       return (pokemon: Pokemon) => {

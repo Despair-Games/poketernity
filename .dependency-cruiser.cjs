@@ -2,11 +2,23 @@
 module.exports = {
   forbidden: [
     {
+      name: "only-type-imports",
+      severity: "error",
+      comment: "Files in 'enums/' and '@types/' must only use type imports.",
+      from: {
+        path: ["(^|/)src/@types", "(^|/)src/enums"],
+        pathNot: ["(^|/)src/@types/phaser.d.ts"],
+      },
+      to: {
+        dependencyTypesNot: ["type-only"],
+      },
+    },
+    {
       name: "no-circular-at-runtime",
       severity: "error",
       comment:
         "This dependency is part of a circular relationship. You might want to revise "
-        + "your solution (i.e. use dependency inversion, make sure the modules have a single responsibility) ",
+        + "your solution (i.e. use dependency inversion, make sure the modules have a single responsibility).",
       from: {},
       to: {
         circular: true,
@@ -18,7 +30,7 @@ module.exports = {
     {
       name: "no-orphans",
       comment:
-        "This is an orphan module - it's likely not used (anymore?). Either use it or "
+        "This is an orphan module - it's likely not used [anymore]. Either use it or "
         + "remove it. If it's logical this module is an orphan (i.e. it's a config file), "
         + "add an exception for it in your dependency-cruiser configuration. By default "
         + "this rule does not scrutinize dot-files (e.g. .eslintrc.js), TypeScript declaration "
@@ -120,7 +132,7 @@ module.exports = {
       },
     },
 
-    /* rules you might want to tweak for your specific situation: */
+    // rules you might want to tweak for your specific situation:
 
     {
       name: "not-to-spec",
@@ -298,7 +310,7 @@ module.exports = {
       conditionNames: ["import", "require", "node", "default", "types"],
       /*
          The extensions, by default are the same as the ones dependency-cruiser
-         can access (run `npx depcruise --info` to see which ones that are in
+         can access (run `pnpm exec depcruise --info` to see which ones that are in
          _your_ environment). If that list is larger than you need you can pass
          the extensions you actually use (e.g. [".js", ".jsx"]). This can speed
          up module resolution, which is the most expensive step.

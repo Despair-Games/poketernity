@@ -70,7 +70,7 @@ describe("Ability - Tangled Feet", () => {
       await move.selectEnemyMove(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.CONFUSED);
+      expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.CONFUSED);
       expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(1);
     });
   });
@@ -93,7 +93,7 @@ describe("Ability - Tangled Feet", () => {
       await move.selectEnemyMove(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(playerPkm).toHaveBattlerTagType(BattlerTagType.CONFUSED);
+      expect(playerPkm).toHaveBattlerTag(BattlerTagType.CONFUSED);
       expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
         calcAccuracyMultiplier(0, stage) / tangledFeetMultiplier,
       );
@@ -121,7 +121,7 @@ describe("Ability - Tangled Feet", () => {
       await move.selectEnemyMove(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(playerPkm).toHaveBattlerTagType(BattlerTagType.CONFUSED);
+      expect(playerPkm).toHaveBattlerTag(BattlerTagType.CONFUSED);
       expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(1);
     });
 
@@ -157,7 +157,7 @@ describe("Ability - Tangled Feet", () => {
         await move.selectEnemyMove(MoveId.TACKLE);
         await game.toEndOfTurn();
 
-        expect(playerPkm).toHaveBattlerTagType(BattlerTagType.CONFUSED);
+        expect(playerPkm).toHaveBattlerTag(BattlerTagType.CONFUSED);
         expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
           1 / passiveAbilityMultiplier / tangledFeetMultiplier,
         );

@@ -13,7 +13,7 @@ export class DragonCheerTag extends CritBoostTag {
   public typesOnAdd: ElementalType[];
 
   constructor() {
-    super(BattlerTagType.CRIT_BOOST, MoveId.DRAGON_CHEER);
+    super(BattlerTagType.DRAGON_CHEER, MoveId.DRAGON_CHEER);
   }
 
   override onAdd(pokemon: Pokemon): void {
