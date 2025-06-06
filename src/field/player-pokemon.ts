@@ -184,8 +184,8 @@ export class PlayerPokemon extends Pokemon {
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
             globalScene.phaseManager.prependToPhase(
-              new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
               PhaseId.POST_ACTION,
+              new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
             );
           }
           globalScene.ui.setMessageMode().then(resolve);
