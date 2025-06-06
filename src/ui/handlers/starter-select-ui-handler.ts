@@ -3943,8 +3943,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
       globalScene.phaseManager.clearPhaseQueue();
       if (globalScene.gameMode.isChallenge) {
-        globalScene.phaseManager.pushPhase(new SelectChallengePhase());
-        globalScene.phaseManager.pushPhase(new EncounterPhase());
+        globalScene.phaseManager.pushPhase(new SelectChallengePhase(), new EncounterPhase());
       } else {
         globalScene.phaseManager.toTitleScreen();
       }

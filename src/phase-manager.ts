@@ -73,15 +73,26 @@ interface PokemonFaintInit {
  * This is responsible for managing the game's {@linkcode Phase | phases}.
  */
 export class PhaseManager {
-  /** dequeue/remove the first element to get the next phase */
+  /**
+   * The main queue where {@linkcode Phase | Phases} are scheduled.
+   * The first Phase in this queue is {@linkcode Phase.start | run} whenever
+   * {@linkcode shiftPhase} is called.
+   */
   private phaseQueue: Phase[] = [];
-  /** A temporary storage of what will be added to the front of {@linkcode phaseQueue} */
+  /**
+   * When {@linkcode shiftPhase} is called, the Phases in this queue are inserted
+   * in queue order to the front of {@linkcode phaseQueue}.
+   */
   private phaseQueuePrepend: Phase[] = [];
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
   private conditionalQueue: [() => boolean, Phase][] = [];
 
   private currentPhase: Phase | null = null;
+  /**
+   * Stores an {@linkcode overridePhase | overridden} {@linkcode Phase}
+   * to restart once the overriding Phase finishes running
+   */
   private standbyPhase: Phase | null = null;
 
   public getCurrentPhase<P extends Phase = Phase>(): P | null {
@@ -108,25 +119,26 @@ export class PhaseManager {
   }
 
   /**
-   * Queues a phase to be run at a future point in time.
-   * @param phase - The {@linkcode Phase} to add
-   * @param defer - If `false`, adds the phase to `phaseQueue`. If `true`, adds the phase to `nextCommandPhaseQueue`. Default `false`.
+   * Queues one or more phases to be run at a future point in time.
+   * @param phase - The first {@linkcode Phase} to push to the {@link phaseQueue | main queue}.
+   * @param otherPhases - Additional (optional) phases to queue. These phases are scheduled after {@linkcode phase} in array order.
    * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
    */
-  public pushPhase(phase: Phase): void {
-    this.phaseQueue.push(phase);
+  public pushPhase(phase: Phase, ...otherPhases: Phase[]): void {
+    this.phaseQueue.push(phase, ...otherPhases);
   }
 
   /**
-   * Adds a phase to the end of {@linkcode phaseQueuePrepend},
+   * Adds one or more phases to the end of {@linkcode phaseQueuePrepend},
    * or at {@linkcode phaseQueuePrependSpliceIndex} if it's set.
-   * @param phase - The {@linkcode Phase} to add
+   * @param phase - The first {@linkcode Phase} to push to {@linkcode phaseQueuePrepend}.
+   * @param otherPhases - Additional (optional) phases to queue. These phases are scheduled after {@linkcode phase} in array order.
    */
-  public unshiftPhase(phase: Phase): void {
+  public unshiftPhase(phase: Phase, ...otherPhases: Phase[]): void {
     if (this.phaseQueuePrependSpliceIndex === -1) {
-      this.phaseQueuePrepend.push(phase);
+      this.phaseQueuePrepend.push(phase, ...otherPhases);
     } else {
-      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, phase);
+      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, phase, ...otherPhases);
     }
   }
 
@@ -226,6 +238,13 @@ export class PhaseManager {
     }
   }
 
+  /**
+   * Cancels the {@link currentPhase | current Phase} to run another {@linkcode Phase}.
+   * The overridden Phase will restart after the overriding Phase finishes running.
+   * If a Phase is already on {@link standbyPhase | standby}, this does nothing.
+   * @param phase - The {@linkcode Phase} overriding the current Phase
+   * @returns `true` if the overriding Phase
+   */
   public overridePhase(phase: Phase): boolean {
     if (this.standbyPhase) {
       return false;
@@ -296,38 +315,40 @@ export class PhaseManager {
   /**
    * Tries to add the input phase to the index before the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
-   * @param phase - The {@linkcode Phase} to be added
    * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @param phase - The {@linkcode Phase} to be added
+   * @param otherPhases - Additional (optional) Phases to add. These Phases are scheduled after {@linkcode phase} in array order
    * @returns `true` if the phase was successfully added to the queue before the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public prependToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
+  public prependToPhase(targetPhaseId: PhaseId, phase: Phase, ...otherPhases: Phase[]): boolean {
     const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
 
     if (targetIndex !== -1) {
-      this.phaseQueue.splice(targetIndex, 0, phase);
+      this.phaseQueue.splice(targetIndex, 0, phase, ...otherPhases);
       return true;
     }
-    this.unshiftPhase(phase);
+    this.unshiftPhase(phase, ...otherPhases);
     return false;
   }
 
   /**
    * Tries to add the input phase to the index after the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
-   * @param phase - The {@linkcode Phase} to be added
    * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @param phase - The {@linkcode Phase} to be added
+   * @param otherPhases - Additional (optional) Phases to add. These Phases are scheduled after {@linkcode phase} in array order
    * @returns `true` if the phase was successfully added to the queue after the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public appendToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
+  public appendToPhase(targetPhaseId: PhaseId, phase: Phase, ...otherPhases: Phase[]): boolean {
     const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
 
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
-      this.phaseQueue.splice(targetIndex + 1, 0, phase);
+      this.phaseQueue.splice(targetIndex + 1, 0, phase, ...otherPhases);
       return true;
     }
-    this.unshiftPhase(phase);
+    this.unshiftPhase(phase, ...otherPhases);
     return false;
   }
 
@@ -451,10 +472,10 @@ export class PhaseManager {
         this.pushPhase(movePhase);
         break;
       case "before":
-        this.prependToPhase(movePhase, phaseId!);
+        this.prependToPhase(phaseId!, movePhase);
         break;
       case "after":
-        this.appendToPhase(movePhase, phaseId!);
+        this.appendToPhase(phaseId!, movePhase);
         break;
       default:
         throw new Error(`Unknown useMove.when: ${when}`);
@@ -466,8 +487,7 @@ export class PhaseManager {
    * @param isVictory - Whether the player won the battle
    */
   public queueNextBattle(isVictory: boolean): void {
-    this.pushPhase(new BattleEndPhase(isVictory));
-    this.pushPhase(new NewBattlePhase());
+    this.pushPhase(new BattleEndPhase(isVictory), new NewBattlePhase());
   }
 
   /**

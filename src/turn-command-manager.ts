@@ -246,10 +246,12 @@ export class TurnCommandManager {
   /** Schedules all phases for the game's end-of-turn sequence */
   public endTurn(): void {
     const { phaseManager } = globalScene;
-    phaseManager.unshiftPhase(new WeatherEffectPhase());
-    phaseManager.unshiftPhase(new BerryPhase());
-    phaseManager.unshiftPhase(new CheckStatusEffectPhase());
-    phaseManager.unshiftPhase(new TurnEndPhase());
+    phaseManager.unshiftPhase(
+      new WeatherEffectPhase(),
+      new BerryPhase(),
+      new CheckStatusEffectPhase(),
+      new TurnEndPhase(),
+    );
   }
 
   public isEmpty(): boolean {
@@ -398,8 +400,8 @@ export class TurnCommandManager {
 
       const forMove = turnCommand.command === BattleCommand.FIGHT;
       globalScene.phaseManager.appendToPhase(
-        new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove),
         this.getNextTurnCommandPhaseId(turnCommand),
+        new PostActionPhase(turnCommand.pokemon.getBattlerIndex(), forMove),
       );
       this.commandsInProgress++;
     }
@@ -492,7 +494,7 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.phaseManager.appendToPhase(new AttemptCapturePhase(targets[0] % 2, cursor), PhaseId.POST_ACTION);
+    globalScene.phaseManager.appendToPhase(PhaseId.POST_ACTION, new AttemptCapturePhase(targets[0] % 2, cursor));
     return true;
   }
 
@@ -512,8 +514,8 @@ export class TurnCommandManager {
 
     const switchType = args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
     globalScene.phaseManager.appendToPhase(
-      new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
       PhaseId.POST_ACTION,
+      new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), cursor, true, pokemon.isPlayer()),
     );
     return true;
   }
@@ -536,7 +538,7 @@ export class TurnCommandManager {
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.phaseManager.appendToPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()), PhaseId.POST_ACTION);
+    globalScene.phaseManager.appendToPhase(PhaseId.POST_ACTION, new AttemptRunPhase(runningPokemon.getFieldIndex()));
     return true;
   }
 
