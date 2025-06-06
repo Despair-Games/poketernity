@@ -29,6 +29,9 @@ import { SelectTargetPhase } from "#phases/select-target-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { TitlePhase } from "#phases/title-phase";
 import { TurnInitPhase } from "#phases/turn-init-phase";
+import { SwitchType } from "#enums/switch-type";
+import { RecallPhase } from "#phases/recall-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -67,6 +70,13 @@ interface PokemonFaintInit {
   destinyTag?: DestinyBondTag | null;
   grudgeTag?: GrudgeTag | null;
   source?: Pokemon;
+}
+
+interface BattlerSwitchOutInit {
+  switchType?: SwitchType;
+  switchInIndex?: number;
+  when?: "eager" | "before" | "after";
+  phaseId?: PhaseId;
 }
 
 /**
@@ -445,6 +455,46 @@ export class PhaseManager {
   ): void {
     this.setPhaseQueueSplice();
     this.unshiftPhase(new FaintPhase(battlerIndex, preventEndure, destinyTag, grudgeTag, source));
+  }
+
+  /**
+   * Unshifts a sequence of phases to switch out a Pokemon on the field
+   * @param battlerIndex - The {@linkcode BattlerIndex} of the Pokemon to switch out
+   * @param switchType - (Default {@linkcode SwitchType.SWITCH}) The {@linkcode SwitchType | type} of switch to apply
+   * @param switchInIndex - (Default `-1`) The index of the party Pokemon to switch into
+   * the target Pokemon's place. If set to `-1`, the Pokemon to switch in is instead resolved
+   * during the {@linkcode SwitchPhase}.
+   */
+  public queueBattlerSwitchOut(
+    battlerIndex: BattlerIndex,
+    { switchType = SwitchType.SWITCH, switchInIndex = -1, when = "eager", phaseId }: BattlerSwitchOutInit = {},
+  ): void {
+    const phases = [
+      new RecallPhase(battlerIndex, switchType),
+      new SwitchPhase(battlerIndex, switchType, switchInIndex),
+    ] as const;
+
+    const validatePhaseId = () => {
+      if (!phaseId) {
+        throw new Error("phaseId is required for when === 'before' or 'after'");
+      }
+    };
+
+    switch (when) {
+      case "eager":
+        this.unshiftPhase(...phases);
+        break;
+      case "before":
+        validatePhaseId();
+        this.prependToPhase(phaseId!, ...phases);
+        break;
+      case "after":
+        validatePhaseId();
+        this.prependToPhase(phaseId!, ...phases);
+        break;
+      default:
+        throw new Error(`Unknown queueBattlerSwitchOut.when: ${when}`);
+    }
   }
 
   public queueMovePhase({

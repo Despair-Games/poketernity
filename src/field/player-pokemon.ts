@@ -26,7 +26,6 @@ import { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
@@ -172,6 +171,7 @@ export class PlayerPokemon extends Pokemon {
    * @param switchType the {@linkcode SwitchType} for this switch-out. If this is
    * `BATON_PASS` or `SHED_TAIL`, this Pokemon's effects are not cleared upon leaving
    * the field.
+   * @deprecated
    */
   switchOut(switchType: SwitchType = SwitchType.SWITCH): Promise<void> {
     return new Promise((resolve) => {
@@ -183,10 +183,11 @@ export class PlayerPokemon extends Pokemon {
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            globalScene.phaseManager.prependToPhase(
-              PhaseId.POST_ACTION,
-              new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
-            );
+            globalScene.phaseManager.queueBattlerSwitchOut(this.getBattlerIndex(), {
+              switchType,
+              when: "before",
+              phaseId: PhaseId.POST_ACTION,
+            });
           }
           globalScene.ui.setMessageMode().then(resolve);
         },

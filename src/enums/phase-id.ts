@@ -77,8 +77,6 @@ import type { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type { SummonMissingPhase } from "#phases/summon-missing-phase";
 import type { SummonPhase } from "#phases/summon-phase";
 import type { SwitchBiomePhase } from "#phases/switch-biome-phase";
-import type { LegacySwitchPhase } from "#phases/legacy-switch-phase";
-import type { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import type { TerastallizationPhase } from "#phases/terastallization-phase";
 import type { TitlePhase } from "#phases/title-phase";
 import type { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
@@ -248,8 +246,6 @@ export enum PhaseId {
   SWITCH,
   /** {@linkcode SwitchBiomePhase} */
   SWITCH_BIOME,
-  /** {@linkcode SwitchSummonPhase} */
-  SWITCH_SUMMON,
   /** {@linkcode TerastallizationPhase} */
   TERASTALLIZATION,
   /** {@linkcode TitlePhase} */

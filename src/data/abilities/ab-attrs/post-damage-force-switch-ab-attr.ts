@@ -15,7 +15,6 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { SwitchPhase } from "#phases/switch-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -137,7 +136,7 @@ class ForceSwitchOutHelper {
    * @todo Nuke this. The logic for all switch-out effects should be centralized, e.g. as a {@linkcode BattleScene} method
    */
   public switchOutLogic(switchOutTarget: Pokemon): boolean {
-    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
+    const { battleType, double, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
@@ -158,7 +157,7 @@ class ForceSwitchOutHelper {
       }
       /**
        * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
-       * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
+       * If yes, the Pokémon leaves the field and a new switch sequence is initiated.
        */
     } else if (battleType !== BattleType.WILD) {
       if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
@@ -166,11 +165,11 @@ class ForceSwitchOutHelper {
       }
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
-        globalScene.phaseManager.prependToPhase(
-          PhaseId.POST_ACTION,
-          new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
-        );
+        globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
+          switchType: this.switchType,
+          when: "before",
+          phaseId: PhaseId.POST_ACTION,
+        });
         return true;
       }
       /**

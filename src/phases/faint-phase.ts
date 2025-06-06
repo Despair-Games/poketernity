@@ -34,7 +34,6 @@ import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-c
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { DamageAnimPhase } from "#phases/damage-anim-phase";
 import { PostKnockoutPhase } from "#phases/post-knockout-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
@@ -56,7 +55,7 @@ import { SwitchPhase } from "#phases/switch-phase";
  *     otherwise push a {@linkcode SwitchPhase} or {@linkcode ToggleDoublePositionPhase} as needed.
  * - If the fainted pokemon was the AI's:
  *   - Unshift a {@linkcode PostKnockoutPhase}, then if this is a trainer battle and the AI
- *     has unfainted pokemon in reserve, push a {@linkcode SwitchSummonPhase}
+ *     has unfainted pokemon in reserve, push a {@linkcode SwitchPhase}
  * - Redirect moves off of fainted targets in doubles (TODO: handle this in {@linkcode MovePhase}?)
  * - Play the pokemon's faint cry
  * - Handle friendship loss for player pokemon
@@ -222,9 +221,7 @@ export class FaintPhase extends PokemonPhase {
           .getEnemyParty()
           .some((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot);
         if (hasReservePartyMember) {
-          globalScene.phaseManager.pushPhase(
-            new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false),
-          );
+          globalScene.phaseManager.pushPhase(new SwitchPhase(this.battlerIndex, SwitchType.SWITCH));
         }
       }
     }

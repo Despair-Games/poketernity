@@ -83,7 +83,7 @@ describe("Moves - Baton Pass", () => {
     expect(game.scene.getEnemyPokemon()!.hp).not.toEqual(100);
     expect(game.phaseInterceptor.log.slice(-4)).toEqual([
       "MoveEffectPhase",
-      "SwitchSummonPhase",
+      "SwitchPhase",
       "SummonPhase",
       "PostSummonPhase",
     ]);

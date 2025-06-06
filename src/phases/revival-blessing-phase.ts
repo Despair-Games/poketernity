@@ -5,7 +5,8 @@ import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { SummonPhase } from "#phases/summon-phase";
+import { SwitchPhase } from "#phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { toDmgValue } from "#utils/common-utils";
@@ -52,17 +53,17 @@ export class RevivalBlessingPhase extends BattlePhase {
 
           if (globalScene.currentBattle.double && globalScene.getPlayerParty().length > 1) {
             const allyPokemon = this.user.getAlly();
-            if (slotIndex <= 1) {
+            if (allyPokemon && slotIndex <= 1) {
               // Revived ally pokemon
               globalScene.phaseManager.unshiftPhase(
-                new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, true),
                 new ToggleDoublePositionPhase(true),
+                new SummonPhase(allyPokemon.getBattlerIndex()),
               );
             } else if (allyPokemon?.isFainted()) {
               // Revived party pokemon, and ally pokemon is fainted
               globalScene.phaseManager.unshiftPhase(
-                new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, true),
                 new ToggleDoublePositionPhase(true),
+                new SwitchPhase(allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex),
               );
             }
           }

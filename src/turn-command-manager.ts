@@ -480,7 +480,7 @@ export class TurnCommandManager {
 
   /**
    * Validates a given {@linkcode BattleCommand.POKEMON | POKEMON} command
-   * and, if valid, schedules a {@linkcode SwitchSummonPhase} for the command.
+   * and, if valid, schedules a {@linkcode RecallPhase} and {@linkcode SwitchPhase} for the command.
    * @param turnCommand the {@linkcode TurnCommand} to schedule
    * @returns `true` if the turn command is scheduled successfully
    */
