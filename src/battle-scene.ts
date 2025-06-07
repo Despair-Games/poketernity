@@ -39,7 +39,7 @@ import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor, ShadowColor } from "#enums/color";
@@ -2753,7 +2753,7 @@ export default class BattleScene extends SceneBase {
         if (availablePartyMembers.length > 1) {
           this.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
           if (!availablePartyMembers[1].isOnField()) {
-            this.phaseManager.pushPhase(new SummonPhase(1));
+            this.phaseManager.pushPhase(new SummonPhase(BattlerIndex.PLAYER_2));
           }
         }
 

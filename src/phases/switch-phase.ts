@@ -30,12 +30,18 @@ export class SwitchPhase extends PokemonPhase {
 
   private switchType: SwitchType;
   private switchInIndex: number;
+  /**
+   * If `true`, this phase schedules a {@linkcode SummonPhase}
+   * to run immediately after it ends
+   */
+  private readonly withSummon: boolean;
 
-  constructor(battlerIndex: number, switchType: SwitchType, switchInIndex: number = -1) {
+  constructor(battlerIndex: number, switchType: SwitchType, switchInIndex: number = -1, withSummon: boolean = true) {
     super(battlerIndex);
 
     this.switchType = switchType;
     this.switchInIndex = switchInIndex;
+    this.withSummon = withSummon;
   }
 
   public override start(): void {
@@ -43,6 +49,13 @@ export class SwitchPhase extends PokemonPhase {
     this.resolveSwitchInIndex()
       .then(this.updatePokemonData)
       .then(this.end);
+  }
+
+  public override end(): void {
+    if (this.withSummon) {
+      globalScene.phaseManager.unshiftPhase(new SummonPhase(this.battlerIndex, false));
+    }
+    super.end();
   }
 
   /**
@@ -78,11 +91,6 @@ export class SwitchPhase extends PokemonPhase {
         !this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
       );
     }
-  }
-
-  public override end(): void {
-    globalScene.phaseManager.unshiftPhase(new SummonPhase(this.battlerIndex, false));
-    super.end();
   }
 
   /**

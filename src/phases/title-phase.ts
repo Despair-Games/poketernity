@@ -318,9 +318,9 @@ export class TitlePhase extends Phase {
       const { battleType, double, waveIndex } = currentBattle;
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-      globalScene.phaseManager.pushPhase(new SummonPhase(0, true, true));
+      globalScene.phaseManager.pushPhase(new SummonPhase(0, true));
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.pushPhase(new SummonPhase(1, true, true));
+        globalScene.phaseManager.pushPhase(new SummonPhase(1, true));
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !globalScene.gameMode.isDaily)) {

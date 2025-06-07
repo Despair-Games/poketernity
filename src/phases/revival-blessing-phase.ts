@@ -57,7 +57,7 @@ export class RevivalBlessingPhase extends BattlePhase {
               // Revived ally pokemon
               globalScene.phaseManager.unshiftPhase(
                 new ToggleDoublePositionPhase(true),
-                new SummonPhase(allyPokemon.getBattlerIndex()),
+                new SummonPhase(allyPokemon.getBattlerIndex(), false, false),
               );
             } else if (allyPokemon?.isFainted()) {
               // Revived party pokemon, and ally pokemon is fainted

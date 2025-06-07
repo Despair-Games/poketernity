@@ -74,7 +74,6 @@ import type { ShowAbilityPhase } from "#phases/show-ability-phase";
 import type { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
 import type { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import type { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { SummonMissingPhase } from "#phases/summon-missing-phase";
 import type { SummonPhase } from "#phases/summon-phase";
 import type { SwitchBiomePhase } from "#phases/switch-biome-phase";
 import type { TerastallizationPhase } from "#phases/terastallization-phase";
@@ -240,8 +239,6 @@ export enum PhaseId {
   STAT_STAGE_CHANGE,
   /** {@linkcode SummonPhase} */
   SUMMON,
-  /** {@linkcode SummonMissingPhase} */
-  SUMMON_MISSING,
   /** {@linkcode SwitchPhase} */
   SWITCH,
   /** {@linkcode SwitchBiomePhase} */

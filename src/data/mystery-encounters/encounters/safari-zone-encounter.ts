@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import type PokemonSpecies from "#data/pokemon-species";
+import { BattlerIndex } from "#enums/battler-index";
 import { ImagesFolder } from "#enums/images-folders";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -324,7 +325,7 @@ async function summonSafariPokemon() {
   encounter.misc.pokemon = pokemon;
   encounter.misc.safariPokemonRemaining -= 1;
 
-  globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+  globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY));
 
   encounter.setDialogueToken("pokemonName", getPokemonNameWithAffix(pokemon));
 

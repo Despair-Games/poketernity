@@ -449,9 +449,9 @@ export class EncounterPhase extends BattlePhase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY));
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY_2));
           }
           this.end();
         };
@@ -613,12 +613,12 @@ export class EncounterPhase extends BattlePhase {
         if (availablePartyMembers.length > 1) {
           globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
           if (!availablePartyMembers[1].isOnField()) {
-            globalScene.phaseManager.pushPhase(new SummonPhase(1));
+            globalScene.phaseManager.pushPhase(new SummonPhase(BattlerIndex.PLAYER_2));
           }
         }
       } else {
         if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.pushPhase(new RecallPhase(1));
+          globalScene.phaseManager.pushPhase(new RecallPhase(BattlerIndex.PLAYER_2));
         }
         globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
       }

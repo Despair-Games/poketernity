@@ -18,6 +18,7 @@ import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase"
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 import { RecallPhase } from "#phases/recall-phase";
+import { BattlerIndex } from "#enums/battler-index";
 
 /**
  * Will handle (in order):
@@ -83,9 +84,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         globalScene.audioManager.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-      globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+      globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY));
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+        globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY_2));
       }
 
       if (!mysteryEncounter?.hideBattleIntroMessage) {
@@ -103,9 +104,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY));
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.unshiftPhase(new SummonPhase(BattlerIndex.ENEMY_2));
           }
           this.endBattleSetup();
         };
@@ -171,14 +172,14 @@ export class MysteryEncounterBattlePhase extends Phase {
     const availablePartyMembers = globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle());
 
     if (!availablePartyMembers[0].isOnField()) {
-      globalScene.phaseManager.pushPhase(new SummonPhase(0));
+      globalScene.phaseManager.pushPhase(new SummonPhase(BattlerIndex.PLAYER));
     }
 
     if (double) {
       if (availablePartyMembers.length > 1) {
         globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
         if (!availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.pushPhase(new SummonPhase(1));
+          globalScene.phaseManager.pushPhase(new SummonPhase(BattlerIndex.PLAYER_2));
         }
       }
     } else {

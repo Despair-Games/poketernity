@@ -7,7 +7,6 @@ import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { SummonMissingPhase } from "#phases/summon-missing-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -16,6 +15,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { RecallPhase } from "#phases/recall-phase";
 import { SwitchPhase } from "#phases/switch-phase";
 import { PartyOption } from "#enums/party-option";
+import { SummonPhase } from "#phases/summon-phase";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
@@ -50,7 +50,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...if the checked Pokemon is somehow not on the field
     if (globalScene.field.getAll().indexOf(pokemon) === -1) {
-      globalScene.phaseManager.unshiftPhase(new SummonMissingPhase(this.fieldIndex));
+      globalScene.phaseManager.unshiftPhase(new SummonPhase(pokemon.getBattlerIndex()));
       this.end();
       return;
     }

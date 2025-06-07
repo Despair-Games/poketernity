@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { EncounterPhase } from "#phases/encounter-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
@@ -22,16 +28,27 @@ import i18next from "i18next";
  * @todo Should this extend {@linkcode PokemonPhase} instead?
  */
 export class SummonPhase extends PokemonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
+  /** @override */
   override readonly id: PhaseId = PhaseId.SUMMON;
 
+  /** If `true`, summons the Pokemon as if loading into a wave */
   private readonly loaded: boolean;
+  /**
+   * If `true` for an enemy Trainer's switch, this phase will play
+   * an animation on the Trainer before the "thrown Poke Ball" animation.
+   * This does not affect summons on the Player's side since part of the
+   * Player Trainer's animation is implemented in {@linkcode EncounterPhase}.
+   */
+  private readonly playsTrainerAnim: boolean;
 
-  constructor(battlerIndex: BattlerIndex, loaded: boolean = false) {
+  constructor(battlerIndex: BattlerIndex, loaded: boolean = false, playsTrainerAnim: boolean = true) {
     super(battlerIndex);
 
     this.loaded = loaded;
+    this.playsTrainerAnim = playsTrainerAnim;
   }
+
+  // #region Public Methods
 
   public override start(): void {
     super.start();
@@ -60,6 +77,9 @@ export class SummonPhase extends PokemonPhase {
     }
   }
 
+  // #endregion
+  // #region Private Methods
+
   /**
    * Plays animations for the Trainer summoning the Pokemon, then plays
    * summon animations for the Pokemon.
@@ -76,7 +96,9 @@ export class SummonPhase extends PokemonPhase {
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
-      await this.playEnemyTrainerThrowSequence();
+      if (this.playsTrainerAnim) {
+        await this.playEnemyTrainerThrowSequence();
+      }
       await this.playPokeBallSummonFX();
     } else {
       // At the moment, this is only reached during Mystery Encounters where the Player
@@ -326,4 +348,6 @@ export class SummonPhase extends PokemonPhase {
   private queuePostSummon(): void {
     globalScene.phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
+
+  // #endregion
 }
