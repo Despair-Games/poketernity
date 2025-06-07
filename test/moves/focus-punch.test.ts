@@ -106,7 +106,7 @@ describe("Moves - Focus Punch", () => {
 
     await game.phaseInterceptor.to("TurnStartPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase()).toMatchObject({ id: PhaseId.SWITCH_SUMMON });
+    expect(game.scene.phaseManager.getCurrentPhase()).toMatchObject({ id: PhaseId.RECALL });
 
     await game.phaseInterceptor.to("PostActionPhase");
 
