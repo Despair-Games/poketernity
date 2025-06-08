@@ -1,11 +1,20 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
+import type { PhaseMap, PhaseString } from "#types/phase-types";
 
 export abstract class Phase {
   /** The identifier of the phase. Unique per phase, but **not** per instance! */
-  public readonly id: PhaseId = PhaseId.UNSPECIFIED;
+  // public readonly id: PhaseId = PhaseId.UNSPECIFIED;
+  /**
+   * The string name of the phase, used to identify the phase type for {@linkcode is}
+   *
+   * @privateremarks
+   *
+   * When implementing a phase, you must set the `phaseName` property to the name of the phase.
+   */
+  public abstract readonly phaseName: PhaseString;
 
   public start(): void {
+    // TODO: https://github.com/pagefaultgames/pokerogue/pull/5267
     if (globalScene.abilityBar.shown) {
       globalScene.abilityBar.resetAutoHideTimer();
     }
@@ -15,7 +24,21 @@ export abstract class Phase {
     globalScene.phaseManager.shiftPhase();
   }
 
-  public is<T extends Phase = Phase>(phaseId: T["id"]): this is T {
-    return this.id === phaseId;
+  // public is<T extends Phase = Phase>(phaseId: T["id"]): this is T {
+  //   return this.id === phaseId;
+  // }
+
+  /**
+   * Check if the phase is of the given type without requiring `instanceof`.
+   *
+   * @param phase - The string name of the phase to check.
+   * @returns Whether this phase is of the provided type.
+   *
+   * @remarks
+   * This does not check for subclasses! It only checks if the phase is *exactly* the given type.
+   * This method exists to avoid circular import issues, as using `instanceof` would require importing each phase.
+   */
+  public is<K extends keyof PhaseMap>(phase: K): this is PhaseMap[K] {
+    return this.phaseName === phase;
   }
 }

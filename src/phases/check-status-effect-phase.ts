@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
@@ -8,10 +7,9 @@ import { isNil } from "#utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
- * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
-  override readonly id = PhaseId.CHECK_STATUS_EFFECT;
+  public override readonly phaseName = "CheckStatusEffectPhase";
 
   public override start(): void {
     super.start();

@@ -2,16 +2,15 @@ import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import type { PhaseString } from "#types/phase-types";
 
 /**
  * Plays a {@linkcode CommonBattleAnim}
- * @extends PokemonPhase
  */
 export class CommonAnimPhase extends PokemonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode CommonAnimPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.COMMON_ANIM;
+  // Type hint required due to this class being extended by others
+  public override readonly phaseName: PhaseString = "CommonAnimPhase";
 
   private anim: CommonAnim;
   private readonly targetIndex?: BattlerIndex;

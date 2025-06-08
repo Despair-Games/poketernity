@@ -8,7 +8,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#data/pokemon-forms";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -25,10 +24,9 @@ import { fixedNumber } from "#utils/common-utils";
  * A phase for handling certain form changes for player Pokemon.
  * This does not cover evolutions, and this does not cover form changes for enemy Pokemon.
  * @see {@linkcode EvolutionPhase} for evolutions
- * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
-  override readonly id = PhaseId.FORM_CHANGE;
+  public override readonly phaseName = "FormChangePhase";
 
   /**
    * The form change that occurs during this phase.

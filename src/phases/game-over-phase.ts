@@ -5,7 +5,6 @@ import { getCharVariantFromDialogue } from "#data/dialogue";
 import type PokemonSpecies from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -40,7 +39,7 @@ import i18next from "i18next";
  * - Award ribbons + vouchers per player pokemon if a victory
  */
 export class GameOverPhase extends BattlePhase {
-  override readonly id = PhaseId.GAME_OVER;
+  public override readonly phaseName = "GameOverPhase";
 
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];
@@ -64,7 +63,8 @@ export class GameOverPhase extends BattlePhase {
     // Handle Mystery Encounter special Game Over cases
     // Situations such as when player lost a battle, but it isn't treated as full Game Over
     if (!this.isVictory && currentBattle.mysteryEncounter?.onGameOver && !currentBattle.mysteryEncounter.onGameOver()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     if (this.isVictory && gameMode.isEndless) {

@@ -5,7 +5,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { BerryUsedEvent } from "#events/battle-scene";
 import { BerryModifier } from "#modifier/modifier";
 import { FieldPhase } from "#phases/abstract-field-phase";
@@ -15,10 +14,9 @@ import i18next from "i18next";
 
 /**
  * The phase after attacks where the pokemon eat berries
- * @extends FieldPhase
  */
 export class BerryPhase extends FieldPhase {
-  override readonly id = PhaseId.BERRY;
+  public override readonly phaseName = "BerryPhase";
 
   public override start(): void {
     super.start();

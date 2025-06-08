@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { ExpNotification } from "#enums/exp-notification";
-import { PhaseId } from "#enums/phase-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
 import { EvolutionPhase } from "#phases/evolution-phase";
@@ -18,11 +17,9 @@ import i18next from "i18next";
  * - Displays the appropriate messages
  * - Pushes a {@linkcode LearnMovePhase} for each newly learned move
  * - Pushes an {@linkcode EvolutionPhase} if the pokemon should evolve
- *
- * @extends PlayerPartyMemberPokemonPhase
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.LEVEL_UP;
+  public override readonly phaseName = "LevelUpPhase";
 
   protected readonly lastLevel: number;
   protected readonly level: number;
@@ -86,6 +83,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
       }
     }
 
-    return super.end();
+    super.end();
+    return;
   }
 }

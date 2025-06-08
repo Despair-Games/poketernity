@@ -23,7 +23,6 @@ import { FieldPosition } from "#enums/field-position";
 import { ImagesFolder } from "#enums/images-folders";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -53,6 +52,7 @@ import { SummonPhase } from "#phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
+import type { PhaseString } from "#types/phase-types";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -61,12 +61,10 @@ import i18next from "i18next";
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
  * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
  * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
- *
- * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.ENCOUNTER;
+  // Type hint required due to this class being extended by others
+  public override readonly phaseName: PhaseString = "EncounterPhase";
 
   private readonly loaded: boolean;
 
@@ -468,6 +466,7 @@ export class EncounterPhase extends BattlePhase {
         doSummon();
       } else {
         let message: string;
+        // biome-ignore lint/suspicious/noAssignInExpressions: This is not an `if`/`while`/etc statement
         globalScene.executeWithSeedOffset(() => (message = randSeedItem(encounterMessages)), waveIndex);
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {

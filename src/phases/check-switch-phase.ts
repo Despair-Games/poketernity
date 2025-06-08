@@ -3,7 +3,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "#phases/abstract-battle-phase";
@@ -16,10 +15,9 @@ import i18next from "i18next";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
- * @extends BattlePhase
  */
 export class CheckSwitchPhase extends BattlePhase {
-  override readonly id = PhaseId.CHECK_SWITCH;
+  public override readonly phaseName = "CheckSwitchPhase";
 
   protected readonly fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */

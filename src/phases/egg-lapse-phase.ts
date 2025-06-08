@@ -5,7 +5,6 @@ import type { Egg } from "#data/egg";
 import { EGG_SEED } from "#data/egg";
 import { EggHatchData } from "#data/egg-hatch-data";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { EggHatchPhase } from "#phases/egg-hatch-phase";
@@ -17,12 +16,11 @@ import i18next from "i18next";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.
- * Also handles prompts for skipping animation, and calling the egg summary phase.
  *
- * @extends Phase
+ * Also handles prompts for skipping animation, and calling the egg summary phase.
  */
 export class EggLapsePhase extends Phase {
-  override readonly id = PhaseId.EGG_LAPSE;
+  public override readonly phaseName = "EggLapsePhase";
 
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
@@ -113,7 +111,8 @@ export class EggLapsePhase extends Phase {
   protected hatchEggSilently(egg: Egg): void {
     const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === egg.id);
     if (eggIndex === -1) {
-      return this.end();
+      this.end();
+      return;
     }
     globalScene.gameData.eggs.splice(eggIndex, 1);
     this.generatePokemon(egg);

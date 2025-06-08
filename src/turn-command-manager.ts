@@ -471,7 +471,7 @@ export class TurnCommandManager {
       move,
       ignorePp: cursor !== -1 && turnMove.ignorePP,
       when: "after",
-      phaseId: PhaseId.POST_ACTION,
+      phaseName: PhaseId.POST_ACTION,
     });
 
     return true;

@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
-import { PhaseId } from "#enums/phase-id";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import type { DamageResult } from "#types/damage-result";
@@ -9,10 +8,9 @@ import { fixedNumber } from "#utils/common-utils";
 
 /**
  * Displays damage numbers and plays move hit SFX during battle
- * @extends PokemonPhase
  */
 export class DamageAnimPhase extends PokemonPhase {
-  override readonly id = PhaseId.DAMAGE_ANIM;
+  public override readonly phaseName = "DamageAnimPhase";
 
   private amount: number;
   private readonly damageResult: DamageResult;

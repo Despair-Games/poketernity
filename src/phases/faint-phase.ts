@@ -24,7 +24,6 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -62,11 +61,9 @@ import i18next from "i18next";
  * - Handle friendship loss for player pokemon
  * - Lapse {@linkcode BattlerTagLapseType.FAINT} tags
  * - Clear {@linkcode BattlerTag}s from the fainted pokemon
- *
- * @extends PokemonPhase
  */
 export class FaintPhase extends PokemonPhase {
-  override readonly id = PhaseId.FAINT;
+  public override readonly phaseName = "FaintPhase";
 
   /** Whether or not enduring (for this phase's purposes, Reviver Seed) should be prevented */
   private readonly preventEndure: boolean;
@@ -125,7 +122,8 @@ export class FaintPhase extends PokemonPhase {
       if (instantReviveModifier) {
         faintPokemon.loseHeldItem(instantReviveModifier);
         globalScene.updateModifiers(this.isPlayer);
-        return this.end();
+        this.end();
+        return;
       }
     }
 
