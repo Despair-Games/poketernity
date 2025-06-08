@@ -24,8 +24,7 @@ import i18next from "i18next";
 
 /**
  * Phase to visually summon the Pokemon at the given {@linkcode fieldIndex} onto the field.
- * @extends PartyMemberPokemonPhase
- * @todo Should this extend {@linkcode PokemonPhase} instead?
+ * @extends PokemonPhase
  */
 export class SummonPhase extends PokemonPhase {
   /** @override */

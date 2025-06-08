@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
-import { GameManager } from "#test/test-utils/game-manager";
+import type { GameManager } from "#test/test-utils/game-manager";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
