@@ -12,7 +12,6 @@ import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/speci
 import { initMoveAnim } from "#init/init-move-anim";
 import type { Move } from "#moves/move";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
-import type { SelectModifierPhase } from "#phases/select-modifier-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
@@ -222,7 +221,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         pokemon.usedTMs = [];
       }
       pokemon.usedTMs.push(this.moveId);
-      globalScene.phaseManager.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+      globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SelectModifierPhase"));
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
         if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
@@ -232,7 +231,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         }
         globalScene.audioManager.playSound("se/buy");
       } else {
-        globalScene.phaseManager.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+        globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SelectModifierPhase"));
       }
     }
 

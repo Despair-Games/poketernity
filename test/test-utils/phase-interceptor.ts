@@ -79,6 +79,8 @@ export interface PromptHandler {
  * make sure that this list contains said phase AFTER all of its subclasses.
  * This way, the phase's `prototype.start` is properly preserved during
  * `initPhases()` so that its subclasses can use `super.start()` properly.
+ *
+ * @todo Can this be merged with the `PHASES` map in `phases/phases.ts`?
  */
 const PHASES = [
   LoginPhase,

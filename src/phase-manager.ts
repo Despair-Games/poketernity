@@ -29,6 +29,7 @@ import { SelectTargetPhase } from "#phases/select-target-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { TitlePhase } from "#phases/title-phase";
 import { TurnInitPhase } from "#phases/turn-init-phase";
+import { type PhaseKey, PHASES, type PhaseConstructorMap, type PhaseMap } from "#phases/phases";
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -108,13 +109,52 @@ export class PhaseManager {
   }
 
   /**
+   * Constructs a phase from the given parameters.
+   * @param phase - The {@linkcode PhaseKey} for the {@linkcode Phase} to construct, e.g. `"MovePhase"`
+   * @param params - The inferred constructor parameters for the Phase specified
+   * by {@linkcode phase}
+   * @returns The newly constructed {@linkcode Phase}
+   */
+  public createPhase<P extends PhaseKey>(phase: P, ...params: PhaseConstructorMap[P]): InstanceType<PhaseMap[P]> {
+    const PhaseClass = PHASES[phase];
+    if (!PhaseClass) {
+      throw new Error(`${phase} does not exist in PHASES!`);
+    }
+
+    // @ts-expect-error: Typescript does not support narrowing the type of operands in generic methods (see https://stackoverflow.com/a/72891234)
+    return new PhaseClass(...params);
+  }
+
+  /**
    * Queues a phase to be run at a future point in time.
    * @param phase - The {@linkcode Phase} to add
    * @param defer - If `false`, adds the phase to `phaseQueue`. If `true`, adds the phase to `nextCommandPhaseQueue`. Default `false`.
    * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
    */
-  public pushPhase(phase: Phase): void {
-    this.phaseQueue.push(phase);
+  public pushPhase(phase: Phase, ...otherPhases: Phase[]): void {
+    this.phaseQueue.push(phase, ...otherPhases);
+  }
+
+  /**
+   * Creates a {@linkcode Phase} from the given parameters, then pushes
+   * that Phase to {@linkcode phaseQueue}. This is equivalent to calling
+   * {@linkcode createPhase}, then {@linkcode pushPhase} for the created Phase.
+   *
+   * Note that this only supports pushing one Phase at a time. The best practice
+   * to push multiple Phases at once is to construct each phase with {@linkcode createPhase}, e.g.
+   *
+   * ```
+   * pushPhase(
+   *   createPhase("MovePhase", ...),
+   *   createPhase("MoveEffectPhase", ...),
+   * );
+   * ```
+   * @param phase - The {@linkcode PhaseKey} for the {@linkcode Phase} to construct, e.g. `"MovePhase"`
+   * @param params - The inferred constructor parameters for the Phase specified
+   * by {@linkcode phase}
+   */
+  public createAndPushPhase<P extends PhaseKey>(phase: P, ...params: PhaseConstructorMap[P]): void {
+    this.pushPhase(this.createPhase(phase, ...params));
   }
 
   /**
@@ -128,6 +168,28 @@ export class PhaseManager {
     } else {
       this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, phase);
     }
+  }
+
+  /**
+   * Creates a {@linkcode Phase} from the given parameters, then adds
+   * that Phase to {@linkcode phaseQueuePrepend}. This is equivalent to calling
+   * {@linkcode createPhase}, then {@linkcode unshiftPhase} for the created Phase.
+   *
+   * Note that this only supports unshifting one Phase at a time. The best practice
+   * to push multiple Phases at once is to construct each phase with {@linkcode createPhase}, e.g.
+   *
+   * ```
+   * unshiftPhase(
+   *   createPhase("MovePhase", ...),
+   *   createPhase("MoveEffectPhase", ...),
+   * );
+   * ```
+   * @param phase - The {@linkcode PhaseKey} for the {@linkcode Phase} to construct, e.g. `"MovePhase"`
+   * @param params - The inferred constructor parameters for the Phase specified
+   * by {@linkcode phase}
+   */
+  public createAndUnshiftPhase<P extends PhaseKey>(phase: P, ...params: PhaseConstructorMap[P]): void {
+    this.unshiftPhase(this.createPhase<P>(phase, ...params));
   }
 
   /**

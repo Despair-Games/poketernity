@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
+import { PHASES, type PhaseKey, type PhaseMap } from "#phases/phases";
 
 export abstract class Phase {
   /** The identifier of the phase. Unique per phase, but **not** per instance! */
@@ -15,7 +16,7 @@ export abstract class Phase {
     globalScene.phaseManager.shiftPhase();
   }
 
-  public is<T extends Phase = Phase>(phaseId: T["id"]): this is T {
-    return this.id === phaseId;
+  public is<P extends PhaseKey>(phaseKey: P): this is InstanceType<PhaseMap[P]> {
+    return this instanceof PHASES[phaseKey];
   }
 }

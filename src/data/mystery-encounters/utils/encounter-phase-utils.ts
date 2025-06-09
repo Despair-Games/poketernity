@@ -33,7 +33,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { Nature } from "#enums/nature";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
@@ -792,7 +791,7 @@ export function setEncounterRewards(
     if (customShopRewards) {
       globalScene.phaseManager.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
     } else {
-      globalScene.phaseManager.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+      globalScene.phaseManager.tryRemovePhase((p) => p.is("SelectModifierPhase"));
     }
 
     if (eggRewards) {

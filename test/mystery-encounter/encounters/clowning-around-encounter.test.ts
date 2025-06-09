@@ -9,7 +9,6 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -188,7 +187,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(3);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.ROLE_PLAY).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
@@ -204,7 +203,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       game.move.use(MoveId.DAZZLING_GLEAM);
       await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
 
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.ME_REWARDS), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("MysteryEncounterRewardsPhase"), true)).toBe(false);
     });
 
     it("should let the player gain the ability after battle completion", async () => {

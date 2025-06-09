@@ -170,4 +170,8 @@ export const PHASES = {
   WeatherEffectPhase,
 } as const;
 
+export type PhaseMap = typeof PHASES;
 export type PhaseKey = keyof typeof PHASES;
+export type PhaseConstructorMap = {
+  [P in PhaseKey]: ConstructorParameters<PhaseMap[P]>;
+};

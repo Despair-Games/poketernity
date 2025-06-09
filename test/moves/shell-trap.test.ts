@@ -73,7 +73,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.is("MovePhase")).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.toEndOfTurn();
@@ -96,7 +96,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.is("MovePhase")).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.toEndOfTurn();
@@ -117,7 +117,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.is("MovePhase")).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);

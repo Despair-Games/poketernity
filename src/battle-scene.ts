@@ -53,7 +53,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { PokeballType } from "#enums/pokeball-type";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
@@ -120,7 +119,6 @@ import { SelectBiomePhase } from "#phases/select-biome-phase";
 import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { SummonPhase } from "#phases/summon-phase";
-import type { SwitchPhase } from "#phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import FieldSpritePipeline from "#pipelines/field-sprite";
 import InvertPostFX from "#pipelines/invert";
@@ -860,7 +858,7 @@ export default class BattleScene extends SceneBase {
     do {
       targetingMovePhase = this.phaseManager.findPhase(
         (mp) =>
-          mp.is<MovePhase>(PhaseId.MOVE)
+          mp.is("MovePhase")
           && mp.targets.length === 1
           && mp.targets[0] === removedPokemon.getBattlerIndex()
           && mp.pokemon.isPlayer() !== secondPokemon.isPlayer(),
@@ -1374,7 +1372,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.phaseManager.tryRemovePhase((p) => p.is<SwitchPhase>(PhaseId.SWITCH));
+      this.phaseManager.tryRemovePhase((p) => p.is("SwitchPhase"));
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 
@@ -1516,8 +1514,8 @@ export default class BattleScene extends SceneBase {
     }
 
     const isEggPhase: boolean =
-      !!this.phaseManager.getCurrentPhase()?.is(PhaseId.EGG_HATCH)
-      || !!this.phaseManager.getCurrentPhase()?.is(PhaseId.EGG_LAPSE);
+      !!this.phaseManager.getCurrentPhase()?.is("EggHatchPhase")
+      || !!this.phaseManager.getCurrentPhase()?.is("EggLapsePhase");
 
     switch (species.speciesId) {
       case SpeciesId.UNOWN:
