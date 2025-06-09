@@ -1,4 +1,12 @@
-import { mockCanvas } from "#test/test-utils/mocks/mock-canvas";
+/**
+ * A minimal stub object to mock HTMLCanvasElement
+ */
+const mockCanvas: any = {
+  width: 0,
+  getContext() {
+    return mockContext;
+  },
+};
 
 /**
  * A minimal stub object to mock CanvasRenderingContext2D

@@ -75,6 +75,8 @@ import {
   DEFAULT_MAX_SLEEP_DURATION,
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  IV_MAX,
+  IV_MIN,
   MAX_STAT_STAGE,
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
@@ -206,7 +208,7 @@ import {
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
-import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -349,7 +351,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
       this.generateId();
-      this.ivs = ivs || getIvsFromId(this.id);
+      this.ivs = ivs || this.generateIvs();
 
       if (this.gender === undefined) {
         this.generateGender();
@@ -476,9 +478,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Sets this Pokemon's ID to be a random integer from 0 to 2^32 - 1, inclusive.
+   * @todo This should be `protected` or `private` but MEs currently call it
    */
-  generateId(): void {
-    this.id = randSeedInt(4294967296);
+  public generateId(): void {
+    this.id = randSeedInt(4294967295);
+  }
+
+  /** @returns An array of 6 random numbers, each between `0-31` inclusive */
+  public generateIvs(): number[] {
+    return new Array(6).fill(null).map(() => this.randSeedIntRange(IV_MIN, IV_MAX));
   }
 
   /**
