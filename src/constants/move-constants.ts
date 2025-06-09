@@ -13,4 +13,6 @@ export const SACRIFICIAL_MOVES = Object.freeze([
   MoveId.MEMENTO,
   MoveId.FINAL_GAMBIT,
   MoveId.MISTY_EXPLOSION,
+  MoveId.HEALING_WISH,
+  MoveId.LUNAR_DANCE,
 ]);
