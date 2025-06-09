@@ -265,19 +265,20 @@ describe("Abilities - Sturdy", () => {
     expect(DestinyBondTag.prototype.lapse).toHaveBeenCalled();
   });
 
-  it.each(sacrificialMoves)("should not proc on sacrificial/self-KO '%s' move", async (_enemyMoveName, enemyMoveId) => {
-    const { classicMode, field, move } = game;
-    await classicMode.startBattle(SpeciesId.LUCARIO);
+  it.each(sacrificialMoves)("should not proc on sacrificial '%s' move", async (_enemyMoveName, enemyMoveId) => {
+    // The check is turned around here. The player has sturdy and should faint. This is due to moves like Healing Wish or Lunar Dance requiring a party
+    const { override, classicMode, field, move } = game;
+    override.ability(AbilityId.STURDY).enemyLevel(999);
+    await classicMode.startBattle(SpeciesId.LUCARIO, SpeciesId.LUGIA);
 
-    const enemy = field.getEnemyPokemon();
+    const player = field.getPlayerPokemon();
 
-    expect(enemy).toHaveFullHp();
+    expect(player).toHaveFullHp();
 
-    move.use(MoveId.SPLASH);
-    await move.forceEnemyMove(enemyMoveId);
+    move.use(enemyMoveId);
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveFainted();
+    expect(player).toHaveFainted();
   });
 
   // See Issue #523 (fixed in PR #1215)
