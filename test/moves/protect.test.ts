@@ -1,5 +1,5 @@
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
-import { TrappedTag } from "#battler-tags/trapped-tag";
+import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -111,7 +111,7 @@ describe("Moves - Protect", () => {
 
     await game.toEndOfTurn();
 
-    expect(leadPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
+    expect(leadPokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES)).toBeTruthy();
   });
 
   it("should fail if the user is the last to move in the turn", async () => {

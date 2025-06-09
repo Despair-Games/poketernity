@@ -13,7 +13,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class NeutralDamageAgainstFlyingTypeMultiplierAttr extends VariableMoveTypeMultiplierAttr {
   override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
-    if (!target.getTag(BattlerTagType.IGNORE_FLYING)) {
+    if (!target.hasTag(BattlerTagType.IGNORE_FLYING)) {
       //When a flying type is hit, the first hit is always 1x multiplier.
       if (target.isOfType(ElementalType.FLYING)) {
         multiplier.value = 1;

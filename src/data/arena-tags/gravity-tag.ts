@@ -24,7 +24,7 @@ export class GravityTag extends ArenaTag {
       if (pokemon) {
         pokemon.removeTag(BattlerTagType.FLOATING);
         pokemon.removeTag(BattlerTagType.TELEKINESIS);
-        if (pokemon.getTag(BattlerTagType.MID_AIR)) {
+        if (pokemon.hasTag(BattlerTagType.MID_AIR)) {
           pokemon.addTag(BattlerTagType.INTERRUPTED);
         }
         pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();

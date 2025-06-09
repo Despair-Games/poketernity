@@ -33,7 +33,7 @@ export class TailwindTag extends ArenaTag {
 
     for (const pokemon of party) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
-      if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.getTag(BattlerTagType.CHARGED)) {
+      if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.hasTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);
         globalScene.phaseManager.queueMessagePhase(
           i18next.t("abilityTriggers:windPowerCharged", {
