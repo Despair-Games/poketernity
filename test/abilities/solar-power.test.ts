@@ -6,7 +6,7 @@ import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
-import { getTSEnumKeys, toDmgValue } from "#utils/common-utils";
+import { getTSEnumKeys } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -68,12 +68,10 @@ describe("Abilities - Solar Power", () => {
     });
 
     it(`should deal 1/8 of max-HP damage to the owner in ${weatherName} weather`, async () => {
-      const expectedDamage = toDmgValue(playerPkm.getMaxHp() / 8);
-
       game.move.use(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(playerPkm).toHaveTakenDamage(expectedDamage);
+      expect(playerPkm).toHaveTakenDamage(playerPkm.getMaxHp() / 8);
     });
 
     it(`should do nothing in ${weatherName} weather if Cloud Nine is active`, async () => {
@@ -96,7 +94,7 @@ describe("Abilities - Solar Power", () => {
     await classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPkm = field.getPlayerPokemon();
-    const expectedDamages = [toDmgValue(playerPkm.getMaxHp() / 8), toDmgValue(playerPkm.getMaxHp() / 4)];
+    const expectedDamages = [playerPkm.getMaxHp() / 8, playerPkm.getMaxHp() / 4];
 
     move.use(MoveId.SUNNY_DAY);
     await game.toNextTurn();
@@ -116,11 +114,11 @@ describe("Abilities - Solar Power", () => {
     await classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const playerPkm = field.getPlayerPokemon();
-    const enemeyPokemon = field.getEnemyPokemon();
+    const enemyPkm = field.getEnemyPokemon();
 
     expect(game).toHaveWeather(WeatherType.HARSH_SUN);
     move.use(MoveId.SPLASH);
-    await game.faintPokemon(enemeyPokemon); // Harsh Sun ends in the same turn by fainting the opponent
+    await game.faintPokemon(enemyPkm); // Harsh Sun ends in the same turn by fainting the opponent
     await phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(playerPkm).toHaveFullHp();

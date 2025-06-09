@@ -123,7 +123,7 @@ import { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-ter
 import { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#abilities/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#abilities/post-turn-form-change-ab-attr";
-import { PostTurnHurtIfSleepingAbAttr } from "#abilities/post-turn-hurt-if-sleeping-ab-attr";
+import { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import { PostTurnLootAbAttr } from "#abilities/post-turn-loot-ab-attr";
 import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
 import { PostTurnStatusHealAbAttr } from "#abilities/post-turn-status-heal-ab-attr";
@@ -678,7 +678,8 @@ export function initAbilities() {
       .partial() // Should also boosts stats of ally
       .ignorable(),
     new Ability(AbilityId.BAD_DREAMS, 4)
-      .attr(PostTurnHurtIfSleepingAbAttr),
+      .attr(BadDreamsAbAttr)
+      .edgeCase(), // When falling asleep, due to being drowsy, the ability flyout appears BEFORE the pokemon falls asleep
     new Ability(AbilityId.PICKPOCKET, 5)
       .attr(PostDefendStealHeldItemAbAttr, (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target))
       .condition(getSheerForceHitDisableAbCondition()),

@@ -19,7 +19,7 @@ import { manageListeners } from "#test/test-utils/listeners-manager";
 import { MockConsole } from "#test/test-utils/mocks/mock-console";
 import { mockContext } from "#test/test-utils/mocks/mock-context";
 import { mockLocalStorage } from "#test/test-utils/mocks/mock-local-storage";
-import { MockImage } from "#test/test-utils/mocks/mocksContainer/mock-image";
+import { MockImage } from "#test/test-utils/mocks/mocks-container/mock-image";
 import { setCookie } from "#utils/app-utils";
 import Phaser from "phaser";
 
