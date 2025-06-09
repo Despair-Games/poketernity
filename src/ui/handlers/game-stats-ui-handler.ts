@@ -254,9 +254,9 @@ export class GameStatsUiHandler extends UiHandler {
     headerBg.setOrigin(0, 0);
     this.gameStatsContainer.add(headerBg);
 
-    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
-    headerText.setOrigin(0, 0);
-    headerText.setPositionRelative(headerBg, 8, 4);
+    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL)
+      .setOrigin(0, 0)
+      .setPositionRelative(headerBg, 8, 4);
     this.gameStatsContainer.add(headerText);
 
     const statsBgWidth = Math.floor((GAME_WIDTH - 2) / this.NUM_COLUMNS);
@@ -286,9 +286,7 @@ export class GameStatsUiHandler extends UiHandler {
       });
       this.statValues.push(statsValues);
 
-      this.gameStatsContainer.add(statsBg);
-      this.gameStatsContainer.add(statsLabels);
-      this.gameStatsContainer.add(statsValues);
+      this.gameStatsContainer.add([statsBg, statsLabels, statsValues]);
     }
 
     // Create arrows to show that we can scroll through the stats. TODO: replace with scrollbar?

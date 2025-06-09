@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { TextStyle } from "#enums/text-style";
+import type { TextStyle } from "#enums/text-style";
 import { addBBCodeTextObject, addTextObject } from "#ui/text-utils";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 interface TextListContainerOptions {
   /**
@@ -10,12 +10,13 @@ interface TextListContainerOptions {
   textStyle: TextStyle;
   /**
    * Whether to use a {@linkcode BBCodeText} object instead of a basic {@linkcode TextObject}.
-   * Only set to `true` if BBCode is needed. The BBCode should be part of the provided strings.
+   * You should only set this to `true` if BBCode is needed. The BBCode should be part of the provided strings.
    */
   useBBCode?: boolean;
   /**
-   * Optional alignement for the text. Default: `left`
+   * Optional alignement for the text.
    * The x origin of the textObject will be placed on the left, center or right of the text based on this.
+   * @defaultValue `left`
    */
   textAlign?: "left" | "center" | "right";
   /**
@@ -87,7 +88,7 @@ export class TextListContainer extends Phaser.GameObjects.Container {
    * @param content - Array of strings to be displayed.
    * @param show - Optional. Set to `true` to immediately display the content of the array.
    */
-  public setList(content: string[], show?: boolean): void {
+  public setList(content: string[], show: boolean = false): void {
     this.lines = content;
     if (show) {
       this.updateList();
