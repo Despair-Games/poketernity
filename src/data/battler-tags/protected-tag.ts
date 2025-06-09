@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { PROTECTION_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -13,8 +19,11 @@ import i18next from "i18next";
 
 /**
  * Tag to protect the owner from most incoming moves for the rest of the turn.
+ *
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Protect_(move) | Protect} and related moves.
- * @extends BattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode PROTECTION_BATTLER_TAG_TYPES}
  */
 export class ProtectedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId, tagType: BattlerTagType = BattlerTagType.PROTECTED) {

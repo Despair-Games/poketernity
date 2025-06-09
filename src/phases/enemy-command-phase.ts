@@ -40,7 +40,8 @@ export class EnemyCommandPhase extends FieldPhase {
     super.start();
 
     if (globalScene.currentBattle.mysteryEncounter?.skipEnemyBattleTurns) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const pokemon = globalScene.getEnemyField()[this.fieldIndex];
@@ -52,9 +53,10 @@ export class EnemyCommandPhase extends FieldPhase {
     if (
       battle.double
       && pokemon.hasAbility(AbilityId.COMMANDER)
-      && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)
+      && pokemon.getAlly()?.hasTag(BattlerTagType.COMMANDED)
     ) {
-      return this.end();
+      this.end();
+      return;
     }
 
     /**
@@ -92,7 +94,8 @@ export class EnemyCommandPhase extends FieldPhase {
 
             battle.enemySwitchCounter++;
 
-            return this.end();
+            this.end();
+            return;
           }
         }
       }

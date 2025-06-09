@@ -1,3 +1,10 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { CRIT_BOOST_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import type { ElementalType } from "#enums/elemental-type";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -9,9 +16,12 @@ import i18next from "i18next";
 
 /**
  * Tag to denote a nonstackable boost to crit rate. Granted by:
- * Focus Energy (+2), Dragon Cheer (+2 if dragon, +1 otherwise),
- * and Lansat Berry (+2)
- * @extends BattlerTag
+ * - Focus Energy (`+2`)
+ * - Dragon Cheer (`+2` if {@linkcode ElementalType.DRAGON | Dragon type}, `+1` otherwise)
+ * - Lansat Berry (`+2`)
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode CRIT_BOOST_BATTLER_TAG_TYPES}
  */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {

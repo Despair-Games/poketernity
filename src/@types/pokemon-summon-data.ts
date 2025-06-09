@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MoveId } from "#enums/move-id";
+import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports

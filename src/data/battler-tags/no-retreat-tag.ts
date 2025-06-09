@@ -18,6 +18,6 @@ export class NoRetreatTag extends TrappedTag {
 
   /** overrides {@linkcode TrappedTag.apply}, removing the Ghost-type condition */
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES);
   }
 }

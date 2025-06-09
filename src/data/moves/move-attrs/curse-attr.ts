@@ -22,7 +22,7 @@ import i18next from "i18next";
 export class CurseAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getTypes(true).includes(ElementalType.GHOST)) {
-      if (target.getTag(BattlerTagType.CURSED)) {
+      if (target.hasTag(BattlerTagType.CURSED)) {
         globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackFailed"));
         return false;
       }

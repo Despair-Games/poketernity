@@ -1,4 +1,4 @@
-import { MockContainer } from "#test/test-utils/mocks/mocksContainer/mock-container";
+import { MockContainer } from "#test/test-utils/mocks/mocks-container/mock-container";
 
 export class MockImage extends MockContainer {
   private texture;

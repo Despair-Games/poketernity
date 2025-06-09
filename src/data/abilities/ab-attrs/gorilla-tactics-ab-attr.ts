@@ -17,7 +17,7 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
       return simulated;
     }
 
-    if (pokemon.getTag(BattlerTagType.GORILLA_TACTICS)) {
+    if (pokemon.hasTag(BattlerTagType.GORILLA_TACTICS)) {
       return false;
     }
 

@@ -118,7 +118,7 @@ export class WeatherEffectPhase extends FieldPhase {
     if (
       cancelled.value
       || pokemon.getTypes(true, true).some((t) => weather.isTypeDamageImmune(t))
-      || pokemon.getTag(BattlerTagType.UNDERGROUND, BattlerTagType.UNDERWATER)
+      || pokemon.hasTag(BattlerTagType.UNDERGROUND, BattlerTagType.UNDERWATER)
       || pokemon.switchOutStatus
     ) {
       return;
