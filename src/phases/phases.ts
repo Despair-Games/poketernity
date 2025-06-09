@@ -43,6 +43,7 @@ import { NextEncounterPhase } from "#phases/next-encounter-phase";
 import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
+import { PokemonHealPhase } from "#phases/pokemon-heal-phase";
 import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
 import { PostGameOverPhase } from "#phases/post-game-over-phase";
@@ -129,6 +130,7 @@ export const PHASES = {
   ObtainStatusEffectPhase,
   PartyExpPhase,
   PartyHealPhase,
+  PokemonHealPhase,
   PokemonTransformPhase,
   PostActionPhase,
   PostGameOverPhase,
