@@ -6,8 +6,8 @@ import type { Move } from "#moves/move";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
- * If the pokemon with this ab-attr is full hp and hit with a move that would 1-hit faint it, it will survive with 1 hp left.
- * Wonder Guard _overrules_ this ab-attr.
+ * If the pokemon with this `AbAttr` is full HP and is hit with a move that would 1-hit faint it,
+ * it will survive with 1 HP left (_unless it also has the ability Wonder Guard_).
  *
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
  */
