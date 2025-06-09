@@ -1,4 +1,4 @@
-import { MockText } from "#test/test-utils/mocks/mocksContainer/mock-text";
+import { MockText } from "#test/test-utils/mocks/mocks-container/mock-text";
 
 export class MockBBCodeText extends MockText {
   setMaxLines(_lines: number) {}
