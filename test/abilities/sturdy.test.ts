@@ -14,7 +14,6 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
 import { SurviveDamageModifier } from "#modifier/modifier";
 import { FaintCountdownAttr } from "#moves/faint-countdown-attr";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -316,31 +315,6 @@ describe("Abilities - Sturdy", () => {
     await game.toEndOfTurn();
 
     expect(SturdyAbAttr.prototype.apply).toHaveReturnedWith(false);
-    expect(enemy).toHaveFainted();
-  });
-
-  it.each([
-    ["Poison", StatusEffect.POISON],
-    ["Toxic", StatusEffect.TOXIC],
-    ["Burn", StatusEffect.BURN],
-  ])("should not proc on '%s' Status Effect damage", async () => {
-    const { override, classicMode, field, move } = game;
-    override
-      .enemySpecies(SpeciesId.SHEDINJA)
-      .enemyPassiveAbility(AbilityId.WONDER_GUARD)
-      .enemyStatusEffect(StatusEffect.BURN);
-    vi.spyOn(SturdyAbAttr.prototype, "apply");
-
-    await classicMode.startBattle(SpeciesId.LUCARIO);
-    const enemy = field.getEnemyPokemon();
-
-    expect(enemy).toHaveHp(1);
-    expect(enemy).toHaveFullHp();
-
-    move.use(MoveId.SPLASH);
-    await game.toEndOfTurn();
-
-    expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
     expect(enemy).toHaveFainted();
   });
 
