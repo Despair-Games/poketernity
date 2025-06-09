@@ -26,7 +26,7 @@
     "biome-all:unsafe": "biome check --write --unsafe --no-errors-on-unmatched",
     "prettier": "prettier . --write",
     "docs": "typedoc",
-    "depcruise": "depcruise src",
+    "depcruise": "depcruise src test",
     "depcruise:graph": "depcruise src --output-type dot | node scripts/dependency-graph.js > dependency-graph.svg",
     "postinstall": "lefthook install && lefthook run post-merge",
     "update-version:patch": "pnpm version patch --force --no-git-tag-version",
