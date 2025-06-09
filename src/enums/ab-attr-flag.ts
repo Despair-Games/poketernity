@@ -107,6 +107,7 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
+import type { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -335,6 +336,8 @@ export const AbAttrFlag = {
   POST_TERA_FORM_CHANGE_STAT_CHANGE: 110,
   /** @see {@linkcode PostTeraFormChangeClearWeatherTerrainAbAttr} */
   POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN: 111,
+  /** @see {@linkcode BadDreamsAbAttr} */
+  BAD_DREAMS: 112,
 } as const;
 
 export type AbAttrFlag = (typeof AbAttrFlag)[keyof typeof AbAttrFlag];

@@ -217,7 +217,7 @@ export class PhaseInterceptor {
    * @returns A promise that resolves when the transition is complete.
    */
   public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       const targetName = this.getPhaseName(phaseTo);
       this.intervalRun = setInterval(async () => {

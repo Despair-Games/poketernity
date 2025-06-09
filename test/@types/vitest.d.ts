@@ -18,6 +18,7 @@ import type { ToHaveStatMatcherOptions } from "#test/test-utils/matchers/to-have
 import type { ToHaveStatusEffectMatcherOptions } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
 import "vitest";
+import type { ToHaveTakenDamageMatcherOptions } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
 
 declare module "vitest" {
   interface Assertion {
@@ -28,7 +29,7 @@ declare module "vitest" {
      * It does not check the Pokemon's entire move history.
      *
      * @param expected - The expected {@linkcode MoveResult}
-     * @param options - The {@linkcode ToHaveMoveResultMatcherOptions} (optional)
+     * @param options - (Optional) The {@linkcode ToHaveMoveResultMatcherOptions}
      * @see {@linkcode Pokemon.getLastXMoves}
      */
     toHaveMoveResult(expected: MoveResult, options?: ToHaveMoveResultMatcherOptions): void;
@@ -40,13 +41,16 @@ declare module "vitest" {
      * It does not check the Pokemon's entire move history.
      *
      * @param expected - The expected {@linkcode MoveId}
-     * @param options - The {@linkcode ToHaveUsedMoveMatcherOptions} (optional)
+     * @param options - (Optional) The {@linkcode ToHaveUsedMoveMatcherOptions}
      * @see {@linkcode Pokemon.getLastXMoves}
      */
     toHaveUsedMove(expected: MoveId, options?: ToHaveUsedMoveMatcherOptions): void;
 
     /**
      * Matcher to check if a {@linkcode Pokemon} stat is as expected
+     *
+     * _Stat means the stat before modifiers are applied._
+     * _If you want to check the stat **after** modifiers are applied, use {@linkcode toHaveEffectiveStat}._
      *
      * @param stat - The {@linkcode PermanentStat} to check
      * @param expectedValue - The expected value of the {@linkcode stat}
@@ -57,24 +61,26 @@ declare module "vitest" {
     /**
      * Matcher to check if a {@linkcode Pokemon Pokemon's} effective stat is as expected
      *
-     * *Effective stat means the stat after all the stat modifiers are applied.*
+     * _Effective stat means the stat after all the stat modifiers are applied._
+     * _If you want to check the stat **before** modifiers are applied, use {@linkcode toHaveStat}._
      *
      * @param stat - The {@linkcode EffectiveStat} to check
      * @param expectedValue - The expected value of the {@linkcode stat}
-     * @param options - The {@linkcode ToHaveStatMatcherOptions} (optional)
+     * @param options - (Optional) The {@linkcode ToHaveEffectiveStatMatcherOptions}
      */
     toHaveEffectiveStat(stat: EffectiveStat, expectedValue: number, options?: ToHaveEffectiveStatMatcherOptions): void;
 
     /**
      * Matcher to check if a {@linkcode Pokemon} has taken a specific amount of damage
      * @param expectedDamageTaken The expected amount of damage the {@linkcode Pokemon} has taken
+     * @param options - (Optional) The {@linkcode ToHaveTakenDamageMatcherOptions}
      */
-    toHaveTakenDamage(expectedDamageTaken: number): void;
+    toHaveTakenDamage(expectedDamageTaken: number, options?: ToHaveTakenDamageMatcherOptions): void;
 
     /**
      * Matcher to check if a {@linkcode Pokemon} has a specific non-volatile status effect
      * @param expectedStatusEffect - The expected {@linkcode StatusEffect}
-     * @param options - The {@linkcode ToHaveStatusEffectMatcherOptions} (optional)
+     * @param options - (Optional) The {@linkcode ToHaveStatusEffectMatcherOptions}
      */
     toHaveStatusEffect(expectedStatusEffect: StatusEffect, options?: ToHaveStatusEffectMatcherOptions): void;
 
@@ -106,7 +112,7 @@ declare module "vitest" {
      * Matcher to check if a {@linkcode Pokemon} has a specific {@linkcode BattlerTagType}.
      * @param expectedBattlerTagType - The expected {@linkcode BattlerTagType}.
      */
-    toHaveBattlerTagType(expectedBattlerTagType: BattlerTagType): void;
+    toHaveBattlerTag(expectedBattlerTagType: BattlerTagType): void;
 
     /**
      * Matcher to check if a {@linkcode Pokemon} had a specific {@linkcode AbilityId} applied.

@@ -46,19 +46,19 @@ describe("Flinch", () => {
     await move.forceEnemyMove(MoveId.FAKE_OUT, BattlerIndex.PLAYER);
     await move.forceEnemyMove(MoveId.SPLASH);
 
-    expect(player1).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(player1).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(player1).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(player1).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(player1).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(player1).toHaveBattlerTag(BattlerTagType.FLINCHED);
     await game.toEndOfTurn();
 
-    expect(player1).not.toHaveBattlerTagType(BattlerTagType.FLINCHED); // tag was lapsed
+    expect(player1).not.toHaveBattlerTag(BattlerTagType.FLINCHED); // tag was lapsed
 
     // Check that Player 1 attempted to copy Swords Dance but could not move due to flinching
     expect(player1).toHaveAbilityApplied(AbilityId.DANCER);

@@ -47,11 +47,11 @@ describe("Abilities - Steadfast", () => {
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -69,11 +69,11 @@ describe("Abilities - Steadfast", () => {
     await move.forceEnemyMove(MoveId.QUICK_ATTACK);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -92,11 +92,11 @@ describe("Abilities - Steadfast", () => {
     await phaseInterceptor.to("PostActionPhase", true);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -124,11 +124,11 @@ describe("Abilities - Steadfast", () => {
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -156,11 +156,11 @@ describe("Abilities - Steadfast", () => {
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
