@@ -2170,16 +2170,12 @@ export default class BattleScene extends SceneBase {
   }
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): void {
-    const modifiersToRemove: PersistentModifier[] = [];
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
       if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
         }
-      }
-      for (const rm of modifiersToRemove) {
-        this.removeModifier(rm, true);
       }
     }
     if (!ignoreUpdate) {
