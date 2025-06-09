@@ -70,12 +70,7 @@ describe("Abilities - Dry Skin", () => {
     vi.spyOn(ReceivedTypeDamageMultiplierAbAttr.prototype, "apply");
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
-    const player = field.getPlayerPokemon();
-    // Mock the random multiplier to always return 1 (100%)
-    vi.spyOn(player, "randSeedIntRange").mockReturnValue(100);
     const enemy = field.getEnemyPokemon();
-    // Mock the random multiplier to always return 1 (100%)
-    vi.spyOn(enemy, "randSeedIntRange").mockReturnValue(100);
 
     // first turn
     enemy.hp = initialHP;
@@ -103,11 +98,11 @@ describe("Abilities - Dry Skin", () => {
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
-    enemy.hp = enemy.getMaxHp() - toDmgValue(enemy.getMaxHp() / 4);
+    enemy.hp = 1;
     move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveFullHp();
+    expect(enemy).toHaveTakenDamage(toDmgValue((enemy.getMaxHp() / 4) * 3));
   });
 
   it("does not heal, on opposing water move, if ability holder is protected", async () => {
