@@ -1884,7 +1884,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
                     // update the passive background
                     if (starterContainer) {
-                      starterContainer.starterPassiveBgs.setVisible(
+                      starterContainer.starterPassiveBg.setVisible(
                         globalScene.gameData.isPassiveUnlocked(this.lastSpecies.speciesId),
                       );
                     }
@@ -2345,9 +2345,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const { formIndex, shiny, variant } = props;
     const female = props.gender === Gender.FEMALE;
 
-    const icon = this.starterIcons[this.starterSpecies.length];
-    icon.setTexture(species.getIconAtlasKey(formIndex, shiny, variant));
-    icon.setFrame(species.getIconId(female, formIndex, shiny, variant));
+    const textureKey = species.getIconAtlasKey(formIndex, shiny, variant);
+    const frameKey = species.getIconId(female, formIndex, shiny, variant);
+    const icon = this.starterIcons[this.starterSpecies.length].setTexture(textureKey, frameKey);
     this.checkIconId(icon, species, female, formIndex, shiny, variant);
 
     this.starterSpecies.push(species);
@@ -2367,10 +2367,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const props = globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId));
     const { formIndex, shiny, variant } = props;
     const female = props.gender === Gender.FEMALE;
+    const textureKey = species.getIconAtlasKey(formIndex, shiny, variant);
+    const frameKey = species.getIconId(female, formIndex, shiny, variant);
 
-    const icon = this.starterIcons[index];
-    icon.setTexture(species.getIconAtlasKey(formIndex, shiny, variant));
-    icon.setFrame(species.getIconId(female, formIndex, shiny, variant));
+    const icon = this.starterIcons[index].setTexture(textureKey, frameKey);
     this.checkIconId(icon, species, female, formIndex, shiny, variant);
   }
 
@@ -2933,7 +2933,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         }
       }
 
-      container.starterPassiveBgs.setVisible(caughtAttr > 0 && globalScene.gameData.isPassiveUnlocked(speciesId));
+      container.starterPassiveBg.setVisible(caughtAttr > 0 && globalScene.gameData.isPassiveUnlocked(speciesId));
       container.hiddenAbilityIcon.setVisible(caughtAttr > 0 && (abilityAttr & AbilityAttr.ABILITY_HIDDEN) > 0);
       container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
       container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
@@ -4190,8 +4190,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       console.log(
         `${species.name}'s icon ${icon.frame.name} does not match getIconId with female: ${female}, formIndex: ${formIndex}, shiny: ${shiny}, variant: ${variant}`,
       );
-      icon.setTexture(species.getIconAtlasKey(formIndex, false, variant));
-      icon.setFrame(species.getIconId(female, formIndex, false, variant));
+      const textureKey = species.getIconAtlasKey(formIndex, false, variant);
+      const frameKey = species.getIconId(female, formIndex, false, variant);
+      icon.setTexture(textureKey, frameKey);
     }
   }
 
