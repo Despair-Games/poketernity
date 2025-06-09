@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MoveUsedEvent } from "#events/battle-scene";
+import type { MoveUsedEvent } from "#events/battle-scene";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
