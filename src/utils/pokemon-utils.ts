@@ -6,7 +6,7 @@ import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#data/starters";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { SpeciesId } from "#enums/species-id";
 import { isNil } from "#utils/common-utils";
-import { randSeedInt, randSeedItem } from "#utils/random-utils";
+import { randSeedItem } from "#utils/random-utils";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given
@@ -86,26 +86,4 @@ export function getPokerusStarters(): PokemonSpecies[] {
   );
 
   return pokerusStarters;
-}
-
-/**
- * Generates IVs from a given {@linkcode id} by extracting 5 bits at a time
- * starting from the least significant bit up to the 30th most significant bit.
- * @param id - 32-bit number
- * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
- * @todo Just generate 6 random numbers instead of doing this nonsense; also make pokemon IDs into actual UUIDs
- */
-export function getIvsFromId(id?: number): number[] {
-  if (isNil(id)) {
-    id = randSeedInt(4294967296);
-  }
-
-  return [
-    (id & 0x3e000000) >>> 25,
-    (id & 0x01f00000) >>> 20,
-    (id & 0x000f8000) >>> 15,
-    (id & 0x00007c00) >>> 10,
-    (id & 0x000003e0) >>> 5,
-    id & 0x0000001f,
-  ];
 }

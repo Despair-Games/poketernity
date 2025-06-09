@@ -162,7 +162,7 @@ import {
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
-import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randItem, randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
 import { formatMoney, shiftCharCodes } from "#utils/string-utils";
 import i18next from "i18next";
@@ -991,7 +991,7 @@ export default class BattleScene extends SceneBase {
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);
 
     if (boss && !dataSource) {
-      const secondaryIvs = getIvsFromId();
+      const secondaryIvs = pokemon.generateIvs();
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
         pokemon.ivs[s] = Math.round(
@@ -2178,16 +2178,12 @@ export default class BattleScene extends SceneBase {
   }
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): void {
-    const modifiersToRemove: PersistentModifier[] = [];
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
       if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
         }
-      }
-      for (const rm of modifiersToRemove) {
-        this.removeModifier(rm, true);
       }
     }
     if (!ignoreUpdate) {
