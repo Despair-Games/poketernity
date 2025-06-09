@@ -23,7 +23,7 @@ import type { FaintPhase } from "#phases/faint-phase";
 import type { FormChangePhase } from "#phases/form-change-phase";
 import type { GameOverModifierRewardPhase } from "#phases/game-over-modifier-reward-phase";
 import type { GameOverPhase } from "#phases/game-over-phase";
-import type { HitCheckPhase } from "#phases/hit-check-phase";
+import type { HitCheckPhase } from "#phases/abstract-hit-check-phase";
 import type { LearnMovePhase } from "#phases/learn-move-phase";
 import type { LevelCapPhase } from "#phases/level-cap-phase";
 import type { LevelUpPhase } from "#phases/level-up-phase";

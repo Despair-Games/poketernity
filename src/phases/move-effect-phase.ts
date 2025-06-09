@@ -41,7 +41,7 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
 import { NoEffectAttr } from "#moves/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import { HitCheckPhase } from "#phases/hit-check-phase";
+import { HitCheckPhase } from "#phases/abstract-hit-check-phase";
 import type { AttackMoveResult } from "#types/attack-move-result";
 import type { DamageResult } from "#types/damage-result";
 import type { TurnMove } from "#types/turn-move";
