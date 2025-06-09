@@ -365,7 +365,7 @@ describe("Abilities - Sturdy", () => {
       await game.toEndOfTurn();
 
       expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
-      expect(TrappedTag.prototype.lapse).toHaveBeenCalled;
+      expect(TrappedTag.prototype.lapse).toHaveBeenCalled();
       expect(enemy).toHaveFainted();
     },
   );
