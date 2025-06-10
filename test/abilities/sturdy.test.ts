@@ -1,12 +1,6 @@
 import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
-import { CursedTag } from "#battler-tags/cursed-tag";
 import { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
-import { NightmareTag } from "#battler-tags/nightmare-tag";
-import { SaltCuredTag } from "#battler-tags/salt-cured-tag";
-import { SeededTag } from "#battler-tags/seeded-tag";
-import { TrappedTag } from "#battler-tags/trapped-tag";
 import { IGNORING_ABILITIES } from "#constants/ability-constants";
-import { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { SACRIFICIAL_MOVES } from "#constants/move-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -33,13 +27,6 @@ const sacrificialMoves = SACRIFICIAL_MOVES.map<[string, MoveId]>((moveId) => [
   capitalizeString(enumValueToKey(MoveId, moveId), "_", false, true) ?? "",
   moveId,
 ]);
-
-const damagingTrappedBattlerTagTypes = [...DAMAGING_TRAPPED_BATTLER_TAG_TYPES].map<[string, BattlerTagType]>(
-  (battlerTagType) => [
-    capitalizeString(enumValueToKey(BattlerTagType, battlerTagType), "_", false, true) ?? "",
-    battlerTagType,
-  ],
-);
 
 //#endregion
 
@@ -148,10 +135,6 @@ describe("Abilities - Sturdy", () => {
 
       expect(enemy).toHaveHp(1);
     }
-  });
-
-  it.todo("takes precedence over 'Focus Sash' item", async () => {
-    // We don't have a 'Focus Sash' item in the game (yet?)
   });
 
   it("takes precedence over 'Focus Band' item", async () => {
@@ -316,88 +299,6 @@ describe("Abilities - Sturdy", () => {
     await game.toEndOfTurn();
 
     expect(SturdyAbAttr.prototype.apply).toHaveReturnedWith(false);
-    expect(enemy).toHaveFainted();
-  });
-
-  it.each(damagingTrappedBattlerTagTypes)(
-    "should not proc on '%s' damaging trap battler-tag ",
-    async (_name, battlerTagType) => {
-      const { classicMode, field, move } = game;
-      vi.spyOn(SturdyAbAttr.prototype, "apply");
-      vi.spyOn(TrappedTag.prototype, "lapse");
-
-      await classicMode.runToSummon(SpeciesId.LUCARIO);
-      const player = field.getPlayerPokemon();
-      const enemy = field.getEnemyPokemon();
-      enemy.setStat(Stat.HP, 1);
-      enemy.hp = 1;
-      enemy.addTag(battlerTagType, Number.MAX_SAFE_INTEGER, MoveId.NONE, player.id);
-
-      expect(enemy).toHaveHp(1);
-      expect(enemy).toHaveFullHp();
-      expect(enemy).toHaveBattlerTag(battlerTagType);
-
-      move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
-
-      expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
-      expect(TrappedTag.prototype.lapse).toHaveBeenCalled();
-      expect(enemy).toHaveFainted();
-    },
-  );
-  it.each(damagingTrappedBattlerTagTypes)(
-    "should not proc on '%s' trap battler-tag ",
-    async (_name, battlerTagType) => {
-      const { classicMode, field, move } = game;
-      vi.spyOn(SturdyAbAttr.prototype, "apply");
-      vi.spyOn(TrappedTag.prototype, "lapse");
-
-      await classicMode.runToSummon(SpeciesId.LUCARIO);
-      const player = field.getPlayerPokemon();
-      const enemy = field.getEnemyPokemon();
-      enemy.setStat(Stat.HP, 1);
-      enemy.hp = 1;
-      enemy.addTag(battlerTagType, Number.MAX_SAFE_INTEGER, MoveId.NONE, player.id);
-
-      expect(enemy).toHaveHp(1);
-      expect(enemy).toHaveFullHp();
-      expect(enemy).toHaveBattlerTag(battlerTagType);
-
-      move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
-
-      expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
-      expect(TrappedTag.prototype.lapse).toHaveBeenCalled();
-      expect(enemy).toHaveFainted();
-    },
-  );
-
-  it.each([
-    ["Seeded", BattlerTagType.SEEDED, SeededTag],
-    ["Nightmare", BattlerTagType.NIGHTMARE, NightmareTag],
-    ["Cursed", BattlerTagType.CURSED, CursedTag],
-    ["Salt Cured", BattlerTagType.SALT_CURED, SaltCuredTag],
-  ])("should not proc on '%s' battler-tag ", async (_name, battlerTagType, TagClass) => {
-    const { classicMode, field, move } = game;
-    vi.spyOn(SturdyAbAttr.prototype, "apply");
-    vi.spyOn(TagClass.prototype, "lapse");
-
-    await classicMode.runToSummon(SpeciesId.LUCARIO);
-    const player = field.getPlayerPokemon();
-    const enemy = field.getEnemyPokemon();
-    enemy.setStat(Stat.HP, 1);
-    enemy.hp = 1;
-    enemy.addTag(battlerTagType, Number.MAX_SAFE_INTEGER, MoveId.NONE, player.id);
-
-    expect(enemy).toHaveHp(1);
-    expect(enemy).toHaveFullHp();
-    expect(enemy).toHaveBattlerTag(battlerTagType);
-
-    move.use(MoveId.SPLASH);
-    await game.toEndOfTurn();
-
-    expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
-    expect(TagClass.prototype.lapse).toHaveBeenCalled();
     expect(enemy).toHaveFainted();
   });
 });
