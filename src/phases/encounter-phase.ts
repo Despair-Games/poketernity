@@ -42,7 +42,6 @@ import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { PostSummonPhase } from "#phases/post-summon-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
@@ -539,13 +538,13 @@ export class EncounterPhase extends BattlePhase {
   }
 
   public override end(): void {
-    const { currentBattle, gameMode } = globalScene;
+    const { currentBattle, gameMode, phaseManager } = globalScene;
     const { battleType, double, waveIndex } = currentBattle;
     const enemyField = globalScene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {
       if (enemyPokemon.isShiny()) {
-        globalScene.phaseManager.createAndPushPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
+        phaseManager.createAndPushPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
@@ -566,7 +565,7 @@ export class EncounterPhase extends BattlePhase {
 
     if (battleType !== BattleType.TRAINER && battleType !== BattleType.MYSTERY_ENCOUNTER) {
       enemyField.map((p) =>
-        globalScene.phaseManager.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
+        phaseManager.pushConditionalPhase(phaseManager.createPhase("PostSummonPhase", p.getBattlerIndex()), () => {
           if (!globalScene.getPlayerParty().length) {
             return false;
           }

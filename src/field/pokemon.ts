@@ -177,7 +177,6 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
-import { DamageAnimPhase } from "#phases/damage-anim-phase";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-filter-options";
@@ -3410,7 +3409,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       source,
     }: DamageFunctionOptions = {},
   ): number {
-    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
+    const damagePhase = globalScene.phaseManager.createPhase(
+      "DamageAnimPhase",
+      this.getBattlerIndex(),
+      amount,
+      result,
+      isCritical,
+    );
     globalScene.phaseManager.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       amount = 0;

@@ -6,7 +6,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import { vouchers } from "#system/voucher";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -40,12 +39,11 @@ export class TrainerVictoryPhase extends BattlePhase {
     // Validate Voucher for boss trainers
     if (Object.hasOwn(vouchers, TrainerType[trainerType])) {
       if (!globalScene.validateVoucher(vouchers[TrainerType[trainerType]]) && trainer.config.isBoss) {
-        globalScene.phaseManager.unshiftPhase(
-          new ModifierRewardPhase(
-            [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
-              vouchers[TrainerType[trainerType]].voucherType
-            ],
-          ),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "ModifierRewardPhase",
+          [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
+            vouchers[TrainerType[trainerType]].voucherType
+          ],
         );
       }
     }

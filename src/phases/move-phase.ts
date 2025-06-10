@@ -38,7 +38,6 @@ import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
@@ -710,11 +709,10 @@ export class MovePhase extends BattlePhase {
 
         if (this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)) {
           redirectTarget.value = currentTarget;
-          globalScene.phaseManager.unshiftPhase(
-            new ShowAbilityPhase(
-              this.pokemon.getBattlerIndex(),
-              this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
-            ),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "ShowAbilityPhase",
+            this.pokemon.getBattlerIndex(),
+            this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
           );
         }
 

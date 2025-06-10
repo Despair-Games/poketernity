@@ -11,7 +11,6 @@ import { BattleType } from "#enums/battle-type";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 
 /**
  * Handles various effects when the player clears a wave:
@@ -77,10 +76,9 @@ export class VictoryPhase extends PokemonPhase {
       }
 
       if (waveIndex <= 750 && (waveIndex <= 500 || waveIndex % 30 === 10)) {
-        phaseManager.pushPhase(
-          new ModifierRewardPhase(
-            !(waveIndex % 30 === 10) || waveIndex > 250 ? modifierTypes.EXP_CHARM : modifierTypes.SUPER_EXP_CHARM,
-          ),
+        phaseManager.createAndPushPhase(
+          "ModifierRewardPhase",
+          !(waveIndex % 30 === 10) || waveIndex > 250 ? modifierTypes.EXP_CHARM : modifierTypes.SUPER_EXP_CHARM,
         );
       }
 
