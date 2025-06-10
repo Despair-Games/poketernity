@@ -1518,7 +1518,8 @@ export class GameData {
       const genderlessSpecies = isNil(species.malePercent);
       const genderlessMon = currentGender === Gender.GENDERLESS;
       if (genderlessMon && !genderlessSpecies) {
-        pokemon.gender = caughtAttr & DexAttr.FEMALE || species.malePercent === 0 ? Gender.FEMALE : Gender.MALE;
+        const isFemaleCaught = (caughtAttr & DexAttr.FEMALE) > 0;
+        pokemon.gender = isFemaleCaught || species.malePercent === 0 ? Gender.FEMALE : Gender.MALE;
       } else if (!genderlessMon && genderlessSpecies) {
         pokemon.gender = Gender.GENDERLESS;
       }
