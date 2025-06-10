@@ -355,6 +355,8 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     // Set the cursor and scroll cursor to their initial positions.
     this.setCursor(this.cursor);
     this.setScrollCursor(this.scrollCursor);
+
+    NavigationManager.getInstance().updateIcons();
   }
 
   updateNavigationDisplay() {

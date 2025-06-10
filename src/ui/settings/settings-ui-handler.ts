@@ -12,6 +12,7 @@ import type { InputsIcons } from "#ui/controls-settings-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
+import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { hasTouchscreen } from "#utils/app-utils";
@@ -35,7 +36,14 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
   private optionCursors: number[];
 
-  private settingLabels: Phaser.GameObjects.Text[];
+  private settingValuesPosition: number[][];
+
+  /** Container for all settings labels in a single TextObject. */
+  private labelsTextList: TextListContainer;
+  /**
+   * The Text objects used to display each setting's options, for up to the maximum number of rows.
+   * The text objects get recycled and reused when scrolling around the settings.
+   */
   private optionValueLabels: Phaser.GameObjects.Text[][];
 
   protected navigationIcons: InputsIcons;
@@ -45,7 +53,6 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   private reloadRequired: boolean;
 
   protected rowsToDisplay: number;
-  protected title: string;
 
   protected uiItems: SettingsUiItem[];
   protected category: SettingsCategory;
@@ -59,12 +66,11 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     } else {
       this.uiItems = uiItems;
     }
-
-    this.category = category;
+    this.rowsToDisplay = Math.min(8, this.uiItems.length);
 
     this.reloadRequired = false;
-    this.rowsToDisplay = Math.min(8, uiItems.length);
-    this.title = capitalizeFirstLetter(category);
+
+    this.settingValuesPosition = [];
   }
 
   /**
@@ -74,7 +80,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     const ui = this.getUi();
 
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
-    this.settingsContainer.setName(`settings-${this.title}`);
+    this.settingsContainer.setName(`settings-${capitalizeFirstLetter(this.category)}`);
 
     this.navigationIcons = {};
 
@@ -121,49 +127,36 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     this.optionsContainer = globalScene.add.container(0, 0);
 
-    this.settingLabels = [];
-    this.optionValueLabels = [];
-
-    // TODO: this is inefficient as it creates a text object for every label and every option,
-    // even if only part of them are only ever shown on screen at once
-    this.uiItems.forEach((uiItem, i) => {
+    // Initialize the settings labels text object
+    const settingLabels: string[] = [];
+    this.uiItems.forEach((uiItem) => {
       let settingName = uiItem.label;
       if (uiItem?.requiresReload) {
         settingName += "*";
       }
-
-      this.settingLabels[i] = addTextObject(8, 28 + i * 16, settingName, TextStyle.SETTINGS_LABEL);
-      this.settingLabels[i].setOrigin(0, 0);
-
-      this.optionsContainer.add(this.settingLabels[i]);
-      this.optionValueLabels.push(
-        uiItem.options.map((option) => {
-          const valueLabel = addTextObject(0, 0, option.label, TextStyle.SETTINGS_VALUE);
-          valueLabel.setOrigin(0, 0);
-          this.optionsContainer.add(valueLabel);
-          return valueLabel;
-        }),
-      );
-
-      const totalWidth = this.optionValueLabels[i]
-        .map((o) => o.displayWidth)
-        .reduce((total, width) => (total += width), 0);
-
-      const labelWidth = Math.max(78, this.settingLabels[i].displayWidth + 8);
-
-      const totalSpace = 297 - labelWidth - totalWidth;
-      const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
-
-      let xOffset = 0;
-
-      for (const value of this.optionValueLabels[i]) {
-        value.setPositionRelative(this.settingLabels[i], labelWidth + xOffset, 0);
-        xOffset += value.displayWidth + optionSpacing;
-      }
+      settingLabels.push(settingName);
     });
+    this.labelsTextList = new TextListContainer(8, 28, this.rowsToDisplay, {
+      textStyle: TextStyle.SETTINGS_LABEL,
+      lineSpacing: 12,
+    });
+    this.labelsTextList.setList(settingLabels, true);
+    this.optionsContainer.add(this.labelsTextList);
+
+    // Initialize text objects for the settings options
+    this.optionValueLabels = [];
+    for (let i = 0; i < this.rowsToDisplay; i++) {
+      const yPosition = 28 + i * 16;
+      // By default, create 2 textObjects for each setting. More will be added as needed when navigating the UI.
+      this.optionValueLabels[i] = [
+        addTextObject(100, yPosition, "", TextStyle.SETTINGS_VALUE).setOrigin(0, 0),
+        addTextObject(100, yPosition, "", TextStyle.SETTINGS_VALUE).setOrigin(0, 0),
+      ];
+      this.optionsContainer.add(this.optionValueLabels[i]);
+    }
 
     // Treat all settings as having the first options selected. These get properly updated in show()
-    this.optionCursors = new Array(this.uiItems.length).fill(0);
+    this.optionCursors = new Array(this.rowsToDisplay).fill(0);
 
     this.scrollBar = new ScrollBar(
       this.optionsBg.width - 9,
@@ -218,19 +211,17 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /**
    * Update the bindings for the current active device configuration.
    */
-  private updateBindings(): void {
+  private updateNavigationIcons(): void {
     for (const settingName of Object.keys(this.navigationIcons)) {
       if (settingName === "BUTTON_HOME") {
-        this.navigationIcons[settingName].setTexture("keyboard");
-        this.navigationIcons[settingName].setFrame("HOME.png");
+        this.navigationIcons[settingName].setTexture("keyboard", "HOME.png");
         this.navigationIcons[settingName].alpha = 1;
         continue;
       }
       const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
       if (icon) {
         const type = globalScene.inputController?.getLastSourceType();
-        this.navigationIcons[settingName].setTexture(type);
-        this.navigationIcons[settingName].setFrame(icon);
+        this.navigationIcons[settingName].setTexture(type, icon);
         this.navigationIcons[settingName].alpha = 1;
       } else {
         this.navigationIcons[settingName].alpha = 0;
@@ -245,26 +236,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    * @returns `true` if successful.
    */
   public override show(): boolean {
-    this.updateBindings();
-
-    this.uiItems.forEach((uiItem, s) => {
-      const value = settingsManager[this.category][uiItem.key];
-      let index = 0;
-
-      if (value !== undefined) {
-        index = uiItem.options.findIndex((option) => option.value === value);
-      }
-
-      if (index < 0) {
-        console.warn(
-          `Could not find index for ${uiItem.key}.`,
-          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
-          "\nAvailable values:",
-          uiItem.options,
-        );
-      }
-      this.setOptionCursor(s, index > 0 ? index : 0);
-    });
+    this.updateNavigationIcons();
 
     this.settingsContainer.setVisible(true);
     this.setCursor(0);
@@ -288,29 +260,24 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    */
   public override processInput(button: Button): boolean {
     const ui = this.getUi();
-    // Defines the maximum number of rows that can be displayed on the screen.
 
     let success = false;
 
-    /**
-     * Checks if the game is in a state where progress may be lost due to changes options with reloadRequired while at battle.
-     * @returns `false` if the warning process is triggered, `true` otherwise.
-     */
     if (button === Button.CANCEL) {
       success = true;
       NavigationManager.getInstance().reset();
       globalScene.ui.revertMode();
     } else {
       const { Wrap } = Phaser.Math;
-      const cursor = this.cursor + this.scrollCursor;
-      const optionCursor = this.optionCursors[cursor];
-      const optionLabels = this.optionValueLabels[cursor];
+      const settingIndex = this.cursor + this.scrollCursor;
+      const optionCursor = this.optionCursors[this.cursor];
+      const optionLabels = this.optionValueLabels[this.cursor];
       const maxOptionCursor = optionLabels.length;
-      const uiItem = this.uiItems[cursor];
+      const uiItem = this.uiItems[settingIndex];
 
       switch (button) {
         case Button.UP:
-          if (cursor) {
+          if (settingIndex) {
             if (this.cursor) {
               success = this.setCursor(this.cursor - 1);
             } else {
@@ -321,16 +288,16 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
             // First, set the cursor to the last visible element, preparing for the scroll to the end.
             const successA = this.setCursor(this.rowsToDisplay - 1);
             // Then, adjust the scroll to display the bottommost elements of the menu.
-            const successB = this.setScrollCursor(this.optionValueLabels.length - this.rowsToDisplay);
+            const successB = this.setScrollCursor(this.uiItems.length - this.rowsToDisplay);
             success = successA || successB; // success is just there to play the little validation sound effect
           }
           break;
         case Button.DOWN:
-          if (cursor < this.optionValueLabels.length - 1) {
+          if (settingIndex < this.uiItems.length - 1) {
             if (this.cursor < this.rowsToDisplay - 1) {
               // if the visual cursor is in the frame of 0 to 8
               success = this.setCursor(this.cursor + 1);
-            } else if (this.scrollCursor < this.optionValueLabels.length - this.rowsToDisplay) {
+            } else if (this.scrollCursor < this.uiItems.length - this.rowsToDisplay) {
               success = this.setScrollCursor(this.scrollCursor + 1);
             }
           } else {
@@ -346,9 +313,9 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           if (!isNil(optionCursor)) {
             // Moves the option cursor left (wrapping)
             if (uiItem.doWrap) {
-              success = this.setOptionCursor(cursor, Wrap(optionCursor - 1, 0, maxOptionCursor), true);
+              success = this.setOptionCursor(this.cursor, Wrap(optionCursor - 1, 0, maxOptionCursor), true);
             } else if (optionCursor > 0) {
-              success = this.setOptionCursor(cursor, optionCursor - 1, true);
+              success = this.setOptionCursor(this.cursor, optionCursor - 1, true);
             }
           }
           break;
@@ -356,9 +323,9 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           // Moves the option cursor right (wrapping)
           if (!isNil(optionCursor)) {
             if (uiItem.doWrap) {
-              success = this.setOptionCursor(cursor, Wrap(optionCursor + 1, 0, maxOptionCursor), true);
+              success = this.setOptionCursor(this.cursor, Wrap(optionCursor + 1, 0, maxOptionCursor), true);
             } else if (optionCursor < optionLabels.length - 1) {
-              success = this.setOptionCursor(cursor, optionCursor + 1, true);
+              success = this.setOptionCursor(this.cursor, optionCursor + 1, true);
             }
           }
           break;
@@ -395,7 +362,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
       this.optionsContainer.add(this.cursorObj);
     }
 
-    this.cursorObj.setPositionRelative(this.optionsBg, 4, 4 + (this.cursor + this.scrollCursor) * 16);
+    this.cursorObj.setPositionRelative(this.optionsBg, 4, 4 + this.cursor * 16);
 
     return ret;
   }
@@ -403,51 +370,51 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /**
    * Set the option cursor to the specified position.
    *
-   * @param settingIndex - The index of the setting or -1 to change the current setting
-   * @param cursor - The cursor position to set.
+   * @param settingCursor - Which setting to update, or -1 to change the currently selected setting
+   * @param optionCursor - Which option to select for this setting.
    * @param save - Whether to save the setting to local storage.
    * @returns `true` if the option cursor was set successfully.
    */
-  protected setOptionCursor(settingIndex: number, cursor: number, save?: boolean): boolean {
-    if (settingIndex === -1) {
-      settingIndex = this.cursor + this.scrollCursor;
+  protected setOptionCursor(settingCursor: number, optionCursor: number, save?: boolean): boolean {
+    if (settingCursor === -1) {
+      settingCursor = this.cursor;
     }
-    const uiItem = this.uiItems[settingIndex];
+    const uiItem = this.uiItems[settingCursor + this.scrollCursor];
 
-    const lastCursor = this.optionCursors[settingIndex];
+    const lastCursor = this.optionCursors[settingCursor];
 
-    const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
+    const lastValueLabel = this.optionValueLabels[settingCursor][lastCursor];
     if (lastValueLabel) {
       setTextColor(lastValueLabel, TextStyle.SETTINGS_VALUE);
     } else {
       console.warn(
         "Could no determine lastValue label for ",
         uiItem.key,
-        settingIndex,
+        settingCursor,
         lastCursor,
-        this.optionValueLabels[settingIndex].map((l) => l.text),
+        this.optionValueLabels[settingCursor].map((l) => l.text),
       );
     }
 
-    this.optionCursors[settingIndex] = cursor;
+    this.optionCursors[settingCursor] = optionCursor;
 
-    const newValueLabel = this.optionValueLabels[settingIndex][cursor];
+    const newValueLabel = this.optionValueLabels[settingCursor][optionCursor];
     if (newValueLabel) {
       setTextColor(newValueLabel, TextStyle.SETTINGS_SELECTED);
     } else {
       console.warn(
         "Could no determine newValueLabel label for ",
         uiItem.key,
-        settingIndex,
-        cursor,
-        this.optionValueLabels[settingIndex].map((l) => l.text),
+        settingCursor,
+        optionCursor,
+        this.optionValueLabels[settingCursor].map((l) => l.text),
       );
     }
 
     if (save) {
-      const value = uiItem.options[cursor].value;
+      const value = uiItem.options[optionCursor].value;
       // For settings that ask for confirmation, display confirmation message and a Yes/No prompt before saving the setting
-      if (uiItem.options[cursor]?.requiresConfirmation) {
+      if (uiItem.options[optionCursor]?.requiresConfirmation) {
         const confirmUpdateSetting = () => {
           globalScene.ui.revertMode();
           this.showText("");
@@ -457,11 +424,11 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           globalScene.ui.revertMode();
           this.showText("");
           // Put the cursor back to its previous position without saving or asking for confirmation again
-          this.setOptionCursor(settingIndex, lastCursor, false);
+          this.setOptionCursor(settingCursor, lastCursor, false);
         };
 
         const confirmationMessage =
-          uiItem.options[cursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
+          uiItem.options[optionCursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
 
         const confirmSettingOptions: ConfirmModeConfig = {
           yesHandler: confirmUpdateSetting,
@@ -493,8 +460,9 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     this.scrollCursor = scrollCursor;
     this.scrollBar.setScrollCursor(this.scrollCursor);
+    this.labelsTextList.setCursor(this.scrollCursor);
 
-    this.updateSettingsScroll();
+    this.displaySettingsOptions();
 
     this.setCursor(this.cursor);
 
@@ -504,15 +472,79 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /**
    * Update the scroll position of the settings UI.
    */
-  private updateSettingsScroll(): void {
-    this.optionsContainer.setY(-16 * this.scrollCursor);
+  private displaySettingsOptions(): void {
+    let tempTextObject: Phaser.GameObjects.Text | null = null;
 
-    for (let s = 0; s < this.settingLabels.length; s++) {
-      const visible = s >= this.scrollCursor && s < this.scrollCursor + this.rowsToDisplay;
-      this.settingLabels[s].setVisible(visible);
-      for (const option of this.optionValueLabels[s]) {
-        option.setVisible(visible);
+    for (let i = 0; i < this.rowsToDisplay; i++) {
+      const uiItem = this.uiItems[i + this.scrollCursor];
+      const optionText = this.optionValueLabels[i];
+
+      // If needed, create more text objects for this setting's options
+      const yPosition = 28 + i * 16;
+      for (let j = optionText.length; j < uiItem.options.length; j++) {
+        const value = addTextObject(100, yPosition, "", TextStyle.SETTINGS_VALUE).setOrigin(0, 0);
+        this.optionsContainer.add(value);
+        optionText.push(value);
       }
+
+      // Set text for each option
+      for (let j = 0; j < optionText.length; j++) {
+        if (j < uiItem.options.length) {
+          optionText[j].setText(uiItem.options[j].label);
+          optionText[j].setVisible(true);
+
+          // By default, mark as unselected
+          setTextColor(optionText[j], TextStyle.SETTINGS_VALUE);
+        } else {
+          optionText[j].setVisible(false);
+        }
+      }
+
+      // If needed, compute the horizontal position of each option
+      if (isNil(this.settingValuesPosition[i + this.scrollCursor])) {
+        const positions: number[] = [];
+        const totalWidth = optionText.map((o) => o.displayWidth).reduce((total, width) => (total += width), 0);
+        if (!tempTextObject) {
+          tempTextObject = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
+        }
+        tempTextObject.setText(uiItem.label + (uiItem.requiresReload ? "*" : ""));
+        const labelWidth = Math.max(78, tempTextObject.displayWidth + 8);
+        const totalSpace = 297 - labelWidth - totalWidth;
+        const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
+
+        let xPosition = labelWidth + this.labelsTextList.x;
+        for (let j = 0; j < uiItem.options.length; j++) {
+          positions.push(xPosition);
+          xPosition += this.optionValueLabels[i][j].displayWidth + optionSpacing;
+        }
+        this.settingValuesPosition[i + this.scrollCursor] = positions;
+      }
+
+      // Set position for each option
+      for (let j = 0; j < optionText.length; j++) {
+        optionText[j].setX(this.settingValuesPosition[i + this.scrollCursor][j]);
+      }
+
+      // Mark the correct option as selected
+      const value = settingsManager[this.category][uiItem.key];
+      let index = 0;
+      if (value !== undefined) {
+        index = uiItem.options.findIndex((option) => option.value === value);
+      }
+      if (index < 0) {
+        console.warn(
+          `Could not find index for ${uiItem.key}.`,
+          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
+          "\nAvailable values:",
+          uiItem.options,
+        );
+        index = 0;
+      }
+      this.setOptionCursor(i, index);
+    }
+
+    if (tempTextObject) {
+      tempTextObject.destroy();
     }
   }
 
@@ -567,6 +599,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         this.setOptionCursor(-1, 0, false);
       });
     } else {
+      /* Checks if the game is in a state where progress may be lost due to options with reloadRequired while in battle.
+       * TODO: Handle lost progress from non battle MEs */
       if (requiresReload) {
         if (this.canLoseProgress()) {
           this.showConfirm(
