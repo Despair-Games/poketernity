@@ -48,7 +48,7 @@ import { RngHelper } from "#test/test-utils/helpers/rng-helper";
 import { SettingsHelper } from "#test/test-utils/helpers/settings-helper";
 import type { InputsHandler } from "#test/test-utils/inputs-handler";
 import { MockFetch } from "#test/test-utils/mocks/mock-fetch";
-import { PhaseInterceptor, type PhaseInterceptorPhase } from "#test/test-utils/phase-interceptor";
+import { PhaseInterceptor } from "#test/test-utils/phase-interceptor";
 import { TextInterceptor } from "#test/test-utils/text-interceptor";
 import type { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -59,6 +59,7 @@ import { isNil } from "#utils/common-utils";
 import { AES, enc } from "crypto-js";
 import fs from "node:fs";
 import { expect, vi } from "vitest";
+import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -374,9 +375,8 @@ export class GameManager {
    * @param phaseTarget - The target phase.
    * @returns True if the current phase matches the target phase, otherwise false.
    */
-  isCurrentPhase(phaseTarget: PhaseInterceptorPhase) {
-    const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
-    return this.scene.phaseManager.getCurrentPhase()?.constructor.name === targetName;
+  isCurrentPhase(phaseTarget: PhaseKey) {
+    return this.scene.phaseManager.getCurrentPhase()?.is(phaseTarget);
   }
 
   /**
