@@ -90,13 +90,4 @@ declare module "phaser" {
       }
     }
   }
-
-  namespace Tweens {
-    interface Tween {
-      // The original phaser types do not include `null` as a possible return type,
-      // but mentioned it in the docs: https://docs.phaser.io/api-documentation/class/tweens-tween#getvalue.
-      // This can be removed once the phaser types are fixed.
-      getValue(index?: number): number | null;
-    }
-  }
 }
