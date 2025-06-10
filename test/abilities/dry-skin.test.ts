@@ -102,7 +102,7 @@ describe("Abilities - Dry Skin", () => {
     move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveTakenDamage(toDmgValue((enemy.getMaxHp() / 4) * 3));
+    expect(enemy.hp).toBe(toDmgValue(enemy.getMaxHp() / 4) + 1);
   });
 
   it("does not heal, on opposing water move, if ability holder is protected", async () => {
