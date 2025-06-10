@@ -2,7 +2,6 @@ import overrides from "#app/overrides";
 import { BattleStyle } from "#enums/battle-style";
 import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
-import { TitlePhase } from "#phases/title-phase";
 import { settings } from "#system/settings-manager";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
@@ -23,7 +22,7 @@ export class DailyModeHelper extends GameManagerHelper {
     }
 
     this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
-      const titlePhase = new TitlePhase();
+      const titlePhase = this.game.scene.phaseManager.createPhase("TitlePhase");
       titlePhase.initDailyRun();
     });
 

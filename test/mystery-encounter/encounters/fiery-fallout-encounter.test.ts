@@ -15,10 +15,8 @@ import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FieryFalloutEncounter } from "#mystery-encounters/fiery-fallout-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
-import { CommandPhase } from "#phases/command-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -163,7 +161,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
       expect(enemyField.length).toBe(2);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.VOLCARONA);
       expect(enemyField[1].species.speciesId).toBe(SpeciesId.VOLCARONA);
@@ -179,7 +177,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
       const leadPokemonItems = scene.findModifiers<PokemonHeldItemModifier>(
@@ -269,7 +267,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIERY_FALLOUT, defaultParty);
       await runMysteryEncounterToEnd(game, 3);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
 
       const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems();
       const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
@@ -290,12 +288,12 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(encounterPhase?.is("MysteryEncounterPhase")).toBeTruthy();
       const continueEncounterSpy = vi.spyOn(encounterPhase as MysteryEncounterPhase, "continueEncounter");
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
       expect(continueEncounterSpy).not.toHaveBeenCalled();
     });
   });

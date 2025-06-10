@@ -2,7 +2,7 @@ import * as messages from "#app/messages";
 import { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import type { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -36,7 +36,7 @@ describe("BattlerTag - StockpilingTag", () => {
       const subject = new StockpilingTag(1);
 
       vi.spyOn(game.scene.phaseManager, "unshiftPhase").mockImplementation((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(1);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
@@ -62,7 +62,7 @@ describe("BattlerTag - StockpilingTag", () => {
       const subject = new StockpilingTag(1);
 
       vi.spyOn(game.scene.phaseManager, "unshiftPhase").mockImplementation((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(1);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
@@ -86,7 +86,7 @@ describe("BattlerTag - StockpilingTag", () => {
       const subject = new StockpilingTag(1);
 
       vi.spyOn(game.scene.phaseManager, "unshiftPhase").mockImplementation((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(1);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
@@ -116,7 +116,7 @@ describe("BattlerTag - StockpilingTag", () => {
       const phaseSpy = vi.spyOn(game.scene.phaseManager, "unshiftPhase");
 
       phaseSpy.mockImplementationOnce((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(1);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
@@ -128,7 +128,7 @@ describe("BattlerTag - StockpilingTag", () => {
       expect(subject.stockpiledCount).toBe(1);
 
       phaseSpy.mockImplementationOnce((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(1);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
@@ -140,7 +140,7 @@ describe("BattlerTag - StockpilingTag", () => {
       expect(subject.stockpiledCount).toBe(2);
 
       phaseSpy.mockImplementationOnce((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(1);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
@@ -157,7 +157,7 @@ describe("BattlerTag - StockpilingTag", () => {
 
       // removing tag should reverse stat changes
       phaseSpy.mockImplementationOnce((phase: StatStageChangePhase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.is("StatStageChangePhase")).toBeTruthy();
         expect(phase["stages"]).toEqual(-2);
         expect(phase["stats"]).toEqual(expect.arrayContaining([Stat.SPDEF]));
       });

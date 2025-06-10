@@ -6,7 +6,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { type StatStageChangeCallback, StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import type { StatStageChangeCallback } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
@@ -71,10 +71,15 @@ export class StockpilingTag extends BattlerTag {
       );
 
       // Attempt to increase DEF and SPDEF by one stage, keeping track of successful changes.
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.DEF], 1, {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [Stat.SPDEF, Stat.DEF],
+        1,
+        {
           onChange: this.onStatStagesChanged,
-        }),
+        },
       );
     }
   }

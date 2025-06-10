@@ -5,7 +5,6 @@ import { GameModes } from "#enums/game-modes";
 import { Nature } from "#enums/nature";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/game-manager-utils";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
@@ -40,10 +39,11 @@ export class ClassicModeHelper extends GameManagerHelper {
     }
 
     this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
+      const { phaseManager } = this.game.scene;
       this.game.scene.gameMode = getGameMode(GameModes.CLASSIC);
       const starters = generateStarter(this.game.scene, starterSpecies);
-      const selectStarterPhase = new SelectStarterPhase();
-      this.game.scene.phaseManager.createAndPushPhase("EncounterPhase", false);
+      const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+      phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
 

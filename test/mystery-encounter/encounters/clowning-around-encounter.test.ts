@@ -22,10 +22,7 @@ import { ClowningAroundEncounter } from "#mystery-encounters/clowning-around-enc
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
-import { CommandPhase } from "#phases/command-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -169,7 +166,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
       expect(enemyField.length).toBe(2);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.MR_MIME);
       expect(enemyField[0].moveset).toEqual([
@@ -211,7 +208,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
       await game.phaseInterceptor.to("SelectModifierPhase");
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
@@ -232,7 +229,7 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       game.endPhase();
       await game.phaseInterceptor.to("PostMysteryEncounterPhase");
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
+      expect(game.isCurrentPhase("PostMysteryEncounterPhase")).toBeTruthy();
 
       await game.phaseInterceptor.to("NewBattlePhase", false);
 

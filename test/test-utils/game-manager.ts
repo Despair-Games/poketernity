@@ -31,7 +31,6 @@ import type { Pokemon } from "#field/pokemon";
 import Trainer from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/game-manager-utils";
@@ -213,10 +212,11 @@ export class GameManager {
     await this.runToTitle();
 
     this.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
+      const { phaseManager } = this.scene;
       this.scene.gameMode = getGameMode(mode);
       const starters = generateStarter(this.scene, species);
-      const selectStarterPhase = new SelectStarterPhase();
-      this.scene.phaseManager.createAndPushPhase("EncounterPhase", false);
+      const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+      phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
 
@@ -251,10 +251,11 @@ export class GameManager {
       "TitlePhase",
       UiMode.TITLE,
       () => {
+        const { phaseManager } = this.scene;
         this.scene.gameMode = getGameMode(GameModes.CLASSIC);
         const starters = generateStarter(this.scene, species);
-        const selectStarterPhase = new SelectStarterPhase();
-        this.scene.phaseManager.createAndPushPhase("EncounterPhase", false);
+        const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+        phaseManager.createAndPushPhase("EncounterPhase", false);
         selectStarterPhase.initBattle(starters);
       },
       () => this.isCurrentPhase("EncounterPhase"),
