@@ -57,11 +57,11 @@ describe("Abilities - Dry Skin", () => {
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
-    enemy.hp = enemy.getMaxHp() - toDmgValue(enemy.getMaxHp() / 8); // remove 1/8 of max health
+    enemy.hp = 1;
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveFullHp();
+    expect(enemy.hp).toBe(toDmgValue(enemy.getMaxHp() / 8) + 1);
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
