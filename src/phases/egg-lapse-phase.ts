@@ -7,8 +7,6 @@ import { EggHatchData } from "#data/egg-hatch-data";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { EggHatchPhase } from "#phases/egg-hatch-phase";
-import { EggSummaryPhase } from "#phases/egg-summary-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -82,7 +80,7 @@ export class EggLapsePhase extends Phase {
   protected hatchEggsRegular(eggsToHatch: Egg[]): void {
     let eggsToHatchCount: number = eggsToHatch.length;
     for (const egg of eggsToHatch) {
-      globalScene.phaseManager.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
+      globalScene.phaseManager.createAndPushPhase("EggHatchPhase", this, egg, eggsToHatchCount);
       eggsToHatchCount--;
     }
   }
@@ -98,7 +96,7 @@ export class EggLapsePhase extends Phase {
   }
 
   protected showSummary(): void {
-    globalScene.phaseManager.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
+    globalScene.phaseManager.createAndPushPhase("EggSummaryPhase", this.eggHatchData);
     this.end();
   }
 

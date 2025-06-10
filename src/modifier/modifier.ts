@@ -38,7 +38,6 @@ import type {
   TmModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { EvolutionPhase } from "#phases/evolution-phase";
 import { LearnMovePhase } from "#phases/learn-move-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";
 import { addTextObject } from "#ui/text-utils";
@@ -2233,8 +2232,11 @@ export class TmModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon): boolean {
-    globalScene.phaseManager.unshiftPhase(
-      new LearnMovePhase(globalScene.getPlayerParty().indexOf(playerPokemon), this.type.moveId, LearnMoveType.TM),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LearnMovePhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      this.type.moveId,
+      LearnMoveType.TM,
     );
 
     return true;
@@ -2288,8 +2290,11 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
       : null;
 
     if (matchingEvolution) {
-      globalScene.phaseManager.unshiftPhase(
-        new EvolutionPhase(playerPokemon, matchingEvolution, playerPokemon.level - 1),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "EvolutionPhase",
+        playerPokemon,
+        matchingEvolution,
+        playerPokemon.level - 1,
       );
       return true;
     }

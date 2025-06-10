@@ -9,8 +9,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
-import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
@@ -273,7 +271,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
-      globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndPushPhase("ShinySparklePhase", pokemon.getBattlerIndex());
     }
 
     pokemon.resetTurnData();
@@ -290,7 +288,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   protected queuePostSummon(): void {
-    globalScene.phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    globalScene.phaseManager.createAndPushPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
   }
 
   public getTrainerSlot(): TrainerSlot {

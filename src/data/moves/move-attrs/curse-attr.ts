@@ -7,7 +7,6 @@ import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
@@ -42,10 +41,14 @@ export class CurseAttr extends MoveEffectAttr {
       target.addTag(BattlerTagType.CURSED, 0, move.id, user.id);
       return true;
     }
-    globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.ATK, Stat.DEF], 1),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      user.getBattlerIndex(),
+      user,
+      [Stat.ATK, Stat.DEF],
+      1,
     );
-    globalScene.phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.SPD], -1));
+    globalScene.phaseManager.createAndPushPhase("StatStageChangePhase", user.getBattlerIndex(), user, [Stat.SPD], -1);
     return true;
   }
 }

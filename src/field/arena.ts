@@ -34,7 +34,6 @@ import { WeatherType } from "#enums/weather-type";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -384,7 +383,7 @@ export class Arena {
    */
   tryOverrideWeather(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
+    globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.SUNNY + (weather - 1));
     globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
     return true;
   }
@@ -396,7 +395,7 @@ export class Arena {
    */
   tryOverrideTerrain(terrain: TerrainType): boolean {
     this.terrain = new Terrain(terrain, 0);
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+    globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.MISTY_TERRAIN + (terrain - 1));
     globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     return true;
   }
@@ -449,7 +448,7 @@ export class Arena {
     }
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
+      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.SUNNY + (newWeatherType - 1));
       globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
@@ -539,7 +538,7 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.MISTY_TERRAIN + (terrain - 1));
       }
       globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
     } else {

@@ -5,7 +5,6 @@ import { CommandPhase } from "#phases/command-phase";
 import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
-import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import type { GameManager } from "#test/test-utils/game-manager";
 import type { MessageUiHandler } from "#ui/message-ui-handler";
 import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
@@ -68,7 +67,7 @@ export async function runMysteryEncounterToEnd(
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       game.scene.phaseManager.clearPhaseQueue();
       game.scene.phaseManager.clearPhaseQueueSplice();
-      game.scene.phaseManager.unshiftPhase(new PostKnockoutPhase(0));
+      game.scene.phaseManager.createAndPushPhase("PostKnockoutPhase", 0);
       game.endPhase();
     });
 
@@ -191,7 +190,7 @@ export async function skipBattleRunMysteryEncounterRewardsPhase(game: GameManage
     p.faint();
     game.scene.field.remove(p);
   });
-  game.scene.phaseManager.pushPhase(new PostKnockoutPhase(0));
+  game.scene.phaseManager.createAndPushPhase("PostKnockoutPhase", 0);
   game.phaseInterceptor.superEndPhase();
   game.setMode(UiMode.MESSAGE);
   await game.phaseInterceptor.to("MysteryEncounterRewardsPhase", runRewardsPhase);

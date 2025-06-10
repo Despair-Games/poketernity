@@ -4,7 +4,6 @@ import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { handleMysteryEncounterVictory } from "#mystery-encounters/encounter-phase-utils";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { VictoryPhase } from "#phases/victory-phase";
 
 /**
  * Handles the actions after the player KOs a pokemon:
@@ -52,7 +51,7 @@ export class PostKnockoutPhase extends PokemonPhase {
         .getEnemyParty()
         .some((p) => p && (p.isOnField() || (battleType !== BattleType.WILD && !p.isFainted())))
     ) {
-      phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
+      phaseManager.createAndPushPhase("VictoryPhase", this.battlerIndex);
     }
 
     this.end();

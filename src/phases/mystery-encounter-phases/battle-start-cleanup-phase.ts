@@ -11,9 +11,6 @@ import { Phase } from "#app/phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
-import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
-import { SwitchPhase } from "#phases/switch-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 
 /**
  * Runs at the beginning of an Encounter's battle.
@@ -52,8 +49,8 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     });
 
     // Remove any status tick phases
-    while (globalScene.phaseManager.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
-      globalScene.phaseManager.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
+    while (globalScene.phaseManager.findPhase((p) => p.is("PostTurnStatusEffectPhase"))) {
+      globalScene.phaseManager.tryRemovePhase((p) => p.is("PostTurnStatusEffectPhase"));
     }
 
     /** The total number of Pokemon in the player's party that can legally fight */
@@ -70,13 +67,13 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const playerField = globalScene.getPlayerField();
     playerField.forEach((pokemon, i) => {
       if (!pokemon.isAllowedInBattle() && legalPlayerPartyPokemon.length > i) {
-        globalScene.phaseManager.unshiftPhase(new SwitchPhase(SwitchType.SWITCH, i, true, false));
+        globalScene.phaseManager.createAndPushPhase("SwitchPhase", SwitchType.SWITCH, i, true, false);
       }
     });
 
     // THEN, if is a double battle, and player only has 1 summoned pokemon, center pokemon on field
     if (globalScene.currentBattle.double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
-      globalScene.phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
+      globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
     }
 
     this.end();

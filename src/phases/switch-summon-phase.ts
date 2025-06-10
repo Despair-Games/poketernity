@@ -11,7 +11,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
-import { PostSummonPhase } from "#phases/post-summon-phase";
 import { SummonPhase } from "#phases/summon-phase";
 import i18next from "i18next";
 
@@ -219,6 +218,6 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   protected override queuePostSummon(): void {
-    globalScene.phaseManager.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    globalScene.phaseManager.createAndPushPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
   }
 }

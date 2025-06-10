@@ -13,8 +13,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "#phases/end-evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { BooleanHolder, fixedNumber } from "#utils/common-utils";
@@ -166,7 +164,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
 
-    globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
+    globalScene.phaseManager.createAndPushPhase("EndEvolutionPhase");
 
     ui.showText(
       i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -267,11 +265,13 @@ export class EvolutionPhase extends FormChangeBasePhase {
           .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
-          globalScene.phaseManager.unshiftPhase(
-            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "LearnMovePhase",
+            globalScene.getPlayerParty().indexOf(this.pokemon),
+            lm[1],
           );
         }
-        globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
+        globalScene.phaseManager.createAndPushPhase("EndEvolutionPhase");
 
         globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);

@@ -26,7 +26,6 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type PokemonData from "#system/pokemon-data";
 import type { TurnMove } from "#types/turn-move";
 import { EnemyBattleInfo } from "#ui/battle-info";
@@ -648,8 +647,13 @@ export class EnemyPokemon extends Pokemon {
         stages++;
       }
 
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(this.getBattlerIndex(), this, [boostedStat!], stages, { ignoreAbilities: true }),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        this.getBattlerIndex(),
+        this,
+        [boostedStat!],
+        stages,
+        { ignoreAbilities: true },
       );
       this.bossSegmentIndex--;
     }

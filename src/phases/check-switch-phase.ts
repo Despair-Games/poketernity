@@ -6,8 +6,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { SummonMissingPhase } from "#phases/summon-missing-phase";
-import { SwitchPhase } from "#phases/switch-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -44,7 +42,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...if the checked Pokemon is somehow not on the field
     if (globalScene.field.getAll().indexOf(pokemon) === -1) {
-      globalScene.phaseManager.unshiftPhase(new SummonMissingPhase(this.fieldIndex));
+      globalScene.phaseManager.createAndPushPhase("SummonMissingPhase", this.fieldIndex);
       this.end();
       return;
     }
@@ -79,8 +77,12 @@ export class CheckSwitchPhase extends BattlePhase {
         const options: ConfirmModeConfig = {
           yesHandler: () => {
             globalScene.ui.setMessageMode();
-            globalScene.phaseManager.unshiftPhase(
-              new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true),
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "SwitchPhase",
+              SwitchType.INITIAL_SWITCH,
+              this.fieldIndex,
+              false,
+              true,
             );
             this.end();
           },

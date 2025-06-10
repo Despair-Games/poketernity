@@ -15,11 +15,6 @@ import { getBiomeKey } from "#field/arena";
 import type { Modifier } from "#modifier/modifier";
 import { getDailyRunStarterModifiers, regenerateModifierPoolThresholds } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { CheckSwitchPhase } from "#phases/check-switch-phase";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectChallengePhase } from "#phases/select-challenge-phase";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
-import { SummonPhase } from "#phases/summon-phase";
 import { vouchers } from "#system/voucher";
 import type { SessionSaveData } from "#types/session-data";
 import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
@@ -301,32 +296,32 @@ export class TitlePhase extends Phase {
       arena.preloadBgm();
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
-        globalScene.phaseManager.pushPhase(new SelectChallengePhase());
+        globalScene.phaseManager.createAndPushPhase("SelectChallengePhase");
       } else {
-        globalScene.phaseManager.pushPhase(new SelectStarterPhase());
+        globalScene.phaseManager.createAndPushPhase("SelectStarterPhase");
       }
       globalScene.newArena(globalScene.gameMode.getStartingBiome());
     } else {
       globalScene.audioManager.playBgm();
     }
 
-    globalScene.phaseManager.pushPhase(new EncounterPhase(this.loaded));
+    globalScene.phaseManager.createAndPushPhase("EncounterPhase", this.loaded);
 
     if (this.loaded) {
       const { battleType, double, waveIndex } = currentBattle;
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-      globalScene.phaseManager.pushPhase(new SummonPhase(0, true, true));
+      globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, true, true);
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.pushPhase(new SummonPhase(1, true, true));
+        globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, true, true);
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !globalScene.gameMode.isDaily)) {
         const minPartySize = double ? 2 : 1;
         if (availablePartyMembers > minPartySize) {
-          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
+          globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, double);
           if (double) {
-            globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
+            globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, double);
           }
         }
       }

@@ -8,8 +8,6 @@ import {
 import { FieldPhase } from "#phases/abstract-field-phase";
 import { CommandPhase } from "#phases/command-phase";
 import { EnemyCommandPhase } from "#phases/enemy-command-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
-import { TurnStartPhase } from "#phases/turn-start-phase";
 import i18next from "i18next";
 
 export class TurnInitPhase extends FieldPhase {
@@ -44,7 +42,7 @@ export class TurnInitPhase extends FieldPhase {
           p.leaveField();
         }
         if (allowedPokemon.length === 1 && currentBattle.double) {
-          globalScene.phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
+          globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
         }
       }
     });
@@ -76,7 +74,7 @@ export class TurnInitPhase extends FieldPhase {
       }
     });
 
-    globalScene.phaseManager.pushPhase(new TurnStartPhase());
+    globalScene.phaseManager.createAndPushPhase("TurnStartPhase");
 
     this.end();
   }

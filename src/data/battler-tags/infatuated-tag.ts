@@ -6,7 +6,6 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MovePhase } from "#phases/move-phase";
 import i18next from "i18next";
 
@@ -64,7 +63,7 @@ export class InfatuatedTag extends BattlerTag {
           sourcePokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(this.sourceId!) ?? undefined), // TODO: is that bang correct?
         }),
       );
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.ATTRACT, pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.ATTRACT, pokemon.getBattlerIndex());
 
       if (
         (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)

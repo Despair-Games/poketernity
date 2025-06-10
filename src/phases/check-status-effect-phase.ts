@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
 import { isNil } from "#utils/common-utils";
 
 /**
@@ -20,7 +19,7 @@ export class CheckStatusEffectPhase extends Phase {
 
     pokemon.forEach((p) => {
       if (!isNil(p) && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
-        globalScene.phaseManager.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
+        globalScene.phaseManager.createAndPushPhase("PostTurnStatusEffectPhase", p.getBattlerIndex());
       }
     });
 

@@ -11,7 +11,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -55,7 +54,7 @@ export class PowderTag extends BattlerTag {
           currPhase.fail();
           currPhase.showMoveText();
 
-          globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.POWDER, pokemon.getBattlerIndex()));
+          globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.POWDER, pokemon.getBattlerIndex());
 
           const cancelDamage = new BooleanHolder(false);
           applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);

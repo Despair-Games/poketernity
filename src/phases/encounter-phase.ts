@@ -42,14 +42,7 @@ import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { CheckSwitchPhase } from "#phases/check-switch-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ReturnPhase } from "#phases/return-phase";
-import { ScanIvsPhase } from "#phases/scan-ivs-phase";
-import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
@@ -445,9 +438,9 @@ export class EncounterPhase extends BattlePhase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, false);
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, false);
           }
           this.end();
         };
@@ -499,7 +492,7 @@ export class EncounterPhase extends BattlePhase {
           ui.clearText();
           ui.getMessageHandler().hideNameText();
 
-          globalScene.phaseManager.unshiftPhase(new MysteryEncounterPhase());
+          globalScene.phaseManager.createAndPushPhase("MysteryEncounterPhase");
           this.end();
         };
 
@@ -552,7 +545,7 @@ export class EncounterPhase extends BattlePhase {
 
     enemyField.forEach((enemyPokemon, e) => {
       if (enemyPokemon.isShiny()) {
-        globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(BattlerIndex.ENEMY + e));
+        globalScene.phaseManager.createAndPushPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
@@ -591,8 +584,10 @@ export class EncounterPhase extends BattlePhase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.map((p) =>
-          globalScene.phaseManager.pushPhase(
-            new ScanIvsPhase(p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+          globalScene.phaseManager.createAndPushPhase(
+            "ScanIvsPhase",
+            p.getBattlerIndex(),
+            Math.min(ivScannerModifier.getStackCount() * 2, 6),
           ),
         );
       }
@@ -602,29 +597,29 @@ export class EncounterPhase extends BattlePhase {
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
 
       if (!availablePartyMembers[0].isOnField()) {
-        globalScene.phaseManager.pushPhase(new SummonPhase(0));
+        globalScene.phaseManager.createAndPushPhase("SummonPhase", 0);
       }
 
       if (double) {
         if (availablePartyMembers.length > 1) {
-          globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
+          globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
           if (!availablePartyMembers[1].isOnField()) {
-            globalScene.phaseManager.pushPhase(new SummonPhase(1));
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", 1);
           }
         }
       } else {
         if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.pushPhase(new ReturnPhase(1));
+          globalScene.phaseManager.createAndPushPhase("ReturnPhase", 1);
         }
-        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
+        globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", false);
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !gameMode.isDaily)) {
         const minPartySize = double ? 2 : 1;
         if (availablePartyMembers.length > minPartySize) {
-          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
+          globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, double);
           if (double) {
-            globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
+            globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, double);
           }
         }
       }

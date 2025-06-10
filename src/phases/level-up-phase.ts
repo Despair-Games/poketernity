@@ -4,8 +4,6 @@ import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { ExpNotification } from "#enums/exp-notification";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
-import { EvolutionPhase } from "#phases/evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
@@ -72,14 +70,14 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     if (this.lastLevel < 100) {
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
       for (const [, learnMoveId] of levelMoves) {
-        globalScene.phaseManager.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, learnMoveId));
+        globalScene.phaseManager.createAndPushPhase("LearnMovePhase", this.partyMemberIndex, learnMoveId);
       }
     }
 
     if (!this.pokemon.pauseEvolutions) {
       const evolution = this.pokemon.getEvolution();
       if (evolution) {
-        globalScene.phaseManager.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
+        globalScene.phaseManager.createAndPushPhase("EvolutionPhase", this.pokemon, evolution, this.lastLevel);
       }
     }
 

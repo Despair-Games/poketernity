@@ -7,7 +7,6 @@ import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
-import { MoneyRewardPhase } from "#phases/money-reward-phase";
 import { vouchers } from "#system/voucher";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -24,16 +23,16 @@ export class TrainerVictoryPhase extends BattlePhase {
 
     globalScene.audioManager.playBgm(trainer.config.victoryBgm);
 
-    globalScene.phaseManager.unshiftPhase(new MoneyRewardPhase(trainer.config.moneyMultiplier));
+    globalScene.phaseManager.createAndPushPhase("MoneyRewardPhase", trainer.config.moneyMultiplier);
 
     const modifierRewardFuncs = trainer.config.modifierRewardFuncs;
     for (const modifierRewardFunc of modifierRewardFuncs) {
-      globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
+      globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", modifierRewardFunc);
     }
 
     if (timedEventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
       for (const rewardFunc of trainer.config.eventRewardFuncs) {
-        globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(rewardFunc));
+        globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", rewardFunc);
       }
     }
 

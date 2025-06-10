@@ -6,7 +6,6 @@ import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import { MoveEffectPhase } from "#phases/move-effect-phase";
 import { isNil } from "#utils/common-utils";
 
 /**
@@ -54,13 +53,19 @@ export class DelayedAttackTag extends ArenaTag {
       if (!isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
-          globalScene.phaseManager.unshiftPhase(
-            new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.moveId, 0, 0, true)),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MoveEffectPhase",
+            attack.sourceId,
+            [attack.targetIndex],
+            new PokemonMove(attack.moveId, 0, 0, true),
           );
         } else if (globalScene.currentBattle.double) {
           const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
-          globalScene.phaseManager.unshiftPhase(
-            new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.moveId, 0, 0, true)),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MoveEffectPhase",
+            attack.sourceId,
+            [redirectIndex],
+            new PokemonMove(attack.moveId, 0, 0, true),
           );
         }
       }

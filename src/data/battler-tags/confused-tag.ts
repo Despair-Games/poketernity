@@ -10,7 +10,6 @@ import type { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MovePhase } from "#phases/move-phase";
 import { isNil, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -32,7 +31,7 @@ export class ConfusedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
+    globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
@@ -63,7 +62,7 @@ export class ConfusedTag extends BattlerTag {
       globalScene.phaseManager.queueMessagePhase(
         i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
 
       const damage = this.getDamage(pokemon);
       if (damage > 0) {

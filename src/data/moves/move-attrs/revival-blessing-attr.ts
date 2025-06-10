@@ -4,8 +4,6 @@ import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -23,7 +21,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
     if (user.isPlayer()) {
-      globalScene.phaseManager.unshiftPhase(new RevivalBlessingPhase(user));
+      globalScene.phaseManager.createAndPushPhase("RevivalBlessingPhase", user);
       return true;
     }
     if (user.isEnemy()) {
@@ -43,12 +41,22 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
       if (globalScene.currentBattle.double && globalScene.getEnemyParty().length > 1) {
         const allyPokemon = user.getAlly();
         if (slotIndex <= 1) {
-          globalScene.phaseManager.unshiftPhase(
-            new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, false),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "SwitchSummonPhase",
+            SwitchType.SWITCH,
+            pokemon.getFieldIndex(),
+            slotIndex,
+            false,
+            false,
           );
         } else if (allyPokemon?.isFainted()) {
-          globalScene.phaseManager.unshiftPhase(
-            new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, false),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "SwitchSummonPhase",
+            SwitchType.SWITCH,
+            allyPokemon.getFieldIndex(),
+            slotIndex,
+            false,
+            false,
           );
         }
       }

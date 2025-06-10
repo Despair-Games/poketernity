@@ -11,12 +11,7 @@ import { BattleType } from "#enums/battle-type";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { BattleEndPhase } from "#phases/battle-end-phase";
-import { EggLapsePhase } from "#phases/egg-lapse-phase";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
-import { NewBattlePhase } from "#phases/new-battle-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
-import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
 
 /**
  * Handles various effects when the player clears a wave:
@@ -39,10 +34,10 @@ export class VictoryPhase extends PokemonPhase {
     // clear all queued delayed attacks (e.g. from Future Sight)
     globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
 
-    phaseManager.pushPhase(new BattleEndPhase(true));
+    phaseManager.createAndPushPhase("BattleEndPhase", true);
 
     if (battleType === BattleType.TRAINER) {
-      phaseManager.pushPhase(new TrainerVictoryPhase());
+      phaseManager.createAndPushPhase("TrainerVictoryPhase");
     }
 
     if (!isEndless && gameMode.isWaveFinal(waveIndex)) {
@@ -53,22 +48,24 @@ export class VictoryPhase extends PokemonPhase {
       return super.end();
     }
 
-    phaseManager.pushPhase(new EggLapsePhase());
+    phaseManager.createAndPushPhase("EggLapsePhase");
 
     if (isClassic && waveIndex === EVIL_BOSS_2_WAVE) {
       // Should get Lock Capsule on 165 before shop phase so it can be used in the rewards shop
-      phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.LOCK_CAPSULE));
+      phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.LOCK_CAPSULE);
     }
 
     if (waveIndex % 10 > 0) {
-      phaseManager.pushPhase(new SelectModifierPhase({ customModifierSettings: this.getFixedBattleCustomModifiers() }));
+      phaseManager.createAndPushPhase("SelectModifierPhase", {
+        customModifierSettings: this.getFixedBattleCustomModifiers(),
+      });
       return this.end();
     }
     if (isDaily) {
-      phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_CHARM));
+      phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.EXP_CHARM);
 
       if ([20, 30, 40].includes(waveIndex)) {
-        phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
+        phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.GOLDEN_POKEBALL);
       }
 
       return this.end();
@@ -76,7 +73,7 @@ export class VictoryPhase extends PokemonPhase {
 
     if (isEndless) {
       if (waveIndex === 10) {
-        phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_SHARE));
+        phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.EXP_SHARE);
       }
 
       if (waveIndex <= 750 && (waveIndex <= 500 || waveIndex % 30 === 10)) {
@@ -88,24 +85,25 @@ export class VictoryPhase extends PokemonPhase {
       }
 
       if (waveIndex % 50 === 0) {
-        phaseManager.pushPhase(
-          new ModifierRewardPhase(!(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS),
+        phaseManager.createAndPushPhase(
+          "ModifierRewardPhase",
+          !(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS,
         );
       }
     } else {
       const modifierType = gameMode.isGymWave(waveIndex) ? modifierTypes.SUPER_EXP_CHARM : modifierTypes.EXP_CHARM;
-      phaseManager.pushPhase(new ModifierRewardPhase(modifierType));
+      phaseManager.createAndPushPhase("ModifierRewardPhase", modifierType);
     }
 
     if ([50, 100, 150].includes(waveIndex)) {
-      phaseManager.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
+      phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.GOLDEN_POKEBALL);
     }
 
     this.end();
   }
 
   public override end(): void {
-    globalScene.phaseManager.pushPhase(new NewBattlePhase());
+    globalScene.phaseManager.createAndPushPhase("NewBattlePhase");
     super.end();
   }
 

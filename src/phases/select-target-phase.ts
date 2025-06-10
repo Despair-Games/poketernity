@@ -4,7 +4,6 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { CommandPhase } from "#phases/command-phase";
 import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import i18next from "i18next";
 
@@ -42,7 +41,7 @@ export class SelectTargetPhase extends PokemonPhase {
 
       if (targets.length < 1) {
         turnManager.tryRemoveCommand((tc) => tc.pokemon === user);
-        globalScene.phaseManager.unshiftPhase(new CommandPhase(this.fieldIndex));
+        globalScene.phaseManager.createAndPushPhase("CommandPhase", this.fieldIndex);
       } else {
         if (turnCommand) {
           turnCommand.targets = targets;

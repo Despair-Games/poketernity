@@ -6,8 +6,6 @@ import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import { SelectGenderPhase } from "#phases/select-gender-phase";
-import { UnavailablePhase } from "#phases/unavailable-phase";
 import { settings } from "#system/settings-manager";
 import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
 import type { LoginFormUiHandler } from "#ui/login-form-ui-handler";
@@ -101,7 +99,7 @@ export class LoginPhase extends Phase {
           removeCookie(SESSION_ID_COOKIE);
           globalScene.reset(true, true);
         } else {
-          globalScene.phaseManager.unshiftPhase(new UnavailablePhase());
+          globalScene.phaseManager.createAndPushPhase("UnavailablePhase");
           super.end();
         }
         return null;
@@ -121,7 +119,7 @@ export class LoginPhase extends Phase {
     globalScene.ui.setMessageMode();
 
     if (settings.display.playerGender === PlayerGender.UNSET) {
-      globalScene.phaseManager.unshiftPhase(new SelectGenderPhase());
+      globalScene.phaseManager.createAndPushPhase("SelectGenderPhase");
     }
 
     handleTutorial(Tutorial.INTRO).then(() => super.end());

@@ -8,7 +8,6 @@ import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#events/battle-scene";
 import { BerryModifier } from "#modifier/modifier";
 import { FieldPhase } from "#phases/abstract-field-phase";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -36,8 +35,11 @@ export class BerryPhase extends FieldPhase {
             i18next.t("abilityTriggers:preventBerryUse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
           );
         } else {
-          globalScene.phaseManager.unshiftPhase(
-            new CommonAnimPhase(CommonAnim.USE_ITEM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "CommonAnimPhase",
+            CommonAnim.USE_ITEM,
+            pokemon.getBattlerIndex(),
+            pokemon.getBattlerIndex(),
           );
 
           for (const berryModifier of globalScene.applyModifiers(BerryModifier, pokemon.isPlayer(), pokemon)) {

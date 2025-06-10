@@ -20,11 +20,6 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
-import { BerryPhase } from "#phases/berry-phase";
-import { CheckStatusEffectPhase } from "#phases/check-status-effect-phase";
-import { MoveHeaderPhase } from "#phases/move-header-phase";
-import { TurnEndPhase } from "#phases/turn-end-phase";
-import { WeatherEffectPhase } from "#phases/weather-effect-phase";
 import type { TurnCommandFilter } from "#types/turn-command-filter";
 import type { TurnMove } from "#types/turn-move";
 import { BooleanHolder, isNil } from "#utils/common-utils";
@@ -246,10 +241,10 @@ export class TurnCommandManager {
   public endTurn(): void {
     const { phaseManager } = globalScene;
     phaseManager.unshiftPhase(
-      new WeatherEffectPhase(),
-      new BerryPhase(),
-      new CheckStatusEffectPhase(),
-      new TurnEndPhase(),
+      phaseManager.createPhase("WeatherEffectPhase"),
+      phaseManager.createPhase("BerryPhase"),
+      phaseManager.createPhase("CheckStatusEffectPhase"),
+      phaseManager.createPhase("TurnEndPhase"),
     );
   }
 
@@ -582,7 +577,7 @@ export class TurnCommandManager {
         pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id) ?? new PokemonMove(turnMove.move.id);
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
-        globalScene.phaseManager.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
+        globalScene.phaseManager.createAndPushPhase("MoveHeaderPhase", pokemon, pokemonMove);
       }
     });
 

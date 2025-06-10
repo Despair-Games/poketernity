@@ -38,8 +38,6 @@ import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import { BattlePhase } from "#phases/abstract-battle-phase";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
-import { MoveEffectPhase } from "#phases/move-effect-phase";
 import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
@@ -288,8 +286,10 @@ export class MovePhase extends BattlePhase {
         globalScene.phaseManager.queueMessagePhase(
           getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
-        globalScene.phaseManager.unshiftPhase(
-          new CommonAnimPhase(CommonAnim.POISON + (statusEffect - 1), this.pokemon.getBattlerIndex()),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "CommonAnimPhase",
+          CommonAnim.POISON + (statusEffect - 1),
+          this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {
         globalScene.phaseManager.queueMessagePhase(
@@ -543,8 +543,11 @@ export class MovePhase extends BattlePhase {
     if (success) {
       applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
       this.showPreMoveMessages();
-      globalScene.phaseManager.unshiftPhase(
-        new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MoveEffectPhase",
+        this.pokemon.getBattlerIndex(),
+        this.targets,
+        this.move,
       );
     } else {
       if ([MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.move.moveId)) {

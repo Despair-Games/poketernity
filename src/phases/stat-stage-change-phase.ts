@@ -111,8 +111,13 @@ export class StatStageChangePhase extends PokemonPhase {
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(this.battlerIndex, this.source, stat, this.stages, this.options),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          this.battlerIndex,
+          this.source,
+          stat,
+          this.stages,
+          this.options,
         );
       }
       return super.end();

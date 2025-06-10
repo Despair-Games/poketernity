@@ -31,9 +31,6 @@ import type { Pokemon } from "#field/pokemon";
 import Trainer from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { FaintPhase } from "#phases/faint-phase";
-import { LoginPhase } from "#phases/login-phase";
 import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
@@ -112,7 +109,7 @@ export class GameManager {
       this.scene.ui.resetHandlers(); // reset ui state
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
-      this.scene.phaseManager.pushPhase(new LoginPhase());
+      this.scene.phaseManager.createAndPushPhase("LoginPhase");
       this.scene.phaseManager.toTitleScreen();
       this.scene.phaseManager.shiftPhase();
 
@@ -218,7 +215,7 @@ export class GameManager {
       this.scene.gameMode = getGameMode(mode);
       const starters = generateStarter(this.scene, species);
       const selectStarterPhase = new SelectStarterPhase();
-      this.scene.phaseManager.pushPhase(new EncounterPhase(false));
+      this.scene.phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
 
@@ -256,7 +253,7 @@ export class GameManager {
         this.scene.gameMode = getGameMode(GameModes.CLASSIC);
         const starters = generateStarter(this.scene, species);
         const selectStarterPhase = new SelectStarterPhase();
-        this.scene.phaseManager.pushPhase(new EncounterPhase(false));
+        this.scene.phaseManager.createAndPushPhase("EncounterPhase", false);
         selectStarterPhase.initBattle(starters);
       },
       () => this.isCurrentPhase("EncounterPhase"),
@@ -434,7 +431,7 @@ export class GameManager {
   async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon): Promise<void> {
     await new Promise<void>(async (resolve, reject) => {
       pokemon.faint();
-      this.scene.phaseManager.unshiftPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
+      this.scene.phaseManager.createAndPushPhase("FaintPhase", pokemon.getBattlerIndex(), true);
       await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
       resolve();
     });

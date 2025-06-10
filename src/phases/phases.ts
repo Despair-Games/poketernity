@@ -22,6 +22,7 @@ import { GameOverModifierRewardPhase } from "#phases/game-over-modifier-reward-p
 import { GameOverPhase } from "#phases/game-over-phase";
 import { LearnMovePhase } from "#phases/learn-move-phase";
 import { LevelCapPhase } from "#phases/level-cap-phase";
+import { LevelUpPhase } from "#phases/level-up-phase";
 import { LoadMoveAnimPhase } from "#phases/load-move-anim-phase";
 import { LoginPhase } from "#phases/login-phase";
 import { MessagePhase } from "#phases/message-phase";
@@ -34,6 +35,7 @@ import { MoveHeaderPhase } from "#phases/move-header-phase";
 import { MovePhase } from "#phases/move-phase";
 import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterBattleStartCleanupPhase } from "#phases/mystery-encounter-phases/battle-start-cleanup-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
 import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
@@ -43,6 +45,7 @@ import { NextEncounterPhase } from "#phases/next-encounter-phase";
 import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
+import { PokemonAnimPhase } from "#phases/pokemon-anim-phase";
 import { PokemonHealPhase } from "#phases/pokemon-heal-phase";
 import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
@@ -109,6 +112,7 @@ export const PHASES = {
   GameOverPhase,
   LearnMovePhase,
   LevelCapPhase,
+  LevelUpPhase,
   LoadMoveAnimPhase,
   LoginPhase,
   MessagePhase,
@@ -122,7 +126,7 @@ export const PHASES = {
   MysteryEncounterBattlePhase,
   MysteryEncounterBattleStartCleanupPhase,
   MysteryEncounterOptionSelectedPhase,
-  PostMysteryEncounterPhase,
+  MysteryEncounterPhase,
   MysteryEncounterRewardsPhase,
   NewBattlePhase,
   NewBiomeEncounterPhase,
@@ -130,11 +134,13 @@ export const PHASES = {
   ObtainStatusEffectPhase,
   PartyExpPhase,
   PartyHealPhase,
+  PokemonAnimPhase,
   PokemonHealPhase,
   PokemonTransformPhase,
   PostActionPhase,
   PostGameOverPhase,
   PostKnockoutPhase,
+  PostMysteryEncounterPhase,
   PostSummonPhase,
   PostTurnStatusEffectPhase,
   QuietFormChangePhase,

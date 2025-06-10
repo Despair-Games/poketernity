@@ -11,7 +11,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -51,8 +50,11 @@ export class FireGrassPledgeTag extends ArenaTag {
           i18next.t("arenaTag:fireGrassPledgeLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
         // TODO: Replace this with a proper animation
-        globalScene.phaseManager.unshiftPhase(
-          new CommonAnimPhase(CommonAnim.MAGMA_STORM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "CommonAnimPhase",
+          CommonAnim.MAGMA_STORM,
+          pokemon.getBattlerIndex(),
+          pokemon.getBattlerIndex(),
         );
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
       });

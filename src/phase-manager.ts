@@ -18,7 +18,6 @@ import type { MoveChargePhase } from "#phases/move-charge-phase";
 import type { PokemonHealPhase } from "#phases/pokemon-heal-phase";
 import type { SelectTargetPhase } from "#phases/select-target-phase";
 import type { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import { TurnInitPhase } from "#phases/turn-init-phase";
 import { type PhaseKey, PHASES, type PhaseConstructorMap, type PhaseMap } from "#phases/phases";
 
 interface UseMoveInit {
@@ -437,7 +436,7 @@ export class PhaseManager {
    * Moves everything from the {@linkcode nextCommandPhaseQueue} to the {@linkcode phaseQueue} (keeping order)
    */
   public populatePhaseQueue(): void {
-    this.phaseQueue.push(new TurnInitPhase());
+    this.createAndPushPhase("TurnInitPhase");
   }
 
   // #region Phase-Specific Utils

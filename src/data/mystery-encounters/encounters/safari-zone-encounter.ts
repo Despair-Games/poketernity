@@ -30,8 +30,6 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
-import { ScanIvsPhase } from "#phases/scan-ivs-phase";
-import { SummonPhase } from "#phases/summon-phase";
 import { settings } from "#system/settings-manager";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
@@ -324,7 +322,7 @@ async function summonSafariPokemon() {
   encounter.misc.pokemon = pokemon;
   encounter.misc.safariPokemonRemaining -= 1;
 
-  globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+  globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, false);
 
   encounter.setDialogueToken("pokemonName", getPokemonNameWithAffix(pokemon));
 
@@ -335,8 +333,10 @@ async function summonSafariPokemon() {
 
   const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
   if (ivScannerModifier) {
-    globalScene.phaseManager.pushPhase(
-      new ScanIvsPhase(pokemon.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+    globalScene.phaseManager.createAndPushPhase(
+      "ScanIvsPhase",
+      pokemon.getBattlerIndex(),
+      Math.min(ivScannerModifier.getStackCount() * 2, 6),
     );
   }
 }

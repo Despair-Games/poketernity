@@ -3,7 +3,6 @@ import type { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { ShowAbilityPhase } from "#phases/show-ability-phase";
 
 /**
  * Cures the user's party of non-volatile status conditions, ie. Heal Bell, Aromatherapy
@@ -47,8 +46,10 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
       pokemon.resetStatus();
       pokemon.updateInfo();
     } else {
-      globalScene.phaseManager.unshiftPhase(
-        new ShowAbilityPhase(pokemon.id, pokemon.getPassiveAbility()?.id === this.abilityCondition),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "ShowAbilityPhase",
+        pokemon.id,
+        pokemon.getPassiveAbility()?.id === this.abilityCondition,
       );
     }
   }

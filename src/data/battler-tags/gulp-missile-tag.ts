@@ -13,7 +13,6 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
@@ -52,8 +51,12 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [Stat.DEF], -1),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          attacker.getBattlerIndex(),
+          pokemon,
+          [Stat.DEF],
+          -1,
         );
       } else {
         attacker.trySetStatus(StatusEffect.PARALYSIS, true, pokemon);

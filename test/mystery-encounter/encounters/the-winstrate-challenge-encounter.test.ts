@@ -15,7 +15,6 @@ import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheWinstrateChallengeEncounter } from "#mystery-encounters/the-winstrate-challenge-encounter";
 import { CommandPhase } from "#phases/command-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
-import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -359,7 +358,7 @@ async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean 
     game.scene.field.remove(p);
   });
   game.phaseInterceptor["onHold"] = [];
-  game.scene.phaseManager.pushPhase(new PostKnockoutPhase(0));
+  game.scene.phaseManager.createAndPushPhase("PostKnockoutPhase", 0);
   game.phaseInterceptor.superEndPhase();
   if (isFinalBattle) {
     await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");

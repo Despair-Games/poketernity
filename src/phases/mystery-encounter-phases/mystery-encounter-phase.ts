@@ -12,7 +12,6 @@ import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { SeenEncounterData } from "#mystery-encounters/mystery-encounter-save-data";
-import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
 import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 import { isNil } from "#utils/common-utils";
 
@@ -120,7 +119,7 @@ export class MysteryEncounterPhase extends Phase {
     const { currentBattle, ui } = globalScene;
 
     const endDialogueAndContinueEncounter = (): void => {
-      globalScene.phaseManager.pushPhase(new MysteryEncounterOptionSelectedPhase());
+      globalScene.phaseManager.createAndPushPhase("MysteryEncounterOptionSelectedPhase");
       this.end();
     };
 

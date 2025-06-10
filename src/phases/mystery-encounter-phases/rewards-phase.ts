@@ -5,8 +5,6 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 
 /**
  * Will handle (in order):
@@ -69,12 +67,12 @@ export class MysteryEncounterRewardsPhase extends Phase {
       encounter.doEncounterRewards();
     } else if (this.addHealPhase) {
       globalScene.phaseManager.tryRemovePhase((p) => p.is("SelectModifierPhase"));
-      globalScene.phaseManager.unshiftPhase(
-        new SelectModifierPhase({ customModifierSettings: { fillRemaining: false, rerollMultiplier: -1 } }),
-      );
+      globalScene.phaseManager.createAndUnshiftPhase("SelectModifierPhase", {
+        customModifierSettings: { fillRemaining: false, rerollMultiplier: -1 },
+      });
     }
 
-    globalScene.phaseManager.pushPhase(new PostMysteryEncounterPhase());
+    globalScene.phaseManager.createAndPushPhase("PostMysteryEncounterPhase");
     this.end();
   }
 }
