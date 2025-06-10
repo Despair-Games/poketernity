@@ -6,4 +6,5 @@ export interface FontStyleOptions {
     yPosition: number;
   };
   strokeThickness?: number;
+  lineSpacing?: number;
 }
