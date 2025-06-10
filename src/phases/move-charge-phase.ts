@@ -4,7 +4,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveResult } from "#enums/move-result";
-import { PhaseId } from "#enums/phase-id";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { HitCheckPhase } from "#phases/abstract-hit-check-phase";
@@ -17,8 +16,6 @@ import i18next from "i18next";
  * @extends {@linkcode PokemonPhase}
  */
 export class MoveChargePhase extends HitCheckPhase {
-  override readonly id = PhaseId.MOVE_CHARGE;
-
   public override start() {
     super.start();
 

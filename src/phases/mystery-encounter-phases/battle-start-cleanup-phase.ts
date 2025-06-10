@@ -10,7 +10,6 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
 import { SwitchPhase } from "#phases/switch-phase";
@@ -28,8 +27,6 @@ import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase"
  * @extends Phase
  */
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
-  override readonly id = PhaseId.ME_BATTLE_START_CLEANUP;
-
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */

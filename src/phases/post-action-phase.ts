@@ -6,7 +6,6 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { PhaseId } from "#enums/phase-id";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 /**
@@ -22,8 +21,6 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
  * @extends PokemonPhase
  */
 export class PostActionPhase extends PokemonPhase {
-  override readonly id = PhaseId.POST_ACTION;
-
   private readonly forMove: boolean;
 
   constructor(battlerIndex: BattlerIndex, forMove: boolean = false) {

@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { ExpNotification } from "#enums/exp-notification";
-import { PhaseId } from "#enums/phase-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
 import { EvolutionPhase } from "#phases/evolution-phase";
@@ -22,8 +21,6 @@ import i18next from "i18next";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.LEVEL_UP;
-
   protected readonly lastLevel: number;
   protected readonly level: number;
   protected readonly pokemon: PlayerPokemon = this.getPlayerPokemon();

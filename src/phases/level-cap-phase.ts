@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import { FieldPhase } from "#phases/abstract-field-phase";
 import i18next from "i18next";
 
@@ -8,8 +7,6 @@ import i18next from "i18next";
  * @extends FieldPhase
  */
 export class LevelCapPhase extends FieldPhase {
-  override readonly id = PhaseId.LEVEL_CAP;
-
   public override start(): void {
     super.start();
 

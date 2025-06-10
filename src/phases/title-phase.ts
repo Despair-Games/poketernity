@@ -8,7 +8,6 @@ import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
@@ -31,7 +30,6 @@ import type { TitleUiHandler } from "#ui/title-ui-handler";
 import i18next from "i18next";
 
 export class TitlePhase extends Phase {
-  override readonly id = PhaseId.TITLE;
   public gameMode: GameModes;
 
   private loaded: boolean = false;

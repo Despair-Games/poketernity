@@ -1,4 +1,3 @@
-import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
@@ -10,7 +9,6 @@ import { applyMoveAttrs } from "#utils/move-utils";
  * @extends BattlePhase
  */
 export class MoveHeaderPhase extends BattlePhase {
-  override readonly id = PhaseId.MOVE_HEADER;
   public readonly pokemon: Pokemon;
   public readonly move: PokemonMove;
 

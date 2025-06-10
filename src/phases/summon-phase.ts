@@ -4,7 +4,6 @@ import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
 import { BattleType } from "#enums/battle-type";
 import { FieldPosition } from "#enums/field-position";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
@@ -16,9 +15,6 @@ import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.SUMMON;
-
   private readonly loaded: boolean;
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {

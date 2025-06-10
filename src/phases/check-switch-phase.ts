@@ -3,7 +3,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "#phases/abstract-battle-phase";
@@ -19,8 +18,6 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class CheckSwitchPhase extends BattlePhase {
-  override readonly id = PhaseId.CHECK_SWITCH;
-
   protected readonly fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */
   protected readonly useName: boolean;

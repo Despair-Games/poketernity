@@ -4,7 +4,6 @@ import Overrides from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
@@ -21,8 +20,6 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.LEARN_MOVE;
-
   private readonly moveId: MoveId;
   private messageMode: UiMode;
   private readonly learnMoveType: LearnMoveType;

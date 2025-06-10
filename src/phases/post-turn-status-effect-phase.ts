@@ -8,15 +8,12 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 import { getStatusEffectActivationText } from "#utils/status-effect-utils";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
-  override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;
-
   public override start(): void {
     const pokemon = this.getPokemon();
 

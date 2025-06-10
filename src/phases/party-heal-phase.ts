@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { fixedNumber } from "#utils/common-utils";
 
@@ -8,8 +7,6 @@ import { fixedNumber } from "#utils/common-utils";
  * @extends BattlePhase
  */
 export class PartyHealPhase extends BattlePhase {
-  override readonly id = PhaseId.PARTY_HEAL;
-
   private readonly resumeBgm: boolean;
 
   constructor(resumeBgm: boolean) {

@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import type { MessageUiHandler } from "#ui/message-ui-handler";
 
@@ -10,8 +9,6 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
  * @extends Phase
  */
 export class EndEvolutionPhase extends Phase {
-  override readonly id = PhaseId.END_EVOLUTION;
-
   public override start(): void {
     super.start();
 

@@ -4,7 +4,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor } from "#enums/color";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
@@ -14,8 +13,6 @@ import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 
 export class ScanIvsPhase extends PokemonPhase {
-  override readonly id = PhaseId.SCAN_IVS;
-
   private readonly shownIvs: number;
 
   constructor(battlerIndex: BattlerIndex, shownIvs: number) {

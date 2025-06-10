@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { CommandPhase } from "#phases/command-phase";
@@ -10,8 +9,6 @@ import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import i18next from "i18next";
 
 export class SelectTargetPhase extends PokemonPhase {
-  override readonly id = PhaseId.SELECT_TARGET;
-
   public override start(): void {
     super.start();
 

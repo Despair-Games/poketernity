@@ -5,7 +5,6 @@ import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-o
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
 import { NewBattlePhase } from "#phases/new-battle-phase";
@@ -20,8 +19,6 @@ import { isNil } from "#utils/common-utils";
  * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
-  override readonly id = PhaseId.ME_POST;
-
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
   protected onPostOptionSelect?: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;

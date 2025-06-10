@@ -23,7 +23,6 @@ import { FieldPosition } from "#enums/field-position";
 import { ImagesFolder } from "#enums/images-folders";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -65,9 +64,6 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.ENCOUNTER;
-
   private readonly loaded: boolean;
 
   constructor(loaded: boolean = false) {

@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
@@ -10,8 +9,6 @@ import { isNil } from "#utils/common-utils";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
-  override readonly id = PhaseId.POKEMON_ANIM;
-
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
   /** The Pokemon to which this animation applies */

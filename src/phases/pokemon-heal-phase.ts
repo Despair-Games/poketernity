@@ -4,7 +4,6 @@ import type { HealBlockTag } from "#battler-tags/heal-block-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { HealingBoosterModifier } from "#modifier/modifier";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
@@ -34,8 +33,6 @@ export interface PokemonHealPhaseOptions {
  * @param fullRestorePP - If `true`, will restore the pokemon's moves to full PP. Default `false`
  */
 export class PokemonHealPhase extends CommonAnimPhase {
-  override readonly id = PhaseId.POKEMON_HEAL;
-
   private readonly hpHealed: number;
   private message?: string;
   private readonly showFullHpMessage: boolean;

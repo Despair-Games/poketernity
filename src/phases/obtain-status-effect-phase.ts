@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
@@ -14,8 +13,6 @@ import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#utils/st
  * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
-  override readonly id = PhaseId.OBTAIN_STATUS_EFFECT;
-
   private readonly statusEffect: StatusEffect;
   private readonly turnsRemaining?: number;
   private readonly sourceText?: string | null;

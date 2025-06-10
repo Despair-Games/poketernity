@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "#phases/abstract-battle-phase";
@@ -17,8 +16,6 @@ import { PartyFilterNonFainted } from "#utils/party-ui-utils";
  * @extends BattlePhase
  */
 export class SwitchPhase extends BattlePhase {
-  override readonly id = PhaseId.SWITCH;
-
   protected readonly fieldIndex: number;
 
   private readonly switchType: SwitchType;

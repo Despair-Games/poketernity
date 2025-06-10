@@ -9,13 +9,10 @@ import { AbilityId } from "#enums/ability-id";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { SwitchPhase } from "#phases/switch-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -149,9 +146,13 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.phaseManager.prependToPhase(
-          PhaseId.POST_ACTION,
-          new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
+        globalScene.phaseManager.createAndPrependPhase(
+          "PostActionPhase",
+          "SwitchPhase",
+          this.switchType,
+          switchOutTarget.getFieldIndex(),
+          true,
+          true,
         );
         return true;
       }
@@ -166,9 +167,14 @@ class ForceSwitchOutHelper {
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
-        globalScene.phaseManager.prependToPhase(
-          PhaseId.POST_ACTION,
-          new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
+        globalScene.phaseManager.createAndPrependPhase(
+          "PostActionPhase",
+          "SwitchSummonPhase",
+          this.switchType,
+          switchOutTarget.getFieldIndex(),
+          summonIndex,
+          false,
+          false,
         );
         return true;
       }

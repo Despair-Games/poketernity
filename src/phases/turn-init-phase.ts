@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import { TurnInitEvent } from "#events/battle-scene";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import {
@@ -14,8 +13,6 @@ import { TurnStartPhase } from "#phases/turn-start-phase";
 import i18next from "i18next";
 
 export class TurnInitPhase extends FieldPhase {
-  override readonly id = PhaseId.TURN_INIT;
-
   public override start(): void {
     super.start();
 

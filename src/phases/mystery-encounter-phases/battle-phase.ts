@@ -8,7 +8,6 @@ import { Phase } from "#app/phase";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
 import { CheckSwitchPhase } from "#phases/check-switch-phase";
@@ -29,8 +28,6 @@ import i18next from "i18next";
  * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
-  override readonly id = PhaseId.ME_BATTLE;
-
   protected disableSwitch: boolean;
 
   constructor(disableSwitch: boolean = false) {

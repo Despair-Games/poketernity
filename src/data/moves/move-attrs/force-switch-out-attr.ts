@@ -7,14 +7,11 @@ import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { SwitchPhase } from "#phases/switch-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
@@ -81,15 +78,24 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.phaseManager.prependToPhase(
-            PhaseId.POST_ACTION,
-            new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
+          globalScene.phaseManager.createAndPrependPhase(
+            "PostActionPhase",
+            "SwitchSummonPhase",
+            this.switchType,
+            switchOutTarget.getFieldIndex(),
+            slotIndex,
+            false,
+            true,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.phaseManager.prependToPhase(
-            PhaseId.POST_ACTION,
-            new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
+          globalScene.phaseManager.createAndPrependPhase(
+            "PostActionPhase",
+            "SwitchPhase",
+            this.switchType,
+            switchOutTarget.getFieldIndex(),
+            true,
+            true,
           );
           return true;
         }
@@ -114,21 +120,25 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.phaseManager.prependToPhase(
-            PhaseId.POST_ACTION,
-            new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
+          globalScene.phaseManager.createAndPrependPhase(
+            "PostActionPhase",
+            "SwitchSummonPhase",
+            this.switchType,
+            switchOutTarget.getFieldIndex(),
+            slotIndex,
+            false,
+            false,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.phaseManager.prependToPhase(
-            PhaseId.POST_ACTION,
-            new SwitchSummonPhase(
-              this.switchType,
-              switchOutTarget.getFieldIndex(),
-              trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0,
-              false,
-              false,
-            ),
+          globalScene.phaseManager.createAndPrependPhase(
+            "PostActionPhase",
+            "SwitchSummonPhase",
+            this.switchType,
+            switchOutTarget.getFieldIndex(),
+            trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0,
+            false,
+            false,
           );
         }
       }

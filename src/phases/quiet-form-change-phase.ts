@@ -7,14 +7,11 @@ import { getSpeciesFormChangeMessage, SpeciesFormChangeTeraTrigger, type Species
 import { getTypeRgb } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import type { MovePhase } from "#phases/move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
-  override readonly id = PhaseId.QUIET_FORM_CHANGE;
-
   protected readonly pokemon: Pokemon;
   protected readonly formChange: SpeciesFormChange;
 

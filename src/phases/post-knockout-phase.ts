@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { genOneThroughFourExpFormula } from "#data/exp";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
-import { PhaseId } from "#enums/phase-id";
 import { handleMysteryEncounterVictory } from "#mystery-encounters/encounter-phase-utils";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#phases/victory-phase";
@@ -15,7 +14,6 @@ import { VictoryPhase } from "#phases/victory-phase";
  * - If there are no more unfainted pokemon on the enemy team, unshift a {@linkcode VictoryPhase}
  */
 export class PostKnockoutPhase extends PokemonPhase {
-  public override readonly id: PhaseId = PhaseId.POST_KNOCKOUT;
   /**
    * If `true`, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase.
    * Only used by Mystery Encounters.

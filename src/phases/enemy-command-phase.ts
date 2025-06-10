@@ -10,7 +10,6 @@ import Overrides from "#app/overrides";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { FieldPhase } from "#phases/abstract-field-phase";
 
 /**
@@ -26,8 +25,6 @@ import { FieldPhase } from "#phases/abstract-field-phase";
  * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
-  override readonly id = PhaseId.ENEMY_COMMAND;
-
   public readonly fieldIndex: number;
 
   constructor(fieldIndex: number) {

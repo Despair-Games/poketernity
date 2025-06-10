@@ -24,7 +24,6 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
-import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 import {
@@ -50,8 +49,6 @@ import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
-  override readonly id = PhaseId.MOVE_EFFECT;
-
   private moveHistoryEntry: TurnMove;
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;

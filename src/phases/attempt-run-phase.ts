@@ -3,7 +3,6 @@ import type { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -17,7 +16,6 @@ import i18next from "i18next";
  * @extends PokemonPhase
  */
 export class AttemptRunPhase extends PokemonPhase {
-  override readonly id = PhaseId.ATTEMPT_RUN;
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override
 

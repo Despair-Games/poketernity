@@ -6,7 +6,6 @@ import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#data/pokeball";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
@@ -17,9 +16,6 @@ import { SummonPhase } from "#phases/summon-phase";
 import i18next from "i18next";
 
 export class SwitchSummonPhase extends SummonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.SWITCH_SUMMON;
-
   private readonly switchType: SwitchType;
   private slotIndex: number;
   private readonly doReturn: boolean;

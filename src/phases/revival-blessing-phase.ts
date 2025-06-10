@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -19,8 +18,6 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {
-  override readonly id = PhaseId.REVIVAL_BLESSING;
-
   protected readonly user: PlayerPokemon;
 
   constructor(user: PlayerPokemon) {

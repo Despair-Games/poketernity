@@ -5,7 +5,6 @@ import type { Egg } from "#data/egg";
 import { EGG_SEED } from "#data/egg";
 import { EggHatchData } from "#data/egg-hatch-data";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { EggHatchPhase } from "#phases/egg-hatch-phase";
@@ -22,8 +21,6 @@ import i18next from "i18next";
  * @extends Phase
  */
 export class EggLapsePhase extends Phase {
-  override readonly id = PhaseId.EGG_LAPSE;
-
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
 

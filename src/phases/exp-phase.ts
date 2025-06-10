@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PhaseId } from "#enums/phase-id";
 import { ExpBoosterModifier } from "#modifier/modifier";
 import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";
@@ -12,8 +11,6 @@ import i18next from "i18next";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.EXP;
-
   private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {

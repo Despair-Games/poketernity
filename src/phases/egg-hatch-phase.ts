@@ -5,7 +5,6 @@ import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import type { Egg } from "#data/egg";
 import type { EggHatchData } from "#data/egg-hatch-data";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { EggCountChangedEvent } from "#events/egg";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -23,8 +22,6 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
  * @extends Phase
  */
 export class EggHatchPhase extends Phase {
-  override readonly id = PhaseId.EGG_HATCH;
-
   /** The egg that is hatching */
   private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */

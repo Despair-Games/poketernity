@@ -1,6 +1,5 @@
 import { Phase } from "#app/phase";
 import type { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { initMoveAnim } from "#init/init-move-anim";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 
@@ -12,8 +11,6 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
  * @extends Phase
  */
 export class LoadMoveAnimPhase extends Phase {
-  override readonly id = PhaseId.LOAD_MOVE_ANIM;
-
   protected readonly moveId: MoveId;
 
   constructor(moveId: MoveId) {

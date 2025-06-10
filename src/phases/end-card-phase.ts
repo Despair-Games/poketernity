@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
@@ -14,7 +13,6 @@ import i18next from "i18next";
  * @extends Phase
  */
 export class EndCardPhase extends Phase {
-  override readonly id = PhaseId.END_CARD;
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
 

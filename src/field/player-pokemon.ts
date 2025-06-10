@@ -17,7 +17,6 @@ import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
@@ -26,7 +25,6 @@ import { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { achvs } from "#system/achievements";
 import type PokemonData from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
@@ -183,9 +181,13 @@ export class PlayerPokemon extends Pokemon {
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            globalScene.phaseManager.prependToPhase(
-              PhaseId.POST_ACTION,
-              new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
+            globalScene.phaseManager.createAndPrependPhase(
+              "PostActionPhase",
+              "SwitchSummonPhase",
+              switchType,
+              this.getFieldIndex(),
+              slotIndex,
+              false,
             );
           }
           globalScene.ui.setMessageMode().then(resolve);

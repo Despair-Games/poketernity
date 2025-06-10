@@ -130,7 +130,6 @@ export class PhaseManager {
    * Queues one or more phases to be run at a future point in time.
    * @param phase - The first {@linkcode Phase} to push to the {@link phaseQueue | main queue}.
    * @param otherPhases - Additional (optional) phases to queue. These phases are scheduled after {@linkcode phase} in array order.
-   * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
    */
   public pushPhase(phase: Phase, ...otherPhases: Phase[]): void {
     this.phaseQueue.push(phase, ...otherPhases);
@@ -402,7 +401,7 @@ export class PhaseManager {
   /**
    * Tries to add the input phase to the index after the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
-   * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @param targetPhaseKey - The {@linkcode PhaseKey} of the Phase on which the created Phase is appended
    * @param phase - The {@linkcode Phase} to be added
    * @param otherPhases - Additional (optional) Phases to add. These Phases are scheduled after {@linkcode phase} in array order
    * @returns `true` if the phase was successfully added to the queue after the target phase,

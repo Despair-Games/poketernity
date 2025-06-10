@@ -24,7 +24,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { MoveUsedEvent } from "#events/battle-scene";
@@ -64,8 +63,6 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
-  override readonly id = PhaseId.MOVE;
-
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
   protected _targets: BattlerIndex[];

@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { timedEventManager } from "#app/timed-event-manager";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { EventModifierType } from "#enums/event-modifier-type";
-import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
@@ -14,8 +13,6 @@ import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export class TrainerVictoryPhase extends BattlePhase {
-  override readonly id = PhaseId.TRAINER_VICTORY;
-
   public override start(): void {
     const { charSprite, currentBattle, ui } = globalScene;
     const { trainer, waveIndex } = currentBattle;

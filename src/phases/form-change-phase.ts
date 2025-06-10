@@ -8,7 +8,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#data/pokemon-forms";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -28,8 +27,6 @@ import { fixedNumber } from "#utils/common-utils";
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
-  override readonly id = PhaseId.FORM_CHANGE;
-
   /**
    * The form change that occurs during this phase.
    */

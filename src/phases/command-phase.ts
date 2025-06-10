@@ -17,7 +17,6 @@ import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
@@ -37,8 +36,6 @@ import i18next from "i18next";
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {
-  override readonly id = PhaseId.COMMAND;
-
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
   protected fieldIndex: number;
 

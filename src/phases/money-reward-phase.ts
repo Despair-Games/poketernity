@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { MoneyMultiplierModifier } from "#modifier/modifier";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 import { NumberHolder } from "#utils/common-utils";
@@ -11,8 +10,6 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class MoneyRewardPhase extends BattlePhase {
-  override readonly id = PhaseId.MONEY_REWARD;
-
   private readonly moneyMultiplier: number;
 
   constructor(moneyMultiplier: number) {

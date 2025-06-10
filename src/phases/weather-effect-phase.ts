@@ -11,7 +11,6 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
-import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/abstract-field-phase";
@@ -26,8 +25,6 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
  * @extends FieldPhase
  */
 export class WeatherEffectPhase extends FieldPhase {
-  override readonly id = PhaseId.WEATHER_EFFECT;
-
   public override start(): void {
     // Get current weather state at end of turn
     const { arena } = globalScene;

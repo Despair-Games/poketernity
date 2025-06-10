@@ -11,7 +11,6 @@ import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
-import { PhaseId } from "#enums/phase-id";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
 import type { Pokemon } from "#field/pokemon";
@@ -37,8 +36,6 @@ export interface SSCPhaseOptions {
 //#endregion
 
 export class StatStageChangePhase extends PokemonPhase {
-  override readonly id = PhaseId.STAT_STAGE_CHANGE;
-
   protected readonly stats: BattleStat[];
   protected readonly source: Pokemon | null;
   protected stages: number;

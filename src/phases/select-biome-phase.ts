@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { biomeLinks } from "#data/biome-links";
 import { getBiomeName } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { MapModifier, MoneyInterestModifier } from "#modifier/modifier";
 import { BattlePhase } from "#phases/abstract-battle-phase";
@@ -13,8 +12,6 @@ import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { randSeedInt } from "#utils/random-utils";
 
 export class SelectBiomePhase extends BattlePhase {
-  override readonly id = PhaseId.SELECT_BIOME;
-
   public override start(): void {
     super.start();
 

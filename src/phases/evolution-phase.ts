@@ -8,7 +8,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#data/pokemon-level-moves";
-import { PhaseId } from "#enums/phase-id";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -29,8 +28,6 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
-  override readonly id = PhaseId.EVOLUTION;
-
   protected readonly lastLevel: number;
 
   private preEvolvedPokemonName: string;
