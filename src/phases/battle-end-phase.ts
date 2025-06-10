@@ -10,6 +10,8 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
  * @extends BattlePhase
  */
 export class BattleEndPhase extends BattlePhase {
+  public override readonly phaseName = "BattleEndPhase";
+
   /** If true, will increment battles won */
   public readonly isVictory: boolean;
 

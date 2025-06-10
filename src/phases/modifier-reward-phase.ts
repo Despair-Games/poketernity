@@ -1,10 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import type { ModifierType, ModifierTypeFunc } from "#modifier/modifier-type";
+import type { PhaseKey } from "#types/phase-types";
 import { getModifierType } from "#utils/modifier-type-utils";
 import i18next from "i18next";
 
 export class ModifierRewardPhase extends Phase {
+  public override readonly phaseName: PhaseKey = "ModifierRewardPhase";
+
   protected readonly modifierType: ModifierType;
 
   constructor(modifierTypeFunc: ModifierTypeFunc) {

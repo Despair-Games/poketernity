@@ -12,9 +12,12 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
 import { SummonPhase } from "#phases/summon-phase";
+import type { PhaseKey } from "#types/phase-types";
 import i18next from "i18next";
 
 export class SwitchSummonPhase extends SummonPhase {
+  public override readonly phaseName: PhaseKey = "SwitchSummonPhase";
+
   private readonly switchType: SwitchType;
   private slotIndex: number;
   private readonly doReturn: boolean;

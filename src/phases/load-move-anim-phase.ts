@@ -11,6 +11,8 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
  * @extends Phase
  */
 export class LoadMoveAnimPhase extends Phase {
+  public override readonly phaseName = "LoadMoveAnimPhase";
+
   protected readonly moveId: MoveId;
 
   constructor(moveId: MoveId) {

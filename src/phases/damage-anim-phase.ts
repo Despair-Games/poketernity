@@ -11,6 +11,8 @@ import { fixedNumber } from "#utils/common-utils";
  * @extends PokemonPhase
  */
 export class DamageAnimPhase extends PokemonPhase {
+  public override readonly phaseName = "DamageAnimPhase";
+
   private amount: number;
   private readonly damageResult: DamageResult;
   private readonly critical: boolean;

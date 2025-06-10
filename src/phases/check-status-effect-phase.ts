@@ -9,6 +9,8 @@ import { isNil } from "#utils/common-utils";
  * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
+  public override readonly phaseName = "CheckStatusEffectPhase";
+
   public override start(): void {
     super.start();
 

@@ -8,6 +8,8 @@ import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import i18next from "i18next";
 
 export class SelectGenderPhase extends Phase {
+  public override readonly phaseName = "SelectGenderPhase";
+
   public override start(): void {
     super.start();
 

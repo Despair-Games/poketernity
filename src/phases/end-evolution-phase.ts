@@ -9,6 +9,8 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
  * @extends Phase
  */
 export class EndEvolutionPhase extends Phase {
+  public override readonly phaseName = "EndEvolutionPhase";
+
   public override start(): void {
     super.start();
 

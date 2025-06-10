@@ -23,6 +23,8 @@ import i18next from "i18next";
  * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
+  public override readonly phaseName = "MysteryEncounterBattlePhase";
+
   protected disableSwitch: boolean;
 
   constructor(disableSwitch: boolean = false) {

@@ -9,6 +9,8 @@ import { isNil } from "#utils/common-utils";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
+  public override readonly phaseName = "PokemonAnimPhase";
+
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
   /** The Pokemon to which this animation applies */

@@ -21,6 +21,8 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
  * @extends PokemonPhase
  */
 export class PostActionPhase extends PokemonPhase {
+  public override readonly phaseName = "PostActionPhase";
+
   private readonly forMove: boolean;
 
   constructor(battlerIndex: BattlerIndex, forMove: boolean = false) {

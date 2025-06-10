@@ -3,12 +3,15 @@ import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Plays a {@linkcode CommonBattleAnim}
  * @extends PokemonPhase
  */
 export class CommonAnimPhase extends PokemonPhase {
+  public override readonly phaseName: PhaseKey = "CommonAnimPhase";
+
   private anim: CommonAnim;
   private readonly targetIndex?: BattlerIndex;
 

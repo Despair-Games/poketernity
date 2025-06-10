@@ -60,6 +60,8 @@ import i18next from "i18next";
  * @extends PokemonPhase
  */
 export class FaintPhase extends PokemonPhase {
+  public override readonly phaseName = "FaintPhase";
+
   /** Whether or not enduring (for this phase's purposes, Reviver Seed) should be prevented */
   private readonly preventEndure: boolean;
 
@@ -117,7 +119,8 @@ export class FaintPhase extends PokemonPhase {
       if (instantReviveModifier) {
         faintPokemon.loseHeldItem(instantReviveModifier);
         globalScene.updateModifiers(this.isPlayer);
-        return this.end();
+        this.end();
+        return;
       }
     }
 

@@ -25,6 +25,8 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
  * @extends FieldPhase
  */
 export class WeatherEffectPhase extends FieldPhase {
+  public override readonly phaseName = "WeatherEffectPhase";
+
   public override start(): void {
     // Get current weather state at end of turn
     const { arena } = globalScene;

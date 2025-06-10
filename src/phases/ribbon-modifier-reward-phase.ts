@@ -5,6 +5,8 @@ import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
 
 export class RibbonModifierRewardPhase extends ModifierRewardPhase {
+  public override readonly phaseName = "RibbonModifierRewardPhase";
+
   private readonly species: PokemonSpecies;
 
   constructor(modifierTypeFunc: ModifierTypeFunc, species: PokemonSpecies) {

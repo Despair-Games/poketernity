@@ -9,6 +9,8 @@ import { FieldPhase } from "#phases/abstract-field-phase";
 import i18next from "i18next";
 
 export class TurnInitPhase extends FieldPhase {
+  public override readonly phaseName = "TurnInitPhase";
+
   public override start(): void {
     super.start();
 
@@ -47,7 +49,8 @@ export class TurnInitPhase extends FieldPhase {
 
     // If true, will skip remainder of current phase (and not queue CommandPhases etc.)
     if (handleMysteryEncounterTurnStartEffects()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.getField().forEach((pokemon) => {

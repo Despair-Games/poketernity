@@ -33,6 +33,8 @@ export interface PokemonHealPhaseOptions {
  * @param fullRestorePP - If `true`, will restore the pokemon's moves to full PP. Default `false`
  */
 export class PokemonHealPhase extends CommonAnimPhase {
+  public override readonly phaseName = "PokemonHealPhase";
+
   private readonly hpHealed: number;
   private message?: string;
   private readonly showFullHpMessage: boolean;

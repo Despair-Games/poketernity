@@ -1,7 +1,10 @@
 import { globalScene } from "#app/global-scene";
-import { PHASES, type PhaseKey, type PhaseMap } from "#phases/phases";
+import type { PhaseMap } from "#app/phase-manager";
+import type { PhaseKey } from "#types/phase-types";
 
 export abstract class Phase {
+  public abstract readonly phaseName: PhaseKey;
+
   public start(): void {
     if (globalScene.abilityBar.shown) {
       globalScene.abilityBar.resetAutoHideTimer();
@@ -13,6 +16,6 @@ export abstract class Phase {
   }
 
   public is<P extends PhaseKey>(phaseKey: P): this is InstanceType<PhaseMap[P]> {
-    return this instanceof PHASES[phaseKey];
+    return this.phaseName === phaseKey;
   }
 }

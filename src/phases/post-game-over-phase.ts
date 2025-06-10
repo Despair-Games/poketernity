@@ -3,6 +3,8 @@ import { Phase } from "#app/phase";
 import type { EndCardPhase } from "#phases/end-card-phase";
 
 export class PostGameOverPhase extends Phase {
+  public override readonly phaseName = "PostGameOverPhase";
+
   private readonly endCardPhase?: EndCardPhase;
 
   constructor(endCardPhase?: EndCardPhase) {

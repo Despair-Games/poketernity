@@ -20,6 +20,8 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export class MysteryEncounterRewardsPhase extends Phase {
+  public override readonly phaseName = "MysteryEncounterRewardsPhase";
+
   protected addHealPhase: boolean;
 
   constructor(addHealPhase: boolean = false) {

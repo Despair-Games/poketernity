@@ -10,6 +10,8 @@ import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 export class PostSummonPhase extends PokemonPhase {
+  public override readonly phaseName = "PostSummonPhase";
+
   public override start(): void {
     super.start();
 

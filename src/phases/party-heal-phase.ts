@@ -7,6 +7,8 @@ import { fixedNumber } from "#utils/common-utils";
  * @extends BattlePhase
  */
 export class PartyHealPhase extends BattlePhase {
+  public override readonly phaseName = "PartyHealPhase";
+
   private readonly resumeBgm: boolean;
 
   constructor(resumeBgm: boolean) {

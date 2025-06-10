@@ -9,6 +9,8 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export class PartyExpPhase extends Phase {
+  public override readonly phaseName = "PartyExpPhase";
+
   protected readonly expValue: number;
   protected readonly useWaveIndexMultiplier?: boolean;
   protected readonly pokemonParticipantIds?: Set<number>;

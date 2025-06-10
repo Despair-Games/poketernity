@@ -5,6 +5,8 @@ import type { SessionReloadModalUiHandler } from "#ui/session-reload-modal-ui-ha
 import { fixedNumber } from "#utils/common-utils";
 
 export class ReloadSessionPhase extends Phase {
+  public override readonly phaseName = "ReloadSessionPhase";
+
   private readonly systemDataStr?: string;
 
   constructor(systemDataStr?: string) {

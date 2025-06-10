@@ -16,6 +16,8 @@ import i18next from "i18next";
  * @extends PokemonPhase
  */
 export class AttemptRunPhase extends PokemonPhase {
+  public override readonly phaseName = "AttemptRunPhase";
+
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override
 

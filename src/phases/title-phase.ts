@@ -25,6 +25,8 @@ import type { TitleUiHandler } from "#ui/title-ui-handler";
 import i18next from "i18next";
 
 export class TitlePhase extends Phase {
+  public override readonly phaseName = "TitlePhase";
+
   public gameMode: GameModes;
 
   private loaded: boolean = false;

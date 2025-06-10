@@ -13,6 +13,8 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
  * @extends Phase
  */
 export class EggSummaryPhase extends Phase {
+  public override readonly phaseName = "EggSummaryPhase";
+
   private readonly eggHatchData: EggHatchData[];
 
   constructor(eggHatchData: EggHatchData[]) {

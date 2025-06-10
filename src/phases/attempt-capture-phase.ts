@@ -33,6 +33,8 @@ import i18next from "i18next";
  * @extends PokemonPhase
  */
 export class AttemptCapturePhase extends PokemonPhase {
+  public override readonly phaseName = "AttemptCapturePhase";
+
   private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
   private originalY: number;
@@ -51,7 +53,8 @@ export class AttemptCapturePhase extends PokemonPhase {
     const pokemon = this.getPokemon() as EnemyPokemon;
 
     if (!pokemon?.hp) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const substitute = pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);

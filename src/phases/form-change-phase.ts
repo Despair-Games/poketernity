@@ -25,6 +25,8 @@ import { fixedNumber } from "#utils/common-utils";
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
+  public override readonly phaseName = "FormChangePhase";
+
   /**
    * The form change that occurs during this phase.
    */

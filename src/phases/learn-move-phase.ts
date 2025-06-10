@@ -20,6 +20,8 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
+  public override readonly phaseName = "LearnMovePhase";
+
   private readonly moveId: MoveId;
   private messageMode: UiMode;
   private readonly learnMoveType: LearnMoveType;
@@ -47,7 +49,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     // This should never happen, but if there is no Pokemon learning the move, exit now to avoid crashes.
     if (!pokemon) {
       console.error("Pokemon is missing from LearnMovePhase!");
-      return this.end();
+      this.end();
+      return;
     }
 
     const move = allMoves.get(this.moveId);
@@ -56,7 +59,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
     const hasMoveAlready = currentMoveset.some((m) => m.moveId === move.id) && this.moveId !== MoveId.SKETCH;
     if (hasMoveAlready) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const uiHandler = ui.getCurrentHandler();

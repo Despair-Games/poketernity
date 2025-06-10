@@ -47,6 +47,7 @@ import { settings } from "#system/settings-manager";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
+import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -56,6 +57,8 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
+  public override readonly phaseName: PhaseKey = "EncounterPhase";
+
   private readonly loaded: boolean;
 
   constructor(loaded: boolean = false) {

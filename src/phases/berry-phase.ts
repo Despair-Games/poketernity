@@ -16,6 +16,8 @@ import i18next from "i18next";
  * @extends FieldPhase
  */
 export class BerryPhase extends FieldPhase {
+  public override readonly phaseName = "BerryPhase";
+
   public override start(): void {
     super.start();
 

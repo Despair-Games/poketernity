@@ -12,6 +12,8 @@ import { FieldPhase } from "#phases/abstract-field-phase";
 import i18next from "i18next";
 
 export class TurnEndPhase extends FieldPhase {
+  public override readonly phaseName = "TurnEndPhase";
+
   public override start(): void {
     super.start();
 

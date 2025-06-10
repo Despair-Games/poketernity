@@ -5,6 +5,8 @@ import { getUnlockableName } from "#system/unlockables";
 import i18next from "i18next";
 
 export class UnlockPhase extends Phase {
+  public override readonly phaseName = "UnlockPhase";
+
   private readonly unlockable: Unlockables;
 
   constructor(unlockable: Unlockables) {

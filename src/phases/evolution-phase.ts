@@ -26,6 +26,8 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
+  public override readonly phaseName = "EvolutionPhase";
+
   protected readonly lastLevel: number;
 
   private preEvolvedPokemonName: string;

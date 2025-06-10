@@ -10,6 +10,8 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class MoneyRewardPhase extends BattlePhase {
+  public override readonly phaseName = "MoneyRewardPhase";
+
   private readonly moneyMultiplier: number;
 
   constructor(moneyMultiplier: number) {

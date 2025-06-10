@@ -32,6 +32,8 @@ import i18next from "i18next";
  * - Award ribbons + vouchers per player pokemon if a victory
  */
 export class GameOverPhase extends BattlePhase {
+  public override readonly phaseName = "GameOverPhase";
+
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];
 
@@ -54,7 +56,8 @@ export class GameOverPhase extends BattlePhase {
     // Handle Mystery Encounter special Game Over cases
     // Situations such as when player lost a battle, but it isn't treated as full Game Over
     if (!this.isVictory && currentBattle.mysteryEncounter?.onGameOver && !currentBattle.mysteryEncounter.onGameOver()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     if (this.isVictory && gameMode.isEndless) {

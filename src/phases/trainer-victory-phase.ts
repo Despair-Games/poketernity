@@ -11,13 +11,16 @@ import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export class TrainerVictoryPhase extends BattlePhase {
+  public override readonly phaseName = "TrainerVictoryPhase";
+
   public override start(): void {
     const { charSprite, currentBattle, ui } = globalScene;
     const { trainer, waveIndex } = currentBattle;
     globalScene.disableMenu = true;
 
     if (!trainer) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.audioManager.playBgm(trainer.config.victoryBgm);
@@ -56,7 +59,9 @@ export class TrainerVictoryPhase extends BattlePhase {
       () => {
         const victoryMessages = trainer.getVictoryMessages();
         let message: string;
-        globalScene.executeWithSeedOffset(() => (message = randSeedItem(victoryMessages)), waveIndex);
+        globalScene.executeWithSeedOffset(() => {
+          message = randSeedItem(victoryMessages);
+        }, waveIndex);
         message = message!; // tell TS compiler it's defined now
 
         const showMessage = (): void => {

@@ -16,6 +16,8 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {
+  public override readonly phaseName = "RevivalBlessingPhase";
+
   protected readonly user: PlayerPokemon;
 
   constructor(user: PlayerPokemon) {

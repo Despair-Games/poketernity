@@ -19,6 +19,8 @@ import i18next from "i18next";
  * @extends Phase
  */
 export class EggLapsePhase extends Phase {
+  public override readonly phaseName = "EggLapsePhase";
+
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
 

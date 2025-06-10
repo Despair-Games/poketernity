@@ -13,6 +13,8 @@ import i18next from "i18next";
  * @extends Phase
  */
 export class EndCardPhase extends Phase {
+  public override readonly phaseName = "EndCardPhase";
+
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
 

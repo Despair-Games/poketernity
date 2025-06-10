@@ -7,6 +7,8 @@ import { settings } from "#system/settings-manager";
 import { NumberHolder } from "#utils/common-utils";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
+  public override readonly phaseName = "ShowPartyExpBarPhase";
+
   private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {

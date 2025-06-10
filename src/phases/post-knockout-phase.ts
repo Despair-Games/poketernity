@@ -13,6 +13,8 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
  * - If there are no more unfainted pokemon on the enemy team, unshift a {@linkcode VictoryPhase}
  */
 export class PostKnockoutPhase extends PokemonPhase {
+  public override readonly phaseName = "PostKnockoutPhase";
+
   /**
    * If `true`, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase.
    * Only used by Mystery Encounters.
@@ -41,7 +43,8 @@ export class PostKnockoutPhase extends PokemonPhase {
 
     if (isMysteryEncounter) {
       handleMysteryEncounterVictory(false, this.isExpOnly);
-      return this.end();
+      this.end();
+      return;
     }
 
     // If any enemy Pokemon are still alive on the field or waiting for its fainting animation, do not advance a wave.

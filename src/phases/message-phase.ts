@@ -2,6 +2,8 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
 export class MessagePhase extends Phase {
+  public override readonly phaseName = "MessagePhase";
+
   private text: string;
   private readonly callbackDelay: number | null;
   private readonly prompt: boolean | null;

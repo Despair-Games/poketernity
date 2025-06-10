@@ -14,14 +14,18 @@ import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 import { getStatusEffectActivationText } from "#utils/status-effect-utils";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
+  public override readonly phaseName = "PostTurnStatusEffectPhase";
+
   public override start(): void {
     const pokemon = this.getPokemon();
 
     if (!pokemon?.isActive(true)) {
-      return this.end();
+      this.end();
+      return;
     }
     if (!pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
-      return this.end();
+      this.end();
+      return;
     }
 
     pokemon.advanceStatusCounter();
@@ -31,7 +35,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     applyAbAttrs<BlockStatusDamageAbAttr>(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
 
     if (cancelled.value) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.phaseManager.queueMessagePhase(

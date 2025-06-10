@@ -36,6 +36,8 @@ import i18next from "i18next";
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {
+  public override readonly phaseName = "CommandPhase";
+
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
   protected fieldIndex: number;
 

@@ -8,6 +8,8 @@ import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import i18next from "i18next";
 
 export class SelectTargetPhase extends PokemonPhase {
+  public override readonly phaseName = "SelectTargetPhase";
+
   public override start(): void {
     super.start();
 

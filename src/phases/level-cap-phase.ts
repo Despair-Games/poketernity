@@ -7,6 +7,8 @@ import i18next from "i18next";
  * @extends FieldPhase
  */
 export class LevelCapPhase extends FieldPhase {
+  public override readonly phaseName = "LevelCapPhase";
+
   public override start(): void {
     super.start();
 

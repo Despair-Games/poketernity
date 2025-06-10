@@ -9,6 +9,8 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
 import i18next from "i18next";
 
 export class TerastallizationPhase extends BattlePhase {
+  public override readonly phaseName = "TerastallizationPhase";
+
   public pokemon: Pokemon;
 
   constructor(pokemon: Pokemon) {

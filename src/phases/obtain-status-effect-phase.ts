@@ -13,6 +13,8 @@ import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#utils/st
  * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
+  public override readonly phaseName = "ObtainStatusEffectPhase";
+
   private readonly statusEffect: StatusEffect;
   private readonly turnsRemaining?: number;
   private readonly sourceText?: string | null;

@@ -23,6 +23,8 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
  * - Pushes a {@linkcode NewBattlePhase}
  */
 export class VictoryPhase extends PokemonPhase {
+  public override readonly phaseName = "VictoryPhase";
+
   public override start(): void {
     super.start();
 
@@ -44,7 +46,8 @@ export class VictoryPhase extends PokemonPhase {
       globalScene.score += gameMode.getClearScoreBonus();
       globalScene.updateScoreText();
       phaseManager.queueGameOverPhase({ isVictory: true });
-      return super.end();
+      super.end();
+      return;
     }
 
     phaseManager.createAndPushPhase("EggLapsePhase");
@@ -58,7 +61,8 @@ export class VictoryPhase extends PokemonPhase {
       phaseManager.createAndPushPhase("SelectModifierPhase", {
         customModifierSettings: this.getFixedBattleCustomModifiers(),
       });
-      return this.end();
+      this.end();
+      return;
     }
     if (isDaily) {
       phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.EXP_CHARM);
@@ -67,7 +71,8 @@ export class VictoryPhase extends PokemonPhase {
         phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.GOLDEN_POKEBALL);
       }
 
-      return this.end();
+      this.end();
+      return;
     }
 
     if (isEndless) {

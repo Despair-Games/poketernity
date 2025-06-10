@@ -3,6 +3,8 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 export class ShowAbilityPhase extends PokemonPhase {
+  public override readonly phaseName = "ShowAbilityPhase";
+
   private readonly passive: boolean;
 
   constructor(battlerIndex: BattlerIndex, passive: boolean = false) {

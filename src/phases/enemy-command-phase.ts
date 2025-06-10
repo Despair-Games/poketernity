@@ -25,6 +25,8 @@ import { FieldPhase } from "#phases/abstract-field-phase";
  * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
+  public override readonly phaseName = "EnemyCommandPhase";
+
   public readonly fieldIndex: number;
 
   constructor(fieldIndex: number) {

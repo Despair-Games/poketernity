@@ -60,6 +60,8 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
+  public override readonly phaseName = "MovePhase";
+
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
   protected _targets: BattlerIndex[];

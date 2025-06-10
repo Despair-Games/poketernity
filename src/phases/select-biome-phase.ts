@@ -10,6 +10,8 @@ import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { randSeedInt } from "#utils/random-utils";
 
 export class SelectBiomePhase extends BattlePhase {
+  public override readonly phaseName = "SelectBiomePhase";
+
   public override start(): void {
     super.start();
 

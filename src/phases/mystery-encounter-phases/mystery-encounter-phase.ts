@@ -27,6 +27,8 @@ import { isNil } from "#utils/common-utils";
  * @extends Phase
  */
 export class MysteryEncounterPhase extends Phase {
+  public override readonly phaseName = "MysteryEncounterPhase";
+
   protected optionSelectSettings?: OptionSelectSettings;
 
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 300;

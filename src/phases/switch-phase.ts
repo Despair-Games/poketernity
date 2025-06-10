@@ -14,6 +14,8 @@ import { PartyFilterNonFainted } from "#utils/party-ui-utils";
  * @extends BattlePhase
  */
 export class SwitchPhase extends BattlePhase {
+  public override readonly phaseName = "SwitchPhase";
+
   protected readonly fieldIndex: number;
 
   private readonly switchType: SwitchType;
@@ -48,7 +50,8 @@ export class SwitchPhase extends BattlePhase {
 
     // Skip modal switch if impossible (no remaining party members that aren't in battle)
     if (this.isModal && !playerInactiveParty.length) {
-      return this.end();
+      this.end();
+      return;
     }
 
     /**
@@ -59,12 +62,14 @@ export class SwitchPhase extends BattlePhase {
      * on the field. see also; battle.test.ts
      */
     if (this.isModal && !this.doReturn && !globalScene.getPlayerParty()[this.fieldIndex].isFainted()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     // Check if there is any space still in field
     if (this.isModal && playerActiveField.length >= currentBattle.getBattlerCount()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     // Override field index to 0 in case of double battle where 2/3 remaining legal party members fainted at once

@@ -4,6 +4,8 @@ import { UiMode } from "#enums/ui-mode";
 import type { ChallengeSelectUiHandler } from "#ui/challenges-select-ui-handler";
 
 export class SelectChallengePhase extends Phase {
+  public override readonly phaseName = "SelectChallengePhase";
+
   public override start(): void {
     super.start();
 

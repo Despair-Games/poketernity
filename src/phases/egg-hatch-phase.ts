@@ -22,6 +22,8 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
  * @extends Phase
  */
 export class EggHatchPhase extends Phase {
+  public override readonly phaseName = "EggHatchPhase";
+
   /** The egg that is hatching */
   private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */

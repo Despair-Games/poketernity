@@ -9,6 +9,8 @@ import { NextEncounterPhase } from "#phases/next-encounter-phase";
  * @extends NextEncounterPhase
  */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
+  public override readonly phaseName = "NewBiomeEncounterPhase";
+
   protected override doEncounter(): void {
     const { arenaEnemy, currentBattle, tweens } = globalScene;
 

@@ -4,6 +4,8 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 
 export class ReturnPhase extends SwitchSummonPhase {
+  public override readonly phaseName = "ReturnPhase";
+
   constructor(fieldIndex: number) {
     super(SwitchType.SWITCH, fieldIndex, -1, true);
   }

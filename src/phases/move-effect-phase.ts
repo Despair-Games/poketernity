@@ -49,6 +49,8 @@ import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
+  public override readonly phaseName = "MoveEffectPhase";
+
   private moveHistoryEntry: TurnMove;
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;

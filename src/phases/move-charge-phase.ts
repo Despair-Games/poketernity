@@ -16,6 +16,8 @@ import i18next from "i18next";
  * @extends {@linkcode PokemonPhase}
  */
 export class MoveChargePhase extends HitCheckPhase {
+  public override readonly phaseName = "MoveChargePhase";
+
   public override start() {
     super.start();
 

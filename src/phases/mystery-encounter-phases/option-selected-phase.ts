@@ -19,6 +19,8 @@ import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-
  * @extends Phase
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
+  public override readonly phaseName = "MysteryEncounterOptionSelectedPhase";
+
   protected onOptionSelect: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;
 

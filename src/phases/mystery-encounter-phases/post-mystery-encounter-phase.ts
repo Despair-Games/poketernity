@@ -18,6 +18,8 @@ import { isNil } from "#utils/common-utils";
  * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
+  public override readonly phaseName = "PostMysteryEncounterPhase";
+
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
   protected onPostOptionSelect?: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;

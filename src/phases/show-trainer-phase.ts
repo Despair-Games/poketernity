@@ -4,6 +4,8 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
 import { settings } from "#system/settings-manager";
 
 export class ShowTrainerPhase extends BattlePhase {
+  public override readonly phaseName = "ShowTrainerPhase";
+
   public override start(): void {
     super.start();
 

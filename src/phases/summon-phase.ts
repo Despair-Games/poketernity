@@ -10,9 +10,12 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
 import { settings } from "#system/settings-manager";
+import type { PhaseKey } from "#types/phase-types";
 import i18next from "i18next";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
+  public override readonly phaseName: PhaseKey = "SummonPhase";
+
   private readonly loaded: boolean;
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
@@ -56,7 +59,8 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         console.error("Party Details:\n", party);
         console.error("All available Pokemon were fainted or illegal!");
         globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
-        return this.end();
+        this.end();
+        return;
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party

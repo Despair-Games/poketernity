@@ -6,6 +6,8 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export class MoveAnimPhase<Anim extends MoveAnim> extends Phase {
+  public override readonly phaseName = "MoveAnimPhase";
+
   protected readonly anim: Anim;
   protected readonly onSubstitute: boolean;
 

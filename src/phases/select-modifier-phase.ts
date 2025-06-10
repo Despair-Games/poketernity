@@ -48,6 +48,8 @@ interface SelectModifierPhaseOptions {
 //#endregion
 
 export class SelectModifierPhase extends BattlePhase {
+  public override readonly phaseName = "SelectModifierPhase";
+
   private readonly rerollCount: number;
   private readonly modifierTiers?: ModifierTier[];
   private readonly customModifierSettings?: CustomModifierSettings;

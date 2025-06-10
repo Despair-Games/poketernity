@@ -24,6 +24,8 @@ import { SwitchType } from "#enums/switch-type";
  * @extends Phase
  */
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
+  public override readonly phaseName = "MysteryEncounterBattleStartCleanupPhase";
+
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */
@@ -59,7 +61,8 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
       globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
-      return this.end();
+      this.end();
+      return;
     }
 
     // Check for any KOd player mons and switch

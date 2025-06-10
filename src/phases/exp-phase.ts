@@ -10,6 +10,8 @@ import i18next from "i18next";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
+  public override readonly phaseName = "ExpPhase";
+
   private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {

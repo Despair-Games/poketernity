@@ -9,6 +9,8 @@ import { applyMoveAttrs } from "#utils/move-utils";
  * @extends BattlePhase
  */
 export class MoveHeaderPhase extends BattlePhase {
+  public override readonly phaseName = "MoveHeaderPhase";
+
   public readonly pokemon: Pokemon;
   public readonly move: PokemonMove;
 

@@ -15,6 +15,8 @@ import { executeIf } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoginPhase extends Phase {
+  public override readonly phaseName = "LoginPhase";
+
   private readonly showText: boolean;
 
   constructor(showText: boolean = true) {

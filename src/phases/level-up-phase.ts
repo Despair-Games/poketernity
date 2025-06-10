@@ -19,6 +19,8 @@ import i18next from "i18next";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
+  public override readonly phaseName = "LevelUpPhase";
+
   protected readonly lastLevel: number;
   protected readonly level: number;
   protected readonly pokemon: PlayerPokemon = this.getPlayerPokemon();
@@ -81,6 +83,6 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
       }
     }
 
-    return super.end();
+    super.end();
   }
 }

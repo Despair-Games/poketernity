@@ -12,6 +12,8 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
  * @extends PokemonPhase
  */
 export class PokemonTransformPhase extends PokemonPhase {
+  public override readonly phaseName = "PokemonTransformPhase";
+
   protected readonly targetIndex: BattlerIndex;
   private readonly playSound: boolean;
 
@@ -27,7 +29,8 @@ export class PokemonTransformPhase extends PokemonPhase {
     const target = globalScene.getField(true).find((p) => p.getBattlerIndex() === this.targetIndex);
 
     if (!target) {
-      return this.end();
+      this.end();
+      return;
     }
 
     user.summonData.speciesForm = target.getSpeciesForm();

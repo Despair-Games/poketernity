@@ -16,6 +16,8 @@ import i18next from "i18next";
  * @extends BattlePhase
  */
 export class CheckSwitchPhase extends BattlePhase {
+  public override readonly phaseName = "CheckSwitchPhase";
+
   protected readonly fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */
   protected readonly useName: boolean;

@@ -3,6 +3,8 @@ import { FieldPosition } from "#enums/field-position";
 import { BattlePhase } from "#phases/abstract-battle-phase";
 
 export class ToggleDoublePositionPhase extends BattlePhase {
+  public override readonly phaseName = "ToggleDoublePositionPhase";
+
   private readonly double: boolean;
 
   constructor(double: boolean) {

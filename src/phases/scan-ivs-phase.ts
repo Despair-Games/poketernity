@@ -13,6 +13,8 @@ import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 
 export class ScanIvsPhase extends PokemonPhase {
+  public override readonly phaseName = "ScanIvsPhase";
+
   private readonly shownIvs: number;
 
   constructor(battlerIndex: BattlerIndex, shownIvs: number) {
@@ -27,7 +29,8 @@ export class ScanIvsPhase extends PokemonPhase {
     const { gameData, ui } = globalScene;
 
     if (!this.shownIvs) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const pokemon = this.getPokemon();

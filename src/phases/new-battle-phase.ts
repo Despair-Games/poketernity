@@ -6,6 +6,8 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
  * @extends BattlePhase
  */
 export class NewBattlePhase extends BattlePhase {
+  public override readonly phaseName = "NewBattlePhase";
+
   public override start(): void {
     super.start();
 

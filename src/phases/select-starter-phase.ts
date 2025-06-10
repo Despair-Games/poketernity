@@ -16,6 +16,8 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export class SelectStarterPhase extends Phase {
+  public override readonly phaseName = "SelectStarterPhase";
+
   public override start(): void {
     super.start();
 

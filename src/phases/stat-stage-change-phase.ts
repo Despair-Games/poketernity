@@ -36,6 +36,8 @@ export interface SSCPhaseOptions {
 //#endregion
 
 export class StatStageChangePhase extends PokemonPhase {
+  public override readonly phaseName = "StatStageChangePhase";
+
   protected readonly stats: BattleStat[];
   protected readonly source: Pokemon | null;
   protected stages: number;
@@ -88,7 +90,8 @@ export class StatStageChangePhase extends PokemonPhase {
     const { add, arena, field, fieldSpritePipeline, tweens, time } = globalScene;
 
     if (!pokemon.isActive(true)) {
-      return super.end();
+      super.end();
+      return;
     }
 
     if (!this.ignoreAbilities && !this.bypassReflect) {
@@ -103,7 +106,8 @@ export class StatStageChangePhase extends PokemonPhase {
         reflected,
       );
       if (reflected.value) {
-        return super.end();
+        super.end();
+        return;
       }
     }
 
@@ -120,7 +124,8 @@ export class StatStageChangePhase extends PokemonPhase {
           this.options,
         );
       }
-      return super.end();
+      super.end();
+      return;
     }
 
     const stages = new NumberHolder(this.stages);
