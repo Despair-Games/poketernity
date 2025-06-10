@@ -272,17 +272,13 @@ export class GameStatsUiHandler extends UiHandler {
 
       const statY = statsBg.y + 5;
       // Create a single text object for all labels to save on resources
-      const statsLabels = new TextListContainer(statsBg.x + 8, statY, this.ROWS_ON_SCREEN, {
-        textStyle: TextStyle.STATS_LABEL,
-        lineSpacing: 12,
-      });
+      const statsLabels = new TextListContainer(statsBg.x + 8, statY, TextStyle.STATS_LABEL, this.ROWS_ON_SCREEN);
       this.statLabels.push(statsLabels);
 
       // Create a single text object for all values to save on resources
-      const statsValues = new TextListContainer(statsBg.x + statsBgWidth - 5, statY, this.ROWS_ON_SCREEN, {
-        textStyle: TextStyle.STATS_VALUE,
+      const statX = statsBg.x + statsBgWidth - 5;
+      const statsValues = new TextListContainer(statX, statY, TextStyle.STATS_VALUE, this.ROWS_ON_SCREEN, {
         textAlign: "right",
-        lineSpacing: 12,
       });
       this.statValues.push(statsValues);
 

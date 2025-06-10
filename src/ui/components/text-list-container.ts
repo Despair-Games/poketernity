@@ -5,10 +5,6 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 interface TextListContainerOptions {
   /**
-   * The {@linkcode TextStyle} that will be applied to all lines.
-   */
-  textStyle: TextStyle;
-  /**
    * Whether to use a {@linkcode BBCodeText} object instead of a basic {@linkcode TextObject}.
    * You should only set this to `true` if BBCode is needed. The BBCode should be part of the provided strings.
    */
@@ -19,10 +15,6 @@ interface TextListContainerOptions {
    * @defaultValue `left`
    */
   textAlign?: "left" | "center" | "right";
-  /**
-   * Optional spacing between each line.
-   */
-  lineSpacing?: number;
 }
 
 /**
@@ -51,17 +43,17 @@ export class TextListContainer extends Phaser.GameObjects.Container {
    * @param maxLines - The maximum number of lines to show at one.
    * @param options - The text style {@linkcode TextListContainerOptions}.
    */
-  constructor(x: number, y: number, maxLines: number, options: TextListContainerOptions) {
+  constructor(x: number, y: number, textStyle: TextStyle, maxLines: number, options?: TextListContainerOptions) {
     super(globalScene, x, y);
 
     this.maxLines = maxLines;
 
-    const align = options.textAlign ?? "left";
+    const align = options?.textAlign ?? "left";
 
-    if (options.useBBCode) {
-      this.textObject = addBBCodeTextObject(0, 0, "", options.textStyle, { maxLines, align });
+    if (options?.useBBCode) {
+      this.textObject = addBBCodeTextObject(0, 0, "", textStyle, { align });
     } else {
-      this.textObject = addTextObject(0, 0, "", options.textStyle, { maxLines, align });
+      this.textObject = addTextObject(0, 0, "", textStyle, { align });
     }
 
     // Place origin of the text object based on its alignment.
@@ -72,10 +64,6 @@ export class TextListContainer extends Phaser.GameObjects.Container {
       xOrigin = 1;
     }
     this.textObject.setOrigin(xOrigin, 0);
-
-    if (options.lineSpacing) {
-      this.textObject.setLineSpacing(options.lineSpacing);
-    }
 
     this.add(this.textObject);
   }
