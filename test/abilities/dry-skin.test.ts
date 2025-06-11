@@ -61,7 +61,7 @@ describe("Abilities - Dry Skin", () => {
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(enemy.hp).toBe(toDmgValue(enemy.getMaxHp() / 8) + 1);
+    expect(enemy).toHaveHp(toDmgValue(enemy.getMaxHp() / 8) + 1);
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
@@ -102,7 +102,7 @@ describe("Abilities - Dry Skin", () => {
     move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
-    expect(enemy.hp).toBe(toDmgValue(enemy.getMaxHp() / 4) + 1);
+    expect(enemy).toHaveHp(toDmgValue(enemy.getMaxHp() / 4) + 1);
   });
 
   it("does not heal, on opposing water move, if ability holder is protected", async () => {
@@ -115,7 +115,7 @@ describe("Abilities - Dry Skin", () => {
     move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
-    expect(enemy.hp).toBe(1);
+    expect(enemy).toHaveHp(1);
   });
 
   it("only heals once on opposing multi-strike water moves", async () => {
