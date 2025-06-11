@@ -68,7 +68,6 @@ import { MovePowerBoostAbAttr } from "#abilities/move-power-boost-ab-attr";
 import { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "#abilities/move-type-power-boost-ab-attr";
 import { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
-import { NoTransformAbilityAbAttr } from "#abilities/no-transform-ability-ab-attr";
 import { NonSuperEffectiveImmunityAbAttr } from "#abilities/non-super-effective-immunity-ab-attr";
 import { PokemonTypeChangeAbAttr } from "#abilities/pokemon-type-change-ab-attr";
 import { PostAttackApplyBattlerTagAbAttr } from "#abilities/post-attack-apply-battler-tag-ab-attr";
@@ -368,7 +367,8 @@ export function initAbilities() {
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonPressure", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       )
-      .partial(), // Does not affect PP cost for field-targeting moves or Snatch
+      // Does not affect PP cost for field-targeting moves or Snatch
+      .partial(),
     new Ability(AbilityId.THICK_FAT, 3)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 0.5)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.ICE, 0.5)
@@ -503,8 +503,10 @@ export function initAbilities() {
       .attr(PostDefendCritStatStageChangeAbAttr, Stat.ATK, 12),
     new Ability(AbilityId.UNBURDEN, 4)
       .attr(PostItemLostApplyBattlerTagAbAttr, BattlerTagType.UNBURDEN)
-      .bypassFaint() // Allows reviver seed to activate Unburden
-      .edgeCase(), // Should not restore Unburden boost if Pokemon loses then regains Unburden ability
+      // Allows reviver seed to activate Unburden
+      .bypassFaint()
+      // Should not restore Unburden boost if Pokemon loses then regains Unburden ability
+      .edgeCase(),
     new Ability(AbilityId.HEATPROOF, 4)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 0.5)
       .attr(ReduceBurnDamageAbAttr, 0.5)
@@ -595,7 +597,8 @@ export function initAbilities() {
       .attr(AnticipationAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       )
-      .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
+      // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
+      .edgeCase(),
     new Ability(AbilityId.FOREWARN, 4)
       .attr(ForewarnAbAttr),
     new Ability(AbilityId.UNAWARE, 4)
@@ -673,17 +676,20 @@ export function initAbilities() {
         WeatherType.SNOW,
         WeatherType.RAIN,
       ])
-      .partial() // Should also boosts stats of ally
+      // Should also boosts stats of ally
+      .partial()
       .ignorable(),
     new Ability(AbilityId.BAD_DREAMS, 4)
       .attr(BadDreamsAbAttr)
-      .edgeCase(), // When falling asleep, due to being drowsy, the ability flyout appears BEFORE the pokemon falls asleep
+      // When falling asleep, due to being drowsy, the ability flyout appears BEFORE the pokemon falls asleep
+      .edgeCase(),
     new Ability(AbilityId.PICKPOCKET, 5)
       .attr(PostDefendStealHeldItemAbAttr, (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target))
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(AbilityId.SHEER_FORCE, 5)
       .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 1.3)
-      .attr(MoveEffectChanceMultiplierAbAttr, 0), // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
+      // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
+      .attr(MoveEffectChanceMultiplierAbAttr, 0),
     new Ability(AbilityId.CONTRARY, 5)
       .attr(StatStageChangeMultiplierAbAttr, -1)
       .ignorable(),
@@ -748,10 +754,11 @@ export function initAbilities() {
       .attr(
         PostTurnLootAbAttr,
         "EATEN_BERRIES",
-        /** Rate is doubled when under sun {@link https://dex.pokemonshowdown.com/abilities/harvest} */
+        // Rate is doubled when under sun, see https://dex.pokemonshowdown.com/abilities/harvest
         (pokemon) => getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)(pokemon) ? 1 : 0.5,
       )
-      .edgeCase(), // Cannot recover berries used up by fling or natural gift (unimplemented)
+      // Cannot recover berries used up by fling or natural gift (unimplemented)
+      .edgeCase(),
     new Ability(AbilityId.TELEPATHY, 5)
       .attr(MoveImmunityAbAttr, (pokemon, attacker, move) => pokemon.getAlly() === attacker && move.isAttackMove())
       .ignorable(),
@@ -763,7 +770,8 @@ export function initAbilities() {
       .ignorable(),
     new Ability(AbilityId.POISON_TOUCH, 5)
       .attr(PostAttackApplyStatusEffectAbAttr, true, 30, StatusEffect.POISON)
-      .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
+      // Does not inflict poison if user gets inflicted with target's Mummy
+      .edgeCase(),
     new Ability(AbilityId.REGENERATOR, 5)
       .attr(PreSwitchOutHealAbAttr),
     new Ability(AbilityId.BIG_PECKS, 5)
@@ -785,7 +793,8 @@ export function initAbilities() {
       .uncopiable(),
     new Ability(AbilityId.INFILTRATOR, 5)
       .attr(InfiltratorAbAttr)
-      .partial(), // does not bypass Mist
+      // does not bypass Mist
+      .partial(),
     new Ability(AbilityId.MUMMY, 5)
       .attr(PostDefendAbilityGiveAbAttr, AbilityId.MUMMY)
       .bypassFaint(),
@@ -835,7 +844,8 @@ export function initAbilities() {
       .bypassFaint(),
     new Ability(AbilityId.VICTORY_STAR, 5)
       .attr(StatMultiplierAbAttr, Stat.ACC, 1.1)
-      .partial(), // Does not boost ally's accuracy
+      // Does not boost ally's accuracy
+      .partial(),
     new Ability(AbilityId.TURBOBLAZE, 5)
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonTurboblaze", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -1018,7 +1028,8 @@ export function initAbilities() {
       .unsuppressable()
       .unreplaceable()
       .bypassFaint()
-      .partial(), // Meteor form should protect against status effects and yawn
+      // Meteor form should protect against status effects and yawn
+      .partial(),
     new Ability(AbilityId.STAKEOUT, 7)
       .attr(MovePowerBoostAbAttr, (_user, target, _move) => !!target?.turnData.switchedInThisTurn, 2),
     new Ability(AbilityId.WATER_BUBBLE, 7)
@@ -1066,7 +1077,7 @@ export function initAbilities() {
       .uncopiable()
       .unsuppressable()
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr)
+      .noTransform()
       // Add BattlerTagType.DISGUISE if the pokemon is in its disguised form
       .conditionalAttr(
         (pokemon) => pokemon.formIndex === 0,
@@ -1138,7 +1149,8 @@ export function initAbilities() {
         [StatusEffect.POISON, StatusEffect.TOXIC],
         [ElementalType.STEEL, ElementalType.POISON],
       )
-      .edgeCase(), // fling with toxic orb (not implemented yet)
+      // fling with toxic orb (not implemented yet)
+      .edgeCase(),
     new Ability(AbilityId.COMATOSE, 7)
       .uncopiable()
       .unsuppressable()
@@ -1273,7 +1285,7 @@ export function initAbilities() {
      * @see {@linkcode GulpMissileTagAttr} and {@linkcode GulpMissileTag} for Gulp Missile implementation
      */
     new Ability(AbilityId.GULP_MISSILE, 8)
-      .attr(NoTransformAbilityAbAttr)
+      .noTransform()
       .uncopiable()
       .unsuppressable()
       .unreplaceable()
@@ -1308,7 +1320,7 @@ export function initAbilities() {
       .uncopiable()
       .unsuppressable()
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr)
+      .noTransform()
       // Add BattlerTagType.ICE_FACE if the pokemon is in ice face form
       .conditionalAttr(
         (pokemon) => pokemon.formIndex === 0,
@@ -1363,13 +1375,14 @@ export function initAbilities() {
     new Ability(AbilityId.NEUTRALIZING_GAS, 8)
       .attr(SuppressFieldAbilitiesAbAttr)
       .uncopiable()
-      .attr(NoTransformAbilityAbAttr)
+      .noTransform()
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonNeutralizingGas", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         }),
       )
-      .partial(), // A bunch of weird interactions with other abilities being suppressed then unsuppressed
+      // A bunch of weird interactions with other abilities being suppressed then unsuppressed
+      .partial(),
     new Ability(AbilityId.PASTEL_VEIL, 8)
       .attr(PostSummonUserFieldRemoveStatusEffectAbAttr, StatusEffect.POISON, StatusEffect.TOXIC)
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.POISON, StatusEffect.TOXIC)
@@ -1379,7 +1392,7 @@ export function initAbilities() {
       .attr(PostTurnFormChangeAbAttr, (p) => (p.getFormKey() ? 1 : 0))
       .uncopiable()
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr)
+      .noTransform()
       .condition((pokemon) => !pokemon.isTerastallized),
     new Ability(AbilityId.QUICK_DRAW, 8)
       .attr(BypassSpeedChanceAbAttr, 30),
@@ -1482,13 +1495,14 @@ export function initAbilities() {
       .uncopiable()
       .unsuppressable()
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr)
+      .noTransform()
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
       .attr(PreSwitchOutFormChangeAbAttr, (pokemon) => (!pokemon.isFainted() ? 1 : pokemon.formIndex))
       .bypassFaint(),
     new Ability(AbilityId.COMMANDER, 9)
       .attr(CommanderAbAttr)
-      .attr(DoubleBattleChanceAbAttr) // Custom implementation to allow more double battles
+      // Custom implementation to allow more double battles
+      .attr(DoubleBattleChanceAbAttr)
       .uncopiable()
       .unreplaceable()
       // Encore, Frenzy, and other non-`TURN_END` tags don't lapse correctly on the commanding Pokemon.
@@ -1509,8 +1523,9 @@ export function initAbilities() {
       )
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.PROTOSYNTHESIS, 0, WeatherType.SUNNY, WeatherType.HARSH_SUN)
       .uncopiable()
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
+      .noTransform()
+      // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
+      .partial(),
     new Ability(AbilityId.QUARK_DRIVE, 9)
       .conditionalAttr(
         getTerrainCondition(TerrainType.ELECTRIC),
@@ -1521,8 +1536,9 @@ export function initAbilities() {
       )
       .attr(PostTerrainChangeAddBattlerTagAbAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
       .uncopiable()
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
+      .noTransform()
+      // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
+      .partial(),
     new Ability(AbilityId.GOOD_AS_GOLD, 9)
       .attr(MoveImmunityAbAttr, (pokemon, attacker, move) => pokemon !== attacker && move.category === MoveCategory.STATUS)
       .ignorable(),
@@ -1587,7 +1603,8 @@ export function initAbilities() {
           return 1 + 0.1 * Math.min(user.isPlayer() ? playerFaints : enemyFaints, 5);
         },
       )
-      .partial(), // Counter resets every wave instead of on arena reset
+      // Counter resets every wave instead of on arena reset
+      .partial(),
     new Ability(AbilityId.COSTAR, 9)
       .attr(PostSummonCopyAllyStatsAbAttr),
     new Ability(AbilityId.TOXIC_DEBRIS, 9)
@@ -1618,41 +1635,42 @@ export function initAbilities() {
       .attr(PostSummonAllyHealAbAttr, 4, true),
     new Ability(AbilityId.TOXIC_CHAIN, 9)
       .attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC)
-      .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
+      // Does not inflict poison if user gets inflicted with target's Mummy
+      .edgeCase(),
     new Ability(AbilityId.EMBODY_ASPECT_TEAL, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPD], 1)
       .attr(PostSummonStatStageChangeAbAttr, [Stat.SPD], 1, true)
       .uncopiable()
       // TODO: confirm if this is true
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr),
+      .noTransform(),
     new Ability(AbilityId.EMBODY_ASPECT_WELLSPRING, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.SPDEF], 1)
       .attr(PostSummonStatStageChangeAbAttr, [Stat.SPDEF], 1, true)
       .uncopiable()
       // TODO: confirm if this is true
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr),
+      .noTransform(),
     new Ability(AbilityId.EMBODY_ASPECT_HEARTHFLAME, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.ATK], 1)
       .attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true)
       .uncopiable()
       // TODO: confirm if this is true
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr),
+      .noTransform(),
     new Ability(AbilityId.EMBODY_ASPECT_CORNERSTONE, 9)
       .attr(PostTeraFormChangeStatChangeAbAttr, [Stat.DEF], 1)
       .attr(PostSummonStatStageChangeAbAttr, [Stat.DEF], 1, true)
       .uncopiable()
       // TODO: confirm if this is true
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr),
+      .noTransform(),
     new Ability(AbilityId.TERA_SHIFT, 9)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.getFormKey() ? 0 : 1))
       .uncopiable()
       .unsuppressable()
       .unreplaceable()
-      .attr(NoTransformAbilityAbAttr),
+      .noTransform(),
     new Ability(AbilityId.TERA_SHELL, 9)
       .attr(FullHpResistTypeAbAttr)
       .uncopiable()
@@ -1670,7 +1688,7 @@ export function initAbilities() {
   );
 }
 
-//#region Helpers
+// #region Helpers
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -1717,4 +1735,4 @@ function getOncePerBattleCondition(ability: AbilityId): AbAttrCondition {
   };
 }
 
-//#endregion
+// #endregion

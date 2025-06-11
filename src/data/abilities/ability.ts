@@ -18,6 +18,7 @@ export class Ability implements Localizable {
   public isSuppressable: boolean = true;
   public isCopiable: boolean = true;
   public isReplaceable: boolean = true;
+  public worksWhenTransformed: boolean = true;
   public attrs: AbAttr[] = [];
   public conditions: AbAttrCondition[] = [];
 
@@ -105,6 +106,11 @@ export class Ability implements Localizable {
 
   unreplaceable(): Ability {
     this.isReplaceable = false;
+    return this;
+  }
+
+  noTransform(): Ability {
+    this.worksWhenTransformed = false;
     return this;
   }
 
