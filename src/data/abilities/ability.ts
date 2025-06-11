@@ -9,24 +9,28 @@ import i18next from "i18next";
 export class Ability implements Localizable {
   public id: AbilityId;
 
-  private nameAppend: string;
+  private nameAppend: string = "";
   public name: string;
   public description: string;
   public generation: number;
-  public isBypassFaint: boolean;
-  public isIgnorable: boolean;
-  public attrs: AbAttr[];
-  public conditions: AbAttrCondition[];
+  public isBypassFaint: boolean = false;
+  public isIgnorable: boolean = false;
+  public isSuppressable: boolean = true;
+  public isCopiable: boolean = true;
+  public isReplaceable: boolean = true;
+  public attrs: AbAttr[] = [];
+  public conditions: AbAttrCondition[] = [];
 
   constructor(id: AbilityId, generation: number) {
     this.id = id;
-
-    this.nameAppend = "";
     this.generation = generation;
-    this.attrs = [];
-    this.conditions = [];
 
     this.localize();
+  }
+
+  /** @returns `true` if both {@linkcode isCopiable} and {@linkcode isReplaceable} are `true` */
+  public get isSwappable(): boolean {
+    return this.isCopiable && this.isReplaceable;
   }
 
   localize(): void {
@@ -86,6 +90,21 @@ export class Ability implements Localizable {
 
   ignorable(): Ability {
     this.isIgnorable = true;
+    return this;
+  }
+
+  unsuppressable(): Ability {
+    this.isSuppressable = false;
+    return this;
+  }
+
+  uncopiable(): Ability {
+    this.isCopiable = false;
+    return this;
+  }
+
+  unreplaceable(): Ability {
+    this.isReplaceable = false;
     return this;
   }
 

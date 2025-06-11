@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -27,7 +26,6 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
 
   /** Causes the effect to fail when the target's ability is unsupressable or already suppressed. */
   override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) =>
-      !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
+    return (_user, target, _move) => target.getAbility().isSuppressable && !target.summonData.abilitySuppressed;
   }
 }

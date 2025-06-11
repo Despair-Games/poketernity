@@ -6,6 +6,7 @@ import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-d
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
 import type { AlwaysHitAbAttr } from "#abilities/always-hit-ab-attr";
 import type { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
+import type { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import type { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import type { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
@@ -98,30 +99,20 @@ import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature
 import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import type { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
-import type { UncopiableAbilityAbAttr } from "#abilities/uncopiable-ability-ab-attr";
-import type { UnsuppressableAbilityAbAttr } from "#abilities/unsuppressable-ability-ab-attr";
-import type { UnswappableAbilityAbAttr } from "#abilities/unswappable-ability-ab-attr";
 import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
 import type { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-move-type-power-boost-ab-attr";
 import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import type { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 export const AbAttrFlag = {
   /** @see {@linkcode AbAttr} */
   UNSPECIFIED: -1,
-  /** @see {@linkcode UncopiableAbilityAbAttr} */
-  UNCOPIABLE_ABILITY: 1,
-  /** @see {@linkcode UnsuppressableAbilityAbAttr} */
-  UNSUPPRESSABLE_ABILITY: 2,
   /** @see {@linkcode PostDefendAbilityGiveAbAttr} */
   POST_DEFEND_ABILITY_GIVE: 3,
-  /** @see {@linkcode UnswappableAbilityAbAttr} */
-  UNSWAPPABLE_ABILITY: 4,
   /** @see {@linkcode PostDamageForceSwitchAbAttr} */
   POST_DAMAGE_FORCE_SWITCH: 5,
   /** @see {@linkcode SuppressFieldAbilitiesAbAttr} */
