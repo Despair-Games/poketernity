@@ -32,7 +32,7 @@ import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import type { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
-import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
 import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
@@ -3277,14 +3277,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(ModifiedDamageAttr, source, this, move, damage);
 
     if (this.isFullHp()) {
-      applyAbFunc<PreDefendFullHpEndureAbAttr>(
-        AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE,
-        this,
-        simulated,
-        source,
-        move,
-        damage,
-      );
+      applyAbFunc<SturdyAbAttr>(AbAttrFlag.STURDY, this, simulated, source, move, damage);
     }
 
     // debug message for when damage is applied (i.e. not simulated)
