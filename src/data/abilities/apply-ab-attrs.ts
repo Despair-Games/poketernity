@@ -122,7 +122,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
         message = attr.getTriggerMessage(pokemon, ability.name, ...args);
 
         if (message && !simulated) {
-          globalScene.phaseManager.queueMessagePhase(message);
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
         }
       }
 

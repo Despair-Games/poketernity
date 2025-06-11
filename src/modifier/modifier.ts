@@ -1632,7 +1632,8 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
         {
@@ -1732,7 +1733,8 @@ export class HitHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
         {
@@ -1910,14 +1912,19 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
-      message: i18next.t("modifier:pokemonInstantReviveApply", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        typeName: this.type.name,
-      }),
-      showFullHpMessage: false,
-      revive: true,
-    });
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
+      pokemon.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / 2),
+      {
+        message: i18next.t("modifier:pokemonInstantReviveApply", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          typeName: this.type.name,
+        }),
+        showFullHpMessage: false,
+        revive: true,
+      },
+    );
 
     // Remove any status the Pokemon had before fainting
     pokemon.resetStatus(false, true);
@@ -2736,7 +2743,7 @@ export class MoneyInterestModifier extends PersistentModifier {
       moneyAmount: formattedMoneyAmount,
       typeName: this.type.name,
     });
-    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message, undefined, true);
 
     return true;
   }

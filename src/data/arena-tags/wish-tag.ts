@@ -42,7 +42,7 @@ export class WishTag extends ArenaTag {
     const target = globalScene.getPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.phaseManager.queueMessagePhase(this.triggerMessage);
-      globalScene.phaseManager.queuePokemonHealPhase(target.getBattlerIndex(), this.healHp);
+      globalScene.phaseManager.createAndUnshiftPhase("PokemonHealPhase", target.getBattlerIndex(), this.healHp);
     }
   }
 }

@@ -178,7 +178,7 @@ export class StatStageChangePhase extends PokemonPhase {
           messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
         }
         for (const message of messages) {
-          globalScene.phaseManager.queueMessagePhase(message);
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
         }
       }
 

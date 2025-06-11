@@ -1,10 +1,3 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { ChargeAnim } from "#enums/charge-anim";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
-
-import { MoveChargeAnim } from "#animations/move-charge-anim";
 import type { Phase } from "#app/phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
@@ -642,49 +635,8 @@ export class PhaseManager {
     promptDelay?: number | null,
     defer: boolean = false,
   ) {
-    if (!defer) {
-      this.createAndUnshiftPhase("MessagePhase", message, callbackDelay, prompt, promptDelay);
-    } else {
-      this.createAndPushPhase("MessagePhase", message, callbackDelay, prompt, promptDelay);
-    }
-  }
-
-  /**
-   * Queues a new {@linkcode PokemonHealPhase} for the given {@linkcode BattlerIndex}.
-   * @param battlerIndex - The {@linkcode BattlerIndex} of the pokemon to heal
-   * @param hpHealed - The amount of HP to heal
-   * @param params_2 - The various {@linkcode PokemonHealPhaseOptions | optional parameters} of `PokemonHealPhase`
-   */
-  public queuePokemonHealPhase(...params: ConstructorParameters<typeof PokemonHealPhase>) {
-    this.createAndUnshiftPhase("PokemonHealPhase", ...params);
-  }
-
-  /**
-   * Adds a new {@linkcode MoveChargePhase} to the phase queue.
-   * @param battlerIndex - The user's {@linkcode BattlerIndex}
-   * @param targets - Array of target `BattlerIndex`es
-   * @param move - The {@linkcode PokemonMove} being used
-   */
-  public queueMoveChargePhase(...params: ConstructorParameters<typeof MoveChargePhase>): void {
-    this.createAndUnshiftPhase("MoveChargePhase", ...params);
-  }
-
-  /**
-   * Inserts a new {@linkcode SelectTargetPhase} to the phase queue.
-   * @param fieldIndex - The selected target's {@linkcode BattlerIndex}
-   */
-  public queueSelectTargetPhase(...params: ConstructorParameters<typeof SelectTargetPhase>): void {
-    this.createAndUnshiftPhase("SelectTargetPhase", ...params);
-  }
-
-  /**
-   * Adds a new {@linkcode MoveAnimPhase} to the phase queue.
-   * @param chargeAnim - The {@linkcode ChargeAnim} to be used
-   * @param moveId - The {@linkcode MoveId} to be used
-   * @param user - The {@linkcode Pokemon} using the move
-   */
-  public queueMoveAnimPhase(...params: ConstructorParameters<typeof MoveChargeAnim>): void {
-    this.createAndUnshiftPhase("MoveAnimPhase", new MoveChargeAnim(...params));
+    const schedulePhase = defer ? this.createAndPushPhase : this.createAndUnshiftPhase;
+    schedulePhase("MessagePhase", message, callbackDelay, prompt, promptDelay);
   }
 
   /**

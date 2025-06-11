@@ -46,7 +46,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
             getPokemonNameWithAffix(pokemon),
             this.sourceText,
           );
-          globalScene.phaseManager.queueMessagePhase(effectObtainText);
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", effectObtainText);
           this.end();
         });
         return;
@@ -56,7 +56,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
         this.statusEffect ?? StatusEffect.NONE,
         getPokemonNameWithAffix(pokemon),
       );
-      globalScene.phaseManager.queueMessagePhase(effectOverlapText);
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", effectOverlapText);
     }
     this.end();
   }

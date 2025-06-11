@@ -102,7 +102,7 @@ export class PendingHealTag extends ArenaTag {
         return this.apply(arena, simulated, pokemon);
       }
 
-      globalScene.phaseManager.queuePokemonHealPhase(targetIndex, pokemon.getMaxHp(), {
+      globalScene.phaseManager.createAndUnshiftPhase("PokemonHealPhase", targetIndex, pokemon.getMaxHp(), {
         message: i18next.t(healMessageKey, { pokemonName: getPokemonNameWithAffix(sourcePokemon) }),
         healStatus: true,
         fullRestorePP: restorePP,

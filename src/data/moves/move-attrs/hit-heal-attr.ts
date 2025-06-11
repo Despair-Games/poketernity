@@ -52,7 +52,7 @@ export class HitHealAttr extends MoveEffectAttr {
         message = "";
       }
     }
-    globalScene.phaseManager.queuePokemonHealPhase(user.getBattlerIndex(), healAmount, {
+    globalScene.phaseManager.createAndUnshiftPhase("PokemonHealPhase", user.getBattlerIndex(), healAmount, {
       message,
       showFullHpMessage: false,
       skipAnim: true,

@@ -68,7 +68,8 @@ export class SeededTag extends BattlerTag {
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
-          globalScene.phaseManager.queuePokemonHealPhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "PokemonHealPhase",
             source.getBattlerIndex(),
             !reverseDrain ? damage : damage * -1,
             {

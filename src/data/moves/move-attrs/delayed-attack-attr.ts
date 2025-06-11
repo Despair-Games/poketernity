@@ -44,7 +44,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
     if (!virtual) {
       overridden.value = true;
-      globalScene.phaseManager.queueMoveAnimPhase(this.chargeAnim, move.id, user);
+      globalScene.phaseManager.createAndUnshiftPhase("MoveAnimPhase", this.chargeAnim, move.id, user);
       globalScene.phaseManager.queueMessagePhase(
         this.chargeText
           .replace("{TARGET}", getPokemonNameWithAffix(target))

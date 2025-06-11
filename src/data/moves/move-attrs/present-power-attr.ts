@@ -33,9 +33,14 @@ export class PresentPowerAttr extends VariablePowerAttr {
     } else if (powerSeed < 100) {
       // If this move is multi-hit, disable all other hits
       user.stopMultiHit();
-      globalScene.phaseManager.queuePokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
-        message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
-      });
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
+        target.getBattlerIndex(),
+        toDmgValue(target.getMaxHp() / 4),
+        {
+          message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
+        },
+      );
     }
 
     return true;

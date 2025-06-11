@@ -70,7 +70,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         pokemon.waveData.berriesEaten.push(berryType);
         const hpHealed = new NumberHolder(toDmgValue(pokemon.getMaxHp() / 4));
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, hpHealed);
-        globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), hpHealed.value, {
+        globalScene.phaseManager.createAndUnshiftPhase("PokemonHealPhase", pokemon.getBattlerIndex(), hpHealed.value, {
           message: i18next.t("battle:hpHealBerry", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             berryName: getBerryName(berryType),
