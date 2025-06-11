@@ -64,6 +64,6 @@ describe("Moves - Doodle", () => {
     await game.toEndOfTurn();
 
     // Enemies should have been intimidated twice
-    expect(game.field.getEnemyPokemon().getStatStage(Stat.ATK)).toBe(-2);
+    expect(game.field.getEnemyPokemon()).toHaveStatStage(Stat.ATK, -2);
   });
 });

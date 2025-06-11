@@ -52,6 +52,6 @@ describe("Moves - Skill Swap", () => {
     await game.toEndOfTurn();
 
     // player atk should be -1 after opponent gains intimidate and it activates
-    expect(game.scene.getPlayerPokemon()?.getStatStage(Stat.ATK)).toBe(-1);
+    expect(game.field.getPlayerPokemon()).toHaveStatStage(Stat.ATK, -1);
   });
 });

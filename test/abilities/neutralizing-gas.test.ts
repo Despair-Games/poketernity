@@ -47,7 +47,7 @@ describe.todo("Abilities - Neutralizing Gas", () => {
     await game.toEndOfTurn();
 
     // Intimidate is suppressed, so the attack stat should not be lowered
-    expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(0);
+    expect(game.field.getPlayerPokemon()).toHaveStatStage(Stat.ATK, 0);
   });
 
   it("should allow the user's passive to activate", async () => {
@@ -57,7 +57,7 @@ describe.todo("Abilities - Neutralizing Gas", () => {
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(1);
+    expect(game.field.getPlayerPokemon()).toHaveStatStage(Stat.ATK, 1);
   });
 
   // TODO: https://github.com/Despair-Games/poketernity/issues/1211
@@ -70,7 +70,7 @@ describe.todo("Abilities - Neutralizing Gas", () => {
     await game.toEndOfTurn();
 
     // Intimidate is suppressed even when the user's speed is lower
-    expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(0);
+    expect(game.field.getPlayerPokemon()).toHaveStatStage(Stat.ATK, 0);
   });
 
   it("should activate other abilities when removed", async () => {
@@ -82,14 +82,14 @@ describe.todo("Abilities - Neutralizing Gas", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(0);
+    expect(enemyPokemon).toHaveStatStage(Stat.ATK, 0);
+    expect(enemyPokemon).toHaveStatStage(Stat.DEF, 0);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
     // Enemy removes user's ability, so both abilities are activated
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
-    expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(1);
+    expect(enemyPokemon).toHaveStatStage(Stat.ATK, 1);
+    expect(enemyPokemon).toHaveStatStage(Stat.DEF, 1);
   });
 
   it("should not activate the user's other ability when removed", async () => {
@@ -98,12 +98,12 @@ describe.todo("Abilities - Neutralizing Gas", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     // Neutralising gas user's passive is still active
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
+    expect(enemyPokemon).toHaveStatStage(Stat.ATK, -1);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
     // Intimidate did not reactivate after neutralizing gas was removed
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
+    expect(enemyPokemon).toHaveStatStage(Stat.ATK, -1);
   });
 
   it("should only deactivate when all setters are off the field", async () => {
