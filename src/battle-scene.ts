@@ -139,7 +139,7 @@ import { BooleanHolder, fixedNumber, getTSEnumValues, isBetween, isNil, NumberHo
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
-import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randItem, randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
 import { formatMoney, shiftCharCodes } from "#utils/string-utils";
 import i18next from "i18next";
@@ -961,14 +961,24 @@ export default class BattleScene extends SceneBase {
     }
     if (Overrides.ENEMY_SPECIES_OVERRIDE) {
       species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
+
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
+
+      // Ensure the gender from the data source is valid for the overridden species
+      if (!isNil(dataSource?.gender)) {
+        if (dataSource.gender === Gender.GENDERLESS && !isNil(species.malePercent)) {
+          dataSource.gender = species.malePercent > 0 ? Gender.MALE : Gender.FEMALE;
+        } else if (dataSource.gender !== Gender.GENDERLESS && isNil(species.malePercent)) {
+          dataSource.gender = Gender.GENDERLESS;
+        }
+      }
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);
 
     if (boss && !dataSource) {
-      const secondaryIvs = getIvsFromId();
+      const secondaryIvs = pokemon.generateIvs();
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
         pokemon.ivs[s] = Math.round(

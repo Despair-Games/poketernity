@@ -255,6 +255,75 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(donphanDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
   });
 
+  it("should unlock a default gender for new pre-evolutions when catching a genderless mon", async () => {
+    await game.scene.initStarterColors();
+    const species = getPokemonSpecies(SpeciesId.SHEDINJA);
+    const nincadaDexData = gameData.dexData[SpeciesId.NINCADA];
+    const ninjaskDexData = gameData.dexData[SpeciesId.NINJASK];
+    const shedinjaDexData = gameData.dexData[SpeciesId.SHEDINJA];
+
+    expect(nincadaDexData.caughtAttr).toBeFalsy();
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr).toBeFalsy();
+
+    // Catch a (genderless) Shedinja
+    const shedinjaCatch = new PlayerPokemon(species, 5, 0, 0, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+    const newStarters = await gameData.setPokemonCaught(shedinjaCatch, true, false, false);
+    expect(newStarters).toStrictEqual([SpeciesId.NINCADA]);
+
+    // genderless mon doesn't get a MALE of FEMALE DexAttr
+    expect(shedinjaDexData.caughtAttr).toBeTruthy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.FEMALE).toBeFalsy();
+
+    // Nincada had no gender unlocked but is not genderless, default to male
+    expect(nincadaDexData.caughtAttr & DexAttr.MALE).toBeTruthy();
+    expect(nincadaDexData.caughtAttr & DexAttr.FEMALE).toBeFalsy();
+
+    // Ninjask does not get marked as caught by catching Shedinja
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+  });
+
+  it("should not unlock a default gender for already caught pre-evolutions when catching a genderless mon", async () => {
+    await game.scene.initStarterColors();
+    const nincadaSpecies = getPokemonSpecies(SpeciesId.NINCADA);
+    const shedinjaSpecies = getPokemonSpecies(SpeciesId.SHEDINJA);
+    const nincadaDexData = gameData.dexData[SpeciesId.NINCADA];
+    const ninjaskDexData = gameData.dexData[SpeciesId.NINJASK];
+    const shedinjaDexData = gameData.dexData[SpeciesId.SHEDINJA];
+
+    expect(nincadaDexData.caughtAttr).toBeFalsy();
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr).toBeFalsy();
+
+    // Catch a female Nincada
+    const ninjaskCatch = new PlayerPokemon(nincadaSpecies, 5, 0, 0, Gender.FEMALE, false, 0, [], Nature.MILD);
+    let newStarters = await gameData.setPokemonCaught(ninjaskCatch, true, false, false);
+    expect(newStarters).toStrictEqual([SpeciesId.NINCADA]);
+
+    expect(nincadaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(nincadaDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr).toBeFalsy();
+
+    // Catch a (genderless) Shedinja
+    const shedinjaCatch = new PlayerPokemon(shedinjaSpecies, 5, 0, 0, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+    newStarters = await gameData.setPokemonCaught(shedinjaCatch, true, false, false);
+    expect(newStarters).toHaveLength(0);
+
+    // genderless mon doesn't get a MALE of FEMALE DexAttr
+    expect(shedinjaDexData.caughtAttr).toBeTruthy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.FEMALE).toBeFalsy();
+
+    // Nincada already had the Female gender unlocked, no need to get male unlocked
+    expect(nincadaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(nincadaDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
+
+    // Ninjask does not get marked as caught by catching Shedinja
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+  });
+
   it("should not unlock non existing forms for a caught mon's pre-evolutions", async () => {
     await game.scene.initStarterColors();
     const species = getPokemonSpecies(SpeciesId.PIKACHU);
