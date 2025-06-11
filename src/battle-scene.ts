@@ -976,8 +976,18 @@ export default class BattleScene extends SceneBase {
     }
     if (Overrides.ENEMY_SPECIES_OVERRIDE) {
       species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
+
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
+
+      // Ensure the gender from the data source is valid for the overridden species
+      if (!isNil(dataSource?.gender)) {
+        if (dataSource.gender === Gender.GENDERLESS && !isNil(species.malePercent)) {
+          dataSource.gender = species.malePercent > 0 ? Gender.MALE : Gender.FEMALE;
+        } else if (dataSource.gender !== Gender.GENDERLESS && isNil(species.malePercent)) {
+          dataSource.gender = Gender.GENDERLESS;
+        }
+      }
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);

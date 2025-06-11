@@ -36,6 +36,7 @@ import type { Device } from "#enums/devices";
 import type { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
+import { Gender } from "#enums/gender";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
@@ -99,7 +100,7 @@ export function decrypt(data: string, bypassLogin: boolean): string {
  */
 export interface DexAttrProps {
   shiny: boolean;
-  female: boolean;
+  gender: Gender;
   variant: Variant;
   formIndex: number;
 }
@@ -1494,6 +1495,7 @@ export class GameData {
       const caughtAttr = dexEntry.caughtAttr;
 
       const currentFormIndex = pokemon.formIndex;
+      const currentGender = pokemon.gender;
 
       if (!pokemon.getSpeciesForm().isStarterSelectable) {
         pokemon.formIndex = pokemon.getSelectableFormIndex(); // Only unlock starter selectable forms
@@ -1508,7 +1510,21 @@ export class GameData {
         pokemon.formIndex = this.getFormIndex(caughtAttr);
       }
 
-      const dexAttr = pokemon.getDexAttr(); // Get the dex attr with the valid and starter selectable form index
+      /*
+       * Ensure that the gender is valid for this species. An invalid gender can happen when an evolved Species
+       * and its pre evolution Species don't have the same possible genders (gendered VS genderless).
+       * In this case it will default to using an already unlocked gender, or male if there is none.
+       */
+      const genderlessSpecies = isNil(species.malePercent);
+      const genderlessMon = currentGender === Gender.GENDERLESS;
+      if (genderlessMon && !genderlessSpecies) {
+        const isFemaleCaught = (caughtAttr & DexAttr.FEMALE) > 0;
+        pokemon.gender = isFemaleCaught || species.malePercent === 0 ? Gender.FEMALE : Gender.MALE;
+      } else if (!genderlessMon && genderlessSpecies) {
+        pokemon.gender = Gender.GENDERLESS;
+      }
+
+      const dexAttr = pokemon.getDexAttr(); // Get the dex attr with valid gender and form index
 
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
@@ -1560,11 +1576,15 @@ export class GameData {
             showMessage,
             unlockedStarters,
           ).then((result) => {
-            pokemon.formIndex = currentFormIndex; // Give the caught pokemon its correct form back
+            // Give the caught pokemon its correct form and gender back
+            pokemon.formIndex = currentFormIndex;
+            pokemon.gender = currentGender;
             resolve(result);
           });
         } else {
-          pokemon.formIndex = currentFormIndex; // Give the caught pokemon its correct form back
+          // Give the caught pokemon its correct form and gender back
+          pokemon.formIndex = currentFormIndex;
+          pokemon.gender = currentGender;
           resolve(unlockedStarters);
         }
       };
@@ -1901,7 +1921,12 @@ export class GameData {
    * @returns {@linkcode DexAttrProps} corresponding to the given dex attribute.
    */
   public getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
-    const female = !(dexAttr & DexAttr.MALE); // TODO: is that correct for genderless species?
+    let gender = Gender.GENDERLESS;
+    if (dexAttr & DexAttr.MALE) {
+      gender = Gender.MALE;
+    } else if (dexAttr & DexAttr.FEMALE) {
+      gender = Gender.FEMALE;
+    }
     const shiny = !(dexAttr & DexAttr.NON_SHINY);
     let variant: Variant = 0;
     if (shiny) {
@@ -1917,7 +1942,7 @@ export class GameData {
 
     return {
       shiny,
-      female,
+      gender,
       variant,
       formIndex,
     };
