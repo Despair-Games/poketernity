@@ -19,7 +19,12 @@ export class TurnInitPhase extends FieldPhase {
     globalScene.getPlayerField().forEach((p) => {
       // If this pokemon is in play and evolved into something illegal under the current challenge, force a switch
       if (p.isOnField() && !p.isAllowedInBattle()) {
-        phaseManager.queueMessagePhase(i18next.t("challenges:illegalEvolution", { pokemon: p.name }), null, true);
+        phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
+          i18next.t("challenges:illegalEvolution", { pokemon: p.name }),
+          undefined,
+          true,
+        );
 
         const allowedPokemon = globalScene.getPokemonAllowedInBattle();
 

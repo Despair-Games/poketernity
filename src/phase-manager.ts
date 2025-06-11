@@ -620,26 +620,6 @@ export class PhaseManager {
   /**  @todo Are these utils still necessary? */
 
   /**
-   * Adds a {@linkcode MessagePhase}, either to {@linkcode phaseQueuePrepend} or {@linkcode phaseQueue}
-   * @param message - The message to display (passed to `MessagePhase`)
-   * @param callbackDelay - (Optional) (passed to `MessagePhase`)
-   * @param prompt - (Optional) (passed to `MessagePhase`)
-   * @param promptDelay - (Optional) (passed to `MessagePhase`)
-   * @param defer - (Optional, default `false`)
-   *   Whether to use {@linkcode unshiftPhase} (`false`) or {@linkcode pushPhase} (`true`)
-   */
-  public queueMessagePhase(
-    message: string,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
-    defer: boolean = false,
-  ) {
-    const schedulePhase = defer ? this.createAndPushPhase : this.createAndUnshiftPhase;
-    schedulePhase("MessagePhase", message, callbackDelay, prompt, promptDelay);
-  }
-
-  /**
    * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
    *
    * @param battlerIndex - The {@linkcode BattlerIndex} to faint

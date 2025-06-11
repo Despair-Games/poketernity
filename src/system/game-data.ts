@@ -274,17 +274,19 @@ export class GameData {
         api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
-              globalScene.phaseManager.queueMessagePhase(
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
                 "Save data could not be found. If this is a new account, you can safely ignore this message.",
-                null,
+                undefined,
                 true,
               );
               return resolve(true);
             }
             if (saveDataOrErr?.includes("Too many connections")) {
-              globalScene.phaseManager.queueMessagePhase(
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
                 "Too many people are trying to connect and the server is overloaded. Please try again later.",
-                null,
+                undefined,
                 true,
               );
               return resolve(false);

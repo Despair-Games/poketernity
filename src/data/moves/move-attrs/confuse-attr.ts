@@ -22,7 +22,8 @@ export class ConfuseAttr extends AddBattlerTagAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
         );
       }

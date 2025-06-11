@@ -485,15 +485,17 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
   }
   if (showMessage) {
     if (changeValue < 0) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("mysteryEncounterMessages:paid_money", { amount: -changeValue }),
-        null,
+        undefined,
         true,
       );
     } else {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("mysteryEncounterMessages:receive_money", { amount: changeValue }),
-        null,
+        undefined,
         true,
       );
     }

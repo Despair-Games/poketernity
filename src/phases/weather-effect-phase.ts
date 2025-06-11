@@ -125,7 +125,10 @@ export class WeatherEffectPhase extends FieldPhase {
 
     const damage = toDmgValue(pokemon.getMaxHp() * WEATHER_DAMAGE_RATIO);
 
-    globalScene.phaseManager.queueMessagePhase(getWeatherDamageMessage(weather.weatherType, pokemon) ?? "");
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      getWeatherDamageMessage(weather.weatherType, pokemon) ?? "",
+    );
     pokemon.damageAndUpdate(damage, { result: HitResult.EFFECTIVE, preventEndure: true });
   }
 }

@@ -152,9 +152,10 @@ export class FaintPhase extends PokemonPhase {
       enemyFaintsHistory.push({ pokemon: pokemon, turn: turn });
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      null,
+      undefined,
       true,
     );
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);

@@ -39,7 +39,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       return;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
     );
 

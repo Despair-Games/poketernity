@@ -23,7 +23,8 @@ export class TerastallizationPhase extends BattlePhase {
     super.start();
 
     new CommonBattleAnim(CommonAnim.TERASTALLIZE, this.pokemon).play(false, () => {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battle:pokemonTerastallized", {
           pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
           type: i18next.t(`pokemonInfo:Type.${ElementalType[this.pokemon.teraType]}`),

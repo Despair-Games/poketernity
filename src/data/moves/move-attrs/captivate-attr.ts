@@ -25,7 +25,8 @@ export class CaptivateAttr extends MoveEffectAttr {
       return true;
     }
     // It doesn't affect pokemonNameWithAffix!
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("abilityTriggers:moveImmunity", {
         pokemonNameWithAffix: getPokemonNameWithAffix(target),
       }),

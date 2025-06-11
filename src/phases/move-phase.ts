@@ -284,7 +284,8 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         globalScene.phaseManager.createAndUnshiftPhase(
@@ -293,7 +294,8 @@ export class MovePhase extends BattlePhase {
           this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
@@ -814,7 +816,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    globalScene.phaseManager.queueMessagePhase(this.getMoveText(), 500);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.getMoveText(), 500);
   }
 
   /**
@@ -837,7 +839,7 @@ export class MovePhase extends BattlePhase {
   }
 
   public showFailedText(failedText?: string): void {
-    globalScene.phaseManager.queueMessagePhase(failedText ?? i18next.t("battle:attackFailed"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", failedText ?? i18next.t("battle:attackFailed"));
   }
 
   /**

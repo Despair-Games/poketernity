@@ -26,7 +26,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 
     if (this.message) {
-      globalScene.phaseManager.queueMessagePhase(this.message);
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.message);
     }
 
     return true;
