@@ -7,7 +7,7 @@ import { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import pad_dualshock from "#inputs/pad-dualshock";
-import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
+import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import {
   setSettingGamepad,
