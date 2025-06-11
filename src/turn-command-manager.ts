@@ -443,7 +443,7 @@ export class TurnCommandManager {
         undefined,
         cursor !== -1 && turnMove.ignorePP,
       ),
-      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex()),
+      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex(), true),
     );
 
     return true;
