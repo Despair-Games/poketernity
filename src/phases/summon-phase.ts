@@ -275,7 +275,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
-      globalScene.phaseManager.createAndPushPhase("ShinySparklePhase", pokemon.getBattlerIndex());
+      globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
     }
 
     pokemon.resetTurnData();
@@ -292,7 +292,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   protected queuePostSummon(): void {
-    globalScene.phaseManager.createAndPushPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
+    globalScene.phaseManager.createAndUnshiftPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
   }
 
   public getTrainerSlot(): TrainerSlot {

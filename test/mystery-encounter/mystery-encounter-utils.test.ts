@@ -285,7 +285,7 @@ describe("Mystery Encounter Utils", () => {
       const phaseSpy = vi.spyOn(game.scene.phaseManager, "createAndUnshiftPhase");
 
       queueEncounterMessage("mysteryEncounter:unit_test_dialogue");
-      const expectedParams = ["mysteryEncounter:unit_test_dialogue", null, true];
+      const expectedParams = ["mysteryEncounter:unit_test_dialogue", undefined, true];
       expect(phaseSpy).toHaveBeenCalledWith("MessagePhase", ...expectedParams);
     });
   });
