@@ -36,7 +36,7 @@ describe("Abilities - Dry Skin", () => {
   it.each([
     ["Harsh Sunlight", WeatherType.SUNNY],
     ["Extremely Harsh Sunlight", WeatherType.HARSH_SUN],
-  ])("looses 1/8 of max health in '%s' weather, at the end of each turn", async (_name, weather) => {
+  ])("loses 1/8 of max health in '%s' weather, at the end of each turn", async (_name, weather) => {
     const { override, classicMode, field, move } = game;
     override.weather(weather);
 
