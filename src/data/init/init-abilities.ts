@@ -596,9 +596,7 @@ export function initAbilities() {
     new Ability(AbilityId.ANTICIPATION, 4)
       .attr(AnticipationAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      )
-      // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
-      .edgeCase(),
+      ),
     new Ability(AbilityId.FOREWARN, 4)
       .attr(ForewarnAbAttr),
     new Ability(AbilityId.UNAWARE, 4)

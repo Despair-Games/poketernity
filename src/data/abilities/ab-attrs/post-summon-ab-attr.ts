@@ -5,6 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Base class for defining all {@linkcode Ability} Attributes post summon
  * @see {@linkcode applyPostSummon()}
+ * @todo Most post-summon abilities should activate when the pokemon gains the ability (such as from Skill Swap)
  */
 export abstract class PostSummonAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
