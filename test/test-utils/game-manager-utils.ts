@@ -42,14 +42,12 @@ export function generateStarter(scene: BattleScene, species: SpeciesId[]): Start
   for (const starter of starters) {
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
     const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
-    const starterGender =
-      starter.species.malePercent !== null ? (!starterProps.female ? Gender.MALE : Gender.FEMALE) : Gender.GENDERLESS;
     const starterPokemon = scene.addPlayerPokemon(
       starter.species,
       startingLevel,
       starter.abilityIndex,
       starterFormIndex,
-      starterGender,
+      starterProps.gender,
       starterProps.shiny,
       starterProps.variant,
       undefined,
