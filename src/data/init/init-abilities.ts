@@ -1276,11 +1276,12 @@ export function initAbilities() {
     new Ability(AbilityId.MIRROR_ARMOR, 8)
       .attr(ReflectStatStageChangeAbAttr)
       .ignorable(),
-    /**
+    /*
      * Right now, the logic is attached to Surf and Dive. Ideally, the post-defend/hit should be an
      * ability attribute but the current implementation of move effects for BattlerTag does not support this
      * in the case where Cramorant is fainted.
-     * @see {@linkcode GulpMissileTagAttr} and {@linkcode GulpMissileTag} for Gulp Missile implementation
+     *
+     * See `GulpMissileTagAttr` and `GulpMissileTag` for Gulp Missile implementation
      */
     new Ability(AbilityId.GULP_MISSILE, 8)
       .noTransform()
