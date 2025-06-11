@@ -28,7 +28,8 @@ export class StickyWebTag extends EntryHazardTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t(`arenaTag:stickyWebOnAdd${this.i18nSideKey}Side`, {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -47,7 +48,8 @@ export class StickyWebTag extends EntryHazardTag {
       }
 
       if (!cancelled.value) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }),
         );
         const stages = new NumberHolder(-1);

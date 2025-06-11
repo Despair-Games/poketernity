@@ -45,7 +45,8 @@ export abstract class TypeHazardTag extends EntryHazardTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t(this.onAddKey, { opponentDesc: source.getOpponentDescriptor() }),
       );
     }
@@ -77,7 +78,8 @@ export abstract class TypeHazardTag extends EntryHazardTag {
         return true;
       }
       const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });

@@ -82,7 +82,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
         pokemon.waveData.berriesEaten.push(berryType);
         if (pokemon.hasNonVolatileStatusEffect(false, true)) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
           );
         }
@@ -139,7 +140,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
           : pokemon.getMoveset().find((m) => m.getPpRatio() < 1);
         if (ppRestoreMove !== undefined) {
           ppRestoreMove!.ppUsed = Math.max(ppRestoreMove!.ppUsed - 10, 0);
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("battle:ppHealBerry", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               moveName: ppRestoreMove!.getName(),

@@ -33,7 +33,8 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
       true,
     );
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("abilityTriggers:postSummonTransform", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         targetName: target.name,

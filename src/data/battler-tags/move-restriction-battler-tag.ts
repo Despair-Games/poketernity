@@ -36,7 +36,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
 
       if (this.isMoveRestricted(move.moveId, pokemon)) {
         if (this.getInterruptedText(pokemon, move.moveId)) {
-          globalScene.phaseManager.queueMessagePhase(this.getInterruptedText(pokemon, move.moveId));
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.getInterruptedText(pokemon, move.moveId));
         }
         phase.cancel();
       }

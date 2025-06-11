@@ -29,7 +29,8 @@ export class PowderTag extends BattlerTag {
     super.onAdd(pokemon);
 
     // "{Pokemon} is covered in powder!"
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:powderOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -65,7 +66,10 @@ export class PowderTag extends BattlerTag {
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
-          globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:powderLapse", { moveName: move.name }));
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
+            i18next.t("battlerTags:powderLapse", { moveName: move.name }),
+          );
         }
       }
       return true;

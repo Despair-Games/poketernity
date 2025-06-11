@@ -32,7 +32,8 @@ export class ConfusedTag extends BattlerTag {
     super.onAdd(pokemon);
 
     globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -40,7 +41,8 @@ export class ConfusedTag extends BattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -48,7 +50,8 @@ export class ConfusedTag extends BattlerTag {
   override onOverlap(pokemon: Pokemon): void {
     super.onOverlap(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -59,14 +62,18 @@ export class ConfusedTag extends BattlerTag {
       || !isNil(Overrides.STATUS_ACTIVATION_OVERRIDE);
 
     if (ret) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
 
       const damage = this.getDamage(pokemon);
       if (damage > 0) {
-        globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapseHurtItself"));
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
+          i18next.t("battlerTags:confusedLapseHurtItself"),
+        );
         pokemon.damageAndUpdate(damage);
         pokemon.waveData.hitCount++;
         (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();

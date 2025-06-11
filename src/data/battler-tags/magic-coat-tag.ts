@@ -20,7 +20,8 @@ export class MagicCoatTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:magicCoatOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -33,7 +34,7 @@ export class MagicCoatTag extends BattlerTag {
     reflected: BooleanHolder,
   ): boolean {
     if (!simulated) {
-      globalScene.phaseManager.queueMessagePhase(this.getReflectionMessage(attacker, move));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.getReflectionMessage(attacker, move));
     }
     reflected.value = true;
     return true;

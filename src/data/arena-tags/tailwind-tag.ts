@@ -23,7 +23,10 @@ export class TailwindTag extends ArenaTag {
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:tailwindOnAdd${this.i18nSideKey}`));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t(`arenaTag:tailwindOnAdd${this.i18nSideKey}`),
+      );
     }
 
     const source = globalScene.getPokemonById(this.sourceId!); //TODO: this bang is questionable!
@@ -33,7 +36,8 @@ export class TailwindTag extends ArenaTag {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
       if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.hasTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("abilityTriggers:windPowerCharged", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             moveName: this.getMoveName(),
@@ -56,7 +60,10 @@ export class TailwindTag extends ArenaTag {
 
   override onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:tailwindOnRemove${this.i18nSideKey}`));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t(`arenaTag:tailwindOnRemove${this.i18nSideKey}`),
+      );
     }
   }
 }

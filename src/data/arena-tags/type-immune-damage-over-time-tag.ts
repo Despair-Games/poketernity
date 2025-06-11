@@ -48,7 +48,8 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena) {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t(`arenaTag:TypeImmuneDamageOverTimeOnAdd${this.i18nSideKey}${ElementalType[this.immuneType]}`),
     );
   }
@@ -66,7 +67,8 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
           return;
         }
 
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${ElementalType[this.immuneType]}`, {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           }),

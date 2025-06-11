@@ -29,7 +29,10 @@ export class FireGrassPledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A sea of fire enveloped your/the opposing team!"
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:fireGrassPledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:fireGrassPledgeOnAdd${this.i18nSideKey}`),
+    );
   }
 
   override lapse(arena: Arena): boolean {
@@ -46,7 +49,8 @@ export class FireGrassPledgeTag extends ArenaTag {
         }
 
         // "{pokemonNameWithAffix} was hurt by the sea of fire!"
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("arenaTag:fireGrassPledgeLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
         // TODO: Replace this with a proper animation

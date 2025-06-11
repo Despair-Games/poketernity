@@ -42,12 +42,14 @@ export class SubstituteTag extends BattlerTag {
     // Queue battle animation and message
     globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_ADD);
     if (this.sourceMoveId === MoveId.SHED_TAIL) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:shedTailOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         1500,
       );
     } else {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:substituteOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         1500,
       );
@@ -65,7 +67,8 @@ export class SubstituteTag extends BattlerTag {
     } else {
       this.sprite.destroy();
     }
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:substituteOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -109,7 +112,8 @@ export class SubstituteTag extends BattlerTag {
       const firstHit = attacker.turnData.hitCount === attacker.turnData.hitsLeft;
 
       if (firstHit && move.hitsSubstitute(attacker, pokemon)) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("battlerTags:substituteOnHit", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
       }

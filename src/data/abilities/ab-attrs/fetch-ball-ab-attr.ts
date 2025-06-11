@@ -20,7 +20,8 @@ export class FetchBallAbAttr extends PostTurnAbAttr {
     if (lastUsed !== null && pokemon.isPlayer()) {
       globalScene.pokeballCounts[lastUsed]++;
       globalScene.currentBattle.lastUsedPokeball = null;
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("abilityTriggers:fetchBall", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           pokeballName: getPokeballName(lastUsed),

@@ -30,7 +30,8 @@ export class ToxicSpikesTag extends EntryHazardTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("arenaTag:toxicSpikesOnAdd", {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -53,7 +54,8 @@ export class ToxicSpikesTag extends EntryHazardTag {
       if (pokemon.isOfType(ElementalType.POISON)) {
         this.neutralized = true;
         if (globalScene.arena.removeTag(this.tagType)) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("arenaTag:toxicSpikesActivateTrapPoison", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               moveName: this.getMoveName(),
