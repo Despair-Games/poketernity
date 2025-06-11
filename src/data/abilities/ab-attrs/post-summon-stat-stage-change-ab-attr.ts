@@ -32,7 +32,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     const { phaseManager } = globalScene;
 
     if (this.selfTarget) {
-      phaseManager.createAndPushPhase(
+      phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
         pokemon.getBattlerIndex(),
         pokemon,

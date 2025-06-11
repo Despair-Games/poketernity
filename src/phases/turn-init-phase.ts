@@ -43,7 +43,7 @@ export class TurnInitPhase extends FieldPhase {
           p.leaveField();
         }
         if (allowedPokemon.length === 1 && currentBattle.double) {
-          phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
+          phaseManager.createAndUnshiftPhase("ToggleDoublePositionPhase", true);
         }
       }
     });

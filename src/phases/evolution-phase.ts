@@ -166,7 +166,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
 
-    globalScene.phaseManager.createAndPushPhase("EndEvolutionPhase");
+    globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
     ui.showText(
       i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -273,7 +273,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
             lm[1],
           );
         }
-        globalScene.phaseManager.createAndPushPhase("EndEvolutionPhase");
+        globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
         globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);

@@ -49,7 +49,13 @@ export class CurseAttr extends MoveEffectAttr {
       [Stat.ATK, Stat.DEF],
       1,
     );
-    globalScene.phaseManager.createAndPushPhase("StatStageChangePhase", user.getBattlerIndex(), user, [Stat.SPD], -1);
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      user.getBattlerIndex(),
+      user,
+      [Stat.SPD],
+      -1,
+    );
     return true;
   }
 }

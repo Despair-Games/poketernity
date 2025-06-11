@@ -212,13 +212,13 @@ export class FaintPhase extends PokemonPhase {
         globalScene.phaseManager.createAndPushPhase("SwitchPhase", SwitchType.SWITCH, this.fieldIndex, true, false);
       }
     } else {
-      globalScene.phaseManager.createAndPushPhase("PostKnockoutPhase", this.battlerIndex);
+      globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", this.battlerIndex);
       if (battleType === BattleType.TRAINER || battleType === BattleType.MYSTERY_ENCOUNTER) {
         const hasReservePartyMember: boolean = globalScene
           .getEnemyParty()
           .some((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot);
         if (hasReservePartyMember) {
-          globalScene.phaseManager.createAndPushPhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
             "SwitchSummonPhase",
             SwitchType.SWITCH,
             this.fieldIndex,
@@ -279,7 +279,7 @@ export class FaintPhase extends PokemonPhase {
     } else {
       // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
       enemy.hp++;
-      globalScene.phaseManager.createAndPushPhase("DamageAnimPhase", enemy.getBattlerIndex(), 0, HitResult.OTHER);
+      globalScene.phaseManager.createAndUnshiftPhase("DamageAnimPhase", enemy.getBattlerIndex(), 0, HitResult.OTHER);
       this.end();
     }
   }

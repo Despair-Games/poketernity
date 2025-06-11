@@ -14,7 +14,7 @@ import i18next from "i18next";
  */
 export class TransformAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    globalScene.phaseManager.createAndPushPhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
       "PokemonTransformPhase",
       user.getBattlerIndex(),
       target.getBattlerIndex(),

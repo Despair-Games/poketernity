@@ -101,7 +101,7 @@ export class LoginPhase extends Phase {
           removeCookie(SESSION_ID_COOKIE);
           globalScene.reset(true, true);
         } else {
-          globalScene.phaseManager.createAndPushPhase("UnavailablePhase");
+          globalScene.phaseManager.createAndUnshiftPhase("UnavailablePhase");
           super.end();
         }
         return null;
@@ -121,7 +121,7 @@ export class LoginPhase extends Phase {
     globalScene.ui.setMessageMode();
 
     if (settings.display.playerGender === PlayerGender.UNSET) {
-      globalScene.phaseManager.createAndPushPhase("SelectGenderPhase");
+      globalScene.phaseManager.createAndUnshiftPhase("SelectGenderPhase");
     }
 
     handleTutorial(Tutorial.INTRO).then(() => super.end());

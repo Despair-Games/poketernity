@@ -20,7 +20,7 @@ export class SlowStartTag extends AbilityBattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.createAndPushPhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t("battlerTags:slowStartOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       undefined,
@@ -39,7 +39,7 @@ export class SlowStartTag extends AbilityBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.createAndPushPhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t("battlerTags:slowStartOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       undefined,

@@ -226,7 +226,7 @@ export class FormChangePhase extends FormChangeBasePhase {
           );
         }
       }
-      globalScene.phaseManager.createAndPushPhase("EndEvolutionPhase");
+      globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
       super.end();
     }

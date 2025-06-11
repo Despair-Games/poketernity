@@ -48,7 +48,7 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
         break;
     }
 
-    globalScene.phaseManager.createAndPushPhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
       "StatStageChangePhase",
       user.getBattlerIndex(),
       user,

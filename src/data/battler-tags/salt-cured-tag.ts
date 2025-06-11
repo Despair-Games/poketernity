@@ -50,7 +50,11 @@ export class SaltCuredTag extends BattlerTag {
     const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.SALT_CURE, pokemon.getBattlerIndex());
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "CommonAnimPhase",
+        CommonAnim.SALT_CURE,
+        pokemon.getBattlerIndex(),
+      );
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

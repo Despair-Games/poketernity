@@ -49,7 +49,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
-    globalScene.phaseManager.createAndPushPhase("LoadMoveAnimPhase", move.id);
+    globalScene.phaseManager.createAndUnshiftPhase("LoadMoveAnimPhase", move.id);
     globalScene.phaseManager.queueMovePhase({
       pokemon: user,
       targets,

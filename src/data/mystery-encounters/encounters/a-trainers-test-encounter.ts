@@ -177,7 +177,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     async () => {
       const encounter = globalScene.currentBattle.mysteryEncounter!;
       // Full heal party
-      globalScene.phaseManager.createAndPushPhase("PartyHealPhase", true);
+      globalScene.phaseManager.createAndUnshiftPhase("PartyHealPhase", true);
 
       const eggOptions: EggOptions = {
         pulled: false,

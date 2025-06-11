@@ -25,16 +25,16 @@ export class TrainerVictoryPhase extends BattlePhase {
 
     globalScene.audioManager.playBgm(trainer.config.victoryBgm);
 
-    globalScene.phaseManager.createAndPushPhase("MoneyRewardPhase", trainer.config.moneyMultiplier);
+    globalScene.phaseManager.createAndUnshiftPhase("MoneyRewardPhase", trainer.config.moneyMultiplier);
 
     const modifierRewardFuncs = trainer.config.modifierRewardFuncs;
     for (const modifierRewardFunc of modifierRewardFuncs) {
-      globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", modifierRewardFunc);
+      globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierRewardFunc);
     }
 
     if (timedEventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
       for (const rewardFunc of trainer.config.eventRewardFuncs) {
-        globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", rewardFunc);
+        globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", rewardFunc);
       }
     }
 

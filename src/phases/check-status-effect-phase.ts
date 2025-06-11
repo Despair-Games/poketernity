@@ -21,7 +21,7 @@ export class CheckStatusEffectPhase extends Phase {
 
     pokemon.forEach((p) => {
       if (!isNil(p) && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
-        globalScene.phaseManager.createAndPushPhase("PostTurnStatusEffectPhase", p.getBattlerIndex());
+        globalScene.phaseManager.createAndUnshiftPhase("PostTurnStatusEffectPhase", p.getBattlerIndex());
       }
     });
 

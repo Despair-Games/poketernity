@@ -430,11 +430,10 @@ export class GameManager {
    * await game.faintPokemon(enemyPkmn);
    */
   async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon): Promise<void> {
-    await new Promise<void>(async (resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       pokemon.faint();
-      this.scene.phaseManager.createAndPushPhase("FaintPhase", pokemon.getBattlerIndex(), true);
-      await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
-      resolve();
+      this.scene.phaseManager.createAndUnshiftPhase("FaintPhase", pokemon.getBattlerIndex(), true);
+      this.phaseInterceptor.to("FaintPhase").then(resolve).catch(reject);
     });
   }
 

@@ -63,7 +63,7 @@ export async function runMysteryEncounterToEnd(
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       game.scene.phaseManager.clearPhaseQueue();
       game.scene.phaseManager.clearPhaseQueueSplice();
-      game.scene.phaseManager.createAndPushPhase("PostKnockoutPhase", 0);
+      game.scene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", 0);
       game.endPhase();
     });
 

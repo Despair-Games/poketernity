@@ -393,13 +393,13 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
                 pokemon.resetSummonData();
                 globalScene.time.delayedCall(1000, () => {
                   if (pokemon.isShiny()) {
-                    globalScene.phaseManager.createAndPushPhase("ShinySparklePhase", pokemon.getBattlerIndex());
+                    globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
                   }
 
                   pokemon.resetTurnData();
 
                   globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
-                  globalScene.phaseManager.createAndPushPhase("PostSummonPhase", pokemon.getBattlerIndex());
+                  globalScene.phaseManager.createAndUnshiftPhase("PostSummonPhase", pokemon.getBattlerIndex());
                   resolve();
                 });
               },

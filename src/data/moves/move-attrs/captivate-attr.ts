@@ -15,7 +15,7 @@ export class CaptivateAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // TODO: Should show oblivious ability flyout if target has oblivious
     if (!target.hasAbility(AbilityId.OBLIVIOUS) && target.isOppositeGender(user)) {
-      globalScene.phaseManager.createAndPushPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
         target.getBattlerIndex(),
         user,

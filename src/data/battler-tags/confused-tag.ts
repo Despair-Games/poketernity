@@ -39,9 +39,11 @@ export class ConfusedTag extends BattlerTag {
 
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
 
-    globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
     globalScene.phaseManager.createAndUnshiftPhase(
-      "MessagePhase",i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix }));
+      "MessagePhase",
+      i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix }),
+    );
   }
 
   override onRemove(pokemon: Pokemon): void {
@@ -51,7 +53,8 @@ export class ConfusedTag extends BattlerTag {
 
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
-      i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix }));
+      i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix }),
+    );
   }
 
   override onOverlap(pokemon: Pokemon): void {
@@ -61,7 +64,8 @@ export class ConfusedTag extends BattlerTag {
 
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
-      i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix }));
+      i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix }),
+    );
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -74,9 +78,13 @@ export class ConfusedTag extends BattlerTag {
 
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
-        i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix })
+        i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }),
       );
-      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "CommonAnimPhase",
+        CommonAnim.CONFUSION,
+        pokemon.getBattlerIndex(),
+      );
 
       const damageHolder = new NumberHolder(this.getDamage(pokemon));
 

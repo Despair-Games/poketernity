@@ -160,7 +160,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             true,
           );
         } else {
-          globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.AMULET_COIN);
+          globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierTypes.AMULET_COIN);
         }
 
         leaveEncounterWithoutBattle(true);
@@ -241,7 +241,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               true,
             );
           } else {
-            globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.CANDY_JAR);
+            globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierTypes.CANDY_JAR);
           }
         } else {
           // Check if the player has max stacks of that Berry Pouch already
@@ -259,7 +259,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               true,
             );
           } else {
-            globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.BERRY_POUCH);
+            globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierTypes.BERRY_POUCH);
           }
         }
 
@@ -341,7 +341,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             true,
           );
         } else {
-          globalScene.phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.HEALING_CHARM);
+          globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierTypes.HEALING_CHARM);
         }
 
         chosenPokemon.loseHeldItem(modifier, false);

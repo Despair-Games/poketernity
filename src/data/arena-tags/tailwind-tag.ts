@@ -46,7 +46,7 @@ export class TailwindTag extends ArenaTag {
       }
       // Raise attack by one stage if party member has WIND_RIDER ability
       if (pokemon.hasAbility(AbilityId.WIND_RIDER)) {
-        globalScene.phaseManager.createAndPushPhase("ShowAbilityPhase", pokemon.getBattlerIndex());
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.getBattlerIndex());
         globalScene.phaseManager.createAndUnshiftPhase(
           "StatStageChangePhase",
           pokemon.getBattlerIndex(),

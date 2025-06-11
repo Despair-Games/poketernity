@@ -147,7 +147,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     async () => {
       // Fall asleep waiting for Snorlax
       // Full heal party
-      globalScene.phaseManager.createAndPushPhase("PartyHealPhase", true);
+      globalScene.phaseManager.createAndUnshiftPhase("PartyHealPhase", true);
       queueEncounterMessage(`${namespace}:option.2.rest_result`);
       leaveEncounterWithoutBattle();
     },

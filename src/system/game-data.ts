@@ -248,7 +248,7 @@ export class GameData {
           if (error) {
             if (error.startsWith("session out of date")) {
               globalScene.phaseManager.clearPhaseQueue();
-              globalScene.phaseManager.createAndPushPhase("ReloadSessionPhase");
+              globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
             }
             console.error(error);
             return resolve(false);
@@ -536,7 +536,7 @@ export class GameData {
 
     if (systemData) {
       globalScene.phaseManager.clearPhaseQueue();
-      globalScene.phaseManager.createAndPushPhase("ReloadSessionPhase", JSON.stringify(systemData));
+      globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase", JSON.stringify(systemData));
       this.clearLocalData();
       return false;
     }
@@ -953,7 +953,7 @@ export class GameData {
           if (error) {
             if (error.startsWith("session out of date")) {
               globalScene.phaseManager.clearPhaseQueue();
-              globalScene.phaseManager.createAndPushPhase("ReloadSessionPhase");
+              globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
             }
             console.error(error);
             resolve(false);
@@ -1028,7 +1028,7 @@ export class GameData {
       } else {
         if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
-          globalScene.phaseManager.createAndPushPhase("ReloadSessionPhase");
+          globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
         }
 
         console.error(jsonResponse);
@@ -1161,7 +1161,7 @@ export class GameData {
             if (error) {
               if (error.startsWith("session out of date")) {
                 globalScene.phaseManager.clearPhaseQueue();
-                globalScene.phaseManager.createAndPushPhase("ReloadSessionPhase");
+                globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
               }
               console.error(error);
               return resolve(false);

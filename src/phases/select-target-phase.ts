@@ -44,7 +44,7 @@ export class SelectTargetPhase extends PokemonPhase {
 
       if (targets.length < 1) {
         turnManager.tryRemoveCommand((tc) => tc.pokemon === user);
-        globalScene.phaseManager.createAndPushPhase("CommandPhase", this.fieldIndex);
+        globalScene.phaseManager.createAndUnshiftPhase("CommandPhase", this.fieldIndex);
       } else {
         if (turnCommand) {
           turnCommand.targets = targets;

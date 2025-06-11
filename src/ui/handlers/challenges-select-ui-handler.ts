@@ -375,7 +375,7 @@ export class ChallengeSelectUiHandler extends UiHandler {
     } else if (button === Button.SUBMIT || button === Button.ACTION) {
       if (this.hasSelectedChallenge) {
         if (this.startCursor.visible) {
-          globalScene.phaseManager.createAndPushPhase("SelectStarterPhase");
+          globalScene.phaseManager.createAndUnshiftPhase("SelectStarterPhase");
           globalScene.phaseManager.getCurrentPhase()?.end();
         } else {
           this.startCursor.setVisible(true);

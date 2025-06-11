@@ -782,7 +782,9 @@ export function setEncounterRewards(
     }
 
     if (customShopRewards) {
-      globalScene.phaseManager.createAndPushPhase("SelectModifierPhase", { customModifierSettings: customShopRewards });
+      globalScene.phaseManager.createAndUnshiftPhase("SelectModifierPhase", {
+        customModifierSettings: customShopRewards,
+      });
     } else {
       globalScene.phaseManager.tryRemovePhase((p) => p.is("SelectModifierPhase"));
     }
@@ -822,7 +824,12 @@ export function setEncounterExp(participantId: number | number[], baseExpValue: 
   const participantIds = coerceArray(participantId);
 
   globalScene.currentBattle.mysteryEncounter!.doEncounterExp = () => {
-    globalScene.phaseManager.createAndPushPhase("PartyExpPhase", baseExpValue, useWaveIndex, new Set(participantIds));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PartyExpPhase",
+      baseExpValue,
+      useWaveIndex,
+      new Set(participantIds),
+    );
 
     return true;
   };

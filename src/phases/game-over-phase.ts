@@ -165,7 +165,7 @@ export class GameOverPhase extends BattlePhase {
               }
 
               if (!firstClear) {
-                globalScene.phaseManager.createAndPushPhase(
+                globalScene.phaseManager.createAndUnshiftPhase(
                   "GameOverModifierRewardPhase",
                   modifierTypes.VOUCHER_PREMIUM,
                 );
@@ -247,18 +247,18 @@ export class GameOverPhase extends BattlePhase {
 
     if (this.isVictory && gameMode.isClassic) {
       if (!gameData.unlocks[Unlockables.ENDLESS_MODE]) {
-        globalScene.phaseManager.createAndPushPhase("UnlockPhase", Unlockables.ENDLESS_MODE);
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.ENDLESS_MODE);
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {
-        globalScene.phaseManager.createAndPushPhase("UnlockPhase", Unlockables.MINI_BLACK_HOLE);
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.MINI_BLACK_HOLE);
       }
 
       if (
         !gameData.unlocks[Unlockables.EVIOLITE]
         && globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions)
       ) {
-        globalScene.phaseManager.createAndPushPhase("UnlockPhase", Unlockables.EVIOLITE);
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.EVIOLITE);
       }
     }
   }

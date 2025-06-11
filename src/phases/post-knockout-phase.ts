@@ -54,7 +54,7 @@ export class PostKnockoutPhase extends PokemonPhase {
         .getEnemyParty()
         .some((p) => p && (p.isOnField() || (battleType !== BattleType.WILD && !p.isFainted())))
     ) {
-      phaseManager.createAndPushPhase("VictoryPhase", this.battlerIndex);
+      phaseManager.createAndUnshiftPhase("VictoryPhase", this.battlerIndex);
     }
 
     this.end();

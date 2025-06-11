@@ -25,7 +25,7 @@ export class BideEffectAttr extends OverrideMoveEffectAttr {
       // If the tag already exists on the user, this does nothing.
       user.addTag(BattlerTagType.BIDE);
       // Play Bide's "charging" animation
-      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.BIDE, user.getBattlerIndex());
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.BIDE, user.getBattlerIndex());
       // Cancel other effects in the move's execution (i.e. the move's damage)
       overridden.value = true;
     }

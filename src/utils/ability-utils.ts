@@ -23,7 +23,7 @@ export function getPokemonWithWeatherBasedForms(): Pokemon[] {
 }
 
 export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.phaseManager.createAndPushPhase("ShowAbilityPhase", pokemon.id, passive);
+  globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
   globalScene.phaseManager.clearPhaseQueueSplice();
 }
 

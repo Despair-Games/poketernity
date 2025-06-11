@@ -67,14 +67,12 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
         break;
     }
 
-    globalScene.phaseManager.createAndPushPhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t("battlerTags:highestStatBoostOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         statName: i18next.t(getStatKey(highestStat)),
       }),
-      undefined,
-      false,
     );
   }
 

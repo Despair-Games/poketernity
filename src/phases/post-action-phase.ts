@@ -44,7 +44,6 @@ export class PostActionPhase extends PokemonPhase {
 
     arena.setIgnoreAbilities(false);
     turnManager.commandsInProgress--;
-    console.log(`commandsInProgress: ${turnManager.commandsInProgress}`);
 
     if (turnManager.commandsInProgress < 1) {
       // Reset turn order in case the last action affected Speed

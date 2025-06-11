@@ -49,7 +49,7 @@ export class NightmareTag extends BattlerTag {
         i18next.t("battlerTags:nightmareLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       // TODO: Update animation type
-      globalScene.phaseManager.createAndPushPhase("CommonAnimPhase", CommonAnim.CURSE, pokemon.getBattlerIndex());
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CURSE, pokemon.getBattlerIndex());
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

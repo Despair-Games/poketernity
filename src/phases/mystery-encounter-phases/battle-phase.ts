@@ -77,9 +77,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         globalScene.audioManager.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-      globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, false);
+      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 0, false);
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, false);
+        globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 1, false);
       }
 
       if (!mysteryEncounter?.hideBattleIntroMessage) {
@@ -97,9 +97,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, false);
+          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 0, false);
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, false);
+            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 1, false);
           }
           this.endBattleSetup();
         };

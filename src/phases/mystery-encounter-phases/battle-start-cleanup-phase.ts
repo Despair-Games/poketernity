@@ -70,13 +70,13 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const playerField = globalScene.getPlayerField();
     playerField.forEach((pokemon, i) => {
       if (!pokemon.isAllowedInBattle() && legalPlayerPartyPokemon.length > i) {
-        globalScene.phaseManager.createAndPushPhase("SwitchPhase", SwitchType.SWITCH, i, true, false);
+        globalScene.phaseManager.createAndUnshiftPhase("SwitchPhase", SwitchType.SWITCH, i, true, false);
       }
     });
 
     // THEN, if is a double battle, and player only has 1 summoned pokemon, center pokemon on field
     if (globalScene.currentBattle.double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
-      globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
+      globalScene.phaseManager.createAndUnshiftPhase("ToggleDoublePositionPhase", true);
     }
 
     this.end();

@@ -44,7 +44,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...if the checked Pokemon is somehow not on the field
     if (globalScene.field.getAll().indexOf(pokemon) === -1) {
-      globalScene.phaseManager.createAndPushPhase("SummonMissingPhase", this.fieldIndex);
+      globalScene.phaseManager.createAndUnshiftPhase("SummonMissingPhase", this.fieldIndex);
       this.end();
       return;
     }

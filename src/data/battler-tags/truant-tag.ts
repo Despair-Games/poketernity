@@ -29,7 +29,7 @@ export class TruantTag extends AbilityBattlerTag {
 
     if (lastMove && lastMove.move.id !== MoveId.NONE) {
       globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
-      globalScene.phaseManager.createAndPushPhase("ShowAbilityPhase", pokemon.id, passive);
+      globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
         i18next.t("battlerTags:truantLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
