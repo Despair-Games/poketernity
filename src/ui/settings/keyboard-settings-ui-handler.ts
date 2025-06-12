@@ -14,7 +14,7 @@ import {
   settingKeyboardOptions,
 } from "#system/settings-keyboard";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
-import { NavigationManager } from "#ui/navigation-menu";
+import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { addTextObject } from "#ui/text-utils";
 import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -55,9 +55,10 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
     optionsContainer.add(label);
     this.settingsContainer.add(optionsContainer);
 
+    // TODO: handle placement of the shortcut icons based on the text size/each other, not magic numbers
     const iconDelete = globalScene.add.sprite(0, 0, "keyboard");
     iconDelete.setOrigin(0, -0.1);
-    iconDelete.setPositionRelative(this.actionsBg, this.navigationContainer.width - 260, 4);
+    iconDelete.setPositionRelative(this.actionsBg, this.navigationIcons["BUTTON_HOME"].x - 260, 4);
     this.navigationIcons["BUTTON_DELETE"] = iconDelete;
 
     const deleteText = addTextObject(0, 0, i18next.t("settings:delete"), TextStyle.SETTINGS_LABEL);
@@ -98,7 +99,7 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
     }
     const isKeyboard = globalScene.ui.getMode() === UiMode.SETTINGS_KEYBOARD;
     globalScene.gameData.resetMappingToFactory(isKeyboard ? Device.KEYBOARD : Device.GAMEPAD);
-    NavigationManager.getInstance().updateIcons();
+    SettingsNavigationManager.getInstance().updateIcons();
   }
 
   /**
@@ -118,7 +119,7 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
         activeConfig,
       );
       this.updateBindings();
-      NavigationManager.getInstance().updateIcons();
+      SettingsNavigationManager.getInstance().updateIcons();
     }
   }
 

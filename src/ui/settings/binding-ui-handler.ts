@@ -3,7 +3,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { NavigationManager } from "#ui/navigation-menu";
+import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
@@ -197,7 +197,7 @@ export abstract class BindingUiHandler extends UiHandler {
           this.cancelFn?.();
         } else {
           success = this.swapAction();
-          NavigationManager.getInstance().updateIcons();
+          SettingsNavigationManager.getInstance().updateIcons();
           this.cancelFn?.(success);
         }
         break;

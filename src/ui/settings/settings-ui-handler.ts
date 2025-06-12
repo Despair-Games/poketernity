@@ -10,7 +10,7 @@ import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";
-import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
+import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { ScrollBar } from "#ui/scroll-bar";
 import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, setTextColor } from "#ui/text-utils";
@@ -27,7 +27,6 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   private settingsContainer: Phaser.GameObjects.Container;
   private optionsContainer: Phaser.GameObjects.Container;
   private messageBoxContainer: Phaser.GameObjects.Container;
-  private navigationContainer: NavigationMenu;
 
   private scrollCursor: number;
   private scrollBar: ScrollBar;
@@ -84,23 +83,23 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     this.navigationIcons = {};
 
-    this.navigationContainer = new NavigationMenu(0, 0);
+    const navigationContainer = SettingsNavigationManager.getInstance().addMenu(0, 0);
 
     this.optionsBg = addWindow(
       0,
-      this.navigationContainer.height,
+      navigationContainer.height,
       GAME_WIDTH - 2,
-      GAME_HEIGHT - 16 - this.navigationContainer.height - 2,
+      GAME_HEIGHT - 16 - navigationContainer.height - 2,
     );
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
-    const actionsBg = addWindow(0, GAME_HEIGHT - this.navigationContainer.height, GAME_WIDTH - 2, 22);
+    const actionsBg = addWindow(0, GAME_HEIGHT - navigationContainer.height, GAME_WIDTH - 2, 22);
     actionsBg.setOrigin(0, 0);
 
     const iconAction = globalScene.add.sprite(0, 0, "keyboard");
     iconAction.setOrigin(0, -0.1);
-    iconAction.setPositionRelative(actionsBg, this.navigationContainer.width - 32, 4);
+    iconAction.setPositionRelative(actionsBg, navigationContainer.width - 32, 4);
     this.navigationIcons["BUTTON_ACTION"] = iconAction;
 
     const actionText = addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
@@ -109,7 +108,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     const iconCancel = globalScene.add.sprite(0, 0, "keyboard");
     iconCancel.setOrigin(0, -0.1);
-    iconCancel.setPositionRelative(actionsBg, this.navigationContainer.width - 100, 4);
+    iconCancel.setPositionRelative(actionsBg, navigationContainer.width - 100, 4);
     this.navigationIcons["BUTTON_CANCEL"] = iconCancel;
 
     const cancelText = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
@@ -136,10 +135,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
       }
       settingLabels.push(settingName);
     });
-    this.labelsTextList = new TextListContainer(8, 28, this.rowsToDisplay, {
-      textStyle: TextStyle.SETTINGS_LABEL,
-      lineSpacing: 12,
-    });
+    this.labelsTextList = new TextListContainer(8, 28, TextStyle.SETTINGS_LABEL, this.rowsToDisplay);
     this.labelsTextList.setList(settingLabels, true);
     this.optionsContainer.add(this.labelsTextList);
 
@@ -186,7 +182,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     this.settingsContainer.add(this.optionsBg);
     this.settingsContainer.add(this.scrollBar);
-    this.settingsContainer.add(this.navigationContainer);
+    this.settingsContainer.add(navigationContainer);
     this.settingsContainer.add(actionsBg);
     this.settingsContainer.add(this.optionsContainer);
     this.settingsContainer.add(iconAction);
@@ -227,7 +223,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         this.navigationIcons[settingName].alpha = 0;
       }
     }
-    NavigationManager.getInstance().updateIcons();
+    SettingsNavigationManager.getInstance().updateIcons();
   }
 
   /**
@@ -265,7 +261,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     if (button === Button.CANCEL) {
       success = true;
-      NavigationManager.getInstance().reset();
+      SettingsNavigationManager.getInstance().reset();
       globalScene.ui.revertMode();
     } else {
       const { Wrap } = Phaser.Math;
@@ -331,7 +327,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           break;
         case Button.CYCLE_FORM:
         case Button.CYCLE_SHINY:
-          success = this.navigationContainer.navigate(button);
+          success = SettingsNavigationManager.getInstance().processInput(button);
           break;
         case Button.ACTION:
           break;
@@ -624,7 +620,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   protected showConfirm(text: string, onConfirm: () => void, onCancel?: () => void) {
     const config: ConfirmModeConfig = {
       yesHandler: () => {
-        NavigationManager.getInstance().reset();
+        SettingsNavigationManager.getInstance().reset();
         // revert confirm mode.
         globalScene.ui.revertMode();
         // revert settings mode.

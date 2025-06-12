@@ -38,7 +38,7 @@ import { MenuUiHandler } from "#ui/menu-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
-import { NavigationManager } from "#ui/navigation-menu";
+import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { PartyUiHandler } from "#ui/party-ui-handler";
 import { RegistrationFormUiHandler } from "#ui/registration-form-ui-handler";
@@ -428,7 +428,7 @@ export class UI extends Phaser.GameObjects.Container {
   public override destroy(fromScene?: boolean): void {
     logUiVerbose("Destroying UI and all handlers");
     // Clear references to current handlers in the NavigationManager
-    NavigationManager.getInstance().clearMenus();
+    SettingsNavigationManager.getInstance().clearMenus();
 
     // Destroy all handlers
     for (const [uiMode, handler] of this.handlers.entries()) {

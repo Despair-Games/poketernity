@@ -7,7 +7,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
-import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
+import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
@@ -33,7 +33,6 @@ export interface LayoutConfig {
 export abstract class ControlsSettingsUiHandler extends UiHandler {
   protected settingsContainer: Phaser.GameObjects.Container;
   protected optionsContainer: Phaser.GameObjects.Container;
-  protected navigationContainer: NavigationMenu;
 
   protected scrollBar: ScrollBar;
   protected scrollCursor: number;
@@ -95,22 +94,22 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.titleSelected}`);
 
-    this.navigationContainer = new NavigationMenu(0, 0);
+    const navigationContainer = SettingsNavigationManager.getInstance().addMenu(0, 0);
 
     this.optionsBg = addWindow(
       0,
-      this.navigationContainer.height,
+      navigationContainer.height,
       GAME_WIDTH - 2,
-      GAME_HEIGHT - 16 - this.navigationContainer.height - 2,
+      GAME_HEIGHT - 16 - navigationContainer.height - 2,
     );
     this.optionsBg.setOrigin(0, 0);
 
-    this.actionsBg = addWindow(0, GAME_HEIGHT - this.navigationContainer.height, GAME_WIDTH - 2, 22);
+    this.actionsBg = addWindow(0, GAME_HEIGHT - navigationContainer.height, GAME_WIDTH - 2, 22);
     this.actionsBg.setOrigin(0, 0);
 
     const iconAction = globalScene.add.sprite(0, 0, "keyboard");
     iconAction.setOrigin(0, -0.1);
-    iconAction.setPositionRelative(this.actionsBg, this.navigationContainer.width - 32, 4);
+    iconAction.setPositionRelative(this.actionsBg, navigationContainer.width - 32, 4);
     this.navigationIcons["BUTTON_ACTION"] = iconAction;
 
     const actionText = addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
@@ -119,7 +118,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
 
     const iconCancel = globalScene.add.sprite(0, 0, "keyboard");
     iconCancel.setOrigin(0, -0.1);
-    iconCancel.setPositionRelative(this.actionsBg, this.navigationContainer.width - 100, 4);
+    iconCancel.setPositionRelative(this.actionsBg, navigationContainer.width - 100, 4);
     this.navigationIcons["BUTTON_CANCEL"] = iconCancel;
 
     const cancelText = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
@@ -128,7 +127,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
 
     const iconReset = globalScene.add.sprite(0, 0, "keyboard");
     iconReset.setOrigin(0, -0.1);
-    iconReset.setPositionRelative(this.actionsBg, this.navigationContainer.width - 180, 4);
+    iconReset.setPositionRelative(this.actionsBg, navigationContainer.width - 180, 4);
     this.navigationIcons["BUTTON_HOME"] = iconReset;
 
     const resetText = addTextObject(0, 0, i18next.t("settings:reset"), TextStyle.SETTINGS_LABEL);
@@ -137,7 +136,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
 
     this.settingsContainer.add(this.optionsBg);
     this.settingsContainer.add(this.actionsBg);
-    this.settingsContainer.add(this.navigationContainer);
+    this.settingsContainer.add(navigationContainer);
     this.settingsContainer.add(iconAction);
     this.settingsContainer.add(iconCancel);
     this.settingsContainer.add(iconReset);
@@ -356,7 +355,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     this.setCursor(this.cursor);
     this.setScrollCursor(this.scrollCursor);
 
-    NavigationManager.getInstance().updateIcons();
+    SettingsNavigationManager.getInstance().updateIcons();
   }
 
   updateNavigationDisplay() {
@@ -390,7 +389,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
    */
   public override show(): boolean {
     this.updateNavigationDisplay();
-    NavigationManager.getInstance().updateIcons();
+    SettingsNavigationManager.getInstance().updateIcons();
     // Update the bindings for the current active gamepad configuration.
     this.updateBindings();
 
@@ -453,7 +452,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     if (button === Button.CANCEL) {
       // Handle cancel button press, reverting UI mode to previous state.
       success = true;
-      NavigationManager.getInstance().reset();
+      SettingsNavigationManager.getInstance().reset();
       globalScene.ui.revertMode();
     } else {
       const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.
@@ -531,7 +530,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
           break;
         case Button.CYCLE_FORM:
         case Button.CYCLE_SHINY:
-          success = this.navigationContainer.navigate(button);
+          success = SettingsNavigationManager.getInstance().processInput(button);
           break;
       }
     }
