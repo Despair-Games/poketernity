@@ -45,7 +45,7 @@ describe("Abilities - Dry Skin", () => {
     move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveTakenDamage(toDmgValue(enemy.getMaxHp() / 8));
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
   });
 
   it.each([
@@ -93,7 +93,7 @@ describe("Abilities - Dry Skin", () => {
     expect(ReceivedTypeDamageMultiplierAbAttr.prototype.apply).toHaveLastReturnedWith(true);
   });
 
-  it("heals 1/4 of max health and deals no damage if hit by opposing water move", async () => {
+  it("should heal 1/4 of max HP instead of receiving damage if hit by a Water-type move", async () => {
     const { classicMode, field, move } = game;
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
@@ -105,7 +105,7 @@ describe("Abilities - Dry Skin", () => {
     expect(enemy).toHaveHp(toDmgValue(enemy.getMaxHp() / 4) + 1);
   });
 
-  it("does not heal, on opposing water move, if ability holder is protected", async () => {
+  it("should not absorb incoming Water-type moves if the ability source is protected", async () => {
     const { override, classicMode, field, move } = game;
     override.enemyMoveset([MoveId.PROTECT]);
 
@@ -118,7 +118,7 @@ describe("Abilities - Dry Skin", () => {
     expect(enemy).toHaveHp(1);
   });
 
-  it("only heals once on opposing multi-strike water moves", async () => {
+  it("should only heal once from multi-strike Water-type attacks", async () => {
     const { override, classicMode, field, move } = game;
     override.moveset([MoveId.WATER_GUN, MoveId.WATER_SHURIKEN]);
 
@@ -139,7 +139,7 @@ describe("Abilities - Dry Skin", () => {
     expect(healthGainedFromWaterShuriken).toBe(healthGainedFromWaterGun);
   });
 
-  it("heals on opposing water moves regardless of accuracy check", async () => {
+  it("should absorb incoming Water-type moves regardless of accuracy check", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
 
     await classicMode.startBattle(SpeciesId.CHANDELURE);
