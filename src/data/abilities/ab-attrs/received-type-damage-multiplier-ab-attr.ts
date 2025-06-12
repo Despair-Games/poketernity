@@ -2,15 +2,25 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-dam
 import type { ElementalType } from "#enums/elemental-type";
 
 /**
- * Adds a damage multiplier for a specific {@linkcode ElementalType}
- * when the ability holder is hit by a move of that type.
+ * Adds a damage multiplier when the ability holder is hit
+ * by a move of a specific {@linkcode ElementalType | type}.
  *
  * ```
- * +-----------+------------------+
- * |  Ability  |    Multiplier    |
- * +-----------+------------------+
- * | Dry Skin  |   1.25 (+25%)    |
- * +-----------+------------------+
+ * +----------------+------------------+----------+
+ * | Ability        | Multiplier       | Type     |
+ * +----------------+------------------+----------+
+ * | Dry Skin       | 1.25 (+25%)      | Water    |
+ * +----------------+------------------+----------+
+ * | Thick Fat      | 1.50 (+50%)      | Fire     |
+ * +----------------+------------------+----------+
+ * | Heatproof      | 1.50 (+50%)      | Fire     |
+ * +----------------+------------------+----------+
+ * | Water Bubble   | 1.50 (+50%)      | Fire     |
+ * +----------------+------------------+----------+
+ * | Fluffy         | 2.00 (+100%)     | Fire     |
+ * +----------------+------------------+----------+
+ * | Purifying Salt | 1.50 (+25%)      | Ghost    |
+ * +----------------+------------------+----------+
  * ```
  *
  * @extends ReceivedMoveDamageMultiplierAbAttr
