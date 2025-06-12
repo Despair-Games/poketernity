@@ -133,7 +133,7 @@ import { PostWeatherChangeAddBattlerTagAbAttr } from "#abilities/post-weather-ch
 import { PostWeatherChangeFormChangeAbAttr } from "#abilities/post-weather-change-form-change-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#abilities/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#abilities/post-weather-lapse-heal-ab-attr";
-import { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "#abilities/pre-switch-out-clear-weather-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "#abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "#abilities/pre-switch-out-heal-ab-attr";
@@ -223,7 +223,7 @@ export function initAbilities() {
       .attr(BlockCritAbAttr)
       .ignorable(),
     new Ability(AbilityId.STURDY, 3)
-      .attr(PreDefendFullHpEndureAbAttr)
+      .attr(SturdyAbAttr)
       .attr(BlockOneHitKOAbAttr)
       .ignorable(),
     new Ability(AbilityId.DAMP, 3)

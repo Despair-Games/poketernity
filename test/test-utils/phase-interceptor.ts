@@ -37,6 +37,7 @@ import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
 import { PostGameOverPhase } from "#phases/post-game-over-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";
 import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
@@ -140,6 +141,7 @@ const PHASES = [
   UnlockPhase,
   PostGameOverPhase,
   RevivalBlessingPhase,
+  PostKnockoutPhase,
 ] as const;
 
 type PhaseClass = (typeof PHASES)[number];

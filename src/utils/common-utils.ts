@@ -234,10 +234,8 @@ export function calcAccuracyMultiplier(userAccStage: number, targetEvaStage: num
 }
 
 /**
- * Returns the name of the key that matches the enum object value.
- *
- * **Note**: **DO NOT** use this with TypeScript enums, only with `const` objects being used as enums.
- * @param input - The enum object to check
+ * Returns the name of the key that matches the enum [object] value.
+ * @param input - The enum [object] to check
  * @param val - The value to get the key of
  * @returns The name of the key with the specified value
  * @example
