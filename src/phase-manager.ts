@@ -303,11 +303,11 @@ export class PhaseManager {
 
   /**
    * Queues one or more phases to be run at a future point in time.
-   * @param phase - The first {@linkcode Phase} to push to the {@link phaseQueue | main queue}.
-   * @param otherPhases - Additional (optional) phases to queue. These phases are scheduled after {@linkcode phase} in array order.
+   * @param phase - The {@linkcode Phase | Phases} to push to the {@link phaseQueue | main queue}.
+   * This requires at least one Phase as input.
    */
-  public pushPhase(phase: Phase, ...otherPhases: Phase[]): void {
-    this.phaseQueue.push(phase, ...otherPhases);
+  public pushPhase(...phases: [Phase, ...Phase[]]): void {
+    this.phaseQueue.push(...phases);
   }
 
   /**
@@ -335,14 +335,14 @@ export class PhaseManager {
   /**
    * Adds one or more phases to the end of {@linkcode phaseQueuePrepend},
    * or at {@linkcode phaseQueuePrependSpliceIndex} if it's set.
-   * @param phase - The first {@linkcode Phase} to push to {@linkcode phaseQueuePrepend}.
-   * @param otherPhases - Additional (optional) phases to queue. These phases are scheduled after {@linkcode phase} in array order.
+   * @param phases - The {@linkcode Phases} to push to {@linkcode phaseQueuePrepend}.
+   * This requires at least one Phase as input.
    */
-  public unshiftPhase(phase: Phase, ...otherPhases: Phase[]): void {
+  public unshiftPhase(...phases: [Phase, ...Phase[]]): void {
     if (this.phaseQueuePrependSpliceIndex === -1) {
-      this.phaseQueuePrepend.push(phase, ...otherPhases);
+      this.phaseQueuePrepend.push(...phases);
     } else {
-      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, phase, ...otherPhases);
+      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, ...phases);
     }
   }
 
@@ -542,19 +542,18 @@ export class PhaseManager {
    * Tries to add the input phase to the index before the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
    * @param targetPhaseKey - The {@linkcode PhaseKey} of the phase to search for in the {@linkcode phaseQueue}
-   * @param phase - The {@linkcode Phase} to be added
-   * @param otherPhases - Additional (optional) Phases to add. These Phases are scheduled after {@linkcode phase} in array order
+   * @param phases - The {@linkcode Phases} to be added. This requires at least one Phase as input.
    * @returns `true` if the phase was successfully added to the queue before the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public prependToPhase(targetPhaseKey: PhaseKey, phase: Phase, ...otherPhases: Phase[]): boolean {
+  public prependToPhase(targetPhaseKey: PhaseKey, ...phases: [Phase, ...Phase[]]): boolean {
     const targetIndex = this.phaseQueue.findIndex((phase) => phase.is(targetPhaseKey));
 
     if (targetIndex !== -1) {
-      this.phaseQueue.splice(targetIndex, 0, phase, ...otherPhases);
+      this.phaseQueue.splice(targetIndex, 0, ...phases);
       return true;
     }
-    this.unshiftPhase(phase, ...otherPhases);
+    this.unshiftPhase(...phases);
     return false;
   }
 
@@ -577,19 +576,18 @@ export class PhaseManager {
    * Tries to add the input phase to the index after the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
    * @param targetPhaseKey - The {@linkcode PhaseKey} of the Phase on which the created Phase is appended
-   * @param phase - The {@linkcode Phase} to be added
-   * @param otherPhases - Additional (optional) Phases to add. These Phases are scheduled after {@linkcode phase} in array order
+   * @param phases - The {@linkcode Phases} to be added. This requires at least one Phase as input.
    * @returns `true` if the phase was successfully added to the queue after the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public appendToPhase(targetPhaseKey: PhaseKey, phase: Phase, ...otherPhases: Phase[]): boolean {
+  public appendToPhase(targetPhaseKey: PhaseKey, ...phases: [Phase, ...Phase[]]): boolean {
     const targetIndex = this.phaseQueue.findIndex((phase) => phase.is(targetPhaseKey));
 
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
-      this.phaseQueue.splice(targetIndex + 1, 0, phase, ...otherPhases);
+      this.phaseQueue.splice(targetIndex + 1, 0, ...phases);
       return true;
     }
-    this.unshiftPhase(phase, ...otherPhases);
+    this.unshiftPhase(...phases);
     return false;
   }
 
