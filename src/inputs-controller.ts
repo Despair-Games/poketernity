@@ -16,7 +16,7 @@ import pad_xbox360 from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
-import { deepCopy } from "#utils/common-utils";
+import { deepCopy, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 export interface DeviceMapping {
@@ -80,7 +80,7 @@ export class InputsController {
   private configs: Map<string, InterfaceConfig> = new Map();
 
   public gamepadSupport: boolean = true;
-  public selectedDevice;
+  public selectedDevice; //: {[key:string]: string};
 
   private disconnectedGamepads: string[] = [];
 
@@ -360,7 +360,7 @@ export class InputsController {
     this.lastSource = "keyboard";
     this.ensureKeyboardIsInit();
     const buttonDown = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD), event.keyCode);
-    if (buttonDown !== undefined) {
+    if (!isNil(buttonDown)) {
       if (this.buttonLock.includes(buttonDown)) {
         return;
       }
@@ -387,7 +387,7 @@ export class InputsController {
   keyboardKeyUp(event): void {
     this.lastSource = "keyboard";
     const buttonUp = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD), event.keyCode);
-    if (buttonUp !== undefined) {
+    if (!isNil(buttonUp)) {
       this.events.emit("input_up", {
         controller_type: "keyboard",
         button: buttonUp,
@@ -427,7 +427,7 @@ export class InputsController {
     }
     const activeConfig = this.getActiveConfig(Device.GAMEPAD);
     const buttonDown = activeConfig && getButtonWithKeycode(activeConfig, button.index);
-    if (buttonDown !== undefined) {
+    if (!isNil(buttonDown)) {
       if (this.buttonLock.includes(buttonDown)) {
         return;
       }
@@ -468,7 +468,7 @@ export class InputsController {
       return;
     }
     const buttonUp = getButtonWithKeycode(this.getActiveConfig(Device.GAMEPAD), button.index);
-    if (buttonUp !== undefined) {
+    if (!isNil(buttonUp)) {
       this.events.emit("input_up", {
         controller_type: "gamepad",
         button: buttonUp,
@@ -543,7 +543,7 @@ export class InputsController {
     return null;
   }
 
-  getIconForLatestInputRecorded(settingName) {
+  getIconForLatestInputRecorded(settingName: string): string {
     if (this.lastSource === "keyboard") {
       this.ensureKeyboardIsInit();
     }
