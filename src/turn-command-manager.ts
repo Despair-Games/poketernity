@@ -204,7 +204,7 @@ export class TurnCommandManager {
   public preemptCommand(commandFilter: TurnCommandFilter): boolean {
     const turnCommand = this.tryRemoveCommand(commandFilter);
     if (!!turnCommand && this.handleCommand(turnCommand)) {
-      turnCommand.pokemon.turnData.order === this.orderIndex++;
+      turnCommand.pokemon.turnData.order = this.orderIndex++;
       this.commandsInProgress++;
       return true;
     }
@@ -360,7 +360,7 @@ export class TurnCommandManager {
   private shiftNextCommand(): boolean {
     const nextCommand = this.turnCommands.shift();
     if (!!nextCommand && this.handleCommand(nextCommand)) {
-      nextCommand.pokemon.turnData.order === this.orderIndex++;
+      nextCommand.pokemon.turnData.order = this.orderIndex++;
       this.commandsInProgress++;
       return true;
     }
