@@ -219,4 +219,8 @@ export class SwitchSummonPhase extends SummonPhase {
     // Reverts to weather-based forms when weather suppressors (Cloud Nine/Air Lock) are switched out
     globalScene.arena.triggerWeatherBasedFormChanges();
   }
+
+  protected override queuePostSummon(): void {
+    globalScene.phaseManager.createAndUnshiftPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
+  }
 }
