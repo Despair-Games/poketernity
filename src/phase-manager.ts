@@ -725,8 +725,11 @@ export class PhaseManager {
    * @param showText - (Optional, default `true`) Whether to show text
    */
   public toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
-    const schedulePhase = eager ? this.createAndUnshiftPhase : this.createAndPushPhase;
-    schedulePhase("LoginPhase", showText);
+    if (eager) {
+      this.createAndUnshiftPhase("LoginPhase", showText);
+    } else {
+      this.createAndPushPhase("LoginPhase", showText);
+    }
   }
 
   /**
@@ -741,7 +744,10 @@ export class PhaseManager {
     eager: boolean,
     ...params: ConstructorParameters<typeof StatStageChangePhase>
   ): void {
-    const schedulePhase = eager ? this.createAndUnshiftPhase : this.createAndPushPhase;
-    schedulePhase("StatStageChangePhase", ...params);
+    if (eager) {
+      this.createAndUnshiftPhase("StatStageChangePhase", ...params);
+    } else {
+      this.createAndPushPhase("StatStageChangePhase", ...params);
+    }
   }
 }
