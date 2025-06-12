@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { MoveId } from "#enums/move-id";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -13,11 +19,36 @@ export class Ability implements Localizable {
   public name: string;
   public description: string;
   public generation: number;
+  /**
+   * If `true`, the ability will activate even if the pokemon faints.
+   * @defaultValue `false`
+   */
   public isBypassFaint: boolean = false;
+  /**
+   * If `true`, the ability can be ignored by effects like {@linkcode AbilityId.MOLD_BREAKER | Mold Breaker}.
+   * @defaultValue `false`
+   */
   public isIgnorable: boolean = false;
+  /**
+   * If `true`, the ability can be suppressed by effects like {@linkcode AbilityId.NEUTRALIZING_GAS | Neutralizing Gas}.
+   * @defaultValue `true`
+   */
   public isSuppressable: boolean = true;
+  /**
+   * If `true`, the ability can be copied by effects like {@linkcode MoveId.ROLE_PLAY | Role Play}.
+   * @defaultValue `true`
+   */
   public isCopiable: boolean = true;
+  /**
+   * If `true`, the ability can be replaced by effects like {@linkcode MoveId.ROLE_PLAY | Role Play}.
+   * @defaultValue `true`
+   */
   public isReplaceable: boolean = true;
+  /**
+   * If `true`, the ability will activate if the pokemon is transformed (such as by {@linkcode MoveId.TRANSFORM | Transform}).
+   * @defaultValue `true`
+   * @todo Implement the effects of the flag
+   */
   public worksWhenTransformed: boolean = true;
   public attrs: AbAttr[] = [];
   public conditions: AbAttrCondition[] = [];
@@ -84,31 +115,40 @@ export class Ability implements Localizable {
     return this;
   }
 
+  /** Marks the ability as able to activate even if the ability holder faints. */
   bypassFaint(): Ability {
     this.isBypassFaint = true;
     return this;
   }
 
+  /** Marks the ability as able to be ignored by effects like {@linkcode AbilityId.MOLD_BREAKER | Mold Breaker} */
   ignorable(): Ability {
     this.isIgnorable = true;
     return this;
   }
 
+  /** Marks the ability as unable to be suppressed by effects like {@linkcode AbilityId.NEUTRALIZING_GAS | Neutralizing Gas} */
   unsuppressable(): Ability {
     this.isSuppressable = false;
     return this;
   }
 
+  /** Marks the ability as unable to be copied by effects like {@linkcode MoveId.ROLE_PLAY | Role Play} */
   uncopiable(): Ability {
     this.isCopiable = false;
     return this;
   }
 
+  /** Marks the ability as unable to be replaced by effects like {@linkcode MoveId.SIMPLE_BEAM | Simple Beam} */
   unreplaceable(): Ability {
     this.isReplaceable = false;
     return this;
   }
 
+  /**
+   * Marks the ability as unable to activate if the user is transformed (such as from {@linkcode MoveId.TRANSFORM | Transform}).
+   * @todo Implement the effects of this flag
+   */
   noTransform(): Ability {
     this.worksWhenTransformed = false;
     return this;
@@ -120,11 +160,13 @@ export class Ability implements Localizable {
     return this;
   }
 
+  /** Marks the ability as being incomplete (missing functionality) in some way */
   partial(): this {
     this.nameAppend += " (P)";
     return this;
   }
 
+  /** Marks the ability as being unimplemented (no functionality) */
   unimplemented(): this {
     this.nameAppend += " (N)";
     return this;
