@@ -46,6 +46,15 @@ describe("Move Effect Scores - Focus Energy", () => {
     expect(enemy).toPreferSelectingMove(MoveId.FOCUS_ENERGY);
   });
 
+  it("should not have high incentive when the user does not have a move with a high critical hit ratio", async () => {
+    game.override.enemyMoveset([MoveId.FOCUS_ENERGY, MoveId.SUPER_FANG, MoveId.PSYCHO_CUT]);
+
+    await game.classicMode.startBattle([SpeciesId.POOCHYENA]);
+
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.FOCUS_ENERGY);
+  });
+
   it("should be avoided when the user is already under Focus Energy's effect", async () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 

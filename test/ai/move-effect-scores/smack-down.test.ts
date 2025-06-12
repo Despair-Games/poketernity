@@ -24,7 +24,7 @@ describe("Move Effect Scores - Smack Down", () => {
       .battleType("single")
       .enemySpecies(SpeciesId.DIGLETT)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset([MoveId.SMACK_DOWN, MoveId.BULLDOZE, MoveId.AERIAL_ACE, MoveId.SPLASH])
+      .enemyMoveset([MoveId.SMACK_DOWN, MoveId.BULLDOZE, MoveId.ASSURANCE, MoveId.SPLASH])
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -35,6 +35,14 @@ describe("Move Effect Scores - Smack Down", () => {
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.SMACK_DOWN);
+  });
+
+  it("should not be preferred if the user is not Ground-type", async () => {
+    game.override.enemySpecies(SpeciesId.MAGIKARP);
+    await game.classicMode.startBattle([SpeciesId.SKARMORY]);
+
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.SMACK_DOWN);
   });
 
   it("should not be preferred if the target is already grounded", async () => {

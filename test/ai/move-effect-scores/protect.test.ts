@@ -39,6 +39,14 @@ describe("Move Effect Scores - Protect", () => {
     expect(enemy).toPreferSelectingMove(MoveId.PROTECT);
   });
 
+  it("should not be preferred over moves with high impact", async () => {
+    game.override.enemyMoveset([...baseMoveset, MoveId.SUPER_FANG]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.PROTECT);
+  });
+
   it.each([
     { abilityName: "Speed Boost", abilityId: AbilityId.SPEED_BOOST },
     { abilityName: "Moody", abilityId: AbilityId.MOODY },

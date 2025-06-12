@@ -48,6 +48,16 @@ describe("Move Effect Scores - Heal Block", () => {
     expect(enemy).toPreferSelectingMove(MoveId.HEAL_BLOCK);
   });
 
+  it("should not be strongly preferred if the opponent does not have Triage", async () => {
+    game.override.enemyMoveset([MoveId.HEAL_BLOCK, MoveId.SUPER_FANG, MoveId.SPLASH]);
+
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+
+    revealAllAbilities(game.scene);
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.HEAL_BLOCK);
+  });
+
   it("should be avoided if the opponent is already under Heal Block's effect", async () => {
     await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 

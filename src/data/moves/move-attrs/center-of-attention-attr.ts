@@ -13,7 +13,7 @@ import type { Move } from "#moves/move";
  */
 export class CenterOfAttentionAttr extends AddBattlerTagAttr {
   constructor(selfTarget: boolean = true) {
-    super(BattlerTagType.CENTER_OF_ATTENTION, selfTarget, { failOnOverlap: true });
+    super(BattlerTagType.CENTER_OF_ATTENTION, selfTarget);
   }
 
   /**

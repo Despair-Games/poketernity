@@ -2,6 +2,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -37,6 +38,26 @@ describe("Move Effect Scores - Yawn", () => {
     const enemy = game.field.getEnemyPokemon();
 
     expect(enemy).toPreferSelectingMove(MoveId.YAWN);
+  });
+
+  it("should not be preferred when the target already has a status effect", async () => {
+    game.override.statusEffect(StatusEffect.PARALYSIS);
+
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.YAWN);
+  });
+
+  it("should not be preferred when the target is Safeguarded", async () => {
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+
+    game.move.use(MoveId.SAFEGUARD);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.YAWN);
   });
 
   it("should not be preferred when the target has Insomnia", async () => {
