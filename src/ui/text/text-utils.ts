@@ -113,8 +113,10 @@ function getTextStyleOptions(
     padding: {
       bottom: 6,
     },
-    lineSpacing: lineSpacing,
   };
+  if (lineSpacing) {
+    styleOptions.lineSpacing = lineSpacing;
+  }
 
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {
