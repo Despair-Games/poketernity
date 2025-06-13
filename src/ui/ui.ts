@@ -57,7 +57,7 @@ import { TitleUiHandler } from "#ui/title-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
-import { coerceArray, executeIf } from "#utils/common-utils";
+import { executeIf } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
@@ -237,7 +237,34 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Instantiate a new UiHandler corresponding the the given mode.
+   * Initialize the tooltip window.
+   */
+  private setupTooltip() {
+    this.tooltipContainer = globalScene.add.container(0, 0);
+    this.tooltipContainer.setName("tooltip");
+    this.tooltipContainer.setVisible(false);
+
+    this.tooltipBg = addWindow(0, 0, 128, 31);
+    this.tooltipBg.setName("window-tooltip-bg");
+    this.tooltipBg.setOrigin(0, 0);
+
+    this.tooltipTitle = addTextObject(64, 4, "", TextStyle.TOOLTIP_TITLE);
+    this.tooltipTitle.setName("text-tooltip-title");
+    this.tooltipTitle.setOrigin(0.5, 0);
+
+    this.tooltipContent = addTextObject(6, 16, "", TextStyle.TOOLTIP_CONTENT);
+    this.tooltipContent.setName("text-tooltip-content");
+    this.tooltipContent.setWordWrapWidth(120 * TEXT_SCALE);
+
+    this.tooltipContainer.add(this.tooltipBg);
+    this.tooltipContainer.add(this.tooltipTitle);
+    this.tooltipContainer.add(this.tooltipContent);
+
+    globalScene.uiContainer.add(this.tooltipContainer);
+  }
+
+  /**
+   * Instantiate a new UiHandler corresponding to the given mode.
    * @param mode - The {@linkcode UiMode} to consider
    * @returns the {@linkcode UiHandler} for that mode
    */
@@ -375,12 +402,11 @@ export class UI extends Phaser.GameObjects.Container {
 
   /**
    * Stop any active handler, clear the mode chain and go back to the default MESSAGE ui mode.
-   *
-   * For now, only used to reset all handlers between tests.
    */
   public resetHandlers(): void {
     this.mode = DEFAULT_MODE;
     const currentHandler = this.getCurrentHandler();
+
     for (const handler of this.handlers.values()) {
       if (handler.active && handler !== currentHandler) {
         handler.stop();
@@ -390,10 +416,11 @@ export class UI extends Phaser.GameObjects.Container {
     if (this.handlers.has(UiMode.STARTER_SELECT)) {
       (this.handlers.get(UiMode.STARTER_SELECT) as StarterSelectUiHandler).clearStarterPreferences();
     }
+
     this.resetModeChain();
   }
 
-  public resetModeChain(): void {
+  private resetModeChain(): void {
     this.modeChain = [];
     globalScene.updateGameInfo();
   }
@@ -415,34 +442,16 @@ export class UI extends Phaser.GameObjects.Container {
     super.destroy(fromScene);
   }
 
-  private setupTooltip() {
-    this.tooltipContainer = globalScene.add.container(0, 0);
-    this.tooltipContainer.setName("tooltip");
-    this.tooltipContainer.setVisible(false);
-
-    this.tooltipBg = addWindow(0, 0, 128, 31);
-    this.tooltipBg.setName("window-tooltip-bg");
-    this.tooltipBg.setOrigin(0, 0);
-
-    this.tooltipTitle = addTextObject(64, 4, "", TextStyle.TOOLTIP_TITLE);
-    this.tooltipTitle.setName("text-tooltip-title");
-    this.tooltipTitle.setOrigin(0.5, 0);
-
-    this.tooltipContent = addTextObject(6, 16, "", TextStyle.TOOLTIP_CONTENT);
-    this.tooltipContent.setName("text-tooltip-content");
-    this.tooltipContent.setWordWrapWidth(120 * TEXT_SCALE);
-
-    this.tooltipContainer.add(this.tooltipBg);
-    this.tooltipContainer.add(this.tooltipTitle);
-    this.tooltipContainer.add(this.tooltipContent);
-
-    globalScene.uiContainer.add(this.tooltipContainer);
-  }
-
+  /**
+   * @returns The currently active {@linkcode UiHandler}.
+   */
   public getCurrentHandler<H extends UiHandler = UiHandler>(): H {
     return this.handlers.get(this.mode) as H;
   }
 
+  /**
+   * @returns The {@linkcode BattleMessageUiHandler} to use to display messages during gameplay.
+   */
   public getMessageHandler(): BattleMessageUiHandler | undefined {
     return this.handlers.get(UiMode.MESSAGE) as BattleMessageUiHandler;
   }
@@ -569,6 +578,12 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
+  /**
+   * Check whether a dialogueshould be shown or not, based on the "skip seen dialogues" setting.
+   * @param i18nKey - The dialogue key
+   * @returns `true` if the dialogue should be skipped.
+   * @todo why is this here?
+   */
   public shouldSkipDialogue(i18nKey: string): boolean {
     if (i18next.exists(i18nKey)) {
       if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
@@ -578,20 +593,34 @@ export class UI extends Phaser.GameObjects.Container {
     return false;
   }
 
+  /**
+   * @returns the current state and contents of the tooltip window.
+   */
   public getTooltip(): { visible: boolean; title: string; content: string } {
     return { visible: this.tooltipContainer.visible, title: this.tooltipTitle.text, content: this.tooltipContent.text };
   }
 
-  public showTooltip(title: string, content: string, overlap?: boolean): void {
+  /**
+   * Make the tooltip window visible (it will be placed based on the mouse/touch cursor until hidden).
+   * @param title - Header text for the tooltip. Can be empty.
+   * @param content - The main content of the tooltip
+   * @param overlap - `true` if the tooltip should be moved above the rest of the UI. Default: `false`
+   */
+  public showTooltip(title: string, content: string, overlap: boolean = false): void {
     this.tooltipContainer.setVisible(true);
     this.editTooltip(title, content);
-    if (overlap) {
+    if (!overlap) {
       globalScene.uiContainer.moveAbove(this.tooltipContainer, this);
     } else {
       globalScene.uiContainer.moveBelow(this.tooltipContainer, this);
     }
   }
 
+  /**
+   * Edit the tooltip window contents (assuming it is already being displayed)
+   * @param title - Header text for the tooltip. Can be empty.
+   * @param content - The main content of the tooltip
+   */
   public editTooltip(title: string, content: string): void {
     this.tooltipTitle.setText(title || "");
     const wrappedContent = this.tooltipContent.runWordWrap(content);
@@ -605,6 +634,7 @@ export class UI extends Phaser.GameObjects.Container {
     this.tooltipTitle.x = this.tooltipBg.width / 2;
   }
 
+  /** Hide the tooltip window. */
   public hideTooltip(): void {
     this.tooltipContainer.setVisible(false);
     this.tooltipTitle.clearTint();
@@ -643,28 +673,32 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
+  /**
+   * Clear text in the currently active message handler.
+   */
   public clearText(): void {
     this.getCurrentMessageHandler().clearText();
   }
 
-  // UNUSED?
-  public setCursor(cursor: number): boolean {
-    const changed = this.getCurrentHandler().setCursor(cursor);
-    if (changed) {
-      this.playSelect();
-    }
-
-    return changed;
-  }
-
+  /**
+   * Play the 'select' sound effect.
+   */
   public playSelect(): void {
     globalScene.audioManager.playSound("ui/select");
   }
 
+  /**
+   * Play the 'error' sound effect.
+   */
   public playError(): void {
     globalScene.audioManager.playSound("ui/error");
   }
 
+  /**
+   * Fade out the Ui container to make it appear black.
+   * @param duration - duration of the fading animation, in ms.
+   * @returns Promise that resolves after the animation is done.
+   */
   public fadeOut(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (this.overlayActive) {
@@ -683,6 +717,11 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * Fade in the Ui container to make it visible.
+   * @param duration - duration of the fading animation, in ms.
+   * @returns Promise that resolves after the animation is done.
+   */
   public fadeIn(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (!this.overlayActive) {
@@ -702,14 +741,28 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * @returns the currently active {@linkcode UiMode}
+   */
   public getMode(): UiMode {
     return this.mode;
   }
 
+  /**
+   * Set the current ui mode to {@linkcode UiMode.MESSAGE}
+   * @returns Promise that resolves once the mode is set.
+   */
   public setMessageMode(): Promise<void> {
     return this.setMode<MessageUiHandler>(UiMode.MESSAGE);
   }
 
+  /**
+   * Change the current ui mode, clearing the current handler.
+   * Won't have any effect if the requested mode is already active.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
   public setMode<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
@@ -717,6 +770,13 @@ export class UI extends Phaser.GameObjects.Container {
     return this.setModeInternal<THandler>(mode, true, false, false, ...args);
   }
 
+  /**
+   * Change the current ui mode, clearing the current handler.
+   * This will take effect even if the requested mode is already active.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the requested UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
   public setModeForceTransition<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
@@ -724,6 +784,13 @@ export class UI extends Phaser.GameObjects.Container {
     return this.setModeInternal<THandler>(mode, true, true, false, ...args);
   }
 
+  /**
+   * Change the current ui mode, without clearing the current handler.
+   * This should be used carefully as it means the previous handler will not be cleared from memory.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the requested UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
   public setModeWithoutClear<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
@@ -731,6 +798,13 @@ export class UI extends Phaser.GameObjects.Container {
     return this.setModeInternal<THandler>(mode, false, false, false, ...args);
   }
 
+  /**
+   * Change the current ui mode, showing the new mode handler above the current one, which is added to the mode chain.
+   * Modes set in this way should be stopped through {@linkcode revertMode}, which will restore the previous mode.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the requested UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
   public setOverlayMode<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
@@ -738,6 +812,19 @@ export class UI extends Phaser.GameObjects.Container {
     return this.setModeInternal<THandler>(mode, false, false, true, ...args);
   }
 
+  /**
+   * Change the current Ui Mode, clearing and destroying previous handlers if needed.
+   * By default doesn't do anything if the requested mode is already active, but can be forced.
+   * If not already initialized, create the UiHandler for this mode, then displays it,
+   * playing a transition animation or not, depending on the source and target mode.
+   *
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param clear - Whether the clear the handler for the current mode.
+   * @param forceTransition - Whether to force the switch to happen, even if the mode is the same as before.
+   * @param chainMode - Whether to add the current mode to the mode chain, to be able to revert back to it.
+   * @param params - Parameters for the requested UiMode's handler 'show' function.
+   * @returns Promise that resolves once the mode is set.
+   */
   private setModeInternal<THandler extends UiHandler = never>(
     mode: UiMode,
     clear: boolean,
@@ -798,6 +885,12 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * Revert back to the previous mode in the mode chain and clears the current handler.
+   * Should only be called if the current mode was set through {@linkcode setOverlayMode}.
+   *
+   * @returns Promise returning `true` if the mode was reverted, `false` if not (because the mode chain was empty).
+   */
   public revertMode(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (!this?.modeChain?.length) {
@@ -831,6 +924,10 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * Stop the current Ui Handler, potentially destroying it to free it from memory.
+   * If the stopped handler was the menu hanlder, destroy all handlers that depended on it.
+   */
   private stopCurrentHandler() {
     this.getCurrentHandler().stop();
     if (alwaysDestroyModes.includes(this.mode)) {
@@ -841,7 +938,10 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  // UNUSED?
+  /**
+   * Revert through all the modes currently in the mode chain.
+   * @returns Promise that resolves when the mode chain is empty.
+   */
   public revertModes(): Promise<void> {
     return new Promise<void>((resolve) => {
       if (!this?.modeChain?.length) {
@@ -851,6 +951,9 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * @returns the array of {@linkcode UiMode}s currently in the modeChain, with the oldest mode first.
+   */
   public getModeChain(): UiMode[] {
     return this.modeChain;
   }
@@ -861,7 +964,7 @@ export class UI extends Phaser.GameObjects.Container {
    * if inputMethod is "keyboard" or "touch", then the inputMethod is returned
    * if inputMethod is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock"
    * @returns gamepad type
-   * TODO: why is this here?
+   * @todo why is this here?
    */
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {
