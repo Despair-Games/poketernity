@@ -505,6 +505,7 @@ export class GameManager {
         }
       });
 
+      // @ts-expect-error - `turnCommands` is private
       turnManager.turnCommands = newTurnOrder;
     });
   }
