@@ -28,7 +28,7 @@ export const BattleSceneEventType = {
   BERRY_USED: "onBerryUsed",
 
   /**
-   * Triggers when after run ends either through winning or losing (but not save and quitting)
+   * Triggers after a run completes via winning or losing (but not through "Save & Quit").
    * @see {@linkcode GameOverEvent}
    */
   POST_GAME_OVER: "onGameOver",

@@ -271,11 +271,8 @@ export default class BattleScene extends SceneBase {
   /**
    * Allows subscribers to listen for events
    *
-   * Current Events:
-   * - {@linkcode BattleSceneEventType.MOVE_USED} {@linkcode MoveUsedEvent}
-   * - {@linkcode BattleSceneEventType.TURN_INIT} {@linkcode TurnInitEvent}
-   * - {@linkcode BattleSceneEventType.TURN_END} {@linkcode TurnEndEvent}
-   * - {@linkcode BattleSceneEventType.NEW_ARENA} {@linkcode NewArenaEvent}
+   * @see `src/events/`
+   * @todo Migrate to using {@linkcode eventBus} instead.
    */
   public readonly eventTarget: EventTarget = new EventTarget();
 

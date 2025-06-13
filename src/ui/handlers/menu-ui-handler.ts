@@ -511,7 +511,9 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       options: communityOptions,
       xOffset: this.optionSelectBg.displayWidth,
       yOffset: this.menuMessageBox.displayHeight + 1,
-      onResize: (w) => (this.communityWindowWidth = w),
+      onResize: (w) => {
+        this.communityWindowWidth = w;
+      },
     };
   }
 

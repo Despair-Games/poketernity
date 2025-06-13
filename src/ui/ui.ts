@@ -174,9 +174,9 @@ export class UI extends Phaser.GameObjects.Container {
   private overlayActive: boolean;
 
   /** Callback used to destroy no longer needed handlers on new encounters. */
-  private readonly onNextEncounterEvent = () => this.deleteUiHandlers([...runPrepModes, ...temporaryBattleModes]);
+  private readonly onNextEncounterEvent = () => this.deleteUiHandlers(...runPrepModes, ...temporaryBattleModes);
   /** Callback used to destroy no longer needed handlers on run end (win or loss). */
-  private readonly onGameOverEvent = () => this.deleteUiHandlers([...permanentBattleModes, ...temporaryBattleModes]);
+  private readonly onGameOverEvent = () => this.deleteUiHandlers(...permanentBattleModes, ...temporaryBattleModes);
 
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
@@ -202,7 +202,7 @@ export class UI extends Phaser.GameObjects.Container {
     for (const mode of settingsUiModes) {
       this.addUiHandler(mode);
     }
-    // If the handler gets initialized just before being shown the input text flashes
+    // If this handler gets initialized just before being shown the input text flashes
     // so for now we initialize it during loading and never stop it.
     // note: all form modals that use 'inputText.setText' have this issue, but this is the only one players can see
     this.addUiHandler(UiMode.RENAME_POKEMON);
@@ -231,13 +231,13 @@ export class UI extends Phaser.GameObjects.Container {
     this.savingIcon.setup();
     globalScene.uiContainer.add(this.savingIcon);
 
-    // Register listener to new encounter events and run end events
+    // Register listener to new encounter events and post game over events
     globalScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
     globalScene.eventTarget.addEventListener(BattleSceneEventType.POST_GAME_OVER, this.onGameOverEvent);
   }
 
   /**
-   * Instanciate a new UiHandler corresponding the the given mode.
+   * Instantiate a new UiHandler corresponding the the given mode.
    * @param mode - The {@linkcode UiMode} to consider
    * @returns the {@linkcode UiHandler} for that mode
    */
@@ -348,8 +348,8 @@ export class UI extends Phaser.GameObjects.Container {
    * Destroy the handlers for the given modes if they exist, and remove them from the handlers list.
    * @param modes - one or more {@linkcode UiMode}s
    */
-  private deleteUiHandlers(modes: UiMode | UiMode[]): void {
-    const deleteHandler = (mode: UiMode) => {
+  private deleteUiHandlers(...modes: UiMode[]): void {
+    for (const mode of modes) {
       const handler = this.handlers.get(mode);
       if (handler && !handler.active) {
         logUiVerbose(`Destroying Handler for mode: ${UiMode[mode]} (${mode})`);
@@ -358,9 +358,7 @@ export class UI extends Phaser.GameObjects.Container {
           handler.destroy();
         }
       }
-    };
-    const toDelete = coerceArray(modes);
-    toDelete.forEach((mode: UiMode) => deleteHandler(mode));
+    }
   }
 
   /**
@@ -383,11 +381,11 @@ export class UI extends Phaser.GameObjects.Container {
   public resetHandlers(): void {
     this.mode = DEFAULT_MODE;
     const currentHandler = this.getCurrentHandler();
-    this.handlers.forEach((handler) => {
+    for (const handler of this.handlers.values()) {
       if (handler.active && handler !== currentHandler) {
         handler.stop();
       }
-    });
+    }
 
     if (this.handlers.has(UiMode.STARTER_SELECT)) {
       (this.handlers.get(UiMode.STARTER_SELECT) as StarterSelectUiHandler).clearStarterPreferences();
@@ -773,7 +771,7 @@ export class UI extends Phaser.GameObjects.Container {
           this.getUiHandler(mode).start(...params);
           // Arriving on title screen, remove login handlers from memory
           if (mode === UiMode.TITLE) {
-            this.deleteUiHandlers([UiMode.LOGIN_FORM, UiMode.REGISTRATION_FORM]);
+            this.deleteUiHandlers(UiMode.LOGIN_FORM, UiMode.REGISTRATION_FORM);
           }
         } else if (!this.getCurrentHandler().active) {
           this.getUiHandler(mode).start(...params);
@@ -839,7 +837,7 @@ export class UI extends Phaser.GameObjects.Container {
       this.deleteUiHandlers(this.mode);
     } else if (this.mode === UiMode.MENU) {
       // When stopping the menu destroy all handlers that depend on it
-      this.deleteUiHandlers(mainMenuAccessedModes);
+      this.deleteUiHandlers(...mainMenuAccessedModes);
     }
   }
 
