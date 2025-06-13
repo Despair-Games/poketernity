@@ -1,4 +1,4 @@
-import { STRONG_MATCHUP_SCORE_THRESHOLD } from "#constants/ai-constants";
+import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -16,13 +16,13 @@ export class AquaRingAttr extends AddBattlerTagAttr {
   }
 
   /**
-   * Grants 75%(+1) if the user's average Matchup Score against all active opponents
-   * is above the {@linkcode STRONG_MATCHUP_SCORE_THRESHOLD}.
+   * Grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} if the user doesn't expect to take
+   * significant damage from any of the opponents' estimated attacks
    */
   public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
-    if (user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD) {
-      return this.getRandomScore(user, 75);
-    }
-    return 0;
+    const userIsDefensivelyFavored = user
+      .getOpponents()
+      .every((opp) => opp.estimateAttackMoves().every((mv) => opp.getExpectedAttackScore(user, mv) < 1));
+    return userIsDefensivelyFavored ? MINOR_EFFECT_SCORE_BONUS : 0;
   }
 }

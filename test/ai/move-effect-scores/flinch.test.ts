@@ -24,7 +24,7 @@ describe("Move Effect Scores - Flinch", () => {
       .battleType("single")
       .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset([MoveId.ASTONISH, MoveId.SPLASH, MoveId.TACKLE])
+      .enemyMoveset([MoveId.ASTONISH, MoveId.SPLASH, MoveId.VISE_GRIP])
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);

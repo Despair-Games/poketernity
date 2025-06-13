@@ -12,8 +12,8 @@ export class EncoreAttr extends AddBattlerTagAttr {
     super(BattlerTagType.ENCORE, false, { failOnOverlap: true });
   }
 
-  public override getCondition(): MoveConditionFunc | null {
-    return (_user, target, _move): boolean => {
+  public override getCondition(): MoveConditionFunc {
+    return (user, target, move): boolean => {
       if (target.isMax()) {
         return false;
       }
@@ -41,7 +41,7 @@ export class EncoreAttr extends AddBattlerTagAttr {
           return false;
       }
 
-      return true;
+      return (super.getCondition() as MoveConditionFunc)(user, target, move);
     };
   }
 

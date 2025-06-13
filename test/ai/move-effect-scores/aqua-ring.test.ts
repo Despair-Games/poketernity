@@ -32,9 +32,10 @@ describe("Move Effect Scores - Aqua Ring", () => {
   it("should be preferred when the user is defensively favored against its opponent", async () => {
     game.override.enemySpecies(SpeciesId.SHUCKLE);
 
-    await game.classicMode.startBattle([SpeciesId.RATTATA]);
+    await game.classicMode.startBattle([SpeciesId.BIDOOF]);
 
     const enemy = game.field.getEnemyPokemon();
+    console.log(enemy.getMatchupScore(game.field.getPlayerPokemon()));
     expect(enemy).toPreferSelectingMove(MoveId.AQUA_RING);
   });
 
