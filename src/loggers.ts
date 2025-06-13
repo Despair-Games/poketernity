@@ -75,8 +75,31 @@ export function logModifiers(...args: any[]): void {
   }
 }
 
-export function logUiEvent(...args: any[]): void {
-  if (import.meta.env.VITE_UI_DEBUG === "1") {
+/**
+ * Logs a UI-related event to the console if `env.VITE_UI_DEBUG` is enabled.
+ * @param verbose - `true` if the message should only be showed if `env.VITE_UI_DEBUG` is set to 2.
+ * @param args - The arguments to pass to `console.log`
+ */
+function logUi(verbose: boolean, ...args: any[]): void {
+  if (import.meta.env.VITE_UI_DEBUG === "2") {
+    console.log("[UI]", ...args);
+  } else if (!verbose && import.meta.env.VITE_UI_DEBUG === "1") {
     console.log("[UI]", ...args);
   }
+}
+
+/**
+ * Logs to the console if `env.VITE_UI_DEBUG` is set to 1 or 2.
+ * @param args - The arguments to pass to `console.log`
+ */
+export function logUiDebug(...args: any[]): void {
+  logUi(false, ...args);
+}
+
+/**
+ * Logs to the console if `env.VITE_UI_DEBUG` is set to 2.
+ * @param args - The arguments to pass to `console.log`
+ */
+export function logUiVerbose(...args: any[]): void {
+  logUi(true, ...args);
 }
