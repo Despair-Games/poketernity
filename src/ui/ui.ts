@@ -451,6 +451,7 @@ export class UI extends Phaser.GameObjects.Container {
 
   /**
    * @returns The {@linkcode BattleMessageUiHandler} to use to display messages during gameplay.
+   * @todo refactor message/dialogue handling to not require this.
    */
   public getMessageHandler(): BattleMessageUiHandler | undefined {
     return this.handlers.get(UiMode.MESSAGE) as BattleMessageUiHandler;
@@ -579,7 +580,7 @@ export class UI extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Check whether a dialogueshould be shown or not, based on the "skip seen dialogues" setting.
+   * Check whether a dialogue should be shown or not, based on the "skip seen dialogues" setting.
    * @param i18nKey - The dialogue key
    * @returns `true` if the dialogue should be skipped.
    * @todo why is this here?

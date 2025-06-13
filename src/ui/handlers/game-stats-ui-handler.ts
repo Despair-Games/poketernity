@@ -215,6 +215,11 @@ const displayStats: DisplayStats = {
   },
 };
 
+const ROWS_ON_SCREEN = 9;
+const NUM_COLUMNS = 2;
+const MAX_STATS_ON_SCREEN = ROWS_ON_SCREEN - NUM_COLUMNS;
+const MAX_CURSOR = Math.ceil((Object.keys(displayStats).length - MAX_STATS_ON_SCREEN) / NUM_COLUMNS);
+
 /**
  * Ui Handler for {@linkcode UiMode.GAME_STATS}.
  * Shows a list of account statistics over two columns.
@@ -223,13 +228,6 @@ const displayStats: DisplayStats = {
  * meaning the playtime stat won't change until the handler is exited then re-opened.
  */
 export class GameStatsUiHandler extends UiHandler {
-  private readonly ROWS_ON_SCREEN = 9;
-  private readonly NUM_COLUMNS = 2;
-  private readonly MAX_STATS_ON_SCREEN = this.ROWS_ON_SCREEN * this.NUM_COLUMNS;
-  private readonly MAX_CURSOR = Math.ceil(
-    (Object.keys(displayStats).length - this.MAX_STATS_ON_SCREEN) / this.NUM_COLUMNS,
-  );
-
   private gameStatsContainer: Phaser.GameObjects.Container;
 
   private statLabels: TextListContainer[];
@@ -259,25 +257,25 @@ export class GameStatsUiHandler extends UiHandler {
       .setPositionRelative(headerBg, 8, 4);
     this.gameStatsContainer.add(headerText);
 
-    const statsBgWidth = Math.floor((GAME_WIDTH - 2) / this.NUM_COLUMNS);
+    const statsBgWidth = Math.floor((GAME_WIDTH - 2) / NUM_COLUMNS);
     const statsBgHeight = Math.floor(GAME_HEIGHT - headerBg.height - 2);
 
-    for (let i = 0; i < this.NUM_COLUMNS; i++) {
+    for (let i = 0; i < NUM_COLUMNS; i++) {
       const xPosition = (statsBgWidth - 2) * i;
       const yPosition = headerBg.height;
-      const width = statsBgWidth + (i > 0 ? 2 : 0) + (i < this.NUM_COLUMNS - 1 ? 2 : 0);
+      const width = statsBgWidth + (i > 0 ? 2 : 0) + (i < NUM_COLUMNS - 1 ? 2 : 0);
       // Create the background window for each panel
       const statsBg = addWindow(xPosition, yPosition, width, statsBgHeight, false, false, i > 0 ? -3 : 0, 1);
       statsBg.setOrigin(0, 0);
 
       const statY = statsBg.y + 5;
       // Create a single text object for all labels to save on resources
-      const statsLabels = new TextListContainer(statsBg.x + 8, statY, TextStyle.STATS_LABEL, this.ROWS_ON_SCREEN);
+      const statsLabels = new TextListContainer(statsBg.x + 8, statY, TextStyle.STATS_LABEL, ROWS_ON_SCREEN);
       this.statLabels.push(statsLabels);
 
       // Create a single text object for all values to save on resources
       const statX = statsBg.x + statsBgWidth - 5;
-      const statsValues = new TextListContainer(statX, statY, TextStyle.STATS_VALUE, this.ROWS_ON_SCREEN, {
+      const statsValues = new TextListContainer(statX, statY, TextStyle.STATS_VALUE, ROWS_ON_SCREEN, {
         textAlign: "right",
       });
       this.statValues.push(statsValues);
@@ -327,9 +325,9 @@ export class GameStatsUiHandler extends UiHandler {
    */
   private initStatsDisplay() {
     // Init arrays containing labels and values for each column of statistics
-    const labels = new Array(this.NUM_COLUMNS);
-    const values = new Array(this.NUM_COLUMNS);
-    for (let col = 0; col < this.NUM_COLUMNS; col++) {
+    const labels = new Array(NUM_COLUMNS);
+    const values = new Array(NUM_COLUMNS);
+    for (let col = 0; col < NUM_COLUMNS; col++) {
       values[col] = [];
       labels[col] = [];
       this.statValues[col].setList(values[col]);
@@ -339,7 +337,7 @@ export class GameStatsUiHandler extends UiHandler {
     // Fill the arrays with computed stats and labels for each statistic
     Object.keys(displayStats).forEach((key, i) => {
       const stat = displayStats[key] as DisplayStat;
-      const column = i % this.NUM_COLUMNS;
+      const column = i % NUM_COLUMNS;
       const value = stat.sourceFunc(globalScene.gameData);
       const showStat = !stat.hidden || Number.isNaN(Number.parseInt(value)) || Number.parseInt(value);
       labels[column].push(showStat ? i18next.t(`gameStatsUiHandler:${stat.label_key}`) : "???");
@@ -351,7 +349,7 @@ export class GameStatsUiHandler extends UiHandler {
    * Update the stats currently on screen.
    */
   private updateStats(): void {
-    for (let col = 0; col < this.NUM_COLUMNS; col++) {
+    for (let col = 0; col < NUM_COLUMNS; col++) {
       this.statLabels[col].setCursor(this.cursor);
       this.statValues[col].setCursor(this.cursor);
     }
@@ -364,7 +362,7 @@ export class GameStatsUiHandler extends UiHandler {
     const showUpArrow = this.cursor > 0;
     this.arrowUp.setVisible(showUpArrow);
 
-    const showDownArrow = this.cursor < this.MAX_CURSOR;
+    const showDownArrow = this.cursor < MAX_CURSOR;
     this.arrowDown.setVisible(showDownArrow);
   }
 
@@ -382,11 +380,11 @@ export class GameStatsUiHandler extends UiHandler {
           if (this.cursor > 0) {
             success = this.setCursor(this.cursor - 1);
           } else if (this.cursor === 0) {
-            success = this.setCursor(this.MAX_CURSOR);
+            success = this.setCursor(MAX_CURSOR);
           }
           break;
         case Button.DOWN:
-          if (this.cursor < this.MAX_CURSOR) {
+          if (this.cursor < MAX_CURSOR) {
             success = this.setCursor(this.cursor + 1);
           } else {
             success = this.setCursor(0);
