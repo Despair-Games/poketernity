@@ -27,7 +27,7 @@ import {
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { ELITE_FOUR_1_WAVE } from "#constants/wave-constants";
 import { getBiomeName } from "#data/biome-utils";
-import { allAbilities, allBiomes, allMoves, allSpecies } from "#data/data-lists";
+import { allAbilities, allBiomes, allSpecies } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonFormChanges, type SpeciesFormChange } from "#data/pokemon-forms";
@@ -1197,7 +1197,6 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...allMoves.values(),
         ...allAbilities,
         ...getTSEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
