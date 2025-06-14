@@ -1431,7 +1431,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Generates placeholder moves for this Pokemon with properties based
+   * Generates placeholder attacks for this Pokemon with properties based
    * on the Pokemon's type(s), attacking stats, and the current wave index.
    * This generates up to 2 moves:
    * - One move for each of the Pokemon's base type(s).
@@ -1452,13 +1452,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * - Each move has 0 priority and no secondary effects.
    * @returns
    */
-  protected getSimulatedMoves(): Move[] {
+  private getSimulatedMoves(): Move[] {
     const types = this.getTypes(false, false, true);
     const category = this.getStat(Stat.ATK) >= this.getStat(Stat.SPATK) ? MoveCategory.PHYSICAL : MoveCategory.SPECIAL;
     const ret: Move[] = [];
 
     for (let i = 0; i < Math.min(types.length, 4 - this.waveData.revealedMoves.size); i++) {
-      ret.push(new AttackMove(MoveId.NONE, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
+      const moveId = i % 2 === 0 ? MoveId.SIMULATED_MOVE_1 : MoveId.SIMULATED_MOVE_2;
+      ret.push(new AttackMove(moveId, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
     }
 
     return ret;
