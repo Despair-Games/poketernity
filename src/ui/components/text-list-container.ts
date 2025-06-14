@@ -10,7 +10,7 @@ interface TextListContainerOptions {
    */
   useBBCode?: boolean;
   /**
-   * Optional alignement for the text.
+   * Optional alignment for the text.
    * The x origin of the textObject will be placed on the left, center or right of the text based on this.
    * @defaultValue `left`
    */
