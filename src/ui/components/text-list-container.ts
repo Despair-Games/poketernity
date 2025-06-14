@@ -42,7 +42,7 @@ export class TextListContainer extends Phaser.GameObjects.Container {
    * @param y - The y position of the TextObject in its parent container.
    * @param textStyle - The {@linkcode TextStyle} to use.
    * @param maxLines - The maximum number of lines to show at one.
-   * @param options - (Optionnal) Extra text styling options {@linkcode TextListContainerOptions}.
+   * @param options - (Optional) Extra text styling options {@linkcode TextListContainerOptions}.
    */
   constructor(x: number, y: number, textStyle: TextStyle, maxLines: number, options?: TextListContainerOptions) {
     super(globalScene, x, y);
