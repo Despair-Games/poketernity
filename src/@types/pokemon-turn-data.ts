@@ -2,6 +2,7 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import type { TypeDamageMultiplier } from "#data/type";
 import type { MoveId } from "#enums/move-id";
 import type { AttackMoveResult } from "#types/attack-move-result";
+import type { PokemonScoreData } from "#types/pokemon-score-data";
 
 export interface PokemonTurnData {
   turnCommand?: TurnCommand;
@@ -26,4 +27,9 @@ export interface PokemonTurnData {
   switchedInThisTurn: boolean;
   failedRunAway: boolean;
   joinedRound: boolean;
+  /**
+   * Contains invariant scoring data for this Pokemon
+   * against all Pokemon on the field, mapped by their id.
+   */
+  scoreData: Map<number, PokemonScoreData>;
 }

@@ -207,6 +207,7 @@ import { applyMoveAttrs } from "#utils/move-utils";
 import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
+import type { PokemonScoreData } from "#types/pokemon-score-data";
 
 interface AbilityData {
   ability: Ability;
@@ -2226,16 +2227,44 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode getAttackScore}
    */
   public getExpectedAttackScore(opponent: Pokemon, move: Move): number {
+    const cachedScore = this.turnData.scoreData.get(opponent.id)?.expectedAttackScores.get(move.id);
+    if (!isNil(cachedScore)) {
+      return cachedScore;
+    }
+
     const damage = opponent.getEstimatedAttackDamage(this, move);
 
+    let score: number = 0;
     if (damage >= opponent.hp) {
-      return this.getAttackScoreOnKnockOut(move);
+      score = this.getAttackScoreOnKnockOut(move);
+    } else if (damage <= 0) {
+      score = -1;
+    } else {
+      const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
+      score = damagePct / 40;
     }
-    if (damage <= 0) {
-      return -1;
+
+    this.cacheEas(opponent, move, score);
+    return score;
+  }
+
+  /**
+   * Caches a {@linkcode PokemonScoreData} entry in this Pokemon's
+   * {@linkcode turnData} with the given data.
+   * @param opponent - The {@linkcode Pokemon} that {@linkcode move} is evaluated against
+   * @param move - The {@linkcode Move} being evaluated
+   * @param score - The calculated score for the move action
+   * @see {@linkcode getExpectedAttackScore}
+   */
+  private cacheEas(opponent: Pokemon, move: Move, score: number): void {
+    const oppScoreData = this.turnData.scoreData.get(opponent.id);
+    if (!oppScoreData) {
+      this.turnData.scoreData.set(opponent.id, {
+        expectedAttackScores: new Map<MoveId, number>([[move.id, score]]),
+      });
+    } else {
+      oppScoreData.expectedAttackScores.set(move.id, score);
     }
-    const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
-    return damagePct / 40;
   }
 
   /**
@@ -2265,6 +2294,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the calculated score for the matchup.
    */
   public getMatchupScore(opponent: Pokemon): number {
+    const cachedScore = this.turnData.scoreData.get(opponent.id)?.matchupScore;
+    if (!isNil(cachedScore)) {
+      return cachedScore;
+    }
+
     const speed = this.getEffectiveStat(Stat.SPD, opponent, undefined, AbilityApplyMode.REVEALED);
     const oppSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, AbilityApplyMode.REVEALED);
     const userCanOutspeed = speed >= oppSpeed;
@@ -2275,16 +2309,40 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const eas = Math.max(...attackMoves.map((mv) => this.getExpectedAttackScore(opponent, mv)));
     const oppEas = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
 
+    let score: number = 0;
     if (this.isActive(true)) {
       if (eas >= 4 && (userCanOutspeed || oppEas < eas)) {
-        return Number.POSITIVE_INFINITY;
+        score = Number.POSITIVE_INFINITY;
+      } else if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
+        score = 0;
+      } else {
+        score = eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
       }
-      if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
-        return 0;
-      }
-      return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
+    } else {
+      score = Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
     }
-    return Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
+
+    this.cacheMatchupScore(opponent, score);
+    return score;
+  }
+
+  /**
+   * Caches a {@linkcode PokemonScoreData} entry in this Pokemon's
+   * {@linkcode turnData} with the given Matchup Score data.
+   * @param opponent - The opposing Pokemon that this Pokemon is evaluated against
+   * @param matchupScore - This Pokemon's Matchup Score against {@linkcode opponent}
+   * @see {@linkcode getMatchupScore}
+   */
+  private cacheMatchupScore(opponent: Pokemon, matchupScore: number) {
+    const oppScoreData = this.turnData.scoreData.get(opponent.id);
+    if (!oppScoreData) {
+      this.turnData.scoreData.set(opponent.id, {
+        matchupScore,
+        expectedAttackScores: new Map<MoveId, number>(),
+      });
+    } else {
+      oppScoreData.matchupScore = matchupScore;
+    }
   }
 
   /**
@@ -4446,6 +4504,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       switchedInThisTurn: false,
       failedRunAway: false,
       joinedRound: false,
+      scoreData: new Map<number, PokemonScoreData>(),
     };
   }
 
