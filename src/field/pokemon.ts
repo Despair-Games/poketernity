@@ -1365,7 +1365,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegmentIndex(): number;
 
-  getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
+  public getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
     const ret = !bypassSummonData && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
@@ -1382,9 +1382,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     overrideArray.forEach((moveId: MoveId, index: number) => {
       const ppUsed = this.moveset[index]?.ppUsed ?? 0;
-      this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
+      this.moveset[index] = new PokemonMove(this, moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
     });
     return this.moveset;
+  }
+
+  public getMove(moveId: MoveId, bypassSummonData: boolean = false): PokemonMove | undefined {
+    return this.getMoveset(bypassSummonData).find((mv) => mv.moveId === moveId);
   }
 
   /**
@@ -2232,7 +2236,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (moveId === MoveId.NONE) {
       return;
     }
-    const move = new PokemonMove(moveId);
+    const move = new PokemonMove(this, moveId);
     this.moveset[moveIndex] = move;
   }
 
@@ -2509,7 +2513,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         while (rand > stabMovePool[index][1]) {
           rand -= stabMovePool[index++][1];
         }
-        this.moveset.push(new PokemonMove(stabMovePool[index][0], 0, 0));
+        this.moveset.push(new PokemonMove(this, stabMovePool[index][0], 0, 0));
       }
     } else {
       // Normal wild pokemon just force a random damaging move
@@ -2521,7 +2525,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         while (rand > attackMovePool[index][1]) {
           rand -= attackMovePool[index++][1];
         }
-        this.moveset.push(new PokemonMove(attackMovePool[index][0], 0, 0));
+        this.moveset.push(new PokemonMove(this, attackMovePool[index][0], 0, 0));
       }
     }
 
@@ -2561,7 +2565,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       while (rand > movePool[index][1]) {
         rand -= movePool[index++][1];
       }
-      this.moveset.push(new PokemonMove(movePool[index][0], 0, 0));
+      this.moveset.push(new PokemonMove(this, movePool[index][0], 0, 0));
     }
 
     // Trigger FormChange, except for enemy Pokemon during Mystery Encounters, to avoid crashes

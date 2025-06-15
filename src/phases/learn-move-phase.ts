@@ -146,7 +146,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
         const forgetSuccessText = i18next.t("battle:learnMoveForgetSuccess", {
           pokemonName: getPokemonNameWithAffix(pokemon),
-          moveName: pokemon.moveset[moveIndex]!.getName(),
+          moveName: pokemon.moveset[moveIndex]!.name,
         });
         const fullText = [i18next.t("battle:countdownPoof"), forgetSuccessText, i18next.t("battle:learnMoveAnd")].join(
           "$",

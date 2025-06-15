@@ -68,7 +68,9 @@ export class PowderTag extends BattlerTag {
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
-          globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:powderLapse", { moveName: move.name }));
+          globalScene.phaseManager.queueMessagePhase(
+            i18next.t("battlerTags:powderLapse", { moveName: currPhase.move.name }),
+          );
         }
       }
       return true;

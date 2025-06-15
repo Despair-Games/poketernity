@@ -138,7 +138,10 @@ export class BattlerTag {
     return false;
   }
 
-  /** @returns the localized name of the move that created this tag */
+  /**
+   * @returns the localized name of the move that created this tag
+   * @todo Should this use `PokemonMove.name` instead?
+   */
   getMoveName(): string | null {
     return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;
   }

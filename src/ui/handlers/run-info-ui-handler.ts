@@ -819,8 +819,9 @@ export class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
         const move = pokemonMoveset[m]?.getMove();
+        const moveName = move ? pokemon.getMove(move.id)!.name : "-";
         pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
-        pokemonMoveLabels[m].setText(move ? move.name : "-");
+        pokemonMoveLabels[m].setText(moveName);
       }
 
       // Pokemon Held Items - not displayed by default

@@ -88,9 +88,9 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     const enemyPokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, false);
     if (!enemyPokemon.moveset.some((m) => m && m.getMove().id === MoveId.REVELATION_DANCE)) {
       if (enemyPokemon.moveset.length < 4) {
-        enemyPokemon.moveset.push(new PokemonMove(MoveId.REVELATION_DANCE));
+        enemyPokemon.moveset.push(new PokemonMove(enemyPokemon, MoveId.REVELATION_DANCE));
       } else {
-        enemyPokemon.moveset[0] = new PokemonMove(MoveId.REVELATION_DANCE);
+        enemyPokemon.moveset[0] = new PokemonMove(enemyPokemon, MoveId.REVELATION_DANCE);
       }
     }
 
@@ -159,7 +159,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(MoveId.REVELATION_DANCE),
+          move: new PokemonMove(null, MoveId.REVELATION_DANCE),
           ignorePp: true,
         });
 
@@ -231,11 +231,11 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
             .filter((move) => move && DANCING_MOVES.includes(move.getMove().id))
             .map((move: PokemonMove) => {
               const option: OptionSelectItem = {
-                label: move.getName(),
+                label: move.name,
                 handler: () => {
                   // Pokemon and second option selected
                   encounter.setDialogueToken("selectedPokemon", pokemon.getNameToRender());
-                  encounter.setDialogueToken("selectedMove", move.getName());
+                  encounter.setDialogueToken("selectedMove", move.name);
                   encounter.misc.selectedMove = move;
 
                   return true;
@@ -271,9 +271,9 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         const move = encounter.misc.selectedMove?.getMove().id;
         if (!oricorio.moveset.some((m) => m.getMove().id === move)) {
           if (oricorio.moveset.length < 4) {
-            oricorio.moveset.push(new PokemonMove(move));
+            oricorio.moveset.push(new PokemonMove(oricorio, move));
           } else {
-            oricorio.moveset[3] = new PokemonMove(move);
+            oricorio.moveset[3] = new PokemonMove(oricorio, move);
           }
         }
 

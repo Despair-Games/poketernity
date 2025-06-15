@@ -37,16 +37,18 @@ export class TauntTag extends MoveRestrictionBattlerTag {
   }
 
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+    const moveName = pokemon.getMove(moveId)?.name ?? "";
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves.get(moveId).name,
+      moveName,
     });
   }
 
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
+    const moveName = pokemon.getMove(moveId)?.name ?? "";
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves.get(moveId).name,
+      moveName,
     });
   }
 }

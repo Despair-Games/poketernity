@@ -385,10 +385,11 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       for (let m = 0; m < 4; m++) {
         const move = m < pokemon.moveset.length && pokemon.moveset[m] ? pokemon.moveset[m]!.getMove() : null;
+        const moveName = move ? (pokemon.getMove(move.id)?.name ?? move.name) : "-";
         this.pokemonMoveBgs[m].setFrame(
           ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase(),
         );
-        this.pokemonMoveLabels[m].setText(move ? move.name : "-");
+        this.pokemonMoveLabels[m].setText(moveName);
         this.pokemonMovesContainers[m].setVisible(!!move);
       }
 

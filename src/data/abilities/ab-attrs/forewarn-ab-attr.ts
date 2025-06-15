@@ -31,7 +31,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
 
         if (movePower > maxPowerSeen) {
           maxPowerSeen = movePower;
-          maxMove = move.getName();
+          maxMove = move.name;
         }
       }
     }

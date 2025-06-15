@@ -582,7 +582,7 @@ export class MoveRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const includedMoves = pokemon?.moveset.filter((move) => move?.moveId && this.requiredMoves.includes(move.moveId));
     if (includedMoves && includedMoves.length > 0 && includedMoves[0]) {
-      return ["move", includedMoves[0].getName()];
+      return ["move", includedMoves[0].name];
     }
     return ["move", ""];
   }

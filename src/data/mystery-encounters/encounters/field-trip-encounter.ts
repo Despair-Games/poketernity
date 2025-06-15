@@ -77,7 +77,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           // Return the options for Pokemon move valid for this option
           return pokemon.moveset.map((move: PokemonMove) => {
             const option: OptionSelectItem = {
-              label: move.getName(),
+              label: move.name,
               handler: () => {
                 // Pokemon and move selected
                 encounter.setDialogueToken("moveCategory", i18next.t(`${namespace}:physical`));
@@ -122,7 +122,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           // Return the options for Pokemon move valid for this option
           return pokemon.moveset.map((move: PokemonMove) => {
             const option: OptionSelectItem = {
-              label: move.getName(),
+              label: move.name,
               handler: () => {
                 // Pokemon and move selected
                 encounter.setDialogueToken("moveCategory", i18next.t(`${namespace}:special`));
@@ -167,7 +167,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           // Return the options for Pokemon move valid for this option
           return pokemon.moveset.map((move: PokemonMove) => {
             const option: OptionSelectItem = {
-              label: move.getName(),
+              label: move.name,
               handler: () => {
                 // Pokemon and move selected
                 encounter.setDialogueToken("moveCategory", i18next.t(`${namespace}:status`));
@@ -205,7 +205,7 @@ function pokemonAndMoveChosen(pokemon: PlayerPokemon, move: PokemonMove, correct
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   const correctMove = move.getMove().category === correctMoveCategory;
   encounter.setDialogueToken("pokeName", pokemon.getNameToRender());
-  encounter.setDialogueToken("move", move.getName());
+  encounter.setDialogueToken("move", move.name);
   if (!correctMove) {
     encounter.selectedOption!.dialogue!.selected = [
       {

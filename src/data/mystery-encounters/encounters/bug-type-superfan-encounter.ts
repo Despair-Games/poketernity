@@ -294,10 +294,10 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
 
       // Init the moves available for tutor
       const moveTutorOptions: PokemonMove[] = [];
-      moveTutorOptions.push(new PokemonMove(PHYSICAL_TUTOR_MOVES[randSeedInt(PHYSICAL_TUTOR_MOVES.length)]));
-      moveTutorOptions.push(new PokemonMove(SPECIAL_TUTOR_MOVES[randSeedInt(SPECIAL_TUTOR_MOVES.length)]));
-      moveTutorOptions.push(new PokemonMove(STATUS_TUTOR_MOVES[randSeedInt(STATUS_TUTOR_MOVES.length)]));
-      moveTutorOptions.push(new PokemonMove(MISC_TUTOR_MOVES[randSeedInt(MISC_TUTOR_MOVES.length)]));
+      moveTutorOptions.push(new PokemonMove(null, PHYSICAL_TUTOR_MOVES[randSeedInt(PHYSICAL_TUTOR_MOVES.length)]));
+      moveTutorOptions.push(new PokemonMove(null, SPECIAL_TUTOR_MOVES[randSeedInt(SPECIAL_TUTOR_MOVES.length)]));
+      moveTutorOptions.push(new PokemonMove(null, STATUS_TUTOR_MOVES[randSeedInt(STATUS_TUTOR_MOVES.length)]));
+      moveTutorOptions.push(new PokemonMove(null, MISC_TUTOR_MOVES[randSeedInt(MISC_TUTOR_MOVES.length)]));
       encounter.misc = {
         moveTutorOptions,
       };
@@ -726,7 +726,7 @@ function doBugTypeMoveTutor(): Promise<void> {
 
     const optionSelectItems = moveOptions.map((move: PokemonMove) => {
       const option: OptionSelectItem = {
-        label: move.getName(),
+        label: move.name,
         handler: () => {
           moveInfoOverlay.active = false;
           moveInfoOverlay.setVisible(false);

@@ -213,7 +213,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, [SpeciesId.ABRA]);
       const party = scene.getPlayerParty();
       const abra = party.find((pkm) => pkm.species.speciesId === SpeciesId.ABRA)!;
-      abra.moveset = [new PokemonMove(MoveId.BEAT_UP)];
+      abra.moveset = [new PokemonMove(abra, MoveId.BEAT_UP)];
       const expBefore = abra.exp;
 
       await runMysteryEncounterToEnd(game, 2);

@@ -93,7 +93,7 @@ export class MovePhase extends BattlePhase {
 
     this.pokemon = pokemon;
     this.targets = targets;
-    this.move = typeof move === "number" ? new PokemonMove(move, 0, 0, true) : move;
+    this.move = typeof move === "number" ? new PokemonMove(pokemon, move, 0, 0, true) : move;
     this.followUp = followUp;
     this.ignorePp = ignorePp;
     this.reflected = reflected;
@@ -826,7 +826,7 @@ export class MovePhase extends BattlePhase {
       variableMessage
       ?? i18next.t("battle:useMove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
-        moveName: this.move.getName(),
+        moveName: this.move.name,
       })
     );
   }

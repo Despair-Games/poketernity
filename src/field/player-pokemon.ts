@@ -161,7 +161,7 @@ export class PlayerPokemon extends Pokemon {
       return false;
     }
 
-    this.moveset = moveset.map((m) => new PokemonMove(m));
+    this.moveset = moveset.map((m) => new PokemonMove(this, m));
 
     return true;
   }
@@ -467,7 +467,7 @@ export class PlayerPokemon extends Pokemon {
   copyMoveset(): PokemonMove[] {
     const newMoveset: PokemonMove[] = [];
     this.moveset.forEach((move) => {
-      newMoveset.push(new PokemonMove(move.moveId, 0, move.ppUp, move.virtual, move.maxPpOverride));
+      newMoveset.push(new PokemonMove(null, move.moveId, 0, move.ppUp, move.virtual, move.maxPpOverride));
     });
 
     return newMoveset;

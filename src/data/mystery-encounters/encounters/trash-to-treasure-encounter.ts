@@ -164,13 +164,13 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
           {
             sourceBattlerIndex: BattlerIndex.ENEMY,
             targets: [BattlerIndex.PLAYER],
-            move: new PokemonMove(MoveId.TOXIC),
+            move: new PokemonMove(null, MoveId.TOXIC),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY,
             targets: [BattlerIndex.ENEMY],
-            move: new PokemonMove(MoveId.AMNESIA),
+            move: new PokemonMove(null, MoveId.AMNESIA),
             ignorePp: true,
           },
         );

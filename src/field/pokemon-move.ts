@@ -1,8 +1,10 @@
 import { allMoves } from "#data/data-lists";
+import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { toDmgValue } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.
@@ -17,8 +19,8 @@ import { toDmgValue } from "#utils/common-utils";
  * @see {@linkcode getPpRatio} - returns the current PP amount / max PP amount.
  * @see {@linkcode getName} - returns name of the {@linkcode Move}.
  **/
-
 export class PokemonMove {
+  public readonly pokemon: Pokemon | null;
   public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
@@ -30,12 +32,31 @@ export class PokemonMove {
    */
   public maxPpOverride?: number;
 
-  constructor(moveId: MoveId, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
+  constructor(
+    pokemon: Pokemon | null,
+    moveId: MoveId,
+    ppUsed: number = 0,
+    ppUp: number = 0,
+    virtual: boolean = false,
+    maxPpOverride?: number,
+  ) {
+    this.pokemon = pokemon;
     this.moveId = moveId;
     this.ppUsed = ppUsed;
     this.ppUp = ppUp;
     this.virtual = virtual;
     this.maxPpOverride = maxPpOverride;
+  }
+
+  public get name(): string {
+    if (this.pokemon === null) {
+      return this.getMove().name;
+    }
+    const gMaxPrefix =
+      this.getMove().checkFlag(MoveFlags.G_MAX_MOVE, this.pokemon) && this.pokemon.isMax()
+        ? i18next.t("move:gMaxPrefix")
+        : "";
+    return `${gMaxPrefix} ${this.getMove().name}`;
   }
 
   /**
@@ -89,6 +110,13 @@ export class PokemonMove {
    * @returns A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
-    return new PokemonMove(source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);
+    return new PokemonMove(
+      source.pokemon,
+      source.moveId,
+      source.ppUsed,
+      source.ppUp,
+      source.virtual,
+      source.maxPpOverride,
+    );
   }
 }

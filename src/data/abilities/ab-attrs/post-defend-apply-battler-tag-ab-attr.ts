@@ -21,10 +21,13 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
     if (this.condition(pokemon, attacker, move)) {
       if (!pokemon.hasTag(this.tagType) && !simulated) {
         pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
+
+        const pokemonName = getPokemonNameWithAffix(pokemon);
+        const moveName = pokemon.getMove(move.id)?.name ?? "";
         globalScene.phaseManager.queueMessagePhase(
           i18next.t("abilityTriggers:windPowerCharged", {
-            pokemonName: getPokemonNameWithAffix(pokemon),
-            moveName: move.name,
+            pokemonName,
+            moveName,
           }),
         );
       }

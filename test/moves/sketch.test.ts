@@ -40,7 +40,10 @@ describe("Moves - Sketch", () => {
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     // can't use normal moveset override because we need to check moveset changes
-    playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.SKETCH)];
+    playerPokemon.moveset = [
+      new PokemonMove(playerPokemon, MoveId.SKETCH),
+      new PokemonMove(playerPokemon, MoveId.SKETCH),
+    ];
 
     game.move.select(MoveId.SKETCH);
     await game.toEndOfTurn();
@@ -62,7 +65,10 @@ describe("Moves - Sketch", () => {
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.GROWL)];
+    playerPokemon.moveset = [
+      new PokemonMove(playerPokemon, MoveId.SKETCH),
+      new PokemonMove(playerPokemon, MoveId.GROWL),
+    ];
 
     game.move.select(MoveId.GROWL);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -89,7 +95,7 @@ describe("Moves - Sketch", () => {
     game.override.enemyMoveset([MoveId.METRONOME]);
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH)];
+    playerPokemon.moveset = [new PokemonMove(playerPokemon, MoveId.SKETCH)];
 
     // Opponent uses Metronome -> False Swipe, then player uses Sketch, which should sketch Metronome
     game.move.select(MoveId.SKETCH);

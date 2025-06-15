@@ -45,8 +45,9 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @param moveId - The {@linkcode MoveId | move} that is being restricted
    * @returns the message to display when the player attempts to select the restricted move
    */
-  override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
-    return i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name });
+  override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+    const moveName = pokemon.getMove(moveId)?.name ?? "";
+    return i18next.t("battle:moveCannotBeSelected", { moveName });
   }
 
   /**

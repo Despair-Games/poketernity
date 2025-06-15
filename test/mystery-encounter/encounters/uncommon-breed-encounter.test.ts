@@ -277,7 +277,8 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
       // Mock moveset
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.CHARM)];
+      const [player] = scene.getPlayerParty();
+      player.moveset = [new PokemonMove(player, MoveId.CHARM)];
       await runMysteryEncounterToEnd(game, 3);
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

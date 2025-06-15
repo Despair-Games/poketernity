@@ -379,7 +379,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Set moves
       if (config?.moveSet && config.moveSet.length > 0) {
-        const moves = config.moveSet.map((m) => new PokemonMove(m));
+        const moves = config.moveSet.map((m) => new PokemonMove(enemyPokemon, m));
         enemyPokemon.moveset = moves;
         enemyPokemon.summonData.moveset = moves;
       }
@@ -425,7 +425,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     ];
     const moveset: string[] = [];
     enemyPokemon.getMoveset().forEach((move) => {
-      moveset.push(move.getName());
+      moveset.push(move.name);
     });
 
     console.log(

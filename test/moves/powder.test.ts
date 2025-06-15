@@ -43,7 +43,7 @@ describe("Moves - Powder", () => {
     await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.moveset = [new PokemonMove(MoveId.EMBER)];
+    enemyPokemon.moveset = [new PokemonMove(enemyPokemon, MoveId.EMBER)];
 
     game.move.select(MoveId.POWDER);
 

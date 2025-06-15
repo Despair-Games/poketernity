@@ -82,9 +82,9 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
         pokemon: pokemon,
       };
       if (pokemon.moveset.length < 4) {
-        pokemon.moveset.push(new PokemonMove(randomEggMoveId));
+        pokemon.moveset.push(new PokemonMove(pokemon, randomEggMoveId));
       } else {
-        pokemon.moveset[0] = new PokemonMove(randomEggMoveId);
+        pokemon.moveset[0] = new PokemonMove(pokemon, randomEggMoveId);
       }
     } else {
       encounter.misc.pokemon = pokemon;
@@ -173,7 +173,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       const eggMove = encounter.misc.eggMove;
       if (!isNil(eggMove)) {
         // Check what type of move the egg move is to determine target
-        const pokemonMove = new PokemonMove(eggMove);
+        const pokemonMove = new PokemonMove(null, eggMove);
         const move = pokemonMove.getMove();
         const target = move.isSelfStatusMove() ? BattlerIndex.ENEMY : BattlerIndex.PLAYER;
 
@@ -279,9 +279,9 @@ function givePokemonExtraEggMove(pokemon: EnemyPokemon, previousEggMoveId: MoveI
       randomEggMoveId = eggMoves[randSeedInt(4)];
     }
     if (pokemon.moveset.length < 4) {
-      pokemon.moveset.push(new PokemonMove(randomEggMoveId));
+      pokemon.moveset.push(new PokemonMove(pokemon, randomEggMoveId));
     } else {
-      pokemon.moveset[1] = new PokemonMove(randomEggMoveId);
+      pokemon.moveset[1] = new PokemonMove(pokemon, randomEggMoveId);
     }
   }
 }

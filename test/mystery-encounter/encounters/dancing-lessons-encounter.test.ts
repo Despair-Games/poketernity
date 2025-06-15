@@ -197,7 +197,8 @@ describe("Dancing Lessons - Mystery Encounter", () => {
     it("should add Oricorio to the party", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       const partyCountBefore = scene.getPlayerParty().length;
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.DRAGON_DANCE)];
+      const [player] = scene.getPlayerParty();
+      player.moveset = [new PokemonMove(player, MoveId.DRAGON_DANCE)];
       await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
       const partyCountAfter = scene.getPlayerParty().length;
 
@@ -236,7 +237,8 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.DRAGON_DANCE)];
+      const [player] = scene.getPlayerParty();
+      player.moveset = [new PokemonMove(player, MoveId.DRAGON_DANCE)];
       await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

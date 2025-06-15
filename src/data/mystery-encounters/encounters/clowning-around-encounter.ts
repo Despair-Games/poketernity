@@ -196,19 +196,19 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
             // Mr. Mime copies the Blacephalon's random ability
             sourceBattlerIndex: BattlerIndex.ENEMY,
             targets: [BattlerIndex.ENEMY_2],
-            move: new PokemonMove(MoveId.ROLE_PLAY),
+            move: new PokemonMove(null, MoveId.ROLE_PLAY),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY_2,
             targets: [BattlerIndex.PLAYER],
-            move: new PokemonMove(MoveId.TAUNT),
+            move: new PokemonMove(null, MoveId.TAUNT),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY_2,
             targets: [BattlerIndex.PLAYER_2],
-            move: new PokemonMove(MoveId.TAUNT),
+            move: new PokemonMove(null, MoveId.TAUNT),
             ignorePp: true,
           },
         );

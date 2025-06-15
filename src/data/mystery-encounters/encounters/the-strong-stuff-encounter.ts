@@ -206,13 +206,13 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(MoveId.GASTRO_ACID),
+          move: new PokemonMove(null, MoveId.GASTRO_ACID),
           ignorePp: true,
         },
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(MoveId.STEALTH_ROCK),
+          move: new PokemonMove(null, MoveId.STEALTH_ROCK),
           ignorePp: true,
         },
       );

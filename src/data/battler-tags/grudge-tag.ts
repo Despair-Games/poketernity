@@ -42,7 +42,7 @@ export class GrudgeTag extends BattlerTag {
           globalScene.phaseManager.queueMessagePhase(
             i18next.t("battlerTags:grudgeLapse", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              moveName: lastMoveData.getName(),
+              moveName: lastMoveData.name,
             }),
           );
         }

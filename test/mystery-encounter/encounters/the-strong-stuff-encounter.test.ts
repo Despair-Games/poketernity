@@ -196,23 +196,22 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_STRONG_STUFF, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      const enemyField = scene.getEnemyField();
+      const [enemy] = scene.getEnemyField();
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(SpeciesId.SHUCKLE);
-      expect(enemyField[0].summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
-      const shuckleItems = enemyField[0].getHeldItems();
+      expect(enemy.species.speciesId).toBe(SpeciesId.SHUCKLE);
+      expect(enemy.summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
+      const shuckleItems = enemy.getHeldItems();
       expect(shuckleItems.length).toBe(5);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.SITRUS)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
-      expect(enemyField[0].moveset).toEqual([
-        new PokemonMove(MoveId.INFESTATION),
-        new PokemonMove(MoveId.SALT_CURE),
-        new PokemonMove(MoveId.GASTRO_ACID),
-        new PokemonMove(MoveId.HEAL_ORDER),
+      expect(enemy.moveset).toEqual([
+        new PokemonMove(enemy, MoveId.INFESTATION),
+        new PokemonMove(enemy, MoveId.SALT_CURE),
+        new PokemonMove(enemy, MoveId.GASTRO_ACID),
+        new PokemonMove(enemy, MoveId.HEAL_ORDER),
       ]);
 
       // Should have used moves pre-battle

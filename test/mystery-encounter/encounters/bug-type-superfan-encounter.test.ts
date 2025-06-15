@@ -378,14 +378,16 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
 
       expect(selectOptionSpy).toHaveBeenCalledTimes(1);
       const optionData = selectOptionSpy.mock.calls[0][0];
-      expect(PHYSICAL_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[0].label)).toBe(
+      expect(PHYSICAL_TUTOR_MOVES.some((moveId) => new PokemonMove(null, moveId).name === optionData[0].label)).toBe(
         true,
       );
-      expect(SPECIAL_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[1].label)).toBe(
+      expect(SPECIAL_TUTOR_MOVES.some((moveId) => new PokemonMove(null, moveId).name === optionData[1].label)).toBe(
         true,
       );
-      expect(STATUS_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[2].label)).toBe(true);
-      expect(MISC_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[3].label)).toBe(true);
+      expect(STATUS_TUTOR_MOVES.some((moveId) => new PokemonMove(null, moveId).name === optionData[2].label)).toBe(
+        true,
+      );
+      expect(MISC_TUTOR_MOVES.some((moveId) => new PokemonMove(null, moveId).name === optionData[3].label)).toBe(true);
     });
   });
 

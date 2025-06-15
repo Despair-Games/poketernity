@@ -169,22 +169,23 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
-      const enemyField = scene.getEnemyField();
+      expect(scene.currentBattle.double).toBeTruthy();
+      const [enemy1, enemy2] = scene.getEnemyField();
+      [enemy1, enemy2].forEach((p) => expect(p).toBeDefined());
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      expect(enemyField.length).toBe(2);
-      expect(enemyField[0].species.speciesId).toBe(SpeciesId.MR_MIME);
-      expect(enemyField[0].moveset).toEqual([
-        new PokemonMove(MoveId.TEETER_DANCE),
-        new PokemonMove(MoveId.ALLY_SWITCH),
-        new PokemonMove(MoveId.DAZZLING_GLEAM),
-        new PokemonMove(MoveId.PSYCHIC),
+      expect(enemy1.species.speciesId).toBe(SpeciesId.MR_MIME);
+      expect(enemy1.moveset).toEqual([
+        new PokemonMove(enemy1, MoveId.TEETER_DANCE),
+        new PokemonMove(enemy1, MoveId.ALLY_SWITCH),
+        new PokemonMove(enemy1, MoveId.DAZZLING_GLEAM),
+        new PokemonMove(enemy1, MoveId.PSYCHIC),
       ]);
-      expect(enemyField[1].species.speciesId).toBe(SpeciesId.BLACEPHALON);
-      expect(enemyField[1].moveset).toEqual([
-        new PokemonMove(MoveId.TRICK),
-        new PokemonMove(MoveId.HYPNOSIS),
-        new PokemonMove(MoveId.SHADOW_BALL),
-        new PokemonMove(MoveId.MIND_BLOWN),
+      expect(enemy2.species.speciesId).toBe(SpeciesId.BLACEPHALON);
+      expect(enemy2.moveset).toEqual([
+        new PokemonMove(enemy2, MoveId.TRICK),
+        new PokemonMove(enemy2, MoveId.HYPNOSIS),
+        new PokemonMove(enemy2, MoveId.SHADOW_BALL),
+        new PokemonMove(enemy2, MoveId.MIND_BLOWN),
       ]);
 
       // Should have used moves pre-battle
@@ -270,7 +271,8 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
 
       // Set some moves on party for attack type booster generation
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.THIEF)];
+      const player = scene.getPlayerParty()[0];
+      player.moveset = [new PokemonMove(player, MoveId.TACKLE), new PokemonMove(player, MoveId.THIEF)];
 
       // 2 Sitrus Berries on lead
       scene.modifiers = [];
@@ -354,12 +356,14 @@ describe("Clowning Around - Mystery Encounter", () => {
     it("should randomize the pokemon types of the party", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
 
+      const [player1, player2, player3] = scene.getPlayerParty();
+
       // Same type moves on lead
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.ICE_BEAM), new PokemonMove(MoveId.SURF)];
+      player1.moveset = [new PokemonMove(player1, MoveId.ICE_BEAM), new PokemonMove(player1, MoveId.SURF)];
       // Different type moves on second
-      scene.getPlayerParty()[1].moveset = [new PokemonMove(MoveId.GRASS_KNOT), new PokemonMove(MoveId.ELECTRO_BALL)];
+      player2.moveset = [new PokemonMove(player2, MoveId.GRASS_KNOT), new PokemonMove(player2, MoveId.ELECTRO_BALL)];
       // No moves on third
-      scene.getPlayerParty()[2].moveset = [];
+      player3.moveset = [];
       await runMysteryEncounterToEnd(game, 3);
 
       const leadTypesAfter = scene.getPlayerParty()[0].customPokemonData?.types;

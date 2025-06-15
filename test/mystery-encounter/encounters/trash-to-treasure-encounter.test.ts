@@ -171,15 +171,14 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TRASH_TO_TREASURE, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      const enemyField = scene.getEnemyField();
+      const [enemy] = scene.getEnemyField();
       expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(SpeciesId.GARBODOR);
-      expect(enemyField[0].moveset).toEqual([
-        new PokemonMove(MoveId.PAYBACK),
-        new PokemonMove(MoveId.GUNK_SHOT),
-        new PokemonMove(MoveId.STOMPING_TANTRUM),
-        new PokemonMove(MoveId.DRAIN_PUNCH),
+      expect(enemy.species.speciesId).toBe(SpeciesId.GARBODOR);
+      expect(enemy.moveset).toEqual([
+        new PokemonMove(enemy, MoveId.PAYBACK),
+        new PokemonMove(enemy, MoveId.GUNK_SHOT),
+        new PokemonMove(enemy, MoveId.STOMPING_TANTRUM),
+        new PokemonMove(enemy, MoveId.DRAIN_PUNCH),
       ]);
 
       // Should have used moves pre-battle

@@ -67,7 +67,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:tookMoveAttack", {
         pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
-        moveName: move.name,
+        moveName: user.getMove(move.id)?.name ?? move.name,
       }),
     );
     return true;

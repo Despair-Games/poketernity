@@ -142,7 +142,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
           globalScene.phaseManager.queueMessagePhase(
             i18next.t("battle:ppHealBerry", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              moveName: ppRestoreMove!.getName(),
+              moveName: ppRestoreMove!.name,
               berryName: getBerryName(berryType),
             }),
           );
