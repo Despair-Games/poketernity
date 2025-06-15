@@ -111,7 +111,7 @@ describe("Safari Zone - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.is("MysteryEncounterPhase")).toBeTruthy();
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
       vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");

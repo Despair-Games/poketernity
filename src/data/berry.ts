@@ -102,8 +102,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const stat: BattleStat = berryType - BerryType.ENIGMA;
         const statStages = new NumberHolder(1);
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, statStages);
-        globalScene.phaseManager.queueStatStageChangePhase(
-          true,
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
           pokemon.getBattlerIndex(),
           pokemon,
           [stat],
@@ -123,8 +123,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const randStat = randSeedInt(Stat.SPD, Stat.ATK);
         const stages = new NumberHolder(2);
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, stages);
-        globalScene.phaseManager.queueStatStageChangePhase(
-          true,
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
           pokemon.getBattlerIndex(),
           pokemon,
           [randStat],

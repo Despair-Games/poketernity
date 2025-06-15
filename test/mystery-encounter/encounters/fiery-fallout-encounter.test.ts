@@ -288,7 +288,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.is("MysteryEncounterPhase")).toBeTruthy();
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const continueEncounterSpy = vi.spyOn(encounterPhase as MysteryEncounterPhase, "continueEncounter");
 
       await runSelectMysteryEncounterOption(game, 3);

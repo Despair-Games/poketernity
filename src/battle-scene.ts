@@ -642,7 +642,7 @@ export default class BattleScene extends SceneBase {
       ).then(() => loadMoveAnimAssets(defaultMoves, true)),
       this.initStarterColors(),
     ]).then(() => {
-      this.phaseManager.toLoginScreen();
+      this.phaseManager.createAndPushPhase("LoginPhase");
       this.phaseManager.toTitleScreen();
 
       this.phaseManager.shiftPhase();

@@ -221,13 +221,6 @@ interface ToTitleScreenInit {
   eager?: boolean;
 }
 
-interface ToLoginScreenInit {
-  /** Whether to show text. @defaultValue `true` */
-  showText?: boolean;
-  /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
-  eager?: boolean;
-}
-
 interface PokemonFaintInit {
   preventEndure?: boolean;
   destinyTag?: DestinyBondTag | null;
@@ -252,6 +245,7 @@ export class PhaseManager {
   private phaseQueuePrepend: Phase[] = [];
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
+  /** @deprecated see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830} */
   private conditionalQueue: [() => boolean, Phase][] = [];
 
   private currentPhase: Phase | null = null;
@@ -277,8 +271,7 @@ export class PhaseManager {
    *
    * @param phase - The {@linkcode Phase} to be added to the conditional queue.
    * @param condition - A function that returns a boolean indicating whether the phase should be executed.
-   * @todo conditional queue in general should be deprecated, see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830}
-   *
+   * @deprecated see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830}
    */
   public pushConditionalPhase(phase: Phase, condition: () => boolean): void {
     this.conditionalQueue.push([condition, phase]);
@@ -435,7 +428,7 @@ export class PhaseManager {
     }
 
     if (!this.phaseQueue.length) {
-      this.populatePhaseQueue();
+      this.createAndPushPhase("TurnInitPhase");
       // Clear the conditionalQueue if there are no phases left in the phaseQueue
       this.conditionalQueue = [];
     }
@@ -606,13 +599,6 @@ export class PhaseManager {
     return this.appendToPhase(targetPhaseKey, this.createPhase(phase, ...params));
   }
 
-  /**
-   * Moves everything from the {@linkcode nextCommandPhaseQueue} to the {@linkcode phaseQueue} (keeping order)
-   */
-  public populatePhaseQueue(): void {
-    this.createAndPushPhase("TurnInitPhase");
-  }
-
   // #region Phase-Specific Utils
 
   /**  @todo Are these utils still necessary? */
@@ -715,18 +701,6 @@ export class PhaseManager {
       this.createAndUnshiftPhase("TitlePhase");
     } else {
       this.createAndPushPhase("TitlePhase");
-    }
-  }
-
-  /**
-   * @param eager - (Optional) `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
-   * @param showText - (Optional, default `true`) Whether to show text
-   */
-  public toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
-    if (eager) {
-      this.createAndUnshiftPhase("LoginPhase", showText);
-    } else {
-      this.createAndPushPhase("LoginPhase", showText);
     }
   }
 

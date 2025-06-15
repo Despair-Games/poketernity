@@ -105,10 +105,10 @@ describe("Moves - Focus Punch", () => {
 
     await game.phaseInterceptor.to("TurnStartPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase()?.is("SwitchSummonPhase")).toBeTruthy();
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SwitchSummonPhase");
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase()?.is("MoveHeaderPhase")).toBeTruthy();
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MoveHeaderPhase");
   });
 });

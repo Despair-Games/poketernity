@@ -479,7 +479,7 @@ export class Arena {
       const isCherrimWithFlowerGift = p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === SpeciesId.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
-        /** @todo This doesn't seem to account for which ability is triggered (main vs. passive) */
+        // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
         globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
         globalScene.triggerPokemonFormChange(p, SpeciesFormChangeWeatherTrigger);
       }
@@ -497,7 +497,7 @@ export class Arena {
         p.hasAbility(AbilityId.FLOWER_GIFT, false, true) && p.species.speciesId === SpeciesId.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
-        /** @todo This doesn't seem to account for which ability is triggered (main vs. passive) */
+        // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
         globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
         return globalScene.triggerPokemonFormChange(p, SpeciesFormChangeRevertWeatherFormTrigger);
       }

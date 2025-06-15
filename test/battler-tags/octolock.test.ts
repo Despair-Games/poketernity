@@ -31,7 +31,7 @@ describe("BattlerTag - OctolockTag", () => {
       const subject = new OctolockTag(1);
 
       vi.spyOn(game.scene.phaseManager, "unshiftPhase").mockImplementation((phase) => {
-        expect(phase.is("StatStageChangePhase")).toBeTruthy();
+        expect(phase.phaseName).toBe("StatStageChangePhase");
         expect((phase as StatStageChangePhase)["stages"]).toEqual(-1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual([Stat.DEF, Stat.SPDEF]);
       });

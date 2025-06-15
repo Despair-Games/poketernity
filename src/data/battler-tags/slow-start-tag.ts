@@ -20,7 +20,7 @@ export class SlowStartTag extends AbilityBattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.createAndUnshiftPhase(
+    globalScene.phaseManager.createAndPushPhase(
       "MessagePhase",
       i18next.t("battlerTags:slowStartOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       undefined,

@@ -8,7 +8,7 @@ export class UnavailablePhase extends Phase {
 
   public override start(): void {
     globalScene.ui.setMode<UnavailableModalUiHandler>(UiMode.UNAVAILABLE, () => {
-      globalScene.phaseManager.toLoginScreen({ showText: true, eager: true });
+      globalScene.phaseManager.createAndUnshiftPhase("LoginPhase");
       this.end();
     });
   }

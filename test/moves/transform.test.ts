@@ -132,7 +132,7 @@ describe("Moves - Transform", () => {
     await game.move.selectEnemyMove(MoveId.MEMENTO);
     await game.toNextWave();
 
-    expect(game.scene.phaseManager.getCurrentPhase()?.is("CommandPhase")).toBeTruthy();
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
     expect(game.scene.currentBattle.waveIndex).toBe(2);
 
     await game.reload.reloadSession();

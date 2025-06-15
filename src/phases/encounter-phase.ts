@@ -547,7 +547,7 @@ export class EncounterPhase extends BattlePhase {
 
     enemyField.forEach((enemyPokemon, e) => {
       if (enemyPokemon.isShiny()) {
-        phaseManager.createAndPushPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
+        phaseManager.createAndUnshiftPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
