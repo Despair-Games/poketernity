@@ -2,7 +2,7 @@ import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import type { PhaseKey } from "#types/phase-types";
 
 /**

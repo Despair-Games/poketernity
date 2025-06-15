@@ -19,7 +19,7 @@ import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { achvs } from "#system/achievements";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";

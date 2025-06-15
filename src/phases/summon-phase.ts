@@ -8,7 +8,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
-import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
+import { PartyMemberPokemonPhase } from "#phases/base/party-member-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import type { PhaseKey } from "#types/phase-types";
 import i18next from "i18next";

@@ -10,7 +10,7 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
 import type { Move } from "#moves/move";
-import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";

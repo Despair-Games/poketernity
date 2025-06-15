@@ -1,7 +1,7 @@
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { applyMoveAttrs } from "#utils/move-utils";
 
 /**

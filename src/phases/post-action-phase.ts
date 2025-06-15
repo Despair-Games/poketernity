@@ -6,7 +6,7 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Does the following after a {@linkcode Pokemon}'s {@linkcode TurnCommand} is resolved:

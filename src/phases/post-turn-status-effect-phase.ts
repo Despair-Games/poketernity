@@ -9,7 +9,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 import { getStatusEffectActivationText } from "#utils/status-effect-utils";
 

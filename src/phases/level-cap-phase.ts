@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import i18next from "i18next";
 
 /**

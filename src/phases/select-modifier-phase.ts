@@ -26,7 +26,7 @@ import {
   type ModifierType,
   type ModifierTypeOption,
 } from "#modifier/modifier-type";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";

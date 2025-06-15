@@ -7,7 +7,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#events/battle-scene";
 import { BerryModifier } from "#modifier/modifier";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

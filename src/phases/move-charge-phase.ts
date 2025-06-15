@@ -6,7 +6,7 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveResult } from "#enums/move-result";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { HitCheckPhase } from "#phases/abstract-hit-check-phase";
+import { HitCheckPhase } from "#phases/base/hit-check-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import { applyMoveChargeAttrs } from "#utils/move-utils";
 import i18next from "i18next";

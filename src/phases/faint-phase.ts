@@ -30,7 +30,7 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PokemonInstantReviveModifier } from "#modifier/modifier";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 

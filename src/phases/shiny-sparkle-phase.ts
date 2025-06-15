@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 export class ShinySparklePhase extends PokemonPhase {
   public override readonly phaseName = "ShinySparklePhase";

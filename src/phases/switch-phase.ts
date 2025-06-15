@@ -3,7 +3,7 @@ import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 

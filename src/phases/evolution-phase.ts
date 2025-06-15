@@ -12,7 +12,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
+import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { BooleanHolder, fixedNumber } from "#utils/common-utils";

@@ -21,7 +21,7 @@ import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import type { FightCommand } from "#types/fight-command";
 import type { TurnMove } from "#types/turn-move";
 import type { CommandUiHandler } from "#ui/command-ui-handler";

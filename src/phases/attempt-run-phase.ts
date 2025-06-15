@@ -7,7 +7,7 @@ import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { clamp, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

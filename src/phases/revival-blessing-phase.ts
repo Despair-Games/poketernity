@@ -3,7 +3,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { toDmgValue } from "#utils/common-utils";
 import { PartyFilterFainted } from "#utils/party-ui-utils";

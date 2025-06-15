@@ -8,7 +8,7 @@ import { getTypeRgb } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { MovePhase } from "#phases/move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {

@@ -12,7 +12,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
+import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
 import { achvs } from "#system/achievements";
 import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";

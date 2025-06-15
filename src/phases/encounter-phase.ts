@@ -41,7 +41,7 @@ import { regenerateModifierPoolThresholds } from "#modifier/modifier-type";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";

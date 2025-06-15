@@ -13,7 +13,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**

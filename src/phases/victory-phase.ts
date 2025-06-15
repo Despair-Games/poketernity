@@ -10,7 +10,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleType } from "#enums/battle-type";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Handles various effects when the player clears a wave:

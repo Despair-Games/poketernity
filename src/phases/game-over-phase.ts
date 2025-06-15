@@ -12,7 +12,7 @@ import { Unlockables } from "#enums/unlockables";
 import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { modifierTypes } from "#modifier/modifier-types";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { EndCardPhase } from "#phases/end-card-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";

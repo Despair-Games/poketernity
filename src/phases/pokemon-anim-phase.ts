@@ -4,7 +4,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { isNil } from "#utils/common-utils";
 
 // TODO: This should probably be made into an abstract base class

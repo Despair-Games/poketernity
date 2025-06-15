@@ -3,7 +3,7 @@ import type { PostBattleAbAttr } from "#abilities/post-battle-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#modifier/modifier";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)

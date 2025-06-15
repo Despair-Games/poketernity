@@ -5,7 +5,7 @@ import { EventModifierType } from "#enums/event-modifier-type";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { vouchers } from "#system/voucher";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";

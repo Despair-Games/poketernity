@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 export class ShowAbilityPhase extends PokemonPhase {
   public override readonly phaseName = "ShowAbilityPhase";

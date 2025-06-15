@@ -6,7 +6,7 @@ import { CommonColor } from "#enums/color";
 import { CommonAnim } from "#enums/common-anim";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";

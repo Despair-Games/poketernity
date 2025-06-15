@@ -37,7 +37,7 @@ import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
 import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";

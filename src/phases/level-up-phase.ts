@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { ExpNotification } from "#enums/exp-notification";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
+import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 

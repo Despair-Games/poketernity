@@ -8,7 +8,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { TurnEndEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#modifier/modifier";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import i18next from "i18next";
 
 export class TurnEndPhase extends FieldPhase {

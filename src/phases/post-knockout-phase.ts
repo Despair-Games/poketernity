@@ -3,7 +3,7 @@ import { genOneThroughFourExpFormula } from "#data/exp";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { handleMysteryEncounterVictory } from "#mystery-encounters/encounter-phase-utils";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Handles the actions after the player KOs a pokemon:
