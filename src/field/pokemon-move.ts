@@ -1,3 +1,4 @@
+import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
@@ -111,7 +112,7 @@ export class PokemonMove {
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
     return new PokemonMove(
-      source.pokemon,
+      source.pokemon ?? globalScene.getPokemonById(source.id),
       source.moveId,
       source.ppUsed,
       source.ppUp,

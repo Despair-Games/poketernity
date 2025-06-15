@@ -364,8 +364,7 @@ export class PlayerPokemon extends Pokemon {
           this.nature,
         );
         newPokemon.passive = this.passive;
-        newPokemon.moveset = this.moveset.slice();
-        newPokemon.moveset = this.copyMoveset();
+        this.copyMoveset(newPokemon);
         newPokemon.luck = this.luck;
         newPokemon.gender = Gender.GENDERLESS;
         newPokemon.metLevel = this.metLevel;
@@ -463,13 +462,15 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  /** Returns a deep copy of this Pokemon's moveset array */
-  copyMoveset(): PokemonMove[] {
+  /**
+   * Copies this Pokemon's moveset array onto the given Pokemon.
+   * @param pokemon - The {@linkcode Pokemon} receiving the copied moveset
+   */
+  copyMoveset(pokemon: Pokemon): void {
     const newMoveset: PokemonMove[] = [];
     this.moveset.forEach((move) => {
-      newMoveset.push(new PokemonMove(null, move.moveId, 0, move.ppUp, move.virtual, move.maxPpOverride));
+      newMoveset.push(new PokemonMove(pokemon, move.moveId, 0, move.ppUp, move.virtual, move.maxPpOverride));
     });
-
-    return newMoveset;
+    pokemon.moveset = newMoveset;
   }
 }
