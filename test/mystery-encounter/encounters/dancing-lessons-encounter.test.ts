@@ -103,7 +103,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.ORICORIO);
       expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 0, 0, 0]);
@@ -124,7 +124,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -222,7 +222,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       await runSelectMysteryEncounterOption(game, 3);
       const partyCountAfter = scene.getPlayerParty().length;
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();

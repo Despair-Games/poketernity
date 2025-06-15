@@ -161,7 +161,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(2);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.VOLCARONA);
       expect(enemyField[1].species.speciesId).toBe(SpeciesId.VOLCARONA);
@@ -177,7 +177,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
       const leadPokemonItems = scene.findModifiers<PokemonHeldItemModifier>(
@@ -267,7 +267,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIERY_FALLOUT, defaultParty);
       await runMysteryEncounterToEnd(game, 3);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems();
       const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
@@ -293,7 +293,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(continueEncounterSpy).not.toHaveBeenCalled();
     });
   });

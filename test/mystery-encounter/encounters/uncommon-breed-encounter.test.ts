@@ -121,7 +121,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
@@ -148,7 +148,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
@@ -200,7 +200,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 2);
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -260,7 +260,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();

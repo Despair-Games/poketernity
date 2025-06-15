@@ -106,7 +106,7 @@ describe("Fight or Flight - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
     });
@@ -119,7 +119,7 @@ describe("Fight or Flight - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
 
@@ -160,7 +160,7 @@ describe("Fight or Flight - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 2);
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -177,7 +177,7 @@ describe("Fight or Flight - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
 

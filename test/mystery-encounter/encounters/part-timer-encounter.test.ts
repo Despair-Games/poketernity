@@ -244,7 +244,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();

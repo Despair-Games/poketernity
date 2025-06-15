@@ -128,7 +128,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(game.isCurrentPhase("MysteryEncounterPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -140,7 +140,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(scene.getEnemyPokemon()?.species.speciesId).toBe(SpeciesId.WOBBUFFET);
       expect(scene.getEnemyPokemon()?.ivs).toEqual([0, 0, 0, 0, 0, 0]);
       expect(scene.getEnemyPokemon()?.nature).toBe(Nature.MILD);
@@ -162,7 +162,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
     });
 
     it("should have no items in rewards if Wubboffet doesn't take enough damage", async () => {
@@ -170,7 +170,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -181,7 +181,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -196,7 +196,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -209,7 +209,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -225,7 +225,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -238,7 +238,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -254,7 +254,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { partySlot: 1 }, true);
 
-      expect(game.isCurrentPhase("CommandPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
@@ -267,7 +267,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.to("SelectModifierPhase", false);
 
       // Rewards
-      expect(game.isCurrentPhase("SelectModifierPhase")).toBeTruthy();
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
