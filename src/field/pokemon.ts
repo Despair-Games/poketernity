@@ -2259,7 +2259,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   private cacheEas(opponent: Pokemon, move: Move, score: number): void {
     const oppScoreData = this.turnData.scoreData.get(opponent.id);
-    if (!oppScoreData) {
+    if (isNil(oppScoreData)) {
       this.turnData.scoreData.set(opponent.id, {
         expectedAttackScores: new Map<MoveId, number>([[move.id, score]]),
       });
@@ -2336,7 +2336,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   private cacheMatchupScore(opponent: Pokemon, matchupScore: number) {
     const oppScoreData = this.turnData.scoreData.get(opponent.id);
-    if (!oppScoreData) {
+    if (isNil(oppScoreData)) {
       this.turnData.scoreData.set(opponent.id, {
         matchupScore,
         expectedAttackScores: new Map<MoveId, number>(),
