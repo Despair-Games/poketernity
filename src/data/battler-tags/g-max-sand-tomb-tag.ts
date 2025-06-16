@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Used for G-Max Sandblast that leaves a sand tomb
  * that persists even on the user leaving the field
- * @extends SandTombTag
  */
 export class GMaxSandTombTag extends SandTombTag {
   constructor(turnCount: number, sourceId: number) {

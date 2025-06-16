@@ -13,7 +13,6 @@ import i18next from "i18next";
  * Uproar for 2 turns after the initial usage and preventing all
  * Pokemon on the field from sleeping. All Pokemon on the field also
  * wake up when this tag is added.
- * @extends MoveLockTag
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Uproar_(move) Uproar}
  */
 export class UproarTag extends MoveLockTag {

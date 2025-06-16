@@ -3,11 +3,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import {
-  doPokeballBounceAnim,
-  getCriticalCaptureChance,
-  getPokeballAtlasKey,
-  getPokeballCatchMultiplier,
-  getPokeballTintColor,
+    doPokeballBounceAnim,
+    getCriticalCaptureChance,
+    getPokeballAtlasKey,
+    getPokeballCatchMultiplier,
+    getPokeballTintColor,
 } from "#data/pokeball";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -32,7 +32,6 @@ import i18next from "i18next";
 
 /**
  * Handles catching a pokemon after the player throws a ball
- * @extends PokemonPhase
  */
 export class AttemptCapturePhase extends PokemonPhase {
   override readonly id = PhaseId.ATTEMPT_CAPTURE;

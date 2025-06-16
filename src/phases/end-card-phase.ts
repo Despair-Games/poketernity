@@ -10,8 +10,6 @@ import i18next from "i18next";
 
 /**
  * Displays the End Card after a classic run ends in victory.
- *
- * @extends Phase
  */
 export class EndCardPhase extends Phase {
   override readonly id = PhaseId.END_CARD;

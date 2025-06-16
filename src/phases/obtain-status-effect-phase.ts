@@ -11,7 +11,6 @@ import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#utils/st
 
 /**
  * Applies a status effect to a pokemon
- * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
   override readonly id = PhaseId.OBTAIN_STATUS_EFFECT;

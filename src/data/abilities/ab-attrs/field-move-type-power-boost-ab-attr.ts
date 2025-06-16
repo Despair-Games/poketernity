@@ -4,7 +4,6 @@ import type { ElementalType } from "#enums/elemental-type";
 
 /**
  * Boosts the power of a specific type of move for all Pokemon in the field.
- * @extends PreAttackFieldMoveTypePowerBoostAbAttr
  */
 export class FieldMoveTypePowerBoostAbAttr extends PreAttackFieldMoveTypePowerBoostAbAttr {
   constructor(boostedType: ElementalType, powerMultiplier: number = 1.5) {

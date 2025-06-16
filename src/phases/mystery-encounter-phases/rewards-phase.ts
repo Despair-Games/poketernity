@@ -19,8 +19,6 @@ import { SelectModifierPhase } from "#phases/select-modifier-phase";
  * - Any encounter reward logic that is set within {@linkcode MysteryEncounter.doEncounterRewards}
  * - Otherwise, can add a no-reward-item shop with only Potions, etc. if addHealPhase is true
  * - Queuing of the {@linkcode PostMysteryEncounterPhase}
- *
- * @extends Phase
  */
 export class MysteryEncounterRewardsPhase extends Phase {
   override readonly id: PhaseId.ME_REWARDS = PhaseId.ME_REWARDS;

@@ -16,7 +16,6 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Tailwind_(move) Tailwind}.
  * Doubles the Speed of the Pokémon who created this arena tag, as well as all allied Pokémon.
  * Applies this arena tag for 4 turns (including the turn the move was used).
- * @extends ArenaTag
  */
 export class TailwindTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {

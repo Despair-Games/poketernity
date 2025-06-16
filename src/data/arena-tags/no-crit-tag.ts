@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Lucky_Chant_(move) Lucky Chant}.
  * Prevents critical hits against the tag's side.
- * @extends ArenaTag
  */
 export class NoCritTag extends ArenaTag {
   /**

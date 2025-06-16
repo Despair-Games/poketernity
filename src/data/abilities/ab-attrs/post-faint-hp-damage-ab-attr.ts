@@ -7,7 +7,6 @@ import i18next from "i18next";
 
 /**
  * Attribute used for abilities (Innards Out) that damage the opponent based on how much HP the last attack used to knock out the owner of the ability.
- * @extends PostFaintAbAttr
  */
 export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): boolean {

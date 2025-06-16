@@ -8,7 +8,6 @@ import i18next from "i18next";
 
 /**
  * Used by Wonder Guard
- * @extends TypeImmunityAbAttr
  */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(condition?: AbAttrCondition) {

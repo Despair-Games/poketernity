@@ -18,8 +18,6 @@ import i18next from "i18next";
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.
  * Also handles prompts for skipping animation, and calling the egg summary phase.
- *
- * @extends Phase
  */
 export class EggLapsePhase extends Phase {
   override readonly id = PhaseId.EGG_LAPSE;

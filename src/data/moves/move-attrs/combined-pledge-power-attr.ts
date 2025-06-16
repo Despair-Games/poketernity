@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to change a {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves | Pledge move}'s
  * power to 150 when combined with another unique Pledge move from an ally.
- * @extends VariablePowerAttr
  */
 export class CombinedPledgePowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {

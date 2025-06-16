@@ -17,7 +17,6 @@ interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  */
 export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
   protected readonly tagType: ArenaTagType;

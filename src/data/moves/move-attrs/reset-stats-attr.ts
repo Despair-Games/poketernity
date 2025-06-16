@@ -11,7 +11,6 @@ import i18next from "i18next";
  * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Clear_Smog_(move) | Clear Smog})
  * or all Pokemon on the field
  * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Haze_(move) | Haze}).
- * @extends MoveEffectAttr
  */
 export class ResetStatsAttr extends MoveEffectAttr {
   /** Should this attribute reset the stat stages of *all* Pokemon on the field? */

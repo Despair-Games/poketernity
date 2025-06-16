@@ -23,7 +23,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Used by other move attributes: {@linkcode MetronomeAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopycatAttr}
  * and {@linkcode NaturePowerAttr}
  * @see {@linkcode apply} for move call
- * @extends OverrideMoveEffectAttr
  */
 export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   protected invalidMoves: ReadonlySet<MoveId>;

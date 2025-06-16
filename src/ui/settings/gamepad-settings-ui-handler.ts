@@ -22,8 +22,6 @@ import i18next from "i18next";
 
 /**
  * Class representing the settings UI handler for gamepads.
- *
- * @extends ControlsSettingsUiHandler
  */
 export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
   constructor() {

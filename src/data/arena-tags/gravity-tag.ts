@@ -11,7 +11,6 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Gravity_(move) Gravity}.
  * Grounds all Pokémon on the field, including Flying-types and those with
  * {@linkcode AbilityId.LEVITATE} for the duration of the arena tag, usually 5 turns.
- * @extends ArenaTag
  */
 export class GravityTag extends ArenaTag {
   constructor(turnCount: number) {

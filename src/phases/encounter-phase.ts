@@ -58,11 +58,11 @@ import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
- * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
+ * Starts the first encounter (wave 1) of a new run.
+ *
+ * Subsequent encounters are handled by
  * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
  * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
- *
- * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */

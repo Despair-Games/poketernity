@@ -32,7 +32,6 @@ export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Mo
 /**
  * Attribute to set move power based on randomly assigned
  * {@link https://bulbapedia.bulbagarden.net/wiki/Magnitude_(move) | Magnitude} level.
- * @extends VariablePowerAttr
  */
 export class MagnitudePowerAttr extends VariablePowerAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

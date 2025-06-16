@@ -12,7 +12,6 @@ import type { MovePhase } from "#phases/move-phase";
 /**
  * Tag to represent when the source's {@linkcode BattlerTagType.MID_AIR | flying} action
  * is cancelled by a grounding effect.
- * @extends BattlerTag
  */
 export class InterruptedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
