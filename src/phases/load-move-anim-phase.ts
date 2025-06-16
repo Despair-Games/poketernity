@@ -8,7 +8,6 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
  * Phase for synchronous move animation loading.
  * Should be used when a move invokes another move that
  * isn't already loaded (e.g. for Metronome).
- *
  */
 export class LoadMoveAnimPhase extends Phase {
   override readonly id = PhaseId.LOAD_MOVE_ANIM;

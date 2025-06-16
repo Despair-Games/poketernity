@@ -26,16 +26,16 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type {
-    AttackTypeBoosterModifierType,
-    DoubleBattleChanceBoosterModifierType,
-    EvolutionItemModifierType,
-    FormChangeItemModifierType,
-    ModifierOverride,
-    ModifierType,
-    PokemonBaseStatTotalModifierType,
-    PokemonExpBoosterModifierType,
-    PokemonFriendshipBoosterModifierType,
-    TmModifierType,
+  AttackTypeBoosterModifierType,
+  DoubleBattleChanceBoosterModifierType,
+  EvolutionItemModifierType,
+  FormChangeItemModifierType,
+  ModifierOverride,
+  ModifierType,
+  PokemonBaseStatTotalModifierType,
+  PokemonExpBoosterModifierType,
+  PokemonFriendshipBoosterModifierType,
+  TmModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { EvolutionPhase } from "#phases/evolution-phase";
@@ -406,8 +406,12 @@ export class AddVoucherModifier extends ConsumableModifier {
 /**
  * Modifier used for party-wide or passive items that start an initial
  * {@linkcode battleCount} equal to {@linkcode maxBattles} that, for every
- * battle, decrements. Typically, when {@linkcode battleCount} reaches 0, the
- * modifier will be removed. If a modifier of the same type is to be added, it
+ * battle, decrements.
+ *
+ * Typically, when {@linkcode battleCount} reaches 0, the
+ * modifier will be removed.
+ *
+ * If a modifier of the same type is to be added, it
  * will reset {@linkcode battleCount} back to {@linkcode maxBattles} of the
  * existing modifier instead of adding that modifier directly.
  * @see {@linkcode add}
@@ -521,8 +525,8 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
 }
 
 /**
- * Modifier used for passive items, specifically lures, that
- * temporarily increases the chance of a double battle.
+ * Modifier used for passive items (specifically lures)
+ * that temporarily increases the chance of a double battle.
  * @see {@linkcode apply}
  */
 export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier {
@@ -556,8 +560,8 @@ export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier
 }
 
 /**
- * Modifier used for party-wide items, specifically the X items, that
- * temporarily increases the stat stage multiplier of the corresponding
+ * Modifier used for party-wide items (specifically the X items)
+ * that temporarily increases the stat stage multiplier of the corresponding
  * {@linkcode TempBattleStat}.
  * @see {@linkcode apply}
  */

@@ -25,7 +25,6 @@ interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
  * @param stages How many stages to change the stat(s) by, [-6, 6]
  * @param selfTarget `true` if the move is self-targetting
  * @param options {@linkcode StatStageChangeAttrOptions} Container for any optional parameters for this attribute.
- *
  */
 export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
   public stats: BattleStat[];

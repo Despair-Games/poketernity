@@ -7,6 +7,7 @@ import { MovePowerMultiplierAttr } from "#moves/move-power-multiplier-attr";
  * Attribute implementing the power-multiplying properties of
  * {@link https://bulbapedia.bulbagarden.net/wiki/Rollout_(move) | Rollout}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Ball_(move) | Ice Ball}.
+ *
  * Multiplies the move's power by 2 for every turn spent under the move's
  * execution
  * @see {@linkcode RollingTag}

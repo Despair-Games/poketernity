@@ -7,11 +7,12 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Attribute to set move power based on one of four random outcomes (listed below).
- * - 40% : 40 BP attack
- * - 30% : 80 BP attack
- * - 10% : 120 BP attack
- * - 20% : Heal 25% of the target's HP
+ * Attribute to set move power based on one of four random outcomes:
+ * - `40%`: `40` BP attack
+ * - `30%`: `80` BP attack
+ * - `10%`: `120` BP attack
+ * - `20%`: Heal `25%` of the target's HP
+ *
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Present_(move) | Present}.
  */
 export class PresentPowerAttr extends VariablePowerAttr {

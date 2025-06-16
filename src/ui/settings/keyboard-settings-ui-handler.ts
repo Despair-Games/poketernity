@@ -8,10 +8,10 @@ import { UiMode } from "#enums/ui-mode";
 import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
 import { deleteBind } from "#inputs/config-handler";
 import {
-    setSettingKeyboard,
-    settingKeyboardBlackList,
-    settingKeyboardDefaults,
-    settingKeyboardOptions,
+  setSettingKeyboard,
+  settingKeyboardBlackList,
+  settingKeyboardDefaults,
+  settingKeyboardOptions,
 } from "#system/settings-keyboard";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { NavigationManager } from "#ui/navigation-menu";
@@ -21,7 +21,6 @@ import i18next from "i18next";
 
 /**
  * Class representing the settings UI handler for keyboards.
- *
  */
 export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;

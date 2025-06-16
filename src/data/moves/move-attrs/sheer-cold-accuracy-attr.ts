@@ -6,7 +6,9 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Cold_(move) | Sheer Cold}'s
- * accuracy properties. Similar to base one-hit KO accuracy rules, except
+ * accuracy properties.
+ *
+ * Similar to base one-hit KO accuracy rules, except
  * that it has more accuracy when used by an Ice-type Pokemon.
  */
 export class SheerColdAccuracyAttr extends OneHitKOAccuracyAttr {

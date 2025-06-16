@@ -13,7 +13,6 @@ import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 /**
  * Opens the party selector UI and transitions into a {@linkcode SwitchSummonPhase}
  * for the player (if a switch would be valid for the current battle state).
- *
  */
 export class SwitchPhase extends BattlePhase {
   override readonly id = PhaseId.SWITCH;

@@ -9,10 +9,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
  * Passes the user's status effect onto the target, then heals the user.
  */
 export class PsychoShiftEffectAttr extends MoveEffectAttr {
-  constructor() {
-    super(false);
-  }
-
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const statusToApply = this.getStatusToApply(user);
 

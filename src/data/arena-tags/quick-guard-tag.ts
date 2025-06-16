@@ -31,6 +31,7 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Guard_(move) Quick Guard}.
+ *
  * *Condition:* The incoming move has increased priority.
  */
 export class QuickGuardTag extends ConditionalProtectTag {

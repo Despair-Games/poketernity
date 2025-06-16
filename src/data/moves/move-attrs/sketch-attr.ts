@@ -11,8 +11,9 @@ import i18next from "i18next";
 
 /**
  * Attribute for {@linkcode MoveId.SKETCH} that causes the user to copy the opponent's last used move.
+ *
  * This move copies the last used non-virtual move
- * e.g. if Metronome is used, it copies Metronome itself, not the virtual move called by Metronome.
+ * (e.g. if Metronome is used, it copies Metronome itself, not the virtual move called by Metronome).
  *
  * Fails if:
  * - the opponent has not yet used a move.
