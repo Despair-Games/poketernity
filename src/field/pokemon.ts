@@ -332,6 +332,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
       this.moveset = dataSource.moveset;
+      /**
+       * `PokemonData` does not preserve the "owner" reference in
+       * saved moves, so the reference needs to be reset for move names
+       * to be displayed properly in some contexts.
+       */
+      this.moveset.forEach((mv) => {
+        mv.pokemon = this;
+      });
       // @ts-expect-error - `Pokemon#status` is protected
       this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;

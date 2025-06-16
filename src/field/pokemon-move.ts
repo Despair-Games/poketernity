@@ -1,4 +1,3 @@
-import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
@@ -21,7 +20,7 @@ import i18next from "i18next";
  * @see {@linkcode getName} - returns name of the {@linkcode Move}.
  **/
 export class PokemonMove {
-  public readonly pokemon: Pokemon | null;
+  public pokemon: Pokemon | null;
   public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
@@ -111,13 +110,6 @@ export class PokemonMove {
    * @returns A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
-    return new PokemonMove(
-      source.pokemon ?? globalScene.getPokemonById(source.id),
-      source.moveId,
-      source.ppUsed,
-      source.ppUp,
-      source.virtual,
-      source.maxPpOverride,
-    );
+    return new PokemonMove(null, source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);
   }
 }
