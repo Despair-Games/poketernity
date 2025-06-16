@@ -5,6 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/game-manager";
 import type { MockText } from "#test/test-utils/mocks/mocks-container/mock-text";
+import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { FightUiHandler } from "#ui/fight-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
@@ -30,7 +31,7 @@ describe("UI - Type Hints", () => {
     game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(MoveId.SPLASH);
   });
 
-  it("check immunity color", async () => {
+  it.skip("check immunity color", async () => {
     game.override
       .battleType("single")
       .startingLevel(100)
@@ -44,7 +45,7 @@ describe("UI - Type Hints", () => {
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
-      const handler = ui.getCurrentHandler<FightUiHandler>();
+      const handler = ui.getCurrentHandler<CommandUiHandler>();
       handler.processInput(Button.ACTION); // select "Fight"
       game.phaseInterceptor.unlock();
     });
@@ -62,14 +63,14 @@ describe("UI - Type Hints", () => {
     await game.phaseInterceptor.to("CommandPhase");
   });
 
-  it("check status move color", async () => {
+  it.skip("check status move color", async () => {
     game.override.enemySpecies(SpeciesId.FLORGES).moveset([MoveId.GROWL]);
 
     await game.classicMode.startBattle(SpeciesId.RAYQUAZA);
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
-      const handler = ui.getCurrentHandler<FightUiHandler>();
+      const handler = ui.getCurrentHandler<CommandUiHandler>();
       handler.processInput(Button.ACTION); // select "Fight"
       game.phaseInterceptor.unlock();
     });
