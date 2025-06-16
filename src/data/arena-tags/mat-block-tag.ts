@@ -25,7 +25,6 @@ const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean =>
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mat_Block_(move) Mat Block}
  * Condition: The incoming move is a Physical or Special attack move.
- * @extends ConditionalProtectTag
  */
 export class MatBlockTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {

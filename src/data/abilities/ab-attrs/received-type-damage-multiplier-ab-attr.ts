@@ -23,7 +23,6 @@ import type { ElementalType } from "#enums/elemental-type";
  * +----------------+--------------+------------+
  * ```
  *
- * @extends ReceivedMoveDamageMultiplierAbAttr
  */
 export class ReceivedTypeDamageMultiplierAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   constructor(moveType: ElementalType, damageMultiplier: number) {

@@ -9,7 +9,6 @@ import type { Move } from "#moves/move";
 /**
  * Tag used to block damaging moves and poison the attacker if the move makes contact.
  * Used by {@linkcode MoveId.BANEFUL_BUNKER}
- * @extends DamageProtectedTag
  */
 export class ContactPoisonProtectedTag extends DamageProtectedTag {
   constructor(sourceMoveId: MoveId) {

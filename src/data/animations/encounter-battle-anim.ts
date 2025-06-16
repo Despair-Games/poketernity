@@ -8,7 +8,6 @@ import type { Pokemon } from "#field/pokemon";
  * Animation for effects that occur at the beginning
  * of certain Mystery Encounters. This usually only plays the
  * "graphic" frames of the animation.
- * @extends BattleAnim
  * @todo Remove the "user" and "target" constructor parameters
  */
 export class EncounterBattleAnim extends BattleAnim {

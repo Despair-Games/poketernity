@@ -7,7 +7,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Attribute to add terrain of a set type to the field.
- * @extends MoveEffectAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Terrain_moves | Terrain moves}
  */
 export class TerrainChangeAttr extends MoveEffectAttr {

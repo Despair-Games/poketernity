@@ -15,7 +15,6 @@ import i18next from "i18next";
  * Tag implementing the {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll)#Effect | Substitute Doll} effect,
  * for use with the moves Substitute and Shed Tail. Pokemon with this tag deflect most forms of received attack damage
  * onto the tag. This tag also grants immunity to most Status moves and several move effects.
- * @extends BattlerTag
  */
 export class SubstituteTag extends BattlerTag {
   /** The substitute's remaining HP. If HP is depleted, the Substitute fades. */

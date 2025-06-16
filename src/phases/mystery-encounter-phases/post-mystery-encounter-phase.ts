@@ -17,7 +17,6 @@ import { isNil } from "#utils/common-utils";
  * - Cleanup of any leftover intro visuals
  * - Queuing of the next wave
  *
- * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
   override readonly id = PhaseId.ME_POST;

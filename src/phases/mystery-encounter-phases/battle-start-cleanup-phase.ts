@@ -25,7 +25,6 @@ import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase"
  *
  * @see {@linkcode TurnEndPhase} for more details
  *
- * @extends Phase
  */
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
   override readonly id = PhaseId.ME_BATTLE_START_CLEANUP;

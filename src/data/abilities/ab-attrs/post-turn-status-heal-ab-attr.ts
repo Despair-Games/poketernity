@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * This attribute will heal 1/8th HP if the ability pokemon has the correct status.
  * @param effects The {@linkcode StatusEffect | status effect(s)} that will qualify healing the ability pokemon
- * @extends PostTurnAbAttr
  */
 export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
   private readonly statusEffects: StatusEffect[];

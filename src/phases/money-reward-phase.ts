@@ -8,7 +8,6 @@ import i18next from "i18next";
 
 /**
  * Grants the player money at the end of a wave
- * @extends BattlePhase
  */
 export class MoneyRewardPhase extends BattlePhase {
   override readonly id = PhaseId.MONEY_REWARD;

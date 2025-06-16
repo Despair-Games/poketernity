@@ -13,7 +13,6 @@ import i18next from "i18next";
  * - 10% : 120 BP attack
  * - 20% : Heal 25% of the target's HP
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Present_(move) | Present}.
- * @extends VariablePowerAttr
  */
 export class PresentPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

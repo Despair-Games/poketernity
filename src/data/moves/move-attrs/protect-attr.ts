@@ -16,7 +16,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
  * |  3   |   1/27       |
  * |  4   |    ...       |
  *
- * @extends AddBattlerTagAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Protect | Variations of Protect}
  */
 export class ProtectAttr extends AddBattlerTagAttr {

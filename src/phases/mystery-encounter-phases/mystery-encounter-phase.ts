@@ -26,7 +26,6 @@ import { isNil } from "#utils/common-utils";
  * - Display any {@linkcode OptionTextDisplay.selected} type dialogue that is set in the {@linkcode MysteryEncounterDialogue} dialogue tree for selected option
  * - Queuing of the {@linkcode MysteryEncounterOptionSelectedPhase}
  *
- * @extends Phase
  */
 export class MysteryEncounterPhase extends Phase {
   override readonly id = PhaseId.ME_ENCOUNTER;

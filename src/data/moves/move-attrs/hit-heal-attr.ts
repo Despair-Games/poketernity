@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * Heals user as a side effect of a move that hits a target.
  * Healing is based on {@linkcode healRatio} * the amount of damage dealt or a stat of the target.
- * @extends MoveEffectAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:HP-draining_moves | HP-draining moves}
  */
 export class HitHealAttr extends MoveEffectAttr {

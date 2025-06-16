@@ -4,7 +4,6 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to the user's field.
- * @extends PreApplyBattlerTagImmunityAbAttr
  */
 export class UserFieldBattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {
   constructor(immuneTagTypes: BattlerTagType | BattlerTagType[]) {

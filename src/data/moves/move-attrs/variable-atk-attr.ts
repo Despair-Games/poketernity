@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * used when obtaining the user's attacking stat. Other stat modifiers, e.g.
  * multipliers from items and abilities, still apply based on the original stat
  * checked.
- * @extends MoveAttr
  */
 export abstract class VariableAtkAttr extends MoveAttr {
   /**

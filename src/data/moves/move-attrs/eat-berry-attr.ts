@@ -13,7 +13,6 @@ import { BooleanHolder } from "#utils/common-utils";
  * Attribute that causes targets of the move to eat a berry.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Stuff_Cheeks_(move) | Stuff Cheeks}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Teatime_(move) | Teatime}.
- * @extends MoveEffectAttr
  */
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier | undefined;

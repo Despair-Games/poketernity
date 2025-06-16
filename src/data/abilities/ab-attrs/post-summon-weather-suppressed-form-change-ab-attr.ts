@@ -6,7 +6,6 @@ import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
 /**
  * Reverts weather-based forms to their normal forms when the user is summoned.
  * Used by Cloud Nine and Air Lock.
- * @extends PostSummonAbAttr
  */
 export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAttr {
   public override apply(_pokemon: Pokemon, simulated: boolean) {

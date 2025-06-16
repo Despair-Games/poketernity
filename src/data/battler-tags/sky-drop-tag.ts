@@ -11,7 +11,6 @@ import { getFrameMs } from "#utils/common-utils";
  * airborne state for both the user and the target. While airborne, both Pokemon
  * are {@link https://bulbapedia.bulbagarden.net/wiki/Semi-invulnerable_turn | semi-invulnerable}
  * to most attacks, and the target's moves are cancelled.
- * @extends BattlerTag
  */
 export class SkyDropTag extends BattlerTag {
   constructor(sourceId: number) {

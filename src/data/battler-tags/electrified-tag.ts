@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Tag implementing the type-changing effect of {@link https://bulbapedia.bulbagarden.net/wiki/Electrify_(move) | Electrify}.
  * While this tag is in effect, the afflicted Pokemon's moves are changed to Electric type.
- * @extends BattlerTag
  */
 export class ElectrifiedTag extends BattlerTag {
   constructor() {

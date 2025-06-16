@@ -4,7 +4,6 @@ import { PhaseId } from "#enums/phase-id";
 
 /**
  * Plays the given {@linkcode MoveAnim} sequentially.
- * @extends Phase
  */
 export class MoveAnimPhase<Anim extends MoveAnim> extends Phase {
   override readonly id = PhaseId.MOVE_ANIM;

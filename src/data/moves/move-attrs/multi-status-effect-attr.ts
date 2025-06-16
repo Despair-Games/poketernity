@@ -9,7 +9,6 @@ import { randSeedItem } from "#utils/random-utils";
  * onto the target.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Tri_Attack_(move) | Tri-Attack}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Dire_Claw_(move) | Dire Claw}.
- * @extends StatusEffectAttr
  */
 export class MultiStatusEffectAttr extends StatusEffectAttr {
   public effects: StatusEffect[];

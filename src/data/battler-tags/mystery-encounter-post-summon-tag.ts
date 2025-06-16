@@ -8,7 +8,6 @@ import type { Pokemon } from "#field/pokemon";
  * These post-summon effects are performed through {@linkcode Pokemon.mysteryEncounterBattleEffects},
  * and can be used to unshift special phases, etc.
  * Currently used only in MysteryEncounters to provide start of fight stat buffs.
- * @extends BattlerTag
  */
 export class MysteryEncounterPostSummonTag extends BattlerTag {
   constructor() {

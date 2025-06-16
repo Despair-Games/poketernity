@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Attribute to change the user's type to match that of the first move in its moveset.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Conversion_(move) | Conversion}.
- * @extends MoveEffectAttr
  */
 export class FirstMoveTypeAttr extends MoveEffectAttr {
   constructor() {

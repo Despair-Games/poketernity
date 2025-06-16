@@ -18,7 +18,6 @@ import i18next from "i18next";
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Seeding | Seeding} status condition.
  * Steals 1/8 of the owner's maximum HP at the end of each turn, giving it
  * to the Pokemon in the position of the original user.
- * @extends BattlerTag
  */
 export class SeededTag extends BattlerTag {
   private sourceIndex: number;

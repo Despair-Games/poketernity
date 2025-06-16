@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify a move's type effectiveness in certain game states.
- * @extends MoveAttr
  */
 export abstract class VariableMoveTypeMultiplierAttr extends MoveAttr {
   /**

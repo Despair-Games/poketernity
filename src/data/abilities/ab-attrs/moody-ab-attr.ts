@@ -9,7 +9,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
  * stat stage by 1. Any stat stage at +6 or -6 is excluded from being increased
  * or decreased, respectively.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability) | Moody}.
- * @extends PostTurnAbAttr
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

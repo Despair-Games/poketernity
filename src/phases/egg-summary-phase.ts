@@ -11,7 +11,6 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
  * It does some of the function for updating egg data.
  * Phase is handled mostly by the egg-hatch-scene-handler UI.
  *
- * @extends Phase
  */
 export class EggSummaryPhase extends Phase {
   override readonly id = PhaseId.EGG_SUMMARY;

@@ -8,7 +8,6 @@ import { addWindow } from "#ui/ui-theme";
 
 /**
  * A container that displays the count of hatching eggs.
- * @extends Phaser.GameObjects.Container
  */
 export class EggCounterContainer extends Phaser.GameObjects.Container {
   private readonly WINDOW_DEFAULT_WIDTH = 40;

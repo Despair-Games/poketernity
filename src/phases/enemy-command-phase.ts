@@ -23,7 +23,6 @@ import { FieldPhase } from "#phases/abstract-field-phase";
  * @see {@linkcode Pokemon.getMatchupScore}
  * @see {@linkcode EnemyPokemon.getNextMove}
  *
- * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
   override readonly id = PhaseId.ENEMY_COMMAND;

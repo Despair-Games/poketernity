@@ -10,7 +10,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute used for moves that double in power if the given move immediately
  * preceded the move applying the attribute, namely Fusion Flare and
  * Fusion Bolt.
- * @extends VariablePowerAttr
  */
 export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   /** The move that must precede the current move */

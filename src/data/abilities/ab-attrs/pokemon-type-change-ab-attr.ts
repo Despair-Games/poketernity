@@ -9,7 +9,6 @@ import i18next from "i18next";
 
 /**
  * Ability attribute for changing a pokemon's type before using a move
- * @extends PreAttackAbAttr
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   private moveType: ElementalType;

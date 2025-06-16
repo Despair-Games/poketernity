@@ -9,7 +9,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
- * @extends MoveEffectAttrOptions
  * @see {@linkcode StatStageChangeAttr}
  */
 interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
@@ -27,7 +26,6 @@ interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
  * @param selfTarget `true` if the move is self-targetting
  * @param options {@linkcode StatStageChangeAttrOptions} Container for any optional parameters for this attribute.
  *
- * @extends ChanceBasedMoveEffectAttr
  */
 export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
   public stats: BattleStat[];

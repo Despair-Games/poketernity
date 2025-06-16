@@ -8,7 +8,6 @@ import { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to change the move's type to Dark when used by Morpeko in Hangry Mode form.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Aura_Wheel_(move) | Aura Wheel}.
- * @extends VariableMoveTypeAttr
  */
 export class AuraWheelTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

@@ -8,7 +8,6 @@ import i18next from "i18next";
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
- * @extends PreStatStageChangeAbAttr
  */
 export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   /** {@linkcode BattleStat} to protect or `undefined` if **all** {@linkcode BattleStat} are protected */

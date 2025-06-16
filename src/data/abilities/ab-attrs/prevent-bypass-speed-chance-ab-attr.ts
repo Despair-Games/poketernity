@@ -10,7 +10,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * This attribute checks if a Pokemon's move meets a provided condition to determine if the Pokemon can use Quick Claw
  * It was created because Pokemon with the ability Mycelium Might cannot access Quick Claw's benefits when using status moves.
  * @param condition checks if a move meets certain conditions
- * @extends AbAttr
  */
 export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   private readonly condition: (pokemon: Pokemon, move: Move) => boolean;

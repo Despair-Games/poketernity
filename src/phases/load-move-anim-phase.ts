@@ -9,7 +9,6 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
  * Should be used when a move invokes another move that
  * isn't already loaded (e.g. for Metronome).
  *
- * @extends Phase
  */
 export class LoadMoveAnimPhase extends Phase {
   override readonly id = PhaseId.LOAD_MOVE_ANIM;

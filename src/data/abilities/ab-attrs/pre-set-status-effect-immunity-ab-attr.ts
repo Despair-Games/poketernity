@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Provides immunity to status effects to specified targets.
  * @param immuneEffects - The status effects to which the Pokémon is immune.
- * @extends PreSetStatusAbAttr
  */
 export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
   private readonly immuneEffects: StatusEffect[];

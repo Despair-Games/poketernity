@@ -10,7 +10,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change the defensive stat to be used in a move's damage calculations.
- * @extends MoveAttr
  */
 export abstract class VariableDefAttr extends MoveAttr {
   /**

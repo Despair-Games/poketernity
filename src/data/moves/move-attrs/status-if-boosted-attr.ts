@@ -5,7 +5,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to apply a status effect to the target if they have had their stats boosted this turn.
- * @extends MoveEffectAttr
  */
 export class StatusIfBoostedAttr extends MoveEffectAttr {
   public effect: StatusEffect;

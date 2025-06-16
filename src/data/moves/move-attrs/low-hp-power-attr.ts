@@ -20,7 +20,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * | 33-48                | 20         |
  *
  *
- * @extends VariablePowerAttr
  */
 export class LowHpPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

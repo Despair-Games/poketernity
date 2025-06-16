@@ -6,7 +6,6 @@ import type { MoveCategory } from "#enums/move-category";
  * Boosts the power of moves in specified categories.
  * @param boostedCategories - The categories of moves that will receive the power boost.
  * @param powerMultiplier - The multiplier to apply to the move's power.
- * @extends FieldMovePowerBoostAbAttr
  */
 export class AllyMoveCategoryPowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
   constructor(boostedCategories: MoveCategory[], powerMultiplier: number) {

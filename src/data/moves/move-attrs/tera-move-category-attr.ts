@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for tera moves that change category based on the user's Atk and SpAtk stats.
- * @extends VariableMoveCategoryAttr
  */
 export class TeraMoveCategoryAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {

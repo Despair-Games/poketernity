@@ -5,7 +5,6 @@ import { EncounterPhase } from "#phases/encounter-phase";
 
 /**
  * Triggers the next encounter (no biome change)
- * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode NextEncounterPhase} is extended by other phases */

@@ -16,7 +16,6 @@ import i18next from "i18next";
  * Substitute costs 1/4 of the user's max hp and rounds down
  * Shed tail costs 1/2 of the user's max hp and rounds up
  *
- * @extends MoveEffectAttr
  * @see {@linkcode apply}
  */
 export class AddSubstituteAttr extends MoveEffectAttr {

@@ -13,7 +13,6 @@ import i18next from "i18next";
  * Tag that applies the effects of Syrup Bomb to the target Pokemon.
  * For three turns, starting from the turn of hit, at the end of each turn, the target Pokemon's speed will decrease by 1.
  * The tag can also expire by taking the target Pokemon off the field, or the Pokemon that originally used the move.
- * @extends BattlerTag
  */
 export class SyrupBombTag extends BattlerTag {
   constructor(sourceId: number) {

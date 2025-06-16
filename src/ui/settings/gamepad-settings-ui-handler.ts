@@ -10,10 +10,10 @@ import pad_dualshock from "#inputs/pad-dualshock";
 import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import {
-  setSettingGamepad,
-  settingGamepadBlackList,
-  settingGamepadDefaults,
-  settingGamepadOptions,
+    setSettingGamepad,
+    settingGamepadBlackList,
+    settingGamepadDefaults,
+    settingGamepadOptions,
 } from "#system/settings-gamepad";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { addTextObject } from "#ui/text-utils";
@@ -23,7 +23,6 @@ import i18next from "i18next";
 /**
  * Class representing the settings UI handler for gamepads.
  *
- * @extends ControlsSettingsUiHandler
  */
 export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
   constructor() {

@@ -6,7 +6,6 @@ import { ArenaEventType } from "#enums/arena-event-type";
 
 /**
  * Base container class for all {@linkcode ArenaEventType} events
- * @extends Event
  */
 export class ArenaEvent extends Event {
   /** The total duration of the {@linkcode ArenaEventType} */
@@ -19,7 +18,6 @@ export class ArenaEvent extends Event {
 }
 /**
  * Container class for {@linkcode ArenaEventType.WEATHER_CHANGED} events
- * @extends ArenaEvent
  */
 export class WeatherChangedEvent extends ArenaEvent {
   /** The {@linkcode WeatherType} being overridden */
@@ -35,7 +33,6 @@ export class WeatherChangedEvent extends ArenaEvent {
 }
 /**
  * Container class for {@linkcode ArenaEventType.TERRAIN_CHANGED} events
- * @extends ArenaEvent
  */
 export class TerrainChangedEvent extends ArenaEvent {
   /** The {@linkcode TerrainType} being overridden */
@@ -52,7 +49,6 @@ export class TerrainChangedEvent extends ArenaEvent {
 
 /**
  * Container class for {@linkcode ArenaEventType.TAG_ADDED} events
- * @extends ArenaEvent
  */
 export class TagAddedEvent extends ArenaEvent {
   /** The {@linkcode ArenaTagType} being added */
@@ -81,7 +77,6 @@ export class TagAddedEvent extends ArenaEvent {
 }
 /**
  * Container class for {@linkcode ArenaEventType.TAG_REMOVED} events
- * @extends ArenaEvent
  */
 export class TagRemovedEvent extends ArenaEvent {
   /** The {@linkcode ArenaTagType} being removed */

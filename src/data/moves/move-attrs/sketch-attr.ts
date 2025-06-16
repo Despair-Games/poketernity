@@ -18,7 +18,6 @@ import i18next from "i18next";
  * - the opponent has not yet used a move.
  * - used on an uncopiable move, listed in unsketchableMoves in getCondition.
  * - the move is already in the user's moveset.
- * @extends MoveEffectAttr
  */
 export class SketchAttr extends MoveEffectAttr {
   constructor() {

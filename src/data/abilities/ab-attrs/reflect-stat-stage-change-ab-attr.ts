@@ -10,7 +10,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Attribute to reflect stat-lowering effects from moves and abilities
  * back to their source.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor}.
- * @extends AbAttr
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

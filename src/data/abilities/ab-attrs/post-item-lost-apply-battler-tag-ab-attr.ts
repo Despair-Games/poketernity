@@ -5,7 +5,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Applies a Battler Tag to the Pokemon after it loses or consumes item
  * Used by Unburden
- * @extends PostItemLostAbAttr
  */
 export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
   private readonly tagType: BattlerTagType;

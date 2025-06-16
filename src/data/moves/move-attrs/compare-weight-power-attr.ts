@@ -16,7 +16,6 @@ import { clamp, type NumberHolder } from "#utils/common-utils";
  * |    >= 2x < 3x               |     60   |
  * |    < 2x                     |     40   |
  *
- * @extends VariablePowerAttr
  */
 export class CompareWeightPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

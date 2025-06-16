@@ -8,7 +8,6 @@ import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler"
 
 /**
  * A base phase for handling Pokemon form changes, including evolutions
- * @extends Phase
  */
 export abstract class FormChangeBasePhase extends Phase {
   protected pokemon: PlayerPokemon;

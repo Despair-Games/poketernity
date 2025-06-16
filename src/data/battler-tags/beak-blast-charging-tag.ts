@@ -16,7 +16,6 @@ import i18next from "i18next";
  * Tag representing the "charge phase" of Beak Blast.
  * Pokemon with this tag will burn any attacker that makes contact with it.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Beak_Blast_(move) | Beak Blast}
- * @extends BattlerTag
  */
 export class BeakBlastChargingTag extends BattlerTag {
   constructor() {

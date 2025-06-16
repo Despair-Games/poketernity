@@ -32,11 +32,11 @@ import { EncounterPhaseEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import { initEncounterAnims } from "#init/init-encounter-anims";
 import {
-  BoostBugSpawnModifier,
-  IvScannerModifier,
-  overrideHeldItems,
-  overrideModifiers,
-  TurnHeldItemTransferModifier,
+    BoostBugSpawnModifier,
+    IvScannerModifier,
+    overrideHeldItems,
+    overrideModifiers,
+    TurnHeldItemTransferModifier,
 } from "#modifier/modifier";
 import { regenerateModifierPoolThresholds } from "#modifier/modifier-type";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
@@ -62,7 +62,6 @@ import i18next from "i18next";
  * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
  * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
  *
- * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */
