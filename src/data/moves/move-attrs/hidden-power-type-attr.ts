@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to change the move's type based on the user's IVs.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move) | Hidden Power}
- * @extends VariableMoveTypeAttr
  */
 export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

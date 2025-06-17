@@ -29,7 +29,6 @@ const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Crafty_Shield_(move) Crafty Shield}.
  * *Condition:* The incoming move is a Status move, is not a hazard, and does
  * not target all Pokemon or sides of the field.
- * @extends ConditionalProtectTag
  */
 export class CraftyShieldTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {

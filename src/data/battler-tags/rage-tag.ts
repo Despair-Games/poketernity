@@ -10,7 +10,6 @@ import type { Pokemon } from "#field/pokemon";
  * BattlerTag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Rage_(move) | Rage}.
  * The owner gains +1 Attack after receiving an attack as long as
  * Rage is continuously used.
- * @extends BattlerTag
  */
 export class RageTag extends BattlerTag {
   constructor() {

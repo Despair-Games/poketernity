@@ -7,7 +7,6 @@ import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
- * @extends BattlePhase
  */
 export class BattleEndPhase extends BattlePhase {
   public override readonly phaseName = "BattleEndPhase";

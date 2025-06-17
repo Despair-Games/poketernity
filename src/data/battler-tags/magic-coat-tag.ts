@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * BattlerTag for the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Coat_(move) | Magic Coat}.
  * Reflects status moves back at the attacker.
- * @extends BattlerTag
  * @see {@linkcode MovePhase.tryReflectMove}
  */
 export class MagicCoatTag extends BattlerTag {

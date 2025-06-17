@@ -13,7 +13,6 @@ import i18next from "i18next";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
- * @extends BattlePhase
  */
 export class CheckSwitchPhase extends BattlePhase {
   public override readonly phaseName = "CheckSwitchPhase";

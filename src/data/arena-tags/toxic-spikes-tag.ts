@@ -15,7 +15,6 @@ import i18next from "i18next";
  * Applies up to 2 layers of Toxic Spikes, poisoning or badly poisoning any Pokémon who is
  * summoned into this trap if 1 or 2 layers of Toxic Spikes respectively are up. Poison-type
  * Pokémon summoned into this trap remove it entirely.
- * @extends EntryHazardTag
  */
 export class ToxicSpikesTag extends EntryHazardTag {
   private neutralized: boolean;

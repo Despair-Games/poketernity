@@ -9,7 +9,6 @@ import i18next from "i18next";
 
 /**
  * A stackable instance of crit boost granted by G-Max Chi Strike
- * @extends BattlerTag
  */
 export class CritBoostStackableTag extends BattlerTag {
   public stackCount: number = 0;

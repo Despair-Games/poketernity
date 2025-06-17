@@ -16,8 +16,6 @@ import { Phase } from "#app/phase";
  * - Any encounter reward logic that is set within {@linkcode MysteryEncounter.doEncounterRewards}
  * - Otherwise, can add a no-reward-item shop with only Potions, etc. if addHealPhase is true
  * - Queuing of the {@linkcode PostMysteryEncounterPhase}
- *
- * @extends Phase
  */
 export class MysteryEncounterRewardsPhase extends Phase {
   public override readonly phaseName = "MysteryEncounterRewardsPhase";

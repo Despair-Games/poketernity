@@ -6,7 +6,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon switching out.
- * @extends PreSwitchOutAbAttr
  */
 export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

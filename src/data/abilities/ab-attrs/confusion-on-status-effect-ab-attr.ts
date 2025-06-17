@@ -9,7 +9,6 @@ import type { Move } from "#moves/move";
  * This attribute applies confusion to the target whenever the user
  * directly poisons them with a move, e.g. Poison Puppeteer.
  * Called in {@linkcode StatusEffectAttr}.
- * @extends PostAttackAbAttr
  * @see {@linkcode applyPostAttack}
  */
 export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {

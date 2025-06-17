@@ -13,7 +13,6 @@ import i18next from "i18next";
 
 /**
  * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil | recoil damage} to the user.
- * @extends MoveEffectAttr
  */
 export class RecoilAttr extends MoveEffectAttr {
   private useHp: boolean;

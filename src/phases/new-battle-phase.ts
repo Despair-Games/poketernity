@@ -3,7 +3,6 @@ import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Triggers a new battle
- * @extends BattlePhase
  */
 export class NewBattlePhase extends BattlePhase {
   public override readonly phaseName = "NewBattlePhase";

@@ -50,11 +50,11 @@ import i18next from "i18next";
 import type { PhaseKey } from "#types/phase-types";
 
 /**
- * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
+ * Starts the first encounter (wave 1) of a new run.
+ *
+ * Subsequent encounters are handled by
  * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
  * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
- *
- * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
   public override readonly phaseName: PhaseKey = "EncounterPhase";

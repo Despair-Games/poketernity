@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * This applies a terrain-based type change to the Pokemon.
  * Used by Mimicry.
- * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

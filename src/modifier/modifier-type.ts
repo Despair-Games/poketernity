@@ -29,39 +29,39 @@ import type { PokemonMove } from "#field/pokemon-move";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import {
-  AddPokeballModifier,
-  AddVoucherModifier,
-  AttackTypeBoosterModifier,
-  BaseStatModifier,
-  BerryModifier,
-  ContactHeldItemTransferChanceModifier,
-  DoubleBattleChanceBoosterModifier,
-  EvolutionItemModifier,
-  ExpBoosterModifier,
-  GigantamaxAccessModifier,
-  LevelIncrementBoosterModifier,
-  MegaEvolutionAccessModifier,
-  MoneyMultiplierModifier,
-  MoneyRewardModifier,
-  PokemonAllMovePpRestoreModifier,
-  PokemonBaseStatFlatModifier,
-  PokemonBaseStatTotalModifier,
-  PokemonExpBoosterModifier,
-  PokemonFormChangeItemModifier,
-  PokemonFriendshipBoosterModifier,
-  PokemonHpRestoreModifier,
-  PokemonLevelIncrementModifier,
-  PokemonNatureChangeModifier,
-  PokemonPpRestoreModifier,
-  PokemonPpUpModifier,
-  PokemonStatusHealModifier,
-  RememberMoveModifier,
-  SpeciesStatBoosterModifier,
-  TempStatStageBoosterModifier,
-  TmModifier,
-  TurnHeldItemTransferModifier,
-  type Modifier,
-  type PokemonHeldItemModifier,
+    AddPokeballModifier,
+    AddVoucherModifier,
+    AttackTypeBoosterModifier,
+    BaseStatModifier,
+    BerryModifier,
+    ContactHeldItemTransferChanceModifier,
+    DoubleBattleChanceBoosterModifier,
+    EvolutionItemModifier,
+    ExpBoosterModifier,
+    GigantamaxAccessModifier,
+    LevelIncrementBoosterModifier,
+    MegaEvolutionAccessModifier,
+    MoneyMultiplierModifier,
+    MoneyRewardModifier,
+    PokemonAllMovePpRestoreModifier,
+    PokemonBaseStatFlatModifier,
+    PokemonBaseStatTotalModifier,
+    PokemonExpBoosterModifier,
+    PokemonFormChangeItemModifier,
+    PokemonFriendshipBoosterModifier,
+    PokemonHpRestoreModifier,
+    PokemonLevelIncrementModifier,
+    PokemonNatureChangeModifier,
+    PokemonPpRestoreModifier,
+    PokemonPpUpModifier,
+    PokemonStatusHealModifier,
+    RememberMoveModifier,
+    SpeciesStatBoosterModifier,
+    TempStatStageBoosterModifier,
+    TmModifier,
+    TurnHeldItemTransferModifier,
+    type Modifier,
+    type PokemonHeldItemModifier,
 } from "#modifier/modifier";
 import { modifierPool } from "#modifier/modifier-pools";
 import { modifierTypes } from "#modifier/modifier-types";
@@ -778,7 +778,6 @@ export type SpeciesStatBoosterItem = keyof typeof SpeciesStatBoosterModifierType
 
 /**
  * Modifier type for {@linkcode SpeciesStatBoosterModifier}
- * @extends PokemonHeldItemModifierType
  */
 export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType
@@ -1272,7 +1271,6 @@ export class TempStatStageBoosterModifierTypeGenerator extends ModifierTypeGener
  * Modifier type generator for {@linkcode SpeciesStatBoosterModifierType}, which
  * encapsulates the logic for weighting the most useful held item from
  * the current list of {@linkcode items}.
- * @extends ModifierTypeGenerator
  */
 export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
   /** Object comprised of the currently available species-based stat boosting held items */

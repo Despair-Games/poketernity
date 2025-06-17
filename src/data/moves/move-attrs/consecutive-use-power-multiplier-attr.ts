@@ -7,7 +7,6 @@ import type { TurnMove } from "#types/turn-move";
 /**
  * Abstract attribute to multiply move power based on the
  * number of times the move has been used consecutively and successfully by the user.
- * @extends MovePowerMultiplierAttr
  */
 export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultiplierAttr {
   constructor(limit: number, resetOnFail: boolean) {

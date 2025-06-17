@@ -23,7 +23,6 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 /**
  * A phase for handling Pokemon evolution
  * @see {@linkcode FormChangePhase} for general form changes
- * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
   public override readonly phaseName = "EvolutionPhase";

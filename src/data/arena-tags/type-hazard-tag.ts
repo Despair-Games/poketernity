@@ -18,7 +18,6 @@ import i18next from "i18next";
  * Class used for hazards that damage based on type. The two existing ones are
  * Stealth rock (produced by stealth rock and stone axe) and
  * Sharp steel (produced by G-Max steelsurge)
- * @extends EntryHazardTag
  */
 export abstract class TypeHazardTag extends EntryHazardTag {
   public readonly damagingType: ElementalType;

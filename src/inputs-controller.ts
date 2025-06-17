@@ -11,7 +11,7 @@ import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inpu
 import pad_dualshock from "#inputs/pad-dualshock";
 import pad_generic from "#inputs/pad-generic";
 import pad_procon from "#inputs/pad-procon";
-import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
+import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
 import type { SettingsUpdateEventArgs } from "#types/settings";

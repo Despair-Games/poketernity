@@ -20,8 +20,6 @@ import { SwitchType } from "#enums/switch-type";
  * Will also handle Game Overs, switches, etc. that could happen from {@linkcode handleMysteryEncounterBattleStartEffects}
  *
  * @see {@linkcode TurnEndPhase} for more details
- *
- * @extends Phase
  */
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
   public override readonly phaseName = "MysteryEncounterBattleStartCleanupPhase";

@@ -5,8 +5,6 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
 
 /**
  * Resets the UI Mode after an evolution is finished.
- *
- * @extends Phase
  */
 export class EndEvolutionPhase extends Phase {
   public override readonly phaseName = "EndEvolutionPhase";

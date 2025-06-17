@@ -6,7 +6,6 @@ import { isNil } from "#utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
- * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
   public override readonly phaseName = "CheckStatusEffectPhase";

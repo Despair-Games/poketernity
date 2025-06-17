@@ -14,7 +14,6 @@ import type { Pokemon } from "#field/pokemon";
  * | Competitive | +2 SpA      |
  *
  *
- * @extends PostStatStageChangeAbAttr
  */
 export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   private readonly statsToChange: BattleStat[];

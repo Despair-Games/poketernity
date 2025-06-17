@@ -7,7 +7,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Grants immunity to One Hit KO moves.
  *
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
- * @extends AbAttr
  */
 export class BlockOneHitKOAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

@@ -10,7 +10,6 @@ import i18next from "i18next";
  * Attribute that cancels the associated move's effects when set to be combined
  * with the user's ally's subsequent move this turn.
  * Used for the {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves | Pledge moves}.
- * @extends OverrideMoveEffectAttr
  */
 export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   constructor() {

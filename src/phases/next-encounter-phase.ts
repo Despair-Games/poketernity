@@ -5,7 +5,6 @@ import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Triggers the next encounter (no biome change)
- * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
   public override readonly phaseName: PhaseKey = "NextEncounterPhase";

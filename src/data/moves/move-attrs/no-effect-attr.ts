@@ -5,7 +5,6 @@ import type { UserMoveConditionFunc } from "#types/user-move-condition-func";
 
 /**
  * Attribute to apply an effect when a move has no effect on the target.
- * @extends MoveAttr
  * @see {@linkcode noEffectFunc}
  */
 export class NoEffectAttr extends MoveAttr {

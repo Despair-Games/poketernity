@@ -11,7 +11,6 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Ion_Deluge_(move) | Ion Deluge}
  * and the secondary effect of {@link https://bulbapedia.bulbagarden.net/wiki/Plasma_Fists_(move) | Plasma Fists}.
  * Converts Normal-type moves to Electric type for the rest of the turn.
- * @extends ArenaTag
  */
 export class IonDelugeTag extends ArenaTag {
   constructor(sourceMoveId?: MoveId) {

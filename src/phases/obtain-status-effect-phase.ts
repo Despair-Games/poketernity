@@ -10,7 +10,6 @@ import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#utils/st
 
 /**
  * Applies a status effect to a pokemon
- * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
   public override readonly phaseName = "ObtainStatusEffectPhase";

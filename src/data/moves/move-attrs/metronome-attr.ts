@@ -10,7 +10,6 @@ import { getMaxMoveList } from "#utils/move-utils";
  * Attribute used to call a random move.
  * Used for {@linkcode MoveId.METRONOME}
  * @see {@linkcode apply} for move selection and move call
- * @extends CallMoveAttr to call a selected move
  */
 export class MetronomeAttr extends CallMoveAttr {
   constructor() {

@@ -5,7 +5,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Displays the message for Cloud Nine and Air Lock.
  * Doesn't display the pokemon's name.
- * @extends PostSummonAbAttr
  */
 export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
   private readonly message: string;

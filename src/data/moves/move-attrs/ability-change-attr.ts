@@ -14,7 +14,6 @@ import i18next from "i18next";
  * Attribute to change a target's ability to a set ability.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Worry_Seed_(move) | Worry Seed}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Simple_Beam_(move) | Simple Beam}.
- * @extends MoveEffectAttr
  */
 export class AbilityChangeAttr extends MoveEffectAttr {
   public ability: AbilityId;

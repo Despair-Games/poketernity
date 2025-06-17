@@ -6,7 +6,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to display a message
- * @extends MoveEffectAttr
  */
 export class DisplayMessageAttr extends MoveEffectAttr {
   private displayMessage: string;

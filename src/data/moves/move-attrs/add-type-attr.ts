@@ -13,7 +13,6 @@ import i18next from "i18next";
  * it only overwrites types added by other moves with this attribute.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Forest%27s_Curse_(move) | Forest's Curse}
  * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Trick-or-Treat_(move) | Trick-or-Treat}.
- * @extends MoveEffectAttr
  */
 export class AddTypeAttr extends MoveEffectAttr {
   private type: ElementalType;

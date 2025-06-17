@@ -5,11 +5,12 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change the offensive stat used for a move's damage calculations.
+ *
  * Moves with this attribute alter the permanent stat and stat stage-modifier
- * used when obtaining the user's attacking stat. Other stat modifiers, e.g.
- * multipliers from items and abilities, still apply based on the original stat
- * checked.
- * @extends MoveAttr
+ * used when obtaining the user's attacking stat.
+ *
+ * Other stat modifiers (e.g. multipliers from items and abilities)
+ * still apply based on the original stat checked.
  */
 export abstract class VariableAtkAttr extends MoveAttr {
   /**

@@ -8,7 +8,6 @@ import { fixedNumber } from "#utils/common-utils";
 
 /**
  * Displays damage numbers and plays move hit SFX during battle
- * @extends PokemonPhase
  */
 export class DamageAnimPhase extends PokemonPhase {
   public override readonly phaseName = "DamageAnimPhase";

@@ -11,7 +11,6 @@ import i18next from "i18next";
 
 /**
  * Heals the user or target by {@linkcode healRatio} depending on the value of {@linkcode selfTarget}
- * @extends MoveEffectAttr
  */
 export class HealAttr extends MoveEffectAttr {
   /** The percentage of {@linkcode Stat.HP} to heal */

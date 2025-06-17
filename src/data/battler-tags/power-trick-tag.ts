@@ -10,7 +10,6 @@ import i18next from "i18next";
 
 /**
  * Tag that swaps the user's base ATK stat with its base DEF stat.
- * @extends BattlerTag
  */
 export class PowerTrickTag extends BattlerTag {
   constructor(sourceMoveId: MoveId, sourceId: number) {

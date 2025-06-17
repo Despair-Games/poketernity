@@ -11,7 +11,6 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 /**
  * Move attribute to cure a set of {@linkcode StatusEffect | status effects}
  * from the user or target, depending on if the effect is {@linkcode selfTarget | self-targeted}.
- * @extends MoveEffectAttr
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {
   /** List of Status Effects to cure */

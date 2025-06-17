@@ -6,7 +6,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Cures the user's party of non-volatile status conditions, ie. Heal Bell, Aromatherapy
- * @extends MoveEffectAttr
  */
 export class PartyStatusCureAttr extends MoveEffectAttr {
   /** Message to display after using move */

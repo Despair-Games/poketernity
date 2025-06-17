@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Changes the type of Tera Blast to match the user's tera type
- * @extends VariableMoveTypeAttr
  */
 export class TeraBlastTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

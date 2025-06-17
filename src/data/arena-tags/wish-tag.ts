@@ -12,7 +12,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Wish_(move) Wish}.
  * Heals the Pokémon in the user's position the turn after Wish is used.
- * @extends ArenaTag
  */
 export class WishTag extends ArenaTag {
   private battlerIndex: BattlerIndex;

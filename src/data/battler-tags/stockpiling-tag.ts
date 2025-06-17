@@ -19,7 +19,6 @@ import i18next from "i18next";
  * - Stat changes on removal of (all) stacks.
  *   - Removing stacks decreases DEF and SPDEF, independently, by one stage for each stack that successfully changed
  *     the stat when added.
- * @extends BattlerTag
  */
 export class StockpilingTag extends BattlerTag {
   public stockpiledCount: number = 0;

@@ -4,7 +4,6 @@ import { fixedNumber } from "#utils/common-utils";
 
 /**
  * Fully heals the player's party, usually occurs after every 10th wave
- * @extends BattlePhase
  */
 export class PartyHealPhase extends BattlePhase {
   public override readonly phaseName = "PartyHealPhase";

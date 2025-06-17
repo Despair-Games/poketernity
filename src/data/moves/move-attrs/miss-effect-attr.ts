@@ -5,7 +5,6 @@ import type { UserMoveConditionFunc } from "#types/user-move-condition-func";
 
 /**
  * Attribute to add an effect that triggers when the move misses.
- * @extends MoveAttr
  * @see {@linkcode missEffectFunc}
  */
 export class MissEffectAttr extends MoveAttr {

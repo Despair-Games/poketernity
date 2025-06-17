@@ -7,9 +7,7 @@ import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Transforms a Pokemon into another Pokemon on the field.
- * Used for Transform (move) and Imposter (ability)
- *
- * @extends PokemonPhase
+ * Used for Transform (move) and Imposter (ability).
  */
 export class PokemonTransformPhase extends PokemonPhase {
   public override readonly phaseName = "PokemonTransformPhase";

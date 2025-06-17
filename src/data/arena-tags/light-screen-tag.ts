@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Reduces the damage of special moves.
  * Used by {@linkcode MoveId.LIGHT_SCREEN}
- * @extends WeakenMoveScreenTag
  */
 export class LightScreenTag extends WeakenMoveScreenTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {

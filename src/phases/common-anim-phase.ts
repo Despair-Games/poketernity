@@ -7,7 +7,6 @@ import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Plays a {@linkcode CommonBattleAnim}
- * @extends PokemonPhase
  */
 export class CommonAnimPhase extends PokemonPhase {
   public override readonly phaseName: PhaseKey = "CommonAnimPhase";

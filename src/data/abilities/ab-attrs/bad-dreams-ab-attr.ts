@@ -13,7 +13,6 @@ import i18next from "i18next";
 /**
  * Attribute to damage all sleeping opponents by 1/8 of their max hp at the end of turn.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Bad_Dreams_(Ability) | Bad Dreams}.
- * @extends AbAttr
  * @todo This should extend `PostTurnAbAttr` but currently does not as a workaround until proper ability timing is implemented.
  */
 export class BadDreamsAbAttr extends AbAttr {

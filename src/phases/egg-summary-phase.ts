@@ -9,8 +9,6 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
  * Class that represents the egg summary phase.
  * It does some of the function for updating egg data.
  * Phase is handled mostly by the egg-hatch-scene-handler UI.
- *
- * @extends Phase
  */
 export class EggSummaryPhase extends Phase {
   public override readonly phaseName = "EggSummaryPhase";

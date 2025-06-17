@@ -17,7 +17,6 @@ import i18next from "i18next";
 /**
  * Tag representing the "disabling" effect performed by {@linkcode MoveId.DISABLE} and {@linkcode AbilityId.CURSED_BODY}.
  * When the tag is added, the last-used move of the tag holder is set as the disabled move.
- * @extends MoveRestrictionBattlerTag
  */
 export class DisabledTag extends MoveRestrictionBattlerTag {
   /** The move being disabled. Gets set when {@linkcode onAdd} is called for this tag. */

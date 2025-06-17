@@ -10,7 +10,6 @@ import i18next from "i18next";
  * This ability applies the Perish Song tag to the attacking pokemon
  * and the defending pokemon if the move makes physical contact and
  * the attacker doesn't already have the Perish Song tag.
- * @extends PostDefendAbAttr
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {

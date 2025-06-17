@@ -18,7 +18,6 @@ import { PokemonPhase } from "#phases/base/pokemon-phase";
  * Pokemon's turn command for execution, if needed.
  * 4. If no valid command is scheduled in the last step, schedule phases
  * for the end-of-turn sequence
- * @extends PokemonPhase
  */
 export class PostActionPhase extends PokemonPhase {
   public override readonly phaseName = "PostActionPhase";

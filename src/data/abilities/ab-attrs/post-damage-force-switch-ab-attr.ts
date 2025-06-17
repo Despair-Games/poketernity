@@ -23,7 +23,6 @@ import i18next from "i18next";
  *
  * Used by Wimp Out and Emergency Exit
  *
- * @extends PostDamageAbAttr
  * @see {@linkcode applyPostDamage}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {

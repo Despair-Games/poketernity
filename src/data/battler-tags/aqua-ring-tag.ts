@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * Tag representing the healing effect of {@link https://bulbapedia.bulbagarden.net/wiki/Aqua_Ring_(move) | Aqua Ring}.
  * Heals the owner for 1/16 of their maximum HP at the end of each turn.
- * @extends BattlerTag
  */
 export class AquaRingTag extends BattlerTag {
   constructor() {

@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
  * Reverses the Speed calculation for all Pokémon on the field as long as this arena tag is up.
- * @extends ArenaRoomTag
  */
 export class TrickRoomTag extends ArenaRoomTag {
   constructor(turnCount: number, sourceId: number) {

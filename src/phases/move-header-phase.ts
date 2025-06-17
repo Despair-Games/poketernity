@@ -6,7 +6,6 @@ import { applyMoveAttrs } from "#utils/move-utils";
 
 /**
  * Applies {@linkcode MoveHeaderAttr}s
- * @extends BattlePhase
  */
 export class MoveHeaderPhase extends BattlePhase {
   public override readonly phaseName = "MoveHeaderPhase";

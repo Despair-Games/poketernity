@@ -11,7 +11,6 @@ import i18next from "i18next";
  *
  * Used by Curious Medicine
  * @param pokemon The {@link Pokemon} with this {@link AbAttr}
- * @extends PostSummonAbAttr
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

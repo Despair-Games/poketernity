@@ -8,7 +8,6 @@ import i18next from "i18next";
 /**
  * Attribute to cause the move to fail if the target is not holding an item.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Poltergeist_(move) | Poltergeist}.
- * @extends PreMoveMessageAttr
  */
 export class AttackedByItemAttr extends PreMoveMessageAttr {
   constructor() {

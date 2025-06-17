@@ -13,7 +13,6 @@ import i18next from "i18next";
  * Causes the owner to faint when {@linkcode turnCount} is depleted.
  *
  * Custom implementation: Boss Pokemon are immune to this effect
- * @extends BattlerTag
  */
 export class PerishSongTag extends BattlerTag {
   constructor(turnCount: number) {

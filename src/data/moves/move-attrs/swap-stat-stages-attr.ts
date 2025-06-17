@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute used for status moves, specifically Heart, Guard, and Power Swap,
  * that swaps the user's and target's corresponding stat stages.
- * @extends MoveEffectAttr
  * @see {@linkcode apply}
  */
 export class SwapStatStagesAttr extends MoveEffectAttr {

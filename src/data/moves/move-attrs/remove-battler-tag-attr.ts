@@ -21,7 +21,6 @@ export const rapidSpinRemoveTags = [
 
 /**
  * Attribute to remove battler tags within a given type set from the target.
- * @extends MoveEffectAttr
  */
 export class RemoveBattlerTagAttr extends MoveEffectAttr {
   public tagTypes: BattlerTagType[];

@@ -15,7 +15,6 @@ import i18next from "i18next";
  * allowing Ground-type moves to hit them.
  *
  * @see {@linkcode BattlerTagType.IGNORE_FLYING}
- * @extends BattlerTag
  */
 export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMoveId: MoveId) {

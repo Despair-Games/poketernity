@@ -14,8 +14,6 @@ import { isNil } from "#utils/common-utils";
  * - Showing any outro dialogue messages
  * - Cleanup of any leftover intro visuals
  * - Queuing of the next wave
- *
- * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
   public override readonly phaseName = "PostMysteryEncounterPhase";

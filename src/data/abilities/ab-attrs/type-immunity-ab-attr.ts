@@ -9,7 +9,6 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
- * @extends PreDefendAbAttr
  * @see {@linkcode applyPreDefend}
  * @see {@linkcode getCondition}
  */

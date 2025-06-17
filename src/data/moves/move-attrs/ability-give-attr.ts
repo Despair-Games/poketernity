@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * Attribute to give the user's ability to the target.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Entrainment_(move) | Entrainment}.
- * @extends MoveEffectAttr
  */
 export class AbilityGiveAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {

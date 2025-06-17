@@ -6,7 +6,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to remove all Substitutes from the field.
- * @extends MoveEffectAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Tidy_Up_(move) | Tidy Up}
  * @see {@linkcode SubstituteTag}
  */

@@ -13,7 +13,6 @@ import i18next from "i18next";
 
 /**
  * Handles the player attempting to run away from a wild battle
- * @extends PokemonPhase
  */
 export class AttemptRunPhase extends PokemonPhase {
   public override readonly phaseName = "AttemptRunPhase";

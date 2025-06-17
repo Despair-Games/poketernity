@@ -6,7 +6,6 @@ import type { MoveMessageFunc } from "#types/move-message-func";
 
 /**
  * Header attribute to queue a message at the beginning of a turn.
- * @extends MoveHeaderAttr
  */
 export class MessageHeaderAttr extends MoveHeaderAttr {
   private message: string | MoveMessageFunc;

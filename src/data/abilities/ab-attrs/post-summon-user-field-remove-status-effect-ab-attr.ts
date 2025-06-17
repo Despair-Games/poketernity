@@ -7,7 +7,6 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * Removes supplied status effects from the user's field. Used by Pastel Veil.
- * @extends PostSummonAbAttr
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private readonly statusEffects: StatusEffect[];

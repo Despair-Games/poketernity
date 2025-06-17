@@ -8,7 +8,6 @@ import i18next from "i18next";
 
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) | Perish Song}.
- * @extends AddBattlerTagAttr
  */
 export class FaintCountdownAttr extends AddBattlerTagAttr {
   constructor() {

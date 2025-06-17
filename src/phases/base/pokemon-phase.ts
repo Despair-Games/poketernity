@@ -6,7 +6,6 @@ import type { nil } from "#types/nil";
 
 /**
  * Provides helper functions to get the pokemon involved in the phase
- * @extends FieldPhase
  */
 export abstract class PokemonPhase extends FieldPhase {
   protected battlerIndex: BattlerIndex | number;

@@ -6,7 +6,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Used by Ogerpon's Embody Aspect ability.
- * @extends AbAttr
  */
 export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
   private readonly stats: BattleStat[];

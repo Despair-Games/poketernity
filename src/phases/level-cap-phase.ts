@@ -4,7 +4,6 @@ import i18next from "i18next";
 
 /**
  * Displays the message for when the level cap increases
- * @extends FieldPhase
  */
 export class LevelCapPhase extends FieldPhase {
   public override readonly phaseName = "LevelCapPhase";

@@ -17,7 +17,6 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Battler tag for Gulp Missile used by Cramorant.
- * @extends BattlerTag
  */
 export class GulpMissileTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {

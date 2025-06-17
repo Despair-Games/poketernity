@@ -14,15 +14,14 @@ import { FieldPhase } from "#phases/base/field-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
+ *
  * During this phase, the enemy decides whether to switch (if it has a trainer)
  * or to use a move from its moveset.
  *
- * For more information on how the Enemy AI works, see {@link ../../docs/enemy-ai.md}
+ * For more information on how the Enemy AI works, see [`enemy-ai.md`](../../docs/enemy-ai.md)
  *
  * @see {@linkcode Pokemon.getMatchupScore}
  * @see {@linkcode EnemyPokemon.getNextMove}
- *
- * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
   public override readonly phaseName = "EnemyCommandPhase";

@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Ability attribute that allows the ability holder to be treated as if it has a status effect.
  * Used by the ability Comatose
- * @extends AbAttr
  */
 export class MockStatusEffectAbAttr extends AbAttr {
   public mockedStatus: StatusEffect;

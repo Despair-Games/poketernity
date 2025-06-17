@@ -13,7 +13,6 @@ import i18next from "i18next";
 
 /**
  * The phase after attacks where the pokemon eat berries
- * @extends FieldPhase
  */
 export class BerryPhase extends FieldPhase {
   public override readonly phaseName = "BerryPhase";

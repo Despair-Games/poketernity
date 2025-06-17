@@ -7,7 +7,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Attribute to allow a move to ignore the target's stat stages when attacking.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Sacred_Sword_(move) | Sacred Sword}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Darkest_Lariat_(move) | Darkest Lariat}.
- * @extends MoveAttr
  */
 export class IgnoreOpponentStatStagesAttr extends MoveAttr {
   /**

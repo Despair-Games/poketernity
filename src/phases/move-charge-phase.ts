@@ -13,7 +13,6 @@ import i18next from "i18next";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).
- * @extends {@linkcode PokemonPhase}
  */
 export class MoveChargePhase extends HitCheckPhase {
   public override readonly phaseName = "MoveChargePhase";
