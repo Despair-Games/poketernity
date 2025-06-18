@@ -1,5 +1,6 @@
 import type { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#types/ability-types";
@@ -110,7 +111,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
 
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {
-            globalScene.abilityBar.showAbility(pokemon, passive);
+            globalScene.abilityBar.show(getPokemonNameWithAffix(pokemon), ability.name, passive);
           } else {
             globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
             globalScene.phaseManager.clearPhaseQueueSplice();
