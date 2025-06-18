@@ -22,11 +22,6 @@ export function getPokemonWithWeatherBasedForms(): Pokemon[] {
     );
 }
 
-export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
-  globalScene.phaseManager.clearPhaseQueueSplice();
-}
-
 export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {

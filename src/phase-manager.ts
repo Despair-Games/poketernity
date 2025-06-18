@@ -703,23 +703,4 @@ export class PhaseManager {
       this.createAndPushPhase("TitlePhase");
     }
   }
-
-  /**
-   * @param eager - `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
-   * @param battlerIndex - The {@linkcode BattlerIndex} of the affected {@linkcode Pokemon}
-   * @param source - The {@linkcode Pokemon} that caused the stat stage change
-   * @param stats - The {@linkcode BattleStat | stats} modified by this phase
-   * @param stages - The change in each affected stat stage
-   * @param params_4 - (Optional) The {@linkcode SSCPhaseOptions} for the generated phase
-   */
-  public queueStatStageChangePhase(
-    eager: boolean,
-    ...params: ConstructorParameters<typeof StatStageChangePhase>
-  ): void {
-    if (eager) {
-      this.createAndUnshiftPhase("StatStageChangePhase", ...params);
-    } else {
-      this.createAndPushPhase("StatStageChangePhase", ...params);
-    }
-  }
 }

@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#types/ability-filter-options";
-import { queueShowAbility } from "#utils/ability-utils";
 
 //#region ApplyAbAttrsResult
 
@@ -113,7 +112,8 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
           if (attr.showAbilityInstant) {
             globalScene.abilityBar.showAbility(pokemon, passive);
           } else {
-            queueShowAbility(pokemon, passive);
+            globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
+            globalScene.phaseManager.clearPhaseQueueSplice();
           }
         }
       }
