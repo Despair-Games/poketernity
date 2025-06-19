@@ -1458,6 +1458,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret: Move[] = [];
 
     for (let i = 0; i < Math.min(types.length, 4 - this.waveData.revealedMoves.size); i++) {
+      /**
+       * Each simulated move is assigned a unique ID so that its {@linkcode getExpectedAttackScore | EAS}
+       * can be properly cached. The simulated move of the Pokemon's primary type is
+       * assigned the ID {@linkcode MoveId.SIMULATED_MOVE_1}, and the simulated move
+       * of its secondary type is assigned {@linkcode MoveId.SIMULATED_MOVE_2}.
+       */
       const moveId = i % 2 === 0 ? MoveId.SIMULATED_MOVE_1 : MoveId.SIMULATED_MOVE_2;
       ret.push(new AttackMove(moveId, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
     }
