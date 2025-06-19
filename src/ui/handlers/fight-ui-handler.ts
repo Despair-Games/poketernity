@@ -134,9 +134,11 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.fromCommand = command;
 
     const messageHandler = this.getUi().getMessageHandler();
-    messageHandler.bg.setVisible(false);
-    messageHandler.commandWindow.setVisible(false);
-    messageHandler.movesWindowContainer.setVisible(true);
+    if (messageHandler) {
+      messageHandler.bg.setVisible(false);
+      messageHandler.commandWindow.setVisible(false);
+      messageHandler.movesWindowContainer.setVisible(true);
+    }
 
     const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
     if (pokemon.summonData.turnCount > 1) {
@@ -371,7 +373,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.accuracyText.setVisible(false);
     this.moveCategoryIcon.setVisible(false);
     this.moveInfoOverlay.clear();
-    messageHandler.bg.setVisible(true);
+    messageHandler?.bg.setVisible(true);
     this.eraseCursor();
   }
 

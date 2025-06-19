@@ -34,6 +34,15 @@ export class BerryUsedEvent extends Event {
 }
 
 /**
+ * Container class for {@linkcode BattleSceneEventType.POST_GAME_OVER} events
+ * @extends Event
+ */
+export class GameOverEvent extends Event {
+  constructor() {
+    super(BattleSceneEventType.POST_GAME_OVER);
+  }
+}
+/**
  * Container class for {@linkcode BattleSceneEventType.ENCOUNTER_PHASE} events
  */
 export class EncounterPhaseEvent extends Event {

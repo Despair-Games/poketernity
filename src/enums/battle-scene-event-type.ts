@@ -1,3 +1,19 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type BattleScene from "#app/battle-scene";
+import type { Arena } from "#field/arena";
+import type {
+  BerryUsedEvent,
+  EncounterPhaseEvent,
+  GameOverEvent,
+  MoveUsedEvent,
+  NewArenaEvent,
+  TurnEndEvent,
+  TurnInitEvent,
+} from "#events/battle-scene";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 /** Alias for all {@linkcode BattleScene} events */
 export const BattleSceneEventType = {
   /**
@@ -10,6 +26,12 @@ export const BattleSceneEventType = {
    * @see {@linkcode BerryUsedEvent}
    */
   BERRY_USED: "onBerryUsed",
+
+  /**
+   * Triggers after a run completes via winning or losing (but not through "Save & Quit").
+   * @see {@linkcode GameOverEvent}
+   */
+  POST_GAME_OVER: "onGameOver",
 
   /**
    * Triggers at the start of each new encounter

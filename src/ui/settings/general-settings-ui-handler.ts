@@ -22,7 +22,8 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
   }
 
   protected override tearDown(): void {
-    globalScene.scale.off(Phaser.Scale.Events.ORIENTATION_CHANGE, this.onOrientationChange); // Always remove listener. No error is thrown if listener was never present
+    // Always remove listener. No error is thrown if listener was never present
+    globalScene.scale.off(Phaser.Scale.Events.ORIENTATION_CHANGE, this.onOrientationChange);
     super.tearDown();
   }
 

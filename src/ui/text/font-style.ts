@@ -15,10 +15,22 @@ export const allTextFormats: Record<FontStyle, FontStyleOptions> = {
     fontSize: 96,
     shadow: { xPosition: 3, yPosition: 3 },
   },
+  [FontStyle.DEFAULT_FONT_96PX_EXTRA_SPACING]: {
+    fontFamily: "emerald",
+    fontSize: 96,
+    shadow: { xPosition: 3, yPosition: 3 },
+    lineSpacing: 12,
+  },
   [FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW]: {
     fontFamily: "emerald",
     fontSize: 96,
     shadow: { xPosition: 4, yPosition: 5 },
+  },
+  [FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW_EXTRA_SPACING]: {
+    fontFamily: "emerald",
+    fontSize: 96,
+    shadow: { xPosition: 4, yPosition: 5 },
+    lineSpacing: 12,
   },
   [FontStyle.DEFAULT_FONT_84PX_BIG_SHADOW]: {
     fontFamily: "emerald",
@@ -29,6 +41,12 @@ export const allTextFormats: Record<FontStyle, FontStyleOptions> = {
     fontFamily: "emerald",
     fontSize: 80,
     shadow: { xPosition: 3, yPosition: 3 },
+  },
+  [FontStyle.DEFAULT_FONT_80PX_EXTRA_SPACING]: {
+    fontFamily: "emerald",
+    fontSize: 80,
+    shadow: { xPosition: 3, yPosition: 3 },
+    lineSpacing: 26,
   },
   [FontStyle.DEFAULT_FONT_76PX]: {
     fontFamily: "emerald",

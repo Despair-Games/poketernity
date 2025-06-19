@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PhaseId } from "#enums/phase-id";
+import { GameOverEvent } from "#events/battle-scene";
 import type { EndCardPhase } from "#phases/end-card-phase";
 
 export class PostGameOverPhase extends Phase {
@@ -29,6 +30,7 @@ export class PostGameOverPhase extends Phase {
           }
           globalScene.reset();
           globalScene.phaseManager.toTitleScreen({ eager: true });
+          globalScene.eventTarget.dispatchEvent(new GameOverEvent());
           this.end();
         });
       });
@@ -36,7 +38,7 @@ export class PostGameOverPhase extends Phase {
 
     if (this.endCardPhase) {
       ui.fadeOut(500).then(() => {
-        ui.getMessageHandler().bg.setVisible(true);
+        ui.getMessageHandler()?.bg.setVisible(true);
 
         this.endCardPhase?.endCard.destroy();
         this.endCardPhase?.text.destroy();

@@ -501,7 +501,7 @@ export class EncounterPhase extends BattlePhase {
       const doEncounter = (): void => {
         const doShowEncounterOptions = (): void => {
           ui.clearText();
-          ui.getMessageHandler().hideNameText();
+          ui.getMessageHandler()?.hideNameText();
 
           globalScene.phaseManager.unshiftPhase(new MysteryEncounterPhase());
           this.end();
