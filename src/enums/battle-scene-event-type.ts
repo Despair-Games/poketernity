@@ -14,6 +14,8 @@ import type {
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { EnumValues } from "#types/enum-values";
+
 /** Alias for all {@linkcode BattleScene} events */
 export const BattleSceneEventType = {
   /**
@@ -56,4 +58,4 @@ export const BattleSceneEventType = {
   NEW_ARENA: "onNewArena",
 } as const;
 
-export type BattleSceneEventType = (typeof BattleSceneEventType)[keyof typeof BattleSceneEventType];
+export type BattleSceneEventType = EnumValues<typeof BattleSceneEventType>;

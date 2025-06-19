@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const ChargeAnim = {
   FLY_CHARGING: 1000,
   BOUNCE_CHARGING: 1001,
@@ -22,4 +24,4 @@ export const ChargeAnim = {
   ELECTRO_SHOT_CHARGING: 1020,
 } as const;
 
-export type ChargeAnim = (typeof ChargeAnim)[keyof typeof ChargeAnim];
+export type ChargeAnim = EnumValues<typeof ChargeAnim>;

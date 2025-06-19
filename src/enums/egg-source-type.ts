@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 // TODO: decouple enum value from cursor position
 export const EggSourceType = {
   GACHA_MOVE: 0,
@@ -7,4 +9,4 @@ export const EggSourceType = {
   EVENT: 4,
 } as const;
 
-export type EggSourceType = (typeof EggSourceType)[keyof typeof EggSourceType];
+export type EggSourceType = EnumValues<typeof EggSourceType>;

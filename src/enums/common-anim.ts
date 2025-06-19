@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const CommonAnim = {
   USE_ITEM: 2000,
   HEALTH_UP: 2001,
@@ -51,4 +53,4 @@ export const CommonAnim = {
   TERASTALLIZE: 2121,
 } as const;
 
-export type CommonAnim = (typeof CommonAnim)[keyof typeof CommonAnim];
+export type CommonAnim = EnumValues<typeof CommonAnim>;

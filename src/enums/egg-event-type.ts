@@ -4,6 +4,8 @@ import type { MoveUsedEvent } from "#events/battle-scene";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { EnumValues } from "#types/enum-values";
+
 export const EggEventType = {
   /**
    * Triggers when egg count is changed.
@@ -12,4 +14,4 @@ export const EggEventType = {
   EGG_COUNT_CHANGED: "onEggCountChanged",
 } as const;
 
-export type EggEventType = (typeof EggEventType)[keyof typeof EggEventType];
+export type EggEventType = EnumValues<typeof EggEventType>;

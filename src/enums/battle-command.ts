@@ -4,6 +4,8 @@ import type { CommandPhase } from "#phases/command-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { EnumValues } from "#types/enum-values";
+
 /**
  * Commands that can be executed from a {@linkcode CommandPhase}.
  *
@@ -19,4 +21,4 @@ export const BattleCommand = {
   TERA: 4,
 } as const;
 
-export type BattleCommand = (typeof BattleCommand)[keyof typeof BattleCommand];
+export type BattleCommand = EnumValues<typeof BattleCommand>;

@@ -4,6 +4,8 @@ import type { Challenge } from "#data/challenge";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { EnumValues } from "#types/enum-values";
+
 /**
  * An enum for all the challenge types. The parameter entries on these describe the
  * parameters to use when calling the applyChallenges function.
@@ -70,4 +72,4 @@ export const ChallengeType = {
   MOVE_WEIGHT: 13,
 } as const;
 
-export type ChallengeType = (typeof ChallengeType)[keyof typeof ChallengeType];
+export type ChallengeType = EnumValues<typeof ChallengeType>;

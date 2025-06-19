@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 /**
  * Enum holding the basic pokemon types, plus the pseudo-type Stellar.
  *
@@ -30,4 +32,4 @@ export const ElementalType = {
   STELLAR: 19,
 } as const;
 
-export type ElementalType = (typeof ElementalType)[keyof typeof ElementalType];
+export type ElementalType = EnumValues<typeof ElementalType>;

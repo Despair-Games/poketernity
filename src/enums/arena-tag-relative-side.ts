@@ -1,6 +1,7 @@
 // tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { Pokemon } from "#field/pokemon";
+import type { EnumValues } from "#types/enum-values";
 
 /**
  * Denotes which side of the field an effect applies,
@@ -12,4 +13,4 @@ export const ArenaTagRelativeSide = {
   ALL: 3,
 } as const;
 
-export type ArenaTagRelativeSide = (typeof ArenaTagRelativeSide)[keyof typeof ArenaTagRelativeSide];
+export type ArenaTagRelativeSide = EnumValues<typeof ArenaTagRelativeSide>;

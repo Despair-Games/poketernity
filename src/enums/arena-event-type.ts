@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 /** Alias for all {@linkcode ArenaEvent} type strings */
 export const ArenaEventType = {
   /** Triggers when a {@linkcode WeatherType} is added, overlapped, or removed */
@@ -11,4 +13,4 @@ export const ArenaEventType = {
   TAG_REMOVED: "onTagRemoved",
 } as const;
 
-export type ArenaEventType = (typeof ArenaEventType)[keyof typeof ArenaEventType];
+export type ArenaEventType = EnumValues<typeof ArenaEventType>;

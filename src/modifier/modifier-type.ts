@@ -67,6 +67,7 @@ import { modifierPool } from "#modifier/modifier-pools";
 import { modifierTypes } from "#modifier/modifier-types";
 import { settings } from "#system/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
+import type { EnumValues } from "#types/enum-values";
 import type { PokemonMoveSelectFilter } from "#types/pokemon-move-select-filter";
 import type { PokemonSelectFilter } from "#types/pokemon-select-filter";
 import { getModifierTierTextTint } from "#ui/text-utils";
@@ -742,7 +743,7 @@ const AttackTypeBoosterItem = {
   FAIRY_FEATHER: ElementalType.FAIRY,
 } as const;
 
-type AttackTypeBoosterItem = (typeof AttackTypeBoosterItem)[keyof typeof AttackTypeBoosterItem];
+type AttackTypeBoosterItem = EnumValues<typeof AttackTypeBoosterItem>;
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType

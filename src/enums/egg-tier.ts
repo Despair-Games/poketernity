@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const EggTier = {
   COMMON: 0,
   RARE: 1,
@@ -5,4 +7,4 @@ export const EggTier = {
   LEGENDARY: 3,
 } as const;
 
-export type EggTier = (typeof EggTier)[keyof typeof EggTier];
+export type EggTier = EnumValues<typeof EggTier>;
