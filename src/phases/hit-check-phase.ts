@@ -85,7 +85,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** Is there an effect that causes the move to bypass accuracy checks, including semi-invulnerability? */
     const alwaysHit =
       [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
-      || (user.getTag(BattlerTagType.IGNORE_ACCURACY)
+      || (user.hasTag(BattlerTagType.IGNORE_ACCURACY)
         && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || target.hasTag(BattlerTagType.ALWAYS_GET_HIT);
 
@@ -161,7 +161,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
       }
     }
 
-    if (alwaysHit || (target.getTag(BattlerTagType.TELEKINESIS) && !move.hasAttr(OneHitKOAttr))) {
+    if (alwaysHit || (target.hasTag(BattlerTagType.TELEKINESIS) && !move.hasAttr(OneHitKOAttr))) {
       return [HitCheckResult.HIT, effectiveness];
     }
 

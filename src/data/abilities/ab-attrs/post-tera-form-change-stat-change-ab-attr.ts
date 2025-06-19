@@ -7,7 +7,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Used by Ogerpon's Embody Aspect ability.
- * @extends AbAttr
  */
 export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
   private readonly stats: BattleStat[];

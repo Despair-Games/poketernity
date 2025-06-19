@@ -1,3 +1,9 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
@@ -17,7 +23,9 @@ import i18next from "i18next";
 
 /**
  * Tag representing all effects that trap and damage a Pokemon over the course of multiple turns
- * @extends TrappedTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode DAMAGING_TRAPPED_BATTLER_TAG_TYPES}
  */
 export abstract class DamagingTrapTag extends TrappedTag {
   private commonAnim: CommonAnim;
@@ -44,7 +52,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES, BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {

@@ -6,7 +6,6 @@ import type { MoveId } from "#enums/move-id";
 
 /**
  * Tag representing a gained immunity to a specified type.
- * @extends BattlerTag
  */
 export abstract class TypeImmuneTag extends BattlerTag {
   public immuneType: ElementalType;

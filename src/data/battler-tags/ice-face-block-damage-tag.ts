@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Provides the additional weather-based effects of the Ice Face ability
- * @extends FormBlockDamageTag
  */
 export class IceFaceBlockDamageTag extends FormBlockDamageTag {
   constructor(tagType: BattlerTagType) {

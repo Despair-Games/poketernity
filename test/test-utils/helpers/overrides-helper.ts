@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
-import { GameManager } from "#test/test-utils/game-manager";
+import type { GameManager } from "#test/test-utils/game-manager";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -54,6 +54,12 @@ export class OverridesHelper extends GameManagerHelper {
    * @defaultValue `true`
    */
   public normalizeNatures: boolean = true;
+  /**
+   * If `true`, will automatically set the level cap to `1` at the start of each test
+   * (effectively disabling experience gain and thus level ups as well).
+   * @defaultValue `true`
+   */
+  public disableExpGain: boolean = true;
 
   /**
    * Override the starting biome

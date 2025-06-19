@@ -1,7 +1,9 @@
 import { toHaveAbilityAppliedMatcher } from "#test/test-utils/matchers/to-have-ability-applied-matcher";
-import { toHaveBattlerTagTypeMatcher } from "#test/test-utils/matchers/to-have-battler-tag-type-matcher";
+import { toHaveBattlerTagMatcher } from "#test/test-utils/matchers/to-have-battler-tag-type-matcher";
 import { toHaveEffectiveStatMatcher } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
+import { toHaveFaintedMatcher } from "#test/test-utils/matchers/to-have-fainted-matcher";
 import { toHaveFullHpMatcher } from "#test/test-utils/matchers/to-have-full-hp-matcher";
+import { toHaveHpMatcher } from "#test/test-utils/matchers/to-have-hp-matcher";
 import { toHaveMoveResultMatcher } from "#test/test-utils/matchers/to-have-move-result-matcher";
 import { toHaveStatMatcher } from "#test/test-utils/matchers/to-have-stat-matcher";
 import { toHaveStatStageMatcher } from "#test/test-utils/matchers/to-have-stat-stage-matcher";
@@ -28,6 +30,8 @@ expect.extend({
   toHaveFullHp: toHaveFullHpMatcher,
   toHaveStatusEffect: toHaveStatusEffectMatcher,
   toHaveStatStage: toHaveStatStageMatcher,
-  toHaveBattlerTagType: toHaveBattlerTagTypeMatcher,
+  toHaveBattlerTag: toHaveBattlerTagMatcher,
   toHaveAbilityApplied: toHaveAbilityAppliedMatcher,
+  toHaveHp: toHaveHpMatcher,
+  toHaveFainted: toHaveFaintedMatcher,
 });

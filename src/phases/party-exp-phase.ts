@@ -6,8 +6,6 @@ import { PhaseId } from "#enums/phase-id";
  * Provides EXP to the player's party *without* doing any Pokemon defeated checks or queueing extraneous post-battle phases.
  *
  * Intended to be used as a more 1-off phase to provide exp to the party (such as during MEs), rather than cleanup a battle entirely.
- *
- * @extends Phase
  */
 export class PartyExpPhase extends Phase {
   override readonly id = PhaseId.PARTY_EXP;

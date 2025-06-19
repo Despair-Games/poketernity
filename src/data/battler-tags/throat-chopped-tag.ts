@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * Tag representing the "Throat Chop" effect. Pokemon with this tag cannot use sound-based moves.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Throat_Chop_(move) | Throat Chop}
- * @extends MoveRestrictionBattlerTag
  */
 export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
   constructor() {

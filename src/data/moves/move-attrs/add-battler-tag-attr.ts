@@ -15,7 +15,6 @@ interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
 export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
@@ -64,7 +63,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc | null {
-    return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).getTag(this.tagType) : null;
+    return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).hasTag(this.tagType) : null;
   }
 
   getTagTargetBenefitScore(): number {
@@ -176,7 +175,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SILK_TRAP:
       case BattlerTagType.BANEFUL_BUNKER:
       case BattlerTagType.BURNING_BULWARK:
-      case BattlerTagType.FLYING:
+      case BattlerTagType.MID_AIR:
       case BattlerTagType.UNDERGROUND:
       case BattlerTagType.UNDERWATER:
       case BattlerTagType.HIDDEN:

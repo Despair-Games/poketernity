@@ -10,9 +10,8 @@ import { SelfStatusMove } from "#moves/move";
 import type { MovePhase } from "#phases/move-phase";
 
 /**
- * Tag to represent when the source's {@linkcode BattlerTagType.FLYING | flying} action
+ * Tag to represent when the source's {@linkcode BattlerTagType.MID_AIR | flying} action
  * is cancelled by a grounding effect.
- * @extends BattlerTag
  */
 export class InterruptedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
@@ -20,7 +19,7 @@ export class InterruptedTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return pokemon.hasTag(BattlerTagType.FLYING);
+    return pokemon.hasTag(BattlerTagType.MID_AIR);
   }
 
   override onAdd(pokemon: Pokemon): void {

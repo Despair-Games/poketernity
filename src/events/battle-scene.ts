@@ -4,7 +4,6 @@ import type { Move } from "#moves/move";
 
 /**
  * Container class for {@linkcode BattleSceneEventType.MOVE_USED} events
- * @extends Event
  */
 export class MoveUsedEvent extends Event {
   /** The ID of the {@linkcode Pokemon} that used the {@linkcode Move} */
@@ -23,7 +22,6 @@ export class MoveUsedEvent extends Event {
 }
 /**
  * Container class for {@linkcode BattleSceneEventType.BERRY_USED} events
- * @extends Event
  */
 export class BerryUsedEvent extends Event {
   /** The {@linkcode BerryModifier} being used */
@@ -37,7 +35,6 @@ export class BerryUsedEvent extends Event {
 
 /**
  * Container class for {@linkcode BattleSceneEventType.ENCOUNTER_PHASE} events
- * @extends Event
  */
 export class EncounterPhaseEvent extends Event {
   constructor() {
@@ -46,7 +43,6 @@ export class EncounterPhaseEvent extends Event {
 }
 /**
  * Container class for {@linkcode BattleSceneEventType.TURN_INIT} events
- * @extends Event
  */
 export class TurnInitEvent extends Event {
   constructor() {
@@ -55,7 +51,6 @@ export class TurnInitEvent extends Event {
 }
 /**
  * Container class for {@linkcode BattleSceneEventType.TURN_END} events
- * @extends Event
  */
 export class TurnEndEvent extends Event {
   /** The amount of turns in the current battle */
@@ -68,7 +63,6 @@ export class TurnEndEvent extends Event {
 }
 /**
  * Container class for {@linkcode BattleSceneEventType.NEW_ARENA} events
- * @extends Event
  */
 export class NewArenaEvent extends Event {
   constructor() {

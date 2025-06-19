@@ -9,7 +9,6 @@ import type { Pokemon } from "#field/pokemon";
  * BattlerTag implementing No Retreat's trapping effect.
  * This is treated separately from other trapping effects to prevent
  * Ghost-type Pokemon from being able to reuse the move.
- * @extends TrappedTag
  */
 export class NoRetreatTag extends TrappedTag {
   constructor(sourceId: number) {
@@ -18,6 +17,6 @@ export class NoRetreatTag extends TrappedTag {
 
   /** overrides {@linkcode TrappedTag.apply}, removing the Ghost-type condition */
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES);
   }
 }

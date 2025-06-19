@@ -10,7 +10,6 @@ import { getMoveTargets, type Move } from "#moves/move";
 /**
  * Causes the user of Bide to "store energy" for 2 turns, then attack the last Pokemon that attacked it.
  * The damage dealt is equal to double the attack damage taken during the storing turns.
- * @extends MoveLockTag
  */
 export class BideTag extends MoveLockTag {
   private lastAttackerId?: number;

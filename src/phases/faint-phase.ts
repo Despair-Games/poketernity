@@ -62,8 +62,6 @@ import i18next from "i18next";
  * - Handle friendship loss for player pokemon
  * - Lapse {@linkcode BattlerTagLapseType.FAINT} tags
  * - Clear {@linkcode BattlerTag}s from the fainted pokemon
- *
- * @extends PokemonPhase
  */
 export class FaintPhase extends PokemonPhase {
   override readonly id = PhaseId.FAINT;

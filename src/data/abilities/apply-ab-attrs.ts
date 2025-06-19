@@ -5,12 +5,34 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#types/ability-filter-options";
 import { queueShowAbility } from "#utils/ability-utils";
 
+//#region ApplyAbAttrsResult
+
+/** The result of applying an ability attribute, whether simulated or actual. */
+interface ApplyAbAttrResult<TAttr extends AbAttr> {
+  /** The ability attribute that was processed */
+  attr: TAttr;
+  /** Whether the ability was applied (or would have been applied, if the check wasn't simulated) */
+  applied: boolean;
+  /** (Optional) Message to display when the attribute is applied */
+  message: string | null;
+}
+
+//#endregion
 //#region Exports
 
+/**
+ * Apply abilities with the {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} ability mode.
+ * @typeParam TAttr - The specific ability attribute type.
+ * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
+ * @param params - The parameters for the given attribute's `apply` function
+ * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
+ *
+ * @see {@linkcode applyAbAttrsInternal}
+ */
 export function applyAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
-): string[] {
+): ApplyAbAttrResult<TAttr>[] {
   return applyAbAttrsInternal<TAttr>({ canApplyOnly: true }, abAttrFlag, ...params);
 }
 
@@ -18,11 +40,15 @@ export function applyAbAttrs<TAttr extends AbAttr = never>(
  * Obtains the function to apply abilities corresponding to the given mode
  * @param mode - The {@linkcode AbilityApplyMode} determining how abilities are applied
  * @returns The function to apply abilities based on the mode:
- * - {@linkcode AbilityApplyMode.DEFAULT} - Applies abilities without restriction
+ * - {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} - Applies abilities without restriction
  *     (as long as they meet conditions to apply).
- * - {@linkcode AbilityApplyMode.REVEALED} - Only applies abilities that have
+ * - {@linkcode AbilityApplyMode.REVEALED | REVEALED} - Only applies abilities that have
  *     previously applied in the current battle.
- * - {@linkcode AbilityApplyMode.IGNORE} - Does nothing and returns an empty array.
+ * - {@linkcode AbilityApplyMode.IGNORE | IGNORE} - Does nothing and returns an empty array.
+ *
+ * @see {@linkcode applyAbAttrs} (Default)
+ * @see {@linkcode applyRevealedAbAttrs} (Revealed)
+ * @see {@linkcode applyNoAbAttrs} (Ignore)
  */
 export function getAbApplyFunc(mode: AbilityApplyMode) {
   switch (mode) {
@@ -31,53 +57,58 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
     case AbilityApplyMode.REVEALED:
       return applyRevealedAbAttrs;
     case AbilityApplyMode.IGNORE:
-      return () => [];
+      return applyNoAbAttrs;
   }
 }
 
 //#endregion
-//#region Helpers
+//#region Internal Functions
 
 /**
  * Applies a Pokemon's ability attributes of matching type
- * @param abAttrFlag The type of attribute to apply
- * @param params The parameters for the given attribute's `apply` function. This should include:
+ * @typeParam TAttr - The specific ability attribute type.
+ * @param abAttrFlag - The type of attribute to apply
+ * @param params - The parameters for the given attribute's `apply` function. This should include:
  * - `pokemon`: The {@linkcode Pokemon} with the ability
  * - `simulated`: If `true`, suppresses changes to game state when applying.
  * - Any additional necessary arguments for the specific attribute type
- * @returns The message(s) displayed when the ability applies
+ * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
  * @see {@linkcode AbAttr}
  */
 function applyAbAttrsInternal<TAttr extends AbAttr = never>(
   abFilterOptions: AbilityFilterOptions,
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
-): string[] {
-  const messages: string[] = [];
+): ApplyAbAttrResult<TAttr>[] {
+  const results: ApplyAbAttrResult<TAttr>[] = [];
   const [pokemon, simulated, ...args] = params;
   const abilities = pokemon.getAbilities(abFilterOptions);
+
   abilities.forEach(({ ability, passive }) => {
     if (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id) {
       return;
     }
 
-    const matchingAttrs = ability.getAttrs(abAttrFlag).filter((attr) => {
+    const matchingAttrs = ability.getAttrs<TAttr>(abAttrFlag).filter((attr) => {
       const condition = attr.getCondition();
       return !condition || condition(pokemon);
     });
 
     matchingAttrs.forEach((attr) => {
       globalScene.phaseManager.setPhaseQueueSplice();
+      let message: ApplyAbAttrResult<TAttr>["message"] = null;
+      const applied = attr.apply(pokemon, simulated, ...args);
 
-      const result = attr.apply(pokemon, simulated, ...args);
-      if (result && !simulated) {
+      if (applied && !simulated) {
         if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
           pokemon.summonData.abilitiesApplied.push(ability.id);
         }
+
         if (!pokemon.waveData.abilitiesApplied.includes(ability.id)) {
           pokemon.waveData.abilitiesApplied.push(ability.id);
           pokemon.waveData.abilitiesRevealed.push(ability.id);
         }
+
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {
             globalScene.abilityBar.showAbility(pokemon, passive);
@@ -86,28 +117,47 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
           }
         }
       }
-      if (result) {
-        const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
-        if (message) {
-          if (!simulated) {
-            globalScene.phaseManager.queueMessagePhase(message);
-          }
-          messages.push(message);
+
+      if (applied) {
+        message = attr.getTriggerMessage(pokemon, ability.name, ...args);
+
+        if (message && !simulated) {
+          globalScene.phaseManager.queueMessagePhase(message);
         }
       }
 
       globalScene.phaseManager.clearPhaseQueueSplice();
+      results.push({ attr, applied, message });
     });
   });
 
-  return messages;
+  return results;
 }
 
+/**
+ * Apply abilities with the {@linkcode AbilityApplyMode.REVEALED | REVEALED} ability mode.
+ * @typeParam TAttr - The specific ability attribute type.
+ * @param abAttrFlag - The {@linkcode AbAttrFlag} to apply
+ * @param params - The parameters for the given attribute's `apply` function
+ * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
+ */
 function applyRevealedAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
-): string[] {
+): ApplyAbAttrResult<TAttr>[] {
   return applyAbAttrsInternal<TAttr>({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
+}
+
+/**
+ * Apply abilities with the {@linkcode AbilityApplyMode.IGNORE | IGNORE} ability mode.
+ * @typeParam TAttr - The specific ability attribute type.
+ * @returns an empty array
+ */
+function applyNoAbAttrs<TAttr extends AbAttr>(
+  _abAttrFlag: AbAttrFlag,
+  ..._params: Parameters<TAttr["apply"]>
+): ApplyAbAttrResult<TAttr>[] {
+  return [];
 }
 
 //#endregion

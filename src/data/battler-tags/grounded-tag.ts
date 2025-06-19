@@ -15,7 +15,6 @@ import i18next from "i18next";
  * allowing Ground-type moves to hit them.
  *
  * @see {@linkcode BattlerTagType.IGNORE_FLYING}
- * @extends BattlerTag
  */
 export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMoveId: MoveId) {
@@ -31,8 +30,7 @@ export class GroundedTag extends BattlerTag {
     const wasNotGrounded =
       pokemon.isOfType(ElementalType.FLYING, true, true)
       || pokemon.hasAbility(AbilityId.LEVITATE)
-      || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES);
+      || pokemon.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.FLOATING);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.phaseManager.queueMessagePhase(

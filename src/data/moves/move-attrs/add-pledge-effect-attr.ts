@@ -8,7 +8,6 @@ import type { Move } from "#moves/move";
 /**
  * Attribute that adds a secondary effect to the field when two unique Pledge moves
  * are combined. The effect added varies based on the two Pledge moves combined.
- * @extends AddArenaTagAttr
  */
 export class AddPledgeEffectAttr extends AddArenaTagAttr {
   private readonly requiredPledge: MoveId;

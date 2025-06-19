@@ -15,7 +15,6 @@ import i18next from "i18next";
  * on an incoming move, reflecting the move back to the user.
  * Most of the logic on whether the move meets conditions to be reflected
  * can be found in {@linkcode MovePhase.tryReflectMove}.
- * @extends PreDefendAbAttr
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   constructor() {

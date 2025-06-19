@@ -20,6 +20,7 @@ describe("Learn Move Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
+    game.override.disableExpGain = false;
     game.override.xpMultiplier(50);
   });
 

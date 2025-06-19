@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { Variant } from "#data/variant";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import type { SpeciesId } from "#enums/species-id";
 import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";

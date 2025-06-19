@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Boosts the power of a Pokémon's move under certain conditions.
- * @extends AbAttr
  */
 export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;

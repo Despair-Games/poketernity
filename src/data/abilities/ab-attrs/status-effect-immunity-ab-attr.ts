@@ -4,7 +4,6 @@ import type { StatusEffect } from "#enums/status-effect";
 
 /**
  * Provides immunity to status effects to the user.
- * @extends PreSetStatusEffectImmunityAbAttr
  */
 export class StatusEffectImmunityAbAttr extends PreSetStatusEffectImmunityAbAttr {
   constructor(...immuneEffects: StatusEffect[]) {

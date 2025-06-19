@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Ability attribute that provides bonus critical hit rate stages to the ability holder
  * It is used by the ability Super Luck, which provides a one stage boost to critical hit rate.
- * @extends AbAttr
  */
 export class BonusCritAbAttr extends AbAttr {
   /** Additional critical hit stages provided by the ability. */

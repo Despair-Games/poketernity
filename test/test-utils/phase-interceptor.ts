@@ -37,6 +37,7 @@ import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
 import { PostGameOverPhase } from "#phases/post-game-over-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";
 import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
@@ -140,6 +141,7 @@ const PHASES = [
   UnlockPhase,
   PostGameOverPhase,
   RevivalBlessingPhase,
+  PostKnockoutPhase,
 ] as const;
 
 type PhaseClass = (typeof PHASES)[number];
@@ -217,7 +219,7 @@ export class PhaseInterceptor {
    * @returns A promise that resolves when the transition is complete.
    */
   public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       const targetName = this.getPhaseName(phaseTo);
       this.intervalRun = setInterval(async () => {

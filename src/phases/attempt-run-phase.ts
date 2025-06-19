@@ -14,7 +14,6 @@ import i18next from "i18next";
 
 /**
  * Handles the player attempting to run away from a wild battle
- * @extends PokemonPhase
  */
 export class AttemptRunPhase extends PokemonPhase {
   override readonly id = PhaseId.ATTEMPT_RUN;

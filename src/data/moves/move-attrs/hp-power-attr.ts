@@ -5,7 +5,6 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Attribute to set move power equal to 150 * the user's HP ratio.
- * @extends VariablePowerAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Eruption | Variations of Eruption}
  */
 export class HpPowerAttr extends VariablePowerAttr {

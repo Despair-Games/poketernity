@@ -23,7 +23,6 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
  * - the damaging effects of Hail and Sandstorm
  * - all post-turn ability triggers dependent on the current weather
  * (e.g. Rain Dish, Dry Skin)
- * @extends FieldPhase
  */
 export class WeatherEffectPhase extends FieldPhase {
   override readonly id = PhaseId.WEATHER_EFFECT;
@@ -34,13 +33,15 @@ export class WeatherEffectPhase extends FieldPhase {
     const weather = arena?.weather;
 
     if (!weather) {
-      return this.end();
+      this.end();
+      return;
     }
 
     if (!weather.lapse()) {
       arena.trySetWeather(WeatherType.NONE, false);
       arena.triggerWeatherBasedFormChangesToNormal();
-      return this.end();
+      this.end();
+      return;
     }
 
     const weatherAnimType: CommonAnim = CommonAnim.SUNNY + (weather.weatherType - 1);
@@ -116,7 +117,7 @@ export class WeatherEffectPhase extends FieldPhase {
     if (
       cancelled.value
       || pokemon.getTypes(true, true).some((t) => weather.isTypeDamageImmune(t))
-      || pokemon.getTag(BattlerTagType.UNDERGROUND, BattlerTagType.UNDERWATER)
+      || pokemon.hasTag(BattlerTagType.UNDERGROUND, BattlerTagType.UNDERWATER)
       || pokemon.switchOutStatus
     ) {
       return;

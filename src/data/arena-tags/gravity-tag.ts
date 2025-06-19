@@ -11,7 +11,6 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Gravity_(move) Gravity}.
  * Grounds all Pokémon on the field, including Flying-types and those with
  * {@linkcode AbilityId.LEVITATE} for the duration of the arena tag, usually 5 turns.
- * @extends ArenaTag
  */
 export class GravityTag extends ArenaTag {
   constructor(turnCount: number) {
@@ -24,7 +23,7 @@ export class GravityTag extends ArenaTag {
       if (pokemon) {
         pokemon.removeTag(BattlerTagType.FLOATING);
         pokemon.removeTag(BattlerTagType.TELEKINESIS);
-        if (pokemon.getTag(BattlerTagType.FLYING)) {
+        if (pokemon.hasTag(BattlerTagType.MID_AIR)) {
           pokemon.addTag(BattlerTagType.INTERRUPTED);
         }
         pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();

@@ -19,11 +19,10 @@ import i18next from "i18next";
  * are not immune by 1/6th of their health
  *
  * Used in:
- * G-Max Vine Lash: Grass
- * G-Max Wildfire: Fire
- * G-Max Cannonade: Water
- * G-Max Volcalith: Rock
- * @extends ArenaTag
+ * - G-Max Vine Lash: Grass
+ * - G-Max Wildfire: Fire
+ * - G-Max Cannonade: Water
+ * - G-Max Volcalith: Rock
  */
 export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   private immuneType: ElementalType;

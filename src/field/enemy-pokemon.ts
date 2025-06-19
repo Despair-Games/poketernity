@@ -36,7 +36,9 @@ import { randSeedInt, randSeedItem } from "#utils/random-utils";
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
   public aiType: AiType;
+  /** The amount of hp-segments the boss has (if the pokemon is a boss). */
   public bossSegments: number;
+  /** The index of the current hp-segment (if the pokemon is a boss). E.g. if the boss has 5 segments and the first 2 are cleared, this will be 2 */
   public bossSegmentIndex: number;
   public initialTeamIndex: number;
   /** To indicate if the instance was populated with a dataSource -> e.g. loaded & populated from session data */
@@ -156,8 +158,8 @@ export class EnemyPokemon extends Pokemon {
   }
 
   override generateAndPopulateMoveset(formIndex?: number): void {
-    switch (true) {
-      case this.species.speciesId === SpeciesId.SMEARGLE:
+    switch (this.species.speciesId) {
+      case SpeciesId.SMEARGLE:
         this.moveset = [
           new PokemonMove(MoveId.SKETCH),
           new PokemonMove(MoveId.SKETCH),
@@ -165,7 +167,7 @@ export class EnemyPokemon extends Pokemon {
           new PokemonMove(MoveId.SKETCH),
         ];
         break;
-      case this.species.speciesId === SpeciesId.ETERNATUS:
+      case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
               new PokemonMove(MoveId.DYNAMAX_CANNON),
@@ -543,6 +545,10 @@ export class EnemyPokemon extends Pokemon {
     amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount * DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
     if (this.isBoss() && !ignoreSegments) {
+      // To consider a boss Pokemon as 1-hit faint, the damage calculation is different and depends on the hp segments.
+      // Every segment past the first one gets a `x SegmentIndex` multiplier.
+      // E.g. if the boss has 3 segments and each with 10 hp, the damage for the 1-hit faint must be at least `60`,
+      // because `10 * 1 + 10 * 2 + 10 * 3 = 60`.
       const segmentSize = this.getMaxHp() / this.bossSegments;
       for (let s = this.bossSegmentIndex; s > 0; s--) {
         const hpThreshold = segmentSize * s;

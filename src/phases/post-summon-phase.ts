@@ -2,7 +2,6 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import type { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
-import type { MysteryEncounterPostSummonTag } from "#battler-tags/mystery-encounter-post-summon-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -29,11 +28,7 @@ export class PostSummonPhase extends PokemonPhase {
     globalScene.arena.applyTags([...ENTRY_HAZARD_ARENA_TAG_TYPES], false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
-    if (
-      globalScene.currentBattle.isBattleMysteryEncounter()
-      && pokemon.findTags((t) => t.isType<MysteryEncounterPostSummonTag>(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON))
-        .length > 0
-    ) {
+    if (globalScene.currentBattle.isBattleMysteryEncounter()) {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
 

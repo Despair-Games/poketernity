@@ -8,7 +8,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
  * Attribute for the "combo" effect of {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
  * Preempts the next move in the turn order with the first instance of any Pokemon
  * using Round. Also marks the Pokemon using the cued Round to double the move's power.
- * @extends MoveEffectAttr
  * @see {@linkcode RoundPowerAttr}
  */
 export class CueNextRoundAttr extends MoveEffectAttr {

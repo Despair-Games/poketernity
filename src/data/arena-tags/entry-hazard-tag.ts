@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Abstract class to implement arena entry hazards.
- * @extends ArenaTag
  */
 export abstract class EntryHazardTag extends ArenaTag {
   public layers: number;

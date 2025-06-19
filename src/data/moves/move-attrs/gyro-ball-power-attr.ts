@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Gyro_Ball_(move) | Gyro Ball's} power modifier.
  * The move's power increases the slower the user is compared to the target.
- * @extends VariablePowerAttr
  **/
 export class GyroBallPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

@@ -5,7 +5,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Attribute to add a {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Spikes | hazard} to the field.
- * @extends AddArenaTagAttr
  */
 export class AddEntryHazardTagAttr extends AddArenaTagAttr {
   override getCondition(): MoveConditionFunc {

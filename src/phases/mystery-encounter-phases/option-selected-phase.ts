@@ -16,8 +16,6 @@ import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-
  * It is important to point out that no phases are directly queued by any logic within this phase.
  *
  * Any phase that is meant to follow this one MUST be queued via the onOptionSelect() logic of the selected option
- *
- * @extends Phase
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
   override readonly id = PhaseId.ME_OPTION_SELECTED;

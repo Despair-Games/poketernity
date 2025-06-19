@@ -7,7 +7,6 @@ import type { Move } from "#moves/move";
 /**
  * Attribute to restore the user's HP.
  * The heal ratio varies based on the active weather.
- * @extends HealAttr
  * @see {@linkcode getWeatherHealRatio}
  */
 export abstract class WeatherHealAttr extends HealAttr {

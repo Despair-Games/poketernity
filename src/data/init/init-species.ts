@@ -3,8 +3,8 @@ import { PokemonForm } from "#data/pokemon-form";
 import PokemonSpecies from "#data/pokemon-species";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
-import { GrowthRate } from "#enums/growth-rates";
-import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { GrowthRate } from "#enums/growth-rate";
+import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 
@@ -5606,8 +5606,8 @@ export function initSpecies() {
         "",
         ElementalType.ELECTRIC,
         null,
-        1.4,
-        61.5,
+        0.3,
+        2,
         AbilityId.STATIC,
         AbilityId.NONE,
         AbilityId.LIGHTNING_ROD,
@@ -5630,8 +5630,8 @@ export function initSpecies() {
         "spiky",
         ElementalType.ELECTRIC,
         null,
-        1.4,
-        61.5,
+        0.3,
+        2,
         AbilityId.STATIC,
         AbilityId.NONE,
         AbilityId.LIGHTNING_ROD,

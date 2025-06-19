@@ -9,7 +9,6 @@ import i18next from "i18next";
 
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.
- * @extends PostDefendAbAttr
  * @see {@linkcode applyPostDefend}
  */
 export class ReverseDrainAbAttr extends PostDefendAbAttr {

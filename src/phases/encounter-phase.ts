@@ -20,7 +20,7 @@ import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
@@ -58,11 +58,11 @@ import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
- * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
+ * Starts the first encounter (wave 1) of a new run.
+ *
+ * Subsequent encounters are handled by
  * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
  * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
- *
- * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */

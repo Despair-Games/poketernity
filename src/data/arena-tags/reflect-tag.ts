@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Reduces the damage of physical moves.
  * Used by {@linkcode MoveId.REFLECT}
- * @extends WeakenMoveScreenTag
  */
 export class ReflectTag extends WeakenMoveScreenTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {

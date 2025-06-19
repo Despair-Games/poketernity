@@ -16,7 +16,6 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Tailwind_(move) Tailwind}.
  * Doubles the Speed of the Pokémon who created this arena tag, as well as all allied Pokémon.
  * Applies this arena tag for 4 turns (including the turn the move was used).
- * @extends ArenaTag
  */
 export class TailwindTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
@@ -33,7 +32,7 @@ export class TailwindTag extends ArenaTag {
 
     for (const pokemon of party) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
-      if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.getTag(BattlerTagType.CHARGED)) {
+      if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.hasTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);
         globalScene.phaseManager.queueMessagePhase(
           i18next.t("abilityTriggers:windPowerCharged", {

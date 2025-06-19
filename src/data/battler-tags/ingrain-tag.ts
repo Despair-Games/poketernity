@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Ingrain_(move) | Ingrain}.
  * Traps the owner and restores 1/16 of its maximum HP at the end of each turn.
- * @extends TrappedTag
  */
 export class IngrainTag extends TrappedTag {
   constructor(sourceId: number) {
@@ -24,7 +23,7 @@ export class IngrainTag extends TrappedTag {
    * @returns boolean True if the tag can be added, false otherwise
    */
   override canAdd(pokemon: Pokemon): boolean {
-    const isTrapped = pokemon.getTag(BattlerTagType.TRAPPED);
+    const isTrapped = pokemon.hasTag(BattlerTagType.TRAPPED);
 
     return !isTrapped;
   }

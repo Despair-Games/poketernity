@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify a move's type based on game state.
- * @extends MoveAttr
  */
 export abstract class VariableMoveTypeAttr extends MoveAttr {
   /**

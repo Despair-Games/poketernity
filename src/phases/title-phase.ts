@@ -6,7 +6,6 @@ import { Phase } from "#app/phase";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#data/daily-run";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";
-import { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
@@ -224,18 +223,12 @@ export class TitlePhase extends Phase {
         for (const starter of starters) {
           const starterProps = gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
           const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
-          const starterGender =
-            starter.species.malePercent !== null
-              ? !starterProps.female
-                ? Gender.MALE
-                : Gender.FEMALE
-              : Gender.GENDERLESS;
           const starterPokemon = globalScene.addPlayerPokemon(
             starter.species,
             startingLevel,
             starter.abilityIndex,
             starterFormIndex,
-            starterGender,
+            starterProps.gender,
             starterProps.shiny,
             starterProps.variant,
             undefined,

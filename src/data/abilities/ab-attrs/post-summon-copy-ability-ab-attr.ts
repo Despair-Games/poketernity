@@ -10,7 +10,6 @@ import i18next from "i18next";
 
 /**
  * Attempts to copy a pokemon's ability. Used by Trace.
- * @extends PostSummonAbAttr
  */
 export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
   private target: Pokemon;

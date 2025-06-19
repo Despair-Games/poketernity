@@ -18,7 +18,6 @@ import type { Pokemon } from "#field/pokemon";
  * | Delta Stream      | Strong Winds |     ∞ | Primal (permanent) |
  *
  * @param weatherType The {@linkcode WeatherType} to set
- * @extends PostSummonAbAttr
  */
 export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
   private readonly weatherType: WeatherType;

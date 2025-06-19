@@ -9,7 +9,6 @@ import type { Move } from "#moves/move";
 /**
  * Tag used to block damaging moves and burn the attacker if the move makes contact.
  * Used by {@linkcode MoveId.BURNING_BULWARK}
- * @extends DamageProtectedTag
  */
 export class ContactBurnProtectedTag extends DamageProtectedTag {
   constructor(sourceMoveId: MoveId) {

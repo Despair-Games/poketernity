@@ -7,7 +7,6 @@ import type { MoveId } from "#enums/move-id";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Ball_(move) Ice Ball}.
  * Also defines a power multiplier for the respective move based on
  * the tag's {@linkcode turnCount}.
- * @extends MoveLockTag
  */
 export class RollingTag extends MoveLockTag {
   constructor(sourceMoveId: MoveId) {

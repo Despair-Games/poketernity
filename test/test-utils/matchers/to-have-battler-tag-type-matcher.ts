@@ -16,7 +16,7 @@ import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
  * @param expectedBattlerTagType - The {@linkcode BattlerTagType} to check for.
  * @returns Whether the matcher passed
  */
-export function toHaveBattlerTagTypeMatcher(
+export function toHaveBattlerTagMatcher(
   this: MatcherState,
   received: unknown,
   expectedBattlerTagType: BattlerTagType,

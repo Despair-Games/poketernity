@@ -56,6 +56,16 @@ export function randSeedInt(range: number, min: number = 0): number {
 }
 
 /**
+ * Generates a random number using the global seed
+ * @param min - The minimum integer to generate
+ * @param max - The maximum integer to generate
+ * @returns a random integer between {@linkcode min} and {@linkcode max} inclusive
+ */
+export function randSeedIntRange(min: number, max: number): number {
+  return randSeedInt(max - min + 1, min);
+}
+
+/**
  * Returns a random integer between min and max (non-inclusive)
  */
 export function randIntRange(min: number, max: number): number {

@@ -9,7 +9,6 @@ import i18next from "i18next";
  * Attribute to allow the target to move immediately after the user
  * if the target hasn't moved yet this turn.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/After_You_(move) | After You}.
- * @extends MoveEffectAttr
  */
 export class AfterYouAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {

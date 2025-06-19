@@ -20,7 +20,6 @@ import { isNil, type NumberHolder } from "#utils/common-utils";
 | Swarm        | Bug   |
 +--------------+-------+
  * ```
- * @extends StatMultiplierAbAttr
  */
 export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
   /**

@@ -40,8 +40,8 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     for (const opponent of pokemon.getOpponents()) {
       const cancelled = new BooleanHolder(false);
       if (this.intimidate) {
-        if (opponent.getTag(BattlerTagType.SUBSTITUTE)) {
-          return false;
+        if (opponent.hasTag(BattlerTagType.SUBSTITUTE)) {
+          continue;
         }
 
         applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INTIMIDATE_IMMUNITY, opponent, simulated, cancelled);

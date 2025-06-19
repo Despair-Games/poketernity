@@ -10,7 +10,7 @@ import { speciesStarterCosts } from "#data/starters";
 import { type Variant, variantData, type VariantSet } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
-import { PokemonRegion } from "#enums/pokemon-regions";
+import { PokemonRegion } from "#enums/pokemon-region";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";

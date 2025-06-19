@@ -10,7 +10,6 @@ import i18next from "i18next";
  * - Turn 1: Uses the default message
  * - Final turn: "{user} unleashed its energy!"
  * - Other turns: "{user} is storing energy!"
- * @extends VariableMoveMessageAttr
  * @see {@link https://www.youtube.com/watch?v=nJyNVe5RQlM | Bide Gens 1-9}
  */
 export class BideMessageAttr extends VariableMoveMessageAttr {

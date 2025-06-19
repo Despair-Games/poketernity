@@ -15,7 +15,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * - Adding a tag to the user to record received attack damage on the first turn
  * - Playing Bide's "charging" animation on all but the last turn of execution
  * - Cancelling Bide's damage on all but the last turn of execution
- * @extends OverrideMoveEffectAttr
  */
 export class BideEffectAttr extends OverrideMoveEffectAttr {
   public override apply(user: Pokemon, _target: Pokemon | null, _move: Move, overridden: BooleanHolder): boolean {

@@ -29,13 +29,13 @@ import {
 } from "#data/rates";
 import { speciesEggTiers } from "#data/species-egg-tiers";
 import { speciesStarterCosts } from "#data/starters";
-import { EggSourceType } from "#enums/egg-source-types";
-import { EggTier } from "#enums/egg-type";
+import { EggSourceType } from "#enums/egg-source-type";
+import { EggTier } from "#enums/egg-tier";
 import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { clamp } from "#utils/common-utils";
-import { getIvsFromId, getPokemonSpecies } from "#utils/pokemon-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt, randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -265,7 +265,7 @@ export class Egg {
       ret.shiny = this._isShiny;
       ret.variant = this._variantTier;
 
-      const secondaryIvs = getIvsFromId();
+      const secondaryIvs = ret.generateIvs();
 
       for (let s = 0; s < ret.ivs.length; s++) {
         ret.ivs[s] = Math.max(ret.ivs[s], secondaryIvs[s]);

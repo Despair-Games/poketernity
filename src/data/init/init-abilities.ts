@@ -123,7 +123,7 @@ import { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-ter
 import { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#abilities/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#abilities/post-turn-form-change-ab-attr";
-import { PostTurnHurtIfSleepingAbAttr } from "#abilities/post-turn-hurt-if-sleeping-ab-attr";
+import { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import { PostTurnLootAbAttr } from "#abilities/post-turn-loot-ab-attr";
 import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
 import { PostTurnStatusHealAbAttr } from "#abilities/post-turn-status-heal-ab-attr";
@@ -133,7 +133,7 @@ import { PostWeatherChangeAddBattlerTagAbAttr } from "#abilities/post-weather-ch
 import { PostWeatherChangeFormChangeAbAttr } from "#abilities/post-weather-change-form-change-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#abilities/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#abilities/post-weather-lapse-heal-ab-attr";
-import { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "#abilities/pre-switch-out-clear-weather-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "#abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "#abilities/pre-switch-out-heal-ab-attr";
@@ -223,7 +223,7 @@ export function initAbilities() {
       .attr(BlockCritAbAttr)
       .ignorable(),
     new Ability(AbilityId.STURDY, 3)
-      .attr(PreDefendFullHpEndureAbAttr)
+      .attr(SturdyAbAttr)
       .attr(BlockOneHitKOAbAttr)
       .ignorable(),
     new Ability(AbilityId.DAMP, 3)
@@ -303,7 +303,7 @@ export function initAbilities() {
         AttackTypeImmunityAbAttr,
         ElementalType.GROUND,
         (pokemon: Pokemon) =>
-          !pokemon.getTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.hasTag(ArenaTagType.GRAVITY),
+          !pokemon.hasTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.hasTag(ArenaTagType.GRAVITY),
       )
       .ignorable(),
     new Ability(AbilityId.EFFECT_SPORE, 3)
@@ -678,7 +678,8 @@ export function initAbilities() {
       .partial() // Should also boosts stats of ally
       .ignorable(),
     new Ability(AbilityId.BAD_DREAMS, 4)
-      .attr(PostTurnHurtIfSleepingAbAttr),
+      .attr(BadDreamsAbAttr)
+      .edgeCase(), // When falling asleep, due to being drowsy, the ability flyout appears BEFORE the pokemon falls asleep
     new Ability(AbilityId.PICKPOCKET, 5)
       .attr(PostDefendStealHeldItemAbAttr, (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target))
       .condition(getSheerForceHitDisableAbCondition()),
