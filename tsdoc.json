@@ -7,10 +7,6 @@
             "syntaxKind": "block"
         },
         {
-            "tagName": "@extends",
-            "syntaxKind": "block"
-        },
-        {
             "tagName": "@linkcode",
             "syntaxKind": "inline"
         }

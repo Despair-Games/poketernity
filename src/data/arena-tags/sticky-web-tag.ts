@@ -17,7 +17,6 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Sticky_Web_(move) Sticky Web}.
  * Applies up to 1 layer of Sticky Web, which lowers the Speed by one stage
  * to any Pokémon who is summoned into this trap.
- * @extends EntryHazardTag
  */
 export class StickyWebTag extends EntryHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {

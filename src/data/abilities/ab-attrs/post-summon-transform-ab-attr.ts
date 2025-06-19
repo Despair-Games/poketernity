@@ -8,7 +8,6 @@ import i18next from "i18next";
 
 /**
  * Used by Imposter
- * @extends PostSummonAbAttr
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

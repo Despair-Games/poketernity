@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to change a move's type based on the user's form if they are an Arceus or Silvally.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Judgment_(move) | Judgment}
  * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Multi-Attack_(move) | Multi-Attack}.
- * @extends VariableMoveTypeAttr
  */
 export class FormChangeItemTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

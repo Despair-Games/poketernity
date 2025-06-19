@@ -12,7 +12,6 @@ import type { Move } from "#moves/move";
  *
  * When a Pokémon with this Ability is hit by a move that makes contact, there is a 9% chance of poison, 10% chance of paralysis, and 11% chance of sleep.
  * The total sum of these chances is 30%.
- * @extends PostDefendAbAttr
  */
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;

@@ -23,7 +23,6 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
  * - the damaging effects of Hail and Sandstorm
  * - all post-turn ability triggers dependent on the current weather
  * (e.g. Rain Dish, Dry Skin)
- * @extends FieldPhase
  */
 export class WeatherEffectPhase extends FieldPhase {
   override readonly id = PhaseId.WEATHER_EFFECT;

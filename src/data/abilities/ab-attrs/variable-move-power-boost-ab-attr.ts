@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Abilities which cause a variable amount of power increase.
  * @param multFunc A function which takes the user, target, and move, and returns the power multiplier. `1` means no multiplier.
  * @param showAbility Whether to show the ability when it activates. Default `true`
- * @extends VariableMovePowerAbAttr
  * @see {@link applyPreAttack}
  */
 export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {

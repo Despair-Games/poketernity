@@ -6,7 +6,6 @@ import { toDmgValue } from "#utils/common-utils";
 /**
  * Attribute to set move damage randomly between 0.5x and 1.5x the user's level.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psywave_(move) | Psywave}.
- * @extends FixedDamageAttr
  */
 export class RandomLevelDamageAttr extends FixedDamageAttr {
   constructor() {

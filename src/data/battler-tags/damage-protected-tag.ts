@@ -5,7 +5,6 @@ import type { Move } from "#moves/move";
 
 /**
  * Base class for `BattlerTag`s that block damaging moves but not status moves
- * @extends ProtectedTag
  */
 export abstract class DamageProtectedTag extends ProtectedTag {
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {

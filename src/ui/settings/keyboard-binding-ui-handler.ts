@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";

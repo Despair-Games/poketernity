@@ -11,7 +11,6 @@ import i18next from "i18next";
 
 /**
  * Tag used by Gorilla Tactics to restrict the user to using only one move.
- * @extends MoveRestrictionBattlerTag
  */
 export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
   private moveId = MoveId.NONE;

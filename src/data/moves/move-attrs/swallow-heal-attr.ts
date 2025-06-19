@@ -7,7 +7,6 @@ import type { Move } from "#moves/move";
 /**
  * Attribute used to apply Swallow's healing, which scales with Stockpile stacks.
  * Does NOT remove stockpiled stacks.
- * @extends HealAttr
  */
 export class SwallowHealAttr extends HealAttr {
   protected override getHealRatio(user: Pokemon, _target: Pokemon, _move: Move): number {

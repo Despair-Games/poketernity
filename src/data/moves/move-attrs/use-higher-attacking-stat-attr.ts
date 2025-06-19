@@ -8,9 +8,9 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change move category to match the user's highest effective offensive stat.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Photon_Geyser_(move) | Photon Geyser}.
- * And all G-Max Moves
- * @extends VariableMoveCategoryAttr
+ *
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Photon_Geyser_(move) | Photon Geyser}
+ * and all G-Max Moves.
  */
 export class UseHigherAttackingStatAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {

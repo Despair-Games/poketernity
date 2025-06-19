@@ -25,7 +25,6 @@ import { fixedNumber } from "#utils/common-utils";
  * A phase for handling certain form changes for player Pokemon.
  * This does not cover evolutions, and this does not cover form changes for enemy Pokemon.
  * @see {@linkcode EvolutionPhase} for evolutions
- * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
   override readonly id = PhaseId.FORM_CHANGE;

@@ -8,7 +8,6 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 
 /**
  * Common attributes of form change abilities that block damage
- * @extends AbilityBattlerTag
  */
 export class FormBlockDamageTag extends AbilityBattlerTag {
   constructor(tagType: BattlerTagType, ability: AbilityId) {

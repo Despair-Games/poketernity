@@ -12,7 +12,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * - Water + Fire Pledge => combined attack is {@linkcode ElementalType.WATER | Water Type}
  * - Grass + Water Pledge => combined attack is {@linkcode ElementalType.GRASS | Grass Type}
  * - Fire + Grass Pledge => combined attack is {@linkcode ElementalType.FIRE | Fire Type}
- * @extends VariableMoveTypeAttr
  */
 export class CombinedPledgeTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, moveType: NumberHolder): boolean {

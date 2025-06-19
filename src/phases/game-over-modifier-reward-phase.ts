@@ -5,7 +5,6 @@ import i18next from "i18next";
 
 /**
  * Used to grant vouchers to the player after they finish a classic run
- * @extends ModifierRewardPhase
  */
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
   override readonly id = PhaseId.GAME_OVER_MODIFIER_REWARD;

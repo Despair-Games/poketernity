@@ -2,7 +2,7 @@ import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/button";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import type { SettingGamepad } from "#enums/setting-gamepad";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
@@ -11,7 +11,7 @@ import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inpu
 import pad_dualshock from "#inputs/pad-dualshock";
 import pad_generic from "#inputs/pad-generic";
 import pad_procon from "#inputs/pad-procon";
-import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
+import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
 import type { SettingsUpdateEventArgs } from "#types/settings";

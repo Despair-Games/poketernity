@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Tag representing the effect of {@link https://bulbapedia.bulbagarden.net/wiki/Helping_Hand_(move) | Helping Hand}.
  * Boosts the power of the owner's attacks by 50% for the rest of the turn
- * @extends BattlerTag
  */
 export class HelpingHandTag extends BattlerTag {
   constructor(sourceId: number) {

@@ -25,8 +25,6 @@ import i18next from "i18next";
  * - Showing intro dialogue for an enemy trainer or wild Pokemon
  * - Sliding in the visuals for enemy trainer or wild Pokemon, as well as handling summoning animations
  * - Queue the {@linkcode SummonPhase}s, {@linkcode PostSummonPhase}s, etc., required to initialize the phase queue for a battle
- *
- * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
   override readonly id = PhaseId.ME_BATTLE;

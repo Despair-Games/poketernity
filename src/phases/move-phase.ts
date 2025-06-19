@@ -61,7 +61,6 @@ import i18next from "i18next";
  * - Handles the Dancer ability
  *
  * If the move is successful, then a {@linkcode MoveEffectPhase} is queued.
- * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
   override readonly id = PhaseId.MOVE;

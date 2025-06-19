@@ -12,7 +12,6 @@ import { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute adding a chance to flinch the target.
- * @extends AddBattlerTagAttr
  */
 export class FlinchAttr extends AddBattlerTagAttr {
   constructor() {

@@ -23,7 +23,6 @@ import i18next from "i18next";
  * Attribute to force either the user (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/U-turn_(move) | U-turn})
  * or the target (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Roar_(move) | Roar})
  * off the field, prompting a switch.
- * @extends MoveEffectAttr
  */
 export class ForceSwitchOutAttr extends MoveEffectAttr {
   constructor(

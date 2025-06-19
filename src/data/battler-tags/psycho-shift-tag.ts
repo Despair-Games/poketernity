@@ -9,7 +9,6 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * Tag used to heal the user of Psycho Shift of its status effect if Psycho Shift succeeds in transferring its status effect to the target Pokemon
- * @extends BattlerTag
  */
 export class PsychoShiftTag extends BattlerTag {
   constructor() {

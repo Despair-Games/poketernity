@@ -17,7 +17,6 @@ import i18next from "i18next";
  * at the cost of half of the user's maximum HP.
  * - Otherwise, this increases the user's Attack and Defense by one stage
  * and decreases the user's Speed by one stage.
- * @extends MoveEffectAttr
  */
 export class CurseAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {

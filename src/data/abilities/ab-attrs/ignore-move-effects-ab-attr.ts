@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Sets incoming moves additional effect chance to zero, ignoring all effects from moves. ie. Shield Dust.
- * @extends PreDefendAbAttr
  * @see {@linkcode applyPreDefend}
  */
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {

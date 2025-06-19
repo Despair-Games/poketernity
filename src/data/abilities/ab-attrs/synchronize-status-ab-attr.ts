@@ -8,7 +8,6 @@ import type { Pokemon } from "#field/pokemon";
  * that Pokemon receives the same non-volatile status condition as part of this
  * ability attribute.
  * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize}.
- * @extends AbAttr
  */
 export class SynchronizeStatusAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

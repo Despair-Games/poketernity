@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
  * Puts the source {@linkcode Pokemon} into a "frenzy", locking them into using the tag's
  * move for `turnCount - 1` turns. If this effect isn't interrupted,
  * the source {@linkcode Pokemon} becomes confused at the end of those turns.
- * @extends MoveLockTag
  */
 export class FrenzyTag extends MoveLockTag {
   constructor(turnCount: number, sourceMoveId: MoveId) {

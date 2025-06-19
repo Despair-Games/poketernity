@@ -13,7 +13,6 @@ import i18next from "i18next";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Flinch | Flinch} status condition
- * @extends BattlerTag
  */
 export class FlinchedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {

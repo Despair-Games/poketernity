@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Reduces the damage dealt to an allied Pokemon. Used by Friend Guard.
- * @extends PreDefendAbAttr
  */
 export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
   private readonly damageMultiplier: number;

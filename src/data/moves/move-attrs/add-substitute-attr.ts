@@ -12,11 +12,9 @@ import i18next from "i18next";
  * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
  * for the user.
  *
- * This attr is only used for Substitute and Shed Tail.
- * Substitute costs 1/4 of the user's max hp and rounds down
- * Shed tail costs 1/2 of the user's max hp and rounds up
- *
- * @extends MoveEffectAttr
+ * This attr is only used for Substitute and Shed Tail:
+ * - Substitute costs 1/4 of the user's max hp and rounds down
+ * - Shed tail costs 1/2 of the user's max hp and rounds up
  * @see {@linkcode apply}
  */
 export class AddSubstituteAttr extends MoveEffectAttr {

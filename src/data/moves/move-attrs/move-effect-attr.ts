@@ -19,7 +19,6 @@ export interface MoveEffectAttrOptions {
 
 /**
  * Base class defining all Move Effect Attributes
- * @extends MoveAttr
  * @see {@linkcode apply}
  */
 export abstract class MoveEffectAttr extends MoveAttr {

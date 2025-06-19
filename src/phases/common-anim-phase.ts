@@ -7,7 +7,6 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 
 /**
  * Plays a {@linkcode CommonBattleAnim}
- * @extends PokemonPhase
  */
 export class CommonAnimPhase extends PokemonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode CommonAnimPhase} is extended by other phases */

@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Increases the power of Tera Blast to 100 if the user is Terastallized into Stellar type
- * @extends VariablePowerAttr
  */
 export class TeraBlastPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to set move power proportional to the target's weight.
  * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Low_Kick_(move) | Low Kick}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Grass_Knot_(move) | Grass Knot}.
- * @extends VariablePowerAttr
  */
 export class WeightPowerAttr extends VariablePowerAttr {
   override apply(_user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

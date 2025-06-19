@@ -15,7 +15,6 @@ interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
 export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {

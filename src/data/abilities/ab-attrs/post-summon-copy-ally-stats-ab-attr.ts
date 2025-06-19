@@ -7,7 +7,6 @@ import i18next from "i18next";
 
 /**
  * Attempt to copy the stat changes on an ally pokemon. Used by Costar.
- * @extends PostSummonAbAttr
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

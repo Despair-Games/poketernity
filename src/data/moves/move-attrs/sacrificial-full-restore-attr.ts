@@ -13,7 +13,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
  * @param restorePP - Whether or not PP is restored to the revived Pokemon. Used by Lunar Dance
  * @param moveMessage - The associated key for the move trigger message.
- * @extends SacrificialAttr
  */
 export class SacrificialFullRestoreAttr extends SacrificialAttr {
   protected restorePP: boolean;

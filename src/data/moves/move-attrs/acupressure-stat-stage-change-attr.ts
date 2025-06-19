@@ -8,7 +8,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 /**
  * Attribute to increase a random stat on the user by 2 stages.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Acupressure_(move) | Acupressure}.
- * @extends MoveEffectAttr
  */
 export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {

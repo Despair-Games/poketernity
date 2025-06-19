@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Weakens the power of moves of a specific {@linkcode ElementalType}
- * @extends ArenaTag
  */
 export abstract class WeakenMoveTypeTag extends ArenaTag {
   private readonly weakenedType: ElementalType;

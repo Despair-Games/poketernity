@@ -21,7 +21,6 @@ import i18next from "i18next";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
- * @extends BattlerTag
  */
 export class ConfusedTag extends BattlerTag {
   /** Chance of self-inflicted damage `= 33%` */

@@ -5,7 +5,6 @@ import type { Move } from "#moves/move";
 
 /**
  * Ability attribute for Gorilla Tactics
- * @extends PostAttackAbAttr
  */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
   constructor() {

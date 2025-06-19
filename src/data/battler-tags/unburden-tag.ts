@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Tag used by {@link https://bulbapedia.bulbagarden.net/wiki/Unburden_(Ability) | Unburden}
  * to double the owner's Speed stat
- * @extends AbilityBattlerTag
  */
 export class UnburdenTag extends AbilityBattlerTag {
   constructor() {
