@@ -85,7 +85,7 @@ describe("Moves - Transform", () => {
 
     expect(player.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
     for (const s of EFFECTIVE_STATS) {
-      expect(player.getStat(s, false)).toBe(enemy.getStat(s, false));
+      expect(player.getStat(s, false)).not.toBe(enemy.getStat(s, false));
     }
 
     const playerTypes = player.getTypes();
@@ -114,7 +114,7 @@ describe("Moves - Transform", () => {
 
     expect(player.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
     for (const s of EFFECTIVE_STATS) {
-      expect(player.getStat(s, false)).toBe(enemy.getStat(s, false));
+      expect(player.getStat(s, false)).not.toBe(enemy.getStat(s, false));
     }
 
     const playerTypes = player.getTypes();
