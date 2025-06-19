@@ -4,7 +4,7 @@ import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#data/starters";
 import type { ElementalType } from "#enums/elemental-type";
-import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 import { isNil } from "#utils/common-utils";
 import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
