@@ -32,7 +32,7 @@ import { getVariantTierForVariant, getVariantTint } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/button";
 import { ChallengeType } from "#enums/challenge-type";
-import { Device } from "#enums/device";
+import { Device } from "#enums/devices";
 import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownType } from "#enums/drop-down-type";

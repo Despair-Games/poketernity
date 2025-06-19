@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Device } from "#enums/device";
+import { Device } from "#enums/devices";
 import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
