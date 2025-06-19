@@ -87,14 +87,18 @@ export class CommandUiHandler extends UiHandler {
     this.toggleTeraButton();
 
     const messageHandler = this.getUi().getMessageHandler();
-    messageHandler.bg.setVisible(true);
-    messageHandler.commandWindow.setVisible(true);
-    messageHandler.movesWindowContainer.setVisible(false);
-    messageHandler.message.setWordWrapWidth((this.canTera() ? 152 : 185) * TEXT_SCALE);
-    messageHandler.showText(
-      i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
-      0,
-    );
+    if (messageHandler) {
+      messageHandler.bg.setVisible(true);
+      messageHandler.commandWindow.setVisible(true);
+      messageHandler.movesWindowContainer.setVisible(false);
+      messageHandler.message.setWordWrapWidth((this.canTera() ? 152 : 185) * TEXT_SCALE);
+      messageHandler.showText(
+        i18next.t("commandUiHandler:actionMessage", {
+          pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()),
+        }),
+        0,
+      );
+    }
 
     // If this is the first turn of battle, default to the fight command. TODO: add setting to disable this behavior
     const isFirstAction = !this.active && globalScene.currentBattle.turn === 1;
@@ -261,7 +265,7 @@ export class CommandUiHandler extends UiHandler {
   protected override clear(): void {
     this.commandsContainer.setVisible(false);
     const messageHandler = this.getUi().getMessageHandler();
-    if (messageHandler.ready) {
+    if (messageHandler?.ready) {
       messageHandler.commandWindow.setVisible(false);
       messageHandler.clearText();
     }

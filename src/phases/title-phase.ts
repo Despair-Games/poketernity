@@ -171,8 +171,7 @@ export class TitlePhase extends Phase {
     const { gameData, ui } = globalScene;
 
     globalScene.sessionSlotId = slotId > -1 || !loggedInUser ? slotId : loggedInUser.lastSessionSlot;
-    ui.setMessageMode();
-    ui.resetModeChain();
+    ui.resetHandlers();
 
     gameData
       .loadSession(slotId, slotId === -1 ? this.lastSessionData : undefined)

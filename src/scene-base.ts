@@ -5,7 +5,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import { settings } from "#system/settings-manager";
 import { windowStyleDependantAtlases } from "#ui/ui-theme";
 import { coerceArray } from "#utils/common-utils";

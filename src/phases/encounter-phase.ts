@@ -20,7 +20,7 @@ import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
@@ -492,7 +492,7 @@ export class EncounterPhase extends BattlePhase {
       const doEncounter = (): void => {
         const doShowEncounterOptions = (): void => {
           ui.clearText();
-          ui.getMessageHandler().hideNameText();
+          ui.getMessageHandler()?.hideNameText();
 
           globalScene.phaseManager.createAndUnshiftPhase("MysteryEncounterPhase");
           this.end();

@@ -22,7 +22,7 @@ import i18next from "i18next";
 /**
  * Abstract class for handling UI elements related to settings.
  */
-export class SettingsUiHandler extends MessageUiHandler {
+export abstract class SettingsUiHandler extends MessageUiHandler {
   private settingsContainer: Phaser.GameObjects.Container;
   private optionsContainer: Phaser.GameObjects.Container;
   private messageBoxContainer: Phaser.GameObjects.Container;
@@ -124,6 +124,8 @@ export class SettingsUiHandler extends MessageUiHandler {
     this.settingLabels = [];
     this.optionValueLabels = [];
 
+    // TODO: this is inefficient as it creates a text object for every label and every option,
+    // even if only part of them are only ever shown on screen at once
     this.uiItems.forEach((uiItem, i) => {
       let settingName = uiItem.label;
       if (uiItem?.requiresReload) {

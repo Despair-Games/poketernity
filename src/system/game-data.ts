@@ -32,7 +32,7 @@ import {
 import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
-import type { Device } from "#enums/devices";
+import type { Device } from "#enums/device";
 import type { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
