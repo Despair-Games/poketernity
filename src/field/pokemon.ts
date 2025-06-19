@@ -208,6 +208,7 @@ import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/p
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 import type { PokemonScoreData } from "#types/pokemon-score-data";
+import { ATTACK_SCORE_HP_THRESHOLD } from "#constants/ai-constants";
 
 interface AbilityData {
   ability: Ability;
@@ -2209,11 +2210,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
 
-    if (damagePct >= 80) {
+    if (damagePct >= 2 * ATTACK_SCORE_HP_THRESHOLD) {
       return 2;
     }
-    const minAttackScore = Math.floor(damagePct / 40);
-    const tierUpChance = (damagePct % 40) * (100 / 40);
+    const minAttackScore = Math.floor(damagePct / ATTACK_SCORE_HP_THRESHOLD);
+    const tierUpChance = (damagePct % ATTACK_SCORE_HP_THRESHOLD) * (100 / ATTACK_SCORE_HP_THRESHOLD);
 
     if (this.randSeedInt(100) < tierUpChance) {
       return minAttackScore + 1;
@@ -2248,7 +2249,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       score = -1;
     } else {
       const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
-      score = damagePct / 40;
+      score = damagePct / ATTACK_SCORE_HP_THRESHOLD;
     }
 
     this.cacheEas(opponent, move, score);
