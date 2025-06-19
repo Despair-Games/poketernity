@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import type { EggOptions } from "#data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
-import { EggTier } from "#enums/egg-tier";
+import { EggTier } from "#enums/egg-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
