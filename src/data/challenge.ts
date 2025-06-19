@@ -343,6 +343,7 @@ export abstract class Challenge {
     return false;
   }
 
+  // TODO: make these generic (like `Phase#is` etc)
   isSingleGenerationChallenge(): this is SingleGenerationChallenge {
     return false;
   }
@@ -542,6 +543,7 @@ interface monotypeOverride {
 export class SingleTypeChallenge extends Challenge {
   private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: SpeciesId.CASTFORM, type: ElementalType.NORMAL }];
   private static SPECIES_OVERRIDES: SpeciesId[] = [SpeciesId.MELOETTA];
+  declare public value: ElementalType;
 
   constructor() {
     super(Challenges.SINGLE_TYPE, 18);
@@ -576,7 +578,7 @@ export class SingleTypeChallenge extends Challenge {
         }
       }
     }
-    if (!types.includes(this.value as ElementalType)) {
+    if (!types.includes(this.value)) {
       valid.value = false;
       return true;
     }
@@ -586,7 +588,7 @@ export class SingleTypeChallenge extends Challenge {
   override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     if (
       pokemon.isPlayer()
-      && !pokemon.isOfType(this.value as ElementalType, false, false, true)
+      && !pokemon.isOfType(this.value, false, false, true)
       && !SingleTypeChallenge.TYPE_OVERRIDES.some(
         (o) => o.type === this.value && pokemon.species.speciesId === o.species,
       )
@@ -606,12 +608,9 @@ export class SingleTypeChallenge extends Challenge {
    * @param overrideValue The value to check for. If `undefined`, gets the current value.
    * @returns The localised name for the current value.
    */
-  override getValue(overrideValue?: number): string {
+  override getValue(overrideValue?: 0 | ElementalType): string {
     const value = overrideValue ?? this.value;
-    if (value === 0) {
-      return enumValueToKey(ElementalType, ElementalType.UNKNOWN).toLowerCase();
-    }
-    return enumValueToKey(ElementalType, value as ElementalType).toLowerCase();
+    return enumValueToKey(ElementalType, value ? value : ElementalType.UNKNOWN).toLowerCase();
   }
 
   /**
@@ -619,12 +618,12 @@ export class SingleTypeChallenge extends Challenge {
    * @param overrideValue The value to check for. If `undefined`, gets the current value.
    * @returns The localised description for the current value.
    */
-  override getDescription(overrideValue?: number): string {
+  override getDescription(overrideValue?: 0 | ElementalType): string {
     const value = overrideValue ?? this.value;
     if (value === 0) {
       return i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     }
-    const typeKey = enumValueToKey(ElementalType, value as ElementalType);
+    const typeKey = enumValueToKey(ElementalType, value);
     const typeName = i18next.t(`pokemonInfo:Type.${typeKey}`);
     const typeColor = `[color=${TypeColor[typeKey]}][shadow=${TypeShadowColor[typeKey]}]${typeName}[/shadow][/color]`;
     return i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
