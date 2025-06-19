@@ -46,7 +46,7 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getRandomElementalType } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
@@ -154,7 +154,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           species: getPokemonSpecies(SpeciesId.BLACEPHALON),
           customPokemonData: new CustomPokemonData({
             ability: ability,
-            types: [randSeedInt(18, 1) as ElementalType, randSeedInt(18, 1) as ElementalType],
+            types: [getRandomElementalType(), getRandomElementalType()],
           }),
           isBoss: true,
           moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
@@ -385,7 +385,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
             if (priorityTypes.length > 0) {
               secondType = priorityTypes.pop() ?? null;
             } else {
-              secondType = randSeedInt(18, 1) as ElementalType;
+              secondType = getRandomElementalType();
             }
           }
           newTypes.push(secondType);
