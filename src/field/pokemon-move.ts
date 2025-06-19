@@ -52,11 +52,13 @@ export class PokemonMove {
     if (this.pokemon === null) {
       return this.getMove().name;
     }
-    const gMaxPrefix =
+    const gMaxDescriptor =
       this.getMove().checkFlag(MoveFlags.G_MAX_MOVE, this.pokemon) && this.pokemon.isMax()
         ? i18next.t("move:gMaxPrefix")
         : "";
-    return `${gMaxPrefix} ${this.getMove().name}`;
+
+    const moveName = this.getMove().name;
+    return i18next.t("move:moveFormatWithGMax", { gMaxDescriptor, moveName });
   }
 
   /**
