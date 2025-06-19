@@ -68,6 +68,64 @@ describe("Moves - Transform", () => {
     }
   });
 
+  it("should fail if opponent is behind a substitute", async () => {
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(enemy, MoveId.SUBSTITUTE);
+
+    game.move.use(MoveId.TRANSFORM);
+    await game.toEndOfTurn();
+
+    expect(player.getSpeciesForm().speciesId).toBe(player.getSpeciesForm().speciesId);
+    expect(player.getAbility()).toBe(player.getAbility());
+    expect(player.getGender()).toBe(player.getGender());
+
+    expect(player.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
+    for (const s of EFFECTIVE_STATS) {
+      expect(player.getStat(s, false)).toBe(enemy.getStat(s, false));
+    }
+
+    const playerTypes = player.getTypes();
+    const enemyTypes = enemy.getTypes();
+
+    expect(playerTypes.length).toBe(enemyTypes.length);
+    for (let i = 0; i < playerTypes.length && i < enemyTypes.length; i++) {
+      expect(playerTypes[i]).toBe(enemyTypes[i]);
+    }
+  });
+
+  it("should fail if opponent is midair", async () => {
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.changeMoveset(enemy, MoveId.FLY);
+
+    game.move.use(MoveId.TRANSFORM);
+    await game.toEndOfTurn();
+
+    expect(player.getSpeciesForm().speciesId).toBe(player.getSpeciesForm().speciesId);
+    expect(player.getAbility()).toBe(player.getAbility());
+    expect(player.getGender()).toBe(player.getGender());
+
+    expect(player.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
+    for (const s of EFFECTIVE_STATS) {
+      expect(player.getStat(s, false)).toBe(enemy.getStat(s, false));
+    }
+
+    const playerTypes = player.getTypes();
+    const enemyTypes = enemy.getTypes();
+
+    expect(playerTypes.length).toBe(enemyTypes.length);
+    for (let i = 0; i < playerTypes.length && i < enemyTypes.length; i++) {
+      expect(playerTypes[i]).toBe(enemyTypes[i]);
+    }
+  });
+
   it("should copy in-battle overridden stats", async () => {
     await game.classicMode.startBattle(SpeciesId.DITTO);
 
