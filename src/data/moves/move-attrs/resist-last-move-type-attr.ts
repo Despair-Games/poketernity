@@ -53,12 +53,12 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
   getTypeResistances(gameMode: GameMode, type: ElementalType): ElementalType[] {
     const typeResistances: ElementalType[] = [];
 
-    for (const e of Object.values(ElementalType)) {
+    for (const elementalType of Object.values(ElementalType)) {
       const multiplier = new NumberHolder(1);
-      multiplier.value = getTypeDamageMultiplier(type, e);
+      multiplier.value = getTypeDamageMultiplier(type, elementalType);
       applyChallenges(gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
       if (multiplier.value < 1) {
-        typeResistances.push(e);
+        typeResistances.push(elementalType);
       }
     }
 
