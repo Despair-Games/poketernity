@@ -54,7 +54,7 @@ export class PokemonMove {
     }
     const gMaxDescriptor =
       this.getMove().checkFlag(MoveFlags.G_MAX_MOVE, this.pokemon) && this.pokemon.isMax()
-        ? i18next.t("move:gMaxPrefix")
+        ? i18next.t("move:gMaxDescriptor")
         : "";
 
     const moveName = this.getMove().name;
