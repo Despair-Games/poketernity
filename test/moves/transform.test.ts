@@ -91,10 +91,7 @@ describe("Moves - Transform", () => {
     const playerTypes = player.getTypes();
     const enemyTypes = enemy.getTypes();
 
-    expect(playerTypes.length).toBe(enemyTypes.length);
-    for (let i = 0; i < playerTypes.length && i < enemyTypes.length; i++) {
-      expect(playerTypes[i]).toBe(enemyTypes[i]);
-    }
+    expect(playerTypes.length).not.toBe(enemyTypes.length);
   });
 
   it("should fail if opponent is midair", async () => {
@@ -120,10 +117,7 @@ describe("Moves - Transform", () => {
     const playerTypes = player.getTypes();
     const enemyTypes = enemy.getTypes();
 
-    expect(playerTypes.length).toBe(enemyTypes.length);
-    for (let i = 0; i < playerTypes.length && i < enemyTypes.length; i++) {
-      expect(playerTypes[i]).toBe(enemyTypes[i]);
-    }
+    expect(playerTypes.length).not.toBe(enemyTypes.length);
   });
 
   it("should copy in-battle overridden stats", async () => {
