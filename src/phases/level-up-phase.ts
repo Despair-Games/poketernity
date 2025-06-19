@@ -46,11 +46,15 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     this.pokemon.addFriendship(FRIENDSHIP_GAIN_PER_LEVEL_UP);
     this.pokemon.updateInfo();
 
+    // Retrieve the messageUiHandler to display level up stats
+    const messageUiHandler = ui.getMessageHandler();
+    if (!messageUiHandler) {
+      this.end();
+      return;
+    }
+
     const promptLevelUpStats = (): Promise<void> =>
-      ui
-        .getMessageHandler()
-        .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
-        .then(() => this.end());
+      messageUiHandler.promptLevelUpStats(this.partyMemberIndex, prevStats, false).then(() => this.end());
 
     if (settings.general.partyExpNotificationMode === ExpNotification.DEFAULT) {
       globalScene.audioManager.playSound("level_up_fanfare");

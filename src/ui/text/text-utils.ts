@@ -104,7 +104,7 @@ function getTextStyleOptions(
 ): CustomTextStyleOptions {
   const textStyleOptions = getTextStyle(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
-  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.fontStyle;
+  const { fontFamily, fontSize, shadow, strokeThickness, lineSpacing } = textStyleOptions.fontStyle;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: fontFamily,
@@ -114,6 +114,9 @@ function getTextStyleOptions(
       bottom: 6,
     },
   };
+  if (lineSpacing) {
+    styleOptions.lineSpacing = lineSpacing;
+  }
 
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {

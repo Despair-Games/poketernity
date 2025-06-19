@@ -684,7 +684,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     this.tooltipContainer.setVisible(false);
     // Keeps container background and pokeball
     this.descriptionContainer.removeBetween(2, this.descriptionContainer.length, true);
-    this.getUi().getMessageHandler().clearText();
+    this.getUi().clearText();
     this.eraseCursor();
   }
 
