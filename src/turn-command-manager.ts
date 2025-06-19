@@ -75,18 +75,12 @@ export interface TurnCommand {
 }
 
 export class TurnCommandManager {
-  /**
-   * The internal {@linkcode TurnCommand} queue.
-   *
-   * NOTE: This is only `public` to facilitate unit tests that override turn order.
-   * Please use this class's API to access and modify turn commands instead
-   * of accessing this array directly.
-   */
-  public turnCommands: TurnCommand[] = [];
-  /** Tracks how many pending turn commands are currently in the phase queue */
-  public commandsInProgress: number = 0;
+  /** The internal {@linkcode TurnCommand} queue. */
+  private turnCommands: TurnCommand[] = [];
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
+  /** Tracks how many pending turn commands are currently in the phase queue */
+  public commandsInProgress: number = 0;
 
   // #region Public Methods
 

@@ -6,7 +6,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Removes specified arena tags when a Pokemon is summoned. Used by Screen Cleaner.
  * @param arenaTags - The {@linkcode ArenaTagType | arena tags} to be removed
- * @extends PostSummonAbAttr
  */
 export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
   private readonly arenaTags: ArenaTagType[];

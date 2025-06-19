@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to multiply move power by the output of
  * a set {@linkcode powerMultiplierFunc | function}.
- * @extends VariablePowerAttr
  */
 export class MovePowerMultiplierAttr extends VariablePowerAttr {
   private powerMultiplierFunc: (user: Pokemon, target: Pokemon, move: Move) => number;

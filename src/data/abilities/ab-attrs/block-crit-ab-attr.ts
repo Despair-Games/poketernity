@@ -8,7 +8,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * These abilities use this attribute:
  * - Battle Armor
  * - Shell Armor (Identical to Battle Armor in functionality, just has a different name)
- * @extends AbAttr
  */
 export class BlockCritAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

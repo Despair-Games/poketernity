@@ -33,7 +33,6 @@ import i18next from "i18next";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
- * @extends FieldPhase
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {

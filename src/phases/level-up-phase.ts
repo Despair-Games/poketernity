@@ -18,8 +18,6 @@ import i18next from "i18next";
  * - Displays the appropriate messages
  * - Pushes a {@linkcode LearnMovePhase} for each newly learned move
  * - Pushes an {@linkcode EvolutionPhase} if the pokemon should evolve
- *
- * @extends PlayerPartyMemberPokemonPhase
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
   override readonly id = PhaseId.LEVEL_UP;

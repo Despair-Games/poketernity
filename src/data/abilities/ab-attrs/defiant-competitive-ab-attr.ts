@@ -15,7 +15,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
  * | Competitive | +2 SpA      |
  *
  *
- * @extends PostStatStageChangeAbAttr
  */
 export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   private readonly statsToChange: BattleStat[];

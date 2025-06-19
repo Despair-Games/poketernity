@@ -8,7 +8,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Triggers weather-based form change when weather changes.
  * Used by Forecast and Flower Gift.
- * @extends PostWeatherChangeAbAttr
  */
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
   private readonly ability: AbilityId;

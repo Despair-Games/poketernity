@@ -5,7 +5,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 /**
  * Attribute to split HP evenly between the user and target.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pain_Split_(move) | Pain Split}.
- * @extends MoveEffectAttr
  */
 export class HpSplitAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {

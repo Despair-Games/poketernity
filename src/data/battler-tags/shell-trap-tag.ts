@@ -12,7 +12,6 @@ import i18next from "i18next";
  * Tag implementing Shell Trap's pre-move behavior.
  * Pokemon with this tag will act immediately after being hit by a physical move.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Shell_Trap_(move) | Shell Trap}
- * @extends BattlerTag
  */
 export class ShellTrapTag extends BattlerTag {
   public activated: boolean = false;

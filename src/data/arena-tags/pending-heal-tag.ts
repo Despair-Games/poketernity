@@ -33,7 +33,6 @@ interface PendingHealEffect {
  * When a damaged Pokemon first enters the effect's {@linkcode BattlerIndex | field position},
  * their HP is fully restored, and they are cured of any non-volatile status condition.
  * If the effect is from Lunar Dance, their PP is also restored.
- * @extends ArenaTag
  */
 export class PendingHealTag extends ArenaTag {
   /** All pending healing effects, organized by {@linkcode BattlerIndex} */

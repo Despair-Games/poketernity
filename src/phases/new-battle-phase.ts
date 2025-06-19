@@ -4,7 +4,6 @@ import { BattlePhase } from "#phases/abstract-battle-phase";
 
 /**
  * Triggers a new battle
- * @extends BattlePhase
  */
 export class NewBattlePhase extends BattlePhase {
   override readonly id = PhaseId.NEW_BATTLE;

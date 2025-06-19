@@ -14,7 +14,6 @@ import { type NumberHolder, BooleanHolder } from "#utils/common-utils";
 
 /**
  * Reduces the damage of specific move categories in the arena.
- * @extends ArenaTag
  */
 export abstract class WeakenMoveScreenTag extends ArenaTag {
   protected readonly weakenedCategories: MoveCategory[];

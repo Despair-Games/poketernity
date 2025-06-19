@@ -7,7 +7,6 @@ import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
  * Attribute to remove the effects of
  * {@link https://bulbapedia.bulbagarden.net/wiki/Light_Screen_(move) | Light Screen}
  * and similar effects.
- * @extends MoveEffectAttr
  */
 export class RemoveScreensAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {

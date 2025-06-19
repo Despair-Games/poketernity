@@ -12,7 +12,6 @@ import i18next from "i18next";
 
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Infatuation | Infatuation} status effect
- * @extends BattlerTag
  */
 export class InfatuatedTag extends BattlerTag {
   public readonly ACTIVATION_CHANCE: number = 100 * (1 / 2);

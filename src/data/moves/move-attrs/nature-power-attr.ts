@@ -12,7 +12,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Attribute to invoke another move based on the current biome
  * (or terrain, if one is on the field).
  * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Nature_Power_(move) | Nature Power}.
- * @extends CallMoveAttr
  */
 export class NaturePowerAttr extends CallMoveAttr {
   constructor() {

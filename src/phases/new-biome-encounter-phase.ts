@@ -7,7 +7,6 @@ import { NextEncounterPhase } from "#phases/next-encounter-phase";
 
 /**
  * Triggers the first encounter of a new biome
- * @extends NextEncounterPhase
  */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
   override readonly id = PhaseId.NEW_BIOME_ENCOUNTER;

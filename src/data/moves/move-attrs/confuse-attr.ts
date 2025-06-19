@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute to {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | confuse}
  * the user or target.
- * @extends AddBattlerTagAttr
  */
 export class ConfuseAttr extends AddBattlerTagAttr {
   constructor(axeKick?: boolean) {

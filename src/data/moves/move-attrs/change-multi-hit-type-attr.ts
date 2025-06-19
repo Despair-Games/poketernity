@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change a move's multi-hit type in certain game states.
- * @extends MoveAttr
  */
 export class ChangeMultiHitTypeAttr extends MoveAttr {
   /**

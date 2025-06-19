@@ -187,7 +187,6 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
 /**
  * Class used for triggering form changes based on the user's Tera type.
  * Used by Ogerpon and Terapagos.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeManualTrigger {
   // description = i18next.t("pokemonEvolutions:Forms.tera");
@@ -196,7 +195,6 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeManualTrigger
 /**
  * Class used for triggering form changes based on the user's lapsed Tera type.
  * Used by Ogerpon and Terapagos.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeManualTrigger {
   // description = i18next.t("pokemonEvolutions:Forms.teraLapse");
@@ -205,7 +203,6 @@ export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeManualTr
 /**
  * Class used for triggering form changes based on weather.
  * Used by Castform and Cherrim.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
   /** The ability that  triggers the form change */
@@ -242,7 +239,6 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
  * Class used for reverting to the original form when the weather runs out
  * or when the user loses the ability/is suppressed.
  * Used by Castform and Cherrim.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChangeTrigger {
   /** The ability that triggers the form change*/

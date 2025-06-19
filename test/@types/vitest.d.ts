@@ -119,5 +119,17 @@ declare module "vitest" {
      * @param expectedAbilityId - The expected {@linkcode AbilityId}.
      */
     toHaveAbilityApplied(expectedAbilityId: AbilityId): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has a specific amount of HP.
+     */
+    toHaveHp(expectedHp: number): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has fainted.
+     *
+     * _Includes a check for hp being `0`._
+     */
+    toHaveFainted(): void;
   }
 }

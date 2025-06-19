@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute used for moves that reduce PP of the target's last used move.
  * Used for Spite.
- * @extends MoveEffectAttr
  */
 export class ReducePpMoveAttr extends MoveEffectAttr {
   protected reduction: number;

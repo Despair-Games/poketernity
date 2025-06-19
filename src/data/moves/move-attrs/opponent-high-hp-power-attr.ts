@@ -7,7 +7,6 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
  * Attribute used for moves whose base power scales with the opponent's HP
  * Used for Crush Grip, Wring Out, and Hard Press
  * `maxBasePower` 100 for Hard Press, 120 for others
- * @extends VariablePowerAttr
  */
 export class OpponentHighHpPowerAttr extends VariablePowerAttr {
   maxBasePower: number;

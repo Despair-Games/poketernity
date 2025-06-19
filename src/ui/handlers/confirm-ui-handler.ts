@@ -6,7 +6,6 @@ import i18next from "i18next";
 
 /**
  * Handler that displays a simple Yes/No menu.
- * @extends BaseOptionSelectUiHandler
  */
 export class ConfirmUiHandler extends BaseOptionSelectUiHandler<OptionSelectItem> {
   constructor() {

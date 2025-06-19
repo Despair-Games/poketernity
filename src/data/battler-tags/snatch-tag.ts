@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Tag to indicate the owner can steal a beneficial self-status move's effects
  * with {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Snatch}.
- * @extends BattlerTag
  */
 export class SnatchingTag extends BattlerTag {
   constructor() {

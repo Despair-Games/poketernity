@@ -21,7 +21,6 @@ import i18next from "i18next";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Grass_Pledge_(move) | Grass Pledge}.
  * Damages all non-Fire-type Pokemon on the given side of the field at the end
  * of each turn for 4 turns.
- * @extends ArenaTag
  */
 export class FireGrassPledgeTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {

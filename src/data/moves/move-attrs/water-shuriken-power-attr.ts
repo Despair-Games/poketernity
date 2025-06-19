@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) | Water Shuriken}'s
  * effect of setting the move's power to 20 per strike when
  * used by Battle Bond Ash Greninja.
- * @extends VariablePowerAttr
  */
 export class WaterShurikenPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

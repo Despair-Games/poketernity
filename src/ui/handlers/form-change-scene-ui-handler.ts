@@ -11,7 +11,6 @@ import { addTextObject } from "#ui/text-utils";
 
 /**
  * A handler for Pokemon form change and evolution scenes
- * @extends MessageUiHandler
  */
 export class FormChangeSceneUiHandler extends MessageUiHandler {
   public container: Phaser.GameObjects.Container;
