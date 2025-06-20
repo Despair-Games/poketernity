@@ -106,10 +106,12 @@ export class ModifierType {
     this.newModifierFunc = newModifierFunc;
   }
 
+  /** The modifier's localized name. */
   public get name(): string {
     return i18next.t(`${this.localeKey}.name`);
   }
 
+  /** The modifier's localized description. */
   public get description(): string {
     return i18next.t(`${this.localeKey}.description`);
   }

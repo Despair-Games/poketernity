@@ -90,10 +90,19 @@ export default class PokemonSpecies extends PokemonSpeciesForm {
     });
   }
 
+  /**
+   * The localized name of the Pokemon species (in its base form).
+   * For the name of a specific form, use {@linkcode getName} instead.
+   */
   public get name(): string {
     return i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase()}`);
   }
 
+  /**
+   * @param formIndex - (Optional) The index of the {@linkcode forms | form}
+   * from which the name is obtained. If not defined, this uses the base form.
+   * @returns The localized name of the Pokemon species under the given form index
+   */
   getName(formIndex?: number): string {
     if (formIndex !== undefined && this.forms.length) {
       const form = this.forms[formIndex];

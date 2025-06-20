@@ -25,14 +25,23 @@ export class Ability {
     this.conditions = [];
   }
 
+  /**
+   * The ability's localized name. May include a {@linkcode nameAppend | tag}
+   * if the ability isn't fully implemented.
+   */
   public get name(): string {
     return this.id ? `${i18next.t(`ability:${this.i18nKey}.name`)}${this.nameAppend}` : "";
   }
 
+  /** The ability's localized description. */
   public get description(): string {
     return this.id ? i18next.t(`ability:${this.i18nKey}.description`) : "";
   }
 
+  /**
+   * The i18n key for this ability in camel-case, i.e. "abilityName".
+   * Used to localize the ability's {@linkcode name} and {@linkcode description}.
+   */
   private get i18nKey(): string {
     return toCamelCaseString(AbilityId[this.id]);
   }
