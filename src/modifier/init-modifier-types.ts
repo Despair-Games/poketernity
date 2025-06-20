@@ -189,7 +189,7 @@ export function initModifierTypes() {
 
   modifierTypes.DIRE_HIT = () =>
     new (class extends ModifierType {
-      override getDescription(): string {
+      public override get description(): string {
         return t("modifierType:ModifierType.TempStatStageBoosterModifierType.description", {
           stat: t("modifierType:ModifierType.DIRE_HIT.extra.raises"),
           amount: t("modifierType:ModifierType.TempStatStageBoosterModifierType.extra.stage"),

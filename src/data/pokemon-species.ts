@@ -10,14 +10,12 @@ import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
-import type { Localizable } from "#types/locales";
 import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
-export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {
-  public name: string;
+export default class PokemonSpecies extends PokemonSpeciesForm {
   readonly group: SpeciesGroups;
   readonly species: string;
   readonly growthRate: GrowthRate;
@@ -85,13 +83,15 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     this.canChangeForm = canChangeForm;
     this.forms = forms;
 
-    this.localize();
-
     forms.forEach((form, f) => {
       form.speciesId = id;
       form.formIndex = f;
       form.generation = generation;
     });
+  }
+
+  public get name(): string {
+    return i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase}`);
   }
 
   getName(formIndex?: number): string {
@@ -119,10 +119,6 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       }
     }
     return this.name;
-  }
-
-  localize(): void {
-    this.name = i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase()}`);
   }
 
   /**
