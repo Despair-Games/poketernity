@@ -28,7 +28,7 @@ export class DragonCheerAttr extends AddBattlerTagAttr {
     const targetHasHighCrit = target.getAttackMoves(true).some((mv) => mv.hasAttr(HighCritAttr));
 
     return (
-      this.getRandomScore(user, 55)
+      this.getRandomScore(user, 50)
       + (targetIsDragon ? MINOR_EFFECT_SCORE_BONUS : 0)
       + (targetHasHighCrit ? MINOR_EFFECT_SCORE_BONUS : 0)
     );

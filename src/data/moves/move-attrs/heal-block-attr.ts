@@ -25,6 +25,12 @@ export class HealBlockAttr extends AddBattlerTagAttr {
    * if the target has the ability {@link AbilityId.TRIAGE | Triage}.
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    if (target.hasTag(BattlerTagType.HEAL_BLOCK)) {
+      // This should not affect score if the target is already Heal Blocked
+      // and the move would not fail as a result (i.e. the move is Psychic Noise)
+      return 0;
+    }
+
     const triageBonus = target.hasRevealedAbility(AbilityId.TRIAGE) ? MINOR_EFFECT_SCORE_BONUS : 0;
 
     return this.getRandomScore(user, 40) + triageBonus;

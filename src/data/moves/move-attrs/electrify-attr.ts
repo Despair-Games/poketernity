@@ -1,5 +1,9 @@
 import { ELECTRIC_IMMUNE_ABILITIES } from "#constants/ability-constants";
-import { MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
+import {
+  MAJOR_EFFECT_SCORE_BONUS,
+  MAJOR_EFFECT_SCORE_PENALTY,
+  MINOR_EFFECT_SCORE_PENALTY,
+} from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -18,10 +22,18 @@ export class ElectrifyAttr extends AddBattlerTagAttr {
   }
 
   /**
-   * Grants 60%(+2) if the user or its ally has an immunity to Electric-type moves,
-   * either from its typing or ability. Otherwise, grants a {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty}
+   * Grants:
+   * - A {@link MAJOR_EFFECT_SCORE_PENALTY | major penalty} if the target is faster than the user
+   * - 60%(+2) if the user or its ally has an immunity to Electric-type moves, either
+   * from its typing or Ability, and the above condition doesn't apply.
+   * - A {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty} if none of the above
+   * conditions apply
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    if (!user.outspeeds(target, true)) {
+      return MAJOR_EFFECT_SCORE_PENALTY;
+    }
+
     const allyHasElectricImmunity = user
       .getField()
       .some(
