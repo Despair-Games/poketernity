@@ -33,8 +33,10 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
   private optionsBg: Phaser.GameObjects.NineSlice;
 
+  /** The currently selected options for all settings. */
   private optionCursors: number[];
 
+  /** The computed horizontal positionning of the options for all settings. */
   private settingValuesPosition: number[][];
 
   /** Container for all settings labels in a single TextObject. */
@@ -45,7 +47,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    */
   private optionValueLabels: Phaser.GameObjects.Text[][];
 
-  protected navigationIcons: InputsIcons;
+  private navigationIcons: InputsIcons;
 
   private cursorObj: Phaser.GameObjects.NineSlice | null;
 

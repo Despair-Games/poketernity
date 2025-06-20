@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import type { Device } from "#enums/device";
@@ -13,6 +12,7 @@ import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
+import type { InputInterfaceConfig } from "#types/input-interface-config";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -308,7 +308,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
    *
    * @returns The active configuration for current device
    */
-  getActiveConfig(): InterfaceConfig {
+  getActiveConfig(): InputInterfaceConfig {
     return globalScene.inputController.getActiveConfig(this.device);
   }
 
@@ -414,7 +414,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
    * @param activeConfig - The active device configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  protected setLayout(activeConfig: InterfaceConfig): boolean {
+  protected setLayout(activeConfig: InputInterfaceConfig): boolean {
     // Extract the type of the gamepad from the active configuration.
     const configType = activeConfig.padType;
 

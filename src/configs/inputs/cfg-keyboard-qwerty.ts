@@ -1,7 +1,8 @@
 import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import type { KeyboardInterfaceConfig } from "#types/input-interface-config";
 
-const cfg_keyboard_qwerty = {
+const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
   padID: "default",
   padType: "keyboard",
   deviceMapping: {
@@ -275,7 +276,7 @@ const cfg_keyboard_qwerty = {
     KEY_SEMICOLON: -1,
     KEY_ALT: -1,
   },
-  blacklist: [
+  bindingBlacklist: [
     "KEY_ENTER",
     "KEY_ESC",
     "KEY_SPACE",

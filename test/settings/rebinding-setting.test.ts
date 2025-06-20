@@ -1,4 +1,3 @@
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
@@ -6,6 +5,7 @@ import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
 import { getKeyWithKeycode, getKeyWithSettingName } from "#inputs/config-handler";
 import { InGameManip } from "#test/settings/helpers/in-game-manip";
 import { MenuManip } from "#test/settings/helpers/menu-manip";
+import type { InputInterfaceConfig } from "#types/input-interface-config";
 import { deepCopy } from "#utils/common-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -13,7 +13,7 @@ describe("Test Rebinding", () => {
   let config: any;
   let inGame: InGameManip;
   let inTheSettingMenu: MenuManip;
-  const configs: Map<string, InterfaceConfig> = new Map();
+  const configs: Map<string, InputInterfaceConfig> = new Map();
   const selectedDevice = {
     [Device.GAMEPAD]: null,
     [Device.KEYBOARD]: "default",

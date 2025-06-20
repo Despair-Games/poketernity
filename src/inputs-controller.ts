@@ -3,8 +3,6 @@ import { globalScene } from "#app/global-scene";
 import { TouchControl } from "#app/touch-controls";
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
-import type { SettingGamepad } from "#enums/setting-gamepad";
-import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
 import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inputs/config-handler";
@@ -14,36 +12,11 @@ import pad_procon from "#inputs/pad-procon";
 import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
+import { InputInterfaceConfig } from "#types/input-interface-config";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import { deepCopy, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
-
-export interface DeviceMapping {
-  [key: string]: number;
-}
-
-export interface IconsMapping {
-  [key: string]: string;
-}
-
-export interface SettingMapping {
-  [key: string]: Button;
-}
-
-export interface MappingLayout {
-  [key: string]: SettingGamepad | SettingKeyboard | number;
-}
-
-export interface InterfaceConfig {
-  padID: string;
-  padType: string;
-  deviceMapping: DeviceMapping;
-  icons: IconsMapping;
-  settings: SettingMapping;
-  default: MappingLayout;
-  custom?: MappingLayout;
-}
 
 const repeatInputDelayMillis = 250;
 
@@ -77,7 +50,7 @@ export class InputsController {
 
   // TODO interactions and configs are defined as maps but used as objects
   private interactions: Map<Button, Map<string, boolean>> = new Map();
-  private configs: Map<string, InterfaceConfig> = new Map();
+  private configs: Map<string, InputInterfaceConfig<string>> = new Map();
 
   public gamepadSupport: boolean = true;
   public selectedDevice; //: {[key:string]: string};
@@ -301,7 +274,7 @@ export class InputsController {
       if (!this.selectedDevice[Device.GAMEPAD]) {
         this.setChosenGamepad(gamepadID, false);
       }
-      const config = deepCopy(this.getConfig(gamepadID)) as InterfaceConfig;
+      const config = deepCopy(this.getConfig(gamepadID)) as InputInterfaceConfig<string>;
       config.custom = this.configs[gamepadID]?.custom || { ...config.default };
       this.configs[gamepadID] = config;
       globalScene.gameData?.saveMappingConfigs(gamepadID, this.configs[gamepadID]);
@@ -316,7 +289,7 @@ export class InputsController {
    */
   setupKeyboard(): void {
     for (const layout of ["default"]) {
-      const config = deepCopy(this.getConfigKeyboard(layout)) as InterfaceConfig;
+      const config = deepCopy(this.getConfigKeyboard(layout)) as InputInterfaceConfig<string>;
       config.custom = this.configs[layout]?.custom || { ...config.default };
       this.configs[layout] = config;
       globalScene.gameData?.saveMappingConfigs(this.selectedDevice[Device.KEYBOARD], this.configs[layout]);
@@ -487,7 +460,7 @@ export class InputsController {
    * @param id The identifier string of the gamepad.
    * @returns InterfaceConfig The configuration object corresponding to the identified gamepad type.
    */
-  getConfig(id: string): InterfaceConfig {
+  getConfig(id: string): InputInterfaceConfig<string> {
     id = id.toLowerCase();
 
     if (id.includes("081f") && id.includes("e401")) {
@@ -512,7 +485,7 @@ export class InputsController {
    * @param id The identifier string of the keyboard layout.
    * @returns InterfaceConfig The configuration object corresponding to the identified keyboard layout.
    */
-  getConfigKeyboard(id: string): InterfaceConfig {
+  getConfigKeyboard(id: string): InputInterfaceConfig<string> {
     if (id === "default") {
       return cfg_keyboard_qwerty;
     }

@@ -1,6 +1,5 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
@@ -13,6 +12,7 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#system/settings-keyboard";
+import { InputInterfaceConfig } from "#types/input-interface-config";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { addTextObject } from "#ui/text-utils";
@@ -129,7 +129,7 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
    * @param activeConfig - The active keyboard configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  protected override setLayout(activeConfig: InterfaceConfig): boolean {
+  protected override setLayout(activeConfig: InputInterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.

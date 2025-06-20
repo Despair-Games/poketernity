@@ -1,10 +1,11 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import { DualshockKeys, GamepadInterfaceConfig } from "#types/input-interface-config";
 
 /**
  * Dualshock mapping
  */
-const pad_dualshock = {
+const pad_dualshock: GamepadInterfaceConfig<DualshockKeys> = {
   padID: "Dualshock",
   padType: "dualshock",
   deviceMapping: {

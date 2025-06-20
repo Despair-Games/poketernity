@@ -1,5 +1,5 @@
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { Device } from "#enums/device";
+import type { GamepadKeys, InputInterfaceConfig, KeyboardKeys } from "#types/input-interface-config";
 import { isNil } from "#utils/common-utils";
 
 /**
@@ -9,7 +9,7 @@ import { isNil } from "#utils/common-utils";
  * @param keycode - The keycode to search for.
  * @returns The key associated with the specified keycode.
  */
-export function getKeyWithKeycode(config: InterfaceConfig, keycode: number) {
+export function getKeyWithKeycode(config: InputInterfaceConfig, keycode: number) {
   return Object.keys(config.deviceMapping).find((key) => config.deviceMapping[key] === keycode);
 }
 
@@ -20,7 +20,7 @@ export function getKeyWithKeycode(config: InterfaceConfig, keycode: number) {
  * @param keycode - The keycode to search for.
  * @returns The setting name associated with the specified keycode.
  */
-export function getSettingNameWithKeycode(config: InterfaceConfig, keycode: number) {
+export function getSettingNameWithKeycode(config: InputInterfaceConfig, keycode: number) {
   const key = getKeyWithKeycode(config, keycode);
   return key && config.custom ? config.custom[key] : null;
 }
@@ -32,7 +32,7 @@ export function getSettingNameWithKeycode(config: InterfaceConfig, keycode: numb
  * @param keycode - The keycode to search for.
  * @returns The icon associated with the specified keycode.
  */
-export function getIconWithKeycode(config: InterfaceConfig, keycode: number) {
+export function getIconWithKeycode(config: InputInterfaceConfig, keycode: number) {
   const key = getKeyWithKeycode(config, keycode);
   return key ? config.icons[key] : null;
 }
@@ -44,7 +44,7 @@ export function getIconWithKeycode(config: InterfaceConfig, keycode: number) {
  * @param keycode - The keycode to search for.
  * @returns The button associated with the specified keycode.
  */
-export function getButtonWithKeycode(config: InterfaceConfig, keycode: number) {
+export function getButtonWithKeycode(config: InputInterfaceConfig, keycode: number) {
   const settingName = getSettingNameWithKeycode(config, keycode);
   return settingName ? config.settings[settingName] : null;
 }
@@ -56,11 +56,14 @@ export function getButtonWithKeycode(config: InterfaceConfig, keycode: number) {
  * @param settingName - The setting name to search for.
  * @returns The key associated with the specified setting name.
  */
-export function getKeyWithSettingName(config: InterfaceConfig, settingName) {
+export function getKeyWithSettingName<K extends string = GamepadKeys | KeyboardKeys>(
+  config: InputInterfaceConfig<K, any>,
+  settingName,
+): K | null {
   if (isNil(config.custom)) {
     return null;
   }
-  return Object.keys(config.custom).find((key) => config.custom![key] === settingName) ?? null;
+  return (Object.keys(config.custom).find((key) => config.custom![key] === settingName) as K) ?? null;
 }
 
 /**
@@ -71,7 +74,7 @@ export function getKeyWithSettingName(config: InterfaceConfig, settingName) {
  * @returns The setting name associated with the specified key.
  * TODO add proper return type
  */
-export function getSettingNameWithKey(config: InterfaceConfig, key: string) {
+export function getSettingNameWithKey(config: InputInterfaceConfig, key: string) {
   return config.custom ? config.custom[key] : "";
 }
 
@@ -93,13 +96,13 @@ export function getIconWithKey(config, key) {
  * @param settingName - The setting name to search for.
  * @returns The icon associated with the specified setting name.
  */
-export function getIconWithSettingName(config: InterfaceConfig, settingName: string) {
+export function getIconWithSettingName(config: InputInterfaceConfig, settingName: string) {
   const key = getKeyWithSettingName(config, settingName);
   return getIconWithKey(config, key);
 }
 
 export function getIconForLatestInput(configs, source: string, devices, settingName: string): string {
-  let config: InterfaceConfig;
+  let config: InputInterfaceConfig;
   if (source === "gamepad") {
     config = configs[devices[Device.GAMEPAD]];
   } else {
@@ -171,25 +174,23 @@ export function swap(config, settingNameTarget, keycode) {
 }
 
 /**
- * Deletes the binding of the specified setting name.
+ * Deletes the existing binding of the specified setting name unless it is a locked binding.
  *
  * @param config - The configuration object containing custom settings.
  * @param settingName - The setting name to delete.
  */
-export function deleteBind(config, settingName) {
+export function deleteBind(config: InputInterfaceConfig, settingName) {
   const key = getKeyWithSettingName(config, settingName);
-  if (config.blacklist.includes(key)) {
+  if (isNil(config.custom) || isNil(key) || config.bindingBlacklist?.includes(key)) {
     return false;
   }
-  if (key) {
-    config.custom[key] = -1;
-  }
+  config.custom[key] = -1;
   return true;
 }
 
-export function canIAssignThisKey(config, key) {
+export function canIAssignThisKey(config: InputInterfaceConfig, key) {
   const settingName = getSettingNameWithKey(config, key);
-  if (config.blacklist?.includes(key)) {
+  if (config.bindingBlacklist?.includes(key)) {
     return false;
   }
   if (settingName === -1) {
@@ -201,10 +202,10 @@ export function canIAssignThisKey(config, key) {
   return true;
 }
 
-export function canIOverrideThisSetting(config, settingName) {
+export function canIOverrideThisSetting(config: InputInterfaceConfig, settingName) {
   const key = getKeyWithSettingName(config, settingName);
-  // || isTheLatestBind(config, settingName) no longer needed since action and cancel are protected
-  if (config.blacklist?.includes(key)) {
+  // If the setting is mapped to a protected key, we can't change it
+  if (!isNil(key) && config.bindingBlacklist?.includes(key)) {
     return false;
   }
   return true;

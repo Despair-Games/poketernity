@@ -1,10 +1,11 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/input-interface-config";
 
 /**
  * Generic pad mapping
  */
-const pad_xbox360 = {
+const pad_xbox360: GamepadInterfaceConfig<ModernGamepadKeys> = {
   padID: "Xbox 360 controller (XInput STANDARD GAMEPAD)",
   padType: "xbox",
   deviceMapping: {

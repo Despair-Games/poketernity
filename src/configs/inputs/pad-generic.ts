@@ -1,10 +1,11 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/input-interface-config";
 
 /**
  * Generic pad mapping
  */
-const pad_generic = {
+const pad_generic: GamepadInterfaceConfig<ModernGamepadKeys> = {
   padID: "Generic",
   padType: "xbox",
   deviceMapping: {
@@ -79,7 +80,7 @@ const pad_generic = {
     LS: SettingGamepad.Button_Speed_Up,
     RS: SettingGamepad.Button_Slow_Down,
   },
-  blacklist: ["LC_N", "LC_S", "LC_W", "LC_E"],
+  bindingBlacklist: ["LC_N", "LC_S", "LC_W", "LC_E"],
 };
 
 export default pad_generic;

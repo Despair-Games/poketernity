@@ -1,6 +1,5 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { MAPPING_CONFIG_LS_KEY } from "#constants/app-constants";
 import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
@@ -15,6 +14,7 @@ import {
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "#system/settings-gamepad";
+import { InputInterfaceConfig } from "#types/input-interface-config";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { truncateString } from "#utils/string-utils";
@@ -71,7 +71,7 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
    * @param activeConfig - The active gamepad configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  protected override setLayout(activeConfig: InterfaceConfig): boolean {
+  protected override setLayout(activeConfig: InputInterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.
