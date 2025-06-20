@@ -107,11 +107,11 @@ export class ModifierType {
   }
 
   public get name(): string {
-    return i18next.t(`${this.localeKey}.name` as any);
+    return i18next.t(`${this.localeKey}.name`);
   }
 
   public get description(): string {
-    return i18next.t(`${this.localeKey}.description` as any);
+    return i18next.t(`${this.localeKey}.description`);
   }
 
   setTier(tier: ModifierTier): void {
