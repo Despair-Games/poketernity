@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Modifies moves additional effects with multipliers, ie. Sheer Force, Serene Grace.
- * @extends AbAttr
  * @see {@linkcode apply}
  */
 export class MoveEffectChanceMultiplierAbAttr extends AbAttr {

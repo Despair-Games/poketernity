@@ -6,7 +6,6 @@ import type { PokemonMove } from "#field/pokemon-move";
 
 /**
  * Triggers just after a move is used either by the opponent or the player
- * @extends AbAttr
  */
 export abstract class PostMoveUsedAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

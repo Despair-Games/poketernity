@@ -8,7 +8,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Adds the appropriate battler tag for Gulp Missile when Surf or Dive is used.
- * @extends MoveEffectAttr
  */
 export class GulpMissileTagAttr extends MoveEffectAttr {
   constructor() {

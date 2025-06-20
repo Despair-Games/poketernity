@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Attribute used for status moves, namely Speed Swap,
  * that swaps the user's and target's corresponding stats.
- * @extends MoveEffectAttr
  */
 export class SwapStatAttr extends MoveEffectAttr {
   /** The stat to be swapped between the user and the target */

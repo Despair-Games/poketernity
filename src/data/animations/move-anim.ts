@@ -10,7 +10,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Animation for effects during the use of a move.
- * @extends BattleAnim
  * @todo Should "target" or "targetIndex" be used?
  */
 export class MoveAnim extends BattleAnim {

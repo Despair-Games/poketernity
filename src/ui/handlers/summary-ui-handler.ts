@@ -962,7 +962,7 @@ export class SummaryUiHandler extends UiHandler {
           statsContainer.add(icon);
 
           icon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 32, 32), Phaser.Geom.Rectangle.Contains);
-          icon.on("pointerover", () => globalScene.ui.showTooltip(item.type.name, item.type.getDescription(), true));
+          icon.on("pointerover", () => globalScene.ui.showTooltip(item.type.name, item.type.description, true));
           icon.on("pointerout", () => globalScene.ui.hideTooltip());
         });
 

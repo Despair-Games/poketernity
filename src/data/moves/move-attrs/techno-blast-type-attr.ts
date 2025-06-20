@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to change a move's type based on the form of Genesect using it.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Techno_Blast_(move) | Techno Blast}.
- * @extends VariableMoveTypeAttr
  */
 export class TechnoBlastTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

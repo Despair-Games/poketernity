@@ -1,6 +1,6 @@
 import { Egg } from "#data/egg";
-import { EggSourceType } from "#enums/egg-source-types";
-import { EggTier } from "#enums/egg-type";
+import { EggSourceType } from "#enums/egg-source-type";
+import { EggTier } from "#enums/egg-tier";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/test-utils";

@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to add Flying-type effectiveness to the current attack in addition
  * to the current attack's base effectiveness.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Flying_Press_(move) | Flying Press}.
- * @extends VariableMoveTypeMultiplierAttr
  */
 export class FlyingTypeMultiplierAttr extends VariableMoveTypeMultiplierAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {

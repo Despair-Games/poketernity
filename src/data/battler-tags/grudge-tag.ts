@@ -11,7 +11,6 @@ import i18next from "i18next";
  * Tag associated with the move Grudge.
  * If this tag is active when the bearer faints from an opponent's move, the tag reduces that move's PP to 0.
  * Otherwise, it lapses when the bearer makes another move.
- * @extends BattlerTag
  */
 export class GrudgeTag extends BattlerTag {
   constructor() {

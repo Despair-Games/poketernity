@@ -15,8 +15,6 @@ import i18next from "i18next";
 /**
  * Sets the Party UI and handles the effect of Revival Blessing
  * when used by one of the player's Pokemon.
- *
- * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {
   override readonly id = PhaseId.REVIVAL_BLESSING;

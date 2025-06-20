@@ -12,7 +12,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 /**
  * Tag used to block damaging moves and change the attacker's stats if the move makes contact.
  * Used by {@linkcode MoveId.KINGS_SHIELD}, {@linkcode MoveId.OBSTRUCT}, and {@linkcode MoveId.SILK_TRAP}
- * @extends DamageProtectedTag
  */
 export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
   private stat: BattleStat;

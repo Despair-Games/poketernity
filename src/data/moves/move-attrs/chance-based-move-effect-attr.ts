@@ -16,7 +16,6 @@ export interface ChanceBasedMoveEffectAttrOptions extends MoveEffectAttrOptions 
 
 /**
  * Attribute for effects that have a random chance of triggering.
- * @extends MoveEffectAttr
  */
 export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
   protected override options?: ChanceBasedMoveEffectAttrOptions;

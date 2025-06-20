@@ -16,7 +16,6 @@ import type { AchievementsUiHandler } from "#ui/achievements-ui-handler";
 import type { AdminUiHandler } from "#ui/admin-ui-handler";
 import { getAdminModeName } from "#ui/admin-ui-handler";
 import type { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
-import { BgmBar } from "#ui/bgm-bar";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { EggGachaUiHandler } from "#ui/egg-gacha-ui-handler";
@@ -59,10 +58,9 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   private excludedMenus: () => ConditionalMenu[];
 
-  protected manageDataConfig: OptionSelectModeConfig;
-  protected communityConfig: OptionSelectModeConfig;
-
-  public bgmBar: BgmBar;
+  private manageDataConfig: OptionSelectModeConfig;
+  private communityConfig: OptionSelectModeConfig;
+  private communityWindowWidth: number;
 
   constructor(mode: UiMode = UiMode.MENU) {
     super(mode);
@@ -82,11 +80,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     const ui = this.getUi();
 
-    this.bgmBar = new BgmBar();
-    this.bgmBar.setup();
-
-    ui.bgmBar = this.bgmBar;
-
     // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
@@ -103,7 +96,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     this.menuContainer = globalScene.add.container(2 - GAME_WIDTH, 2 - GAME_HEIGHT);
     this.menuContainer.setName("menu");
-    this.menuContainer.add(this.bgmBar);
+    this.menuContainer.add(ui.bgmBar);
 
     this.menuMessageBoxContainer = globalScene.add.container(0, 130);
     this.menuMessageBoxContainer.setName("menu-message-box");
@@ -144,7 +137,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     this.cursorObj?.setVisible(false);
     handleTutorial(Tutorial.MENU).then(() => {
       this.cursorObj?.setVisible(true);
-      this.bgmBar.toggleBgmBar(true);
+      this.getUi().bgmBar.toggleBgmBar(true);
     });
 
     return true;
@@ -498,6 +491,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           });
           globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options: options,
+            xOffset: this.optionSelectBg.displayWidth + this.communityWindowWidth,
             yOffset: this.menuMessageBox.displayHeight + 1,
           });
           return true;
@@ -517,6 +511,9 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       options: communityOptions,
       xOffset: this.optionSelectBg.displayWidth,
       yOffset: this.menuMessageBox.displayHeight + 1,
+      onResize: (w) => {
+        this.communityWindowWidth = w;
+      },
     };
   }
 
@@ -542,7 +539,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         break;
       case MenuOptions.EGG_LIST:
         if (globalScene.gameData.eggs.length) {
-          ui.revertMode();
           ui.setOverlayMode<EggListUiHandler>(UiMode.EGG_LIST);
           success = true;
         } else {
@@ -550,7 +546,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         }
         break;
       case MenuOptions.EGG_GACHA:
-        ui.revertMode();
         ui.setOverlayMode<EggGachaUiHandler>(UiMode.EGG_GACHA);
         success = true;
         break;
@@ -713,7 +708,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   protected override clear() {
     super.clear();
-    this.bgmBar.toggleBgmBar(false);
+    this.getUi().bgmBar.toggleBgmBar(false);
   }
 }
 

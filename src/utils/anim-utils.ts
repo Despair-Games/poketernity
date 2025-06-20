@@ -9,7 +9,7 @@ import type { LegacyAnimConfig } from "#animations/anim-config";
 import { commonAnims } from "#animations/common-anims";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import Phaser from "phaser";
 
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {

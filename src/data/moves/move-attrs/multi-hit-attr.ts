@@ -12,7 +12,6 @@ import { applyMoveAttrs } from "#utils/move-utils";
 /**
  * Attribute used for attack moves that hit multiple times per use, e.g. Bullet Seed.
  * Applied at the beginning of {@linkcode MoveEffectPhase}.
- * @extends MoveAttr
  */
 export class MultiHitAttr extends MoveAttr {
   /** This move's intrinsic multi-hit type. It should never be modified. */

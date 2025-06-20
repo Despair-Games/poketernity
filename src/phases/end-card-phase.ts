@@ -10,8 +10,6 @@ import i18next from "i18next";
 
 /**
  * Displays the End Card after a classic run ends in victory.
- *
- * @extends Phase
  */
 export class EndCardPhase extends Phase {
   override readonly id = PhaseId.END_CARD;
@@ -22,9 +20,10 @@ export class EndCardPhase extends Phase {
     super.start();
 
     const { field, ui } = globalScene;
+    const messageHandler = ui.getMessageHandler();
 
-    ui.getMessageHandler().bg.setVisible(false);
-    ui.getMessageHandler().nameBoxContainer.setVisible(false);
+    messageHandler?.bg.setVisible(false);
+    messageHandler?.nameBoxContainer.setVisible(false);
 
     this.endCard = globalScene.add.image(
       0,
@@ -50,7 +49,7 @@ export class EndCardPhase extends Phase {
         "",
         null,
         () => {
-          ui.getMessageHandler().bg.setVisible(true);
+          messageHandler?.bg.setVisible(true);
           this.end();
         },
         null,

@@ -11,7 +11,6 @@ import { toDmgValue } from "#utils/common-utils";
  * at the cost of a portion of the user's maximum HP.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Belly_Drum_(move) | Belly Drum}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move) | Clangorous Soul}.
- * @extends StatStageChangeAttr
  */
 export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   private cutRatio: number;

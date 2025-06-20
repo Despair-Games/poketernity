@@ -12,7 +12,7 @@ import { Challenges } from "#enums/challenges";
 import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";
 import { GameModes } from "#enums/game-modes";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import { RunDisplayMode } from "#enums/run-display-mode";

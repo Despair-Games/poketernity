@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used to calculate the power of attacks that scale with Stockpile stacks (i.e. Spit Up).
- * @extends VariablePowerAttr
  */
 export class SpitUpPowerAttr extends VariablePowerAttr {
   private multiplier: number = 0;

@@ -15,7 +15,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) Mist}.
  * Prevents Pokémon on the opposing side from lowering the stats of the Pokémon in the Mist.
- * @extends ArenaTag
  */
 export class MistTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {

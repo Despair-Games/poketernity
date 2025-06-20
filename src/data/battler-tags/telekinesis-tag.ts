@@ -20,7 +20,6 @@ import i18next from "i18next";
  * The Telekinesis tag can be baton-passed to a teammate.
  * Custom: Unlike the mainline games, it doesn't lapse when baton-passed to Mega Gengar.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Telekinesis_(move) | Telekinesis}
- * @extends BattlerTag
  */
 export class TelekinesisTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {

@@ -19,7 +19,6 @@ import i18next from "i18next";
  * {@link https://bulbapedia.bulbagarden.net/wiki/Salt_Cure_(move) | Salt Cure}.
  * Deals 1/8 of the owner's maximum HP as damage at the end of each turn, or
  * 1/4 if the owner is Water- or Steel-type.
- * @extends BattlerTag
  */
 export class SaltCuredTag extends BattlerTag {
   private sourceIndex: number;

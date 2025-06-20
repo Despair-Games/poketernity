@@ -10,7 +10,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 /**
  * Octolock traps the target pokemon and reduces its DEF and SPDEF by one stage at the
  * end of each turn.
- * @extends TrappedTag
  */
 export class OctolockTag extends TrappedTag {
   constructor(sourceId: number) {

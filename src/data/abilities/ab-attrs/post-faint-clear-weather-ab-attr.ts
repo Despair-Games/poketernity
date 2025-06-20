@@ -7,7 +7,6 @@ import type { Move } from "#moves/move";
 
 /**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon fainting
- * @extends PostFaintAbAttr
  */
 export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {

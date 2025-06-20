@@ -5,7 +5,6 @@ import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
 /**
  * Attribute to remove {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Spikes | hazards}
  * from the field.
- * @extends MoveEffectAttr
  */
 export class RemoveEntryHazardAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {

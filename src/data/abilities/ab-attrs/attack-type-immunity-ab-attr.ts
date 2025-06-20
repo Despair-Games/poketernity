@@ -10,7 +10,6 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
  * Type immunity abilities that do not give additional benefits (HP recovery, stat boosts, etc) are not immune to status moves of the type.
  *
  * Example: Levitate
- * @extends TypeImmunityAbAttr
  */
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
   public override apply(

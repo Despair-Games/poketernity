@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { Phase } from "#app/phase";
-import { UiMode } from "#enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";
 import { BattleEndPhase } from "#phases/battle-end-phase";
 import { BerryPhase } from "#phases/berry-phase";
@@ -349,13 +349,14 @@ export class PhaseInterceptor {
 
   /**
    * m2m to set mode.
+   * TODO: not sure what the goal of this is since there are other ui set mode functions
+   * which don't get the same treatment (like `setOverlayMode`).
    * @param mode - The {@linkcode UiMode} to set.
    * @param args - Additional arguments to pass to the original method.
    */
   setMode(mode: UiMode, ...args: unknown[]): Promise<void> {
     const currentPhase = this.scene.phaseManager.getCurrentPhase();
     const instance = this.scene.ui;
-    console.log("setMode", `${UiMode[mode]} (=${mode})`, args);
     const ret = this.originalSetMode.apply(instance, [mode, ...args]);
     if (currentPhase && !this.phases[currentPhase.constructor.name]) {
       throw new Error(

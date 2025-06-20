@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to modify a G-Max move's base power
  * Adds a flat +50 base power if the user is G-Max'd
- * @extends VariablePowerAttr
  */
 export class GMaxPowerAttr extends VariablePowerAttr {
   /**

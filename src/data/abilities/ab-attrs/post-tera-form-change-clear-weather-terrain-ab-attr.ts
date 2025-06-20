@@ -8,7 +8,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Used by Terapagos's Teraform Zero ability.
  * Clears weather (including Primal weather) and terrain after terastallization
- * @extends AbAttr
  */
 export class PostTeraFormChangeClearWeatherTerrainAbAttr extends AbAttr {
   constructor() {

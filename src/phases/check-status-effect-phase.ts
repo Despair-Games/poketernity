@@ -8,7 +8,6 @@ import { isNil } from "#utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
- * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
   override readonly id = PhaseId.CHECK_STATUS_EFFECT;

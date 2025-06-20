@@ -6,7 +6,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Tag used to allow moves that interact with {@link MoveId.MINIMIZE} to function.
- * @extends BattlerTag
  */
 export class MinimizeTag extends BattlerTag {
   constructor() {

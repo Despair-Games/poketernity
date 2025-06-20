@@ -5,7 +5,6 @@ import type { ElementalType } from "#enums/elemental-type";
  * Boosts the power of a specific type of move.
  * @param boostedType - The type of move that will receive the power boost.
  * @param powerMultiplier - The multiplier to apply to the move's power, defaults to 1.5 if not provided.
- * @extends FieldMovePowerBoostAbAttr
  */
 export class PreAttackFieldMoveTypePowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
   constructor(boostedType: ElementalType, powerMultiplier: number = 1.5) {

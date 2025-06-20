@@ -7,18 +7,17 @@ import type { Move } from "#moves/move";
 
 /**
  * Ability attribute that inflicts a status on a Pokemon that gets hit by the ability user's attacks.
-```
-+--------------+-------------------------+----------+----------------+
-| Ability Name | Only for contact moves? | % Chance | Status         |
-+--------------+-------------------------+----------+----------------+
-| Poison Touch |                     Yes |       30 | Poisoned       |
-| Toxic Chain  |                      No |       30 | Badly Poisoned |
-+--------------+-------------------------+----------+----------------+ 
-```
-Currently, all abilities that use this attribute only inflict one status effect each. 
-The code is future-proofed so that it can accept a list of multiple status effects though. 
-@extends PostAttackAbAttr
-*/
+ * ```
+ * +--------------+-------------------------+----------+----------------+
+ * | Ability Name | Only for contact moves? | % Chance | Status         |
+ * +--------------+-------------------------+----------+----------------+
+ * | Poison Touch |            Yes          |    30    | Poisoned       |
+ * | Toxic Chain  |            No           |    30    | Badly Poisoned |
+ * +--------------+-------------------------+----------+----------------+
+ * ```
+ * Currently, all abilities that use this attribute only inflict one status effect each.
+ * The code is future-proofed so that it can accept a list of multiple status effects though.
+ */
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   private readonly contactRequired: boolean;
   public readonly chance: number;

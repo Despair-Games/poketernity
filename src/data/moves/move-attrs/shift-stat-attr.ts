@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute used to switch the user's own stats.
  * Used by Power Shift.
- * @extends MoveEffectAttr
  */
 export class ShiftStatAttr extends MoveEffectAttr {
   private statToSwitch: EffectiveStat;

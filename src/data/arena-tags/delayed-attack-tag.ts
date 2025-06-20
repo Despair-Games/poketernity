@@ -25,7 +25,6 @@ interface DelayedAttack {
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
  * Delays the attack's effect by 3 turns (including the turn the move is used),
  * and deals damage after the turn count is reached.
- * @extends ArenaTag
  */
 export class DelayedAttackTag extends ArenaTag {
   /** Contains all queued delayed attacks on the field */

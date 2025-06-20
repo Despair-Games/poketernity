@@ -12,7 +12,6 @@ import { getMaxMoveList } from "#utils/move-utils";
  *
  * Used for {@linkcode MoveId.COPYCAT}
  * @see {@linkcode apply} for move selection and move call
- * @extends CallMoveAttr
  */
 export class CopycatAttr extends CallMoveAttr {
   constructor() {

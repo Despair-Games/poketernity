@@ -58,7 +58,15 @@
         "useTemplate": "off", // string concatenation is faster: https://stackoverflow.com/questions/29055518/are-es6-template-literals-faster-than-string-concatenation
         "noNamespaceImport": "error",
         "noInferrableTypes": "off", // Explicit > Implicit
-        "useConsistentArrayType": "error" // Standardize on `T[]`
+        "useConsistentArrayType": "error", // Standardize on `T[]`
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["kebab-case"],
+            "requireAscii": true,
+            "strictCase": false
+          }
+        }
       },
       "suspicious": {
         "noDoubleEquals": "error",

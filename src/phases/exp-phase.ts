@@ -9,7 +9,6 @@ import i18next from "i18next";
 
 /**
  * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up
- * @extends PlayerPartyMemberPokemonPhase
  */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
   override readonly id = PhaseId.EXP;

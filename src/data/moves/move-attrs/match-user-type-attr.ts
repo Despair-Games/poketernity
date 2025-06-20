@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to change move type to match the user's primary type.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revelation_Dance_(move) | Revelation Dance}.
- * @extends VariableMoveTypeAttr
  */
 export class MatchUserTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

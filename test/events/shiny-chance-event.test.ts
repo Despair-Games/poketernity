@@ -1,6 +1,6 @@
 import { timedEventManager } from "#app/timed-event-manager";
 import { Egg } from "#data/egg";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#enums/egg-source-type";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";

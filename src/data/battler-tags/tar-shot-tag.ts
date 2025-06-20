@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Tag representing the continuous effect of {@link http://bulbapedia.bulbagarden.net/wiki/Tar_Shot_(move) | Tar Shot}.
  * that doubles the type effectiveness of Fire-type moves.
- * @extends BattlerTag
  */
 export class TarShotTag extends BattlerTag {
   constructor() {

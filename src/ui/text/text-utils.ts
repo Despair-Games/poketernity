@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { TEXT_SCALE } from "#constants/ui-constants";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { ModifierTier } from "#enums/modifier-tier";
 import { TextStyle } from "#enums/text-style";
 import { getTextStyle } from "#ui/text-style";
@@ -104,7 +104,7 @@ function getTextStyleOptions(
 ): CustomTextStyleOptions {
   const textStyleOptions = getTextStyle(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
-  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.fontStyle;
+  const { fontFamily, fontSize, shadow, strokeThickness, lineSpacing } = textStyleOptions.fontStyle;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: fontFamily,
@@ -114,6 +114,9 @@ function getTextStyleOptions(
       bottom: 6,
     },
   };
+  if (lineSpacing) {
+    styleOptions.lineSpacing = lineSpacing;
+  }
 
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {

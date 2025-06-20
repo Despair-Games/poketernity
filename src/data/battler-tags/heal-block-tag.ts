@@ -17,7 +17,6 @@ import i18next from "i18next";
 /**
  * Tag that prevents HP recovery from held items and move effects. It also blocks the usage of recovery moves.
  * Applied by moves:  {@linkcode MoveId.HEAL_BLOCK | Heal Block (5 turns)}, {@linkcode MoveId.PSYCHIC_NOISE | Psychic Noise (2 turns)}
- * @extends MoveRestrictionBattlerTag
  */
 export class HealBlockTag extends MoveRestrictionBattlerTag {
   constructor(turnCount: number, sourceMoveId: MoveId) {
