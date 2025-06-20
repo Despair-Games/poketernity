@@ -74,7 +74,10 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
  * @param config - The config for a single Tween
  * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
  */
-export async function playTween(config: TweenBuilderConfig, scene: Scene = globalScene) {
+export async function playTween(
+  config: TweenBuilderConfig,
+  scene: Scene = globalScene,
+): Promise<void> {
   await new Promise((resolve) =>
     scene.tweens.add({
       ...config,
