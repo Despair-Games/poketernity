@@ -1,5 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, EFFECTIVE_STATS, Stat } from "#enums/stat";
@@ -79,22 +80,11 @@ describe("Moves - Transform", () => {
     game.move.use(MoveId.TRANSFORM);
     await game.toEndOfTurn();
 
-    expect(player.getSpeciesForm().speciesId).toBe(player.getSpeciesForm().speciesId);
-    expect(player.getAbility()).toBe(player.getAbility());
-    expect(player.getGender()).toBe(player.getGender());
-
-    expect(player.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
-    for (const s of EFFECTIVE_STATS) {
-      expect(player.getStat(s, false)).not.toBe(enemy.getStat(s, false));
-    }
-
-    const playerTypes = player.getTypes();
-    const enemyTypes = enemy.getTypes();
-
-    expect(playerTypes.length).not.toBe(enemyTypes.length);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player.getSpeciesForm().speciesId).toBe(SpeciesId.BULBASAUR);
   });
 
-  it("should fail if opponent is midair", async () => {
+  it("should fail if opponent is mid air", async () => {
     await game.classicMode.startBattle(SpeciesId.BULBASAUR);
 
     const player = game.field.getPlayerPokemon();
@@ -105,19 +95,24 @@ describe("Moves - Transform", () => {
     game.move.use(MoveId.TRANSFORM);
     await game.toEndOfTurn();
 
-    expect(player.getSpeciesForm().speciesId).toBe(player.getSpeciesForm().speciesId);
-    expect(player.getAbility()).toBe(player.getAbility());
-    expect(player.getGender()).toBe(player.getGender());
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player.getSpeciesForm().speciesId).toBe(SpeciesId.BULBASAUR);
+  });
 
-    expect(player.getStat(Stat.HP, false)).not.toBe(enemy.getStat(Stat.HP));
-    for (const s of EFFECTIVE_STATS) {
-      expect(player.getStat(s, false)).not.toBe(enemy.getStat(s, false));
-    }
+  it("should fail if opponent is already transformed", async () => {
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
 
-    const playerTypes = player.getTypes();
-    const enemyTypes = enemy.getTypes();
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    expect(playerTypes.length).not.toBe(enemyTypes.length);
+    expect(enemy.getSpeciesForm().speciesId).toBe(SpeciesId.MAGIKARP);
+
+    game.move.changeMoveset(enemy, MoveId.TRANSFORM);
+
+    game.move.use(MoveId.TRANSFORM);
+    await game.toEndOfTurn();
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy.getSpeciesForm().speciesId).toBe(SpeciesId.BULBASAUR);
   });
 
   it("should copy in-battle overridden stats", async () => {
