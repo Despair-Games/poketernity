@@ -91,7 +91,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm {
   }
 
   public get name(): string {
-    return i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase}`);
+    return i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase()}`);
   }
 
   getName(formIndex?: number): string {
