@@ -3,15 +3,13 @@ import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import type { AbAttrCondition } from "#types/ab-attr-condition";
 import type { Constructor } from "#types/constructor";
-import type { Localizable } from "#types/locales";
+import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
 
-export class Ability implements Localizable {
+export class Ability {
   public id: AbilityId;
 
   private nameAppend: string;
-  public name: string;
-  public description: string;
   public generation: number;
   public isBypassFaint: boolean;
   public isIgnorable: boolean;
@@ -25,19 +23,27 @@ export class Ability implements Localizable {
     this.generation = generation;
     this.attrs = [];
     this.conditions = [];
-
-    this.localize();
   }
 
-  localize(): void {
-    const i18nKey = AbilityId[this.id]
-      .split("_")
-      .filter((f) => f)
-      .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
-      .join("") as string;
+  /**
+   * The ability's localized name. May include a {@linkcode nameAppend | tag}
+   * if the ability isn't fully implemented.
+   */
+  public get name(): string {
+    return this.id ? `${i18next.t(`ability:${this.i18nKey}.name`)}${this.nameAppend}` : "";
+  }
 
-    this.name = this.id ? `${i18next.t(`ability:${i18nKey}.name`) as string}${this.nameAppend}` : "";
-    this.description = this.id ? (i18next.t(`ability:${i18nKey}.description`) as string) : "";
+  /** The ability's localized description. */
+  public get description(): string {
+    return this.id ? i18next.t(`ability:${this.i18nKey}.description`) : "";
+  }
+
+  /**
+   * The i18n key for this ability in camel-case, i.e. "abilityName".
+   * Used to localize the ability's {@linkcode name} and {@linkcode description}.
+   */
+  private get i18nKey(): string {
+    return toCamelCaseString(AbilityId[this.id]);
   }
 
   /**

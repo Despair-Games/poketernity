@@ -526,7 +526,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     this.getUi().bgmBar.toggleBgmBar(settingsManager.display.showBgmBar);
     if (this.reloadRequired) {
       this.reloadRequired = false;
-      globalScene.reset(true, false, true);
+      globalScene.reset(true, false);
     }
   }
 
