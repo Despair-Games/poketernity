@@ -8,6 +8,11 @@ export enum MoveId {
   /**
    * The {@linkcode Pokemon.getSimulatedMoves | simulated move}
    * of a Pokemon's primary type.
+   *
+   * @privateremarks
+   * This and {@linkcode SIMULATED_MOVE_2} are negative values
+   * to maintain parity between the IDs of real moves
+   * and their IDs in the mainline games.
    */
   SIMULATED_MOVE_1 = -2,
   /**
