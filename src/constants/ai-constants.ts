@@ -9,6 +9,17 @@ import type { Pokemon } from "#field/pokemon";
 export const KO_ATTACK_SCORE = 4;
 
 /**
+ * The damage (in terms of % maximum HP) a projected attack must deal
+ * to a target to reach the next scoring "tier". An attack projected to deal
+ * damage below this threshold will receive an Attack Score of either 0 or 1.
+ * On the other hand, attacks projected to deal damage above this threshold
+ * will receive an Attack Score of either 1 or 2.
+ * @see {@linkcode Pokemon.getAttackScore}
+ * @see {@linkcode Pokemon.getExpectedAttackScore}
+ */
+export const ATTACK_SCORE_HP_THRESHOLD = 40;
+
+/**
  * A relatively major bonus to a move attribute's {@link MoveAttr.getEffectScore | Effect Score}.
  * Used when a move with the attribute gains a decisive advantage in
  * a given battle state.
