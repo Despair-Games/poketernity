@@ -4,7 +4,6 @@ import { ElementalType } from "#enums/elemental-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
-import { HighCritAttr } from "#moves/high-crit-attr";
 import type { Move } from "#moves/move";
 
 /**
@@ -25,12 +24,21 @@ export class DragonCheerAttr extends AddBattlerTagAttr {
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const targetIsDragon = target.isOfType(ElementalType.DRAGON, true, true);
-    const targetHasHighCrit = target.getAttackMoves(true).some((mv) => mv.hasAttr(HighCritAttr));
+    const opponent = target.getOpponents()[0];
+    /** @todo This is only based on the target's first opponent */
+    const maxCritStage = target.getMoveset().reduce((maxStage, mv) => {
+      const critStage = opponent?.getCritStage(target, mv.getMove(), true) ?? 0;
+      return Math.max(critStage, maxStage);
+    }, 0);
+
+    if (maxCritStage >= 4) {
+      return 0;
+    }
 
     return (
       this.getRandomScore(user, 50)
       + (targetIsDragon ? MINOR_EFFECT_SCORE_BONUS : 0)
-      + (targetHasHighCrit ? MINOR_EFFECT_SCORE_BONUS : 0)
+      + (maxCritStage > 0 ? MINOR_EFFECT_SCORE_BONUS : 0)
     );
   }
 }

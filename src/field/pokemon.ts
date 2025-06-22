@@ -454,7 +454,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @defaultValue 0
    */
   public get turnsAsleep(): number {
-    return this.status?.turnsAsleep ?? -1;
+    return this.status?.turnsAsleep ?? 0;
   }
 
   /**
@@ -1227,7 +1227,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * @param target - The {@linkcode} to compare Speed against
+   * @param target - The {@linkcode Pokemon} to compare Speed against
    * @param estimate - If `true`, estimates the target's Speed, not accounting for unrevealed Abilities
    * @returns `true` if this Pokemon has higher Speed than
    */
