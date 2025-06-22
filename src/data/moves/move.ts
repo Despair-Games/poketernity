@@ -963,9 +963,9 @@ export class AttackMove extends Move {
     attackScore = Math.pow(effectiveness - 1, 2) * effectiveness < 1 ? -2 : 2;
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
-        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
-        if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
-          const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
+        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, { opponent: target }));
+        if (atk.value > user.getEffectiveStat(Stat.SPATK, { opponent: target })) {
+          const statRatio = user.getEffectiveStat(Stat.SPATK, { opponent: target }) / atk.value;
           if (statRatio <= 0.75) {
             attackScore *= 2;
           } else if (statRatio <= 0.875) {
@@ -973,9 +973,9 @@ export class AttackMove extends Move {
           }
         }
       } else {
-        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
-        if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
-          const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
+        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, { opponent: target }));
+        if (spAtk.value > user.getEffectiveStat(Stat.ATK, { opponent: target })) {
+          const statRatio = user.getEffectiveStat(Stat.ATK, { opponent: target }) / spAtk.value;
           if (statRatio <= 0.75) {
             attackScore *= 2;
           } else if (statRatio <= 0.875) {

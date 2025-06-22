@@ -215,6 +215,28 @@ interface DamageFunctionOptions {
   source?: Pokemon;
 }
 
+interface EffectiveStatOptions {
+  /** The target {@linkcode Pokemon} */
+  opponent?: Pokemon;
+  /** The {@linkcode Move} being used */
+  move?: Move;
+  /**
+   * The {@linkcode AbilityApplyMode} determining how abilities are applied
+   * @defaultValue {@linkcode AbilityApplyMode.DEFAULT}
+   */
+  abilityApplyMode?: AbilityApplyMode;
+  /**
+   * Whether a critical hit has occurred or not
+   * @defaultValue `false`
+   */
+  isCritical?: boolean;
+  /**
+   * If `true`, nullifies any effects that produce any changes to game state from triggering
+   * @defaultValue `true`
+   */
+  simulated?: boolean;
+}
+
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
   public override name: string;
@@ -1110,33 +1132,34 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Calculates and retrieves the final value of a stat considering any held
-   * items, move effects, opponent abilities, and whether there was a critical
-   * hit.
-   * @param stat the desired {@linkcode EffectiveStat}
-   * @param opponent the target {@linkcode Pokemon}
-   * @param move the {@linkcode Move} being used
-   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied
-   * @param isCritical determines whether a critical hit has occurred or not (`false` by default)
-   * @param simulated if `true`, nullifies any effects that produce any changes to game state from triggering
-   * @returns the final in-battle value of a stat
+   * Calculates and retrieves the final value of a stat considering any held items,
+   * move effects, opponent abilities, and whether there was a critical hit.
+   * @param stat - The desired {@linkcode EffectiveStat}
+   * @param opponent - The target {@linkcode Pokemon}
+   * @param move - The {@linkcode Move} being used
+   * @param abilityApplyMode - (Default {@linkcode AbilityApplyMode.DEFAULT}) The {@linkcode AbilityApplyMode} determining how abilities are applied
+   * @param isCritical - (Default `false`) Whether a critical hit has occurred or not
+   * @param simulated - (Default `true`) If `true`, nullifies any effects that produce any changes to game state from triggering
+   * @returns The final in-battle value of a stat
    */
   getEffectiveStat(
     stat: EffectiveStat,
-    opponent?: Pokemon,
-    move?: Move,
-    abilityApplyMode: AbilityApplyMode = AbilityApplyMode.DEFAULT,
-    isCritical: boolean = false,
-    simulated: boolean = true,
+    {
+      opponent,
+      move,
+      abilityApplyMode = AbilityApplyMode.DEFAULT,
+      isCritical = false,
+      simulated = true,
+    }: EffectiveStatOptions = {},
   ): number {
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
 
     const statValue = new NumberHolder(-1);
 
-    /**
+    /*
      * Variable Attack attributes are applied only to the raw stat
      * value and associated stat stage multiplier. Other stat modifiers,
-     * e.g. items and abilities, apply based on the original {@linkcode stat}.
+     * e.g. items and abilities, apply based on the original stat.
      */
     if (move && opponent && [Stat.ATK, Stat.SPATK].includes(stat)) {
       applyMoveAttrs(VariableAtkAttr, this, opponent, move, statValue, isCritical);
@@ -1168,6 +1191,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let ret = statValue.value;
 
+    const { arena } = globalScene;
     switch (stat) {
       case Stat.ATK:
         if (this.hasTag(BattlerTagType.SLOW_START)) {
@@ -1175,23 +1199,23 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.DEF:
-        if (this.isOfType(ElementalType.ICE) && globalScene.arena.hasWeather(WeatherType.SNOW)) {
+        if (this.isOfType(ElementalType.ICE) && arena.hasWeather(WeatherType.SNOW)) {
           ret *= 1.5;
         }
         break;
       case Stat.SPATK:
         break;
       case Stat.SPDEF:
-        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.hasWeather(WeatherType.SANDSTORM)) {
+        if (this.isOfType(ElementalType.ROCK) && arena.hasWeather(WeatherType.SANDSTORM)) {
           ret *= 1.5;
         }
         break;
       case Stat.SPD: {
         const side = this.getArenaTagSide();
-        if (globalScene.arena.hasTag(ArenaTagType.TAILWIND, side)) {
+        if (arena.hasTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
-        if (globalScene.arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
+        if (arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
           ret >>= 2;
         }
 
@@ -2073,8 +2097,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const enemyTypes = opponent.getTypes(true, true);
     /** Is this Pokemon faster than the opponent? */
     const outspeed =
-      (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, opponent) : this.getStat(Stat.SPD, false))
-      >= opponent.getEffectiveStat(Stat.SPD, this);
+      (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, { opponent }) : this.getStat(Stat.SPD, false))
+      >= opponent.getEffectiveStat(Stat.SPD, { opponent: this });
     /**
      * Based on how effective this Pokemon's types are offensively against the opponent's types.
      * This score is increased by 25 percent if this Pokemon is faster than the opponent.
@@ -2923,14 +2947,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * The attacker's offensive stat for the given move's category.
      * Critical hits cause negative stat stages to be ignored.
      */
-    const sourceAtk = source.getEffectiveStat(
-      isPhysical ? Stat.ATK : Stat.SPATK,
-      this,
+    const sourceAtk = source.getEffectiveStat(isPhysical ? Stat.ATK : Stat.SPATK, {
+      opponent: this,
       move,
       abilityApplyMode,
       isCritical,
       simulated,
-    );
+    });
 
     /**
      * The {@linkcode EffectiveStat} used to defend against the given move.
@@ -2943,7 +2966,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * This Pokemon's defensive stat for the given move's category.
      * Critical hits cause positive stat stages to be ignored.
      */
-    const targetDef = this.getEffectiveStat(defendingStat.value, source, move, abilityApplyMode, isCritical, simulated);
+    const targetDef = this.getEffectiveStat(defendingStat.value, {
+      opponent: source,
+      move,
+      abilityApplyMode,
+      isCritical,
+      simulated,
+    });
 
     /** This prevents a move with negative power from possibly dealing positive damage.
      * The issue can occur because the base damage is the result of the below equation plus 2.

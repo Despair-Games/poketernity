@@ -46,7 +46,12 @@ export function toHaveEffectiveStatMatcher(
     };
   }
 
-  const actualValue = received.getEffectiveStat(stat, enemy, move, AbilityApplyMode.DEFAULT, isCritical);
+  const actualValue = received.getEffectiveStat(stat, {
+    opponent: enemy,
+    move,
+    abilityApplyMode: AbilityApplyMode.DEFAULT,
+    isCritical,
+  });
   const pass = actualValue === expectedValue;
 
   const pkmName = getPokemonNameWithAffix(received);
