@@ -7,6 +7,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";
 import type { ConditionFn } from "#types/condition-fn";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 // Note: Refer to https://github.com/Despair-Games/poketernity/pull/775/files for removed achv code
@@ -107,15 +108,15 @@ export class MonoGenAchv extends ChallengeAchv {
 export class MonoTypeAchv extends ChallengeAchv {
   constructor(type: ElementalType, iconImage: string) {
     super(
-      "MONO_" + ElementalType[type],
+      "MONO_" + enumValueToKey(ElementalType, type),
       iconImage,
       (c) =>
         c.isSingleTypeChallenge()
-        && c.value === type + 1
+        && c.value === type
         && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
     );
     this.descriptionKey = "MonoType";
-    this.descriptionLocArgs = { type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`) };
+    this.descriptionLocArgs = { type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, type)}`) };
   }
 }
 

@@ -4,6 +4,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
@@ -27,7 +28,7 @@ export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
     return i18next.t("abilityTriggers:postDefendTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,
-      typeName: i18next.t(`pokemonInfo:Type.${ElementalType[pokemon.getTypes(true)[0]]}`),
+      typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, pokemon.getTypes(true)[0])}`),
     });
   }
 }

@@ -9,6 +9,7 @@ import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
+import { enumValueToKey } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -66,8 +67,8 @@ describe.each([
     await game.toEndOfTurn();
 
     expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === ability)).toHaveLength(1);
-    const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]];
-    const moveType = ElementalType[allMoves.get(MoveId.AGILITY).type];
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, allMoves.get(MoveId.AGILITY).type);
     expect(leadPokemonType).not.toBe(moveType);
 
     await game.toNextTurn();
@@ -95,8 +96,8 @@ describe.each([
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
-    const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
-      moveType = ElementalType[ElementalType.FIRE];
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, ElementalType.FIRE);
     expect(leadPokemonType).toBe(moveType);
   });
 
@@ -112,8 +113,8 @@ describe.each([
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
-    const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
-      moveType = ElementalType[ElementalType.ICE];
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, ElementalType.ICE);
     expect(leadPokemonType).toBe(moveType);
   });
 
@@ -267,8 +268,8 @@ describe.each([
   function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
     expect(pokemon.summonData.abilitiesApplied).toContain(ability);
     expect(pokemon.getTypes()).toHaveLength(1);
-    const pokemonType = ElementalType[pokemon.getTypes()[0]],
-      moveType = ElementalType[allMoves.get(moveId).type];
+    const pokemonType = enumValueToKey(ElementalType, pokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, allMoves.get(moveId).type);
     expect(pokemonType).toBe(moveType);
   }
 });

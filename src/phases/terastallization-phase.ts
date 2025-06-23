@@ -6,6 +6,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/base/battle-phase";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class TerastallizationPhase extends BattlePhase {
@@ -27,7 +28,7 @@ export class TerastallizationPhase extends BattlePhase {
         "MessagePhase",
         i18next.t("battle:pokemonTerastallized", {
           pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
-          type: i18next.t(`pokemonInfo:Type.${ElementalType[this.pokemon.teraType]}`),
+          type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.pokemon.teraType)}`),
         }),
       );
 

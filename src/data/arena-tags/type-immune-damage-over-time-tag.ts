@@ -10,7 +10,7 @@ import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -49,7 +49,9 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   override onAdd(_arena: Arena) {
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
-      i18next.t(`arenaTag:TypeImmuneDamageOverTimeOnAdd${this.i18nSideKey}${ElementalType[this.immuneType]}`),
+      i18next.t(
+        `arenaTag:TypeImmuneDamageOverTimeOnAdd${this.i18nSideKey}${enumValueToKey(ElementalType, this.immuneType)}`,
+      ),
     );
   }
 
@@ -68,7 +70,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
 
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
-          i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${ElementalType[this.immuneType]}`, {
+          i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${enumValueToKey(ElementalType, this.immuneType)}`, {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           }),
         );

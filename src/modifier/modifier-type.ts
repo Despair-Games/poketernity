@@ -721,26 +721,28 @@ export class BerryModifierType extends PokemonHeldItemModifierType implements Ge
   }
 }
 
-enum AttackTypeBoosterItem {
-  SILK_SCARF,
-  BLACK_BELT,
-  SHARP_BEAK,
-  POISON_BARB,
-  SOFT_SAND,
-  HARD_STONE,
-  SILVER_POWDER,
-  SPELL_TAG,
-  METAL_COAT,
-  CHARCOAL,
-  MYSTIC_WATER,
-  MIRACLE_SEED,
-  MAGNET,
-  TWISTED_SPOON,
-  NEVER_MELT_ICE,
-  DRAGON_FANG,
-  BLACK_GLASSES,
-  FAIRY_FEATHER,
-}
+const AttackTypeBoosterItem = {
+  SILK_SCARF: ElementalType.NORMAL,
+  BLACK_BELT: ElementalType.FIGHTING,
+  SHARP_BEAK: ElementalType.FLYING,
+  POISON_BARB: ElementalType.POISON,
+  SOFT_SAND: ElementalType.GROUND,
+  HARD_STONE: ElementalType.ROCK,
+  SILVER_POWDER: ElementalType.BUG,
+  SPELL_TAG: ElementalType.GHOST,
+  METAL_COAT: ElementalType.STEEL,
+  CHARCOAL: ElementalType.FIRE,
+  MYSTIC_WATER: ElementalType.WATER,
+  MIRACLE_SEED: ElementalType.GRASS,
+  MAGNET: ElementalType.ELECTRIC,
+  TWISTED_SPOON: ElementalType.PSYCHIC,
+  NEVER_MELT_ICE: ElementalType.ICE,
+  DRAGON_FANG: ElementalType.DRAGON,
+  BLACK_GLASSES: ElementalType.DARK,
+  FAIRY_FEATHER: ElementalType.FAIRY,
+} as const;
+
+type AttackTypeBoosterItem = (typeof AttackTypeBoosterItem)[keyof typeof AttackTypeBoosterItem];
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
@@ -752,7 +754,7 @@ export class AttackTypeBoosterModifierType
   constructor(moveType: ElementalType, boostPercent: number) {
     super(
       "",
-      `${AttackTypeBoosterItem[moveType]?.toLowerCase()}`,
+      `${enumValueToKey(AttackTypeBoosterItem, moveType as AttackTypeBoosterItem).toLowerCase()}`,
       (_type, args) => new AttackTypeBoosterModifier(this, (args[0] as Pokemon).id, moveType, boostPercent),
     );
 
@@ -761,13 +763,15 @@ export class AttackTypeBoosterModifierType
   }
 
   override get name(): string {
-    return i18next.t(`modifierType:AttackTypeBoosterItem.${AttackTypeBoosterItem[this.moveType]?.toLowerCase()}`);
+    return i18next.t(
+      `modifierType:AttackTypeBoosterItem.${enumValueToKey(AttackTypeBoosterItem, this.moveType as AttackTypeBoosterItem).toLowerCase()}`,
+    );
   }
 
   public override get description(): string {
     // TODO: Need getTypeName?
     return i18next.t("modifierType:ModifierType.AttackTypeBoosterModifierType.description", {
-      moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.moveType)}`),
     });
   }
 
@@ -1046,7 +1050,7 @@ export class TmModifierType extends PokemonModifierType {
   constructor(moveId: MoveId) {
     super(
       "",
-      `tm_${ElementalType[allMoves.get(moveId).type].toLowerCase()}`,
+      `tm_${enumValueToKey(ElementalType, allMoves.get(moveId).type).toLowerCase()}`,
       (_type, args) => new TmModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (
@@ -1173,7 +1177,7 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
 export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
   constructor() {
     super((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementalType) {
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Object.values(ElementalType)) {
         return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, 20);
       }
 

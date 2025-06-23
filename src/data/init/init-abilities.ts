@@ -804,9 +804,13 @@ export function initAbilities() {
     new Ability(AbilityId.RATTLED, 5)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) =>
-          move.category !== MoveCategory.STATUS
-          && [ElementalType.BUG, ElementalType.DARK, ElementalType.GHOST].includes(user.getMoveType(move)),
+        (_target, user, move) => {
+          const rattledTypes: readonly ElementalType[] = [ElementalType.BUG, ElementalType.DARK, ElementalType.GHOST];
+          return (
+            move.category !== MoveCategory.STATUS
+            && rattledTypes.includes(user.getMoveType(move))
+          );
+        },
         Stat.SPD,
         1,
       )
@@ -1283,8 +1287,10 @@ export function initAbilities() {
     new Ability(AbilityId.STEAM_ENGINE, 8)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) =>
-          move.category !== MoveCategory.STATUS && [ElementalType.FIRE, ElementalType.WATER].includes(user.getMoveType(move)),
+        (_target, user, move) => {
+          const affectedTypes: readonly ElementalType[] = [ElementalType.FIRE, ElementalType.WATER];
+          return move.category !== MoveCategory.STATUS && affectedTypes.includes(user.getMoveType(move));
+        },
         Stat.SPD,
         6,
       ),

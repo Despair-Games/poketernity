@@ -19,7 +19,7 @@ import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { leftPad } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -256,7 +256,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     if (hasMove) {
       const pokemonMove = moveset[cursor];
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
-      this.typeIcon.setTexture("type_icons", ElementalType[moveType].toLowerCase()).setScale(0.8);
+      this.typeIcon.setTexture("type_icons", enumValueToKey(ElementalType, moveType).toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
       this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);

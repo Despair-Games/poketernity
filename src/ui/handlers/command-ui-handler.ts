@@ -16,6 +16,7 @@ import type { FightUiHandler } from "#ui/fight-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
+import { enumValueToKey } from "#utils/common-utils";
 import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 import i18next from "i18next";
 
@@ -77,7 +78,9 @@ export class CommandUiHandler extends UiHandler {
 
     if (this.canTera()) {
       this.teraButton.setVisible(true);
-      this.teraButton.setFrame(ElementalType[globalScene.getField()[this.fieldIndex].teraType].toLowerCase());
+      this.teraButton.setFrame(
+        enumValueToKey(ElementalType, globalScene.getField()[this.fieldIndex].teraType).toLowerCase(),
+      );
     } else {
       this.teraButton.setVisible(false);
       if (this.getCursor() === BattleCommand.TERA) {

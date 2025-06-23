@@ -289,7 +289,7 @@ export class MovePhase extends BattlePhase {
         );
         globalScene.phaseManager.createAndUnshiftPhase(
           "CommonAnimPhase",
-          CommonAnim.POISON + (statusEffect - 1),
+          CommonAnim.POISON + (statusEffect - 1) as CommonAnim,
           this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {

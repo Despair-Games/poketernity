@@ -31,7 +31,7 @@ import type { SessionSaveData } from "#types/session-data";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
-import { clamp, isNil } from "#utils/common-utils";
+import { clamp, enumValueToKey, isNil } from "#utils/common-utils";
 import { formatLargeNumberFixedDigits, formatMoney, getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
@@ -661,11 +661,11 @@ export class RunInfoUiHandler extends UiHandler {
             rules.push(i18next.t(`runHistory:challengeMonoGen${this.runInfo.challenges[i].value}`));
             break;
           case Challenges.SINGLE_TYPE: {
-            const typeRule = ElementalType[this.runInfo.challenges[i].value - 1];
+            const typeRule = enumValueToKey(ElementalType, this.runInfo.challenges[i].value as ElementalType);
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
             const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
             const typeText =
-              typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`)! + "[/color]" + "[/shadow]";
+              typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`) + "[/color]" + "[/shadow]";
             rules.push(typeText);
             break;
           }
@@ -673,7 +673,7 @@ export class RunInfoUiHandler extends UiHandler {
             rules.push(i18next.t("challenges:inverseBattle.shortName"));
             break;
           default: {
-            const localisationKey = Challenges[this.runInfo.challenges[i].id]
+            const localisationKey = enumValueToKey(Challenges, this.runInfo.challenges[i].id as Challenges)
               .split("_")
               .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
               .join("");
@@ -819,7 +819,9 @@ export class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
         const move = pokemonMoveset[m]?.getMove();
-        pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
+        pokemonMoveBgs[m].setFrame(
+          enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
+        );
         pokemonMoveLabels[m].setText(move ? move.name : "-");
       }
 
