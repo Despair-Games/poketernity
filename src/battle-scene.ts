@@ -27,7 +27,7 @@ import {
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { ELITE_FOUR_1_WAVE } from "#constants/wave-constants";
 import { getBiomeName } from "#data/biome-utils";
-import { allAbilities, allBiomes, allMoves, allSpecies } from "#data/data-lists";
+import { allBiomes, allSpecies } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonFormChanges, type SpeciesFormChange } from "#data/pokemon-forms";
@@ -135,7 +135,6 @@ import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { AbstractConstructor } from "#types/abstract-constructor";
 import type { HeldModifierConfig } from "#types/held-modifier-config";
-import type { Localizable } from "#types/locales";
 import type { ModifierPredicate } from "#types/modifier-predicate";
 import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
@@ -159,7 +158,6 @@ import {
   isNil,
   NumberHolder,
 } from "#utils/common-utils";
-import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -643,7 +641,7 @@ export default class BattleScene extends SceneBase {
       });
     }
 
-    this.reset(false, false, true);
+    this.reset();
 
     const ui = new UI();
     this.uiContainer.add(ui);
@@ -1116,7 +1114,7 @@ export default class BattleScene extends SceneBase {
     return this.currentBattle?.randSeedInt(range, min);
   }
 
-  reset(clearScene: boolean = false, clearData: boolean = false, reloadI18n: boolean = false): void {
+  reset(clearScene: boolean = false, clearData: boolean = false): void {
     if (clearData) {
       this.gameData = new GameData();
     }
@@ -1198,26 +1196,6 @@ export default class BattleScene extends SceneBase {
     this.mysteryEncounterSaveData = new MysteryEncounterSaveData();
 
     this.updateGameInfo();
-
-    if (reloadI18n) {
-      const localizable: Localizable[] = [
-        ...allSpecies,
-        ...allMoves.values(),
-        ...allAbilities,
-        ...getTSEnumValues(ModifierPoolType)
-          .map((mpt) => getModifierPoolForType(mpt))
-          .flatMap((mp) =>
-            Object.values(mp)
-              .flat()
-              .map((mt) => mt.modifierType)
-              .filter((mt) => "localize" in mt)
-              .map((lpb) => lpb as unknown as Localizable),
-          ),
-      ];
-      for (const item of localizable) {
-        item.localize();
-      }
-    }
 
     if (clearScene) {
       this.audioManager.fadeOutBgm(250, false);

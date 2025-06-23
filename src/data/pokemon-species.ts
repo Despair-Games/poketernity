@@ -10,14 +10,12 @@ import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
-import type { Localizable } from "#types/locales";
 import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
-export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {
-  public name: string;
+export default class PokemonSpecies extends PokemonSpeciesForm {
   readonly group: SpeciesGroups;
   readonly species: string;
   readonly growthRate: GrowthRate;
@@ -85,8 +83,6 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     this.canChangeForm = canChangeForm;
     this.forms = forms;
 
-    this.localize();
-
     forms.forEach((form, f) => {
       form.speciesId = id;
       form.formIndex = f;
@@ -94,6 +90,19 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     });
   }
 
+  /**
+   * The localized name of the Pokemon species (in its base form).
+   * For the name of a specific form, use {@linkcode getName} instead.
+   */
+  public get name(): string {
+    return i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase()}`);
+  }
+
+  /**
+   * @param formIndex - (Optional) The index of the {@linkcode forms | form}
+   * from which the name is obtained. If not defined, this uses the base form.
+   * @returns The localized name of the Pokemon species under the given form index
+   */
   getName(formIndex?: number): string {
     if (formIndex !== undefined && this.forms.length) {
       const form = this.forms[formIndex];
@@ -119,10 +128,6 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       }
     }
     return this.name;
-  }
-
-  localize(): void {
-    this.name = i18next.t(`pokemon:${SpeciesId[this.speciesId].toLowerCase()}`);
   }
 
   /**
