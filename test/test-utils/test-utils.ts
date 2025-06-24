@@ -70,7 +70,6 @@ export function receivedStr(received: unknown, expectedType: TypeOfResult = "obj
   if (received === undefined) {
     return "undefined";
   }
-  // biome-ignore lint/suspicious/useValidTypeof: `expectedType` is a string
   if (typeof received !== expectedType) {
     return typeof received;
   }

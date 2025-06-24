@@ -12,7 +12,7 @@ export function initCommonAnims(): Promise<void> {
       const commonAnimId = commonAnimIds[ca];
       commonAnimFetches.push(
         globalScene
-          .cachedFetch(`./battle-anims/common-${commonAnimNames[ca].toLowerCase().replace(/\_/g, "-")}.json`)
+          .cachedFetch(`./battle-anims/common-${commonAnimNames[ca].toLowerCase().replace(/_/g, "-")}.json`)
           .then((response) => response.json())
           .then((cas) => commonAnims.set(commonAnimId, new LegacyAnimConfig(cas))),
       );

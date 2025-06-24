@@ -23,7 +23,7 @@ export default tseslint.config(
     rules: {
       "no-undef": "off", // Disables the rule that disallows the use of undeclared variables (TypeScript handles this)
       "@typescript-eslint/no-unused-vars": [
-        // Handled by ESLint for imports until Biome 2.0
+        // TODO: Now that Biome is updated to 2.0, swap over this rule handling to Biome
         "error",
         {
           args: "all", // Disallows unused variables
@@ -35,14 +35,6 @@ export default tseslint.config(
       semi: "off", // Disables the general semi rule for TypeScript files
       "no-extra-semi": "error", // Disallows unnecessary semicolons for TypeScript-specific syntax
       "import-x/extensions": ["error", "never", { json: "always" }], // Enforces no extension for imports unless json
-      "@typescript-eslint/ban-ts-comment": [
-        // Require `@ts-expect-error` instead of `@ts-ignore`
-        "error",
-        {
-          "ts-check": false,
-          "ts-expect-error": "allow-with-description",
-        },
-      ],
       "no-relative-import-paths/no-relative-import-paths": [
         // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
         "error",
@@ -115,14 +107,6 @@ export default tseslint.config(
       "computed-property-spacing": ["error", "never"], // Enforces consistent spacing inside computed property brackets
       "space-infix-ops": ["error", { int32Hint: false }], // Enforces spacing around infix operators
       "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }], // Disallows multiple empty lines
-      "@typescript-eslint/ban-ts-comment": [
-        // Require `@ts-expect-error` instead of `@ts-ignore`
-        "error",
-        {
-          "ts-check": false,
-          "ts-expect-error": "allow-with-description",
-        },
-      ],
     },
   },
 );

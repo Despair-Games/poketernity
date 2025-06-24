@@ -220,7 +220,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   getSpriteAtlasPath(female: boolean, formIndex?: number, shiny?: boolean, variant?: number): string {
-    const spriteId = this.getSpriteId(female, formIndex, shiny, variant).replace(/\_{2}/g, "/");
+    const spriteId = this.getSpriteId(female, formIndex, shiny, variant).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
@@ -401,7 +401,7 @@ export abstract class PokemonSpeciesForm {
     const rootSpeciesId = this.getRootSpeciesId();
     for (const moveId of moveset) {
       if (Object.hasOwn(speciesEggMoves, rootSpeciesId)) {
-        const eggMoveIndex = speciesEggMoves[rootSpeciesId].findIndex((m) => m === moveId);
+        const eggMoveIndex = speciesEggMoves[rootSpeciesId].indexOf(moveId);
         if (eggMoveIndex > -1 && eggMoves & (1 << eggMoveIndex)) {
           continue;
         }

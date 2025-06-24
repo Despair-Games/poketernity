@@ -4,9 +4,9 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 
 export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
-  private readonly formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => number;
 
-  constructor(formFunc: (p: Pokemon) => integer) {
+  constructor(formFunc: (p: Pokemon) => number) {
     super(true);
 
     this.formFunc = formFunc;

@@ -584,15 +584,11 @@ export class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
       tweenProps["alpha"] = (this.opacity || 0) / 255;
     }
     if (Object.keys(tweenProps).length) {
-      globalScene.tweens.add(
-        Object.assign(
-          {
-            targets: moveAnim.bgSprite,
-            duration: getFrameMs(this.duration * 3),
-          },
-          tweenProps,
-        ),
-      );
+      globalScene.tweens.add({
+        targets: moveAnim.bgSprite,
+        duration: getFrameMs(this.duration * 3),
+        ...tweenProps,
+      });
     }
     return this.duration * 2;
   }
