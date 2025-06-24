@@ -52,7 +52,7 @@ import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
+// biome-ignore lint/performance/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { ReloadSessionPhase } from "#phases/reload-session-phase";
