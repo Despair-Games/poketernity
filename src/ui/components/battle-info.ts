@@ -5,7 +5,7 @@ import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
 import { getTypeRgb } from "#data/type";
 import { getVariantTint } from "#data/variant";
 import { ElementalType } from "#enums/elemental-type";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { expGainSpeedMap } from "#enums/exp-gain-speed";
 import { Gender } from "#enums/gender";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
@@ -781,10 +781,9 @@ export class BattleInfo extends Phaser.GameObjects.Container {
             * durationMultiplier
             * levelDurationMultiplier
           : 0;
-      const speed = settings.general.expGainsSpeed;
-      if (speed && speed >= ExpGainsSpeed.DEFAULT) {
-        duration = speed >= ExpGainsSpeed.SKIP ? ExpGainsSpeed.DEFAULT : duration / Math.pow(2, speed);
-      }
+      const speed = settings.general.expGainSpeed;
+      duration *= expGainSpeedMap[speed];
+
       if (ratio === 1) {
         this.lastLevelExp = 0;
         this.lastLevel++;
