@@ -56,7 +56,8 @@
         "noSwitchDeclarations": "error",
         "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
         "noUnusedImports": {
-          "level": "error",
+          // TODO: replace the ESLint rule with this and swap the suppression comments
+          "level": "off",
           "fix": "safe"
         },
         "noUnusedFunctionParameters": "error",
