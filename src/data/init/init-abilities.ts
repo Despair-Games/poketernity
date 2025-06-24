@@ -1517,8 +1517,7 @@ export function initAbilities() {
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.PROTOSYNTHESIS, 0, WeatherType.SUNNY, WeatherType.HARSH_SUN)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.QUARK_DRIVE, 9)
       .conditionalAttr(
         getTerrainCondition(TerrainType.ELECTRIC),
@@ -1530,8 +1529,7 @@ export function initAbilities() {
       .attr(PostTerrainChangeAddBattlerTagAbAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
-      .attr(NoTransformAbilityAbAttr)
-      .partial(), // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
+      .attr(NoTransformAbilityAbAttr),
     new Ability(AbilityId.GOOD_AS_GOLD, 9)
       .attr(MoveImmunityAbAttr, (pokemon, attacker, move) => pokemon !== attacker && move.category === MoveCategory.STATUS)
       .ignorable(),
