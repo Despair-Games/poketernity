@@ -22,7 +22,7 @@ export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
     } else {
       chargeAnims.set(chargeAnim, null);
       globalScene
-        .cachedFetch(`./battle-anims/${enumValueToKey(ChargeAnim, chargeAnim).toLowerCase().replace(/\_/g, "-")}.json`)
+        .cachedFetch(`./battle-anims/${enumValueToKey(ChargeAnim, chargeAnim).toLowerCase().replace(/_/g, "-")}.json`)
         .then((response) => response.json())
         .then((ca) => {
           if (Array.isArray(ca)) {

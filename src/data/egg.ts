@@ -252,7 +252,7 @@ export class Egg {
 
       // Sets the hidden ability if a hidden ability exists and
       // the override is set or the egg hits the chance
-      let abilityIndex: number | undefined = undefined;
+      let abilityIndex: number | undefined;
       const sameSpeciesEggHACheck =
         this._sourceType === EggSourceType.SAME_SPECIES_EGG && !randSeedInt(SAME_SPECIES_EGG_HA_RATE);
       const gachaEggHACheck = !(this._sourceType === EggSourceType.SAME_SPECIES_EGG) && !randSeedInt(GACHA_EGG_HA_RATE);

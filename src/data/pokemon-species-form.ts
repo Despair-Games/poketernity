@@ -220,7 +220,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   getSpriteAtlasPath(female: boolean, formIndex?: number, shiny?: boolean, variant?: number): string {
-    const spriteId = this.getSpriteId(female, formIndex, shiny, variant).replace(/\_{2}/g, "/");
+    const spriteId = this.getSpriteId(female, formIndex, shiny, variant).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 

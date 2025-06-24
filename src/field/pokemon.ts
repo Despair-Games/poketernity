@@ -747,12 +747,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getSpriteAtlasPath(bypassSummonData?: boolean): string {
-    const spriteId = this.getSpriteId(bypassSummonData).replace(/\_{2}/g, "/");
+    const spriteId = this.getSpriteId(bypassSummonData).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
   getBattleSpriteAtlasPath(back?: boolean, bypassSummonData?: boolean): string {
-    const spriteId = this.getBattleSpriteId(back, bypassSummonData).replace(/\_{2}/g, "/");
+    const spriteId = this.getBattleSpriteId(back, bypassSummonData).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
