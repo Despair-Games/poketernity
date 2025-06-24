@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/abstract-field-phase";
 import type { nil } from "#types/nil";
@@ -8,11 +8,11 @@ import type { nil } from "#types/nil";
  * Provides helper functions to get the pokemon involved in the phase
  */
 export abstract class PokemonPhase extends FieldPhase {
-  protected battlerIndex: BattlerIndex | number;
+  protected battlerIndex: FieldBattlerIndex | number;
   public isPlayer: boolean;
   public fieldIndex: number;
 
-  constructor(battlerIndex: BattlerIndex | number) {
+  constructor(battlerIndex: FieldBattlerIndex | number) {
     super();
 
     this.battlerIndex = battlerIndex;

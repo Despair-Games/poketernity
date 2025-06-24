@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { ArenaTag } from "#arena-tags/arena-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
@@ -16,7 +16,7 @@ import { isNil } from "#utils/common-utils";
 interface DelayedAttack {
   sourceId: number;
   moveId: MoveId;
-  targetIndex: BattlerIndex;
+  targetIndex: FieldBattlerIndex;
   turnCount: number;
 }
 
@@ -40,9 +40,9 @@ export class DelayedAttackTag extends ArenaTag {
    * Adds a delayed attack to the field.
    * @param source - The attacking {@linkcode Pokemon}
    * @param moveId - The {@linkcode MoveId} for the move being used
-   * @param targetIndex - The {@linkcode BattlerIndex} targeted by the attack
+   * @param targetIndex - The {@linkcode FieldBattlerIndex} targeted by the attack
    */
-  public addAttack(source: Pokemon, moveId: MoveId, targetIndex: BattlerIndex): void {
+  public addAttack(source: Pokemon, moveId: MoveId, targetIndex: FieldBattlerIndex): void {
     this.delayedAttacks.push({ sourceId: source.id, moveId: moveId, targetIndex, turnCount: 3 });
   }
 

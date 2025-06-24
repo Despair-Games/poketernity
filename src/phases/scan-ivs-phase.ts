@@ -1,7 +1,7 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { CommonColor } from "#enums/color";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
@@ -18,7 +18,7 @@ export class ScanIvsPhase extends PokemonPhase {
 
   private readonly shownIvs: number;
 
-  constructor(battlerIndex: BattlerIndex, shownIvs: number) {
+  constructor(battlerIndex: FieldBattlerIndex, shownIvs: number) {
     super(battlerIndex);
 
     this.shownIvs = shownIvs;

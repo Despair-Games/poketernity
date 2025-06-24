@@ -10,7 +10,7 @@ import { handleTutorial } from "#app/tutorial";
 import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
@@ -57,7 +57,7 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly isStickyWeb: boolean;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     source: Pokemon | null,
     stats: BattleStat[],
     stages: number,

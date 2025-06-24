@@ -4,7 +4,7 @@ import type { TurnCommand } from "#app/turn-command-manager";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
@@ -25,7 +25,7 @@ export class PostActionPhase extends PokemonPhase {
 
   private readonly forMove: boolean;
 
-  constructor(battlerIndex: BattlerIndex, forMove: boolean = false) {
+  constructor(battlerIndex: FieldBattlerIndex, forMove: boolean = false) {
     super(battlerIndex);
 
     this.forMove = forMove;

@@ -20,7 +20,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { CommonAnim } from "#enums/common-anim";
@@ -47,7 +47,7 @@ export class Arena {
   public tags: ArenaTag[] = [];
   public bgm: string;
   public ignoreAbilities: boolean;
-  public ignoringEffectSource: BattlerIndex | null;
+  public ignoringEffectSource?: FieldBattlerIndex;
 
   /**
    * Used to keep track of the previous TimeOfDay.
@@ -756,9 +756,9 @@ export class Arena {
     }
   }
 
-  setIgnoreAbilities(ignoreAbilities: boolean, ignoringEffectSource: BattlerIndex | null = null): void {
+  setIgnoreAbilities(ignoreAbilities: boolean, ignoringEffectSource?: FieldBattlerIndex): void {
     this.ignoreAbilities = ignoreAbilities;
-    this.ignoringEffectSource = ignoreAbilities ? ignoringEffectSource : null;
+    this.ignoringEffectSource = ignoreAbilities ? ignoringEffectSource : undefined;
   }
 
   /**

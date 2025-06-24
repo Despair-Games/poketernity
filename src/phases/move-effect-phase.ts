@@ -13,7 +13,7 @@ import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -345,7 +345,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     user.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
 
     /** The indexes of active Pokemon that fall within the move's field effect */
-    const affectedPokemon: BattlerIndex[] = [];
+    const affectedPokemon: FieldBattlerIndex[] = [];
 
     if (this.targets.some((t) => [BattlerIndex.PLAYER_SIDE, BattlerIndex.BOTH_SIDES].includes(t))) {
       affectedPokemon.push(...globalScene.getPlayerField().map((p) => p.getBattlerIndex()));

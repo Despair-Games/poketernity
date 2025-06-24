@@ -10,7 +10,7 @@ import { MoveChargeAnim } from "#animations/move-charge-anim";
 import type { Phase } from "#app/phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
@@ -404,7 +404,7 @@ export class PhaseManager {
   /**
    * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
    *
-   * @param battlerIndex - The {@linkcode BattlerIndex} to faint
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} to faint
    * @param preventEndure - (Optional, default `false`) Whether or not enduring (Reviver Seed) should be prevented
    * @param destinyTag - (Optional) Destiny Bond tag belonging to the currently fainting Pokemon, if applicable
    * @param grudgeTag - (Optional) Grudge tag belonging to the currently fainting Pokemon, if applicable
@@ -419,7 +419,7 @@ export class PhaseManager {
    * {@linkcode shiftPhase} will reset the {@linkcode phaseQueuePrependSpliceIndex} via {@linkcode clearPhaseQueueSplice}_
    */
   public queueBattlerFaintPhase(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     { preventEndure = false, destinyTag = null, grudgeTag = null, source }: PokemonFaintInit,
   ): void {
     this.setPhaseQueueSplice();

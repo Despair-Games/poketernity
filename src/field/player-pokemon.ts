@@ -10,7 +10,7 @@ import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getCandyProgressRequirement, speci
 import { reverseCompatibleTms, tmSpecies } from "#data/tms";
 import type { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
 import type { MoveId } from "#enums/move-id";
@@ -111,7 +111,7 @@ export class PlayerPokemon extends Pokemon {
     return globalScene.getPlayerField().indexOf(this);
   }
 
-  getBattlerIndex(): BattlerIndex {
+  getBattlerIndex(): FieldBattlerIndex {
     return this.getFieldIndex();
   }
 

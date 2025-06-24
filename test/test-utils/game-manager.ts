@@ -14,7 +14,7 @@ import overrides from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/button";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
@@ -492,7 +492,7 @@ export class GameManager {
    * game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
    * ```
    */
-  setTurnOrder(order: BattlerIndex[]): void {
+  setTurnOrder(order: FieldBattlerIndex[]): void {
     expect(order.length).toBe(this.scene.getField(true).length);
     const { turnManager } = this.scene.currentBattle;
 

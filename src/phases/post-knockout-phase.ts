@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { genOneThroughFourExpFormula } from "#data/exp";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 import { handleMysteryEncounterVictory } from "#mystery-encounters/encounter-phase-utils";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
@@ -22,7 +22,7 @@ export class PostKnockoutPhase extends PokemonPhase {
    */
   public readonly isExpOnly: boolean;
 
-  constructor(battlerIndex: BattlerIndex | number, isExpOnly: boolean = false) {
+  constructor(battlerIndex: FieldBattlerIndex | number, isExpOnly: boolean = false) {
     super(battlerIndex);
 
     this.isExpOnly = isExpOnly;

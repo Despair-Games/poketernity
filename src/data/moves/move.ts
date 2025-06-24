@@ -1035,10 +1035,10 @@ export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
 
-export type MoveTargetSet = {
+export interface MoveTargetSet {
   targets: BattlerIndex[];
   multiple: boolean;
-};
+}
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);

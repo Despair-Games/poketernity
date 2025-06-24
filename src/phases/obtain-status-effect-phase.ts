@@ -1,7 +1,7 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
@@ -21,7 +21,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
   private readonly sourcePokemon?: Pokemon | null;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     statusEffect: StatusEffect,
     turnsRemaining?: number,
     sourceText?: string | null,

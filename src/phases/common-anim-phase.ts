@@ -1,6 +1,6 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonPhase } from "#phases/abstract-pokemon-phase";
@@ -13,9 +13,9 @@ export class CommonAnimPhase extends PokemonPhase {
   override readonly id: PhaseId = PhaseId.COMMON_ANIM;
 
   private anim: CommonAnim;
-  private readonly targetIndex?: BattlerIndex;
+  private readonly targetIndex?: FieldBattlerIndex;
 
-  constructor(anim: CommonAnim, battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex) {
+  constructor(anim: CommonAnim, battlerIndex?: FieldBattlerIndex, targetIndex?: FieldBattlerIndex) {
     // TODO: refactor `PokemonPhase` and/or this phase
     super(battlerIndex!);
 
