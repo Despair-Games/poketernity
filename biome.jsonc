@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -16,22 +16,24 @@
     "ignoreUnknown": true,
     // Adding folders to the ignore list is GREAT for performance because it prevents biome from descending into them
     // and having to verify whether each individual file is ignored
-    "ignore": [
-      "**/*.d.ts",
-      ".github/*",
-      ".vscode/*",
-      "build/*",
-      "coverage/*",
-      "dist/*",
-      "docs/*",
-      "node_modules/*",
-      "public/*",
-      "typedoc/*",
-      "src/data/tms.ts" // this file is just too big
+    "includes": [
+      "**",
+      "!**/*.d.ts",
+      "!**/.github/**/*",
+      "!**/.vscode/**/*",
+      "!**/build/**/*",
+      "!**/coverage/**/*",
+      "!**/dist/**/*",
+      "!**/docs/**/*",
+      "!**/node_modules/**/*",
+      "!**/public/**/*",
+      "!**/typedoc/**/*",
+      // this file is too big
+      "!**/src/data/tms.ts"
     ]
   },
 
-  "organizeImports": { "enabled": false }, // TODO: Enable in Biome 2.0
+  "assist": { "actions": { "source": { "organizeImports": "off" } } }, // TODO: Enable in Biome 2.0
   "linter": {
     "enabled": true,
     "rules": {
@@ -44,7 +46,6 @@
         "noUnusedImports": "off" // Handled by ESLint until multi-line disable is added (in Biome 2.0)
       },
       "style": {
-        "noVar": "error",
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
         "useBlockStatements": "error",
         "useConst": "error",
@@ -56,7 +57,6 @@
         "useSingleVarDeclarator": "off",
         "useNodejsImportProtocol": "error",
         "useTemplate": "off", // string concatenation is faster: https://stackoverflow.com/questions/29055518/are-es6-template-literals-faster-than-string-concatenation
-        "noNamespaceImport": "error",
         "noInferrableTypes": "off", // Explicit > Implicit
         "useConsistentArrayType": "error", // Standardize on `T[]`
         "useFilenamingConvention": {
@@ -66,7 +66,13 @@
             "requireAscii": true,
             "strictCase": false
           }
-        }
+        },
+        "useAsConstAssertion": "error",
+        "useSelfClosingElements": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noUselessElse": "error",
+        "noCommonJs": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -78,7 +84,8 @@
         "noRedeclare": "error",
         "noGlobalIsNan": "error",
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
-        "useDefaultSwitchClauseLast": "warn" // TODO: make error?
+        "useDefaultSwitchClauseLast": "warn", // TODO: make error?
+        "noVar": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info", // TODO: Refactor and make this an error
@@ -89,8 +96,9 @@
         "noBannedTypes": "warn", // TODO: refactor and make an error
         "useRegexLiterals": "off" // Was broken for some reason; TODO: re-enable
       },
-      "nursery": {
-        "noCommonJs": "error"
+      "nursery": {},
+      "performance": {
+        "noNamespaceImport": "error"
       }
     }
   },
@@ -99,15 +107,15 @@
   },
   "overrides": [
     {
-      "include": ["test/**"],
+      "includes": ["**/test/**"],
       "javascript": { "globals": [] },
       "linter": {
         "rules": {
           "performance": {
-            "noDelete": "off" // TODO: evaluate if this is necessary for the test(s) to function
+            "noDelete": "off", // TODO: evaluate if this is necessary for the test(s) to function
+            "noNamespaceImport": "off"
           },
           "style": {
-            "noNamespaceImport": "off", // this is required for `vi.spyOn` to work in some tests
             "noNonNullAssertion": "off" // tests are able to make assumptions about the game state that normally can't be made
           }
         }
@@ -115,7 +123,7 @@
     },
     {
       // This section is to improve the bug tester workflow
-      "include": ["src/overrides.ts"],
+      "includes": ["**/src/overrides.ts"],
       "linter": {
         "rules": {
           "correctness": {
