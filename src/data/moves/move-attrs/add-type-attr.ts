@@ -5,6 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import type { MoveConditionFunc } from "#types/move-condition-func";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -29,7 +30,7 @@ export class AddTypeAttr extends MoveEffectAttr {
 
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:addType", {
-        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[this.type]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.type)}`),
         pokemonName: getPokemonNameWithAffix(target),
       }),
     );

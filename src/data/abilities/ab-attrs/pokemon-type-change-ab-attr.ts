@@ -5,6 +5,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -47,7 +48,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.moveType)}`),
     });
   }
 }

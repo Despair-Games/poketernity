@@ -40,7 +40,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     if (pokemon && !pokemon.hasNonVolatileStatusEffect(false, true)) {
       if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon, this.turnsRemaining, this.sourceText)) {
         pokemon.updateInfo(true);
-        new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect - 1), pokemon).play(false, () => {
+        new CommonBattleAnim((CommonAnim.POISON + (this.statusEffect - 1)) as CommonAnim, pokemon).play(false, () => {
           const effectObtainText = getStatusEffectObtainText(
             this.statusEffect,
             getPokemonNameWithAffix(pokemon),

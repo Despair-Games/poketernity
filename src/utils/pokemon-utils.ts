@@ -3,10 +3,11 @@ import { allSpecies } from "#data/data-lists";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#data/starters";
+import type { ElementalType } from "#enums/elemental-type";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 import { isNil } from "#utils/common-utils";
-import { randSeedItem } from "#utils/random-utils";
+import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given
@@ -86,4 +87,9 @@ export function getPokerusStarters(): PokemonSpecies[] {
   );
 
   return pokerusStarters;
+}
+
+/** @returns A random {@linkcode ElementalType} (excluding `Unknown` and `Stellar`) */
+export function getRandomElementalType(): ElementalType {
+  return randSeedIntRange(1, 18) as ElementalType;
 }

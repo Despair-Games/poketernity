@@ -149,7 +149,15 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, fixedNumber, getTSEnumValues, isBetween, isNil, NumberHolder } from "#utils/common-utils";
+import {
+  BooleanHolder,
+  enumValueToKey,
+  fixedNumber,
+  getTSEnumValues,
+  isBetween,
+  isNil,
+  NumberHolder,
+} from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -2674,8 +2682,8 @@ export default class BattleScene extends SceneBase {
             return {
               name: p.name,
               form: p.getFormKey(),
-              types: p.getTypes().map((type) => ElementalType[type]),
-              teraType: ElementalType[p.teraType],
+              types: p.getTypes().map((type) => enumValueToKey(ElementalType, type)),
+              teraType: enumValueToKey(ElementalType, p.teraType),
               isTerastallized: p.isTerastallized,
               level: p.level,
               currentHP: p.hp,

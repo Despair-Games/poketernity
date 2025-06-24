@@ -4,6 +4,7 @@ import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -21,7 +22,7 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${ElementalType[firstMoveType]}`),
+        type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, firstMoveType)}`),
       }),
     );
 

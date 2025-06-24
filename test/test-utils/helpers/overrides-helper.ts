@@ -636,7 +636,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (type === ElementalType.UNKNOWN) {
       this.log("Disabled override for player Tera type!");
     } else {
-      this.log(`Player Tera type set to ${ElementalType[type]} (=${type})!`);
+      this.log(`Player Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
     }
     return this;
   }
@@ -650,7 +650,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (type === ElementalType.UNKNOWN) {
       this.log("Disabled override for enemy Tera type!");
     } else {
-      this.log(`Enemy Tera type set to ${ElementalType[type]} (=${type})!`);
+      this.log(`Enemy Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
     }
     return this;
   }

@@ -14,7 +14,7 @@ import type { StarterDataEntry } from "#types/starter-data";
 import { IVGraph } from "#ui/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -387,7 +387,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
         const move = m < pokemon.moveset.length && pokemon.moveset[m] ? pokemon.moveset[m]!.getMove() : null;
         const moveName = move ? (pokemon.getMove(move.id)?.name ?? move.name) : "-";
         this.pokemonMoveBgs[m].setFrame(
-          ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+          enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
         );
         this.pokemonMoveLabels[m].setText(moveName);
         this.pokemonMovesContainers[m].setVisible(!!move);

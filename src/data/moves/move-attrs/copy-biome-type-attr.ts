@@ -6,6 +6,7 @@ import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -33,7 +34,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[typeChange]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, typeChange)}`),
       }),
     );
 

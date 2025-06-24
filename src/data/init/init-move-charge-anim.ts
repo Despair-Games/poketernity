@@ -2,6 +2,7 @@ import { LegacyAnimConfig } from "#animations/anim-config";
 import { chargeAnims } from "#animations/charge-anims";
 import { globalScene } from "#app/global-scene";
 import { ChargeAnim } from "#enums/charge-anim";
+import { enumValueToKey } from "#utils/common-utils";
 
 //#region Exports
 
@@ -21,7 +22,7 @@ export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
     } else {
       chargeAnims.set(chargeAnim, null);
       globalScene
-        .cachedFetch(`./battle-anims/${ChargeAnim[chargeAnim].toLowerCase().replace(/\_/g, "-")}.json`)
+        .cachedFetch(`./battle-anims/${enumValueToKey(ChargeAnim, chargeAnim).toLowerCase().replace(/\_/g, "-")}.json`)
         .then((response) => response.json())
         .then((ca) => {
           if (Array.isArray(ca)) {

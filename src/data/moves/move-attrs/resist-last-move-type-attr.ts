@@ -9,7 +9,7 @@ import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 import { applyChallenges } from "#utils/challenge-utils";
-import { NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -38,7 +38,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     globalScene.phaseManager.queueMessagePhase(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${ElementalType[modifiedType]}`),
+        type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, modifiedType)}`),
       }),
     );
     user.updateInfo();
@@ -50,15 +50,15 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
    * Retrieve the types resisting a given type. Used by Conversion 2
    * @returns An array populated with Types, or an empty array if no resistances exist (Unknown or Stellar type)
    */
-  getTypeResistances(gameMode: GameMode, type: number): ElementalType[] {
+  getTypeResistances(gameMode: GameMode, type: ElementalType): ElementalType[] {
     const typeResistances: ElementalType[] = [];
 
-    for (let i = 0; i < Object.keys(ElementalType).length; i++) {
+    for (const elementalType of Object.values(ElementalType)) {
       const multiplier = new NumberHolder(1);
-      multiplier.value = getTypeDamageMultiplier(type, i);
+      multiplier.value = getTypeDamageMultiplier(type, elementalType);
       applyChallenges(gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
       if (multiplier.value < 1) {
-        typeResistances.push(i);
+        typeResistances.push(elementalType);
       }
     }
 
@@ -79,11 +79,12 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
       }
 
       const { move: moveData, type: moveType } = targetMove;
-      if (!moveData || [ElementalType.STELLAR, ElementalType.UNKNOWN].includes(moveType)) {
+      if (!moveData || moveType === ElementalType.STELLAR || moveType === ElementalType.UNKNOWN) {
         return false;
       }
       const userTypes = user.getTypes();
-      const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t)); // valid types are ones that are not already the user's types
+      // valid types are ones that are not already the user's types
+      const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t));
       return validTypes.length > 0;
     };
   }

@@ -17,7 +17,7 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeItemTrigger } from "#form-change-triggers/species-form-change-item-trigger";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, isNil } from "#utils/common-utils";
 
 export interface EncounterRequirement {
   meetsRequirement(): boolean; // Boolean to see if a requirement is met
@@ -540,7 +540,7 @@ export class TypeRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const includedTypes = this.requiredType.filter((ty) => pokemon?.getTypes().includes(ty));
     if (includedTypes.length > 0) {
-      return ["type", ElementalType[includedTypes[0]]];
+      return ["type", enumValueToKey(ElementalType, includedTypes[0])];
     }
     return ["type", ""];
   }

@@ -7,7 +7,6 @@ import { getLevelTotalExp } from "#data/exp";
 import type PokemonSpecies from "#data/pokemon-species";
 import { TrainerPartyTemplate } from "#data/trainer-config";
 import { Challenges } from "#enums/challenges";
-import type { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -46,7 +45,7 @@ import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/held-modifier-config";
 import { NumberHolder, isNil } from "#utils/common-utils";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getRandomElementalType, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 
 /** i18n namespace for encounter */
@@ -512,9 +511,9 @@ async function postProcessTransformedPokemon(
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
   const newTypes = [newPokemon.getTypes()[0]];
-  let newType = randSeedInt(18) as ElementalType;
+  let newType = getRandomElementalType();
   while (newType === newTypes[0]) {
-    newType = randSeedInt(18) as ElementalType;
+    newType = getRandomElementalType();
   }
   newTypes.push(newType);
   if (!newPokemon.customPokemonData) {
