@@ -216,7 +216,7 @@ interface DamageFunctionOptions {
 }
 
 interface EffectiveStatOptions {
-  /** The target {@linkcode Pokemon} */
+  /** The opposing {@linkcode Pokemon}, usually involved in an incoming or outgoing attack */
   opponent?: Pokemon;
   /** The {@linkcode Move} being used */
   move?: Move;
@@ -1135,11 +1135,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Calculates and retrieves the final value of a stat considering any held items,
    * move effects, opponent abilities, and whether there was a critical hit.
    * @param stat - The desired {@linkcode EffectiveStat}
-   * @param opponent - The target {@linkcode Pokemon}
-   * @param move - The {@linkcode Move} being used
-   * @param abilityApplyMode - (Default {@linkcode AbilityApplyMode.DEFAULT}) The {@linkcode AbilityApplyMode} determining how abilities are applied
-   * @param isCritical - (Default `false`) Whether a critical hit has occurred or not
-   * @param simulated - (Default `true`) If `true`, nullifies any effects that produce any changes to game state from triggering
+   * @see {@linkcode EffectiveStatOptions} for optional params
    * @returns The final in-battle value of a stat
    */
   getEffectiveStat(
