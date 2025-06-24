@@ -214,7 +214,7 @@ export class GameData {
       voucherCounts: this.voucherCounts,
       eggs: this.eggs.map((e) => new EggData(e)),
       gameVersion: globalScene.game.config.gameVersion,
-      timestamp: new Date().getTime(),
+      timestamp: Date.now(),
       eggPity: this.eggPity.slice(0),
       unlockPity: this.unlockPity.slice(0),
     };
@@ -728,7 +728,7 @@ export class GameData {
           ? new TrainerData(globalScene.currentBattle.trainer)
           : null,
       gameVersion: globalScene.game.config.gameVersion,
-      timestamp: new Date().getTime(),
+      timestamp: Date.now(),
       challenges: globalScene.gameMode.challenges.map((c) => new ChallengeData(c)),
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,

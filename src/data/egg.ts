@@ -178,7 +178,7 @@ export class Egg {
 
       this._sourceType = eggOptions.sourceType;
       this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
-      this._timestamp = eggOptions.timestamp ?? new Date().getTime();
+      this._timestamp = eggOptions.timestamp ?? Date.now();
 
       // First roll shiny and variant so we can filter if species with an variant exist
       this._isShiny = eggOptions.isShiny ?? (Overrides.EGG_SHINY_OVERRIDE || this.rollShiny());

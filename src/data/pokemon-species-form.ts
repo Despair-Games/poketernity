@@ -401,7 +401,7 @@ export abstract class PokemonSpeciesForm {
     const rootSpeciesId = this.getRootSpeciesId();
     for (const moveId of moveset) {
       if (Object.hasOwn(speciesEggMoves, rootSpeciesId)) {
-        const eggMoveIndex = speciesEggMoves[rootSpeciesId].findIndex((m) => m === moveId);
+        const eggMoveIndex = speciesEggMoves[rootSpeciesId].indexOf(moveId);
         if (eggMoveIndex > -1 && eggMoves & (1 << eggMoveIndex)) {
           continue;
         }
