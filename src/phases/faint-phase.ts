@@ -1,9 +1,9 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { GameOverPhase } from "#phases/game-over-phase";
 import type { MovePhase } from "#phases/move-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
@@ -20,7 +20,7 @@ import { allMoves } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
@@ -73,7 +73,7 @@ export class FaintPhase extends PokemonPhase {
   private readonly source?: Pokemon;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     preventEndure: boolean = false,
     destinyTag?: DestinyBondTag | null,
     grudgeTag?: GrudgeTag | null,

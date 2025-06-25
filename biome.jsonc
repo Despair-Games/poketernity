@@ -49,15 +49,14 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true, // see https://biomejs.dev/linter/rules/#recommended-rules
+      "recommended": true, // see https://biomejs.dev/linter/javascript/rules/#recommended-rules and https://biomejs.dev/linter/css/rules/#recommended-rules
       "correctness": {
         "noUndeclaredVariables": "off", // handled by TypeScript
         "noUnusedVariables": "error",
         "noSwitchDeclarations": "error",
         "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
         "noUnusedImports": {
-          // TODO: replace the ESLint rule with this and swap the suppression comments
-          "level": "off",
+          "level": "error",
           "fix": "safe"
         },
         "noUnusedFunctionParameters": "error",

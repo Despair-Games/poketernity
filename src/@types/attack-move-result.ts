@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { DamageResult } from "#types/damage-result";
 
@@ -8,5 +8,5 @@ export interface AttackMoveResult {
   damage: number;
   isCritical: boolean;
   sourceId: number;
-  sourceBattlerIndex: BattlerIndex;
+  sourceBattlerIndex: FieldBattlerIndex;
 }

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
@@ -17,7 +17,7 @@ export class DamageAnimPhase extends PokemonPhase {
   private readonly critical: boolean;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     amount: number,
     damageResult: DamageResult = HitResult.EFFECTIVE,
     critical: boolean = false,

@@ -1,7 +1,6 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { UiWindowStyle } from "#enums/ui-window-style";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { api } from "#api/api";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";

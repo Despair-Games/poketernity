@@ -1614,13 +1614,13 @@ let modifierPoolThresholds = {};
 let ignoredPoolIndexes = {};
 
 let dailyStarterModifierPoolThresholds = {};
-let _ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _ignoredDailyStarterPoolIndexes = {};
 
 let enemyModifierPoolThresholds = {};
-let _enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyIgnoredPoolIndexes = {};
 
 let enemyBuffModifierPoolThresholds = {};
-let _enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyBuffIgnoredPoolIndexes = {};
 
 const tierWeights = [768 / 1024, 195 / 1024, 48 / 1024, 12 / 1024, 1 / 1024];
 /**

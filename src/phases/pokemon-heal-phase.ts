@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { HealBlockTag } from "#battler-tags/heal-block-tag";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { StatusEffect } from "#enums/status-effect";
@@ -45,7 +45,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
   private readonly fullRestorePP: boolean;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     hpHealed: number,
     {
       message,

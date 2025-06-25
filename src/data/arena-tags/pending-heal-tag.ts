@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ArenaTag } from "#arena-tags/arena-tag";
 import { allMoves } from "#data/data-lists";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
@@ -35,8 +35,8 @@ interface PendingHealEffect {
  * If the effect is from Lunar Dance, their PP is also restored.
  */
 export class PendingHealTag extends ArenaTag {
-  /** All pending healing effects, organized by {@linkcode BattlerIndex} */
-  private pendingHeals: Partial<Record<BattlerIndex, PendingHealEffect[]>> = {};
+  /** All pending healing effects, organized by {@linkcode FieldBattlerIndex} */
+  private pendingHeals: Partial<Record<FieldBattlerIndex, PendingHealEffect[]>> = {};
 
   constructor() {
     super(ArenaTagType.PENDING_HEAL, 0);
@@ -45,10 +45,10 @@ export class PendingHealTag extends ArenaTag {
   /**
    * Adds a pending healing effect to the field. Effects under the same move *and*
    * target index as an existing effect are ignored.
-   * @param targetIndex - The {@linkcode BattlerIndex} under which the effect applies
+   * @param targetIndex - The {@linkcode FieldBattlerIndex} under which the effect applies
    * @param healEffect - The {@linkcode PendingHealEffect | data} for the pending heal effect
    */
-  public queueHeal(targetIndex: BattlerIndex, healEffect: PendingHealEffect): void {
+  public queueHeal(targetIndex: FieldBattlerIndex, healEffect: PendingHealEffect): void {
     const existingHealEffects = this.pendingHeals[targetIndex];
     if (existingHealEffects) {
       if (!existingHealEffects.some((he) => he.moveId === healEffect.moveId)) {
