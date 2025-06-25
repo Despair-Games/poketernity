@@ -113,7 +113,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
           if (attr.showAbilityInstant) {
             globalScene.abilityBar.show(getPokemonNameWithAffix(pokemon), ability.name, passive);
           } else {
-            globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
+            globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon, passive);
             globalScene.phaseManager.clearPhaseQueueSplice();
           }
         }

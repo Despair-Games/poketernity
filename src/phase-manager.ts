@@ -26,6 +26,7 @@ import { FaintPhase } from "#phases/faint-phase";
 import { FormChangePhase } from "#phases/form-change-phase";
 import { GameOverModifierRewardPhase } from "#phases/game-over-modifier-reward-phase";
 import { GameOverPhase } from "#phases/game-over-phase";
+import { HideAbilityPhase } from "#phases/hide-ability-phase";
 import { LearnMovePhase } from "#phases/learn-move-phase";
 import { LevelCapPhase } from "#phases/level-cap-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";
@@ -123,6 +124,7 @@ const PHASES = {
   FormChangePhase,
   GameOverModifierRewardPhase,
   GameOverPhase,
+  HideAbilityPhase,
   LearnMovePhase,
   LevelCapPhase,
   LevelUpPhase,

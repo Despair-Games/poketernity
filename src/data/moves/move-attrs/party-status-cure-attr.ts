@@ -44,7 +44,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     } else if (pokemon.hasAbility(this.abilityCondition)) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "ShowAbilityPhase",
-        pokemon.id,
+        pokemon,
         pokemon.getPassiveAbility()?.id === this.abilityCondition,
       );
     } else {

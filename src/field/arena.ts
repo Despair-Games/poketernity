@@ -493,7 +493,7 @@ export class Arena {
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
-        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p);
         globalScene.triggerPokemonFormChange(p, SpeciesFormChangeWeatherTrigger);
       }
     });
@@ -511,7 +511,7 @@ export class Arena {
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
-        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p);
         return globalScene.triggerPokemonFormChange(p, SpeciesFormChangeRevertWeatherFormTrigger);
       }
     });
