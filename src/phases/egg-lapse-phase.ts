@@ -5,11 +5,8 @@ import type { Egg } from "#data/egg";
 import { EGG_SEED } from "#data/egg";
 import { EggHatchData } from "#data/egg-hatch-data";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { EggHatchPhase } from "#phases/egg-hatch-phase";
-import { EggSummaryPhase } from "#phases/egg-summary-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -20,7 +17,7 @@ import i18next from "i18next";
  * Also handles prompts for skipping animation, and calling the egg summary phase.
  */
 export class EggLapsePhase extends Phase {
-  override readonly id = PhaseId.EGG_LAPSE;
+  public override readonly phaseName = "EggLapsePhase";
 
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
@@ -62,12 +59,12 @@ export class EggLapsePhase extends Phase {
         eggsToHatchCount >= this.minEggsToSkip
         && settings.general.eggSkipPreference === EggSkipPreference.ALWAYS
       ) {
-        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:eggHatching"));
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battle:eggHatching"));
         this.hatchEggsSkipped(eggsToHatch);
         this.showSummary();
       } else {
         // regular hatches, no summary
-        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:eggHatching"));
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battle:eggHatching"));
         this.hatchEggsRegular(eggsToHatch);
         this.end();
       }
@@ -83,7 +80,7 @@ export class EggLapsePhase extends Phase {
   protected hatchEggsRegular(eggsToHatch: Egg[]): void {
     let eggsToHatchCount: number = eggsToHatch.length;
     for (const egg of eggsToHatch) {
-      globalScene.phaseManager.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
+      globalScene.phaseManager.createAndUnshiftPhase("EggHatchPhase", this, egg, eggsToHatchCount);
       eggsToHatchCount--;
     }
   }
@@ -99,7 +96,7 @@ export class EggLapsePhase extends Phase {
   }
 
   protected showSummary(): void {
-    globalScene.phaseManager.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
+    globalScene.phaseManager.createAndUnshiftPhase("EggSummaryPhase", this.eggHatchData);
     this.end();
   }
 

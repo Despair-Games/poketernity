@@ -54,7 +54,8 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
 
     this.moveId = lastValidMove.id;
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:disabledOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: allMoves.get(this.moveId).name,
@@ -66,7 +67,8 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:disabledLapse", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: allMoves.get(this.moveId).name,

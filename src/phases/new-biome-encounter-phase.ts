@@ -2,14 +2,13 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostBiomeChangeAbAttr } from "#abilities/post-biome-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
 import { NextEncounterPhase } from "#phases/next-encounter-phase";
 
 /**
  * Triggers the first encounter of a new biome
  */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
-  override readonly id = PhaseId.NEW_BIOME_ENCOUNTER;
+  public override readonly phaseName = "NewBiomeEncounterPhase";
 
   protected override doEncounter(): void {
     const { arenaEnemy, currentBattle, tweens } = globalScene;

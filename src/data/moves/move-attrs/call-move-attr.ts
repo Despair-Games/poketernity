@@ -14,7 +14,6 @@ import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import { type Move, getMoveTargets } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import { LoadMoveAnimPhase } from "#phases/load-move-anim-phase";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
@@ -49,7 +48,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
-    globalScene.phaseManager.unshiftPhase(new LoadMoveAnimPhase(move.id));
+    globalScene.phaseManager.createAndUnshiftPhase("LoadMoveAnimPhase", move.id);
     globalScene.phaseManager.queueMovePhase({
       pokemon: user,
       targets,

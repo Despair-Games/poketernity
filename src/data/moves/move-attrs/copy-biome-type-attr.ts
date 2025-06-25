@@ -31,7 +31,8 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     user.setTemporaryTypes(typeChange);
     user.updateInfo();
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, typeChange)}`),

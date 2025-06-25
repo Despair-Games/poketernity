@@ -1,16 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
 import { isNil } from "#utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
  */
 export class CheckStatusEffectPhase extends Phase {
-  override readonly id = PhaseId.CHECK_STATUS_EFFECT;
+  public override readonly phaseName = "CheckStatusEffectPhase";
 
   public override start(): void {
     super.start();
@@ -22,7 +20,7 @@ export class CheckStatusEffectPhase extends Phase {
 
     pokemon.forEach((p) => {
       if (!isNil(p) && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
-        globalScene.phaseManager.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
+        globalScene.phaseManager.createAndUnshiftPhase("PostTurnStatusEffectPhase", p.getBattlerIndex());
       }
     });
 

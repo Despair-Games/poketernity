@@ -10,7 +10,6 @@ import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -42,7 +41,8 @@ export class SeededTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:seededOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
     this.sourceIndex = globalScene.getPokemonById(this.sourceId!)!.getBattlerIndex(); // TODO: are those bangs correct?
@@ -58,14 +58,18 @@ export class SeededTag extends BattlerTag {
         applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
         if (!cancelled.value) {
-          globalScene.phaseManager.unshiftPhase(
-            new CommonAnimPhase(CommonAnim.LEECH_SEED, source.getBattlerIndex(), pokemon.getBattlerIndex()),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "CommonAnimPhase",
+            CommonAnim.LEECH_SEED,
+            source.getBattlerIndex(),
+            pokemon.getBattlerIndex(),
           );
 
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
-          globalScene.phaseManager.queuePokemonHealPhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "PokemonHealPhase",
             source.getBattlerIndex(),
             !reverseDrain ? damage : damage * -1,
             {

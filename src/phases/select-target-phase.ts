@@ -2,15 +2,13 @@ import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { CommandPhase } from "#phases/command-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
 import i18next from "i18next";
 
 export class SelectTargetPhase extends PokemonPhase {
-  override readonly id = PhaseId.SELECT_TARGET;
+  public override readonly phaseName = "SelectTargetPhase";
 
   public override start(): void {
     super.start();
@@ -35,7 +33,8 @@ export class SelectTargetPhase extends PokemonPhase {
           .getRestrictingTag(moveId, user, firstTarget)
           ?.getSelectionDeniedText(user, moveObject.id);
 
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name }),
           0,
           true,
@@ -45,7 +44,7 @@ export class SelectTargetPhase extends PokemonPhase {
 
       if (targets.length < 1) {
         turnManager.tryRemoveCommand((tc) => tc.pokemon === user);
-        globalScene.phaseManager.unshiftPhase(new CommandPhase(this.fieldIndex));
+        globalScene.phaseManager.createAndUnshiftPhase("CommandPhase", this.fieldIndex);
       } else {
         if (turnCommand) {
           turnCommand.targets = targets;

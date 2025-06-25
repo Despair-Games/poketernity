@@ -4,14 +4,14 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
-import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class TerastallizationPhase extends BattlePhase {
-  public override readonly id = PhaseId.TERASTALLIZATION;
+  public override readonly phaseName = "TerastallizationPhase";
+
   public pokemon: Pokemon;
 
   constructor(pokemon: Pokemon) {
@@ -24,7 +24,8 @@ export class TerastallizationPhase extends BattlePhase {
     super.start();
 
     new CommonBattleAnim(CommonAnim.TERASTALLIZE, this.pokemon).play(false, () => {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battle:pokemonTerastallized", {
           pokemonNameWithAffix: getPokemonNameWithAffix(this.pokemon),
           type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.pokemon.teraType)}`),

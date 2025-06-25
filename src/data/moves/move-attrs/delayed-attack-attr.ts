@@ -1,3 +1,4 @@
+import { MoveChargeAnim } from "#animations/move-charge-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { DelayedAttackTag } from "#arena-tags/delayed-attack-tag";
@@ -43,8 +44,12 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
     if (!virtual) {
       overridden.value = true;
-      globalScene.phaseManager.queueMoveAnimPhase(this.chargeAnim, move.id, user);
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MoveAnimPhase",
+        new MoveChargeAnim(this.chargeAnim, move.id, user),
+      );
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         this.chargeText
           .replace("{TARGET}", getPokemonNameWithAffix(target))
           .replace("{USER}", getPokemonNameWithAffix(user)),
@@ -63,7 +68,8 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
       return true;
     }
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:tookMoveAttack", {
         pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
         moveName: move.name,

@@ -9,7 +9,6 @@ import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -28,7 +27,8 @@ export class StickyWebTag extends EntryHazardTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t(`arenaTag:stickyWebOnAdd${this.i18nSideKey}Side`, {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -47,14 +47,20 @@ export class StickyWebTag extends EntryHazardTag {
       }
 
       if (!cancelled.value) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }),
         );
         const stages = new NumberHolder(-1);
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value, {
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          pokemon.getBattlerIndex(),
+          this.getSourcePokemon(),
+          [Stat.SPD],
+          stages.value,
+          {
             isStickyWeb: true,
-          }),
+          },
         );
         return true;
       }

@@ -8,8 +8,6 @@ import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
 import { GameManager } from "#test/test-utils/game-manager";
 import { generateStarter } from "#test/test-utils/game-manager-utils";
@@ -148,8 +146,8 @@ describe("Test Phase Interceptor", () => {
     game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
       game.scene.gameMode = getGameMode(GameModes.CLASSIC);
       const starters = generateStarter(game.scene, [SpeciesId.FEEBAS]);
-      const selectStarterPhase = new SelectStarterPhase();
-      game.scene.phaseManager.pushPhase(new EncounterPhase(false));
+      const selectStarterPhase = game.scene.phaseManager.createPhase("SelectStarterPhase");
+      game.scene.phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
     await game.phaseInterceptor.to("SummonPhase");

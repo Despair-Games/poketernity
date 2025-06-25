@@ -26,7 +26,8 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const abilityName = this.source.name;
     if (!simulated) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() * this.healPercent),
         {

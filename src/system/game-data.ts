@@ -55,7 +55,6 @@ import type { Pokemon } from "#field/pokemon";
 // biome-ignore lint/performance/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
-import { ReloadSessionPhase } from "#phases/reload-session-phase";
 import { achvs } from "#system/achievements";
 import ArenaData from "#system/arena-data";
 import ChallengeData from "#system/challenge-data";
@@ -249,7 +248,7 @@ export class GameData {
           if (error) {
             if (error.startsWith("session out of date")) {
               globalScene.phaseManager.clearPhaseQueue();
-              globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
+              globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
             }
             console.error(error);
             return resolve(false);
@@ -276,17 +275,19 @@ export class GameData {
         api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
-              globalScene.phaseManager.queueMessagePhase(
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
                 "Save data could not be found. If this is a new account, you can safely ignore this message.",
-                null,
+                undefined,
                 true,
               );
               return resolve(true);
             }
             if (saveDataOrErr?.includes("Too many connections")) {
-              globalScene.phaseManager.queueMessagePhase(
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
                 "Too many people are trying to connect and the server is overloaded. Please try again later.",
-                null,
+                undefined,
                 true,
               );
               return resolve(false);
@@ -535,7 +536,7 @@ export class GameData {
 
     if (systemData) {
       globalScene.phaseManager.clearPhaseQueue();
-      globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase(JSON.stringify(systemData)));
+      globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase", JSON.stringify(systemData));
       this.clearLocalData();
       return false;
     }
@@ -952,7 +953,7 @@ export class GameData {
           if (error) {
             if (error.startsWith("session out of date")) {
               globalScene.phaseManager.clearPhaseQueue();
-              globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
+              globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
             }
             console.error(error);
             resolve(false);
@@ -1027,7 +1028,7 @@ export class GameData {
       } else {
         if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
-          globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
+          globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
         }
 
         console.error(jsonResponse);
@@ -1160,7 +1161,7 @@ export class GameData {
             if (error) {
               if (error.startsWith("session out of date")) {
                 globalScene.phaseManager.clearPhaseQueue();
-                globalScene.phaseManager.unshiftPhase(new ReloadSessionPhase());
+                globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
               }
               console.error(error);
               return resolve(false);

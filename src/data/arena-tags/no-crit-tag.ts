@@ -25,7 +25,8 @@ export class NoCritTag extends ArenaTag {
 
   /** Queues a message upon adding this effect to the field */
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t(`arenaTag:noCritOnAdd${this.i18nSideKey}`, {
         moveName: this.getMoveName(),
       }),
@@ -35,7 +36,8 @@ export class NoCritTag extends ArenaTag {
   /** Queues a message upon removing this effect from the field */
   override onRemove(_arena: Arena): void {
     const source = globalScene.getPokemonById(this.sourceId!); // TODO: is this bang correct?
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("arenaTag:noCritOnRemove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(source ?? undefined),
         moveName: this.getMoveName(),

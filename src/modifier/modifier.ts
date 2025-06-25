@@ -38,9 +38,6 @@ import type {
   TmModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { EvolutionPhase } from "#phases/evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
-import { LevelUpPhase } from "#phases/level-up-phase";
 import { addTextObject } from "#ui/text-utils";
 import { hslToHex } from "#utils/color-utils";
 import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
@@ -1510,7 +1507,8 @@ export class SurviveDamageModifier extends PokemonHeldItemModifier {
     if (!surviveDamage.value && pokemon.randSeedInt(10) < this.getStackCount()) {
       surviveDamage.value = true;
 
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("modifier:surviveDamageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -1546,7 +1544,8 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
       const hasQuickClaw = this.type.isPokemonHeldItemModifierType() && this.type.id === "QUICK_CLAW";
 
       if (hasQuickClaw) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             itemName: i18next.t("modifierType:ModifierType.QUICK_CLAW.name"),
@@ -1631,7 +1630,8 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
         {
@@ -1730,7 +1730,8 @@ export class HitHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
         {
@@ -1908,14 +1909,19 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
-      message: i18next.t("modifier:pokemonInstantReviveApply", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        typeName: this.type.name,
-      }),
-      showFullHpMessage: false,
-      revive: true,
-    });
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
+      pokemon.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / 2),
+      {
+        message: i18next.t("modifier:pokemonInstantReviveApply", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          typeName: this.type.name,
+        }),
+        showFullHpMessage: false,
+        revive: true,
+      },
+    );
 
     // Remove any status the Pokemon had before fainting
     pokemon.resetStatus(false, true);
@@ -1962,7 +1968,8 @@ export class ResetNegativeStatStageModifier extends PokemonHeldItemModifier {
     }
 
     if (statRestored) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("modifier:resetNegativeStatStageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -2206,12 +2213,11 @@ export class PokemonLevelIncrementModifier extends ConsumablePokemonModifier {
 
     playerPokemon.addFriendship(FRIENDSHIP_GAIN_FROM_CANDY);
 
-    globalScene.phaseManager.unshiftPhase(
-      new LevelUpPhase(
-        globalScene.getPlayerParty().indexOf(playerPokemon),
-        playerPokemon.level - levelCount.value,
-        playerPokemon.level,
-      ),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LevelUpPhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      playerPokemon.level - levelCount.value,
+      playerPokemon.level,
     );
 
     return true;
@@ -2227,8 +2233,11 @@ export class TmModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon): boolean {
-    globalScene.phaseManager.unshiftPhase(
-      new LearnMovePhase(globalScene.getPlayerParty().indexOf(playerPokemon), this.type.moveId, LearnMoveType.TM),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LearnMovePhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      this.type.moveId,
+      LearnMoveType.TM,
     );
 
     return true;
@@ -2250,13 +2259,12 @@ export class RememberMoveModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon, cost?: number): boolean {
-    globalScene.phaseManager.unshiftPhase(
-      new LearnMovePhase(
-        globalScene.getPlayerParty().indexOf(playerPokemon),
-        playerPokemon.getLearnableLevelMoves()[this.levelMoveIndex],
-        LearnMoveType.MEMORY,
-        cost,
-      ),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LearnMovePhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      playerPokemon.getLearnableLevelMoves()[this.levelMoveIndex],
+      LearnMoveType.MEMORY,
+      cost,
     );
 
     return true;
@@ -2282,8 +2290,11 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
       : null;
 
     if (matchingEvolution) {
-      globalScene.phaseManager.unshiftPhase(
-        new EvolutionPhase(playerPokemon, matchingEvolution, playerPokemon.level - 1),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "EvolutionPhase",
+        playerPokemon,
+        matchingEvolution,
+        playerPokemon.level - 1,
       );
       return true;
     }
@@ -2729,7 +2740,7 @@ export class MoneyInterestModifier extends PersistentModifier {
       moneyAmount: formattedMoneyAmount,
       typeName: this.type.name,
     });
-    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message, undefined, true);
 
     return true;
   }
@@ -3015,7 +3026,10 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
     }
 
     for (const mt of transferredModifierTypes) {
-      globalScene.phaseManager.queueMessagePhase(this.getTransferMessage(pokemon, targetPokemon, mt));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        this.getTransferMessage(pokemon, targetPokemon, mt),
+      );
     }
 
     return transferredModifierTypes.length > 0;

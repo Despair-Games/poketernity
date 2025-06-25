@@ -3,7 +3,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import i18next from "i18next";
 
 /**
@@ -14,9 +13,14 @@ import i18next from "i18next";
  */
 export class TransformAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    globalScene.phaseManager.unshiftPhase(new PokemonTransformPhase(user.getBattlerIndex(), target.getBattlerIndex()));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonTransformPhase",
+      user.getBattlerIndex(),
+      target.getBattlerIndex(),
+    );
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:transformedIntoTarget", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),

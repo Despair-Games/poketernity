@@ -7,7 +7,7 @@ import type { globalScene } from "#app/global-scene";
 import type { Ability } from "#abilities/ability";
 import { allAbilities } from "#data/data-lists";
 import type { AbilityId } from "#enums/ability-id";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { ElementalType } from "#enums/elemental-type";
 import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -48,8 +48,8 @@ export class FieldHelper extends GameManagerHelper {
     return pokemon!;
   }
 
-  /** @returns the order of commands executed in the last turn by {@linkcode BattlerIndex}. */
-  public getTurnOrder(): BattlerIndex[] {
+  /** @returns the order of commands executed in the last turn by {@linkcode FieldBattlerIndex}. */
+  public getTurnOrder(): FieldBattlerIndex[] {
     return this.game.scene
       .getField(true)
       .sort((pA, pB) => pA.turnData.order - pB.turnData.order)
@@ -57,10 +57,10 @@ export class FieldHelper extends GameManagerHelper {
   }
 
   /**
-   * @returns the {@linkcode BattlerIndex | indexes} of Pokemon on the field in order of decreasing Speed.
+   * @returns the {@linkcode FieldBattlerIndex | indexes} of Pokemon on the field in order of decreasing Speed.
    * Speed ties are returned in increasing order of index.
    */
-  public getSpeedOrder(): BattlerIndex[] {
+  public getSpeedOrder(): FieldBattlerIndex[] {
     return this.game.scene
       .getField(true)
       .sort((pA, pB) => pB.getEffectiveStat(Stat.SPD) - pA.getEffectiveStat(Stat.SPD))

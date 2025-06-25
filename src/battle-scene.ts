@@ -53,7 +53,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { PokeballType } from "#enums/pokeball-type";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
@@ -107,21 +106,7 @@ import { modifierTypes } from "#modifier/modifier-types";
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";
-import { ExpPhase } from "#phases/exp-phase";
-import { FormChangePhase } from "#phases/form-change-phase";
-import { LevelCapPhase } from "#phases/level-cap-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
-import { NextEncounterPhase } from "#phases/next-encounter-phase";
-import { PokemonAnimPhase } from "#phases/pokemon-anim-phase";
-import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
-import { ReturnPhase } from "#phases/return-phase";
-import { SelectBiomePhase } from "#phases/select-biome-phase";
-import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
-import { ShowTrainerPhase } from "#phases/show-trainer-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import type { SwitchPhase } from "#phases/switch-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import FieldSpritePipeline from "#pipelines/field-sprite";
 import InvertPostFX from "#pipelines/invert";
 import SpritePipeline from "#pipelines/sprite";
@@ -660,7 +645,7 @@ export default class BattleScene extends SceneBase {
       ).then(() => loadMoveAnimAssets(defaultMoves, true)),
       this.initStarterColors(),
     ]).then(() => {
-      this.phaseManager.toLoginScreen();
+      this.phaseManager.createAndPushPhase("LoginPhase");
       this.phaseManager.toTitleScreen();
 
       this.phaseManager.shiftPhase();
@@ -863,7 +848,7 @@ export default class BattleScene extends SceneBase {
     do {
       targetingMovePhase = this.phaseManager.findPhase(
         (mp) =>
-          mp.is<MovePhase>(PhaseId.MOVE)
+          mp.is("MovePhase")
           && mp.targets.length === 1
           && mp.targets[0] === removedPokemon.getBattlerIndex()
           && mp.pokemon.isPlayer() !== secondPokemon.isPlayer(),
@@ -1367,7 +1352,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.phaseManager.tryRemovePhase((p) => p.is<SwitchPhase>(PhaseId.SWITCH));
+      this.phaseManager.tryRemovePhase((p) => p.is("SwitchPhase"));
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 
@@ -1409,7 +1394,7 @@ export default class BattleScene extends SceneBase {
 
         playerField.forEach((pokemon, p) => {
           if (pokemon.isOnField()) {
-            this.phaseManager.pushPhase(new ReturnPhase(p));
+            this.phaseManager.createAndPushPhase("ReturnPhase", p);
           }
         });
 
@@ -1430,7 +1415,7 @@ export default class BattleScene extends SceneBase {
         }
 
         if (!this.trainer.visible) {
-          this.phaseManager.pushPhase(new ShowTrainerPhase());
+          this.phaseManager.createAndPushPhase("ShowTrainerPhase");
         }
       }
 
@@ -1439,14 +1424,14 @@ export default class BattleScene extends SceneBase {
       }
 
       if (!this.gameMode.hasRandomBiomes && !isNewBiome) {
-        this.phaseManager.pushPhase(new NextEncounterPhase());
+        this.phaseManager.createAndPushPhase("NextEncounterPhase");
       } else {
-        this.phaseManager.pushPhase(new SelectBiomePhase());
-        this.phaseManager.pushPhase(new NewBiomeEncounterPhase());
+        this.phaseManager.createAndPushPhase("SelectBiomePhase");
+        this.phaseManager.createAndPushPhase("NewBiomeEncounterPhase");
 
         const newMaxExpLevel = this.getMaxExpLevel();
         if (newMaxExpLevel > maxExpLevel) {
-          this.phaseManager.pushPhase(new LevelCapPhase());
+          this.phaseManager.createAndPushPhase("LevelCapPhase");
         }
       }
     }
@@ -1509,8 +1494,8 @@ export default class BattleScene extends SceneBase {
     }
 
     const isEggPhase: boolean =
-      !!this.phaseManager.getCurrentPhase()?.is(PhaseId.EGG_HATCH)
-      || !!this.phaseManager.getCurrentPhase()?.is(PhaseId.EGG_LAPSE);
+      !!this.phaseManager.getCurrentPhase()?.is("EggHatchPhase")
+      || !!this.phaseManager.getCurrentPhase()?.is("EggLapsePhase");
 
     switch (species.speciesId) {
       case SpeciesId.UNOWN:
@@ -2107,7 +2092,8 @@ export default class BattleScene extends SceneBase {
         }
       } else if (!virtual) {
         const defaultModifierType = getDefaultModifierTypeForTier(modifier.type.tier);
-        this.phaseManager.queueMessagePhase(
+        this.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("battle:itemStackFull", { fullItemName: modifier.type.name, itemName: defaultModifierType.name }),
           undefined,
           true,
@@ -2604,9 +2590,9 @@ export default class BattleScene extends SceneBase {
       if (matchingFormChange) {
         let phase: Phase;
         if (pokemon.isPlayer() && !matchingFormChange.quiet) {
-          phase = new FormChangePhase(pokemon, matchingFormChange, modal);
+          phase = this.phaseManager.createPhase("FormChangePhase", pokemon, matchingFormChange, modal);
         } else {
-          phase = new QuietFormChangePhase(pokemon, matchingFormChange);
+          phase = this.phaseManager.createPhase("QuietFormChangePhase", pokemon, matchingFormChange);
         }
         if (pokemon.isPlayer() && !matchingFormChange.quiet && modal) {
           this.phaseManager.overridePhase(phase);
@@ -2628,7 +2614,7 @@ export default class BattleScene extends SceneBase {
     fieldAssets?: Phaser.GameObjects.Sprite[],
     delayed: boolean = false,
   ): boolean {
-    const phase: Phase = new PokemonAnimPhase(battleAnimType, pokemon, fieldAssets);
+    const phase: Phase = this.phaseManager.createPhase("PokemonAnimPhase", battleAnimType, pokemon, fieldAssets);
     if (delayed) {
       this.phaseManager.pushPhase(phase);
     } else {
@@ -2736,9 +2722,9 @@ export default class BattleScene extends SceneBase {
         this.currentBattle.double = true;
         const availablePartyMembers = this.getPlayerParty().filter((p) => p.isAllowedInBattle());
         if (availablePartyMembers.length > 1) {
-          this.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
+          this.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
           if (!availablePartyMembers[1].isOnField()) {
-            this.phaseManager.pushPhase(new SummonPhase(1));
+            this.phaseManager.createAndPushPhase("SummonPhase", 1);
           }
         }
 
@@ -2865,8 +2851,8 @@ export default class BattleScene extends SceneBase {
           const partyMemberIndex = party.indexOf(expPartyMembers[pm]);
           this.phaseManager.unshiftPhase(
             expPartyMembers[pm].isOnField()
-              ? new ExpPhase(partyMemberIndex, exp)
-              : new ShowPartyExpBarPhase(partyMemberIndex, exp),
+              ? this.phaseManager.createPhase("ExpPhase", partyMemberIndex, exp)
+              : this.phaseManager.createPhase("ShowPartyExpBarPhase", partyMemberIndex, exp),
           );
         }
       }

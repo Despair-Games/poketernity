@@ -14,7 +14,7 @@ import overrides from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/button";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
@@ -31,10 +31,6 @@ import type { Pokemon } from "#field/pokemon";
 import Trainer from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { FaintPhase } from "#phases/faint-phase";
-import { LoginPhase } from "#phases/login-phase";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/game-manager-utils";
@@ -51,7 +47,7 @@ import { RngHelper } from "#test/test-utils/helpers/rng-helper";
 import { SettingsHelper } from "#test/test-utils/helpers/settings-helper";
 import type { InputsHandler } from "#test/test-utils/inputs-handler";
 import { MockFetch } from "#test/test-utils/mocks/mock-fetch";
-import { PhaseInterceptor, type PhaseInterceptorPhase } from "#test/test-utils/phase-interceptor";
+import { PhaseInterceptor } from "#test/test-utils/phase-interceptor";
 import { TextInterceptor } from "#test/test-utils/text-interceptor";
 import type { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -62,6 +58,7 @@ import { isNil } from "#utils/common-utils";
 import { AES, enc } from "crypto-js";
 import fs from "node:fs";
 import { expect, vi } from "vitest";
+import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -112,7 +109,7 @@ export class GameManager {
       this.scene.ui.resetHandlers(); // reset ui state
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
-      this.scene.phaseManager.pushPhase(new LoginPhase());
+      this.scene.phaseManager.createAndPushPhase("LoginPhase");
       this.scene.phaseManager.toTitleScreen();
       this.scene.phaseManager.shiftPhase();
 
@@ -215,10 +212,11 @@ export class GameManager {
     await this.runToTitle();
 
     this.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
+      const { phaseManager } = this.scene;
       this.scene.gameMode = getGameMode(mode);
       const starters = generateStarter(this.scene, species);
-      const selectStarterPhase = new SelectStarterPhase();
-      this.scene.phaseManager.pushPhase(new EncounterPhase(false));
+      const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+      phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
 
@@ -253,10 +251,11 @@ export class GameManager {
       "TitlePhase",
       UiMode.TITLE,
       () => {
+        const { phaseManager } = this.scene;
         this.scene.gameMode = getGameMode(GameModes.CLASSIC);
         const starters = generateStarter(this.scene, species);
-        const selectStarterPhase = new SelectStarterPhase();
-        this.scene.phaseManager.pushPhase(new EncounterPhase(false));
+        const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+        phaseManager.createAndPushPhase("EncounterPhase", false);
         selectStarterPhase.initBattle(starters);
       },
       () => this.isCurrentPhase("EncounterPhase"),
@@ -377,9 +376,8 @@ export class GameManager {
    * @param phaseTarget - The target phase.
    * @returns True if the current phase matches the target phase, otherwise false.
    */
-  isCurrentPhase(phaseTarget: PhaseInterceptorPhase) {
-    const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
-    return this.scene.phaseManager.getCurrentPhase()?.constructor.name === targetName;
+  isCurrentPhase(phaseTarget: PhaseKey) {
+    return this.scene.phaseManager.getCurrentPhase()?.is(phaseTarget);
   }
 
   /**
@@ -432,11 +430,10 @@ export class GameManager {
    * await game.faintPokemon(enemyPkmn);
    */
   async faintPokemon(pokemon: PlayerPokemon | EnemyPokemon): Promise<void> {
-    await new Promise<void>(async (resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       pokemon.faint();
-      this.scene.phaseManager.unshiftPhase(new FaintPhase(pokemon.getBattlerIndex(), true));
-      await this.phaseInterceptor.to("FaintPhase").catch((e) => reject(e));
-      resolve();
+      this.scene.phaseManager.createAndUnshiftPhase("FaintPhase", pokemon.getBattlerIndex(), true);
+      this.phaseInterceptor.to("FaintPhase").then(resolve).catch(reject);
     });
   }
 
@@ -492,7 +489,7 @@ export class GameManager {
    * game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
    * ```
    */
-  setTurnOrder(order: BattlerIndex[]): void {
+  setTurnOrder(order: FieldBattlerIndex[]): void {
     expect(order.length).toBe(this.scene.getField(true).length);
     const { turnManager } = this.scene.currentBattle;
 

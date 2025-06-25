@@ -6,7 +6,6 @@ import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-o
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
 
@@ -19,7 +18,7 @@ import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-
  * Any phase that is meant to follow this one MUST be queued via the onOptionSelect() logic of the selected option
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
-  override readonly id = PhaseId.ME_OPTION_SELECTED;
+  public override readonly phaseName = "MysteryEncounterOptionSelectedPhase";
 
   protected onOptionSelect: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;

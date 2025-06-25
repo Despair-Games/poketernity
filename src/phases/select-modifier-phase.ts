@@ -4,7 +4,6 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { ModifierTier } from "#enums/modifier-tier";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import {
   ExtraModifierModifier,
@@ -27,7 +26,7 @@ import {
   type ModifierType,
   type ModifierTypeOption,
 } from "#modifier/modifier-type";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
@@ -49,7 +48,7 @@ interface SelectModifierPhaseOptions {
 //#endregion
 
 export class SelectModifierPhase extends BattlePhase {
-  override readonly id = PhaseId.SELECT_MODIFIER;
+  public override readonly phaseName = "SelectModifierPhase";
 
   private readonly rerollCount: number;
   private readonly modifierTiers?: ModifierTier[];

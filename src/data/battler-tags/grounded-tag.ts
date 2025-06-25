@@ -33,7 +33,8 @@ export class GroundedTag extends BattlerTag {
       || pokemon.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.FLOATING);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

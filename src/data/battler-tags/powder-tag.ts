@@ -9,11 +9,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
-import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
-import type { MovePhase } from "#phases/move-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -31,7 +28,8 @@ export class PowderTag extends BattlerTag {
     super.onAdd(pokemon);
 
     // "{Pokemon} is covered in powder!"
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:powderOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -46,7 +44,7 @@ export class PowderTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
       const currPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currPhase?.is<MovePhase>(PhaseId.MOVE)) {
+      if (currPhase?.is("MovePhase")) {
         const move = currPhase.move.getMove();
         const weather = globalScene.arena.weather;
         if (
@@ -56,7 +54,11 @@ export class PowderTag extends BattlerTag {
           currPhase.fail();
           currPhase.showMoveText();
 
-          globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.POWDER, pokemon.getBattlerIndex()));
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "CommonAnimPhase",
+            CommonAnim.POWDER,
+            pokemon.getBattlerIndex(),
+          );
 
           const cancelDamage = new BooleanHolder(false);
           applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
@@ -67,7 +69,10 @@ export class PowderTag extends BattlerTag {
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
-          globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:powderLapse", { moveName: move.name }));
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
+            i18next.t("battlerTags:powderLapse", { moveName: move.name }),
+          );
         }
       }
       return true;

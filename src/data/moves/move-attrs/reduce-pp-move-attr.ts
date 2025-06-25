@@ -30,7 +30,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
       reduction: movesetMove.ppUsed - lastPpUsed,
     });
     globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(target.id, movesetMove.getMove(), movesetMove.ppUsed));
-    globalScene.phaseManager.queueMessagePhase(message);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
 
     return true;
   }

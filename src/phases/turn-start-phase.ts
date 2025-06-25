@@ -1,9 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 
 export class TurnStartPhase extends FieldPhase {
-  override readonly id = PhaseId.TURN_START;
+  public override readonly phaseName = "TurnStartPhase";
 
   public override start(): void {
     super.start();

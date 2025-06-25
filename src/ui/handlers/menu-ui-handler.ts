@@ -7,11 +7,9 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/button";
 import { GameDataType } from "#enums/game-data-type";
-import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import type { SelectModifierPhase } from "#phases/select-modifier-phase";
 import type { AchievementsUiHandler } from "#ui/achievements-ui-handler";
 import type { AdminUiHandler } from "#ui/admin-ui-handler";
 import { getAdminModeName } from "#ui/admin-ui-handler";
@@ -67,7 +65,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     this.excludedMenus = () => [
       {
-        excluded: globalScene.phaseManager.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER) ?? false,
+        excluded: globalScene.phaseManager.getCurrentPhase()?.is("SelectModifierPhase") ?? false,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { excluded: BYPASS_LOGIN, options: [MenuOptions.LOG_OUT] },

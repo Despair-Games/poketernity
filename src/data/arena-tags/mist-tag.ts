@@ -28,7 +28,8 @@ export class MistTag extends ArenaTag {
       const source = globalScene.getPokemonById(this.sourceId);
 
       if (!quiet && source) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("arenaTag:mistOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
         );
       } else if (!quiet) {
@@ -58,7 +59,7 @@ export class MistTag extends ArenaTag {
     cancelled.value = true;
 
     if (!simulated) {
-      globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mistApply"));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:mistApply"));
     }
 
     return true;

@@ -5,11 +5,9 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { BerryUsedEvent } from "#events/battle-scene";
 import { BerryModifier } from "#modifier/modifier";
-import { FieldPhase } from "#phases/abstract-field-phase";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -17,7 +15,7 @@ import i18next from "i18next";
  * The phase after attacks where the pokemon eat berries
  */
 export class BerryPhase extends FieldPhase {
-  override readonly id = PhaseId.BERRY;
+  public override readonly phaseName = "BerryPhase";
 
   public override start(): void {
     super.start();
@@ -34,12 +32,16 @@ export class BerryPhase extends FieldPhase {
           .map((opp) => applyAbAttrs<PreventBerryUseAbAttr>(AbAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
 
         if (cancelled.value) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("abilityTriggers:preventBerryUse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
           );
         } else {
-          globalScene.phaseManager.unshiftPhase(
-            new CommonAnimPhase(CommonAnim.USE_ITEM, pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "CommonAnimPhase",
+            CommonAnim.USE_ITEM,
+            pokemon.getBattlerIndex(),
+            pokemon.getBattlerIndex(),
           );
 
           for (const berryModifier of globalScene.applyModifiers(BerryModifier, pokemon.isPlayer(), pokemon)) {

@@ -7,7 +7,6 @@ import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
@@ -22,7 +21,7 @@ export class CurseAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getTypes(true).includes(ElementalType.GHOST)) {
       if (target.hasTag(BattlerTagType.CURSED)) {
-        globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackFailed"));
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battle:attackFailed"));
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
@@ -31,7 +30,8 @@ export class CurseAttr extends MoveEffectAttr {
         ignoreSegments: true,
         preventEndure: true,
       });
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:cursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
           pokemonName: getPokemonNameWithAffix(target),
@@ -41,10 +41,20 @@ export class CurseAttr extends MoveEffectAttr {
       target.addTag(BattlerTagType.CURSED, 0, move.id, user.id);
       return true;
     }
-    globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.ATK, Stat.DEF], 1),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      user.getBattlerIndex(),
+      user,
+      [Stat.ATK, Stat.DEF],
+      1,
     );
-    globalScene.phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [Stat.SPD], -1));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      user.getBattlerIndex(),
+      user,
+      [Stat.SPD],
+      -1,
+    );
     return true;
   }
 }

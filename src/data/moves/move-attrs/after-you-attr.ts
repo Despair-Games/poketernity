@@ -12,7 +12,8 @@ import i18next from "i18next";
  */
 export class AfterYouAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }),
     );
 

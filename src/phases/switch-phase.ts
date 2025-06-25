@@ -1,12 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
-import { BattlePhase } from "#phases/abstract-battle-phase";
-import { PostSummonPhase } from "#phases/post-summon-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 
@@ -15,7 +12,7 @@ import { PartyFilterNonFainted } from "#utils/party-ui-utils";
  * for the player (if a switch would be valid for the current battle state).
  */
 export class SwitchPhase extends BattlePhase {
-  override readonly id = PhaseId.SWITCH;
+  public override readonly phaseName = "SwitchPhase";
 
   protected readonly fieldIndex: number;
 
@@ -51,7 +48,8 @@ export class SwitchPhase extends BattlePhase {
 
     // Skip modal switch if impossible (no remaining party members that aren't in battle)
     if (this.isModal && !playerInactiveParty.length) {
-      return this.end();
+      this.end();
+      return;
     }
 
     /**
@@ -62,12 +60,14 @@ export class SwitchPhase extends BattlePhase {
      * on the field. see also; battle.test.ts
      */
     if (this.isModal && !this.doReturn && !globalScene.getPlayerParty()[this.fieldIndex].isFainted()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     // Check if there is any space still in field
     if (this.isModal && playerActiveField.length >= currentBattle.getBattlerCount()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     // Override field index to 0 in case of double battle where 2/3 remaining legal party members fainted at once
@@ -83,11 +83,15 @@ export class SwitchPhase extends BattlePhase {
           // Remove any pre-existing PostSummonPhase under the same field index.
           // Pre-existing PostSummonPhases may occur when this phase is invoked during a prompt to switch at the start of a wave.
           globalScene.phaseManager.tryRemovePhase(
-            (p) => p instanceof PostSummonPhase && p.isPlayer && p.fieldIndex === this.fieldIndex,
+            (p) => p.is("SwitchSummonPhase") && p.isPlayer && p.fieldIndex === this.fieldIndex,
           );
           const switchType = option === PartyOption.PASS_BATON ? SwitchType.BATON_PASS : this.switchType;
-          globalScene.phaseManager.unshiftPhase(
-            new SwitchSummonPhase(switchType, fieldIndex, slotIndex, this.doReturn),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "SwitchSummonPhase",
+            switchType,
+            fieldIndex,
+            slotIndex,
+            this.doReturn,
           );
         }
         ui.setMessageMode().then(() => super.end());

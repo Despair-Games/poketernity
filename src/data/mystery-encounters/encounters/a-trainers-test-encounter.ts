@@ -19,7 +19,6 @@ import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
-import { PartyHealPhase } from "#phases/party-heal-phase";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -178,7 +177,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     async () => {
       const encounter = globalScene.currentBattle.mysteryEncounter!;
       // Full heal party
-      globalScene.phaseManager.unshiftPhase(new PartyHealPhase(true));
+      globalScene.phaseManager.createAndUnshiftPhase("PartyHealPhase", true);
 
       const eggOptions: EggOptions = {
         pulled: false,

@@ -3,7 +3,7 @@ import { BattleAnim } from "#animations/battle-anims";
 import { moveAnims } from "#animations/move-anims";
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
@@ -15,7 +15,7 @@ import type { Pokemon } from "#field/pokemon";
 export class MoveAnim extends BattleAnim {
   public moveId: MoveId;
 
-  constructor(move: MoveId, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
+  constructor(move: MoveId, user: Pokemon, targetIndex: FieldBattlerIndex, playOnEmptyField: boolean = false) {
     super(user, globalScene.getPokemonByBattlerIndex(targetIndex), playOnEmptyField);
 
     this.moveId = move;

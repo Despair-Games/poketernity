@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
 
@@ -7,7 +6,7 @@ import i18next from "i18next";
  * Used to grant vouchers to the player after they finish a classic run
  */
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
-  override readonly id = PhaseId.GAME_OVER_MODIFIER_REWARD;
+  public override readonly phaseName = "GameOverModifierRewardPhase";
 
   public override doReward(): Promise<void> {
     const { arenaBg, time, ui } = globalScene;

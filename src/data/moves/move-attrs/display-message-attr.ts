@@ -25,7 +25,7 @@ export class DisplayMessageAttr extends MoveEffectAttr {
     const replacedMessage = this.displayMessage
       .replace("{USER}", getPokemonNameWithAffix(user))
       .replace("{TARGET}", getPokemonNameWithAffix(target));
-    globalScene.phaseManager.queueMessagePhase(replacedMessage);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", replacedMessage);
     return true;
   }
 }

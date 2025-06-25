@@ -3,12 +3,11 @@ import type { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { clamp, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -16,7 +15,8 @@ import i18next from "i18next";
  * Handles the player attempting to run away from a wild battle
  */
 export class AttemptRunPhase extends PokemonPhase {
-  override readonly id = PhaseId.ATTEMPT_RUN;
+  public override readonly phaseName = "AttemptRunPhase";
+
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override
 
@@ -36,7 +36,13 @@ export class AttemptRunPhase extends PokemonPhase {
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
       globalScene.audioManager.playSound("se/flee");
-      globalScene.phaseManager.queueMessagePhase(i18next.t("battle:runAwaySuccess"), null, true, 500);
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battle:runAwaySuccess"),
+        undefined,
+        true,
+        500,
+      );
 
       globalScene.tweens.add({
         targets: [globalScene.arenaEnemy, enemyField].flat(),
@@ -58,7 +64,13 @@ export class AttemptRunPhase extends PokemonPhase {
       globalScene.phaseManager.queueNextBattle(false);
     } else {
       playerPokemon.turnData.failedRunAway = true;
-      globalScene.phaseManager.queueMessagePhase(i18next.t("battle:runAwayCannotEscape"), null, true, 500);
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battle:runAwayCannotEscape"),
+        undefined,
+        true,
+        500,
+      );
     }
 
     this.end();

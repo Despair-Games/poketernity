@@ -5,10 +5,9 @@ import type { TurnCommand } from "#app/turn-command-manager";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { PhaseId } from "#enums/phase-id";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Does the following after a {@linkcode Pokemon}'s {@linkcode TurnCommand} is resolved:
@@ -22,11 +21,11 @@ import { PokemonPhase } from "#phases/abstract-pokemon-phase";
  * for the end-of-turn sequence
  */
 export class PostActionPhase extends PokemonPhase {
-  override readonly id = PhaseId.POST_ACTION;
+  public override readonly phaseName = "PostActionPhase";
 
   private readonly forMove: boolean;
 
-  constructor(battlerIndex: BattlerIndex, forMove: boolean = false) {
+  constructor(battlerIndex: FieldBattlerIndex, forMove: boolean = false) {
     super(battlerIndex);
 
     this.forMove = forMove;
@@ -45,7 +44,6 @@ export class PostActionPhase extends PokemonPhase {
 
     arena.setIgnoreAbilities(false);
     turnManager.commandsInProgress--;
-    console.log(`commandsInProgress: ${turnManager.commandsInProgress}`);
 
     if (turnManager.commandsInProgress < 1) {
       // Reset turn order in case the last action affected Speed

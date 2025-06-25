@@ -19,7 +19,7 @@ export class IonDelugeTag extends ArenaTag {
 
   /** Queues an on-add message */
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:plasmaFistsOnAdd"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:plasmaFistsOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {} // Removes default on-remove message

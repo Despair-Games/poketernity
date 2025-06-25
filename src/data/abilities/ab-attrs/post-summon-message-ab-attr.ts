@@ -13,7 +13,7 @@ export class PostSummonMessageAbAttr extends PostSummonAbAttr {
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
-      globalScene.phaseManager.queueMessagePhase(this.messageFunc(pokemon));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.messageFunc(pokemon));
     }
 
     return true;

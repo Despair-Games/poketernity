@@ -14,7 +14,6 @@ import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import type { MovePhase } from "#phases/move-phase";
 import { isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -39,8 +38,11 @@ export class ConfusedTag extends BattlerTag {
 
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
 
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
-    globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix }));
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:confusedOnAdd", { pokemonNameWithAffix }),
+    );
   }
 
   override onRemove(pokemon: Pokemon): void {
@@ -48,7 +50,10 @@ export class ConfusedTag extends BattlerTag {
 
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix }));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:confusedOnRemove", { pokemonNameWithAffix }),
+    );
   }
 
   override onOverlap(pokemon: Pokemon): void {
@@ -56,7 +61,10 @@ export class ConfusedTag extends BattlerTag {
 
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix }));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:confusedOnOverlap", { pokemonNameWithAffix }),
+    );
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -67,13 +75,23 @@ export class ConfusedTag extends BattlerTag {
     if (ret) {
       const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
 
-      globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }));
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CONFUSION, pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }),
+      );
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "CommonAnimPhase",
+        CommonAnim.CONFUSION,
+        pokemon.getBattlerIndex(),
+      );
 
       const damageHolder = new NumberHolder(this.getDamage(pokemon));
 
       if (damageHolder.value > 0) {
-        globalScene.phaseManager.queueMessagePhase(i18next.t("battlerTags:confusedLapseHurtItself"));
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
+          i18next.t("battlerTags:confusedLapseHurtItself"),
+        );
 
         if (pokemon.isFullHp()) {
           applyAbAttrs<SturdyAbAttr>(

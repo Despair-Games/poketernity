@@ -31,9 +31,6 @@ import {
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
-import { PartyHealPhase } from "#phases/party-heal-phase";
-import { ReturnPhase } from "#phases/return-phase";
-import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
@@ -144,7 +141,7 @@ export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounter
     },
     async () => {
       // Refuse the challenge, they full heal the party and give the player a Rarer Candy
-      globalScene.phaseManager.unshiftPhase(new PartyHealPhase(true));
+      globalScene.phaseManager.createAndUnshiftPhase("PartyHealPhase", true);
       setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.RARER_CANDY], fillRemaining: false });
       leaveEncounterWithoutBattle();
     },
@@ -201,7 +198,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
       globalScene.arena.resetArenaEffects();
       const playerField = globalScene.getPlayerField();
       playerField.forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-      playerField.forEach((_, p) => globalScene.phaseManager.unshiftPhase(new ReturnPhase(p)));
+      playerField.forEach((_, p) => globalScene.phaseManager.createAndUnshiftPhase("ReturnPhase", p));
 
       for (const pokemon of globalScene.getPlayerParty()) {
         // Only trigger form change when Eiscue is in Noice form
@@ -217,7 +214,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
       }
 
-      globalScene.phaseManager.unshiftPhase(new ShowTrainerPhase());
+      globalScene.phaseManager.createAndUnshiftPhase("ShowTrainerPhase");
       // Hide the trainer and init next battle
       const trainer = globalScene.currentBattle.trainer;
       // Unassign previous trainer from battle so it isn't destroyed before animation completes
