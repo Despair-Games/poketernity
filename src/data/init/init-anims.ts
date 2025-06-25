@@ -18,15 +18,15 @@ import { getTSEnumValues } from "#utils/common-utils";
 
 export async function populateAnims() {
   const commonAnimNames = Object.keys(CommonAnim).map((k) => k.toLowerCase());
-  const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
+  const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/_/g, ""));
   const commonAnimIds: CommonAnim[] = Object.values(CommonAnim);
   const chargeAnimNames = Object.keys(ChargeAnim).map((k) => k.toLowerCase());
-  const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
+  const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/_/g, " "));
   const chargeAnimIds: ChargeAnim[] = Object.values(ChargeAnim);
   const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
   const moveNameToId = {};
   for (const move of getTSEnumValues(MoveId).slice(1)) {
-    const moveName = MoveId[move].toUpperCase().replace(/\_/g, "");
+    const moveName = MoveId[move].toUpperCase().replace(/_/g, "");
     moveNameToId[moveName] = move;
   }
 
@@ -84,7 +84,7 @@ export async function populateAnims() {
             const frameData = framesData[fd];
             const focusFramesData = frameData.split("    - - ");
             for (let tf = 0; tf < focusFramesData.length; tf++) {
-              const values = focusFramesData[tf].replace(/ {6}\- /g, "").split("\n");
+              const values = focusFramesData[tf].replace(/ {6}- /g, "").split("\n");
               const targetFrame = new AnimFrame(
                 Number.parseFloat(values[0]),
                 Number.parseFloat(values[1]),
@@ -131,7 +131,7 @@ export async function populateAnims() {
               .replace(/[a-z]+: ! '', /gi, "")
               .replace(/name: (.*?),/, 'name: "$1",')
               .replace(
-                /flashColor: !ruby\/object:Color { alpha: ([\d\.]+), blue: ([\d\.]+), green: ([\d\.]+), red: ([\d\.]+)}/,
+                /flashColor: !ruby\/object:Color { alpha: ([\d.]+), blue: ([\d.]+), green: ([\d.]+), red: ([\d.]+)}/,
                 "flashRed: $4, flashGreen: $3, flashBlue: $2, flashAlpha: $1",
               );
             const frameIndex = Number.parseInt(/frame: (\d+)/.exec(timingData)![1]); // TODO: is the bang correct?

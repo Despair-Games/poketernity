@@ -52,7 +52,7 @@ import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
+// biome-ignore lint/performance/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { ReloadSessionPhase } from "#phases/reload-session-phase";
@@ -214,7 +214,7 @@ export class GameData {
       voucherCounts: this.voucherCounts,
       eggs: this.eggs.map((e) => new EggData(e)),
       gameVersion: globalScene.game.config.gameVersion,
-      timestamp: new Date().getTime(),
+      timestamp: Date.now(),
       eggPity: this.eggPity.slice(0),
       unlockPity: this.unlockPity.slice(0),
     };
@@ -728,7 +728,7 @@ export class GameData {
           ? new TrainerData(globalScene.currentBattle.trainer)
           : null,
       gameVersion: globalScene.game.config.gameVersion,
-      timestamp: new Date().getTime(),
+      timestamp: Date.now(),
       challenges: globalScene.gameMode.challenges.map((c) => new ChallengeData(c)),
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,

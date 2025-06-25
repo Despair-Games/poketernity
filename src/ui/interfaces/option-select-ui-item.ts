@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import { BaseOptionSelectUiHandler } from "#ui/base-option-select-ui-handler";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type { OptionSelectItem } from "#ui/option-select-config";

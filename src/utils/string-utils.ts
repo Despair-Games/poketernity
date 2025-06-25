@@ -7,7 +7,7 @@ import i18next from "i18next";
 
 export function toReadableString(str: string): string {
   return str
-    .replace(/\_/g, " ")
+    .replace(/_/g, " ")
     .split(" ")
     .map((s) => `${s.slice(0, 1)}${s.slice(1).toLowerCase()}`)
     .join(" ");
@@ -212,7 +212,7 @@ export function capitalizeFirstLetter(str: string): string {
  * @returns The animation filename for the given move
  */
 export function animationFileName(moveId: MoveId): string {
-  return MoveId[moveId].toLowerCase().replace(/\_/g, "-");
+  return MoveId[moveId].toLowerCase().replace(/_/g, "-");
 }
 
 /**
