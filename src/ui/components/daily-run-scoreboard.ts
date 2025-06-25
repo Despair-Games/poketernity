@@ -32,22 +32,13 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     this.setup();
   }
 
-  /**
-   * Sets the updating state and updates button states accordingly.
-   * If value is true (updating), disables the buttons; if false, enables the buttons.
-   * @param value - The new updating state.
-   */
-  set isUpdating(value: boolean) {
+  /** When set to `true`, disables the buttons; when set to `false`, enables the buttons. */
+  public get isUpdating() {
+    return this._isUpdating;
+  }
+  public set isUpdating(value: boolean) {
     this._isUpdating = value;
     this.setButtonsState(!value);
-  }
-
-  /**
-   * Gets the current updating state.
-   * @returns - The current updating state.
-   */
-  get isUpdating() {
-    return this._isUpdating;
   }
 
   setup() {

@@ -2649,7 +2649,7 @@ export default class BattleScene extends SceneBase {
       (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
     ) {
-      this.gameData.achvUnlocks[achv.id] = new Date().getTime();
+      this.gameData.achvUnlocks[achv.id] = Date.now();
       this.ui.achvBar.showAchv(achv);
       if (Object.hasOwn(vouchers, achv.id)) {
         this.validateVoucher(vouchers[achv.id]);
@@ -2662,7 +2662,7 @@ export default class BattleScene extends SceneBase {
 
   validateVoucher(voucher: Voucher, ...args: unknown[]): boolean {
     if (!Object.hasOwn(this.gameData.voucherUnlocks, voucher.id) && voucher.validate(...args)) {
-      this.gameData.voucherUnlocks[voucher.id] = new Date().getTime();
+      this.gameData.voucherUnlocks[voucher.id] = Date.now();
       this.ui.achvBar.showAchv(voucher);
       this.gameData.voucherCounts[voucher.voucherType]++;
       return true;

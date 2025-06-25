@@ -1,9 +1,9 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CommandPhase } from "#phases/command-phase";
 import type { TurnEndPhase } from "#phases/turn-end-phase";
 import type { TurnStartPhase } from "#phases/turn-start-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";

@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
 import type { NextEncounterPhase } from "#phases/next-encounter-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";

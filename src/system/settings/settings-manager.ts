@@ -105,7 +105,7 @@ class SettingsManager {
    * Getter for the active game-speed index (inside {@linkcode GAME_SPEEDS})
    */
   get gameSpeedIndex() {
-    return GAME_SPEEDS.findIndex((n) => n === this.general.gameSpeed) ?? 0;
+    return GAME_SPEEDS.indexOf(this.general.gameSpeed) ?? 0;
   }
 
   /**

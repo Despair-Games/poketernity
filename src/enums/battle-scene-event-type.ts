@@ -1,5 +1,5 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type BattleScene from "#app/battle-scene";
 import type { Arena } from "#field/arena";
 import type {
@@ -11,7 +11,7 @@ import type {
   TurnEndEvent,
   TurnInitEvent,
 } from "#events/battle-scene";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 /** Alias for all {@linkcode BattleScene} events */

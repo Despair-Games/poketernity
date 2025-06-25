@@ -179,7 +179,7 @@ export function getBBCodeFragment(
 export function getTextWithColors(content: string, primaryStyle: TextStyle, forWindow?: boolean): string {
   // Apply primary styling before anything else
   let text = getBBCodeFragment(content, primaryStyle, true);
-  const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
+  const primaryStyleString = [...text.match(new RegExp(/\[color=[^[]*\]\[shadow=[^[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
    * or it will look wrong in light mode because of the different window background color
@@ -194,7 +194,7 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
   });
 
   // Remove extra style block at the end
-  return text.replace(/\[color=[^\[]*\]\[shadow=[^\[]*\]\[\/color\]\[\/shadow\]/gi, "");
+  return text.replace(/\[color=[^[]*\]\[shadow=[^[]*\]\[\/color\]\[\/shadow\]/gi, "");
 }
 
 export function getModifierTierTextTint(tier: ModifierTier): number {
