@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
@@ -28,8 +27,7 @@ import type { ModifierOverride } from "#modifier/modifier-type";
 
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
- * {@linkcode BerryType}, {@linkcode ElementalType}, {@linkcode EvolutionItem}
- * {@linkcode FormChangeItem}, {@linkcode Stat}, {@linkcode Arena}
+ * {@linkcode BerryType}, {@linkcode EvolutionItem} {@linkcode FormChangeItem}, {@linkcode Stat}
  */
 /**
  * Overrides that are used to test different in game situations

@@ -1,5 +1,5 @@
 // -- start tsdocs imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Phase } from "#app/phase";
 import type { AttemptCapturePhase } from "#phases/attempt-capture-phase";
 import type { AttemptRunPhase } from "#phases/attempt-run-phase";
@@ -90,7 +90,7 @@ import type { UnavailablePhase } from "#phases/unavailable-phase";
 import type { UnlockPhase } from "#phases/unlock-phase";
 import type { VictoryPhase } from "#phases/victory-phase";
 import type { WeatherEffectPhase } from "#phases/weather-effect-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 export enum PhaseId {
