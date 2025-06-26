@@ -188,6 +188,7 @@ import type { PokemonWaveData } from "#types/pokemon-wave-data";
 import type { Status } from "#types/status";
 import type { TurnMove } from "#types/turn-move";
 import type { BattleInfo } from "#ui/battle-info";
+import { playTween } from "#utils/anim-utils";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
   BooleanHolder,
@@ -205,7 +206,6 @@ import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
-import { playTween } from "#utils/anim-utils";
 
 interface AbilityData {
   ability: Ability;

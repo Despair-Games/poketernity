@@ -15,11 +15,11 @@ import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SwitchType } from "#enums/switch-type";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
-import { UiMode } from "#enums/ui-mode";
 
 /**
  * Phase to handle all logical elements of switching a Pokemon.

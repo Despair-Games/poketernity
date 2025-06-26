@@ -5,13 +5,13 @@ import type { PostSummonPhase } from "#phases/post-summon-phase";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { getCharVariantFromDialogue } from "#data/dialogue";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
-import { BattlerIndex } from "#enums/battler-index";
 
 /**
  * Will handle (in order):

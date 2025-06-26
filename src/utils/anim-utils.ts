@@ -7,8 +7,8 @@ import type { LegacyAnimConfig } from "#animations/anim-config";
 import { commonAnims } from "#animations/common-anims";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { ImagesFolder } from "#enums/images-folder";
 import type { SceneBase } from "#app/scene-base";
+import { ImagesFolder } from "#enums/images-folder";
 
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {

@@ -15,11 +15,11 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
 import type { PhaseKey } from "#types/phase-types";
 import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
-import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 interface SummonPhaseOptions {
   loaded?: boolean;
