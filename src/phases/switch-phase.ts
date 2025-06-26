@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type BattleScene from "#app/battle-scene";
 import type { RecallPhase } from "#phases/recall-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
@@ -18,7 +18,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
-import { SummonPhase } from "#phases/summon-phase";
 
 /**
  * Phase to handle all logical elements of switching a Pokemon.
