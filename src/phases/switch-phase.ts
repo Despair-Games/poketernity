@@ -138,8 +138,11 @@ export class SwitchPhase extends PokemonPhase {
     party[this.switchInIndex] = activePokemon;
     party[this.fieldIndex] = switchedInPokemon;
 
-    // Reset the switched out Pokemon's summon data
+    // Reset the switched out Pokemon's summon data and turn data
     activePokemon.resetSummonData();
+    activePokemon.resetTurnData();
+    // Mark the switched in Pokemon as having switched in this turn
+    switchedInPokemon.turnData.switchedInThisTurn = true;
   }
 
   /**

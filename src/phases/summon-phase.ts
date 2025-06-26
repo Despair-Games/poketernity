@@ -85,8 +85,6 @@ export class SummonPhase extends PokemonPhase {
       globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
     }
 
-    pokemon.resetTurnData();
-
     // TODO: The conditions to apply post-summon effects here are inaccurate
     if (!this.loaded || waveIndex % 10 === 1) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
