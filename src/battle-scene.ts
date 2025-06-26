@@ -891,9 +891,9 @@ export default class BattleScene extends SceneBase {
     return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
   }
 
-  getPokemonById(pokemonId: number): Pokemon | null {
+  getPokemonById(pokemonId: number): Pokemon | undefined {
     const findInParty = (party: Pokemon[]) => party.find((p) => p.id === pokemonId);
-    return (findInParty(this.getPlayerParty()) || findInParty(this.getEnemyParty())) ?? null;
+    return findInParty(this.getPlayerParty()) || findInParty(this.getEnemyParty());
   }
 
   addPlayerPokemon(

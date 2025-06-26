@@ -24,7 +24,7 @@ export abstract class PostStatStageChangeAbAttr extends AbAttr {
     _simulated: boolean,
     _statsChanged: BattleStat[],
     _stagesChanged: number,
-    _source: Pokemon | null,
+    _source: Pokemon | undefined,
     _isStickyWeb: boolean,
   ): boolean {
     return false;

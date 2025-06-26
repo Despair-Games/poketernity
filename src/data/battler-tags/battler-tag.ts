@@ -4,7 +4,7 @@ import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { coerceArray } from "#utils/common-utils";
+import { coerceArray, isNil } from "#utils/common-utils";
 
 /**
  * Represents an ongoing in-battle effect associated with a {@linkcode Pokemon}.
@@ -158,8 +158,10 @@ export class BattlerTag {
    * Helper function that retrieves the source Pokemon object
    * @returns The source {@linkcode Pokemon} or `null` if none is found
    */
-  public getSourcePokemon(): Pokemon | null {
-    return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
+  public getSourcePokemon(): Pokemon | undefined {
+    if (!isNil(this.sourceId)) {
+      return globalScene.getPokemonById(this.sourceId);
+    }
   }
 
   /**

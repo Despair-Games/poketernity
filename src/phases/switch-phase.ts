@@ -70,7 +70,7 @@ export class SwitchPhase extends PokemonPhase {
       UiMode.PARTY,
       PartyUiMode.FAINT_SWITCH,
       this.fieldIndex,
-      this.onPartyModeSelection,
+      (cursor: number, option: PartyOption) => this.onPartyModeSelection(cursor, option),
     );
   }
 

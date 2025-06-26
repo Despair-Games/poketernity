@@ -29,7 +29,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     super(selfSwitch, { lastHitOnly: true });
   }
 
-  isBatonPass() {
+  public isBatonPass() {
     return this.switchType === SwitchType.BATON_PASS;
   }
 
@@ -76,10 +76,10 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
       if (switchOutTarget.hp > 0) {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
-          const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
+          const switchInIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
             switchType: this.switchType,
-            switchInIndex: slotIndex,
+            switchInIndex,
             when: "before",
             phaseKey: "PostActionPhase",
           });
@@ -89,7 +89,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
             "PostActionPhase",
             "SwitchPhase",
             switchOutTarget.getBattlerIndex(),
-            this.switchType
+            this.switchType,
           );
           return true;
         }

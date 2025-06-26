@@ -31,7 +31,7 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
     simulated: boolean,
     _statStagesChanged: BattleStat[],
     stagesChanged: number,
-    source: Pokemon | null,
+    source: Pokemon | undefined,
     isStickyWeb: boolean,
   ): boolean {
     // Ability does not activate if the stat change was caused by the ability holder or its ally.

@@ -182,7 +182,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
   }
 
   /** @returns The {@linkcode Pokemon} using this phase's invoked move */
-  public getUserPokemon(): Pokemon | null {
+  public getUserPokemon(): Pokemon | undefined {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       return globalScene.getPokemonById(this.battlerIndex);
     }
